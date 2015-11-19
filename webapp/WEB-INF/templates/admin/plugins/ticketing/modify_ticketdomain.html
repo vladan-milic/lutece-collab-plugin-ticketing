@@ -1,0 +1,14 @@
+<#include "manageadminticketing_tabs.html" />
+<@tabs tab="ticketdomain" />
+
+<@rowBoxHeader i18nTitleKey="ticketing.modify_ticketdomain.pageTitle">
+    <form class="form-horizontal" method="post" name="modify_ticketdomain" action="jsp/admin/plugins/ticketing/ManageTicketDomains.jsp">
+        <@messages errors=errors />
+        <input type="hidden" id="id" name="id" value="${ticketdomain.id}"/>
+        
+        <@fieldInputCombo i18nLabelKey="ticketing.modify_ticketdomain.labelIdTicketType" inputName="id_ticket_type" items=ticket_types_list value="${ticketdomain.idTicketType!''}" i18nHelpBlockKey="ticketing.modify_ticketdomain.labelIdTicketType.help" cssClass='form-control' />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticketdomain.labelLabel" inputName="label" mandatory=true value="${ticketdomain.label}" i18nHelpBlockKey="ticketing.modify_ticketdomain.labelLabel.help" />
+        <@actionButtons button1Name="action_modifyTicketDomain" button2Name="view_manageTicketDomains"/>
+    </form>
+</@rowBoxHeader>
+

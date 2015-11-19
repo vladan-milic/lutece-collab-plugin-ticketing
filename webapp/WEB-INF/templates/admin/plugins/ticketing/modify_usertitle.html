@@ -1,0 +1,13 @@
+<#include "manageadminticketing_tabs.html" />
+<@tabs tab="usertitle" />
+
+<@rowBoxHeader i18nTitleKey="ticketing.modify_usertitle.pageTitle">
+    <form class="form-horizontal" method="post" name="modify_usertitle" action="jsp/admin/plugins/ticketing/ManageUserTitles.jsp">
+        <@messages errors=errors />
+        <input type="hidden" id="id" name="id" value="${usertitle.id}"/>
+        
+        <@fieldInputText i18nLabelKey="ticketing.modify_usertitle.labelLabel" inputName="label" mandatory=true value="${usertitle.label}" i18nHelpBlockKey="ticketing.modify_usertitle.labelLabel.help" />
+        <@actionButtons button1Name="action_modifyUserTitle" button2Name="view_manageUserTitles"/>
+    </form>
+</@rowBoxHeader>
+

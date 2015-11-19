@@ -1,0 +1,89 @@
+<div class="row" >
+    <div class="col-sm-12">
+
+    <form class="form-horizontal" role="form" method="post" action="jsp/site/Portal.jsp?page=ticket">
+        <fieldset>
+            <legend>#i18n{ticketing.xpage.create_ticket.title}</legend>
+
+            <@messages errors=errors />
+            <input type="hidden" id="id" name="id"/>  
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="id_user_title" >#i18n{ticketing.xpage.create_ticket.labelIdUserTitle} * :</label>
+                <div class="col-sm-9">
+                    <@comboWithParams name="id_user_title" default_value="${ticket.idUserTitle!''}"  additionalParameters="class=\"form-control\""  items=user_titles_list />
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdUserTitle.help}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="firstname" >#i18n{ticketing.xpage.create_ticket.labelFirstname} * :</label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" id="firstname" name="firstname" value="${ticket.firstname!''}"  maxlength="50" tabindex="2" />
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelFirstname.help}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="lastname" >#i18n{ticketing.xpage.create_ticket.labelLastname} * :</label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" id="lastname" name="lastname" value="${ticket.lastname!''}"  maxlength="50" tabindex="3" />
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelLastname.help}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="email" >#i18n{ticketing.xpage.create_ticket.labelEmail} :</label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" id="email" name="email" value="${ticket.email!''}"  maxlength="255" tabindex="4" />
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelEmail.help}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="phone_number" >#i18n{ticketing.xpage.create_ticket.labelPhoneNumber} :</label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" id="phone_number" name="phone_number" value="${ticket.phoneNumber!''}"  maxlength="50" tabindex="5" />
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="id_ticket_type" >#i18n{ticketing.xpage.create_ticket.labelTicketType} * :</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="id_ticket_type" name="id_ticket_type" value="${ticket.idTicketType!''}"  tabindex="6" >
+                    </select>    
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdTicketType.help}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="id_ticket_domain" >#i18n{ticketing.xpage.create_ticket.labelTicketDomain} * :</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="id_ticket_domain" name="id_ticket_domain" value="${ticket.idTicketDomain!''}"  tabindex="8" >
+                    </select>
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdTicketDomain.help}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="id_ticket_category" >#i18n{ticketing.xpage.create_ticket.labelTicketCategory} * :</label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="id_ticket_category" name="id_ticket_category" value="${ticket.idTicketCategory!''}"  tabindex="10" >
+                    </select>
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdTicketCategory.help}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="ticket_comment" >#i18n{ticketing.xpage.create_ticket.labelTicketComment} :</label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" id="ticket_comment" name="ticket_comment" >${ticket.ticketComment!''} </textarea>
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelTicketComment.help}</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <button name="action_createTicket" class="btn btn-primary" type="submit" tabindex="15">
+                        #i18n{ticketing.xpage.create_ticket.labelButtonCreate}
+                    </button>
+               </div>
+            </div>
+        </fieldset>
+    </form>
+    </div>
+</div>
+
+  

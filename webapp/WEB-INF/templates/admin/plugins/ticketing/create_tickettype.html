@@ -1,0 +1,13 @@
+<#include "manageadminticketing_tabs.html" />
+<@tabs tab="tickettype" />
+
+<@rowBoxHeader i18nTitleKey="ticketing.create_tickettype.pageTitle">
+    <form class="form-horizontal" method="post" name="create_tickettype" action="jsp/admin/plugins/ticketing/ManageTicketTypes.jsp">
+        <@messages errors=errors />
+        <input type="hidden" id="id" name="id"/>
+        
+        <@fieldInputText i18nLabelKey="ticketing.create_tickettype.labelLabel" inputName="label" mandatory=true value="${tickettype.label!''}" i18nHelpBlockKey="ticketing.create_tickettype.labelLabel.help" />
+        <@actionButtons button1Name="action_createTicketType" button2Name="view_manageTicketTypes"/>
+    </form>
+</@rowBoxHeader>
+

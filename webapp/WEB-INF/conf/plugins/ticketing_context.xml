@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd" >
+
+    <bean id="ticketing.ticketRest"  class="fr.paris.lutece.plugins.ticketing.web.rs.TicketRest" />
+    <bean id="ticketing.ticketTypeRest"  class="fr.paris.lutece.plugins.ticketing.web.rs.TicketTypeRest" />
+
+    <bean id="ticketing.ticketDAO"  class="fr.paris.lutece.plugins.ticketing.business.TicketDAO" />  
+    <bean id="ticketing.ticketTypeDAO"  class="fr.paris.lutece.plugins.ticketing.business.TicketTypeDAO" />  
+    <bean id="ticketing.ticketDomainDAO"  class="fr.paris.lutece.plugins.ticketing.business.TicketDomainDAO" />  
+    <bean id="ticketing.ticketCategoryDAO"  class="fr.paris.lutece.plugins.ticketing.business.TicketCategoryDAO" />  
+    <bean id="ticketing.userTitleDAO"  class="fr.paris.lutece.plugins.ticketing.business.UserTitleDAO" />  
+</beans>

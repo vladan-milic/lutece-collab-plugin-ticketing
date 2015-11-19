@@ -1,0 +1,26 @@
+<#macro tabs tab >
+<div>
+    <ul class="nav nav-tabs">
+        <li <#if tab="ticketcategory">class="active"</#if>>
+            <a href="jsp/admin/plugins/ticketing/ManageTicketCategorys.jsp">
+                #i18n{ticketing.manage_ticketcategorys.pageTitle}
+            </a>
+        </li>
+        <li <#if tab="ticketdomain">class="active"</#if>>
+            <a href="jsp/admin/plugins/ticketing/ManageTicketDomains.jsp">
+                #i18n{ticketing.manage_ticketdomains.pageTitle}
+            </a>
+        </li>
+        <li <#if tab="tickettype">class="active"</#if>>
+            <a href="jsp/admin/plugins/ticketing/ManageTicketTypes.jsp">
+                #i18n{ticketing.manage_tickettypes.pageTitle}
+            </a>
+        </li>
+        <li <#if tab="usertitle">class="active"</#if>>
+            <a href="jsp/admin/plugins/ticketing/ManageUserTitles.jsp">
+                #i18n{ticketing.manage_usertitles.pageTitle}
+            </a>
+        </li>
+    </ul>
+</div>
+</#macro>

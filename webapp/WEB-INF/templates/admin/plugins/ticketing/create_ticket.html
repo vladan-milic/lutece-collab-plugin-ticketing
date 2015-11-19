@@ -1,0 +1,26 @@
+<#include "managetickets_tabs.html" />
+<@tabs tab="ticket" />
+
+<@rowBoxHeader i18nTitleKey="ticketing.create_ticket.pageTitle">
+    <form class="form-horizontal" method="post" name="create_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+        <@messages errors=errors />
+        <input type="hidden" id="id" name="id"/>
+        <@fieldInputCombo i18nLabelKey="ticketing.create_ticket.labelIdUserTitle" inputName="id_user_title" user_titles_list value="${ticket.idUserTitle!''}" i18nHelpBlockKey="ticketing.create_ticket.labelIdUserTitle.help" cssClass='' > 
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelUserTitle" inputName="user_title"  value="${ticket.userTitle!''}" i18nHelpBlockKey="ticketing.create_ticket.labelUserTitle.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelFirstname" inputName="firstname" mandatory=true value="${ticket.firstname!''}" i18nHelpBlockKey="ticketing.create_ticket.labelFirstname.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelLastname" inputName="lastname" mandatory=true value="${ticket.lastname!''}" i18nHelpBlockKey="ticketing.create_ticket.labelLastname.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelEmail" inputName="email"  value="${ticket.email!''}" i18nHelpBlockKey="ticketing.create_ticket.labelEmail.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelPhoneNumber" inputName="phone_number"  value="${ticket.phoneNumber!''}" i18nHelpBlockKey="ticketing.create_ticket.labelPhoneNumber.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelIdTicketType" inputName="id_ticket_type" mandatory=true value="${ticket.idTicketType!''}" i18nHelpBlockKey="ticketing.create_ticket.labelIdTicketType.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelTicketType" inputName="ticket_type"  value="${ticket.ticketType!''}" i18nHelpBlockKey="ticketing.create_ticket.labelTicketType.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelIdTicketDomain" inputName="id_ticket_domain"  value="${ticket.idTicketDomain!''}" i18nHelpBlockKey="ticketing.create_ticket.labelIdTicketDomain.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelTicketDomain" inputName="ticket_domain"  value="${ticket.ticketDomain!''}" i18nHelpBlockKey="ticketing.create_ticket.labelTicketDomain.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelIdTicketCategory" inputName="id_ticket_category"  value="${ticket.idTicketCategory!''}" i18nHelpBlockKey="ticketing.create_ticket.labelIdTicketCategory.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelTicketCategory" inputName="ticket_category"  value="${ticket.ticketCategory!''}" i18nHelpBlockKey="ticketing.create_ticket.labelTicketCategory.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelTicketComment" inputName="ticket_comment"  value="${ticket.ticketComment!''}" i18nHelpBlockKey="ticketing.create_ticket.labelTicketComment.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelTicketStatus" inputName="ticket_status" mandatory=true value="${ticket.ticketStatus!''}" i18nHelpBlockKey="ticketing.create_ticket.labelTicketStatus.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelTicketStatusText" inputName="ticket_status_text"  value="${ticket.ticketStatusText!''}" i18nHelpBlockKey="ticketing.create_ticket.labelTicketStatusText.help" />
+        <@actionButtons button1Name="action_createTicket" button2Name="view_manageTickets"/>
+    </form>
+</@rowBoxHeader>
+

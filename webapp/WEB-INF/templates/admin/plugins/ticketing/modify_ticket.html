@@ -1,0 +1,27 @@
+<#include "managetickets_tabs.html" />
+<@tabs tab="ticket" />
+
+<@rowBoxHeader i18nTitleKey="ticketing.modify_ticket.pageTitle">
+    <form class="form-horizontal" method="post" name="modify_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+        <@messages errors=errors />
+        <input type="hidden" id="id" name="id" value="${ticket.id}"/>
+        
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelIdUserTitle" inputName="id_user_title" mandatory=true value="${ticket.idUserTitle}" i18nHelpBlockKey="ticketing.modify_ticket.labelIdUserTitle.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelUserTitle" inputName="user_title"  value="${ticket.userTitle}" i18nHelpBlockKey="ticketing.modify_ticket.labelUserTitle.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelFirstname" inputName="firstname" mandatory=true value="${ticket.firstname}" i18nHelpBlockKey="ticketing.modify_ticket.labelFirstname.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelLastname" inputName="lastname" mandatory=true value="${ticket.lastname}" i18nHelpBlockKey="ticketing.modify_ticket.labelLastname.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelEmail" inputName="email"  value="${ticket.email}" i18nHelpBlockKey="ticketing.modify_ticket.labelEmail.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelPhoneNumber" inputName="phone_number"  value="${ticket.phoneNumber}" i18nHelpBlockKey="ticketing.modify_ticket.labelPhoneNumber.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelIdTicketType" inputName="id_ticket_type" mandatory=true value="${ticket.idTicketType}" i18nHelpBlockKey="ticketing.modify_ticket.labelIdTicketType.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelTicketType" inputName="ticket_type"  value="${ticket.ticketType}" i18nHelpBlockKey="ticketing.modify_ticket.labelTicketType.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelIdTicketDomain" inputName="id_ticket_domain"  value="${ticket.idTicketDomain}" i18nHelpBlockKey="ticketing.modify_ticket.labelIdTicketDomain.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelTicketDomain" inputName="ticket_domain"  value="${ticket.ticketDomain}" i18nHelpBlockKey="ticketing.modify_ticket.labelTicketDomain.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelIdTicketCategory" inputName="id_ticket_category"  value="${ticket.idTicketCategory}" i18nHelpBlockKey="ticketing.modify_ticket.labelIdTicketCategory.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelTicketCategory" inputName="ticket_category"  value="${ticket.ticketCategory}" i18nHelpBlockKey="ticketing.modify_ticket.labelTicketCategory.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelTicketComment" inputName="ticket_comment"  value="${ticket.ticketComment}" i18nHelpBlockKey="ticketing.modify_ticket.labelTicketComment.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelTicketStatus" inputName="ticket_status" mandatory=true value="${ticket.ticketStatus}" i18nHelpBlockKey="ticketing.modify_ticket.labelTicketStatus.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelTicketStatusText" inputName="ticket_status_text"  value="${ticket.ticketStatusText}" i18nHelpBlockKey="ticketing.modify_ticket.labelTicketStatusText.help" />
+        <@actionButtons button1Name="action_modifyTicket" button2Name="view_manageTickets"/>
+    </form>
+</@rowBoxHeader>
+

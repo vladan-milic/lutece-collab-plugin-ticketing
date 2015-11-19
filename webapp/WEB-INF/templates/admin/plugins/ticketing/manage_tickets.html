@@ -1,0 +1,70 @@
+<@rowBox>
+    <@boxHeader i18nTitleKey="ticketing.manage_tickets.tableLabel">
+        <@headerButtons>
+
+        
+        <form class="form-inline pull-right" method="post" name="manage_tickets" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+            <!-- Add pull-right to class1 -->
+            <@actionButtons button1Name="view_createTicket" icon1="icon-plus icon-white" i18nValue1Key="ticketing.manage_tickets.buttonAdd" />
+        </form>
+        
+    </@headerButtons>
+    </@boxHeader>
+    <@boxBody>    
+    <@messages infos=infos />
+    <@paginationAdmin paginator=paginator combo=1 />
+    
+    <@table>
+        <tr>
+            <input type="hidden" id="id" name="id"/>
+            <th>#i18n{ticketing.manage_tickets.columnUser}</th>
+            <th>#i18n{ticketing.manage_tickets.columnTicketType}</th>
+            <th>#i18n{ticketing.manage_tickets.columnTicketDomain}</th>
+            <th>#i18n{ticketing.manage_tickets.columnTicketCategory}</th>
+            <th>#i18n{ticketing.manage_tickets.columnTicketComment}</th>
+            <th>#i18n{ticketing.manage_tickets.columnTicketStatus}</th>
+            <th>#i18n{portal.util.labelActions}</th>
+        </tr>
+        <@tableHeadBodySeparator />
+            <#list ticket_list as ticket >
+        <tr>
+            <input type="hidden" id="id" name="id"/>
+            <td>
+                ${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}<br>
+                ${ticket.email} ${ticket.phoneNumber}
+            </td>
+            <td>
+                ${ticket.ticketType}
+            </td>
+            <td>
+                ${ticket.ticketDomain}
+            </td>
+            <td>
+                ${ticket.ticketCategory}
+            </td>
+            <td>
+                ${ticket.ticketComment}
+            </td>
+            <td>
+                ${ticket.ticketStatus} ${ticket.ticketStatusText}
+            </td>
+        <td>
+            <a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
+               class="btn btn-primary btn-small" title="#i18n{portal.util.labelModify}">
+                <i class="fa fa-pencil"></i>
+            </a>
+
+            <a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}"
+               class="btn btn-danger btn-small" title="#i18n{portal.util.labelDelete}" >
+                <i class="fa fa-trash"></i>
+            </a>
+        </td>
+        </tr>
+        </#list>
+    </@table>
+
+    <@paginationAdmin paginator=paginator />
+
+  </@boxBody>
+</@rowBox>
+
