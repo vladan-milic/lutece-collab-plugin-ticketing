@@ -31,7 +31,6 @@
  *
  * License 1.0
  */
-
 package fr.paris.lutece.plugins.ticketing.business;
 
 import fr.paris.lutece.test.LuteceTestCase;
@@ -45,28 +44,27 @@ public class TicketTypeBusinessTest extends LuteceTestCase
     public void testBusiness(  )
     {
         // Initialize an object
-        TicketType ticketType = new TicketType();
+        TicketType ticketType = new TicketType(  );
         ticketType.setLabel( LABEL1 );
 
         // Create test
         TicketTypeHome.create( ticketType );
-        TicketType ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId( ) );
-        assertEquals( ticketTypeStored.getLabel() , ticketType.getLabel( ) );
+
+        TicketType ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId(  ) );
+        assertEquals( ticketTypeStored.getLabel(  ), ticketType.getLabel(  ) );
 
         // Update test
         ticketType.setLabel( LABEL2 );
         TicketTypeHome.update( ticketType );
-        ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId( ) );
-        assertEquals( ticketTypeStored.getLabel() , ticketType.getLabel( ) );
+        ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId(  ) );
+        assertEquals( ticketTypeStored.getLabel(  ), ticketType.getLabel(  ) );
 
         // List test
-        TicketTypeHome.getTicketTypesList();
+        TicketTypeHome.getTicketTypesList(  );
 
         // Delete test
-        TicketTypeHome.remove( ticketType.getId( ) );
-        ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId( ) );
+        TicketTypeHome.remove( ticketType.getId(  ) );
+        ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId(  ) );
         assertNull( ticketTypeStored );
-        
     }
-
 }

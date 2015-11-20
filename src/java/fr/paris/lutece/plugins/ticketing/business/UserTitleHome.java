@@ -31,23 +31,22 @@
  *
  * License 1.0
  */
- 
 package fr.paris.lutece.plugins.ticketing.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
+
 import java.util.List;
+
 
 /**
  * This class provides instances management methods (create, find, ...) for UserTitle objects
  */
-
 public final class UserTitleHome
 {
     // Static variable pointed at the DAO instance
-
     private static IUserTitleDAO _dao = SpringContextService.getBean( "ticketing.userTitleDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
@@ -101,30 +100,29 @@ public final class UserTitleHome
      */
     public static UserTitle findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, _plugin);
+        return _dao.load( nKey, _plugin );
     }
 
     /**
      * Load the data of all the userTitle objects and returns them in form of a collection
      * @return the collection which contains the data of all the userTitle objects
      */
-    public static List<UserTitle> getUserTitlesList( )
+    public static List<UserTitle> getUserTitlesList(  )
     {
         return _dao.selectUserTitlesList( _plugin );
     }
-    
+
     /**
      * Load the id of all the userTitle objects and returns them in form of a collection
      * @return the collection which contains the id of all the userTitle objects
      */
-    public static List<Integer> getIdUserTitlesList( )
+    public static List<Integer> getIdUserTitlesList(  )
     {
         return _dao.selectIdUserTitlesList( _plugin );
     }
-    
-    public static ReferenceList getReferenceList()
+
+    public static ReferenceList getReferenceList(  )
     {
         return _dao.selectReferenceList( _plugin );
     }
 }
-

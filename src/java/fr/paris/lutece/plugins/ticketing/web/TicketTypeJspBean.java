@@ -31,8 +31,6 @@
  *
  * License 1.0
  */
-
- 
 package fr.paris.lutece.plugins.ticketing.web;
 
 import fr.paris.lutece.plugins.ticketing.business.TicketType;
@@ -47,7 +45,6 @@ import fr.paris.lutece.util.url.UrlItem;
 import java.util.List;
 import java.util.Map;
 
-
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -57,7 +54,6 @@ import javax.servlet.http.HttpServletRequest;
 @Controller( controllerJsp = "ManageTicketTypes.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = "TICKETING_MANAGEMENT" )
 public class TicketTypeJspBean extends ManageAdminTicketingJspBean
 {
-
     ////////////////////////////////////////////////////////////////////////////
     // Constants
 
@@ -65,7 +61,6 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     private static final String TEMPLATE_MANAGE_TICKETTYPES = "/admin/plugins/ticketing/manage_tickettypes.html";
     private static final String TEMPLATE_CREATE_TICKETTYPE = "/admin/plugins/ticketing/create_tickettype.html";
     private static final String TEMPLATE_MODIFY_TICKETTYPE = "/admin/plugins/ticketing/modify_tickettype.html";
-
 
     // Parameters
     private static final String PARAMETER_ID_TICKETTYPE = "id";
@@ -78,13 +73,11 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     // Markers
     private static final String MARK_TICKETTYPE_LIST = "tickettype_list";
     private static final String MARK_TICKETTYPE = "tickettype";
-
     private static final String JSP_MANAGE_TICKETTYPES = "jsp/admin/plugins/ticketing/ManageTicketTypes.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETTYPE = "ticketing.message.confirmRemoveTicketType";
     private static final String PROPERTY_DEFAULT_LIST_TICKETTYPE_PER_PAGE = "ticketing.listTicketTypes.itemsPerPage";
- 
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.tickettype.attribute.";
 
     // Views
@@ -102,11 +95,10 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     private static final String INFO_TICKETTYPE_CREATED = "ticketing.info.tickettype.created";
     private static final String INFO_TICKETTYPE_UPDATED = "ticketing.info.tickettype.updated";
     private static final String INFO_TICKETTYPE_REMOVED = "ticketing.info.tickettype.removed";
-    
+
     // Session variable to store working values
     private TicketType _tickettype;
-    
-    
+
     /**
      * Build the Manage View
      * @param request The HTTP request
@@ -116,8 +108,10 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     public String getManageTicketTypes( HttpServletRequest request )
     {
         _tickettype = null;
+
         List<TicketType> listTicketTypes = (List<TicketType>) TicketTypeHome.getTicketTypesList(  );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKETTYPE_LIST, listTicketTypes, JSP_MANAGE_TICKETTYPES );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKETTYPE_LIST, listTicketTypes,
+                JSP_MANAGE_TICKETTYPES );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETTYPES, TEMPLATE_MANAGE_TICKETTYPES, model );
     }
@@ -209,7 +203,7 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETTYPE ) );
 
-        if ( _tickettype == null || ( _tickettype.getId(  ) != nId ))
+        if ( ( _tickettype == null ) || ( _tickettype.getId(  ) != nId ) )
         {
             _tickettype = TicketTypeHome.findByPrimaryKey( nId );
         }
@@ -234,7 +228,7 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
         // Check constraints
         if ( !validateBean( _tickettype, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect( request, VIEW_MODIFY_TICKETTYPE, PARAMETER_ID_TICKETTYPE, _tickettype.getId( ) );
+            return redirect( request, VIEW_MODIFY_TICKETTYPE, PARAMETER_ID_TICKETTYPE, _tickettype.getId(  ) );
         }
 
         TicketTypeHome.update( _tickettype );

@@ -30,34 +30,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * License 1.0
- */ 
+ */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.*;
+
 
 /**
  * This is the business class for the object TicketType
- */ 
+ */
 public class TicketType implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
     // Variables declarations 
     private int _nId;
-    
     @NotEmpty( message = "#i18n{ticketing.validation.tickettype.Label.notEmpty}" )
-    @Size( max = 50 , message = "#i18n{ticketing.validation.tickettype.Label.size}" ) 
+    @Size( max = 50, message = "#i18n{ticketing.validation.tickettype.Label.size}" )
     private String _strLabel;
 
     /**
      * Returns the Id
      * @return The Id
      */
-    public int getId( )
+    public int getId(  )
     {
         return _nId;
     }
@@ -65,7 +65,7 @@ public class TicketType implements Serializable
     /**
      * Sets the Id
      * @param nId The Id
-     */ 
+     */
     public void setId( int nId )
     {
         _nId = nId;
@@ -75,7 +75,7 @@ public class TicketType implements Serializable
      * Returns the Label
      * @return The Label
      */
-    public String getLabel( )
+    public String getLabel(  )
     {
         return _strLabel;
     }
@@ -83,7 +83,7 @@ public class TicketType implements Serializable
     /**
      * Sets the Label
      * @param strLabel The Label
-     */ 
+     */
     public void setLabel( String strLabel )
     {
         _strLabel = strLabel;

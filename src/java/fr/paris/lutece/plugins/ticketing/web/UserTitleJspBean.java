@@ -31,8 +31,6 @@
  *
  * License 1.0
  */
-
- 
 package fr.paris.lutece.plugins.ticketing.web;
 
 import fr.paris.lutece.plugins.ticketing.business.UserTitle;
@@ -47,7 +45,6 @@ import fr.paris.lutece.util.url.UrlItem;
 import java.util.List;
 import java.util.Map;
 
-
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -57,7 +54,6 @@ import javax.servlet.http.HttpServletRequest;
 @Controller( controllerJsp = "ManageUserTitles.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = "TICKETING_MANAGEMENT" )
 public class UserTitleJspBean extends ManageAdminTicketingJspBean
 {
-
     ////////////////////////////////////////////////////////////////////////////
     // Constants
 
@@ -65,7 +61,6 @@ public class UserTitleJspBean extends ManageAdminTicketingJspBean
     private static final String TEMPLATE_MANAGE_USERTITLES = "/admin/plugins/ticketing/manage_usertitles.html";
     private static final String TEMPLATE_CREATE_USERTITLE = "/admin/plugins/ticketing/create_usertitle.html";
     private static final String TEMPLATE_MODIFY_USERTITLE = "/admin/plugins/ticketing/modify_usertitle.html";
-
 
     // Parameters
     private static final String PARAMETER_ID_USERTITLE = "id";
@@ -78,13 +73,11 @@ public class UserTitleJspBean extends ManageAdminTicketingJspBean
     // Markers
     private static final String MARK_USERTITLE_LIST = "usertitle_list";
     private static final String MARK_USERTITLE = "usertitle";
-
     private static final String JSP_MANAGE_USERTITLES = "jsp/admin/plugins/ticketing/ManageUserTitles.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_USERTITLE = "ticketing.message.confirmRemoveUserTitle";
     private static final String PROPERTY_DEFAULT_LIST_USERTITLE_PER_PAGE = "ticketing.listUserTitles.itemsPerPage";
- 
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.usertitle.attribute.";
 
     // Views
@@ -102,11 +95,10 @@ public class UserTitleJspBean extends ManageAdminTicketingJspBean
     private static final String INFO_USERTITLE_CREATED = "ticketing.info.usertitle.created";
     private static final String INFO_USERTITLE_UPDATED = "ticketing.info.usertitle.updated";
     private static final String INFO_USERTITLE_REMOVED = "ticketing.info.usertitle.removed";
-    
+
     // Session variable to store working values
     private UserTitle _usertitle;
-    
-    
+
     /**
      * Build the Manage View
      * @param request The HTTP request
@@ -116,8 +108,10 @@ public class UserTitleJspBean extends ManageAdminTicketingJspBean
     public String getManageUserTitles( HttpServletRequest request )
     {
         _usertitle = null;
+
         List<UserTitle> listUserTitles = (List<UserTitle>) UserTitleHome.getUserTitlesList(  );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_USERTITLE_LIST, listUserTitles, JSP_MANAGE_USERTITLES );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_USERTITLE_LIST, listUserTitles,
+                JSP_MANAGE_USERTITLES );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_USERTITLES, TEMPLATE_MANAGE_USERTITLES, model );
     }
@@ -209,7 +203,7 @@ public class UserTitleJspBean extends ManageAdminTicketingJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_USERTITLE ) );
 
-        if ( _usertitle == null || ( _usertitle.getId(  ) != nId ))
+        if ( ( _usertitle == null ) || ( _usertitle.getId(  ) != nId ) )
         {
             _usertitle = UserTitleHome.findByPrimaryKey( nId );
         }
@@ -234,7 +228,7 @@ public class UserTitleJspBean extends ManageAdminTicketingJspBean
         // Check constraints
         if ( !validateBean( _usertitle, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect( request, VIEW_MODIFY_USERTITLE, PARAMETER_ID_USERTITLE, _usertitle.getId( ) );
+            return redirect( request, VIEW_MODIFY_USERTITLE, PARAMETER_ID_USERTITLE, _usertitle.getId(  ) );
         }
 
         UserTitleHome.update( _usertitle );

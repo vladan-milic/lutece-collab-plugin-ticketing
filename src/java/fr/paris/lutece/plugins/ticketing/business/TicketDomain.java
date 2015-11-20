@@ -30,18 +30,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * License 1.0
- */ 
+ */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.*;
+
 
 /**
  * This is the business class for the object TicketDomain
- */ 
+ */
 public class TicketDomain implements Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -50,16 +51,15 @@ public class TicketDomain implements Serializable
     private int _nId;
     private int _nIdTicketType;
     private String _strTicketType;
-    
     @NotEmpty( message = "#i18n{ticketing.validation.ticketdomain.Label.notEmpty}" )
-    @Size( max = 50 , message = "#i18n{ticketing.validation.ticketdomain.Label.size}" ) 
+    @Size( max = 50, message = "#i18n{ticketing.validation.ticketdomain.Label.size}" )
     private String _strLabel;
 
     /**
      * Returns the Id
      * @return The Id
      */
-    public int getId( )
+    public int getId(  )
     {
         return _nId;
     }
@@ -67,7 +67,7 @@ public class TicketDomain implements Serializable
     /**
      * Sets the Id
      * @param nId The Id
-     */ 
+     */
     public void setId( int nId )
     {
         _nId = nId;
@@ -77,7 +77,7 @@ public class TicketDomain implements Serializable
      * Returns the IdTicketType
      * @return The IdTicketType
      */
-    public int getIdTicketType( )
+    public int getIdTicketType(  )
     {
         return _nIdTicketType;
     }
@@ -85,7 +85,7 @@ public class TicketDomain implements Serializable
     /**
      * Sets the IdTicketType
      * @param nIdTicketType The IdTicketType
-     */ 
+     */
     public void setIdTicketType( int nIdTicketType )
     {
         _nIdTicketType = nIdTicketType;
@@ -95,7 +95,7 @@ public class TicketDomain implements Serializable
      * Returns the TicketType
      * @return The TicketType
      */
-    public String getTicketType( )
+    public String getTicketType(  )
     {
         return _strTicketType;
     }
@@ -103,16 +103,17 @@ public class TicketDomain implements Serializable
     /**
      * Sets the TicketType
      * @param strTicketType The TicketType
-     */ 
+     */
     public void setTicketType( String strTicketType )
     {
         _strTicketType = strTicketType;
     }
+
     /**
      * Returns the Label
      * @return The Label
      */
-    public String getLabel( )
+    public String getLabel(  )
     {
         return _strLabel;
     }
@@ -120,7 +121,7 @@ public class TicketDomain implements Serializable
     /**
      * Sets the Label
      * @param strLabel The Label
-     */ 
+     */
     public void setLabel( String strLabel )
     {
         _strLabel = strLabel;

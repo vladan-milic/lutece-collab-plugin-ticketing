@@ -34,7 +34,10 @@
 package fr.paris.lutece.plugins.ticketing.web;
 
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
+import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -46,14 +49,17 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
+
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 
 /**
  * ManageTickets JSP Bean abstract class for JSP Bean
  */
+
 /**
  * This class provides the user interface to manage Ticket features ( manage, create, modify, remove )
  */
@@ -62,7 +68,6 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
 {
     // Right
     public static final String RIGHT_MANAGETICKETS = "TICKETING_TICKETS_MANAGEMENT";
-    
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String MARK_PAGINATOR = "paginator";
@@ -76,7 +81,6 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String TEMPLATE_CREATE_TICKET = "/admin/plugins/ticketing/create_ticket.html";
     private static final String TEMPLATE_MODIFY_TICKET = "/admin/plugins/ticketing/modify_ticket.html";
 
-
     // Parameters
     private static final String PARAMETER_ID_TICKET = "id";
 
@@ -89,13 +93,14 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String MARK_TICKET_LIST = "ticket_list";
     private static final String MARK_TICKET = "ticket";
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";
-
+    private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
+    private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
+    private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
     private static final String JSP_MANAGE_TICKETS = "jsp/admin/plugins/ticketing/ManageTickets.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
     private static final String PROPERTY_DEFAULT_LIST_TICKET_PER_PAGE = "ticketing.listTickets.itemsPerPage";
- 
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.ticket.attribute.";
 
     // Views
@@ -113,45 +118,17 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String INFO_TICKET_CREATED = "ticketing.info.ticket.created";
     private static final String INFO_TICKET_UPDATED = "ticketing.info.ticket.updated";
     private static final String INFO_TICKET_REMOVED = "ticketing.info.ticket.removed";
-    
+    private static final long serialVersionUID = 1L;
+
     // Session variable to store working values
     private Ticket _ticket;
+
     //Variables
     private int _nDefaultItemsPerPage;
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
 
-    /**
-     * Return a model that contains the list and paginator infos
-     * @param request The HTTP request
-     * @param strBookmark The bookmark
-     * @param list The list of item
-     * @param strManageJsp The JSP
-     * @return The model
-     */
-    protected Map<String, Object> getPaginatedListModel( HttpServletRequest request, String strBookmark, List list,
-        String strManageJsp )
-    {
-        _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
-        _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
-        _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
-                _nDefaultItemsPerPage );
 
-        UrlItem url = new UrlItem( strManageJsp );
-        String strUrl = url.getUrl(  );
-
-        // PAGINATOR
-        LocalizedPaginator paginator = new LocalizedPaginator( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
-                _strCurrentPageIndex, getLocale(  ) );
-
-        Map<String, Object> model = getModel(  );
-
-        model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
-        model.put( MARK_PAGINATOR, paginator );
-        model.put( strBookmark, paginator.getPageItems(  ) );
-
-        return model;
-    }
     /**
      * Build the Manage View
      * @param request The HTTP request
@@ -161,8 +138,24 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     public String getManageTickets( HttpServletRequest request )
     {
         _ticket = null;
+
         List<Ticket> listTickets = (List<Ticket>) TicketHome.getTicketsList(  );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKET_LIST, listTickets, JSP_MANAGE_TICKETS );
+        _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
+        _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
+        _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
+                _nDefaultItemsPerPage );
+
+        UrlItem url = new UrlItem( JSP_MANAGE_TICKETS );
+        String strUrl = url.getUrl(  );
+
+        // PAGINATOR
+        LocalizedPaginator paginator = new LocalizedPaginator( listTickets, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
+                _strCurrentPageIndex, getLocale(  ) );
+
+        Map<String, Object> model = getModel(  );
+        model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
+        model.put( MARK_PAGINATOR, paginator );
+        model.put( MARK_TICKET_LIST, paginator.getPageItems(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
     }
@@ -179,7 +172,11 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         _ticket = ( _ticket != null ) ? _ticket : new Ticket(  );
 
         Map<String, Object> model = getModel(  );
-        model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList() );
+        model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );
+        // FIXME Dynamic filling
+        model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
+        model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
         model.put( MARK_TICKET, _ticket );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKET, TEMPLATE_CREATE_TICKET, model );
@@ -255,12 +252,17 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKET ) );
 
-        if ( _ticket == null || ( _ticket.getId(  ) != nId ))
+        if ( ( _ticket == null ) || ( _ticket.getId(  ) != nId ) )
         {
             _ticket = TicketHome.findByPrimaryKey( nId );
         }
 
         Map<String, Object> model = getModel(  );
+        model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );
+        // FIXME Dynamic filling
+        model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
+        model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
         model.put( MARK_TICKET, _ticket );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKET, TEMPLATE_MODIFY_TICKET, model );
@@ -280,7 +282,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         // Check constraints
         if ( !validateBean( _ticket, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect( request, VIEW_MODIFY_TICKET, PARAMETER_ID_TICKET, _ticket.getId( ) );
+            return redirect( request, VIEW_MODIFY_TICKET, PARAMETER_ID_TICKET, _ticket.getId(  ) );
         }
 
         TicketHome.update( _ticket );

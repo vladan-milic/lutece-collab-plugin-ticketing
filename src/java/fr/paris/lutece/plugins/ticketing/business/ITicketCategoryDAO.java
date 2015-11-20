@@ -31,13 +31,12 @@
  *
  * License 1.0
  */
- 
 package fr.paris.lutece.plugins.ticketing.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
-import java.util.List;
 
+import java.util.List;
 
 
 /**
@@ -83,7 +82,7 @@ public interface ITicketCategoryDAO
      * @return The collection which contains the data of all the ticketCategory objects
      */
     List<TicketCategory> selectTicketCategorysList( Plugin plugin );
-    
+
     /**
      * Load the id of all the ticketCategory objects and returns them as a collection
      * @param plugin the Plugin
@@ -97,6 +96,5 @@ public interface ITicketCategoryDAO
      * @param plugin The plugin
      * @return The reference list
      */
-    ReferenceList selectReferenceListByDomain(int nDomainId, Plugin plugin);
+    ReferenceList selectReferenceListByDomain( int nDomainId, Plugin plugin );
 }
-

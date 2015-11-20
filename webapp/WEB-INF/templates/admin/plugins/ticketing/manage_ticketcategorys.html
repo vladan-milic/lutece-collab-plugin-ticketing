@@ -16,6 +16,7 @@
     <@boxBody>    
     <@messages infos=infos />
     <@paginationAdmin paginator=paginator combo=1 />
+    <div class="clearfix"></div>
     
     <@table>
         <tr>
@@ -36,12 +37,12 @@
             </td>
         <td>
             <a href="jsp/admin/plugins/ticketing/ManageTicketCategorys.jsp?view=modifyTicketCategory&id=${ticketcategory.id}"
-               class="btn btn-primary btn-small" title="#i18n{portal.util.labelModify}">
+               class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
                 <i class="fa fa-pencil"></i>
             </a>
 
             <a href="jsp/admin/plugins/ticketing/ManageTicketCategorys.jsp?action=confirmRemoveTicketCategory&id=${ticketcategory.id}"
-               class="btn btn-danger btn-small" title="#i18n{portal.util.labelDelete}" >
+               class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
                 <i class="fa fa-trash"></i>
             </a>
         </td>

@@ -30,71 +30,58 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * License 1.0
- */ 
+ */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.*;
+
 
 /**
  * This is the business class for the object Ticket
- */ 
+ */
 public class Ticket implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
     // Variables declarations 
     private int _nId;
-    
     private int _nIdUserTitle;
-    
-    @Size( max = 50 , message = "#i18n{ticketing.validation.ticket.UserTitle.size}" ) 
+    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.UserTitle.size}" )
     private String _strUserTitle;
-    
     @NotEmpty( message = "#i18n{ticketing.validation.ticket.Firstname.notEmpty}" )
-    @Size( max = 50 , message = "#i18n{ticketing.validation.ticket.Firstname.size}" ) 
+    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.Firstname.size}" )
     private String _strFirstname;
-    
     @NotEmpty( message = "#i18n{ticketing.validation.ticket.Lastname.notEmpty}" )
-    @Size( max = 50 , message = "#i18n{ticketing.validation.ticket.Lastname.size}" ) 
+    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.Lastname.size}" )
     private String _strLastname;
-    @Email(message = "#i18n{portal.validation.message.email}")
-    @Size( max = 255 , message = "#i18n{ticketing.validation.ticket.Email.size}" ) 
+    @Email( message = "#i18n{portal.validation.message.email}" )
+    @Size( max = 255, message = "#i18n{ticketing.validation.ticket.Email.size}" )
     private String _strEmail;
-    
-    @Size( max = 50 , message = "#i18n{ticketing.validation.ticket.PhoneNumber.size}" ) 
+    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.PhoneNumber.size}" )
     private String _strPhoneNumber;
-    
     private int _nIdTicketType;
-    
-    @Size( max = 50 , message = "#i18n{ticketing.validation.ticket.TicketType.size}" ) 
+    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketType.size}" )
     private String _strTicketType;
-    
     private int _nIdTicketDomain;
-    
-    @Size( max = 50 , message = "#i18n{ticketing.validation.ticket.TicketDomain.size}" ) 
+    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketDomain.size}" )
     private String _strTicketDomain;
-    
     private int _nIdTicketCategory;
-    
-    @Size( max = 50 , message = "#i18n{ticketing.validation.ticket.TicketCategory.size}" ) 
+    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketCategory.size}" )
     private String _strTicketCategory;
-    
     private String _strTicketComment;
-    
     private int _nTicketStatus;
-    
-    @Size( max = 255 , message = "#i18n{ticketing.validation.ticket.TicketStatusText.size}" ) 
+    @Size( max = 255, message = "#i18n{ticketing.validation.ticket.TicketStatusText.size}" )
     private String _strTicketStatusText;
 
     /**
      * Returns the Id
      * @return The Id
      */
-    public int getId( )
+    public int getId(  )
     {
         return _nId;
     }
@@ -102,7 +89,7 @@ public class Ticket implements Serializable
     /**
      * Sets the Id
      * @param nId The Id
-     */ 
+     */
     public void setId( int nId )
     {
         _nId = nId;
@@ -112,7 +99,7 @@ public class Ticket implements Serializable
      * Returns the IdUserTitle
      * @return The IdUserTitle
      */
-    public int getIdUserTitle( )
+    public int getIdUserTitle(  )
     {
         return _nIdUserTitle;
     }
@@ -120,16 +107,17 @@ public class Ticket implements Serializable
     /**
      * Sets the IdUserTitle
      * @param nIdUserTitle The IdUserTitle
-     */ 
+     */
     public void setIdUserTitle( int nIdUserTitle )
     {
         _nIdUserTitle = nIdUserTitle;
     }
+
     /**
      * Returns the UserTitle
      * @return The UserTitle
      */
-    public String getUserTitle( )
+    public String getUserTitle(  )
     {
         return _strUserTitle;
     }
@@ -137,16 +125,17 @@ public class Ticket implements Serializable
     /**
      * Sets the UserTitle
      * @param strUserTitle The UserTitle
-     */ 
+     */
     public void setUserTitle( String strUserTitle )
     {
         _strUserTitle = strUserTitle;
     }
+
     /**
      * Returns the Firstname
      * @return The Firstname
      */
-    public String getFirstname( )
+    public String getFirstname(  )
     {
         return _strFirstname;
     }
@@ -154,16 +143,17 @@ public class Ticket implements Serializable
     /**
      * Sets the Firstname
      * @param strFirstname The Firstname
-     */ 
+     */
     public void setFirstname( String strFirstname )
     {
         _strFirstname = strFirstname;
     }
+
     /**
      * Returns the Lastname
      * @return The Lastname
      */
-    public String getLastname( )
+    public String getLastname(  )
     {
         return _strLastname;
     }
@@ -171,16 +161,17 @@ public class Ticket implements Serializable
     /**
      * Sets the Lastname
      * @param strLastname The Lastname
-     */ 
+     */
     public void setLastname( String strLastname )
     {
         _strLastname = strLastname;
     }
+
     /**
      * Returns the Email
      * @return The Email
      */
-    public String getEmail( )
+    public String getEmail(  )
     {
         return _strEmail;
     }
@@ -188,16 +179,17 @@ public class Ticket implements Serializable
     /**
      * Sets the Email
      * @param strEmail The Email
-     */ 
+     */
     public void setEmail( String strEmail )
     {
         _strEmail = strEmail;
     }
+
     /**
      * Returns the PhoneNumber
      * @return The PhoneNumber
      */
-    public String getPhoneNumber( )
+    public String getPhoneNumber(  )
     {
         return _strPhoneNumber;
     }
@@ -205,16 +197,17 @@ public class Ticket implements Serializable
     /**
      * Sets the PhoneNumber
      * @param strPhoneNumber The PhoneNumber
-     */ 
+     */
     public void setPhoneNumber( String strPhoneNumber )
     {
         _strPhoneNumber = strPhoneNumber;
     }
+
     /**
      * Returns the IdTicketType
      * @return The IdTicketType
      */
-    public int getIdTicketType( )
+    public int getIdTicketType(  )
     {
         return _nIdTicketType;
     }
@@ -222,16 +215,17 @@ public class Ticket implements Serializable
     /**
      * Sets the IdTicketType
      * @param nIdTicketType The IdTicketType
-     */ 
+     */
     public void setIdTicketType( int nIdTicketType )
     {
         _nIdTicketType = nIdTicketType;
     }
+
     /**
      * Returns the TicketType
      * @return The TicketType
      */
-    public String getTicketType( )
+    public String getTicketType(  )
     {
         return _strTicketType;
     }
@@ -239,16 +233,17 @@ public class Ticket implements Serializable
     /**
      * Sets the TicketType
      * @param strTicketType The TicketType
-     */ 
+     */
     public void setTicketType( String strTicketType )
     {
         _strTicketType = strTicketType;
     }
+
     /**
      * Returns the IdTicketDomain
      * @return The IdTicketDomain
      */
-    public int getIdTicketDomain( )
+    public int getIdTicketDomain(  )
     {
         return _nIdTicketDomain;
     }
@@ -256,16 +251,17 @@ public class Ticket implements Serializable
     /**
      * Sets the IdTicketDomain
      * @param nIdTicketDomain The IdTicketDomain
-     */ 
+     */
     public void setIdTicketDomain( int nIdTicketDomain )
     {
         _nIdTicketDomain = nIdTicketDomain;
     }
+
     /**
      * Returns the TicketDomain
      * @return The TicketDomain
      */
-    public String getTicketDomain( )
+    public String getTicketDomain(  )
     {
         return _strTicketDomain;
     }
@@ -273,16 +269,17 @@ public class Ticket implements Serializable
     /**
      * Sets the TicketDomain
      * @param strTicketDomain The TicketDomain
-     */ 
+     */
     public void setTicketDomain( String strTicketDomain )
     {
         _strTicketDomain = strTicketDomain;
     }
+
     /**
      * Returns the IdTicketCategory
      * @return The IdTicketCategory
      */
-    public int getIdTicketCategory( )
+    public int getIdTicketCategory(  )
     {
         return _nIdTicketCategory;
     }
@@ -290,16 +287,17 @@ public class Ticket implements Serializable
     /**
      * Sets the IdTicketCategory
      * @param nIdTicketCategory The IdTicketCategory
-     */ 
+     */
     public void setIdTicketCategory( int nIdTicketCategory )
     {
         _nIdTicketCategory = nIdTicketCategory;
     }
+
     /**
      * Returns the TicketCategory
      * @return The TicketCategory
      */
-    public String getTicketCategory( )
+    public String getTicketCategory(  )
     {
         return _strTicketCategory;
     }
@@ -307,16 +305,17 @@ public class Ticket implements Serializable
     /**
      * Sets the TicketCategory
      * @param strTicketCategory The TicketCategory
-     */ 
+     */
     public void setTicketCategory( String strTicketCategory )
     {
         _strTicketCategory = strTicketCategory;
     }
+
     /**
      * Returns the TicketComment
      * @return The TicketComment
      */
-    public String getTicketComment( )
+    public String getTicketComment(  )
     {
         return _strTicketComment;
     }
@@ -324,16 +323,17 @@ public class Ticket implements Serializable
     /**
      * Sets the TicketComment
      * @param strTicketComment The TicketComment
-     */ 
+     */
     public void setTicketComment( String strTicketComment )
     {
         _strTicketComment = strTicketComment;
     }
+
     /**
      * Returns the TicketStatus
      * @return The TicketStatus
      */
-    public int getTicketStatus( )
+    public int getTicketStatus(  )
     {
         return _nTicketStatus;
     }
@@ -341,16 +341,17 @@ public class Ticket implements Serializable
     /**
      * Sets the TicketStatus
      * @param nTicketStatus The TicketStatus
-     */ 
+     */
     public void setTicketStatus( int nTicketStatus )
     {
         _nTicketStatus = nTicketStatus;
     }
+
     /**
      * Returns the TicketStatusText
      * @return The TicketStatusText
      */
-    public String getTicketStatusText( )
+    public String getTicketStatusText(  )
     {
         return _strTicketStatusText;
     }
@@ -358,7 +359,7 @@ public class Ticket implements Serializable
     /**
      * Sets the TicketStatusText
      * @param strTicketStatusText The TicketStatusText
-     */ 
+     */
     public void setTicketStatusText( String strTicketStatusText )
     {
         _strTicketStatusText = strTicketStatusText;

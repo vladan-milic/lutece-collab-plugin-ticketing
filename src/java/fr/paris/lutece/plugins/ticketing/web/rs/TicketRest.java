@@ -1,50 +1,52 @@
- /*
- * Copyright (c) 2002-2012, Mairie de Paris
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *  1. Redistributions of source code must retain the above copyright notice
- *     and the following disclaimer.
- *
- *  2. Redistributions in binary form must reproduce the above copyright notice
- *     and the following disclaimer in the documentation and/or other materials
- *     provided with the distribution.
- *
- *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
- *     contributors may be used to endorse or promote products derived from
- *     this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- *
- * License 1.0
- */
+/*
+* Copyright (c) 2002-2012, Mairie de Paris
+* All rights reserved.
+*
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted provided that the following conditions
+* are met:
+*
+*  1. Redistributions of source code must retain the above copyright notice
+*     and the following disclaimer.
+*
+*  2. Redistributions in binary form must reproduce the above copyright notice
+*     and the following disclaimer in the documentation and/or other materials
+*     provided with the distribution.
+*
+*  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+*     contributors may be used to endorse or promote products derived from
+*     this software without specific prior written permission.
+*
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+* POSSIBILITY OF SUCH DAMAGE.
+*
+* License 1.0
+*/
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
-import fr.paris.lutece.plugins.ticketing.business.Ticket;
-import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.rest.service.RestConstants;
 import fr.paris.lutece.plugins.rest.util.json.JSONUtil;
 import fr.paris.lutece.plugins.rest.util.xml.XMLUtil;
-import fr.paris.lutece.util.xml.XmlUtil;
+import fr.paris.lutece.plugins.ticketing.business.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.portal.service.util.AppLogService;
-import java.io.IOException;
+import fr.paris.lutece.util.xml.XmlUtil;
 
 import net.sf.json.JSONObject;
 
+import java.io.IOException;
+
 import java.util.Collection;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -57,16 +59,15 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+
 /**
  * Page resource
  */
- 
 @Path( RestConstants.BASE_PATH + Constants.PLUGIN_PATH + Constants.TICKET_PATH )
 public class TicketRest
 {
     private static final String KEY_TICKETS = "tickets";
     private static final String KEY_TICKET = "ticket";
-    
     private static final String KEY_ID = "id";
     private static final String KEY_ID_USER_TITLE = "id_user_title";
     private static final String KEY_USER_TITLE = "user_title";
@@ -83,79 +84,85 @@ public class TicketRest
     private static final String KEY_TICKET_COMMENT = "ticket_comment";
     private static final String KEY_TICKET_STATUS = "ticket_status";
     private static final String KEY_TICKET_STATUS_TEXT = "ticket_status_text";
-    
+
     @GET
     @Path( Constants.ALL_PATH )
-    public Response getTickets( @HeaderParam(HttpHeaders.ACCEPT) String accept , @QueryParam( Constants.FORMAT_QUERY ) String format ) throws IOException
+    public Response getTickets( @HeaderParam( HttpHeaders.ACCEPT )
+    String accept, @QueryParam( Constants.FORMAT_QUERY )
+    String format ) throws IOException
     {
         String entity;
         String mediaType;
-        
-        if ( (accept != null && accept.contains(MediaType.APPLICATION_JSON)) || (format != null && format.equals(Constants.MEDIA_TYPE_JSON)) )
+
+        if ( ( ( accept != null ) && accept.contains( MediaType.APPLICATION_JSON ) ) ||
+                ( ( format != null ) && format.equals( Constants.MEDIA_TYPE_JSON ) ) )
         {
-            entity = getTicketsJson();
+            entity = getTicketsJson(  );
             mediaType = MediaType.APPLICATION_JSON;
         }
         else
         {
-            entity = getTicketsXml();
+            entity = getTicketsXml(  );
             mediaType = MediaType.APPLICATION_XML;
         }
-        return Response
-            .ok(entity, mediaType)
-            .build();
+
+        return Response.ok( entity, mediaType ).build(  );
     }
-    
+
     /**
      * Gets all resources list in XML format
      * @return The list
      */
-    public String getTicketsXml( )
+    public String getTicketsXml(  )
     {
-        StringBuffer sbXML = new StringBuffer( XmlUtil.getXmlHeader() );
-        Collection<Ticket> list = TicketHome.getTicketsList();
-        
-        XmlUtil.beginElement( sbXML , KEY_TICKETS );
+        StringBuffer sbXML = new StringBuffer( XmlUtil.getXmlHeader(  ) );
+        Collection<Ticket> list = TicketHome.getTicketsList(  );
+
+        XmlUtil.beginElement( sbXML, KEY_TICKETS );
 
         for ( Ticket ticket : list )
         {
             addTicketXml( sbXML, ticket );
         }
-        
-        XmlUtil.endElement( sbXML , KEY_TICKETS );
+
+        XmlUtil.endElement( sbXML, KEY_TICKETS );
 
         return sbXML.toString(  );
     }
-    
+
     /**
      * Gets all resources list in JSON format
      * @return The list
      */
-    public String getTicketsJson( )
+    public String getTicketsJson(  )
     {
         JSONObject jsonTicket = new JSONObject(  );
         JSONObject json = new JSONObject(  );
-        
-        Collection<Ticket> list = TicketHome.getTicketsList();
-        
+
+        Collection<Ticket> list = TicketHome.getTicketsList(  );
+
         for ( Ticket ticket : list )
         {
             addTicketJson( jsonTicket, ticket );
         }
-        
+
         json.accumulate( KEY_TICKETS, jsonTicket );
-        
-        return json.toString( );
+
+        return json.toString(  );
     }
-    
+
     @GET
     @Path( "{" + Constants.ID_PATH + "}" )
-    public Response getTicket( @PathParam( Constants.ID_PATH ) String strId, @HeaderParam(HttpHeaders.ACCEPT) String accept , @QueryParam( Constants.FORMAT_QUERY ) String format ) throws IOException
+    public Response getTicket( @PathParam( Constants.ID_PATH )
+    String strId, @HeaderParam( HttpHeaders.ACCEPT )
+    String accept, @QueryParam( Constants.FORMAT_QUERY )
+    String format ) throws IOException
     {
         String entity;
         String mediaType;
-        
-        if ( (accept != null && accept.contains(MediaType.APPLICATION_JSON)) || (format != null && format.equals(Constants.MEDIA_TYPE_JSON)) )
+
+        if ( ( ( accept != null ) && accept.contains( MediaType.APPLICATION_JSON ) ) ||
+                ( ( format != null ) && format.equals( Constants.MEDIA_TYPE_JSON ) ) )
         {
             entity = getTicketJson( strId );
             mediaType = MediaType.APPLICATION_JSON;
@@ -165,11 +172,10 @@ public class TicketRest
             entity = getTicketXml( strId );
             mediaType = MediaType.APPLICATION_XML;
         }
-        return Response
-            .ok(entity, mediaType)
-            .build();
+
+        return Response.ok( entity, mediaType ).build(  );
     }
-    
+
     /**
      * Gets a resource in XML format
      * @param strId The resource ID
@@ -178,7 +184,7 @@ public class TicketRest
     public String getTicketXml( String strId )
     {
         StringBuffer sbXML = new StringBuffer(  );
-        
+
         try
         {
             int nId = Integer.parseInt( strId );
@@ -201,7 +207,7 @@ public class TicketRest
 
         return sbXML.toString(  );
     }
-    
+
     /**
      * Gets a resource in JSON format
      * @param strId The resource ID
@@ -220,7 +226,7 @@ public class TicketRest
             if ( ticket != null )
             {
                 addTicketJson( json, ticket );
-                strJson = json.toString( );
+                strJson = json.toString(  );
             }
         }
         catch ( NumberFormatException e )
@@ -234,15 +240,18 @@ public class TicketRest
 
         return strJson;
     }
-    
+
     @DELETE
     @Path( "{" + Constants.ID_PATH + "}" )
-    public Response deleteTicket( @PathParam( Constants.ID_PATH ) String strId, @HeaderParam(HttpHeaders.ACCEPT) String accept, @QueryParam( Constants.FORMAT_QUERY ) String format ) throws IOException
+    public Response deleteTicket( @PathParam( Constants.ID_PATH )
+    String strId, @HeaderParam( HttpHeaders.ACCEPT )
+    String accept, @QueryParam( Constants.FORMAT_QUERY )
+    String format ) throws IOException
     {
         try
         {
             int nId = Integer.parseInt( strId );
-            
+
             if ( TicketHome.findByPrimaryKey( nId ) != null )
             {
                 TicketHome.remove( nId );
@@ -252,30 +261,32 @@ public class TicketRest
         {
             AppLogService.error( "Invalid ticket number" );
         }
-        return getTickets(accept, format);
+
+        return getTickets( accept, format );
     }
-    
+
     @POST
-    public Response createTicket(
-    @FormParam( KEY_ID ) String id,
-    @FormParam( "id_user_title" ) String id_user_title, 
-    @FormParam( "user_title" ) String user_title, 
-    @FormParam( "firstname" ) String firstname, 
-    @FormParam( "lastname" ) String lastname, 
-    @FormParam( "email" ) String email, 
-    @FormParam( "phone_number" ) String phone_number, 
-    @FormParam( "id_ticket_type" ) String id_ticket_type, 
-    @FormParam( "ticket_type" ) String ticket_type, 
-    @FormParam( "id_ticket_domain" ) String id_ticket_domain, 
-    @FormParam( "ticket_domain" ) String ticket_domain, 
-    @FormParam( "id_ticket_category" ) String id_ticket_category, 
-    @FormParam( "ticket_category" ) String ticket_category, 
-    @FormParam( "ticket_comment" ) String ticket_comment, 
-    @FormParam( "ticket_status" ) String ticket_status, 
-    @FormParam( "ticket_status_text" ) String ticket_status_text, 
-    @HeaderParam(HttpHeaders.ACCEPT) String accept, @QueryParam( Constants.FORMAT_QUERY ) String format) throws IOException
+    public Response createTicket( @FormParam( KEY_ID )
+    String id, @FormParam( "id_user_title" )
+    String id_user_title, @FormParam( "user_title" )
+    String user_title, @FormParam( "firstname" )
+    String firstname, @FormParam( "lastname" )
+    String lastname, @FormParam( "email" )
+    String email, @FormParam( "phone_number" )
+    String phone_number, @FormParam( "id_ticket_type" )
+    String id_ticket_type, @FormParam( "ticket_type" )
+    String ticket_type, @FormParam( "id_ticket_domain" )
+    String id_ticket_domain, @FormParam( "ticket_domain" )
+    String ticket_domain, @FormParam( "id_ticket_category" )
+    String id_ticket_category, @FormParam( "ticket_category" )
+    String ticket_category, @FormParam( "ticket_comment" )
+    String ticket_comment, @FormParam( "ticket_status" )
+    String ticket_status, @FormParam( "ticket_status_text" )
+    String ticket_status_text, @HeaderParam( HttpHeaders.ACCEPT )
+    String accept, @QueryParam( Constants.FORMAT_QUERY )
+    String format ) throws IOException
     {
-        if( id != null )
+        if ( id != null )
         {
             int nId = Integer.parseInt( KEY_ID );
 
@@ -303,8 +314,8 @@ public class TicketRest
         }
         else
         {
-            Ticket ticket = new Ticket( );
-            
+            Ticket ticket = new Ticket(  );
+
             ticket.setIdUserTitle( Integer.parseInt( id_user_title ) );
             ticket.setUserTitle( user_title );
             ticket.setFirstname( firstname );
@@ -322,9 +333,10 @@ public class TicketRest
             ticket.setTicketStatusText( ticket_status_text );
             TicketHome.create( ticket );
         }
-        return getTickets(accept, format);
+
+        return getTickets( accept, format );
     }
-    
+
     /**
      * Write a ticket into a buffer
      * @param sbXML The buffer
@@ -333,25 +345,25 @@ public class TicketRest
     private void addTicketXml( StringBuffer sbXML, Ticket ticket )
     {
         XmlUtil.beginElement( sbXML, KEY_TICKET );
-        XmlUtil.addElement( sbXML, KEY_ID , ticket.getId( ) );
-        XmlUtil.addElement( sbXML, KEY_ID_USER_TITLE , ticket.getIdUserTitle( ) );
-        XmlUtil.addElement( sbXML, KEY_USER_TITLE , ticket.getUserTitle( ) );
-        XmlUtil.addElement( sbXML, KEY_FIRSTNAME , ticket.getFirstname( ) );
-        XmlUtil.addElement( sbXML, KEY_LASTNAME , ticket.getLastname( ) );
-        XmlUtil.addElement( sbXML, KEY_EMAIL , ticket.getEmail( ) );
-        XmlUtil.addElement( sbXML, KEY_PHONE_NUMBER , ticket.getPhoneNumber( ) );
-        XmlUtil.addElement( sbXML, KEY_ID_TICKET_TYPE , ticket.getIdTicketType( ) );
-        XmlUtil.addElement( sbXML, KEY_TICKET_TYPE , ticket.getTicketType( ) );
-        XmlUtil.addElement( sbXML, KEY_ID_TICKET_DOMAIN , ticket.getIdTicketDomain( ) );
-        XmlUtil.addElement( sbXML, KEY_TICKET_DOMAIN , ticket.getTicketDomain( ) );
-        XmlUtil.addElement( sbXML, KEY_ID_TICKET_CATEGORY , ticket.getIdTicketCategory( ) );
-        XmlUtil.addElement( sbXML, KEY_TICKET_CATEGORY , ticket.getTicketCategory( ) );
-        XmlUtil.addElement( sbXML, KEY_TICKET_COMMENT , ticket.getTicketComment( ) );
-        XmlUtil.addElement( sbXML, KEY_TICKET_STATUS , ticket.getTicketStatus( ) );
-        XmlUtil.addElement( sbXML, KEY_TICKET_STATUS_TEXT , ticket.getTicketStatusText( ) );
+        XmlUtil.addElement( sbXML, KEY_ID, ticket.getId(  ) );
+        XmlUtil.addElement( sbXML, KEY_ID_USER_TITLE, ticket.getIdUserTitle(  ) );
+        XmlUtil.addElement( sbXML, KEY_USER_TITLE, ticket.getUserTitle(  ) );
+        XmlUtil.addElement( sbXML, KEY_FIRSTNAME, ticket.getFirstname(  ) );
+        XmlUtil.addElement( sbXML, KEY_LASTNAME, ticket.getLastname(  ) );
+        XmlUtil.addElement( sbXML, KEY_EMAIL, ticket.getEmail(  ) );
+        XmlUtil.addElement( sbXML, KEY_PHONE_NUMBER, ticket.getPhoneNumber(  ) );
+        XmlUtil.addElement( sbXML, KEY_ID_TICKET_TYPE, ticket.getIdTicketType(  ) );
+        XmlUtil.addElement( sbXML, KEY_TICKET_TYPE, ticket.getTicketType(  ) );
+        XmlUtil.addElement( sbXML, KEY_ID_TICKET_DOMAIN, ticket.getIdTicketDomain(  ) );
+        XmlUtil.addElement( sbXML, KEY_TICKET_DOMAIN, ticket.getTicketDomain(  ) );
+        XmlUtil.addElement( sbXML, KEY_ID_TICKET_CATEGORY, ticket.getIdTicketCategory(  ) );
+        XmlUtil.addElement( sbXML, KEY_TICKET_CATEGORY, ticket.getTicketCategory(  ) );
+        XmlUtil.addElement( sbXML, KEY_TICKET_COMMENT, ticket.getTicketComment(  ) );
+        XmlUtil.addElement( sbXML, KEY_TICKET_STATUS, ticket.getTicketStatus(  ) );
+        XmlUtil.addElement( sbXML, KEY_TICKET_STATUS_TEXT, ticket.getTicketStatusText(  ) );
         XmlUtil.endElement( sbXML, KEY_TICKET );
     }
-    
+
     /**
      * Write a ticket into a JSON Object
      * @param json The JSON Object
@@ -360,22 +372,22 @@ public class TicketRest
     private void addTicketJson( JSONObject json, Ticket ticket )
     {
         JSONObject jsonTicket = new JSONObject(  );
-        jsonTicket.accumulate( KEY_ID , ticket.getId( ) );
-        jsonTicket.accumulate( KEY_ID_USER_TITLE, ticket.getIdUserTitle( ) );
-        jsonTicket.accumulate( KEY_USER_TITLE, ticket.getUserTitle( ) );
-        jsonTicket.accumulate( KEY_FIRSTNAME, ticket.getFirstname( ) );
-        jsonTicket.accumulate( KEY_LASTNAME, ticket.getLastname( ) );
-        jsonTicket.accumulate( KEY_EMAIL, ticket.getEmail( ) );
-        jsonTicket.accumulate( KEY_PHONE_NUMBER, ticket.getPhoneNumber( ) );
-        jsonTicket.accumulate( KEY_ID_TICKET_TYPE, ticket.getIdTicketType( ) );
-        jsonTicket.accumulate( KEY_TICKET_TYPE, ticket.getTicketType( ) );
-        jsonTicket.accumulate( KEY_ID_TICKET_DOMAIN, ticket.getIdTicketDomain( ) );
-        jsonTicket.accumulate( KEY_TICKET_DOMAIN, ticket.getTicketDomain( ) );
-        jsonTicket.accumulate( KEY_ID_TICKET_CATEGORY, ticket.getIdTicketCategory( ) );
-        jsonTicket.accumulate( KEY_TICKET_CATEGORY, ticket.getTicketCategory( ) );
-        jsonTicket.accumulate( KEY_TICKET_COMMENT, ticket.getTicketComment( ) );
-        jsonTicket.accumulate( KEY_TICKET_STATUS, ticket.getTicketStatus( ) );
-        jsonTicket.accumulate( KEY_TICKET_STATUS_TEXT, ticket.getTicketStatusText( ) );
+        jsonTicket.accumulate( KEY_ID, ticket.getId(  ) );
+        jsonTicket.accumulate( KEY_ID_USER_TITLE, ticket.getIdUserTitle(  ) );
+        jsonTicket.accumulate( KEY_USER_TITLE, ticket.getUserTitle(  ) );
+        jsonTicket.accumulate( KEY_FIRSTNAME, ticket.getFirstname(  ) );
+        jsonTicket.accumulate( KEY_LASTNAME, ticket.getLastname(  ) );
+        jsonTicket.accumulate( KEY_EMAIL, ticket.getEmail(  ) );
+        jsonTicket.accumulate( KEY_PHONE_NUMBER, ticket.getPhoneNumber(  ) );
+        jsonTicket.accumulate( KEY_ID_TICKET_TYPE, ticket.getIdTicketType(  ) );
+        jsonTicket.accumulate( KEY_TICKET_TYPE, ticket.getTicketType(  ) );
+        jsonTicket.accumulate( KEY_ID_TICKET_DOMAIN, ticket.getIdTicketDomain(  ) );
+        jsonTicket.accumulate( KEY_TICKET_DOMAIN, ticket.getTicketDomain(  ) );
+        jsonTicket.accumulate( KEY_ID_TICKET_CATEGORY, ticket.getIdTicketCategory(  ) );
+        jsonTicket.accumulate( KEY_TICKET_CATEGORY, ticket.getTicketCategory(  ) );
+        jsonTicket.accumulate( KEY_TICKET_COMMENT, ticket.getTicketComment(  ) );
+        jsonTicket.accumulate( KEY_TICKET_STATUS, ticket.getTicketStatus(  ) );
+        jsonTicket.accumulate( KEY_TICKET_STATUS_TEXT, ticket.getTicketStatusText(  ) );
         json.accumulate( KEY_TICKET, jsonTicket );
     }
 }

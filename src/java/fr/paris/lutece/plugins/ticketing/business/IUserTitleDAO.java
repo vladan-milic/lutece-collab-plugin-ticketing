@@ -31,13 +31,12 @@
  *
  * License 1.0
  */
- 
 package fr.paris.lutece.plugins.ticketing.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
-import java.util.List;
 
+import java.util.List;
 
 
 /**
@@ -83,7 +82,7 @@ public interface IUserTitleDAO
      * @return The collection which contains the data of all the userTitle objects
      */
     List<UserTitle> selectUserTitlesList( Plugin plugin );
-    
+
     /**
      * Load the id of all the userTitle objects and returns them as a collection
      * @param plugin the Plugin
@@ -96,6 +95,5 @@ public interface IUserTitleDAO
      * @param plugin the Plugin
      * @return The reference list
      */
-    ReferenceList selectReferenceList(Plugin plugin);
+    ReferenceList selectReferenceList( Plugin plugin );
 }
-
