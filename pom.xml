@@ -42,4 +42,11 @@
         <jiraProjectName>TICKETING</jiraProjectName>
         <jiraComponentId></jiraComponentId>
     </properties>
+    
+    <scm>
+        <connection>scm:git:https://github.com/lutece-platform/lutece-collab-plugin-ticketing.git</connection>
+        <developerConnection>scm:git:https://github.com/lutece-platform/lutece-collab-plugin-ticketing.git</developerConnection>
+        <url>https://github.com/lutece-platform/lutece-collab-plugin-ticketing.git</url>
+    </scm>
+    
 </project>
