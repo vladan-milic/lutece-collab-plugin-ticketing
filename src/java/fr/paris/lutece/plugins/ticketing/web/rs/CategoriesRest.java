@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2002-2014, Mairie de Paris
+* Copyright (c) 2002-2012, Mairie de Paris
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -17,11 +17,11 @@
 *     contributors may be used to endorse or promote products derived from
 *     this software without specific prior written permission.
 *
-* THIS SOFTWARE IS PROVREST_IDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
-* LIABLE FOR ANY DIRECT, INDIRECT, INCREST_IDENTAL, SPECIAL, EXEMPLARY, OR
+* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
 * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
 * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
 * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
@@ -33,13 +33,44 @@
 */
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
-public final class Constants
+import fr.paris.lutece.plugins.rest.service.RestConstants;
+import fr.paris.lutece.plugins.ticketing.service.CategoriesService;
+
+
+import java.io.IOException;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+
+/**
+ * Page resource
+ */
+@Path( RestConstants.BASE_PATH + Constants.PLUGIN_PATH + Constants.CATEGORIES_PATH )
+public class CategoriesRest
 {
-    public static final String TICKET_PATH = "ticket/";
-    public static final String CATEGORIES_PATH = "categories/";
-    public static final String PLUGIN_PATH = "ticketing/";
-    public static final String ID_PATH = "id";
-    public static final String ALL_PATH = "s";
-    public static final String FORMAT_QUERY = "format";
-    public static final String MEDIA_TYPE_JSON = "json";
+    @GET
+    @Path( "/" )
+    public Response getCategories( ) throws IOException
+    {
+        String strEntity = getCategoriesJson(  );
+        String strMediaType = MediaType.APPLICATION_JSON;
+
+        return Response.ok( strEntity, strMediaType ).build(  );
+    }
+
+    /**
+     * Gets all resources list in JSON format
+     * @return The list
+     */
+    public String getCategoriesJson(  )
+    {
+        return CategoriesService.getJsonCategories();
+    }
+
 }

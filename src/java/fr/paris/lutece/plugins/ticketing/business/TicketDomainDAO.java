@@ -213,7 +213,7 @@ public final class TicketDomainDAO implements ITicketDomainDAO
 
         while ( daoUtil.next(  ) )
         {
-            list.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 3 ) );
+            list.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
         }
 
         daoUtil.free(  );
