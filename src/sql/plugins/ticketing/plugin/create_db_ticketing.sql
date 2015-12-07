@@ -52,6 +52,7 @@ CREATE TABLE ticketing_ticket_category (
 id_ticket_category int(6) NOT NULL,
 id_ticket_domain int(11) NOT NULL default '0',
 label varchar(50) NOT NULL default '',
+id_workflow INT NOT NULL default '0',
 PRIMARY KEY (id_ticket_category)
 );
 
