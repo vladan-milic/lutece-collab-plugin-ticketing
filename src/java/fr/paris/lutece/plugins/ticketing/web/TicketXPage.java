@@ -39,6 +39,8 @@ import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
+import fr.paris.lutece.portal.service.security.LuteceUser;
+import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
@@ -63,6 +65,7 @@ public class TicketXPage extends MVCApplication
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
+    private static final String MARK_TICKET_USER = "myLuteceUser";
 
     // Views
     private static final String VIEW_MANAGE_TICKETS = "manageTickets";
@@ -87,10 +90,11 @@ public class TicketXPage extends MVCApplication
     public XPage getCreateTicket( HttpServletRequest request )
     {
         _ticket = ( _ticket != null ) ? _ticket : new Ticket(  );
-
+        LuteceUser user=SecurityService.getInstance().getRegisteredUser(request);
         Map<String, Object> model = getModel(  );
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );
         model.put( MARK_TICKET, _ticket );
+        model.put(MARK_TICKET_USER, user);
 
         // FIXME Dynamic filling
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );

@@ -36,7 +36,6 @@
             <type>lutece-plugin</type>
         </dependency>
     </dependencies>
-
     <properties>
         <componentName>ticketing</componentName>
         <jiraProjectName>TICKETING</jiraProjectName>
