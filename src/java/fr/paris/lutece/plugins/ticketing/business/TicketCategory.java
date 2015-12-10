@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import org.hibernate.validator.constraints.*;
-
 import java.io.Serializable;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 
 /**

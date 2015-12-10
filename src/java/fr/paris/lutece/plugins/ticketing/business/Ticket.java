@@ -33,11 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import org.hibernate.validator.constraints.*;
-
 import java.io.Serializable;
+import java.util.Collection;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import fr.paris.lutece.plugins.workflowcore.business.action.Action;
+import fr.paris.lutece.plugins.workflowcore.business.state.State;
 
 
 /**
@@ -46,6 +51,8 @@ import javax.validation.constraints.*;
 public class Ticket implements Serializable
 {
     private static final long serialVersionUID = 1L;
+
+    public static final String TICKET_RESOURCE_TYPE = "ticket";
 
     // Variables declarations 
     private int _nId;
@@ -76,6 +83,8 @@ public class Ticket implements Serializable
     private int _nTicketStatus;
     @Size( max = 255, message = "#i18n{ticketing.validation.ticket.TicketStatusText.size}" )
     private String _strTicketStatusText;
+    private State _state;
+    private transient Collection<Action> _listWorkflowActions;
 
     /**
      * Returns the Id
@@ -364,4 +373,44 @@ public class Ticket implements Serializable
     {
         _strTicketStatusText = strTicketStatusText;
     }
+    
+    /**
+     * Returns the State
+     * @return The State
+     */
+    public State getState(  )
+    {
+        return _state;
+    }
+    
+    /**
+     * Sets the State
+     * @param state The state
+     */
+     public void setState( State state )
+     {
+         _state = state;
+     }
+     
+     /**
+      * Get the list of workflow actions available for this ticket. Workflow
+      * actions are NOT loaded by default, so check that they have been set
+      * before calling this method.
+      * @return The list of workflow actions available for this ticket.
+      */
+     public Collection<Action> getListWorkflowActions(  )
+     {
+         return _listWorkflowActions;
+     }
+     
+     /**
+      * Set the list of workflow actions available for this ticket.
+      * @param listWorkflowActions The list of workflow actions available for
+      *            this
+      *            ticket.
+      */
+     public void setListWorkflowActions( Collection<Action> listWorkflowActions )
+     {
+         this._listWorkflowActions = listWorkflowActions;
+     }
 }
