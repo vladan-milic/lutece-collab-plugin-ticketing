@@ -33,6 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
@@ -44,10 +49,6 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
-
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -63,6 +64,7 @@ public class TicketXPage extends MVCApplication
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
+    private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
 
     // Views
     private static final String VIEW_MANAGE_TICKETS = "manageTickets";
@@ -73,6 +75,9 @@ public class TicketXPage extends MVCApplication
 
     // Infos
     private static final String INFO_TICKET_CREATED = "ticketing.info.ticket.created";
+
+    // Errors
+    public static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
 
     // Session variable to store working values
     private Ticket _ticket;
@@ -97,6 +102,9 @@ public class TicketXPage extends MVCApplication
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
 
+        model.put ( MARK_CONTACT_MODES_LIST,
+                ContactModeHome.getReferenceList ( ) );
+
         return getXPage( TEMPLATE_CREATE_TICKET, request.getLocale(  ), model );
     }
 
@@ -114,6 +122,12 @@ public class TicketXPage extends MVCApplication
         // Check constraints
         if ( !validateBean( _ticket, getLocale( request ) ) )
         {
+            return redirectView( request, VIEW_CREATE_TICKET );
+        }
+
+        if ( _ticket.hasNoPhoneNumberFilled( ) )
+        {
+            addError( ERROR_PHONE_NUMBER_MISSING, getLocale( request ) );
             return redirectView( request, VIEW_CREATE_TICKET );
         }
 

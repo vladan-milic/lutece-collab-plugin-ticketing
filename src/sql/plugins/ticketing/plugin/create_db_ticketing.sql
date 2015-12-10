@@ -10,10 +10,12 @@ id_user_title int(11) NOT NULL default '0',
 firstname varchar(50) NOT NULL default '',
 lastname varchar(50) NOT NULL default '',
 email varchar(255) NOT NULL default '',
-phone_number varchar(50) NOT NULL default '',
+fixed_phone_number varchar(50) NOT NULL default '',
+mobile_phone_number varchar(50) NOT NULL default '',
 id_ticket_type int(11) NOT NULL default '0',
 id_ticket_domain int(11) NOT NULL default '0',
 id_ticket_category int(11) NOT NULL default '0',
+id_contact_mode int(11) NOT NULL default '0',
 ticket_comment long varchar NULL ,
 ticket_status int(11) NOT NULL default '0',
 ticket_status_text varchar(255) NULL default '',
@@ -52,6 +54,7 @@ CREATE TABLE ticketing_ticket_category (
 id_ticket_category int(6) NOT NULL,
 id_ticket_domain int(11) NOT NULL default '0',
 label varchar(50) NOT NULL default '',
+id_workflow INT NOT NULL default '0',
 PRIMARY KEY (id_ticket_category)
 );
 
@@ -65,3 +68,17 @@ id_user_title int(6) NOT NULL,
 label varchar(50) NOT NULL default '',
 PRIMARY KEY (id_user_title)
 );
+
+--
+-- Structure for table ticketing_contact_mode
+--
+
+DROP TABLE IF EXISTS ticketing_contact_mode;
+CREATE TABLE ticketing_contact_mode (
+id_contact_mode int(6) NOT NULL,
+label varchar(50) NOT NULL default '',
+PRIMARY KEY (id_contact_mode)
+);
+
+
+      

@@ -33,6 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
@@ -49,11 +55,6 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
-
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -96,6 +97,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
+    private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
     private static final String JSP_MANAGE_TICKETS = "jsp/admin/plugins/ticketing/ManageTickets.jsp";
 
     // Properties
@@ -119,6 +121,9 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String INFO_TICKET_UPDATED = "ticketing.info.ticket.updated";
     private static final String INFO_TICKET_REMOVED = "ticketing.info.ticket.removed";
     private static final long serialVersionUID = 1L;
+
+    // Errors
+    public static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
 
     // Session variable to store working values
     private Ticket _ticket;
@@ -177,6 +182,8 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
+        model.put ( MARK_CONTACT_MODES_LIST,
+                ContactModeHome.getReferenceList ( ) );
         model.put( MARK_TICKET, _ticket );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKET, TEMPLATE_CREATE_TICKET, model );
@@ -196,6 +203,12 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         // Check constraints
         if ( !validateBean( _ticket, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
+            return redirectView( request, VIEW_CREATE_TICKET );
+        }
+
+        if ( _ticket.hasNoPhoneNumberFilled( ) )
+        {
+            addError( ERROR_PHONE_NUMBER_MISSING, getLocale( ) );
             return redirectView( request, VIEW_CREATE_TICKET );
         }
 
@@ -263,6 +276,8 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
+        model.put ( MARK_CONTACT_MODES_LIST,
+                ContactModeHome.getReferenceList ( ) );
         model.put( MARK_TICKET, _ticket );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKET, TEMPLATE_MODIFY_TICKET, model );
@@ -283,6 +298,13 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         if ( !validateBean( _ticket, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
             return redirect( request, VIEW_MODIFY_TICKET, PARAMETER_ID_TICKET, _ticket.getId(  ) );
+        }
+
+        if ( _ticket.hasNoPhoneNumberFilled( ) )
+        {
+            addError( ERROR_PHONE_NUMBER_MISSING, getLocale( ) );
+            return redirect( request, VIEW_MODIFY_TICKET, PARAMETER_ID_TICKET,
+                    _ticket.getId( ) );
         }
 
         TicketHome.update( _ticket );

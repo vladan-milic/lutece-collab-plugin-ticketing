@@ -35,9 +35,14 @@
                     <i class="fa fa-at"></i> ${ticket.email}<br>
                     </small>
                     </#if>
-                    <#if ticket.phoneNumber ??>
+                    <#if ticket.fixedPhoneNumber ??>
                     <small>
-                    <i class="fa fa-phone"></i> ${ticket.phoneNumber}
+                    <i class="fa fa-phone"></i> ${ticket.fixedPhoneNumber}
+                    </small>
+                    </#if>
+                    <#if ticket.mobilePhoneNumber ??>
+                    <small>
+                    <i class="fa fa-phone"></i> ${ticket.mobilePhoneNumber}
                     </small>
                     </#if>
                 </td>

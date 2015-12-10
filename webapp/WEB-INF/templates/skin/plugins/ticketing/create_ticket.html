@@ -36,10 +36,17 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="phone_number" >#i18n{ticketing.xpage.create_ticket.labelPhoneNumber} :</label>
+                <label class="col-sm-3 control-label" for="fixed_phone_number" >#i18n{ticketing.xpage.create_ticket.labelFixedPhoneNumber} :</label>
                 <div class="col-sm-9">
-                    <input class="form-control" type="text" id="phone_number" name="phone_number" value="${ticket.phoneNumber!''}"  maxlength="50" tabindex="5" />
-                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span>
+                    <input class="form-control" type="text" id="fixed_phone_number" name="fixed_phone_number" value="${ticket.fixedPhoneNumber!''}"  maxlength="50" tabindex="5" />
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelFixedPhoneNumber.help}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="mobile_phone_number" >#i18n{ticketing.xpage.create_ticket.labelMobilePhoneNumber} :</label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" id="mobile_phone_number" name="mobile_phone_number" value="${ticket.mobilePhoneNumber!''}"  maxlength="50" tabindex="5" />
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelMobilePhoneNumber.help}</span>
                 </div>
             </div>
             <div class="form-group">
@@ -61,6 +68,13 @@
                 <div class="col-sm-9">
                     <@comboWithParams name="id_ticket_category" default_value="${ticket.idTicketCategory!''}"  additionalParameters="class=\"form-control\""  items=ticket_categories_list />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdTicketCategory.help}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="id_contact_mode" >#i18n{ticketing.xpage.create_ticket.labelIdContactMode} * :</label>
+                <div class="col-sm-9">
+                    <@comboWithParams name="id_contact_mode" default_value="${ticket.idContactMode!''}"  additionalParameters="class=\"form-control\""  items=contact_modes_list />
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdContactMode.help}</span>
                 </div>
             </div>
             <div class="form-group">
