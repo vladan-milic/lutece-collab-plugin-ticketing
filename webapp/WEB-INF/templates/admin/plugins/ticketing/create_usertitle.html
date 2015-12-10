@@ -5,7 +5,7 @@
     <form class="form-horizontal" method="post" name="create_usertitle" action="jsp/admin/plugins/ticketing/ManageUserTitles.jsp">
         <@messages errors=errors />
         <input type="hidden" id="id" name="id"/>
-        
+        <input type="hidden" id="guid" name="guid" value=""/>
         <@fieldInputText i18nLabelKey="ticketing.create_usertitle.labelLabel" inputName="label" mandatory=true value="${usertitle.label!''}" i18nHelpBlockKey="ticketing.create_usertitle.labelLabel.help" />
         <@actionButtons button1Name="action_createUserTitle" button2Name="view_manageUserTitles"/>
     </form>

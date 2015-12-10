@@ -2,6 +2,7 @@
     <form class="form-horizontal" method="post" name="modify_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
         <@messages errors=errors />
         <input type="hidden" id="id" name="id" value="${ticket.id}"/>
+        <input type="hidden" id="guid" name="guid" value=""/>
         <@fieldInputCombo i18nLabelKey="ticketing.modify_ticket.labelUserTitle" inputName="id_user_title" items=user_titles_list value="${ticket.idUserTitle!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelIdUserTitle.help" cssClass='' /> 
         <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelFirstname" inputName="firstname" mandatory=true value="${ticket.firstname!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelFirstname.help" />
         <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelLastname" inputName="lastname" mandatory=true value="${ticket.lastname!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelLastname.help" />
