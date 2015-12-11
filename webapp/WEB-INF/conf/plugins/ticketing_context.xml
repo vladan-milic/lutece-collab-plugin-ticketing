@@ -12,4 +12,5 @@
     <bean id="ticketing.ticketDomainDAO"  class="fr.paris.lutece.plugins.ticketing.business.TicketDomainDAO" />  
     <bean id="ticketing.ticketCategoryDAO"  class="fr.paris.lutece.plugins.ticketing.business.TicketCategoryDAO" />  
     <bean id="ticketing.userTitleDAO"  class="fr.paris.lutece.plugins.ticketing.business.UserTitleDAO" />  
+    <bean id="ticketing.contactModeDAO"  class="fr.paris.lutece.plugins.ticketing.business.ContactModeDAO" />  
 </beans>

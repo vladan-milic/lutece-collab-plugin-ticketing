@@ -51,6 +51,7 @@ import fr.paris.lutece.plugins.workflowcore.business.state.State;
 public class Ticket implements Serializable
 {
     private static final long serialVersionUID = 1L;
+    private static final String EMPTY = "";
 
     public static final String TICKET_RESOURCE_TYPE = "ticket";
 
@@ -65,11 +66,14 @@ public class Ticket implements Serializable
     @NotEmpty( message = "#i18n{ticketing.validation.ticket.Lastname.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.Lastname.size}" )
     private String _strLastname;
+    @NotEmpty( message = "#i18n{ticketing.validation.ticket.Email.notEmpty}" )
     @Email( message = "#i18n{portal.validation.message.email}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.ticket.Email.size}" )
     private String _strEmail;
-    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.PhoneNumber.size}" )
-    private String _strPhoneNumber;
+    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.FixedPhoneNumber.size}" )
+    private String _strFixedPhoneNumber;
+    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.MobilePhoneNumber.size}" )
+    private String _strMobilePhoneNumber;
     private int _nIdTicketType;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketType.size}" )
     private String _strTicketType;
@@ -79,6 +83,9 @@ public class Ticket implements Serializable
     private int _nIdTicketCategory;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketCategory.size}" )
     private String _strTicketCategory;
+    private int _nIdContactMode;
+    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.ContactMode.size}" )
+    private String _strContactMode;
     private String _strTicketComment;
     private int _nTicketStatus;
     @Size( max = 255, message = "#i18n{ticketing.validation.ticket.TicketStatusText.size}" )
@@ -195,21 +202,45 @@ public class Ticket implements Serializable
     }
 
     /**
-     * Returns the PhoneNumber
-     * @return The PhoneNumber
+     * Returns the FixedPhoneNumber
+     * 
+     * @return The FixedPhoneNumber
      */
-    public String getPhoneNumber(  )
+    public String getFixedPhoneNumber( )
     {
-        return _strPhoneNumber;
+        return _strFixedPhoneNumber;
     }
 
     /**
-     * Sets the PhoneNumber
-     * @param strPhoneNumber The PhoneNumber
+     * Sets the FixedPhoneNumber
+     * 
+     * @param strFixedPhoneNumber
+     *            The FixedPhoneNumber
      */
-    public void setPhoneNumber( String strPhoneNumber )
+    public void setFixedPhoneNumber( String strFixedPhoneNumber )
     {
-        _strPhoneNumber = strPhoneNumber;
+        _strFixedPhoneNumber = strFixedPhoneNumber;
+    }
+
+    /**
+     * Returns the MobilePhoneNumber
+     * 
+     * @return The MobilePhoneNumber
+     */
+    public String getMobilePhoneNumber( )
+    {
+        return _strMobilePhoneNumber;
+    }
+
+    /**
+     * Sets the MobilePhoneNumber
+     * 
+     * @param strMobilePhoneNumber
+     *            The MobilePhoneNumber
+     */
+    public void setMobilePhoneNumber( String strMobilePhoneNumber )
+    {
+        _strMobilePhoneNumber = strMobilePhoneNumber;
     }
 
     /**
@@ -321,17 +352,62 @@ public class Ticket implements Serializable
     }
 
     /**
+     * Returns the IdContactMode
+     * 
+     * @return The IdContactMode
+     */
+    public int getIdContactMode( )
+    {
+        return _nIdContactMode;
+    }
+
+    /**
+     * Sets the IdContactMode
+     * 
+     * @param nIdContactMode
+     *            The IdContactMode
+     */
+    public void setIdContactMode( int nIdContactMode )
+    {
+        _nIdContactMode = nIdContactMode;
+    }
+
+    /**
+     * Returns the ContactMode
+     * 
+     * @return The ContactMode
+     */
+    public String getContactMode( )
+    {
+        return _strContactMode;
+    }
+
+    /**
+     * Sets the ContactMode
+     * 
+     * @param strContactMode
+     *            The ContactMode
+     */
+    public void setContactMode( String strContactMode )
+    {
+        _strContactMode = strContactMode;
+    }
+
+    /**
      * Returns the TicketComment
+     * 
      * @return The TicketComment
      */
-    public String getTicketComment(  )
+    public String getTicketComment( )
     {
         return _strTicketComment;
     }
 
     /**
      * Sets the TicketComment
-     * @param strTicketComment The TicketComment
+     * 
+     * @param strTicketComment
+     *            The TicketComment
      */
     public void setTicketComment( String strTicketComment )
     {
@@ -340,6 +416,7 @@ public class Ticket implements Serializable
 
     /**
      * Returns the TicketStatus
+     * 
      * @return The TicketStatus
      */
     public int getTicketStatus(  )
@@ -373,7 +450,19 @@ public class Ticket implements Serializable
     {
         _strTicketStatusText = strTicketStatusText;
     }
-    
+
+    /**
+     * Returns true if the fixed phone number and the mobile phone number are
+     * not filled, and else returns false
+     * 
+     * @return boolean result
+     */
+    public boolean hasNoPhoneNumberFilled( )
+    {
+        return EMPTY.equals( this.getFixedPhoneNumber( ).trim( ) )
+                && EMPTY.equals( this.getMobilePhoneNumber( ).trim( ) );
+    }
+
     /**
      * Returns the State
      * @return The State
