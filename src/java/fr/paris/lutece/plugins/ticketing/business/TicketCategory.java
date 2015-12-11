@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import org.hibernate.validator.constraints.*;
-
 import java.io.Serializable;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 
 /**
@@ -55,6 +55,7 @@ public class TicketCategory implements Serializable
     @NotEmpty( message = "#i18n{ticketing.validation.ticketcategory.Label.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.ticketcategory.Label.size}" )
     private String _strLabel;
+    private int _nIdWorkflow;
 
     /**
      * Returns the Id
@@ -144,5 +145,23 @@ public class TicketCategory implements Serializable
     public void setLabel( String strLabel )
     {
         _strLabel = strLabel;
+    }
+    
+    /**
+     * Get the id of the workflow associated with this ticket category
+     * @return The id of the workflow
+     */
+    public int getIdWorkflow(  )
+    {
+        return _nIdWorkflow;
+    }
+
+    /**
+     * Set the id of the workflow associated with this ticket category
+     * @param nIdWorkflow The id of the workflow
+     */
+    public void setIdWorkflow( int nIdWorkflow )
+    {
+        _nIdWorkflow = nIdWorkflow;
     }
 }
