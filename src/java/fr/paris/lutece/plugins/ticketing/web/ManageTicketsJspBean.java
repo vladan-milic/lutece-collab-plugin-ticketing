@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -50,6 +51,7 @@ import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
+import fr.paris.lutece.plugins.workflowcore.service.state.IStateService;
 import fr.paris.lutece.plugins.workflowcore.service.state.StateService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -95,6 +97,13 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String PARAMETER_ID_TICKET = "id";
     private static final String PARAMETER_ID_ACTION = "id_action";
     private static final String PARAMETER_BACK = "back";
+    private static final String PARAMETER_GUID = "guid";
+    private static final String PARAMETER_FIRSTNAME = "fn";
+    private static final String PARAMETER_LASTNAME = "ln";
+    private static final String PARAMETER_PHONE = "ph";
+    private static final String PARAMETER_EMAIL = "em";
+    
+    
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETS = "ticketing.manage_tickets.pageTitle";
@@ -111,7 +120,12 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
     private static final String MARK_TASKS_FORM = "tasks_form";
     private static final String JSP_MANAGE_TICKETS = "jsp/admin/plugins/ticketing/ManageTickets.jsp";
-
+    private static final String MARK_GUID = "guid";
+    private static final String MARK_FIRSTNAME = "firstname";
+    private static final String MARK_LASTNAME = "lastname";
+    private static final String MARK_PHONE = "phone";
+    private static final String MARK_EMAIL = "email";
+    
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
     private static final String PROPERTY_DEFAULT_LIST_TICKET_PER_PAGE = "ticketing.listTickets.itemsPerPage";
@@ -137,8 +151,9 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final long serialVersionUID = 1L;
     
     //services
-    private final StateService _stateService = SpringContextService.getBean( StateService.BEAN_SERVICE );
-
+   // private final StateService _stateService = SpringContextService.getBean( StateService.BEAN_SERVICE );
+   @Inject
+    private IStateService _stateService;
     // Session variable to store working values
     private Ticket _ticket;
 
@@ -183,7 +198,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
                 stateFilter.setIdWorkflow( nIdWorkflow );
 
                 State state = _stateService.findByResource( ticket.getId( ),
-                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow );
+                       Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow );
 
                 if ( state != null )
                 {
@@ -216,6 +231,11 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @View( VIEW_CREATE_TICKET )
     public String getCreateTicket( HttpServletRequest request )
     {
+    	String strGuid = request.getParameter( PARAMETER_GUID );
+    	String strFirstname = request.getParameter( PARAMETER_FIRSTNAME );
+    	String strLastname = request.getParameter( PARAMETER_LASTNAME );
+    	String strPhone = request.getParameter( PARAMETER_PHONE );
+    	String strEmail = request.getParameter(PARAMETER_EMAIL);
         _ticket = ( _ticket != null ) ? _ticket : new Ticket(  );
 
         Map<String, Object> model = getModel(  );
@@ -225,6 +245,11 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
         model.put( MARK_TICKET, _ticket );
+        model.put(MARK_GUID, strGuid);
+        model.put(MARK_FIRSTNAME,strFirstname);
+        model.put(MARK_LASTNAME, strLastname);
+        model.put(MARK_PHONE, strPhone);
+        model.put(MARK_EMAIL, strEmail);
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKET, TEMPLATE_CREATE_TICKET, model );
     }
