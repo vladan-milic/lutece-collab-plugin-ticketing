@@ -37,7 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -52,11 +51,8 @@ import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
-import fr.paris.lutece.plugins.workflowcore.service.state.IStateService;
-import fr.paris.lutece.plugins.workflowcore.service.state.StateService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
@@ -151,13 +147,6 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String INFO_TICKET_UPDATED = "ticketing.info.ticket.updated";
     private static final String INFO_TICKET_REMOVED = "ticketing.info.ticket.removed";
     private static final long serialVersionUID = 1L;
-    
-    //services
-
-  @Inject
-  private IStateService _stateService;
-
-   // private final StateService _stateService = SpringContextService.getBean( StateService.BEAN_SERVICE );
 
     // Errors
     public static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
@@ -206,8 +195,8 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
                 StateFilter stateFilter = new StateFilter(  );
                 stateFilter.setIdWorkflow( nIdWorkflow );
 
-                State state = _stateService.findByResource( ticket.getId( ),
-                       Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow );
+                State state = WorkflowService.getInstance( ).getState( ticket.getId( ),
+                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
 
                 if ( state != null )
                 {
