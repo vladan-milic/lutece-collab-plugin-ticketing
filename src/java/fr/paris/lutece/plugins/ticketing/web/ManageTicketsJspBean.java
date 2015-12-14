@@ -154,10 +154,10 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     
     //services
 
-  @Inject
-  private IStateService _stateService;
+  //@Inject
+  //private IStateService _stateService;
 
-   // private final StateService _stateService = SpringContextService.getBean( StateService.BEAN_SERVICE );
+   private final StateService _stateService = SpringContextService.getBean( StateService.BEAN_SERVICE );
 
     // Errors
     public static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
