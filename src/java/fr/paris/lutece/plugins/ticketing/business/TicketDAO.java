@@ -38,6 +38,7 @@ import java.util.List;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+import java.sql.Timestamp;
 
 
 /**
@@ -47,13 +48,16 @@ public final class TicketDAO implements ITicketDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket ) FROM ticketing_ticket";
-    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket, a.id_user_title, b.label, a.firstname, a.lastname, a.email, a.fixed_phone_number, a.mobile_phone_number, c.id_ticket_type, c.label, d.id_ticket_domain, d.label, a.id_ticket_category, e.label, a.id_contact_mode, f.label, a.ticket_comment, a.ticket_status, a.ticket_status_text "
+    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket, a.id_user_title, b.label, a.firstname, a.lastname, a.email, "
+            + "a.fixed_phone_number, a.mobile_phone_number, c.id_ticket_type, c.label, d.id_ticket_domain, "
+            + "d.label, a.id_ticket_category, e.label, a.id_contact_mode, f.label, a.ticket_comment,"
+            + " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create "
             + " FROM ticketing_ticket a, ticketing_user_title b, ticketing_ticket_type c, ticketing_ticket_domain d, ticketing_ticket_category e, ticketing_contact_mode f "
             + " WHERE a.id_ticket = ? AND a.id_user_title = b.id_user_title AND a.id_ticket_category = e.id_ticket_category AND e.id_ticket_domain = d.id_ticket_domain AND d.id_ticket_type = c.id_ticket_type AND a.id_contact_mode = f.id_contact_mode";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket ( id_ticket, id_user_title, firstname, lastname, email, fixed_phone_number, mobile_phone_number, id_ticket_category, id_contact_mode, ticket_comment, ticket_status, ticket_status_text ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket ( id_ticket, id_user_title, firstname, lastname, email, fixed_phone_number, mobile_phone_number, id_ticket_category, id_contact_mode, ticket_comment, ticket_status, ticket_status_text,date_update,date_create ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_ticket WHERE id_ticket = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket SET id_ticket = ?, id_user_title = ?, firstname = ?, lastname = ?, email = ?, fixed_phone_number = ?, mobile_phone_number = ?, id_ticket_category = ?, id_contact_mode = ?, ticket_comment = ?, ticket_status = ?, ticket_status_text = ? WHERE id_ticket = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket, a.id_user_title, b.label, a.firstname, a.lastname, a.email, a.fixed_phone_number, a.mobile_phone_number, c.id_ticket_type, c.label, d.id_ticket_domain, d.label, a.id_ticket_category, e.label, a.id_contact_mode, f.label, a.ticket_comment, a.ticket_status, a.ticket_status_text "
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket SET id_ticket = ?, id_user_title = ?, firstname = ?, lastname = ?, email = ?, fixed_phone_number = ?, mobile_phone_number = ?, id_ticket_category = ?, id_contact_mode = ?, ticket_comment = ?, ticket_status = ?, ticket_status_text = ?, date_update =?  WHERE id_ticket = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket, a.id_user_title, b.label, a.firstname, a.lastname, a.email, a.fixed_phone_number, a.mobile_phone_number, c.id_ticket_type, c.label, d.id_ticket_domain, d.label, a.id_ticket_category, e.label, a.id_contact_mode, f.label, a.ticket_comment, a.ticket_status, a.ticket_status_text, a.date_update, a.date_create "
             + " FROM ticketing_ticket a, ticketing_user_title b, ticketing_ticket_type c, ticketing_ticket_domain d, ticketing_ticket_category e, ticketing_contact_mode f "
             + " WHERE a.id_user_title = b.id_user_title AND a.id_ticket_category = e.id_ticket_category AND e.id_ticket_domain = d.id_ticket_domain AND d.id_ticket_type = c.id_ticket_type AND a.id_contact_mode = f.id_contact_mode";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket FROM ticketing_ticket";
@@ -103,6 +107,12 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setString( nIndex++, ticket.getTicketComment(  ) );
         daoUtil.setInt( nIndex++, ticket.getTicketStatus(  ) );
         daoUtil.setString( nIndex++, ticket.getTicketStatusText(  ) );
+        
+        ticket.setDateUpdate(new Timestamp( new java.util.Date(  ).getTime(  ) ) );
+        ticket.setDateCreate(new Timestamp( new java.util.Date(  ).getTime(  ) ) );
+        
+        daoUtil.setTimestamp(nIndex++, ticket.getDateUpdate());
+        daoUtil.setTimestamp( nIndex++, ticket.getDateCreate());
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -143,6 +153,9 @@ public final class TicketDAO implements ITicketDAO
             ticket.setTicketComment( daoUtil.getString( nIndex++ ) );
             ticket.setTicketStatus( daoUtil.getInt( nIndex++ ) );
             ticket.setTicketStatusText( daoUtil.getString( nIndex++ ) );
+             ticket.setDateUpdate(daoUtil.getTimestamp(nIndex++ ) );
+            ticket.setDateCreate(daoUtil.getTimestamp(nIndex++ ) );
+           
         }
 
         daoUtil.free(  );
@@ -183,6 +196,9 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setString( nIndex++, ticket.getTicketComment(  ) );
         daoUtil.setInt( nIndex++, ticket.getTicketStatus(  ) );
         daoUtil.setString( nIndex++, ticket.getTicketStatusText(  ) );
+        
+        ticket.setDateUpdate(new Timestamp( new java.util.Date(  ).getTime(  ) ) );
+        daoUtil.setTimestamp(nIndex++, ticket.getDateUpdate());
         daoUtil.setInt( nIndex++, ticket.getId(  ) );
 
         daoUtil.executeUpdate(  );
@@ -222,6 +238,8 @@ public final class TicketDAO implements ITicketDAO
             ticket.setTicketComment ( daoUtil.getString ( 17 ) );
             ticket.setTicketStatus ( daoUtil.getInt ( 18 ) );
             ticket.setTicketStatusText ( daoUtil.getString ( 19 ) );
+            ticket.setDateUpdate(daoUtil.getTimestamp(20 ) );
+            ticket.setDateCreate(daoUtil.getTimestamp(21 ) );
 
             ticketList.add( ticket );
         }

@@ -43,6 +43,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
+import java.sql.Timestamp;
 
 
 /**
@@ -91,7 +92,34 @@ public class Ticket implements Serializable
     @Size( max = 255, message = "#i18n{ticketing.validation.ticket.TicketStatusText.size}" )
     private String _strTicketStatusText;
     private State _state;
+    private Timestamp _dDateCreate;
+    private Timestamp _dDateUpdate;
     private transient Collection<Action> _listWorkflowActions;
+
+    
+    /**
+     * @return */
+    public Timestamp getDateCreate() {
+        return _dDateCreate;
+    }
+
+     /**
+     * @param dDateCreate*/
+    public void setDateCreate(Timestamp dDateCreate) {
+        this._dDateCreate = dDateCreate;
+    }
+
+     /**
+     * @return */
+    public Timestamp getDateUpdate() {
+        return _dDateUpdate;
+    }
+
+     /**
+     * @param dDateUpdate*/
+    public void setDateUpdate(Timestamp dDateUpdate) {
+        this._dDateUpdate = dDateUpdate;
+    }
 
     /**
      * Returns the Id

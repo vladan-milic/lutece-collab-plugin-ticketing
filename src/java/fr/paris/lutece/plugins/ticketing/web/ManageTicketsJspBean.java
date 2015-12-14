@@ -296,6 +296,8 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
 
         if ( nIdWorkflow > 0 )
         {
+            
+        
             WorkflowService.getInstance( ).getState( _ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE,
                     nIdWorkflow, ticketCategory.getId( ) );
             WorkflowService.getInstance( ).executeActionAutomatic( _ticket.getId( ),
