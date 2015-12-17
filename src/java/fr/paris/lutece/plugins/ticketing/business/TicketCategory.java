@@ -30,7 +30,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * License 1.0
- */ 
+ */
 package fr.paris.lutece.plugins.ticketing.business;
 
 import java.io.Serializable;
@@ -42,28 +42,27 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * This is the business class for the object TicketCategory
- */ 
+ */
 public class TicketCategory implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
     // Variables declarations 
     private int _nId;
-    
     private int _nIdTicketDomain;
     private String _strTicketDomain;
     private String _strTicketType;
     private int _nIdTicketForm;
-    
     @NotEmpty( message = "#i18n{ticketing.validation.ticketcategory.Label.notEmpty}" )
-    @Size( max = 50 , message = "#i18n{ticketing.validation.ticketcategory.Label.size}" ) 
+    @Size( max = 50, message = "#i18n{ticketing.validation.ticketcategory.Label.size}" )
     private String _strLabel;
+    private int _nIdWorkflow;
 
     /**
      * Returns the Id
      * @return The Id
      */
-    public int getId( )
+    public int getId(  )
     {
         return _nId;
     }
@@ -71,7 +70,7 @@ public class TicketCategory implements Serializable
     /**
      * Sets the Id
      * @param nId The Id
-     */ 
+     */
     public void setId( int nId )
     {
         _nId = nId;
@@ -99,7 +98,7 @@ public class TicketCategory implements Serializable
      * Returns the TicketDomain
      * @return The TicketDomain
      */
-    public String getTicketDomain( )
+    public String getTicketDomain(  )
     {
         return _strTicketDomain;
     }
@@ -107,7 +106,7 @@ public class TicketCategory implements Serializable
     /**
      * Sets the TicketDomain
      * @param strTicketDomain The TicketDomain
-     */ 
+     */
     public void setTicketDomain( String strTicketDomain )
     {
         _strTicketDomain = strTicketDomain;
@@ -117,7 +116,7 @@ public class TicketCategory implements Serializable
      * Returns the TicketType
      * @return The TicketType
      */
-    public String getTicketType( )
+    public String getTicketType(  )
     {
         return _strTicketType;
     }
@@ -125,17 +124,17 @@ public class TicketCategory implements Serializable
     /**
      * Sets the TicketType
      * @param strTicketType The TicketType
-     */ 
+     */
     public void setTicketType( String strTicketType )
     {
         _strTicketType = strTicketType;
     }
-    
+
     /**
      * Returns the Label
      * @return The Label
      */
-    public String getLabel( )
+    public String getLabel(  )
     {
         return _strLabel;
     }
@@ -143,12 +142,30 @@ public class TicketCategory implements Serializable
     /**
      * Sets the Label
      * @param strLabel The Label
-     */ 
+     */
     public void setLabel( String strLabel )
     {
         _strLabel = strLabel;
     }
+    
+    /**
+     * Get the id of the workflow associated with this ticket category
+     * @return The id of the workflow
+     */
+    public int getIdWorkflow(  )
+    {
+        return _nIdWorkflow;
+    }
 
+    /**
+     * Set the id of the workflow associated with this ticket category
+     * @param nIdWorkflow The id of the workflow
+     */
+    public void setIdWorkflow( int nIdWorkflow )
+    {
+        _nIdWorkflow = nIdWorkflow;
+    }
+    
     /**
      * @return the _nIdTicketForm
      */

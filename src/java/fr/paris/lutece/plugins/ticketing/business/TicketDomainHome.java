@@ -31,23 +31,22 @@
  *
  * License 1.0
  */
- 
 package fr.paris.lutece.plugins.ticketing.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
+
 import java.util.List;
+
 
 /**
  * This class provides instances management methods (create, find, ...) for TicketDomain objects
  */
-
 public final class TicketDomainHome
 {
     // Static variable pointed at the DAO instance
-
     private static ITicketDomainDAO _dao = SpringContextService.getBean( "ticketing.ticketDomainDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
@@ -101,37 +100,34 @@ public final class TicketDomainHome
      */
     public static TicketDomain findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, _plugin);
+        return _dao.load( nKey, _plugin );
     }
 
     /**
      * Load the data of all the ticketDomain objects and returns them in form of a collection
      * @return the collection which contains the data of all the ticketDomain objects
      */
-    public static List<TicketDomain> getTicketDomainsList( )
+    public static List<TicketDomain> getTicketDomainsList(  )
     {
         return _dao.selectTicketDomainsList( _plugin );
     }
-    
+
     /**
      * Load the id of all the ticketDomain objects and returns them in form of a collection
      * @return the collection which contains the id of all the ticketDomain objects
      */
-    public static List<Integer> getIdTicketDomainsList( )
+    public static List<Integer> getIdTicketDomainsList(  )
     {
         return _dao.selectIdTicketDomainsList( _plugin );
     }
-    
+
     public static ReferenceList getReferenceListByType( int nTicketTypeId )
     {
-        return _dao.selectReferenceListByType( nTicketTypeId , _plugin );
+        return _dao.selectReferenceListByType( nTicketTypeId, _plugin );
     }
-    
-    public static ReferenceList getReferenceList( )
+
+    public static ReferenceList getReferenceList(  )
     {
         return _dao.selectReferenceList( _plugin );
     }
-
 }
-
-

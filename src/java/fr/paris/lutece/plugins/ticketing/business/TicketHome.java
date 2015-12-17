@@ -31,7 +31,6 @@
  *
  * License 1.0
  */
- 
 package fr.paris.lutece.plugins.ticketing.business;
 
 import java.util.ArrayList;
@@ -48,11 +47,9 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 /**
  * This class provides instances management methods (create, find, ...) for Ticket objects
  */
-
 public final class TicketHome
 {
     // Static variable pointed at the DAO instance
-
     private static ITicketDAO _dao = SpringContextService.getBean( "ticketing.ticketDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
     private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance(  );
@@ -107,23 +104,23 @@ public final class TicketHome
      */
     public static Ticket findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, _plugin);
+        return _dao.load( nKey, _plugin );
     }
 
     /**
      * Load the data of all the ticket objects and returns them in form of a collection
      * @return the collection which contains the data of all the ticket objects
      */
-    public static List<Ticket> getTicketsList( )
+    public static List<Ticket> getTicketsList(  )
     {
         return _dao.selectTicketsList( _plugin );
     }
-    
+
     /**
      * Load the id of all the ticket objects and returns them in form of a collection
      * @return the collection which contains the id of all the ticket objects
      */
-    public static List<Integer> getIdTicketsList( )
+    public static List<Integer> getIdTicketsList(  )
     {
         return _dao.selectIdTicketsList( _plugin );
     }
@@ -228,4 +225,3 @@ public final class TicketHome
     }
     
 }
-

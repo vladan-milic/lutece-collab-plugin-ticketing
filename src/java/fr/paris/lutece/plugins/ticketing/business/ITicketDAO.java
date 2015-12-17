@@ -82,7 +82,7 @@ public interface ITicketDAO
      * @return The collection which contains the data of all the ticket objects
      */
     List<Ticket> selectTicketsList( Plugin plugin );
-    
+
     /**
      * Load the id of all the ticket objects and returns them as a collection
      * @param plugin the Plugin
@@ -124,7 +124,6 @@ public interface ITicketDAO
      * @param plugin The plugin
      */
     void removeTicketResponsesByIdResponse( int nIdTicket, Plugin plugin );
-
     /**
      * Find the id of the ticket associated with a given response
      * @param nIdResponse The id of the response

@@ -33,27 +33,27 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
- * This class provides Data Access methods for UserTitle objects
+ * This class provides Data Access methods for ContactMode objects
  */
-public final class UserTitleDAO implements IUserTitleDAO
+public final class ContactModeDAO implements IContactModeDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_user_title ) FROM ticketing_user_title";
-    private static final String SQL_QUERY_SELECT = "SELECT id_user_title, label FROM ticketing_user_title WHERE id_user_title = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_user_title ( id_user_title, label ) VALUES ( ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_user_title WHERE id_user_title = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_user_title SET id_user_title = ?, label = ? WHERE id_user_title = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_user_title, label FROM ticketing_user_title";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_user_title FROM ticketing_user_title";
+    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_contact_mode ) FROM ticketing_contact_mode";
+    private static final String SQL_QUERY_SELECT = "SELECT id_contact_mode, label FROM ticketing_contact_mode WHERE id_contact_mode = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_contact_mode ( id_contact_mode, label ) VALUES ( ?, ? ) ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_contact_mode WHERE id_contact_mode = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_contact_mode SET id_contact_mode = ?, label = ? WHERE id_contact_mode = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_contact_mode, label FROM ticketing_contact_mode";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_contact_mode FROM ticketing_contact_mode";
 
     /**
      * Generates a new primary key
@@ -81,14 +81,14 @@ public final class UserTitleDAO implements IUserTitleDAO
      * {@inheritDoc }
      */
     @Override
-    public void insert( UserTitle userTitle, Plugin plugin )
+    public void insert( ContactMode contactMode, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
 
-        userTitle.setId( newPrimaryKey( plugin ) );
+        contactMode.setId ( newPrimaryKey ( plugin ) );
 
-        daoUtil.setInt( 1, userTitle.getId(  ) );
-        daoUtil.setString( 2, userTitle.getLabel(  ) );
+        daoUtil.setInt ( 1, contactMode.getId ( ) );
+        daoUtil.setString ( 2, contactMode.getLabel ( ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -98,24 +98,24 @@ public final class UserTitleDAO implements IUserTitleDAO
      * {@inheritDoc }
      */
     @Override
-    public UserTitle load( int nKey, Plugin plugin )
+    public ContactMode load( int nKey, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setInt( 1, nKey );
         daoUtil.executeQuery(  );
 
-        UserTitle userTitle = null;
+        ContactMode contactMode = null;
 
         if ( daoUtil.next(  ) )
         {
-            userTitle = new UserTitle(  );
-            userTitle.setId( daoUtil.getInt( 1 ) );
-            userTitle.setLabel( daoUtil.getString( 2 ) );
+            contactMode = new ContactMode();
+            contactMode.setId ( daoUtil.getInt ( 1 ) );
+            contactMode.setLabel ( daoUtil.getString ( 2 ) );
         }
 
         daoUtil.free(  );
 
-        return userTitle;
+        return contactMode;
     }
 
     /**
@@ -134,13 +134,13 @@ public final class UserTitleDAO implements IUserTitleDAO
      * {@inheritDoc }
      */
     @Override
-    public void store( UserTitle userTitle, Plugin plugin )
+    public void store( ContactMode contactMode, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-        daoUtil.setInt( 1, userTitle.getId(  ) );
-        daoUtil.setString( 2, userTitle.getLabel(  ) );
-        daoUtil.setInt( 3, userTitle.getId(  ) );
+        daoUtil.setInt ( 1, contactMode.getId ( ) );
+        daoUtil.setString ( 2, contactMode.getLabel ( ) );
+        daoUtil.setInt ( 3, contactMode.getId ( ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -150,45 +150,45 @@ public final class UserTitleDAO implements IUserTitleDAO
      * {@inheritDoc }
      */
     @Override
-    public List<UserTitle> selectUserTitlesList( Plugin plugin )
+    public List<ContactMode> selectContactModesList( Plugin plugin )
     {
-        List<UserTitle> userTitleList = new ArrayList<UserTitle>(  );
+        List<ContactMode> contactModeList = new ArrayList<ContactMode>();
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
         daoUtil.executeQuery(  );
 
         while ( daoUtil.next(  ) )
         {
-            UserTitle userTitle = new UserTitle(  );
+            ContactMode contactMode = new ContactMode();
 
-            userTitle.setId( daoUtil.getInt( 1 ) );
-            userTitle.setLabel( daoUtil.getString( 2 ) );
+            contactMode.setId ( daoUtil.getInt ( 1 ) );
+            contactMode.setLabel ( daoUtil.getString ( 2 ) );
 
-            userTitleList.add( userTitle );
+            contactModeList.add ( contactMode );
         }
 
         daoUtil.free(  );
 
-        return userTitleList;
+        return contactModeList;
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public List<Integer> selectIdUserTitlesList( Plugin plugin )
+    public List<Integer> selectIdContactModesList( Plugin plugin )
     {
-        List<Integer> userTitleList = new ArrayList<Integer>(  );
+        List<Integer> contactModeList = new ArrayList<Integer>();
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
         daoUtil.executeQuery(  );
 
         while ( daoUtil.next(  ) )
         {
-            userTitleList.add( daoUtil.getInt( 1 ) );
+            contactModeList.add ( daoUtil.getInt ( 1 ) );
         }
 
         daoUtil.free(  );
 
-        return userTitleList;
+        return contactModeList;
     }
 
     /**
@@ -197,17 +197,18 @@ public final class UserTitleDAO implements IUserTitleDAO
     @Override
     public ReferenceList selectReferenceList( Plugin plugin )
     {
-        ReferenceList list = new ReferenceList(  );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        ReferenceList list = new ReferenceList();
+        DAOUtil daoUtil = new DAOUtil ( SQL_QUERY_SELECTALL, plugin );
+        daoUtil.executeQuery();
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next ( ) )
         {
-            list.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
+            list.addItem ( daoUtil.getInt ( 1 ), daoUtil.getString ( 2 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free();
 
         return list;
     }
+
 }

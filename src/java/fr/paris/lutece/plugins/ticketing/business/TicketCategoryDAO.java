@@ -31,7 +31,6 @@
  *
  * License 1.0
  */
-
 package fr.paris.lutece.plugins.ticketing.business;
 
 import java.util.ArrayList;
@@ -41,21 +40,21 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+
 /**
  * This class provides Data Access methods for TicketCategory objects
  */
-
 public final class TicketCategoryDAO implements ITicketCategoryDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket_category ) FROM ticketing_ticket_category";
-    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label, b.label, c.label, a.id_ticket_form "
+    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label,  a.id_workflow, b.label, c.label, a.id_ticket_form "
             + " FROM ticketing_ticket_category a, ticketing_ticket_domain b , ticketing_ticket_type c "
             + " WHERE id_ticket_category = ? AND a.id_ticket_domain = b.id_ticket_domain AND b.id_ticket_type = c.id_ticket_type";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_category ( id_ticket_category, id_ticket_domain, label,id_ticket_form ) VALUES ( ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_category ( id_ticket_category, id_ticket_domain, label, id_workflow, id_ticket_form ) VALUES ( ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_ticket_category WHERE id_ticket_category = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_category SET id_ticket_category = ?, id_ticket_domain = ?, label = ?, id_ticket_form = ? WHERE id_ticket_category = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label, b.label, c.label "
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_category SET id_ticket_category = ?, id_ticket_domain = ?, label = ?, id_workflow = ?, id_ticket_form = ? WHERE id_ticket_category = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label, a.id_workflow, b.label, c.label "
             + " FROM ticketing_ticket_category a, ticketing_ticket_domain b , ticketing_ticket_type c "
             + " WHERE a.id_ticket_domain = b.id_ticket_domain AND b.id_ticket_type = c.id_ticket_type";
     private static final String SQL_QUERY_SELECT_BY_DOMAIN = "SELECT id_ticket_category, label FROM ticketing_ticket_category WHERE id_ticket_domain = ?";
@@ -66,19 +65,19 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
      * @param plugin The Plugin
      * @return The new primary key
      */
-    public int newPrimaryKey( Plugin plugin)
+    public int newPrimaryKey( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK , plugin  );
-        daoUtil.executeQuery( );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
+        daoUtil.executeQuery(  );
 
         int nKey = 1;
 
-        if( daoUtil.next( ) )
+        if ( daoUtil.next(  ) )
         {
-                nKey = daoUtil.getInt( 1 ) + 1;
+            nKey = daoUtil.getInt( 1 ) + 1;
         }
 
-        daoUtil.free();
+        daoUtil.free(  );
 
         return nKey;
     }
@@ -93,13 +92,14 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
 
         ticketCategory.setId( newPrimaryKey( plugin ) );
 
-        daoUtil.setInt( 1, ticketCategory.getId( ) );
-        daoUtil.setInt( 2, ticketCategory.getIdTicketDomain( ) );
-        daoUtil.setString( 3, ticketCategory.getLabel( ) );
-        daoUtil.setInt( 4, ticketCategory.getIdTicketForm( ) );
+        daoUtil.setInt( 1, ticketCategory.getId(  ) );
+        daoUtil.setInt( 2, ticketCategory.getIdTicketDomain(  ) );
+        daoUtil.setString( 3, ticketCategory.getLabel(  ) );
+        daoUtil.setInt( 4, ticketCategory.getIdWorkflow(  ) );
+        daoUtil.setInt( 5, ticketCategory.getIdTicketForm( ) );
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -109,23 +109,25 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
     public TicketCategory load( int nKey, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.setInt( 1 , nKey );
-        daoUtil.executeQuery( );
+        daoUtil.setInt( 1, nKey );
+        daoUtil.executeQuery(  );
 
         TicketCategory ticketCategory = null;
 
-        if ( daoUtil.next( ) )
+        if ( daoUtil.next(  ) )
         {
-            ticketCategory = new TicketCategory();
+            ticketCategory = new TicketCategory(  );
             ticketCategory.setId( daoUtil.getInt( 1 ) );
             ticketCategory.setIdTicketDomain( daoUtil.getInt( 2 ) );
             ticketCategory.setLabel( daoUtil.getString( 3 ) );
-            ticketCategory.setTicketDomain(daoUtil.getString( 4 ) );
-            ticketCategory.setTicketType(daoUtil.getString( 5 ) );
-            ticketCategory.setIdTicketForm( daoUtil.getInt( 6 ) );
+            ticketCategory.setIdWorkflow( daoUtil.getInt( 4 ) );
+            ticketCategory.setTicketDomain(daoUtil.getString( 5 ) );
+            ticketCategory.setTicketType(daoUtil.getString( 6 ) );
+            ticketCategory.setIdTicketForm( daoUtil.getInt( 7 ) );
         }
 
-        daoUtil.free( );
+        daoUtil.free(  );
+
         return ticketCategory;
     }
 
@@ -136,9 +138,9 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
     public void delete( int nKey, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1 , nKey );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.setInt( 1, nKey );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -148,15 +150,15 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
     public void store( TicketCategory ticketCategory, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        
-        daoUtil.setInt( 1, ticketCategory.getId( ) );
-        daoUtil.setInt( 2, ticketCategory.getIdTicketDomain( ) );
-        daoUtil.setString( 3, ticketCategory.getLabel( ) );
-        daoUtil.setInt( 4, ticketCategory.getIdTicketForm( ) );
-        daoUtil.setInt( 5, ticketCategory.getId( ) );
+        daoUtil.setInt( 1, ticketCategory.getId(  ) );
+        daoUtil.setInt( 2, ticketCategory.getIdTicketDomain(  ) );
+        daoUtil.setString( 3, ticketCategory.getLabel(  ) );
+        daoUtil.setInt( 4, ticketCategory.getIdWorkflow(  ) );
+        daoUtil.setInt( 5, ticketCategory.getIdTicketForm( ) );
+        daoUtil.setInt( 6, ticketCategory.getId(  ) );
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -172,48 +174,51 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         while ( daoUtil.next(  ) )
         {
             TicketCategory ticketCategory = new TicketCategory(  );
-            
+
             ticketCategory.setId( daoUtil.getInt( 1 ) );
             ticketCategory.setIdTicketDomain( daoUtil.getInt( 2 ) );
             ticketCategory.setLabel( daoUtil.getString( 3 ) );
-            ticketCategory.setTicketDomain(daoUtil.getString( 4 ) );
-            ticketCategory.setTicketType(daoUtil.getString( 5 ) );
+            ticketCategory.setIdWorkflow( daoUtil.getInt( 4 ) );
+            ticketCategory.setTicketDomain( daoUtil.getString( 5 ) );
+            ticketCategory.setTicketType( daoUtil.getString( 6 ) );
 
             ticketCategoryList.add( ticketCategory );
         }
 
-        daoUtil.free( );
+        daoUtil.free(  );
+
         return ticketCategoryList;
     }
-    
+
     /**
      * {@inheritDoc }
      */
     @Override
     public List<Integer> selectIdTicketCategorysList( Plugin plugin )
     {
-            List<Integer> ticketCategoryList = new ArrayList<Integer>( );
-            DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
-            daoUtil.executeQuery(  );
+        List<Integer> ticketCategoryList = new ArrayList<Integer>(  );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
+        daoUtil.executeQuery(  );
 
-            while ( daoUtil.next(  ) )
-            {
-                ticketCategoryList.add( daoUtil.getInt( 1 ) );
-            }
+        while ( daoUtil.next(  ) )
+        {
+            ticketCategoryList.add( daoUtil.getInt( 1 ) );
+        }
 
-            daoUtil.free( );
-            return ticketCategoryList;
+        daoUtil.free(  );
+
+        return ticketCategoryList;
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public ReferenceList selectReferenceListByDomain(int nDomainId, Plugin plugin) 
+    public ReferenceList selectReferenceListByDomain( int nDomainId, Plugin plugin )
     {
         ReferenceList list = new ReferenceList(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_DOMAIN, plugin );
-        daoUtil.setInt( 1, nDomainId);
+        daoUtil.setInt( 1, nDomainId );
         daoUtil.executeQuery(  );
 
         while ( daoUtil.next(  ) )
@@ -221,7 +226,8 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             list.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
         }
 
-        daoUtil.free( ); 
+        daoUtil.free(  );
+
         return list;
     }
     

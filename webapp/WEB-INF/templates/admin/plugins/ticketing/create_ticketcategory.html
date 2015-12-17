@@ -5,9 +5,12 @@
     <form class="form-horizontal" method="post" name="create_ticketcategory" action="jsp/admin/plugins/ticketing/ManageTicketCategorys.jsp">
         <@messages errors=errors />
         <input type="hidden" id="id" name="id"/>
-        
+        <input type="hidden" id="guid" name="guid" value=""/>
         <@fieldInputCombo i18nLabelKey="ticketing.create_ticketcategory.labelIdTicketDomain" inputName="id_ticket_domain" items=ticket_domains_list value="${ticketcategory.idTicketDomain!''}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelIdTicketDomain.help" cssClass='form-control' />
         <@fieldInputText i18nLabelKey="ticketing.create_ticketcategory.labelLabel" inputName="label" mandatory=true value="${ticketcategory.label!''}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelLabel.help" />
+        <#if listWorkflows??>
+			<@fieldInputCombo i18nLabelKey='ticketing.create_ticketcategory.labelWorkflow' inputName='idWorkflow' items=listWorkflows value="${ticketcategory.idWorkflow!}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelWorkflow.help" cssClass="form-control" />
+		</#if>
 		<#if ticketform_list??>
 			<@fieldInputCombo i18nLabelKey='ticketing.create_ticketcategory.labelTicketForm' inputName='idTicketForm' items=ticketform_list value="${ticketcategory.idTicketForm!}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelForm.help" cssClass="form-control" />			
 		</#if>

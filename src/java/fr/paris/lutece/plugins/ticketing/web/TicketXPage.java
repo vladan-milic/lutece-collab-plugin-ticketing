@@ -32,9 +32,10 @@
  * License 1.0
  */
 package fr.paris.lutece.plugins.ticketing.web;
- 
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,12 +48,18 @@ import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketForm;
 import fr.paris.lutece.plugins.ticketing.business.TicketFormHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
+import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
+import fr.paris.lutece.portal.service.security.LuteceUser;
+import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
@@ -63,8 +70,7 @@ import fr.paris.lutece.portal.web.xpages.XPage;
 /**
  * This class provides the user interface to manage Ticket xpages ( manage, create, modify, remove )
  */
- 
-@Controller( xpageName = "ticket" , pageTitleI18nKey = "ticketing.xpage.ticket.pageTitle" , pagePathI18nKey = "ticketing.xpage.ticket.pagePathLabel" )
+@Controller( xpageName = "ticket", pageTitleI18nKey = "ticketing.xpage.ticket.pageTitle", pagePathI18nKey = "ticketing.xpage.ticket.pagePathLabel" )
 public class TicketXPage extends MVCApplication
 {
     // Templates
@@ -74,7 +80,12 @@ public class TicketXPage extends MVCApplication
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";
     private static final String MARK_TICKET = "ticket";
     private static final String MARK_TICKET_FORM = "ticket_form";
-    
+    private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
+    private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
+    private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
+    private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
+    private static final String MARK_TICKET_USER = "myLuteceUser";
+
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
 
     // Views
@@ -87,27 +98,39 @@ public class TicketXPage extends MVCApplication
 
     // Infos
     private static final String INFO_TICKET_CREATED = "ticketing.info.ticket.created";
-    
+
+    // Errors
+    public static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
+
     // Session variable to store working values
     private Ticket _ticket;
 
     private final TicketFormService _ticketFormService = SpringContextService
             .getBean( TicketFormService.BEAN_NAME );
-    
+
     /**
      * Returns the form to create a ticket
      *
      * @param request The Http request
      * @return the html code of the ticket form
      */
-    @View( value = VIEW_CREATE_TICKET , defaultView = true )
+    @View( value = VIEW_CREATE_TICKET, defaultView = true )
     public XPage getCreateTicket( HttpServletRequest request )
     {
         _ticket = ( _ticket != null ) ? _ticket : new Ticket(  );
-
+        LuteceUser user=SecurityService.getInstance().getRegisteredUser(request);
         Map<String, Object> model = getModel(  );
-        model.put( MARK_USER_TITLES_LIST , UserTitleHome.getReferenceList() );
+        model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );
         model.put( MARK_TICKET, _ticket );
+        model.put(MARK_TICKET_USER, user);
+
+        // FIXME Dynamic filling
+        model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
+        model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
+
+        model.put ( MARK_CONTACT_MODES_LIST,
+                ContactModeHome.getReferenceList ( ) );
         return getXPage( TEMPLATE_CREATE_TICKET, request.getLocale( ), model );
     }
 
@@ -121,31 +144,35 @@ public class TicketXPage extends MVCApplication
     public XPage doCreateTicket( HttpServletRequest request )
     {
         populate( _ticket, request );
-
+        _ticket.setListResponse( new ArrayList<Response>( ) );
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
-        if ( _ticket.getIdTicketCategory( ) > 0 )
+        if ( _ticket.getIdTicketCategory( ) >= 0 )
         {
             EntryFilter filter = new EntryFilter( );
-
-            filter.setIdResource( TicketFormHome.findByCategoryId( _ticket.getIdTicketCategory( ) )
-                    .getIdForm( ) );
-            filter.setResourceType( TicketForm.RESOURCE_TYPE );
-            filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-            filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-            filter.setIdIsComment( EntryFilter.FILTER_FALSE );
-
-            List<Entry> listEntryFirstLevel = EntryHome.getEntryList( filter );
-
-            for ( Entry entry : listEntryFirstLevel )
+            TicketForm form = TicketFormHome.findByCategoryId( _ticket.getIdTicketCategory( ) );
+            if ( form != null )
             {
-                listFormErrors.addAll( _ticketFormService.getResponseEntry( request,
-                        entry.getIdEntry( ), getLocale( request ), _ticket ) );
+                filter.setIdResource( TicketFormHome.findByCategoryId(
+                        _ticket.getIdTicketCategory( ) ).getIdForm( ) );
+                filter.setResourceType( TicketForm.RESOURCE_TYPE );
+                filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
+                filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
+                filter.setIdIsComment( EntryFilter.FILTER_FALSE );
+
+                List<Entry> listEntryFirstLevel = EntryHome.getEntryList( filter );
+
+                for ( Entry entry : listEntryFirstLevel )
+                {
+                    listFormErrors.addAll( _ticketFormService.getResponseEntry( request,
+                            entry.getIdEntry( ), getLocale( request ), _ticket ) );
+                }
             }
 
         }
+
         // If there is some errors, we redirect the user to the form page
         // Check constraints
-        if ( !validateBean( _ticket, getLocale( request ) ) || listFormErrors.size( ) > 0 )
+        if ( !validateTicket( _ticket, getLocale( request ) ) || listFormErrors.size( ) > 0 )
         {
             for ( GenericAttributeError error : listFormErrors )
             {
@@ -170,8 +197,6 @@ public class TicketXPage extends MVCApplication
 
         return redirectView( request, VIEW_MANAGE_TICKETS );
     }
-
-
     /**
      * Display ticket form linked to the category used for AJAX request ie.
      * standalone mode (no header/footer lutece)
@@ -199,4 +224,24 @@ public class TicketXPage extends MVCApplication
         return page;
     }
 
+    /**
+     * perform ticket validation
+     * 
+     * @param ticket
+     *            ticket
+     * @param locale
+     *            locale
+     * @return true if ticket is valid false otherwise
+     */
+    private boolean validateTicket(Ticket ticket, Locale locale)
+    {
+        boolean bValid = true;
+        if ( ticket.hasNoPhoneNumberFilled( ) )
+        {
+            bValid = false;
+            addError( ERROR_PHONE_NUMBER_MISSING, locale );
+        }
+        return bValid && validateBean( ticket, locale );
+
+    }
 }

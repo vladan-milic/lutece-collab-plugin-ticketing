@@ -33,35 +33,44 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 
-import java.util.List;
-
 
 /**
- * IUserTitleDAO Interface
+ * IContactModeDAO Interface
  */
-public interface IUserTitleDAO
+public interface IContactModeDAO
 {
     /**
      * Insert a new record in the table.
-     * @param userTitle instance of the UserTitle object to insert
-     * @param plugin the Plugin
+     * 
+     * @param contactMode
+     *            instance of the contactMode object to insert
+     * @param plugin
+     *            the Plugin
      */
-    void insert( UserTitle userTitle, Plugin plugin );
+    void insert( ContactMode contactMode, Plugin plugin );
 
     /**
      * Update the record in the table
-     * @param userTitle the reference of the UserTitle
-     * @param plugin the Plugin
+     * 
+     * @param contactMode
+     *            the reference of the ContactMode
+     * @param plugin
+     *            the Plugin
      */
-    void store( UserTitle userTitle, Plugin plugin );
+    void store( ContactMode contactMode, Plugin plugin );
 
     /**
      * Delete a record from the table
-     * @param nKey The identifier of the UserTitle to delete
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the ContactMode to delete
+     * @param plugin
+     *            the Plugin
      */
     void delete( int nKey, Plugin plugin );
 
@@ -70,30 +79,45 @@ public interface IUserTitleDAO
 
     /**
      * Load the data from the table
-     * @param nKey The identifier of the userTitle
-     * @param plugin the Plugin
-     * @return The instance of the userTitle
+     * 
+     * @param nKey
+     *            The identifier of the contactMode
+     * @param plugin
+     *            the Plugin
+     * @return The instance of the contactMode
      */
-    UserTitle load( int nKey, Plugin plugin );
+    ContactMode load( int nKey, Plugin plugin );
 
     /**
-     * Load the data of all the userTitle objects and returns them as a collection
-     * @param plugin the Plugin
-     * @return The collection which contains the data of all the userTitle objects
+     * Load the data of all the contactMode objects and returns them as a
+     * collection
+     * 
+     * @param plugin
+     *            the Plugin
+     * @return The collection which contains the data of all the contactMode
+     *         objects
      */
-    List<UserTitle> selectUserTitlesList( Plugin plugin );
+    List<ContactMode> selectContactModesList( Plugin plugin );
 
     /**
-     * Load the id of all the userTitle objects and returns them as a collection
-     * @param plugin the Plugin
-     * @return The collection which contains the id of all the userTitle objects
+     * Load the id of all the contactMode objects and returns them as a
+     * collection
+     * 
+     * @param plugin
+     *            the Plugin
+     * @return The collection which contains the id of all the contactMode
+     *         objects
      */
-    List<Integer> selectIdUserTitlesList( Plugin plugin );
+    List<Integer> selectIdContactModesList( Plugin plugin );
 
     /**
-     * Load the data of all the userTitle objects and returns them as a reference list
-     * @param plugin the Plugin
+     * Load the data of all the contactMode objects and returns them as a
+     * reference list
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The reference list
      */
     ReferenceList selectReferenceList( Plugin plugin );
+
 }

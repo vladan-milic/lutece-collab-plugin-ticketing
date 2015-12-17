@@ -31,8 +31,6 @@
  *
  * License 1.0
  */
-
- 
 package fr.paris.lutece.plugins.ticketing.web;
 
 import java.util.List;
@@ -47,6 +45,7 @@ import fr.paris.lutece.plugins.ticketing.business.TicketForm;
 import fr.paris.lutece.plugins.ticketing.business.TicketFormHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
@@ -60,7 +59,6 @@ import fr.paris.lutece.util.url.UrlItem;
 @Controller( controllerJsp = "ManageTicketCategorys.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = "TICKETING_MANAGEMENT" )
 public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 {
-
     ////////////////////////////////////////////////////////////////////////////
     // Constants
 
@@ -68,7 +66,6 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String TEMPLATE_MANAGE_TICKETCATEGORYS = "/admin/plugins/ticketing/manage_ticketcategorys.html";
     private static final String TEMPLATE_CREATE_TICKETCATEGORY = "/admin/plugins/ticketing/create_ticketcategory.html";
     private static final String TEMPLATE_MODIFY_TICKETCATEGORY = "/admin/plugins/ticketing/modify_ticketcategory.html";
-
 
     // Parameters
     private static final String PARAMETER_ID_TICKETCATEGORY = "id";
@@ -81,7 +78,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     // Markers
     private static final String MARK_TICKETCATEGORY_LIST = "ticketcategory_list";
     private static final String MARK_TICKETCATEGORY = "ticketcategory";
-    private static final String MARK_TICKET_DOMAINS_LIST ="ticket_domains_list";
+    private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
+    private static final String MARK_LIST_WORKFLOWS = "listWorkflows";
     private static final String MARK_TICKET_FORM_LIST = "ticketform_list";
 
     private static final String JSP_MANAGE_TICKETCATEGORYS = "jsp/admin/plugins/ticketing/ManageTicketCategorys.jsp";
@@ -89,7 +87,6 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETCATEGORY = "ticketing.message.confirmRemoveTicketCategory";
     private static final String PROPERTY_DEFAULT_LIST_TICKETCATEGORY_PER_PAGE = "ticketing.listTicketCategorys.itemsPerPage";
- 
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.ticketcategory.attribute.";
 
     // Views
@@ -107,11 +104,10 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String INFO_TICKETCATEGORY_CREATED = "ticketing.info.ticketcategory.created";
     private static final String INFO_TICKETCATEGORY_UPDATED = "ticketing.info.ticketcategory.updated";
     private static final String INFO_TICKETCATEGORY_REMOVED = "ticketing.info.ticketcategory.removed";
-    
+
     // Session variable to store working values
     private TicketCategory _ticketcategory;
-    
-    
+
     /**
      * Build the Manage View
      * @param request The HTTP request
@@ -121,8 +117,10 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     public String getManageTicketCategorys( HttpServletRequest request )
     {
         _ticketcategory = null;
+
         List<TicketCategory> listTicketCategorys = (List<TicketCategory>) TicketCategoryHome.getTicketCategorysList(  );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKETCATEGORY_LIST, listTicketCategorys, JSP_MANAGE_TICKETCATEGORYS );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKETCATEGORY_LIST, listTicketCategorys,
+                JSP_MANAGE_TICKETCATEGORYS );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETCATEGORYS, TEMPLATE_MANAGE_TICKETCATEGORYS, model );
     }
@@ -140,7 +138,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_TICKETCATEGORY, _ticketcategory );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList());
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
+        model.put( MARK_LIST_WORKFLOWS, WorkflowService.getInstance(  ).getWorkflowsEnabled( getUser(  ), getLocale(  ) ) );
         model.put( MARK_TICKET_FORM_LIST, TicketFormHome.getAvailableTicketFormsList( ) );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKETCATEGORY, TEMPLATE_CREATE_TICKETCATEGORY, model );
@@ -216,14 +215,15 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY ) );
 
-        if ( _ticketcategory == null || ( _ticketcategory.getId(  ) != nId ))
+        if ( ( _ticketcategory == null ) || ( _ticketcategory.getId(  ) != nId ) )
         {
             _ticketcategory = TicketCategoryHome.findByPrimaryKey( nId );
         }
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_TICKETCATEGORY, _ticketcategory );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList());
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
+        model.put( MARK_LIST_WORKFLOWS, WorkflowService.getInstance(  ).getWorkflowsEnabled( getUser(  ), getLocale(  ) ) );
         ReferenceList lstForms = TicketFormHome.getAvailableTicketFormsList( );
         TicketForm form = TicketFormHome.findByPrimaryKey( _ticketcategory
                 .getIdTicketForm( ) );
@@ -250,7 +250,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         // Check constraints
         if ( !validateBean( _ticketcategory, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect( request, VIEW_MODIFY_TICKETCATEGORY, PARAMETER_ID_TICKETCATEGORY, _ticketcategory.getId( ) );
+            return redirect( request, VIEW_MODIFY_TICKETCATEGORY, PARAMETER_ID_TICKETCATEGORY, _ticketcategory.getId(  ) );
         }
 
         TicketCategoryHome.update( _ticketcategory );

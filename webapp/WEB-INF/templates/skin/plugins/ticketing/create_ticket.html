@@ -6,55 +6,82 @@
             <legend>#i18n{ticketing.xpage.create_ticket.title}</legend>
 
             <@messages errors=errors />
+            
+<#if myLuteceUser?has_content>
+	<#assign civilityName = myLuteceUser.getUserInfo( "user.name.civility" ) />
+	<#assign givenName = myLuteceUser.getUserInfo( "user.name.given" ) />
+	<#assign familyName = myLuteceUser.getUserInfo( "user.name.family" ) />
+	<#if myLuteceUser.getUserInfo( "user.business-info.online.email" )?has_content>
+		<#assign emailContact = myLuteceUser.getUserInfo( "user.business-info.online.email" ) />
+	<#elseif myLuteceUser.getUserInfo( "user.home-info.online.email" )?has_content>
+		<#assign emailContact = myLuteceUser.getUserInfo( "user.home-info.online.email" ) />
+	</#if>
+	<#if myLuteceUser.getUserInfo( "user.business-info.telecom.mobile.number" )?has_content>
+		<#assign mobilePhoneNumber = myLuteceUser.getUserInfo( "user.business-info.telecom.mobile.number" ) />
+	<#elseif myLuteceUser.getUserInfo( "user.home-info.telecom.mobile.number" )?has_content>
+		<#assign mobilePhoneNumber = myLuteceUser.getUserInfo( "user.home-info.telecom.mobile.number" ) />
+	</#if>
+    <#if myLuteceUser.getUserInfo( "user.business-info.telecom.telephone.number" )?has_content>
+        <#assign fixedPhoneNumber = myLuteceUser.getUserInfo( "user.business-info.telecom.telephone.number" ) />
+    <#elseif myLuteceUser.getUserInfo( "user.home-info.telecom.telephone.number" )?has_content>
+        <#assign fixedPhoneNumber = myLuteceUser.getUserInfo( "user.home-info.telecom.telephone.number" ) />
+    </#if>
+</#if>
             <input type="hidden" id="id" name="id"/>  
+            <input type="hidden" id="guid" name="guid" value=""/>
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="id_user_title" >#i18n{ticketing.xpage.create_ticket.labelIdUserTitle} * :</label>
                 <div class="col-sm-9">
-                    <@comboWithParams name="id_user_title" default_value="${ticket.idUserTitle!''}"  additionalParameters="class=\"form-control\""  items=user_titles_list />
+                    <@comboWithParams name="id_user_title" default_value="${civilityName!''}"  additionalParameters="class=\"form-control\""  items=user_titles_list />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdUserTitle.help}</span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="firstname" >#i18n{ticketing.xpage.create_ticket.labelFirstname} * :</label>
                 <div class="col-sm-9">
-                    <input class="form-control" type="text" id="firstname" name="firstname" value="${ticket.firstname!''}"  maxlength="50" tabindex="2" />
+                    <input class="form-control" type="text" id="firstname" name="firstname" value="${givenName!''}"  maxlength="50" tabindex="2" />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelFirstname.help}</span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="lastname" >#i18n{ticketing.xpage.create_ticket.labelLastname} * :</label>
                 <div class="col-sm-9">
-                    <input class="form-control" type="text" id="lastname" name="lastname" value="${ticket.lastname!''}"  maxlength="50" tabindex="3" />
+                    <input class="form-control" type="text" id="lastname" name="lastname" value="${familyName!''}"  maxlength="50" tabindex="3" />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelLastname.help}</span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="email" >#i18n{ticketing.xpage.create_ticket.labelEmail} :</label>
+                <label class="col-sm-3 control-label" for="email" >#i18n{ticketing.xpage.create_ticket.labelEmail} * :</label>
                 <div class="col-sm-9">
-                    <input class="form-control" type="text" id="email" name="email" value="${ticket.email!''}"  maxlength="255" tabindex="4" />
+                    <input class="form-control" type="text" id="email" name="email" value="${emailContact!''}"  maxlength="255" tabindex="4" />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelEmail.help}</span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="phone_number" >#i18n{ticketing.xpage.create_ticket.labelPhoneNumber} :</label>
+                <label class="col-sm-3 control-label" for="fixed_phone_number" >#i18n{ticketing.xpage.create_ticket.labelFixedPhoneNumber} :</label>
                 <div class="col-sm-9">
-                    <input class="form-control" type="text" id="phone_number" name="phone_number" value="${ticket.phoneNumber!''}"  maxlength="50" tabindex="5" />
-                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span>
+                    <input class="form-control" type="text" id="fixed_phone_number" name="fixed_phone_number" value="${fixedPhoneNumber!''}"  maxlength="50" tabindex="5" />
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelFixedPhoneNumber.help}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="mobile_phone_number" >#i18n{ticketing.xpage.create_ticket.labelMobilePhoneNumber} :</label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" id="mobile_phone_number" name="mobile_phone_number" value="${mobilePhoneNumber!''}"  maxlength="50" tabindex="5" />
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelMobilePhoneNumber.help}</span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="id_ticket_type" >#i18n{ticketing.xpage.create_ticket.labelTicketType} * :</label>
                 <div class="col-sm-9">
-                    <select class="form-control" id="id_ticket_type" name="id_ticket_type" value="${ticket.idTicketType!''}"  tabindex="6" >
-                    </select>    
+                    <@comboWithParams name="id_ticket_type" default_value="${ticket.idTicketType!''}"  additionalParameters="class=\"form-control\""  items=ticket_types_list />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdTicketType.help}</span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="id_ticket_domain" >#i18n{ticketing.xpage.create_ticket.labelTicketDomain} * :</label>
                 <div class="col-sm-9">
-                    <select class="form-control" id="id_ticket_domain" name="id_ticket_domain" value="${ticket.idTicketDomain!''}"  tabindex="8" >
-                    </select>
+                    <@comboWithParams name="id_ticket_domain" default_value="${ticket.idTicketDomain!''}"  additionalParameters="class=\"form-control\""  items=ticket_domains_list />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdTicketDomain.help}</span>
                 </div>
             </div>
@@ -63,6 +90,13 @@
                 <div class="col-sm-9">
                     <@comboWithParams name="id_ticket_category" default_value="${ticket.idTicketCategory!''}"  additionalParameters="class=\"form-control\""  items=ticket_categories_list />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdTicketCategory.help}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="id_contact_mode" >#i18n{ticketing.xpage.create_ticket.labelIdContactMode} * :</label>
+                <div class="col-sm-9">
+                    <@comboWithParams name="id_contact_mode" default_value="${ticket.idContactMode!''}"  additionalParameters="class=\"form-control\""  items=contact_modes_list />
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdContactMode.help}</span>
                 </div>
             </div>
             <div class="form-group">
@@ -87,19 +121,5 @@
 </div>
 
 
-<script>
-	id_ticket_category.onchange=function(){
-            $.ajax({
-            url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+id_ticket_category.value,
-            data: {
-                txtsearch: $('#appendedInputButton').val()
-            },
-            type: "GET",
-            dataType : "html",
-            success: function( response ) {
-				$('#generic_attributes').replaceWith('<div  class="form-group" id="generic_attributes">' + response + '</div>');
-            }
-            });
-	};
-</script>
-  
+<script src="js/plugins/ticketing/ticket_tree.js"></script>
+<script src="js/plugins/ticketing/ticket_form.js"></script>

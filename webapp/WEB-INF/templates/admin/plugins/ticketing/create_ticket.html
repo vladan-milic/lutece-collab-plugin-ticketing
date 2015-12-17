@@ -2,43 +2,23 @@
     <form class="form-horizontal" method="post" name="create_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
         <@messages errors=errors />
         <input type="hidden" id="id" name="id"/>
+        <input type="hidden" id="guid" name="guid" value=""/>
         <@fieldInputCombo i18nLabelKey="ticketing.create_ticket.labelUserTitle" inputName="id_user_title" items=user_titles_list value="${ticket.idUserTitle!''}" i18nHelpBlockKey="ticketing.create_ticket.labelIdUserTitle.help" cssClass='' /> 
-        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelFirstname" inputName="firstname" mandatory=true value="${ticket.firstname!''}" i18nHelpBlockKey="ticketing.create_ticket.labelFirstname.help" />
-        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelLastname" inputName="lastname" mandatory=true value="${ticket.lastname!''}" i18nHelpBlockKey="ticketing.create_ticket.labelLastname.help" />
-        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelEmail" inputName="email"  value="${ticket.email!''}" i18nHelpBlockKey="ticketing.create_ticket.labelEmail.help" />
-        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelPhoneNumber" inputName="phone_number"  value="${ticket.phoneNumber!''}" i18nHelpBlockKey="ticketing.create_ticket.labelPhoneNumber.help" />
-		<@fieldInputText i18nLabelKey="ticketing.create_ticket.labelTicketStatusText" inputName="ticketStatusText" mandatory=true value="${ticket.ticketStatusText!''}" i18nHelpBlockKey="ticketing.create_ticket.labelTicketStatusText.help" />
-	    <@fieldInputCombo i18nLabelKey="ticketing.create_ticket.labelTicketType" inputName="id_ticket_type" items=ticket_types_list value="${ticket.idTicketType!''}" i18nHelpBlockKey="ticketing.create_ticket.labelTicketType.help" cssClass='' /> 
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelFirstname" inputName="firstname" mandatory=true value="${firstname!''}" i18nHelpBlockKey="ticketing.create_ticket.labelFirstname.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelLastname" inputName="lastname" mandatory=true value="${lastname!''}" i18nHelpBlockKey="ticketing.create_ticket.labelLastname.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelEmail" inputName="email"  value="${email!''}" i18nHelpBlockKey="ticketing.create_ticket.labelEmail.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelFixedPhoneNumber" inputName="fixed_phone_number"  value="${phone!''}" i18nHelpBlockKey="ticketing.create_ticket.labelFixedPhoneNumber.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelMobilePhoneNumber" inputName="mobile_phone_number"  value="${phone!''}" i18nHelpBlockKey="ticketing.create_ticket.labelMobilePhoneNumber.help" />
+        <@fieldInputCombo i18nLabelKey="ticketing.create_ticket.labelTicketType" inputName="id_ticket_type" items=ticket_types_list value="${ticket.idTicketType!''}" i18nHelpBlockKey="ticketing.create_ticket.labelTicketType.help" cssClass='' /> 
         <@fieldInputCombo i18nLabelKey="ticketing.create_ticket.labelTicketDomain" inputName="id_ticket_domain" items=ticket_domains_list value="${ticket.idTicketDomain!''}" i18nHelpBlockKey="ticketing.create_ticket.labelTicketDomain.help" cssClass='' /> 
         <@fieldInputCombo i18nLabelKey="ticketing.create_ticket.labelTicketCategory" inputName="id_ticket_category" items=ticket_categories_list value="${ticket.idTicketCategory!''}" i18nHelpBlockKey="ticketing.create_ticket.labelTicketCategory.help" cssClass='' /> 
+        <@fieldInputCombo i18nLabelKey="ticketing.create_ticket.labelContactMode" inputName="id_contact_mode" items=contact_modes_list value="${ticket.idContactMode!''}" i18nHelpBlockKey="ticketing.create_ticket.labelIdContactMode.help" cssClass='' /> 
         <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelTicketComment" inputName="ticket_comment"  value="${ticket.ticketComment!''}" i18nHelpBlockKey="ticketing.create_ticket.labelTicketComment.help" />
-   
+		<div class="form-group" id="generic_attributes">
+		</div>
         <@actionButtons button1Name="action_createTicket" button2Name="view_manageTickets"/>
     </form>
 </@rowBoxHeader>
 
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
-<script>
-    $(document).ready(function() {
-            lutece_ticket_tree("#id_ticket_type", "#id_ticket_domain", "#id_ticket_category");
-    });
-	category.onchange=function(){
-            $.ajax({
-            url: "jsp/admin/plugins/ticketing/ManageTickets.jsp?view=ticketForm&id_ticket_category="+category.value,
-            data: {
-                txtsearch: $('#appendedInputButton').val()
-            },
-            type: "GET",
-            dataType : "html",
-            success: function( response ) {
-				$('#generic_attributes').replaceWith('<div id="generic_attributes">' + response + '</div>');
-            },
-            error: function( xhr, status ) {
-				alert( "Sorry, there was a problem!" );
-            },
-            complete: function( xhr, status ) {
-                //$('#showresults').slideDown('slow')
-            }
-            });
-	};
-</script>
+<script src="js/plugins/ticketing/ticket_form.js"></script>

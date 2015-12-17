@@ -1,0 +1,13 @@
+<#include "manageadminticketing_tabs.html" />
+<@tabs tab="contactmode" />
+
+<@rowBoxHeader i18nTitleKey="ticketing.modify_contactmode.pageTitle">
+    <form class="form-horizontal" method="post" name="modify_contactmode" action="jsp/admin/plugins/ticketing/ManageContactModes.jsp">
+        <@messages errors=errors />
+        <input type="hidden" id="id" name="id" value="${contactmode.id}"/>
+        
+        <@fieldInputText i18nLabelKey="ticketing.modify_contactmode.labelLabel" inputName="label" mandatory=true value="${contactmode.label}" i18nHelpBlockKey="ticketing.modify_contactmode.labelLabel.help" />
+        <@actionButtons button1Name="action_modifyContactMode" button2Name="view_manageContactModes"/>
+    </form>
+</@rowBoxHeader>
+

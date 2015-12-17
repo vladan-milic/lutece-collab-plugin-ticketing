@@ -33,57 +33,68 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
-import java.util.List;
-
 
 /**
- * This class provides instances management methods (create, find, ...) for UserTitle objects
+ * This class provides instances management methods (create, find, ...) for
+ * ContactMode objects
  */
-public final class UserTitleHome
+public final class ContactModeHome
 {
     // Static variable pointed at the DAO instance
-    private static IUserTitleDAO _dao = SpringContextService.getBean( "ticketing.userTitleDAO" );
+    private static IContactModeDAO _dao = SpringContextService
+            .getBean ( "ticketing.contactModeDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private UserTitleHome(  )
+    private ContactModeHome(  )
     {
     }
 
     /**
-     * Create an instance of the userTitle class
-     * @param userTitle The instance of the UserTitle which contains the informations to store
-     * @return The  instance of userTitle which has been created with its primary key.
+     * Create an instance of the contactMode class
+     * 
+     * @param contactMode
+     *            The instance of the ContactMode which contains the
+     *            informations to store
+     * @return The instance of contactMode which has been created with its
+     *         primary key.
      */
-    public static UserTitle create( UserTitle userTitle )
+    public static ContactMode create( ContactMode contactMode )
     {
-        _dao.insert( userTitle, _plugin );
+        _dao.insert ( contactMode, _plugin );
 
-        return userTitle;
+        return contactMode;
     }
 
     /**
-     * Update of the userTitle which is specified in parameter
-     * @param userTitle The instance of the UserTitle which contains the data to store
-     * @return The instance of the  userTitle which has been updated
+     * Update of the contactMode which is specified in parameter
+     * 
+     * @param contactMode
+     *            The instance of the ContactMode which contains the data to
+     *            store
+     * @return The instance of the contactMode which has been updated
      */
-    public static UserTitle update( UserTitle userTitle )
+    public static ContactMode update( ContactMode contactMode )
     {
-        _dao.store( userTitle, _plugin );
+        _dao.store ( contactMode, _plugin );
 
-        return userTitle;
+        return contactMode;
     }
 
     /**
-     * Remove the userTitle whose identifier is specified in parameter
-     * @param nKey The userTitle Id
+     * Remove the contactMode whose identifier is specified in parameter
+     * 
+     * @param nKey
+     *            The contactMode Id
      */
     public static void remove( int nKey )
     {
@@ -94,35 +105,51 @@ public final class UserTitleHome
     // Finders
 
     /**
-     * Returns an instance of a userTitle whose identifier is specified in parameter
-     * @param nKey The userTitle primary key
-     * @return an instance of UserTitle
+     * Returns an instance of a contactMode whose identifier is specified in
+     * parameter
+     * 
+     * @param nKey
+     *            The contactMode primary key
+     * @return an instance of ContactMode
      */
-    public static UserTitle findByPrimaryKey( int nKey )
+    public static ContactMode findByPrimaryKey( int nKey )
     {
         return _dao.load( nKey, _plugin );
     }
 
     /**
-     * Load the data of all the userTitle objects and returns them in form of a collection
-     * @return the collection which contains the data of all the userTitle objects
+     * Load the data of all the contactMode objects and returns them in form of
+     * a collection
+     * 
+     * @return the collection which contains the data of all the contactMode
+     *         objects
      */
-    public static List<UserTitle> getUserTitlesList(  )
+    public static List<ContactMode> getContactModesList()
     {
-        return _dao.selectUserTitlesList( _plugin );
+        return _dao.selectContactModesList ( _plugin );
     }
 
     /**
-     * Load the id of all the userTitle objects and returns them in form of a collection
-     * @return the collection which contains the id of all the userTitle objects
+     * Load the id of all the contactMode objects and returns them in form of a
+     * collection
+     * 
+     * @return the collection which contains the id of all the contactMode
+     *         objects
      */
-    public static List<Integer> getIdUserTitlesList(  )
+    public static List<Integer> getIdContactModesList()
     {
-        return _dao.selectIdUserTitlesList( _plugin );
+        return _dao.selectIdContactModesList ( _plugin );
     }
 
+    /**
+     * Load the data of all the contactMode objects and returns them as a
+     * reference list
+     * 
+     * @return The reference list
+     */
     public static ReferenceList getReferenceList(  )
     {
         return _dao.selectReferenceList( _plugin );
     }
+
 }

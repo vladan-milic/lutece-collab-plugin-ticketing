@@ -31,7 +31,6 @@
  *
  * License 1.0
  */
- 
 package fr.paris.lutece.plugins.ticketing.business;
 
 import java.util.List;
@@ -41,14 +40,14 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
+
+
 /**
  * This class provides instances management methods (create, find, ...) for TicketCategory objects
  */
-
 public final class TicketCategoryHome
 {
     // Static variable pointed at the DAO instance
-
     private static ITicketCategoryDAO _dao = SpringContextService.getBean( "ticketing.ticketCategoryDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
@@ -102,34 +101,30 @@ public final class TicketCategoryHome
      */
     public static TicketCategory findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, _plugin);
+        return _dao.load( nKey, _plugin );
     }
 
     /**
      * Load the data of all the ticketCategory objects and returns them in form of a collection
      * @return the collection which contains the data of all the ticketCategory objects
      */
-    public static List<TicketCategory> getTicketCategorysList( )
+    public static List<TicketCategory> getTicketCategorysList(  )
     {
         return _dao.selectTicketCategorysList( _plugin );
     }
-    
+
     /**
      * Load the id of all the ticketCategory objects and returns them in form of a collection
      * @return the collection which contains the id of all the ticketCategory objects
      */
-    public static List<Integer> getIdTicketCategorysList( )
+    public static List<Integer> getIdTicketCategorysList(  )
     {
         return _dao.selectIdTicketCategorysList( _plugin );
     }
-    
-    
+
     public static ReferenceList getReferenceListByDomain( int nDomainId )
     {
-        return _dao.selectReferenceListByDomain( nDomainId , _plugin );
+        return _dao.selectReferenceListByDomain( nDomainId, _plugin );
     }
 
 }
-
-
-

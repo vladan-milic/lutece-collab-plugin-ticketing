@@ -33,38 +33,59 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import fr.paris.lutece.test.LuteceTestCase;
+import java.io.Serializable;
+
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 
-public class UserTitleBusinessTest extends LuteceTestCase
+/**
+ * This is the business class for the object ContactMode
+ */
+public class ContactMode implements Serializable
 {
-    private final static String LABEL1 = "Label1";
-    private final static String LABEL2 = "Label2";
+    private static final long serialVersionUID = 1L;
 
-    public void testBusiness(  )
+    // Variables declarations 
+    private int _nId;
+    @NotEmpty( message = "#i18n{ticketing.validation.contactmode.Label.notEmpty}" )
+    @Size( max = 50, message = "#i18n{ticketing.validation.contactmode.Label.size}" )
+    private String _strLabel;
+
+    /**
+     * Returns the Id
+     * @return The Id
+     */
+    public int getId(  )
     {
-        // Initialize an object
-        UserTitle userTitle = new UserTitle(  );
-        userTitle.setLabel( LABEL1 );
+        return _nId;
+    }
 
-        // Create test
-        UserTitleHome.create( userTitle );
+    /**
+     * Sets the Id
+     * @param nId The Id
+     */
+    public void setId( int nId )
+    {
+        _nId = nId;
+    }
 
-        UserTitle userTitleStored = UserTitleHome.findByPrimaryKey( userTitle.getId(  ) );
-        assertEquals( userTitleStored.getLabel(  ), userTitle.getLabel(  ) );
+    /**
+     * Returns the Label
+     * @return The Label
+     */
+    public String getLabel(  )
+    {
+        return _strLabel;
+    }
 
-        // Update test
-        userTitle.setLabel( LABEL2 );
-        UserTitleHome.update( userTitle );
-        userTitleStored = UserTitleHome.findByPrimaryKey( userTitle.getId(  ) );
-        assertEquals( userTitleStored.getLabel(  ), userTitle.getLabel(  ) );
-
-        // List test
-        UserTitleHome.getUserTitlesList(  );
-
-        // Delete test
-        UserTitleHome.remove( userTitle.getId(  ) );
-        userTitleStored = UserTitleHome.findByPrimaryKey( userTitle.getId(  ) );
-        assertNull( userTitleStored );
+    /**
+     * Sets the Label
+     * @param strLabel The Label
+     */
+    public void setLabel( String strLabel )
+    {
+        _strLabel = strLabel;
     }
 }

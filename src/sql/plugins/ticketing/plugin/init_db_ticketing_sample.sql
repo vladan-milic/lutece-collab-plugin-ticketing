@@ -12,5 +12,10 @@ INSERT INTO ticketing_ticket_type (id_ticket_type, label) VALUES
 (2, "Réclamations");
 
 INSERT INTO ticketing_user_title (id_user_title, label) VALUES
-(1, "Monsieur"),
-(2, "Madame");
+(1, "M."),
+(2, "Mme");
+
+INSERT INTO ticketing_contact_mode (id_contact_mode, label) VALUES
+(1, "E-mail"),
+(2, "Téléphone fixe"),
+(3, "Téléphone portable");
