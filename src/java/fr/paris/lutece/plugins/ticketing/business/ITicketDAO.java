@@ -89,5 +89,49 @@ public interface ITicketDAO
      * @return The collection which contains the id of all the ticket objects
      */
     List<Integer> selectIdTicketsList( Plugin plugin );
-}
+    
+    
+    // ----------------------------------------
+    // Ticket response management
+    // ----------------------------------------
 
+    /**
+     * Associates a response to a ticket
+     * @param nIdTicket The id of the ticket
+     * @param nIdResponse The id of the response
+     * @param plugin The plugin
+     */
+    void insertTicketResponse( int nIdTicket, int nIdResponse, Plugin plugin );
+
+    /**
+     * Get the list of id of responses associated with an ticket
+     * @param nIdTicket the id of the ticket
+     * @param plugin the plugin
+     * @return the list of responses, or an empty list if no response was found
+     */
+    List<Integer> findListIdResponse( int nIdTicket, Plugin plugin );
+
+    /**
+     * Remove the association between an ticket and responses
+     * @param nIdTicket The id of the ticket
+     * @param plugin The plugin
+     */
+    void deleteTicketResponse( int nIdTicket, Plugin plugin );
+
+     /**
+     * Remove an ticket responses from the id of a response.
+     * @param nIdResponse The id of the response
+     * @param plugin The plugin
+     */
+    void removeTicketResponsesByIdResponse( int nIdTicket, Plugin plugin );
+
+    /**
+     * Find the id of the ticket associated with a given response
+     * @param nIdResponse The id of the response
+     * @param plugin The plugin
+     * @return The id of the ticket, or 0 if no ticket is associated
+     *         with he given response.
+     */
+    int findIdTicketByIdResponse( int nIdResponse, Plugin plugin );
+}    
+ 

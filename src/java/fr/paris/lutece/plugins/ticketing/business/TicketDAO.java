@@ -48,17 +48,26 @@ public final class TicketDAO implements ITicketDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket ) FROM ticketing_ticket";
-    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket, a.id_user_title, b.label, a.firstname, a.lastname, a.email, a.phone_number, a.id_ticket_type, c.label, a.id_ticket_domain, d.label, a.id_ticket_category, e.label, a.ticket_comment, a.ticket_status, a.ticket_status_text "
-            + " FROM ticketing_ticket a, ticketing_user_title b, ticketing_ticket_type c, ticketing_ticket_domain d, ticketing_ticket_category e "
-            + " WHERE a.id_ticket = ? AND a.id_user_title = b.id_user_title AND a.id_ticket_type = a.id_ticket_type  AND a.id_ticket_domain = d.id_ticket_domain  AND a.id_ticket_category = e.id_ticket_category";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket ( id_ticket, id_user_title, firstname, lastname, email, phone_number, id_ticket_type, id_ticket_domain, id_ticket_category, ticket_comment, ticket_status, ticket_status_text ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket, a.id_user_title, b.label, a.firstname, a.lastname, a.email, a.phone_number, a.id_ticket_type, c.label, a.id_ticket_domain, d.label, a.id_ticket_category, e.label, a.ticket_comment, a.ticket_status, a.ticket_status_text " +
+        " FROM ticketing_ticket a, ticketing_user_title b, ticketing_ticket_type c, ticketing_ticket_domain d, ticketing_ticket_category e " +
+        " WHERE a.id_ticket = ? AND a.id_user_title = b.id_user_title AND a.id_ticket_type = a.id_ticket_type  AND a.id_ticket_domain = d.id_ticket_domain  AND a.id_ticket_category = e.id_ticket_category";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket ( id_ticket, id_user_title, firstname, lastname, email, phone_number, id_ticket_type, id_ticket_domain, id_ticket_category, ticket_comment, ticket_status, ticket_status_text ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_ticket WHERE id_ticket = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket SET id_ticket = ?, id_user_title = ?, firstname = ?, lastname = ?, email = ?, phone_number = ?, id_ticket_type = ?, id_ticket_domain = ?, id_ticket_category = ?, ticket_comment = ?, ticket_status = ?, ticket_status_text = ? WHERE id_ticket = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket, a.id_user_title, b.label, a.firstname, a.lastname, a.email, a.phone_number, a.id_ticket_type, c.label, a.id_ticket_domain, d.label, a.id_ticket_category, e.label, a.ticket_comment, a.ticket_status, a.ticket_status_text "
-            + " FROM ticketing_ticket a, ticketing_user_title b, ticketing_ticket_type c, ticketing_ticket_domain d, ticketing_ticket_category e "
-            + " WHERE a.id_user_title = b.id_user_title AND a.id_ticket_type = a.id_ticket_type  AND a.id_ticket_domain = d.id_ticket_domain  AND a.id_ticket_category = e.id_ticket_category";
+    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket, a.id_user_title, b.label, a.firstname, a.lastname, a.email, a.phone_number, a.id_ticket_type, c.label, a.id_ticket_domain, d.label, a.id_ticket_category, e.label, a.ticket_comment, a.ticket_status, a.ticket_status_text " +
+        " FROM ticketing_ticket a, ticketing_user_title b, ticketing_ticket_type c, ticketing_ticket_domain d, ticketing_ticket_category e " +
+        " WHERE a.id_user_title = b.id_user_title AND a.id_ticket_type = c.id_ticket_type AND a.id_ticket_domain = d.id_ticket_domain  AND a.id_ticket_category = e.id_ticket_category";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket FROM ticketing_ticket";
 
+    // SQL commands to manage appointment responses
+    private static final String SQL_QUERY_INSERT_TICKET_RESPONSE = "INSERT INTO ticketing_ticket_response (id_ticket, id_response) VALUES (?,?)";
+    private static final String SQL_QUERY_SELECT_TICKET_RESPONSE_LIST = "SELECT id_response FROM ticketing_ticket_response WHERE id_ticket = ?";
+    private static final String SQL_QUERY_DELETE_TICKET_RESPONSE = "DELETE FROM ticketing_ticket_response WHERE id_ticket = ?";
+    private static final String SQL_QUERY_REMOVE_FROM_ID_RESPONSE = "DELETE FROM ticketing_ticket_response WHERE id_response = ?";
+    private static final String SQL_QUERY_FIND_ID_TICKET_FROM_ID_RESPONSE = " SELECT id_ticket FROM ticketing_ticket_response WHERE id_response = ? ";
+
+    
+    
     /**
      * Generates a new primary key
      * @param plugin The Plugin
@@ -91,22 +100,19 @@ public final class TicketDAO implements ITicketDAO
 
         ticket.setId( newPrimaryKey( plugin ) );
 
-        daoUtil.setInt( 1, ticket.getId( ) );
-        daoUtil.setInt( 2, ticket.getIdUserTitle( ) );
-        daoUtil.setString( 3, ticket.getUserTitle( ) );
-        daoUtil.setString( 4, ticket.getFirstname( ) );
-        daoUtil.setString( 5, ticket.getLastname( ) );
-        daoUtil.setString( 6, ticket.getEmail( ) );
-        daoUtil.setString( 7, ticket.getPhoneNumber( ) );
-        daoUtil.setInt( 8, ticket.getIdTicketType( ) );
-        daoUtil.setString( 9, ticket.getTicketType( ) );
-        daoUtil.setInt( 10, ticket.getIdTicketDomain( ) );
-        daoUtil.setString( 11, ticket.getTicketDomain( ) );
-        daoUtil.setInt( 12, ticket.getIdTicketCategory( ) );
-        daoUtil.setString( 13, ticket.getTicketCategory( ) );
-        daoUtil.setString( 14, ticket.getTicketComment( ) );
-        daoUtil.setInt( 15, ticket.getTicketStatus( ) );
-        daoUtil.setString( 16, ticket.getTicketStatusText( ) );
+        int nIndex = 1;
+        daoUtil.setInt( nIndex++, ticket.getId(  ) );
+        daoUtil.setInt( nIndex++, ticket.getIdUserTitle(  ) );
+        daoUtil.setString( nIndex++, ticket.getFirstname(  ) );
+        daoUtil.setString( nIndex++, ticket.getLastname(  ) );
+        daoUtil.setString( nIndex++, ticket.getEmail(  ) );
+        daoUtil.setString( nIndex++, ticket.getPhoneNumber(  ) );
+        daoUtil.setInt( nIndex++, ticket.getIdTicketType(  ) );
+        daoUtil.setInt( nIndex++, ticket.getIdTicketDomain(  ) );
+        daoUtil.setInt( nIndex++, ticket.getIdTicketCategory(  ) );
+        daoUtil.setString( nIndex++, ticket.getTicketComment(  ) );
+        daoUtil.setInt( nIndex++, ticket.getTicketStatus(  ) );
+        daoUtil.setString( nIndex++, ticket.getTicketStatusText(  ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -126,23 +132,24 @@ public final class TicketDAO implements ITicketDAO
 
         if ( daoUtil.next( ) )
         {
+            int nIndex = 1;
             ticket = new Ticket();
-            ticket.setId( daoUtil.getInt( 1 ) );
-            ticket.setIdUserTitle( daoUtil.getInt( 2 ) );
-            ticket.setUserTitle( daoUtil.getString( 3 ) );
-            ticket.setFirstname( daoUtil.getString( 4 ) );
-            ticket.setLastname( daoUtil.getString( 5 ) );
-            ticket.setEmail( daoUtil.getString( 6 ) );
-            ticket.setPhoneNumber( daoUtil.getString( 7 ) );
-            ticket.setIdTicketType( daoUtil.getInt( 8 ) );
-            ticket.setTicketType( daoUtil.getString( 9 ) );
-            ticket.setIdTicketDomain( daoUtil.getInt( 10 ) );
-            ticket.setTicketDomain( daoUtil.getString( 11 ) );
-            ticket.setIdTicketCategory( daoUtil.getInt( 12 ) );
-            ticket.setTicketCategory( daoUtil.getString( 13 ) );
-            ticket.setTicketComment( daoUtil.getString( 14 ) );
-            ticket.setTicketStatus( daoUtil.getInt( 15 ) );
-            ticket.setTicketStatusText( daoUtil.getString( 16 ) );
+            ticket.setId( daoUtil.getInt( nIndex++ ) );
+            ticket.setIdUserTitle( daoUtil.getInt( nIndex++ ) );
+            ticket.setUserTitle( daoUtil.getString( nIndex++ ) );
+            ticket.setFirstname( daoUtil.getString( nIndex++ ) );
+            ticket.setLastname( daoUtil.getString( nIndex++ ) );
+            ticket.setEmail( daoUtil.getString( nIndex++ ) );
+            ticket.setPhoneNumber( daoUtil.getString( nIndex++ ) );
+            ticket.setIdTicketType( daoUtil.getInt( nIndex++ ) );
+            ticket.setTicketType( daoUtil.getString( nIndex++ ) );
+            ticket.setIdTicketDomain( daoUtil.getInt( nIndex++ ) );
+            ticket.setTicketDomain( daoUtil.getString( nIndex++ ) );
+            ticket.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
+            ticket.setTicketCategory( daoUtil.getString( nIndex++ ) );
+            ticket.setTicketComment( daoUtil.getString( nIndex++ ) );
+            ticket.setTicketStatus( daoUtil.getInt( nIndex++ ) );
+            ticket.setTicketStatusText( daoUtil.getString( nIndex++ ) );
         }
 
         daoUtil.free( );
@@ -169,23 +176,20 @@ public final class TicketDAO implements ITicketDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
         
-        daoUtil.setInt( 1, ticket.getId( ) );
-        daoUtil.setInt( 2, ticket.getIdUserTitle( ) );
-        daoUtil.setString( 3, ticket.getUserTitle( ) );
-        daoUtil.setString( 4, ticket.getFirstname( ) );
-        daoUtil.setString( 5, ticket.getLastname( ) );
-        daoUtil.setString( 6, ticket.getEmail( ) );
-        daoUtil.setString( 7, ticket.getPhoneNumber( ) );
-        daoUtil.setInt( 8, ticket.getIdTicketType( ) );
-        daoUtil.setString( 9, ticket.getTicketType( ) );
-        daoUtil.setInt( 10, ticket.getIdTicketDomain( ) );
-        daoUtil.setString( 11, ticket.getTicketDomain( ) );
-        daoUtil.setInt( 12, ticket.getIdTicketCategory( ) );
-        daoUtil.setString( 13, ticket.getTicketCategory( ) );
-        daoUtil.setString( 14, ticket.getTicketComment( ) );
-        daoUtil.setInt( 15, ticket.getTicketStatus( ) );
-        daoUtil.setString( 16, ticket.getTicketStatusText( ) );
-        daoUtil.setInt( 17, ticket.getId( ) );
+        int nIndex = 1;
+        daoUtil.setInt( nIndex++, ticket.getId(  ) );
+        daoUtil.setInt( nIndex++, ticket.getIdUserTitle(  ) );
+        daoUtil.setString( nIndex++, ticket.getFirstname(  ) );
+        daoUtil.setString( nIndex++, ticket.getLastname(  ) );
+        daoUtil.setString( nIndex++, ticket.getEmail(  ) );
+        daoUtil.setString( nIndex++, ticket.getPhoneNumber(  ) );
+        daoUtil.setInt( nIndex++, ticket.getIdTicketType(  ) );
+        daoUtil.setInt( nIndex++, ticket.getIdTicketDomain(  ) );
+        daoUtil.setInt( nIndex++, ticket.getIdTicketCategory(  ) );
+        daoUtil.setString( nIndex++, ticket.getTicketComment(  ) );
+        daoUtil.setInt( nIndex++, ticket.getTicketStatus(  ) );
+        daoUtil.setString( nIndex++, ticket.getTicketStatusText(  ) );
+        daoUtil.setInt( nIndex++, ticket.getId(  ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -246,5 +250,93 @@ public final class TicketDAO implements ITicketDAO
 
             daoUtil.free( );
             return ticketList;
+    }
+    
+    
+    
+
+    // ----------------------------------------
+    // Ticket response management
+    // ----------------------------------------
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void insertTicketResponse( int nIdTicket, int nIdResponse, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_TICKET_RESPONSE, plugin );
+        daoUtil.setInt( 1, nIdTicket );
+        daoUtil.setInt( 2, nIdResponse );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Integer> findListIdResponse( int nIdTicket, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_TICKET_RESPONSE_LIST, plugin );
+        daoUtil.setInt( 1, nIdTicket );
+        daoUtil.executeQuery(  );
+
+        List<Integer> listIdResponse = new ArrayList<Integer>(  );
+
+        while ( daoUtil.next(  ) )
+        {
+            listIdResponse.add( daoUtil.getInt( 1 ) );
+        }
+
+        daoUtil.free(  );
+
+        return listIdResponse;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void deleteTicketResponse( int nIdTicket, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_TICKET_RESPONSE, plugin );
+        daoUtil.setInt( 1, nIdTicket );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeTicketResponsesByIdResponse( int nIdResponse, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_REMOVE_FROM_ID_RESPONSE, plugin );
+        daoUtil.setInt( 1, nIdResponse );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findIdTicketByIdResponse( int nIdResponse, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ID_TICKET_FROM_ID_RESPONSE, plugin );
+        daoUtil.setInt( 1, nIdResponse );
+        daoUtil.executeQuery(  );
+
+        int nIdTicket = 0;
+
+        if ( daoUtil.next(  ) )
+        {
+            nIdTicket = daoUtil.getInt( 1 );
+        }
+
+        daoUtil.free(  );
+
+        return nIdTicket;
     }
 }

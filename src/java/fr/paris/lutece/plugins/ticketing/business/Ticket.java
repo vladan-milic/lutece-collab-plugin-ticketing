@@ -33,10 +33,15 @@
  */ 
 package fr.paris.lutece.plugins.ticketing.business;
 
-import javax.validation.constraints.*;
-import org.hibernate.validator.constraints.*;
-
 import java.io.Serializable;
+import java.util.List;
+
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import fr.paris.lutece.plugins.genericattributes.business.Response;
 
 
 /**
@@ -89,6 +94,27 @@ public class Ticket implements Serializable
     
     @Size( max = 255 , message = "#i18n{ticketing.validation.ticket.TicketStatusText.size}" ) 
     private String _strTicketStatusText;
+
+    private List<Response> _listResponse;
+    
+    private int _nFormId;
+
+    /**
+     * @return the _nFormId
+     */
+    public int getFormId()
+    {
+        return _nFormId;
+    }
+
+    /**
+     * @param _nFormId
+     *            the _nFormId to set
+     */
+    public void setFormId(int _nFormId)
+    {
+        this._nFormId = _nFormId;
+    }
 
     /**
      * Returns the Id
@@ -362,5 +388,23 @@ public class Ticket implements Serializable
     public void setTicketStatusText( String strTicketStatusText )
     {
         _strTicketStatusText = strTicketStatusText;
+    }
+    
+    /**
+     * Get the list of response of this ticket
+     * @return the list of response of this ticket
+     */
+    public List<Response> getListResponse(  )
+    {
+        return _listResponse;
+    }
+
+    /**
+     * Set the list of responses of this ticket
+     * @param listResponse The list of responses
+     */
+    public void setListResponse( List<Response> listResponse )
+    {
+        this._listResponse = listResponse;
     }
 }

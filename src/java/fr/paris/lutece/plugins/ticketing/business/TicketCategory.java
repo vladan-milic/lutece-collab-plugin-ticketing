@@ -33,10 +33,11 @@
  */ 
 package fr.paris.lutece.plugins.ticketing.business;
 
-import javax.validation.constraints.*;
-import org.hibernate.validator.constraints.*;
-
 import java.io.Serializable;
+
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 
 /**
@@ -52,7 +53,7 @@ public class TicketCategory implements Serializable
     private int _nIdTicketDomain;
     private String _strTicketDomain;
     private String _strTicketType;
-    
+    private int _nIdTicketForm;
     
     @NotEmpty( message = "#i18n{ticketing.validation.ticketcategory.Label.notEmpty}" )
     @Size( max = 50 , message = "#i18n{ticketing.validation.ticketcategory.Label.size}" ) 
@@ -147,4 +148,22 @@ public class TicketCategory implements Serializable
     {
         _strLabel = strLabel;
     }
+
+    /**
+     * @return the _nIdTicketForm
+     */
+    public int getIdTicketForm()
+    {
+        return _nIdTicketForm;
+    }
+
+    /**
+     * @param _nIdTicketForm
+     *            the _nIdTicketForm to set
+     */
+    public void setIdTicketForm(int _nIdTicketForm)
+    {
+        this._nIdTicketForm = _nIdTicketForm;
+    }
+
 }

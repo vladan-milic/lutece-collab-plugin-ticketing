@@ -34,12 +34,12 @@
 
 package fr.paris.lutece.plugins.ticketing.business;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class provides Data Access methods for TicketCategory objects
@@ -49,12 +49,12 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket_category ) FROM ticketing_ticket_category";
-    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label, b.label, c.label "
+    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label, b.label, c.label, a.id_ticket_form "
             + " FROM ticketing_ticket_category a, ticketing_ticket_domain b , ticketing_ticket_type c "
             + " WHERE id_ticket_category = ? AND a.id_ticket_domain = b.id_ticket_domain AND b.id_ticket_type = c.id_ticket_type";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_category ( id_ticket_category, id_ticket_domain, label ) VALUES ( ?, ?, ? ) ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_category ( id_ticket_category, id_ticket_domain, label,id_ticket_form ) VALUES ( ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_ticket_category WHERE id_ticket_category = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_category SET id_ticket_category = ?, id_ticket_domain = ?, label = ? WHERE id_ticket_category = ?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_category SET id_ticket_category = ?, id_ticket_domain = ?, label = ?, id_ticket_form = ? WHERE id_ticket_category = ?";
     private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label, b.label, c.label "
             + " FROM ticketing_ticket_category a, ticketing_ticket_domain b , ticketing_ticket_type c "
             + " WHERE a.id_ticket_domain = b.id_ticket_domain AND b.id_ticket_type = c.id_ticket_type";
@@ -96,6 +96,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.setInt( 1, ticketCategory.getId( ) );
         daoUtil.setInt( 2, ticketCategory.getIdTicketDomain( ) );
         daoUtil.setString( 3, ticketCategory.getLabel( ) );
+        daoUtil.setInt( 4, ticketCategory.getIdTicketForm( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -121,6 +122,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             ticketCategory.setLabel( daoUtil.getString( 3 ) );
             ticketCategory.setTicketDomain(daoUtil.getString( 4 ) );
             ticketCategory.setTicketType(daoUtil.getString( 5 ) );
+            ticketCategory.setIdTicketForm( daoUtil.getInt( 6 ) );
         }
 
         daoUtil.free( );
@@ -150,7 +152,8 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.setInt( 1, ticketCategory.getId( ) );
         daoUtil.setInt( 2, ticketCategory.getIdTicketDomain( ) );
         daoUtil.setString( 3, ticketCategory.getLabel( ) );
-        daoUtil.setInt( 4, ticketCategory.getId( ) );
+        daoUtil.setInt( 4, ticketCategory.getIdTicketForm( ) );
+        daoUtil.setInt( 5, ticketCategory.getId( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -221,4 +224,5 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.free( ); 
         return list;
     }
+    
 }

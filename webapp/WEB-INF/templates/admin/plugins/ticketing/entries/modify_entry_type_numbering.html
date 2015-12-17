@@ -1,0 +1,44 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<fieldset>
+		<legend>#i18n{ticketing.modifyEntry.titleQuestion} : '${form.title}'</legend>
+			<form class="form-horizontal" action="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp" method="post" name="" id="">
+			<input name="id_entry" value="${entry.idEntry}" type="hidden">
+			<input name="action" value="doModifyEntry" type="hidden">
+			<div class="form-group">
+			<label class="control-label" for="title">#i18n{ticketing.createEntry.labelTitle} *</label>
+				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+					<input type="text" name="title" id="title" class="form-control" value="${entry.title}" maxlength="255">
+					<span class="help-block">#i18n{ticketing.createEntry.labelTitleComment}</span>
+				</div>
+			</div>
+			<#if entry.fields?? && entry.fields?has_content>
+				<#assign prefix = "">
+				<#if entry.fields[0].title??>
+						<#assign prefix = entry.fields[0].title>
+				</#if>
+				<div class="form-group">
+					<label class="control-label" for="prefix">#i18n{ticketing.createEntry.labelPrefix}</label>
+					<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<input type="text" name="prefix" value="${prefix}" maxlength="255" class="form-control">
+						<span class="help-block">#i18n{ticketing.createEntry.labelPrefixComment}</span>
+					</div>
+				</div>
+			</#if>
+			<div class="form-group">
+				<div class="col-xs-12 col-sm-12 col-md-offset-3 col-lg-offset-3">
+					<button class="btn btn-primary btn-sm" name="save" type="submit">
+						<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{ticketing.modifyEntry.buttonSave}
+					</button>
+					<button class="btn btn-primary btn-sm" name="apply" type="submit">
+						<i class="glyphicon glyphicon-ok-sign"></i>&nbsp;#i18n{ticketing.modifyEntry.buttonApply}
+					</button>
+					<button class="btn btn-default btn-sm" type="submit" name="cancel" value="cancel">
+						<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{ticketing.createEntry.buttonCancel}
+					</button>
+				</div>
+			</div>
+			</form>
+		</fieldset>
+	</div>
+</div>	
