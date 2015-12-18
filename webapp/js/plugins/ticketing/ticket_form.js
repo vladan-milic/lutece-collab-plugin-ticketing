@@ -25,3 +25,31 @@
             }
             });
 	};
+	
+	var domainSelect = document.getElementById("id_ticket_domain");
+	domainSelect.onchange=function(){
+		var catValue = categorySelect.options[categorySelect.selectedIndex].value;
+            $.ajax({
+            url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+catValue ,
+            type: "GET",
+            dataType : "html",
+            success: function( response ) {
+				$('#generic_attributes').replaceWith('<div id="generic_attributes">' + response + '</div>');
+            }
+            });
+	};
+
+	var typeSelect = document.getElementById("id_ticket_type");
+	typeSelect.onchange=function(){
+			var catValue = categorySelect.options[categorySelect.selectedIndex].value;
+            $.ajax({
+            url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+catValue ,
+            type: "GET",
+            dataType : "html",
+            success: function( response ) {
+				$('#generic_attributes').replaceWith('<div id="generic_attributes">' + response + '</div>');
+            }
+            });
+	};
+
+	
