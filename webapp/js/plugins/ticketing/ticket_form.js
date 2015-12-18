@@ -15,9 +15,8 @@
     });
 	var categorySelect = document.getElementById("id_ticket_category");
 	categorySelect.onchange=function(){
-			var catValue = categorySelect.options[categorySelect.selectedIndex].value;
             $.ajax({
-            url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+catValue ,
+            url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+getSelectedCategoryValue(),
             type: "GET",
             dataType : "html",
             success: function( response ) {
@@ -28,9 +27,8 @@
 	
 	var domainSelect = document.getElementById("id_ticket_domain");
 	domainSelect.onchange=function(){
-		var catValue = categorySelect.options[categorySelect.selectedIndex].value;
             $.ajax({
-            url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+catValue ,
+            url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+getSelectedCategoryValue()  ,
             type: "GET",
             dataType : "html",
             success: function( response ) {
@@ -41,9 +39,8 @@
 
 	var typeSelect = document.getElementById("id_ticket_type");
 	typeSelect.onchange=function(){
-			var catValue = categorySelect.options[categorySelect.selectedIndex].value;
             $.ajax({
-            url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+catValue ,
+            url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+getSelectedCategoryValue()  ,
             type: "GET",
             dataType : "html",
             success: function( response ) {
@@ -52,4 +49,13 @@
             });
 	};
 
+	function getSelectedCategoryValue()  {
+		var categorySelect = document.getElementById("id_ticket_category");
+		var catValue = -1;	
+		if(categorySelect.options[categorySelect.selectedIndex] != undefined) 
+		{
+			catValue = categorySelect.options[categorySelect.selectedIndex].value;
+		}
+		return catValue ;
+	}
 	
