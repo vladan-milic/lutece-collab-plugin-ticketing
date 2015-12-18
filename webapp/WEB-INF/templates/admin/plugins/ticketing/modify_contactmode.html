@@ -1,3 +1,4 @@
+<#include "/admin/util/editor/editor.html" />
 <#include "manageadminticketing_tabs.html" />
 <@tabs tab="contactmode" />
 
@@ -7,7 +8,17 @@
         <input type="hidden" id="id" name="id" value="${contactmode.id}"/>
         
         <@fieldInputText i18nLabelKey="ticketing.modify_contactmode.labelLabel" inputName="label" mandatory=true value="${contactmode.label}" i18nHelpBlockKey="ticketing.modify_contactmode.labelLabel.help" />
+        <div class="form-group">
+            <label class="col-md-3 col-lg-3 col-xs-12 col-sm-3" for="confirmation_msg">#i18n{ticketing.modify_contactmode.labelConfirmationMsg} : </label>
+             <div class="col-md-9 col-lg-9 col-xs-12 col-sm-9">
+                <textarea name="confirmation_msg" id="confirmation_msg" rows="5" cols="90" class="richtext">${contactmode.confirmationMsg}</textarea>
+                <span class="help-block">#i18n{ticketing.modify_contactmode.label_message_comment_confirmation}</span>
+            </div>
+        </div>
+        <#include "freemarker_list_confirm_ticket.html" />
+        
         <@actionButtons button1Name="action_modifyContactMode" button2Name="view_manageContactModes"/>
     </form>
 </@rowBoxHeader>
 
+<@initEditor />

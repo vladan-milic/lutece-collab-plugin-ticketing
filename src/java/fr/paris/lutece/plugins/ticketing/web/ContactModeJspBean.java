@@ -62,6 +62,7 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     private static final String TEMPLATE_MANAGE_CONTACTMODES = "/admin/plugins/ticketing/manage_contactmodes.html";
     private static final String TEMPLATE_CREATE_CONTACTMODE = "/admin/plugins/ticketing/create_contactmode.html";
     private static final String TEMPLATE_MODIFY_CONTACTMODE = "/admin/plugins/ticketing/modify_contactmode.html";
+    private static final String TEMPLATE_FREEMARKER_LIST = "/admin/plugins/ticketing/freemarker_list_ticket.html";
 
     // Parameters
     private static final String PARAMETER_ID_CONTACTMODE = "id";

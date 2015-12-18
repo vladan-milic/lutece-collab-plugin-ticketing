@@ -1,0 +1,82 @@
+<@rowBoxHeader i18nTitleKey="ticketing.recap_ticket.pageTitle">
+    <form class="form-horizontal" method="post" name="recap_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+        <@messages errors=errors />
+        <input type="hidden" id="id" name="id" value="${ticket.id}"/>
+        <input type="hidden" id="guid" name="guid" value=""/>
+        <fieldset>
+             <div class="form-group">
+                 <label for="userTitle" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.recap_ticket.labelUserTitle}</label>
+                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                     ${ticket.userTitle}
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label for="firstname" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.recap_ticket.labelFirstname}</label>
+                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                     ${ticket.firstname}
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label for="lastname" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.recap_ticket.labelLastname}</label>
+                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                     ${ticket.lastname}
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label for="email" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.recap_ticket.labelEmail}</label>
+                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                     ${ticket.email}
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label for="fixedPhoneNumber" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.recap_ticket.labelFixedPhoneNumber}</label>
+                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                     ${ticket.fixedPhoneNumber}
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label for="mobilePhoneNumber" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.recap_ticket.labelMobilePhoneNumber}</label>
+                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                     ${ticket.mobilePhoneNumber}
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label for="ticketType" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.recap_ticket.labelTicketType}</label>
+                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                     ${ticket.ticketType}
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label for="ticketDomain" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.recap_ticket.labelTicketDomain}</label>
+                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                     ${ticket.ticketDomain}
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label for="ticketCategory" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.recap_ticket.labelTicketCategory}</label>
+                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                     ${ticket.ticketCategory}
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label for="contactMode" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.recap_ticket.labelContactMode}</label>
+                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                     ${ticket.contactMode}
+                 </div>
+             </div>
+             <div class="form-group">
+                 <label for="ticketComment" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.recap_ticket.labelTicketComment}</label>
+                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                     ${ticket.ticketComment}
+                 </div>
+             </div>
+        </fieldset>
+         <#if ticket_action = "createTicket" >
+            <@actionButtons button1Name="action_createTicket" button2Name="view_createTicket"/>
+         </#if>
+         <#if ticket_action = "modifyTicket" >
+            <@actionButtons button1Name="action_modifyTicket" button2Name="view_modifyTicket"/>
+         </#if>
+    </form>
+</@rowBoxHeader>
+

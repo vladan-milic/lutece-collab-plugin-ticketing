@@ -6,7 +6,7 @@
         <@fieldInputCombo i18nLabelKey="ticketing.modify_ticket.labelUserTitle" inputName="id_user_title" items=user_titles_list value="${ticket.idUserTitle!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelIdUserTitle.help" cssClass='' /> 
         <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelFirstname" inputName="firstname" mandatory=true value="${ticket.firstname!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelFirstname.help" />
         <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelLastname" inputName="lastname" mandatory=true value="${ticket.lastname!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelLastname.help" />
-        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelEmail" inputName="email"  value="${ticket.email!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelEmail.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelEmail" inputName="email" mandatory=true value="${ticket.email!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelEmail.help" />
         <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelFixedPhoneNumber" inputName="fixed_phone_number"  value="${ticket.fixedPhoneNumber!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelFixedPhoneNumber.help" />
         <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelMobilePhoneNumber" inputName="mobile_phone_number"  value="${ticket.mobilePhoneNumber!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelMobilePhoneNumber.help" />
         <@fieldInputCombo i18nLabelKey="ticketing.modify_ticket.labelTicketType" inputName="id_ticket_type" items=ticket_types_list value="${ticket.idTicketType!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelTicketType.help" cssClass='' /> 
@@ -14,7 +14,7 @@
         <@fieldInputCombo i18nLabelKey="ticketing.modify_ticket.labelTicketCategory" inputName="id_ticket_category" items=ticket_categories_list value="${ticket.idTicketCategory!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelTicketCategory.help" cssClass='' /> 
         <@fieldInputCombo i18nLabelKey="ticketing.modify_ticket.labelContactMode" inputName="id_contact_mode" items=contact_modes_list value="${ticket.idContactMode!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelIdContactMode.help" cssClass='' /> 
         <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelTicketComment" inputName="ticket_comment"  value="${ticket.ticketComment!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelTicketComment.help" />
-        <@actionButtons button1Name="action_modifyTicket" button2Name="view_manageTickets"/>
+        <@actionButtons button1Name="action_recapTicket" button2Name="view_manageTickets"/>
     </form>
 </@rowBoxHeader>
 

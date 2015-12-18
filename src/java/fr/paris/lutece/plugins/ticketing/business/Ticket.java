@@ -87,6 +87,7 @@ public class Ticket implements Serializable
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.ContactMode.size}" )
     private String _strContactMode;
     private String _strTicketComment;
+    private String _strConfirmationMsg;
     private int _nTicketStatus;
     @Size( max = 255, message = "#i18n{ticketing.validation.ticket.TicketStatusText.size}" )
     private String _strTicketStatusText;
@@ -412,6 +413,27 @@ public class Ticket implements Serializable
     public void setTicketComment( String strTicketComment )
     {
         _strTicketComment = strTicketComment;
+    }
+
+    /**
+     * Returns the ConfirmationMsg
+     * 
+     * @return The ConfirmationMsg
+     */
+    public String getConfirmationMsg( )
+    {
+        return _strConfirmationMsg;
+    }
+
+    /**
+     * Sets the ConfirmationMsg
+     * 
+     * @param strConfirmationMsg
+     *            The ConfirmationMsg
+     */
+    public void setConfirmationMsg( String strConfirmationMsg )
+    {
+        _strConfirmationMsg = strConfirmationMsg;
     }
 
     /**

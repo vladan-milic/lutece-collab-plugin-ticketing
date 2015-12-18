@@ -43,6 +43,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 /**
  * This is the business class for the object ContactMode
  */
+/**
+ * @author s235706
+ *
+ */
 public class ContactMode implements Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -52,6 +56,7 @@ public class ContactMode implements Serializable
     @NotEmpty( message = "#i18n{ticketing.validation.contactmode.Label.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.contactmode.Label.size}" )
     private String _strLabel;
+    private String _strConfirmationMsg;
 
     /**
      * Returns the Id
@@ -88,4 +93,26 @@ public class ContactMode implements Serializable
     {
         _strLabel = strLabel;
     }
+
+    /**
+     * Returns the confirmation message
+     * 
+     * @return The confirmation message
+     */
+    public String getConfirmationMsg( )
+    {
+        return _strConfirmationMsg;
+    }
+
+    /**
+     * Sets the confirmation message
+     * 
+     * @param strConfirmationMsg
+     *            The confirmation message
+     */
+    public void setConfirmationMsg( String strConfirmationMsg )
+    {
+        _strConfirmationMsg = strConfirmationMsg;
+    }
+
 }

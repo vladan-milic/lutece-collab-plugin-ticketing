@@ -14,7 +14,7 @@
         <@fieldInputCombo i18nLabelKey="ticketing.create_ticket.labelTicketCategory" inputName="id_ticket_category" items=ticket_categories_list value="${ticket.idTicketCategory!''}" i18nHelpBlockKey="ticketing.create_ticket.labelTicketCategory.help" cssClass='' /> 
         <@fieldInputCombo i18nLabelKey="ticketing.create_ticket.labelContactMode" inputName="id_contact_mode" items=contact_modes_list value="${ticket.idContactMode!''}" i18nHelpBlockKey="ticketing.create_ticket.labelIdContactMode.help" cssClass='' /> 
         <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelTicketComment" inputName="ticket_comment"  value="${ticket.ticketComment!''}" i18nHelpBlockKey="ticketing.create_ticket.labelTicketComment.help" />
-        <@actionButtons button1Name="action_createTicket" button2Name="view_manageTickets"/>
+        <@actionButtons button1Name="action_recapTicket" button2Name="view_manageTickets"/>
     </form>
 </@rowBoxHeader>
 

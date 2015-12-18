@@ -92,10 +92,10 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="id_contact_mode" >#i18n{ticketing.xpage.create_ticket.labelIdContactMode} * :</label>
+                <label class="col-sm-3 control-label" for="id_contact_mode" >#i18n{ticketing.xpage.create_ticket.labelContactMode} * :</label>
                 <div class="col-sm-9">
                     <@comboWithParams name="id_contact_mode" default_value="${ticket.idContactMode!''}"  additionalParameters="class=\"form-control\""  items=contact_modes_list />
-                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdContactMode.help}</span>
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelContactMode.help}</span>
                 </div>
             </div>
             <div class="form-group">
@@ -108,7 +108,7 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-9">
-                    <button name="action_createTicket" class="btn btn-primary" type="submit" tabindex="15">
+                    <button name="action_recapTicket" class="btn btn-primary" type="submit" tabindex="15">
                         #i18n{ticketing.xpage.create_ticket.labelButtonCreate}
                     </button>
                </div>

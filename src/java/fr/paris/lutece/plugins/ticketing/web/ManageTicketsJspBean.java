@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -45,6 +46,7 @@ import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
@@ -82,6 +84,8 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
+    private static final String MARK_TICKET_ACTION = "ticket_action";
+
 
     ////////////////////////////////////////////////////////////////////////////
     // Constants
@@ -91,6 +95,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String TEMPLATE_CREATE_TICKET = "/admin/plugins/ticketing/create_ticket.html";
     private static final String TEMPLATE_MODIFY_TICKET = "/admin/plugins/ticketing/modify_ticket.html";
     private static final String TEMPLATE_TASKS_FORM_WORKFLOW = "admin/plugins/ticketing/tasks_form_workflow.html";
+    private static final String TEMPLATE_RECAP_TICKET = "/admin/plugins/ticketing/recap_ticket.html";
 
     // Parameters
     private static final String PARAMETER_ID_TICKET = "id";
@@ -102,6 +107,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String PROPERTY_PAGE_TITLE_MODIFY_TICKET = "ticketing.modify_ticket.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_CREATE_TICKET = "ticketing.create_ticket.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_RECAP_TICKET = "ticketing.recap_ticket.pageTitle";
 
     // Markers
     private static final String MARK_TICKET_LIST = "ticket_list";
@@ -124,6 +130,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String VIEW_CREATE_TICKET = "createTicket";
     private static final String VIEW_MODIFY_TICKET = "modifyTicket";
     private static final String VIEW_WORKFLOW_ACTION_FORM = "viewWorkflowActionForm";
+    private static final String VIEW_RECAP_TICKET = "recapTicket";
 
     // Actions
     private static final String ACTION_CREATE_TICKET = "createTicket";
@@ -131,6 +138,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String ACTION_REMOVE_TICKET = "removeTicket";
     private static final String ACTION_CONFIRM_REMOVE_TICKET = "confirmRemoveTicket";
     private static final String ACTION_DO_PROCESS_WORKFLOW_ACTION = "doProcessWorkflowAction";
+    private static final String ACTION_RECAP_TICKET = "recapTicket";
 
     // Infos
     private static final String INFO_TICKET_CREATED = "ticketing.info.ticket.created";
@@ -138,11 +146,16 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String INFO_TICKET_REMOVED = "ticketing.info.ticket.removed";
     private static final long serialVersionUID = 1L;
     
-    //services
-    private final StateService _stateService = SpringContextService.getBean( StateService.BEAN_SERVICE );
-
     // Errors
-    public static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
+    private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
+
+    // Session keys
+    private static final String SESSION_NOT_VALIDATED_TICKET = "ticketing.session.notValidatedTicket";
+    private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
+
+    // services
+    private final StateService _stateService = SpringContextService
+            .getBean( StateService.BEAN_SERVICE );
 
     // Session variable to store working values
     private Ticket _ticket;
@@ -162,6 +175,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     public String getManageTickets( HttpServletRequest request )
     {
         _ticket = null;
+        removeTicketFromSession( request.getSession( ) );
 
         List<Ticket> listTickets = (List<Ticket>) TicketHome.getTicketsList(  );
         _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
@@ -176,15 +190,16 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         LocalizedPaginator<Ticket> paginator = new LocalizedPaginator<Ticket>( listTickets, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndex, getLocale(  ) );
         
-        if ( WorkflowService.getInstance(  ).isAvailable(  ) )
+        if ( WorkflowService.getInstance( ).isAvailable( ) )
         {
-            for ( Ticket ticket : paginator.getPageItems(  ) )
+            for ( Ticket ticket : paginator.getPageItems( ) )
             {
-                
-                TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-                int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
-                StateFilter stateFilter = new StateFilter(  );
+                TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket
+                        .getIdTicketCategory( ) );
+                int nIdWorkflow = ticketCategory.getIdWorkflow( );
+
+                StateFilter stateFilter = new StateFilter( );
                 stateFilter.setIdWorkflow( nIdWorkflow );
 
                 State state = _stateService.findByResource( ticket.getId( ),
@@ -197,9 +212,8 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
 
                 if ( nIdWorkflow > 0 )
                 {
-                    ticket.setListWorkflowActions(
-                            WorkflowService.getInstance( ).getActions( ticket.getId( ),
-                                    Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, getUser( ) ) );
+                    ticket.setListWorkflowActions( WorkflowService.getInstance( ).getActions(
+                            ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, getUser( ) ) );
                 }
             }
         }
@@ -221,6 +235,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @View( VIEW_CREATE_TICKET )
     public String getCreateTicket( HttpServletRequest request )
     {
+        _ticket = getTicketFromSession( request.getSession( ) );
         _ticket = ( _ticket != null ) ? _ticket : new Ticket(  );
 
         Map<String, Object> model = getModel(  );
@@ -229,9 +244,10 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
-        model.put ( MARK_CONTACT_MODES_LIST,
-                ContactModeHome.getReferenceList ( ) );
+        model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( ) );
         model.put( MARK_TICKET, _ticket );
+
+        saveActionTypeInSession( request.getSession( ), ACTION_CREATE_TICKET );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKET, TEMPLATE_CREATE_TICKET, model );
     }
@@ -245,24 +261,11 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @Action( ACTION_CREATE_TICKET )
     public String doCreateTicket( HttpServletRequest request )
     {
-        populate( _ticket, request );
-
-        // Check constraints
-        if ( !validateBean( _ticket, VALIDATION_ATTRIBUTES_PREFIX ) )
-        {
-            return redirectView( request, VIEW_CREATE_TICKET );
-        }
-
-        if ( _ticket.hasNoPhoneNumberFilled( ) )
-        {
-            addError( ERROR_PHONE_NUMBER_MISSING, getLocale( ) );
-            return redirectView( request, VIEW_CREATE_TICKET );
-        }
-
+        _ticket = getTicketFromSession( request.getSession( ) );
         TicketHome.create( _ticket );
 
-        TicketCategory ticketCategory = TicketCategoryHome
-                .findByPrimaryKey( _ticket.getIdTicketCategory( ) );
+        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( _ticket
+                .getIdTicketCategory( ) );
         int nIdWorkflow = ticketCategory.getIdWorkflow( );
 
         if ( nIdWorkflow > 0 )
@@ -330,6 +333,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @View( VIEW_MODIFY_TICKET )
     public String getModifyTicket( HttpServletRequest request )
     {
+        _ticket = getTicketFromSession( request.getSession( ) );
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKET ) );
 
         if ( ( _ticket == null ) || ( _ticket.getId(  ) != nId ) )
@@ -343,9 +347,10 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
-        model.put ( MARK_CONTACT_MODES_LIST,
-                ContactModeHome.getReferenceList ( ) );
+        model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( ) );
         model.put( MARK_TICKET, _ticket );
+
+        saveActionTypeInSession( request.getSession( ), ACTION_MODIFY_TICKET );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKET, TEMPLATE_MODIFY_TICKET, model );
     }
@@ -359,24 +364,11 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @Action( ACTION_MODIFY_TICKET )
     public String doModifyTicket( HttpServletRequest request )
     {
-        populate( _ticket, request );
-
-        // Check constraints
-        if ( !validateBean( _ticket, VALIDATION_ATTRIBUTES_PREFIX ) )
-        {
-            return redirect( request, VIEW_MODIFY_TICKET, PARAMETER_ID_TICKET, _ticket.getId(  ) );
-        }
-
-        if ( _ticket.hasNoPhoneNumberFilled( ) )
-        {
-            addError( ERROR_PHONE_NUMBER_MISSING, getLocale( ) );
-            return redirect( request, VIEW_MODIFY_TICKET, PARAMETER_ID_TICKET,
-                    _ticket.getId( ) );
-        }
+        _ticket = getTicketFromSession( request.getSession( ) );
 
         TicketHome.update( _ticket );
         addInfo( INFO_TICKET_UPDATED, getLocale(  ) );
-
+        
         return redirectView( request, VIEW_MANAGE_TICKETS );
     }
 
@@ -384,7 +376,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
      * Get the workflow action form before processing the action. If the action
      * does not need to display any form, then redirect the user to the workflow
      * action processing page.
-     * 
+     *
      * @param request
      *            The request
      * @return The HTML content to display, or the next URL to redirect the user
@@ -396,10 +388,8 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         String strIdAction = request.getParameter( PARAMETER_ID_ACTION );
         String strIdTicket = request.getParameter( PARAMETER_ID_TICKET );
 
-        if ( StringUtils.isNotEmpty( strIdAction )
-                && StringUtils.isNumeric( strIdAction )
-                && StringUtils.isNotEmpty( strIdTicket )
-                && StringUtils.isNumeric( strIdTicket ) )
+        if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction )
+                && StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
         {
             int nIdAction = Integer.parseInt( strIdAction );
             int nIdTicket = Integer.parseInt( strIdTicket );
@@ -407,8 +397,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
             if ( WorkflowService.getInstance( ).isDisplayTasksForm( nIdAction, getLocale( ) ) )
             {
                 String strHtmlTasksForm = WorkflowService.getInstance( ).getDisplayTasksForm(
-                        nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, request,
-                        getLocale( ) );
+                        nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, request, getLocale( ) );
 
                 Map<String, Object> model = new HashMap<String, Object>( );
 
@@ -428,7 +417,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
 
     /**
      * Do process a workflow action over a ticket
-     * 
+     *
      * @param request
      *            The request
      * @return The next URL to redirect to
@@ -448,8 +437,8 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
             if ( request.getParameter( PARAMETER_BACK ) == null )
             {
                 Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-                TicketCategory ticketCategory = TicketCategoryHome
-                        .findByPrimaryKey( ticket.getIdTicketCategory( ) );
+                TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket
+                        .getIdTicketCategory( ) );
 
                 if ( WorkflowService.getInstance( ).isDisplayTasksForm( nIdAction, getLocale( ) ) )
                 {
@@ -461,7 +450,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
                     {
                         return redirect( request, strError );
                     }
-                } 
+                }
                 else
                 {
                     WorkflowService.getInstance( ).doProcessAction( nIdTicket,
@@ -473,4 +462,159 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
 
         return redirectView( request, VIEW_MANAGE_TICKETS );
     }
+
+    /**
+     * Process the data capture form of a new ticket
+     *
+     * @param request
+     *            The Http Request
+     * @return The Jsp URL of the process result
+     */
+    @Action( ACTION_RECAP_TICKET )
+    public String doRecapTicket( HttpServletRequest request )
+    {
+        populate( _ticket, request );
+
+        // Check constraints
+        if ( !validateBean( _ticket, VALIDATION_ATTRIBUTES_PREFIX ) )
+        {
+            if ( getActionTypeFromSession( request.getSession( ) ).equals( ACTION_MODIFY_TICKET ) )
+            {
+                return redirect( request, VIEW_MODIFY_TICKET, PARAMETER_ID_TICKET, _ticket.getId( ) );
+            }
+            else
+            // ACTION_CREATE_TICKET
+            {
+                return redirectView( request, VIEW_CREATE_TICKET );
+            }
+        }
+
+        if ( _ticket.hasNoPhoneNumberFilled( ) )
+        {
+            addError( ERROR_PHONE_NUMBER_MISSING, getLocale( ) );
+            if ( getActionTypeFromSession( request.getSession( ) ).equals( ACTION_MODIFY_TICKET ) )
+            {
+                return redirect( request, VIEW_MODIFY_TICKET, PARAMETER_ID_TICKET, _ticket.getId( ) );
+            }
+            else
+            // ACTION_CREATE_TICKET
+            {
+                return redirectView( request, VIEW_CREATE_TICKET );
+            }
+        }
+
+        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( _ticket
+                .getIdTicketCategory( ) );
+        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory
+                .getIdTicketDomain( ) );
+        _ticket.setTicketCategory( ticketCategory.getLabel( ) );
+        _ticket.setTicketDomain( ticketDomain.getLabel( ) );
+
+        _ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType( ) )
+                .getLabel( ) );
+        _ticket.setContactMode( ContactModeHome.findByPrimaryKey( _ticket.getIdContactMode( ) )
+                .getLabel( ) );
+        _ticket.setUserTitle( UserTitleHome.findByPrimaryKey( _ticket.getIdUserTitle( ) )
+                .getLabel( ) );
+        _ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( _ticket.getIdContactMode( ) )
+                .getConfirmationMsg( ) );
+
+        saveTicketInSession( request.getSession( ), _ticket );
+
+        return redirectView( request, VIEW_RECAP_TICKET );
+    }
+
+    /**
+     * Returns the form to recapitulate a ticket to create or modify
+     *
+     * @param request
+     *            The Http request
+     * @return the html code of the ticket form
+     */
+    @View( VIEW_RECAP_TICKET )
+    public String getRecapTicket( HttpServletRequest request )
+    {
+        _ticket = getTicketFromSession( request.getSession( ) );
+
+        Map<String, Object> model = getModel( );
+        model.put( MARK_TICKET_ACTION, getActionTypeFromSession( request.getSession( ) ) );
+        model.put( MARK_TICKET, _ticket );
+
+        removeActionTypeFromSession( request.getSession( ) );
+
+        return getPage( PROPERTY_PAGE_TITLE_RECAP_TICKET, TEMPLATE_RECAP_TICKET, model );
+    }
+
+    /**
+     * Save an ticket form in the session of the user
+     * 
+     * @param session
+     *            The session
+     * @param ticket
+     *            The ticket form to save
+     */
+    public void saveTicketInSession( HttpSession session, Ticket ticket )
+    {
+        session.setAttribute( SESSION_NOT_VALIDATED_TICKET, ticket );
+    }
+
+    /**
+     * Get the current ticket form from the session
+     * 
+     * @param session
+     *            The session of the user
+     * @return The ticket form
+     */
+    public Ticket getTicketFromSession( HttpSession session )
+    {
+        return (Ticket) session.getAttribute( SESSION_NOT_VALIDATED_TICKET );
+    }
+
+    /**
+     * Remove any ticket form stored in the session of the user
+     * 
+     * @param session
+     *            The session
+     */
+    public void removeTicketFromSession( HttpSession session )
+    {
+        session.removeAttribute( SESSION_NOT_VALIDATED_TICKET );
+    }
+
+    /**
+     * Save the current action type in the session of the user
+     * 
+     * @param session
+     *            The session
+     * @param actionType
+     *            The action type to save
+     */
+    public void saveActionTypeInSession( HttpSession session, String actionType )
+    {
+        session.setAttribute( SESSION_ACTION_TYPE, actionType );
+    }
+
+    /**
+     * Get the current actionType from the session
+     * 
+     * @param session
+     *            The session of the user
+     * @return The actionType
+     */
+    public String getActionTypeFromSession( HttpSession session )
+    {
+        return (String) session.getAttribute( SESSION_ACTION_TYPE );
+    }
+
+    /**
+     * Remove any action type stored in the session of the user
+     * 
+     * @param session
+     *            The session
+     */
+    public void removeActionTypeFromSession( HttpSession session )
+    {
+        session.removeAttribute( SESSION_ACTION_TYPE );
+    }
+
 }

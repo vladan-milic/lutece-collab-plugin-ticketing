@@ -1,0 +1,22 @@
+<@rowBoxHeader i18nTitleKey="ticketing.confirm_ticket.pageTitle">
+    <form class="form-horizontal" role="form" method="post" action="jsp/site/Portal.jsp?page=ticket">
+        <input type="hidden" id="id" name="id"/>  
+        <legend>#i18n{ticketing.xpage.confirm_ticket.title}</legend>
+        <fieldset>
+             <div class="form-group">
+                 <label for="confirmationMsg" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.xpage.confirm_ticket.labelMessage}</label>
+                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                     ${message}
+                 </div>
+             </div>
+        </fieldset>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+                <button name="view_createTicket" class="btn btn-primary" type="submit" tabindex="15">
+                    #i18n{ticketing.xpage.confirm_ticket.labelButtonReturn}
+                </button>
+           </div>
+        </div>
+    </form>
+</@rowBoxHeader>
+

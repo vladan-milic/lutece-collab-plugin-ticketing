@@ -33,24 +33,30 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
+import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
+import fr.paris.lutece.util.html.HtmlTemplate;
 
 
 /**
@@ -61,6 +67,9 @@ public class TicketXPage extends MVCApplication
 {
     // Templates
     private static final String TEMPLATE_CREATE_TICKET = "/skin/plugins/ticketing/create_ticket.html";
+    private static final String TEMPLATE_RECAP_TICKET = "/skin/plugins/ticketing/recap_ticket.html";
+    private static final String TEMPLATE_CONFIRM_TICKET = "/skin/plugins/ticketing/confirm_ticket.html";
+    private static final String TEMPLATE_MESSAGE_CONFIRM = "/skin/plugins/ticketing/message_confirm_ticket.html";
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";
     private static final String MARK_TICKET = "ticket";
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
@@ -68,22 +77,38 @@ public class TicketXPage extends MVCApplication
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
     private static final String MARK_TICKET_USER = "myLuteceUser";
+    private static final String MARK_TICKET_ACTION = "ticket_action";
+    private static final String MARK_MESSAGE = "message";
+    private static final String MARK_USERTITLE = "userTitle";
+    private static final String MARK_FIRSTNAME = "firstName";
+    private static final String MARK_LASTNAME = "lastName";
+    private static final String MARK_EMAIL = "email";
+    private static final String MARK_FIX_PHONE_NUMBER = "fixedPhoneNumber";
+    private static final String MARK_MOBILE_PHONE_NUMBER = "mobilePhoneNumber";
 
     // Views
     private static final String VIEW_MANAGE_TICKETS = "manageTickets";
     private static final String VIEW_CREATE_TICKET = "createTicket";
+    private static final String VIEW_RECAP_TICKET = "recapTicket";
+    private static final String VIEW_CONFIRM_TICKET = "confirmTicket";
 
     // Actions
     private static final String ACTION_CREATE_TICKET = "createTicket";
+    private static final String ACTION_RECAP_TICKET = "recapTicket";
 
     // Infos
     private static final String INFO_TICKET_CREATED = "ticketing.info.ticket.created";
 
     // Errors
-    public static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
+    private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
+
+    // Session keys
+    private static final String SESSION_NOT_VALIDATED_TICKET = "ticketing.session.notValidatedTicket";
+    private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
 
     // Session variable to store working values
     private Ticket _ticket;
+
 
     /**
      * Returns the form to create a ticket
@@ -94,20 +119,23 @@ public class TicketXPage extends MVCApplication
     @View( value = VIEW_CREATE_TICKET, defaultView = true )
     public XPage getCreateTicket( HttpServletRequest request )
     {
+        _ticket = getTicketFromSession( request.getSession( ) );
         _ticket = ( _ticket != null ) ? _ticket : new Ticket(  );
-        LuteceUser user=SecurityService.getInstance().getRegisteredUser(request);
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
         Map<String, Object> model = getModel(  );
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );
         model.put( MARK_TICKET, _ticket );
-        model.put(MARK_TICKET_USER, user);
+        model.put( MARK_TICKET_USER, user );
 
         // FIXME Dynamic filling
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
 
-        model.put ( MARK_CONTACT_MODES_LIST,
-                ContactModeHome.getReferenceList ( ) );
+        model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( ) );
+
+        saveActionTypeInSession( request.getSession( ), ACTION_CREATE_TICKET );
+        removeTicketFromSession( request.getSession( ) );
 
         return getXPage( TEMPLATE_CREATE_TICKET, request.getLocale(  ), model );
     }
@@ -121,23 +149,235 @@ public class TicketXPage extends MVCApplication
     @Action( ACTION_CREATE_TICKET )
     public XPage doCreateTicket( HttpServletRequest request )
     {
+        _ticket = getTicketFromSession( request.getSession( ) );
+        TicketHome.create( _ticket );
+        addInfo( INFO_TICKET_CREATED, getLocale( request ) );
+
+        return redirectView( request, VIEW_CONFIRM_TICKET );
+    }
+
+    /**
+     * Returns the form to recapitulate a ticket
+     *
+     * @param request
+     *            The Http request
+     * @return the html code of the ticket form
+     */
+    @View( value = VIEW_RECAP_TICKET )
+    public XPage getRecapTicket( HttpServletRequest request )
+    {
+        _ticket = getTicketFromSession( request.getSession( ) );
+
+        Map<String, Object> model = getModel( );
+        model.put( MARK_TICKET_ACTION, getActionTypeFromSession( request.getSession( ) ) );
+        model.put( MARK_TICKET, _ticket );
+
+        removeActionTypeFromSession( request.getSession( ) );
+
+        return getXPage( TEMPLATE_RECAP_TICKET, request.getLocale( ), model );
+
+    }
+
+    /**
+     * Process the data capture form of a new ticket
+     *
+     * @param request
+     *            The Http Request
+     * @return The Jsp URL of the process result
+     */
+    @Action( ACTION_RECAP_TICKET )
+    public XPage doRecapTicket( HttpServletRequest request )
+    {
         populate( _ticket, request );
 
         // Check constraints
         if ( !validateBean( _ticket, getLocale( request ) ) )
         {
-            return redirectView( request, VIEW_CREATE_TICKET );
+            if ( getActionTypeFromSession( request.getSession( ) ).equals( ACTION_CREATE_TICKET ) )
+            {
+                return redirectView( request, VIEW_CREATE_TICKET );
+            }
         }
 
         if ( _ticket.hasNoPhoneNumberFilled( ) )
         {
             addError( ERROR_PHONE_NUMBER_MISSING, getLocale( request ) );
-            return redirectView( request, VIEW_CREATE_TICKET );
+            if ( getActionTypeFromSession( request.getSession( ) ).equals( ACTION_CREATE_TICKET ) )
+            {
+                return redirectView( request, VIEW_CREATE_TICKET );
+            }
         }
 
-        TicketHome.create( _ticket );
-        addInfo( INFO_TICKET_CREATED, getLocale( request ) );
+        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( _ticket
+                .getIdTicketCategory( ) );
+        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory
+                .getIdTicketDomain( ) );
+        _ticket.setTicketCategory( ticketCategory.getLabel( ) );
+        _ticket.setTicketDomain( ticketDomain.getLabel( ) );
 
-        return redirectView( request, VIEW_MANAGE_TICKETS );
+        _ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType( ) )
+                .getLabel( ) );
+        _ticket.setContactMode( ContactModeHome.findByPrimaryKey( _ticket.getIdContactMode( ) )
+                .getLabel( ) );
+        _ticket.setUserTitle( UserTitleHome.findByPrimaryKey( _ticket.getIdUserTitle( ) )
+                .getLabel( ) );
+        _ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( _ticket.getIdContactMode( ) )
+                .getConfirmationMsg( ) );
+
+        saveTicketInSession( request.getSession( ), _ticket );
+
+        return redirectView( request, VIEW_RECAP_TICKET );
+    }
+
+    /**
+     * Returns the form to confirm a ticket
+     *
+     * @param request
+     *            The Http request
+     * @return the html code of the ticket form
+     */
+    @View( value = VIEW_CONFIRM_TICKET )
+    public XPage getConfirmTicket( HttpServletRequest request )
+    {
+        _ticket = getTicketFromSession( request.getSession( ) );
+
+        Map<String, Object> model = getModel( );
+        String strContent = fillTemplate( request, _ticket );
+        model.put( MARK_MESSAGE, strContent );
+        model.put( MARK_TICKET, _ticket );
+
+        removeTicketFromSession( request.getSession( ) );
+        removeActionTypeFromSession( request.getSession( ) );
+
+        return getXPage( TEMPLATE_CONFIRM_TICKET, request.getLocale( ), model );
+
+    }
+
+    /**
+     * Returns the template with the confirmation message with freemarker labels
+     * filled
+     *
+     * @param request
+     *            The Http request
+     * @param ticket
+     *            the ticket
+     * @return the template with confirmation message
+     */
+    private String fillTemplate( HttpServletRequest request, Ticket ticket )
+    {
+        Map<String, Object> model = new HashMap<String, Object>( );
+
+        model.put( MARK_MESSAGE, ticket.getConfirmationMsg( ) );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MESSAGE_CONFIRM,
+                request.getLocale( ),
+                model );
+
+        model.put( MARK_USERTITLE, ticket.getUserTitle( ) );
+        model.put( MARK_FIRSTNAME, ticket.getFirstname( ) );
+        model.put( MARK_LASTNAME, ticket.getLastname( ) );
+        model.put( MARK_EMAIL, ticket.getEmail( ) );
+        model.put( MARK_FIX_PHONE_NUMBER, ticket.getFixedPhoneNumber( ) );
+        model.put( MARK_MOBILE_PHONE_NUMBER, ticket.getMobilePhoneNumber( ) );
+
+        String strContent = AppTemplateService.getTemplateFromStringFtl( template.getHtml( ),
+                request.getLocale( ), model ).getHtml( );
+
+        return strContent;
+    }
+
+    /**
+     * Returns the form to confirm a ticket
+     *
+     * @param request
+     *            The Http request
+     * @param ticket
+     *            the ticket
+     * @return the html code of the ticket form
+     */
+    // private Map<String, Object> fillModel( HttpServletRequest request, Ticket
+    // ticket )
+    // {
+    // Map<String, Object> model = new HashMap<String, Object>( );
+    //
+    // model.put( MARK_MESSAGE, ticket.getConfirmationMsg( ) );
+    // HtmlTemplate template = AppTemplateService.getTemplate(
+    // TEMPLATE_MESSAGE_CONFIRM,
+    // request.getLocale( ),
+    // model );
+    // model.put( MARK_CONFIRM, template.getHtml( ) );
+    //
+    // return model;
+    // }
+
+    /**
+     * Save an ticket form in the session of the user
+     * 
+     * @param session
+     *            The session
+     * @param ticket
+     *            The ticket form to save
+     */
+    private void saveTicketInSession( HttpSession session, Ticket ticket )
+    {
+        session.setAttribute( SESSION_NOT_VALIDATED_TICKET, ticket );
+    }
+
+    /**
+     * Get the current ticket form from the session
+     * 
+     * @param session
+     *            The session of the user
+     * @return The ticket form
+     */
+    private Ticket getTicketFromSession( HttpSession session )
+    {
+        return (Ticket) session.getAttribute( SESSION_NOT_VALIDATED_TICKET );
+    }
+
+    /**
+     * Remove any ticket form stored in the session of the user
+     * 
+     * @param session
+     *            The session
+     */
+    private void removeTicketFromSession( HttpSession session )
+    {
+        session.removeAttribute( SESSION_NOT_VALIDATED_TICKET );
+    }
+
+    /**
+     * Save the current action type in the session of the user
+     * 
+     * @param session
+     *            The session
+     * @param actionType
+     *            The action type to save
+     */
+    private void saveActionTypeInSession( HttpSession session, String actionType )
+    {
+        session.setAttribute( SESSION_ACTION_TYPE, actionType );
+    }
+
+    /**
+     * Get the current actionType from the session
+     * 
+     * @param session
+     *            The session of the user
+     * @return The actionType
+     */
+    private String getActionTypeFromSession( HttpSession session )
+    {
+        return (String) session.getAttribute( SESSION_ACTION_TYPE );
+    }
+
+    /**
+     * Remove any action type stored in the session of the user
+     * 
+     * @param session
+     *            The session
+     */
+    private void removeActionTypeFromSession( HttpSession session )
+    {
+        session.removeAttribute( SESSION_ACTION_TYPE );
     }
 }
