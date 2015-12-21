@@ -34,13 +34,16 @@
 package fr.paris.lutece.plugins.ticketing.business;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 
@@ -92,7 +95,35 @@ public class Ticket implements Serializable
     @Size( max = 255, message = "#i18n{ticketing.validation.ticket.TicketStatusText.size}" )
     private String _strTicketStatusText;
     private State _state;
+    private Timestamp _dDateCreate;
+    private Timestamp _dDateUpdate;
     private transient Collection<Action> _listWorkflowActions;
+    private List<Response> _listResponse;   
+
+    
+    /**
+     * @return */
+    public Timestamp getDateCreate() {
+        return _dDateCreate;
+    }
+
+     /**
+     * @param dDateCreate*/
+    public void setDateCreate(Timestamp dDateCreate) {
+        this._dDateCreate = dDateCreate;
+    }
+
+     /**
+     * @return */
+    public Timestamp getDateUpdate() {
+        return _dDateUpdate;
+    }
+
+     /**
+     * @param dDateUpdate*/
+    public void setDateUpdate(Timestamp dDateUpdate) {
+        this._dDateUpdate = dDateUpdate;
+    }
 
     /**
      * Returns the Id
@@ -472,7 +503,8 @@ public class Ticket implements Serializable
     {
         _strTicketStatusText = strTicketStatusText;
     }
-
+    
+    
     /**
      * Returns true if the fixed phone number and the mobile phone number are
      * not filled, and else returns false
@@ -524,4 +556,22 @@ public class Ticket implements Serializable
      {
          this._listWorkflowActions = listWorkflowActions;
      }
+    
+    /**
+     * Get the list of response of this ticket
+     * @return the list of response of this ticket
+     */
+    public List<Response> getListResponse(  )
+    {
+        return _listResponse;
+    }
+
+    /**
+     * Set the list of responses of this ticket
+     * @param listResponse The list of responses
+     */
+    public void setListResponse( List<Response> listResponse )
+    {
+        this._listResponse = listResponse;
+    }
 }

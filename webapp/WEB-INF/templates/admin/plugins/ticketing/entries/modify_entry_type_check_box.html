@@ -1,0 +1,101 @@
+<#include "/admin/util/editor/editor.html" />
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+		<form class="form" action="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp" method="post" name="" id=""  >
+			<fieldset>
+				<legend>#i18n{ticketing.modifyEntry.titleQuestion} : '${form.title}'</legend>
+				<input name="id_entry" value="${entry.idEntry}" type="hidden" />
+				<input name="action" value="doModifyEntry" type="hidden" />
+				
+				<label for="title">#i18n{ticketing.createEntry.labelTitle}* : </label>
+				<input type="text" name="title" id="title" class="form-control" value="${entry.title}"  maxlength="255">
+				<span class="help-block">#i18n{ticketing.createEntry.labelTitleComment}</span>
+				<label for="help_message">#i18n{ticketing.createEntry.labelHelpMessage} : </label>
+				<textarea  name="help_message" id="help_message" rows="2" class="form-control">${entry.helpMessage}</textarea>
+				<span class="help-block">#i18n{ticketing.createEntry.labelHelpMessageComment}</span>
+				<label for="comment"> #i18n{ticketing.createEntry.labelComment} : </label>
+				<textarea  name="comment" class="form-control" rows="2">${entry.comment}</textarea>
+			 	<label for="width">#i18n{ticketing.createEntry.labelPresentation} : </label>
+				<select  id="field_in_line" name="field_in_line" class="form-control">
+					<option value=1 <#if entry.fieldInLine >selected="selected" </#if> >#i18n{ticketing.createEntry.selectPresentationInLine}</option>
+					<option value=0 <#if !entry.fieldInLine >selected="selected" </#if>>#i18n{ticketing.createEntry.selectPresentationNotInLine}</option>
+				</select>
+				<label for="">#i18n{ticketing.createEntry.labelType} :  ${entry.entryType.title}</label>
+				<label for="mandatory">#i18n{ticketing.createEntry.labelMandatory} : 
+				<input name="mandatory" value="1" type="checkbox" <#if entry.mandatory>checked="checked"</#if> /></label>
+				<label for="errorMessage"> #i18n{ticketing.createEntry.labelMandatoryErrorMessage} : </label>
+				<textarea name="errorMessage" class="form-control" rows="2">${entry.errorMessage!}</textarea>
+				<span class="help-block">#i18n{ticketing.createEntry.labelMandatoryErrorMessageHelp}</span>
+				<label for="css_class">#i18n{ticketing.createEntry.labelCSSClass} : </label>
+				<input type="text" name="css_class" value="${entry.CSSClass!}" class="form-control" maxlength="255">
+				<span class="help-block">#i18n{ticketing.createEntry.labelCSSClassComment}</span>
+				<div class="form-group">
+					<button class="btn btn-primary btn-sm" name="save" type="submit" >
+						<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{ticketing.modifyEntry.buttonSave}
+					</button>
+					<button class="btn btn-primary btn-sm" name="apply" type="submit" >
+						<i class="glyphicon glyphicon-ok-sign"></i>&nbsp;#i18n{ticketing.modifyEntry.buttonApply}
+					</button>
+					<button class="btn btn-default btn-sm" type="submit" name="cancel" value="cancel" >
+						<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{ticketing.createEntry.buttonCancel}
+					</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+		<fieldset>
+			<legend>
+				#i18n{ticketing.createEntry.manageField.title}
+				<a class="btn btn-primary btn-sm pull-right" type="submit" href="jsp/admin/plugins/ticketing/ManageTicketFormFields.jsp?view=getCreateField&id_entry=${entry.idEntry}" ><i class="glyphicon glyphicon-plus"></i>&nbsp;#i18n{ticketing.createEntry.manageField.buttonInsert}</a>
+			</legend>
+			<table class="table table-striped">
+				<tr> 
+					<th>#i18n{ticketing.createEntry.manageField.rowTitle}</th>
+					<th>#i18n{ticketing.createEntry.manageField.rowValue}</th>
+					<th><i class="glyphicon glyphicon-question-sign" title="#i18n{ticketing.createEntry.manageField.rowConditionalQuestion}"></i>&nbsp;</th>
+					<th>#i18n{ticketing.createEntry.manageField.rowActions}</th>
+				</tr>
+			 	<#assign cpt=0>
+				<#list list as field>
+					<#assign cpt=cpt+1>
+					<tr>
+						<td>${field.title}</td>
+						<td><#if field.defaultValue><span class="label label-success"><i class="glyphicon glyphicon-ok" title="#i18n{ticketing.createEntry.manageField.rowDefaultValue}"></i></span></#if>&nbsp;${field.value}</td>
+						<td>
+							<#if field.conditionalQuestions?exists>
+								<#list field.conditionalQuestions as entry>
+									<#if entry.entryType.comment>
+										${entry.comment}
+									<#else>
+										${entry.title}
+									</#if>
+									<br>
+								</#list>
+							</#if>     	
+						</td>
+						<td>
+							<a class="btn btn-primary btn-xs" href="jsp/admin/plugins/ticketing/ManageTicketFormFields.jsp?view=getModifyFieldCC&id_field=${field.idField}" title="#i18n{portal.util.labelModify}">
+								<i class="glyphicon glyphicon-edit"></i>
+							</a>
+							<#if cpt!=1>
+								<a class="btn  btn-primary btn-xs" href="jsp/admin/plugins/ticketing/ManageTicketFormFields.jsp?action=doMoveFieldUp&id_field=${field.idField}#list"  title="#i18n{ticketing.createEntry.manageField.titleMoveUp}" >
+									<i class="glyphicon glyphicon-chevron-up"></i>
+								</a>
+							</#if>
+							<#if field_has_next>
+								<a class="btn btn-primary btn-xs" href="jsp/admin/plugins/ticketing/ManageTicketFormFields.jsp?&action=doMoveFieldDown&id_field=${field.idField}#list"  title="#i18n{ticketing.createEntry.manageField.titleMoveDown}" >
+									<i class="glyphicon glyphicon-chevron-down"></i>
+								</a>
+							</#if>
+							<a class="btn btn-danger btn-xs" href="jsp/admin/plugins/ticketing/ManageTicketFormFields.jsp?view=getConfirmRemoveField&id_field=${field.idField}#list"  title="#i18n{ticketing.createEntry.manageField.titleDelete}" >
+								<i class="glyphicon glyphicon-trash"></i>
+							</a>
+						</td>
+					</tr>
+				</#list> 
+			</table>
+		</fieldset>
+	</div>
+</div>
+ <@initEditor />

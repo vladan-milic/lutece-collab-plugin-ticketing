@@ -1,0 +1,37 @@
+	<a class="btn btn-primary btn-sm pull-right" href="jsp/admin/plugins/ticketing/ManageTicketForms.jsp?view=createTicketForm&forceReload=true">
+		<i class="glyphicon glyphicon-plus">&nbsp;</i>&nbsp;#i18n{ticketing.manage_ticketforms.buttonAdd}
+	</a>
+<legend>#i18n{ticketing.manage_ticketforms.pageTitle}</legend>	
+<div class="row" >
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<@messages infos=infos />
+		<@paginationAdmin paginator=paginator combo=1 />
+		<table class="table table-condensed table-striped">
+			<tr>
+				<th>#i18n{ticketing.manage_ticketforms.columnTitle}</th>
+				<th>#i18n{ticketing.manage_ticketforms.columnCategory}</th>
+				<th>#i18n{portal.util.labelActions}</th>
+			</tr>
+			<#list ticketform_list as ticketform >
+				<tr>
+					<td>
+						&nbsp;${ticketform.title}
+					</td>
+					<td>
+						&nbsp;${ticketform.ticketCategory}
+					</td>
+					<td>
+						<a href="jsp/admin/plugins/ticketing/ManageTicketForms.jsp?view=modifyTicketForm&id_form=${ticketform.idForm}&forceReload=true" class="btn btn-primary btn-xs" title="#i18n{portal.util.labelModify}">
+							<i class="glyphicon glyphicon-edit"></i>
+						</a>						
+						<a href="jsp/admin/plugins/ticketing/ManageTicketForms.jsp?action=confirmRemoveTicketForm&id_form=${ticketform.idForm}" class="btn btn-danger btn-xs" title="#i18n{portal.util.labelDelete}" >
+							<i class="glyphicon glyphicon-trash"></i>
+						</a>
+						
+					</td>
+				</tr>
+			</#list>
+		</table>
+		<@paginationAdmin paginator=paginator />
+	</div>
+</div>

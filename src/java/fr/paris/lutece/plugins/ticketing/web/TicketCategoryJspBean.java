@@ -33,21 +33,24 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.TicketForm;
+import fr.paris.lutece.plugins.ticketing.business.TicketFormHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
-
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -77,6 +80,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_TICKETCATEGORY = "ticketcategory";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_LIST_WORKFLOWS = "listWorkflows";
+    private static final String MARK_TICKET_FORM_LIST = "ticketform_list";
 
     private static final String JSP_MANAGE_TICKETCATEGORYS = "jsp/admin/plugins/ticketing/ManageTicketCategorys.jsp";
 
@@ -136,6 +140,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         model.put( MARK_TICKETCATEGORY, _ticketcategory );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_LIST_WORKFLOWS, WorkflowService.getInstance(  ).getWorkflowsEnabled( getUser(  ), getLocale(  ) ) );
+        model.put( MARK_TICKET_FORM_LIST, TicketFormHome.getAvailableTicketFormsList( ) );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKETCATEGORY, TEMPLATE_CREATE_TICKETCATEGORY, model );
     }
@@ -219,6 +224,14 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         model.put( MARK_TICKETCATEGORY, _ticketcategory );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_LIST_WORKFLOWS, WorkflowService.getInstance(  ).getWorkflowsEnabled( getUser(  ), getLocale(  ) ) );
+        ReferenceList lstForms = TicketFormHome.getAvailableTicketFormsList( );
+        TicketForm form = TicketFormHome.findByPrimaryKey( _ticketcategory
+                .getIdTicketForm( ) );
+        if ( form != null )
+        {
+            lstForms.addItem( _ticketcategory.getIdTicketForm( ), form.getTitle( ) );
+        }
+        model.put( MARK_TICKET_FORM_LIST, lstForms );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKETCATEGORY, TEMPLATE_MODIFY_TICKETCATEGORY, model );
     }

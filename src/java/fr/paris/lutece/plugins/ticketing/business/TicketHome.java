@@ -33,12 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
+import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.ticketing.service.TicketFormCacheService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import java.util.List;
-
 
 /**
  * This class provides instances management methods (create, find, ...) for Ticket objects
@@ -48,6 +52,7 @@ public final class TicketHome
     // Static variable pointed at the DAO instance
     private static ITicketDAO _dao = SpringContextService.getBean( "ticketing.ticketDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance(  );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -119,4 +124,104 @@ public final class TicketHome
     {
         return _dao.selectIdTicketsList( _plugin );
     }
+    
+    
+    // -----------------------------------------------
+    // Ticket response management
+    // -----------------------------------------------
+
+    /**
+     * Associates a response to a ticket
+     * @param nIdTicket The id of the ticket
+     * @param nIdResponse The id of the response
+     */
+    public static void insertTicketResponse( int nIdticket, int nIdResponse )
+    {
+        _dao.insertTicketResponse( nIdticket, nIdResponse, _plugin );
+        _cacheService.removeKey( _cacheService.getTicketResponseCacheKey( nIdticket ) );
+    }
+
+    /**
+     * Get the list of id of responses associated with an ticket
+     * @param nIdticket the id of the ticket
+     * @return the list of responses, or an empty list if no response was found
+     */
+    public static List<Integer> findListIdResponse( int nIdticket )
+    {
+        String strCacheKey = _cacheService.getTicketResponseCacheKey( nIdticket );
+        List<Integer> listIdResponse = (List<Integer>) _cacheService.getFromCache( strCacheKey );
+
+        if ( listIdResponse == null )
+        {
+            listIdResponse = _dao.findListIdResponse( nIdticket, _plugin );
+           _cacheService.putInCache( strCacheKey, new ArrayList<Integer>( listIdResponse ) );
+        }
+        else
+        {
+            listIdResponse = new ArrayList<Integer> ( listIdResponse );
+        }
+
+        return listIdResponse;
+    }
+
+    /**
+     * Get the list of responses associated with an ticket
+     * @param nIdticket the id of the ticket
+     * @return the list of responses, or an empty list if no response was found
+     */
+    public static List<Response> findListResponse( int nIdticket )
+    {
+        List<Integer> listIdResponse = findListIdResponse( nIdticket );
+        List<Response> listResponse = new ArrayList<Response>( listIdResponse.size(  ) );
+
+        for ( Integer nIdResponse : listIdResponse )
+        {
+            listResponse.add( ResponseHome.findByPrimaryKey( nIdResponse ) );
+        }
+
+        return listResponse;
+    }
+
+    /**
+     * Find the id of the ticket associated with a given response
+     * @param nIdResponse The id of the response
+     * @return The id of the ticket, or 0 if no ticket is associated
+     *         with he given response.
+     */
+    public static int findIdTicketByIdResponse( int nIdResponse )
+    {
+        return _dao.findIdTicketByIdResponse( nIdResponse, _plugin );
+    }
+
+    /**
+     * Remove the association between an ticket and responses
+     * 
+     * @param nIdTicket
+     *            The id of the ticket
+     */
+    public static void removeTicketResponse(int nIdticket)
+    {
+        _dao.deleteTicketResponse( nIdticket, _plugin );
+        _cacheService.removeKey( _cacheService.getTicketResponseCacheKey( nIdticket ) );
+    }
+
+    /**
+     * Remove every ticket responses associated with a given entry.
+     * @param nIdEntry The id of the entry
+     */
+    public static void removeResponsesByIdEntry( int nIdEntry )
+    {
+        ResponseFilter filter = new ResponseFilter(  );
+        filter.setIdEntry( nIdEntry );
+
+        List<Response> listResponses = ResponseHome.getResponseList( filter );
+
+        for ( Response response : listResponses )
+        {
+            _dao.removeTicketResponsesByIdResponse( response.getIdResponse(  ), _plugin );
+            ResponseHome.remove( response.getIdResponse(  ) );
+        }
+        _cacheService.resetCache(  );
+    }
+    
 }

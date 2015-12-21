@@ -11,7 +11,10 @@
         <#if listWorkflows??>
 			<@fieldInputCombo i18nLabelKey='ticketing.create_ticketcategory.labelWorkflow' inputName='idWorkflow' items=listWorkflows value="${ticketcategory.idWorkflow!}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelWorkflow.help" cssClass="form-control" />
 		</#if>
-		<@actionButtons button1Name="action_createTicketCategory" button2Name="view_manageTicketCategorys"/>
+		<#if ticketform_list??>
+			<@fieldInputCombo i18nLabelKey='ticketing.create_ticketcategory.labelTicketForm' inputName='idTicketForm' items=ticketform_list value="${ticketcategory.idTicketForm!}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelForm.help" cssClass="form-control" />			
+		</#if>
+        <@actionButtons button1Name="action_createTicketCategory" button2Name="view_manageTicketCategorys"/>
     </form>
-</@rowBoxHeader>
+</@rowBoxHeader> 
 

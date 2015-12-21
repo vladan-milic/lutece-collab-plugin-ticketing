@@ -78,7 +78,7 @@ public class TicketBusinessTest extends LuteceTestCase
         ticket.setFirstname( FIRSTNAME1 );
         ticket.setLastname( LASTNAME1 );
         ticket.setEmail( EMAIL1 );
-        ticket.setPhoneNumber( PHONENUMBER1 );
+        ticket.setFixedPhoneNumber(PHONENUMBER1 );
         ticket.setIdTicketType( IDTICKETTYPE1 );
         ticket.setTicketType( TICKETTYPE1 );
         ticket.setIdTicketDomain( IDTICKETDOMAIN1 );
@@ -98,7 +98,7 @@ public class TicketBusinessTest extends LuteceTestCase
         assertEquals( ticketStored.getFirstname(  ), ticket.getFirstname(  ) );
         assertEquals( ticketStored.getLastname(  ), ticket.getLastname(  ) );
         assertEquals( ticketStored.getEmail(  ), ticket.getEmail(  ) );
-        assertEquals( ticketStored.getPhoneNumber(  ), ticket.getPhoneNumber(  ) );
+        assertEquals( ticketStored.getFixedPhoneNumber(  ), ticket.getFixedPhoneNumber(  ) );
         assertEquals( ticketStored.getIdTicketType(  ), ticket.getIdTicketType(  ) );
         assertEquals( ticketStored.getTicketType(  ), ticket.getTicketType(  ) );
         assertEquals( ticketStored.getIdTicketDomain(  ), ticket.getIdTicketDomain(  ) );
@@ -115,7 +115,7 @@ public class TicketBusinessTest extends LuteceTestCase
         ticket.setFirstname( FIRSTNAME2 );
         ticket.setLastname( LASTNAME2 );
         ticket.setEmail( EMAIL2 );
-        ticket.setPhoneNumber( PHONENUMBER2 );
+        ticket.setFixedPhoneNumber( PHONENUMBER2 );
         ticket.setIdTicketType( IDTICKETTYPE2 );
         ticket.setTicketType( TICKETTYPE2 );
         ticket.setIdTicketDomain( IDTICKETDOMAIN2 );
@@ -132,7 +132,7 @@ public class TicketBusinessTest extends LuteceTestCase
         assertEquals( ticketStored.getFirstname(  ), ticket.getFirstname(  ) );
         assertEquals( ticketStored.getLastname(  ), ticket.getLastname(  ) );
         assertEquals( ticketStored.getEmail(  ), ticket.getEmail(  ) );
-        assertEquals( ticketStored.getPhoneNumber(  ), ticket.getPhoneNumber(  ) );
+        assertEquals( ticketStored.getFixedPhoneNumber(  ), ticket.getFixedPhoneNumber(  ) );
         assertEquals( ticketStored.getIdTicketType(  ), ticket.getIdTicketType(  ) );
         assertEquals( ticketStored.getTicketType(  ), ticket.getTicketType(  ) );
         assertEquals( ticketStored.getIdTicketDomain(  ), ticket.getIdTicketDomain(  ) );
