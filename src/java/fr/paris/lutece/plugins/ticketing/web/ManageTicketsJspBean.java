@@ -119,9 +119,9 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     // Parameters
     private static final String PARAMETER_ID_TICKET = "id";
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
-        private static final String PARAMETER_ID_ACTION = "id_action";
+    private static final String PARAMETER_ID_ACTION = "id_action";
     private static final String PARAMETER_BACK = "back";
-    // private static final String PARAMETER_GUID = "guid";
+    private static final String PARAMETER_GUID = "guid";
     // private static final String PARAMETER_FIRSTNAME = "fn";
     // private static final String PARAMETER_LASTNAME = "ln";
     // private static final String PARAMETER_PHONE = "ph";
@@ -145,7 +145,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
     private static final String MARK_TASKS_FORM = "tasks_form";
     private static final String JSP_MANAGE_TICKETS = "jsp/admin/plugins/ticketing/ManageTickets.jsp";
-    // private static final String MARK_GUID = "guid";
+    private static final String MARK_GUID = "guid";
     // private static final String MARK_FIRSTNAME = "firstname";
     // private static final String MARK_LASTNAME = "lastname";
     // private static final String MARK_PHONE = "phone";
@@ -181,7 +181,6 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
 
     // Session keys
-    private static final String SESSION_NOT_VALIDATED_TICKET = "ticketing.session.notValidatedTicket";
     private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
 
 
@@ -204,7 +203,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     public String getManageTickets( HttpServletRequest request )
     {
         _ticket = null;
-        removeTicketFromSession( request.getSession( ) );
+        _ticketFormService.removeTicketFromSession( request.getSession( ) );
 
         List<Ticket> listTickets = (List<Ticket>) TicketHome.getTicketsList(  );
         _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
@@ -262,7 +261,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @View( VIEW_CREATE_TICKET )
     public String getCreateTicket( HttpServletRequest request )
     {
-        _ticket = getTicketFromSession( request.getSession( ) );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
         _ticket = ( _ticket != null ) ? _ticket : new Ticket(  );
 
         Map<String, Object> model = getModel(  );
@@ -275,7 +274,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
 
     private void initTicketForm(HttpServletRequest request, Map<String, Object> model)
     {
-        // String strGuid = request.getParameter( PARAMETER_GUID );
+        String strGuid = request.getParameter( PARAMETER_GUID );
         // String strFirstname = request.getParameter( PARAMETER_FIRSTNAME );
         // String strLastname = request.getParameter( PARAMETER_LASTNAME );
         // String strPhone = request.getParameter( PARAMETER_PHONE );
@@ -288,7 +287,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
         model.put ( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList ( ) );
         model.put( MARK_TICKET, _ticket );
-        // model.put(MARK_GUID, strGuid);
+        model.put( MARK_GUID, strGuid );
         // model.put(MARK_FIRSTNAME,strFirstname);
         // model.put(MARK_LASTNAME, strLastname);
         // model.put(MARK_PHONE, strPhone);
@@ -304,7 +303,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @Action( ACTION_CREATE_TICKET )
     public String doCreateTicket( HttpServletRequest request )
     {
-        _ticket = getTicketFromSession( request.getSession( ) );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
         TicketHome.create( _ticket );
 
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( _ticket
@@ -387,6 +386,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @View(VIEW_TICKET_FORM)
     public String getTicketForm(HttpServletRequest request)
     {
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         if ( !StringUtils.isEmpty( strIdCategory ) && StringUtils.isNumeric( strIdCategory ) )
         {
@@ -409,7 +409,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @View( VIEW_MODIFY_TICKET )
     public String getModifyTicket( HttpServletRequest request )
     {
-        _ticket = getTicketFromSession( request.getSession( ) );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKET ) );
 
         if ( ( _ticket == null ) || ( _ticket.getId(  ) != nId ) )
@@ -464,9 +464,10 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @Action( ACTION_MODIFY_TICKET )
     public String doModifyTicket( HttpServletRequest request )
     {
-        _ticket = getTicketFromSession( request.getSession( ) );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
 
         TicketHome.update( _ticket );
+
         // remove and add generic attributes responses
         TicketHome.removeTicketResponse( _ticket.getId( ) );
         if ( _ticket.getListResponse( ) != null && !_ticket.getListResponse( ).isEmpty( ) )
@@ -646,7 +647,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         _ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( _ticket.getIdContactMode( ) )
                 .getConfirmationMsg( ) );
 
-        saveTicketInSession( request.getSession( ), _ticket );
+        _ticketFormService.saveTicketInSession( request.getSession( ), _ticket );
 
         return redirectView( request, VIEW_RECAP_TICKET );
     }
@@ -661,7 +662,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @View( VIEW_RECAP_TICKET )
     public String getRecapTicket( HttpServletRequest request )
     {
-        _ticket = getTicketFromSession( request.getSession( ) );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
 
         Map<String, Object> model = getModel( );
         model.put( MARK_TICKET_ACTION, getActionTypeFromSession( request.getSession( ) ) );
@@ -690,42 +691,6 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
 		{
 			return redirectView( request, VIEW_CREATE_TICKET );
 		}
-    }
-
-    /**
-     * Save an ticket form in the session of the user
-     * 
-     * @param session
-     *            The session
-     * @param ticket
-     *            The ticket form to save
-     */
-    public void saveTicketInSession( HttpSession session, Ticket ticket )
-    {
-        session.setAttribute( SESSION_NOT_VALIDATED_TICKET, ticket );
-    }
-
-    /**
-     * Get the current ticket form from the session
-     * 
-     * @param session
-     *            The session of the user
-     * @return The ticket form
-     */
-    public Ticket getTicketFromSession( HttpSession session )
-    {
-        return (Ticket) session.getAttribute( SESSION_NOT_VALIDATED_TICKET );
-    }
-
-    /**
-     * Remove any ticket form stored in the session of the user
-     * 
-     * @param session
-     *            The session
-     */
-    public void removeTicketFromSession( HttpSession session )
-    {
-        session.removeAttribute( SESSION_NOT_VALIDATED_TICKET );
     }
 
     /**

@@ -122,7 +122,6 @@ public class TicketXPage extends MVCApplication
     private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
 
     // Session keys
-    private static final String SESSION_NOT_VALIDATED_TICKET = "ticketing.session.notValidatedTicket";
     private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
 
     // Session variable to store working values
@@ -140,7 +139,7 @@ public class TicketXPage extends MVCApplication
     @View( value = VIEW_CREATE_TICKET, defaultView = true )
     public XPage getCreateTicket( HttpServletRequest request )
     {
-        _ticket = getTicketFromSession( request.getSession( ) );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
         _ticket = ( _ticket != null ) ? _ticket : new Ticket(  );
         LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
         Map<String, Object> model = getModel(  );
@@ -156,7 +155,7 @@ public class TicketXPage extends MVCApplication
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( ) );
 
         saveActionTypeInSession( request.getSession( ), ACTION_CREATE_TICKET );
-        removeTicketFromSession( request.getSession( ) );
+        _ticketFormService.removeTicketFromSession( request.getSession( ) );
 
         return getXPage( TEMPLATE_CREATE_TICKET, request.getLocale(  ), model );
     }
@@ -170,7 +169,7 @@ public class TicketXPage extends MVCApplication
     @Action( ACTION_CREATE_TICKET )
     public XPage doCreateTicket( HttpServletRequest request )
     {
-        _ticket = getTicketFromSession( request.getSession( ) );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
         TicketHome.create( _ticket );
         if ( _ticket.getListResponse( ) != null && !_ticket.getListResponse( ).isEmpty( ) )
         {
@@ -196,7 +195,7 @@ public class TicketXPage extends MVCApplication
     @View( value = VIEW_RECAP_TICKET )
     public XPage getRecapTicket( HttpServletRequest request )
     {
-        _ticket = getTicketFromSession( request.getSession( ) );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
 
         Map<String, Object> model = getModel( );
         model.put( MARK_TICKET_ACTION, getActionTypeFromSession( request.getSession( ) ) );
@@ -292,7 +291,7 @@ public class TicketXPage extends MVCApplication
         _ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( _ticket.getIdContactMode( ) )
                 .getConfirmationMsg( ) );
 
-        saveTicketInSession( request.getSession( ), _ticket );
+        _ticketFormService.saveTicketInSession( request.getSession( ), _ticket );
 
         return redirectView( request, VIEW_RECAP_TICKET );
     }
@@ -307,14 +306,14 @@ public class TicketXPage extends MVCApplication
     @View( value = VIEW_CONFIRM_TICKET )
     public XPage getConfirmTicket( HttpServletRequest request )
     {
-        _ticket = getTicketFromSession( request.getSession( ) );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
 
         Map<String, Object> model = getModel( );
         String strContent = fillTemplate( request, _ticket );
         model.put( MARK_MESSAGE, strContent );
         model.put( MARK_TICKET, _ticket );
 
-        removeTicketFromSession( request.getSession( ) );
+        _ticketFormService.removeTicketFromSession( request.getSession( ) );
         removeActionTypeFromSession( request.getSession( ) );
 
         return getXPage( TEMPLATE_CONFIRM_TICKET, request.getLocale( ), model );
@@ -378,42 +377,6 @@ public class TicketXPage extends MVCApplication
         XPage page = getXPage( TEMPLATE_TICKET_FORM, request.getLocale( ), model );
         page.setStandalone( true );
         return page;
-    }
-
-    /**
-     * Save an ticket form in the session of the user
-     * 
-     * @param session
-     *            The session
-     * @param ticket
-     *            The ticket form to save
-     */
-    private void saveTicketInSession( HttpSession session, Ticket ticket )
-    {
-        session.setAttribute( SESSION_NOT_VALIDATED_TICKET, ticket );
-    }
-
-    /**
-     * Get the current ticket form from the session
-     * 
-     * @param session
-     *            The session of the user
-     * @return The ticket form
-     */
-    private Ticket getTicketFromSession( HttpSession session )
-    {
-        return (Ticket) session.getAttribute( SESSION_NOT_VALIDATED_TICKET );
-    }
-
-    /**
-     * Remove any ticket form stored in the session of the user
-     * 
-     * @param session
-     *            The session
-     */
-    private void removeTicketFromSession( HttpSession session )
-    {
-        session.removeAttribute( SESSION_NOT_VALIDATED_TICKET );
     }
 
     /**
