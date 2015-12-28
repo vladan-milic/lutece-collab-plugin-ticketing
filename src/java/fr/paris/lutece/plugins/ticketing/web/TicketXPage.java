@@ -364,14 +364,15 @@ public class TicketXPage extends MVCApplication
     public XPage getTicketForm(HttpServletRequest request)
     {
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
         Map<String, Object> model = getModel( );
         if ( !StringUtils.isEmpty( strIdCategory ) && StringUtils.isNumeric( strIdCategory ) )
         {
             int nIdCategory = Integer.parseInt( strIdCategory );
             TicketForm form = TicketFormHome.findByCategoryId( nIdCategory );
             if ( form != null ){
-                model.put( MARK_TICKET_FORM,
-                        _ticketFormService.getHtmlForm( form, request.getLocale( ), false, request ) );
+                model.put( MARK_TICKET_FORM, _ticketFormService.getHtmlForm( _ticket, form,
+                        request.getLocale( ), false, request ) );
             }
         }
         XPage page = getXPage( TEMPLATE_TICKET_FORM, request.getLocale( ), model );

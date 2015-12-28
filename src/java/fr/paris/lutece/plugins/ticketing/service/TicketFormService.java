@@ -50,24 +50,18 @@ import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketForm;
-import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.portal.service.content.XPageAppService;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
-import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.html.HtmlTemplate;
-import fr.paris.lutece.util.sql.TransactionManager;
 import fr.paris.lutece.util.url.UrlItem;
 
 
@@ -140,7 +134,7 @@ public class TicketFormService implements Serializable
      * @param request HttpServletRequest
      * @return the HTML code of the form
      */
-    public String getHtmlForm(TicketForm form, Locale locale,
+    public String getHtmlForm(Ticket ticket, TicketForm form, Locale locale,
         boolean bDisplayFront, HttpServletRequest request )
     {
         Map<String, Object> model = new HashMap<String, Object>(  );
@@ -156,14 +150,6 @@ public class TicketFormService implements Serializable
         model.put( MARK_FORM, form );
         model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
         model.put( MARK_LOCALE, locale );
-
-        Ticket ticket = getTicketFromSession ( request.getSession ( ) );
-
-        if ( ticket == null )
-        {
-            ticket = new Ticket ( );
-        }
-
         model.put ( MARK_TICKET, ticket );
         
         List<GenericAttributeError> listErrors = (List<GenericAttributeError>) request.getSession(  )
@@ -508,71 +494,5 @@ public class TicketFormService implements Serializable
     public void removeValidatedTicketFromSession( HttpSession session )
     {
         session.removeAttribute( SESSION_VALIDATED_TICKET_FORM );
-    }
-
-
-    /**
-     * Do check if an ticketing can be made and make an ticketing.
-     * @param ticket The ticketing to make
-     * @param form The ticketing form associated with the ticketing
-     * @param bIsAdmin True if this method was called by an admin, false if it
-     *            was called by a regular user
-     * @return True if the ticketing was successfully made, false if the
-     *         selected slot is empty or does not exist
-     * @throws AppException If an error occurs when processing the creation or
-     *             the update of the ticketing
-     */
-    public synchronized boolean doMakeTicket( Ticket ticket, TicketForm form, boolean bIsAdmin )
-        throws AppException
-    {
-        Plugin pluginTicket = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME );
-
-        TransactionManager.beginTransaction( pluginTicket );
-
-        try
-        {
-            // Only admins can modify ticketings
-            boolean bCreate = !bIsAdmin || ( ticket.getId ( ) == 0 );
-
-            if ( bCreate )
-            {
-                TicketHome.create( ticket );
-            }
-            else
-            {
-                TicketHome.update( ticket );
-            }
-
-            // For modification (by an admin), the update of responses have already been made when this method is called 
-            if ( bCreate )
-            {
-                for ( Response response : ticket.getListResponse(  ) )
-                {
-                    ResponseHome.create( response );
-                    TicketHome.insertTicketResponse ( ticket.getId ( ),
-                        response.getIdResponse(  ) );
-                }
-            }
-
-            // if ( form.getIdWorkflow( ) > 0 )
-            // {
-            // WorkflowService.getInstance( )
-            // .getState( ticket.getIdTicket( ), Ticket.TICKET_RESOURCE_TYPE,
-            // form.getIdWorkflow( ), form.getIdForm( ) );
-            // WorkflowService.getInstance( )
-            // .executeActionAutomatic( ticket.getIdTicket( ),
-            // Ticket.TICKET_RESOURCE_TYPE, form.getIdWorkflow( ),
-            // form.getIdForm( ) );
-            // }
-
-            TransactionManager.commitTransaction( pluginTicket );
-        }
-        catch ( Exception e )
-        {
-            TransactionManager.rollBack( pluginTicket );
-            throw new AppException( e.getMessage(  ), e );
-        }
-
-        return true;
     }
 }

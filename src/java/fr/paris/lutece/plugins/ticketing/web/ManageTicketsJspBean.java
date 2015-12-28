@@ -394,7 +394,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
             TicketForm form = TicketFormHome.findByCategoryId( nIdCategory );
             if ( form != null )
             {
-                return _ticketFormService.getHtmlForm( form, getLocale( ), false, request );
+                return _ticketFormService.getHtmlForm( _ticket, form, getLocale( ), false, request );
             }
         }
         return StringUtils.EMPTY;
@@ -445,6 +445,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
             }
 
             _ticket.setListResponse( listResponses );
+            _ticketFormService.saveTicketInSession( request.getSession( ), _ticket );
         }
 
         Map<String, Object> model = getModel(  );
