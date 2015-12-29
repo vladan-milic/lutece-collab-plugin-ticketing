@@ -122,10 +122,11 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String PARAMETER_ID_ACTION = "id_action";
     private static final String PARAMETER_BACK = "back";
     private static final String PARAMETER_GUID = "guid";
-    // private static final String PARAMETER_FIRSTNAME = "fn";
-    // private static final String PARAMETER_LASTNAME = "ln";
-    // private static final String PARAMETER_PHONE = "ph";
-    // private static final String PARAMETER_EMAIL = "em";
+    private static final String PARAMETER_FIRSTNAME = "fn";
+    private static final String PARAMETER_LASTNAME = "ln";
+    private static final String PARAMETER_PHONE = "ph";
+    private static final String PARAMETER_EMAIL = "em";
+    private static final String PARAMETER_CATEGORY = "cat";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETS = "ticketing.manage_tickets.pageTitle";
@@ -146,10 +147,6 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String MARK_TASKS_FORM = "tasks_form";
     private static final String JSP_MANAGE_TICKETS = "jsp/admin/plugins/ticketing/ManageTickets.jsp";
     private static final String MARK_GUID = "guid";
-    // private static final String MARK_FIRSTNAME = "firstname";
-    // private static final String MARK_LASTNAME = "lastname";
-    // private static final String MARK_PHONE = "phone";
-    // private static final String MARK_EMAIL = "email";
     
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
@@ -275,24 +272,50 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private void initTicketForm(HttpServletRequest request, Map<String, Object> model)
     {
         String strGuid = request.getParameter( PARAMETER_GUID );
-        // String strFirstname = request.getParameter( PARAMETER_FIRSTNAME );
-        // String strLastname = request.getParameter( PARAMETER_LASTNAME );
-        // String strPhone = request.getParameter( PARAMETER_PHONE );
-        // String strEmail = request.getParameter( PARAMETER_EMAIL );
+        String strFirstname = request.getParameter( PARAMETER_FIRSTNAME );
+        String strLastname = request.getParameter( PARAMETER_LASTNAME );
+        String strPhone = request.getParameter( PARAMETER_PHONE );
+        String strEmail = request.getParameter( PARAMETER_EMAIL );
+        String strCategory = request.getParameter( PARAMETER_CATEGORY );
 
+        if( ! StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty(  _ticket.getFirstname() ))
+        {
+            _ticket.setFirstname( strFirstname );
+        }
+        if( ! StringUtils.isEmpty( strLastname ) && StringUtils.isEmpty(  _ticket.getLastname() ))
+        {
+            _ticket.setLastname( strLastname );
+        }
+        if( ! StringUtils.isEmpty( strPhone ) && StringUtils.isEmpty(  _ticket.getMobilePhoneNumber() ))
+        {
+            _ticket.setMobilePhoneNumber(strPhone);
+        }
+        if( ! StringUtils.isEmpty( strEmail ) && StringUtils.isEmpty(  _ticket.getEmail() ))
+        {
+            _ticket.setEmail( strEmail );
+        }
+        if( ! StringUtils.isEmpty( strCategory ) && (_ticket.getIdTicketCategory() == 0 ))
+        {
+            TicketCategory category = TicketCategoryHome.findByCode( strCategory );
+            if( category != null )
+            {
+                _ticket.setIdTicketCategory( category.getId() );
+                _ticket.setIdTicketDomain( category.getIdTicketDomain() );
+                _ticket.setIdTicketType( category.getIdTicketType() );
+            }
+        }
+        
+        
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );
-        // FIXME Dynamic filling
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
         model.put ( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList ( ) );
         model.put( MARK_TICKET, _ticket );
         model.put( MARK_GUID, strGuid );
-        // model.put(MARK_FIRSTNAME,strFirstname);
-        // model.put(MARK_LASTNAME, strLastname);
-        // model.put(MARK_PHONE, strPhone);
-        // model.put(MARK_EMAIL, strEmail);
     }
+    
+    
 
     /**
      * Process the data capture form of a new ticket
