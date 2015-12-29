@@ -50,12 +50,14 @@ public class TicketCategory implements Serializable
     // Variables declarations 
     private int _nId;
     private int _nIdTicketDomain;
+    private int _nIdTicketType;
     private String _strTicketDomain;
     private String _strTicketType;
     private int _nIdTicketForm;
     @NotEmpty( message = "#i18n{ticketing.validation.ticketcategory.Label.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.ticketcategory.Label.size}" )
     private String _strLabel;
+    private String _strCode;
     private int _nIdWorkflow;
 
     /**
@@ -92,6 +94,24 @@ public class TicketCategory implements Serializable
     public void setIdTicketDomain( int nIdTicketDomain )
     {
         _nIdTicketDomain = nIdTicketDomain;
+    }
+
+    /**
+     * Returns the IdTicketType
+     * @return The IdTicketType
+     */
+    public int getIdTicketType( )
+    {
+        return _nIdTicketType;
+    }
+
+    /**
+     * Sets the IdTicketType
+     * @param nIdTicketType The IdTicketType
+     */ 
+    public void setIdTicketType( int nIdTicketType )
+    {
+        _nIdTicketType = nIdTicketType;
     }
 
     /**
@@ -183,4 +203,22 @@ public class TicketCategory implements Serializable
         this._nIdTicketForm = _nIdTicketForm;
     }
 
+    /**
+     * Returns the Code
+     * @return The Code
+     */
+    public String getCode(  )
+    {
+        return _strCode;
+    }
+
+    /**
+     * Sets the Code
+     * @param strCode The Code
+     */
+    public void setCode( String strCode )
+    {
+        _strCode = strCode;
+    }
+    
 }

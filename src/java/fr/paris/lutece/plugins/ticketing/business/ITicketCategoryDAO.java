@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 
@@ -78,6 +76,14 @@ public interface ITicketCategoryDAO
      */
     TicketCategory load( int nKey, Plugin plugin );
 
+    /**
+     * Load the data from the table
+     * @param strCode The code of the category
+     * @param plugin the Plugin
+     * @return The instance of the ticketCategory
+     */
+    TicketCategory loadByCode( String strCode, Plugin plugin );
+    
     /**
      * Load the data of all the ticketCategory objects and returns them as a collection
      * @param plugin the Plugin

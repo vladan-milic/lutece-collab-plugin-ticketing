@@ -8,6 +8,7 @@
         <input type="hidden" id="guid" name="guid" value=""/>
         <@fieldInputCombo i18nLabelKey="ticketing.modify_ticketcategory.labelIdTicketDomain" inputName="id_ticket_domain" items=ticket_domains_list value="${ticketcategory.idTicketDomain!''}" i18nHelpBlockKey="ticketing.modify_ticketcategory.labelIdTicketDomain.help" cssClass='form-control' />
         <@fieldInputText i18nLabelKey="ticketing.modify_ticketcategory.labelLabel" inputName="label" mandatory=true value="${ticketcategory.label}" i18nHelpBlockKey="ticketing.modify_ticketcategory.labelLabel.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_ticketcategory.labelCode" inputName="code" mandatory=false value="${ticketcategory.code!''}" i18nHelpBlockKey="ticketing.modify_ticketcategory.labelCode.help" />
         <#if listWorkflows??>
 			<@fieldInputCombo i18nLabelKey='ticketing.modify_ticketcategory.labelWorkflow' inputName='idWorkflow' items=listWorkflows value="${ticketcategory.idWorkflow!}" i18nHelpBlockKey="ticketing.modify_ticketcategory.labelWorkflow.help" cssClass="form-control" />
 		</#if>
