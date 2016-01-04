@@ -45,7 +45,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -143,7 +142,6 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String MARK_TICKET_LIST = "ticket_list";
     private static final String MARK_TICKET = "ticket";
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";
-    private static final String MARK_FORM_GENERIC_ATTRIBUTES_MAP_HTML = "generic_attributes_form_map_html";
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
@@ -587,7 +585,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         populate( _ticket, request );
 
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
-        if ( _ticket.getIdTicketCategory( ) >= 0 )
+        if ( _ticket.getIdTicketCategory( ) > 0 )
         {
             EntryFilter filter = new EntryFilter( );
             TicketForm form = TicketFormHome.findByCategoryId( _ticket.getIdTicketCategory( ) );
