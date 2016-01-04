@@ -61,6 +61,7 @@ import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
+import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -182,6 +183,8 @@ public class TicketXPage extends MVCApplication
         
         addInfo( INFO_TICKET_CREATED, getLocale( request ) );
 
+        TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles(
+                request.getSession( ).getId( ) );
         return redirectView( request, VIEW_CONFIRM_TICKET );
     }
 
@@ -196,7 +199,6 @@ public class TicketXPage extends MVCApplication
     public XPage getRecapTicket( HttpServletRequest request )
     {
         _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
-
         Map<String, Object> model = getModel( );
         model.put( MARK_TICKET_ACTION, getActionTypeFromSession( request.getSession( ) ) );
         model.put( MARK_TICKET, _ticket );
@@ -217,10 +219,11 @@ public class TicketXPage extends MVCApplication
     @Action( ACTION_RECAP_TICKET )
     public XPage doRecapTicket( HttpServletRequest request )
     {
+        _ticket = ( _ticket != null ) ? _ticket : new Ticket( );
         populate( _ticket, request );
         _ticket.setListResponse( new ArrayList<Response>( ) );
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
-        if ( _ticket.getIdTicketCategory( ) >= 0 )
+        if ( _ticket.getIdTicketCategory( ) > 0 )
         {
             EntryFilter filter = new EntryFilter( );
             TicketForm form = TicketFormHome.findByCategoryId( _ticket.getIdTicketCategory( ) );
@@ -245,7 +248,7 @@ public class TicketXPage extends MVCApplication
         }
 
         // Check constraints
-        if ( !validateBean( _ticket, getLocale( request ) ) )
+        if ( !validateBean( _ticket ) )
         {
             if ( getActionTypeFromSession( request.getSession( ) ).equals( ACTION_CREATE_TICKET ) )
             {

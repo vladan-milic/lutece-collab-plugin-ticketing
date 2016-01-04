@@ -38,6 +38,7 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
@@ -77,12 +78,15 @@ public class Ticket implements Serializable
     private String _strFixedPhoneNumber;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.MobilePhoneNumber.size}" )
     private String _strMobilePhoneNumber;
+    @Min(value = 1, message = "#i18n{ticketing.validation.ticket.TicketType.mandatory}")
     private int _nIdTicketType;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketType.size}" )
     private String _strTicketType;
+    @Min(value = 1, message = "#i18n{ticketing.validation.ticket.TicketDomain.mandatory}")
     private int _nIdTicketDomain;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketDomain.size}" )
     private String _strTicketDomain;
+    @Min(value = 1, message = "#i18n{ticketing.validation.ticket.TicketCategory.mandatory}")
     private int _nIdTicketCategory;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketCategory.size}" )
     private String _strTicketCategory;
