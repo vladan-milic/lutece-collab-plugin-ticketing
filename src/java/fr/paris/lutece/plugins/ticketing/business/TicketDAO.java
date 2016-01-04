@@ -66,8 +66,8 @@ public final class TicketDAO implements ITicketDAO
     // SQL commands to manage appointment responses
     private static final String SQL_QUERY_INSERT_TICKET_RESPONSE = "INSERT INTO ticketing_ticket_response (id_ticket, id_response) VALUES (?,?)";
     private static final String SQL_QUERY_SELECT_TICKET_RESPONSE_LIST = "SELECT id_response FROM ticketing_ticket_response WHERE id_ticket = ?";
-    private static final String SQL_QUERY_DELETE_TICKET_RESPONSE = "DELETE FROM ticketing_ticket_response WHERE id_ticket = ?";
-    private static final String SQL_QUERY_REMOVE_FROM_ID_RESPONSE = "DELETE FROM ticketing_ticket_response WHERE id_response = ?";
+    private static final String SQL_QUERY_DELETE_TICKET_RESPONSE = "DELETE tr, gr FROM ticketing_ticket_response tr JOIN genatt_response gr ON gr.id_response = tr.id_response WHERE tr.id_ticket = ?";
+    private static final String SQL_QUERY_REMOVE_FROM_ID_RESPONSE = "DELETE tr, gr FROM ticketing_ticket_response tr JOIN genatt_response gr ON gr.id_response = tr.id_response WHERE gr.id_response = ?";
     private static final String SQL_QUERY_FIND_ID_TICKET_FROM_ID_RESPONSE = " SELECT id_ticket FROM ticketing_ticket_response WHERE id_response = ? ";
 
     
