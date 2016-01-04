@@ -1,3 +1,5 @@
+<#include "/skin/plugins/asynchronousupload/upload_commons.html" />
+
 <@rowBoxHeader i18nTitleKey="ticketing.create_ticket.pageTitle">
     <form class="form-horizontal" method="post" name="create_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
         <@messages errors=errors />
@@ -22,3 +24,5 @@
 
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
 <script src="js/plugins/ticketing/ticket_form.js"></script>
+<@addRequiredJsFiles />
+<script type="text/javascript" src="jsp/site/plugins/asynchronousupload/GetMainUploadJs.jsp?handler=ticketAsynchronousUploadHandler" ></script>

@@ -33,12 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
+
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
@@ -47,12 +51,9 @@ import org.apache.commons.lang.StringUtils;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
-import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
-import fr.paris.lutece.plugins.genericattributes.business.GenAttFileItem;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
-import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
@@ -68,12 +69,15 @@ import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
+import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
+import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
@@ -83,7 +87,6 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
-
 
 /**
  * ManageTickets JSP Bean abstract class for JSP Bean
@@ -122,10 +125,12 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String PARAMETER_ID_ACTION = "id_action";
     private static final String PARAMETER_BACK = "back";
     private static final String PARAMETER_GUID = "guid";
-    // private static final String PARAMETER_FIRSTNAME = "fn";
-    // private static final String PARAMETER_LASTNAME = "ln";
-    // private static final String PARAMETER_PHONE = "ph";
-    // private static final String PARAMETER_EMAIL = "em";
+    private static final String PARAMETER_ID_RESPONSE = "idResponse";
+    private static final String PARAMETER_FIRSTNAME = "fn";
+    private static final String PARAMETER_LASTNAME = "ln";
+    private static final String PARAMETER_PHONE = "ph";
+    private static final String PARAMETER_EMAIL = "em";
+    private static final String PARAMETER_CATEGORY = "cat";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETS = "ticketing.manage_tickets.pageTitle";
@@ -146,10 +151,6 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String MARK_TASKS_FORM = "tasks_form";
     private static final String JSP_MANAGE_TICKETS = "jsp/admin/plugins/ticketing/ManageTickets.jsp";
     private static final String MARK_GUID = "guid";
-    // private static final String MARK_FIRSTNAME = "firstname";
-    // private static final String MARK_LASTNAME = "lastname";
-    // private static final String MARK_PHONE = "phone";
-    // private static final String MARK_EMAIL = "email";
     
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
@@ -204,6 +205,8 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     {
         _ticket = null;
         _ticketFormService.removeTicketFromSession( request.getSession( ) );
+        TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles(
+                request.getSession( ).getId( ) );
 
         List<Ticket> listTickets = (List<Ticket>) TicketHome.getTicketsList(  );
         _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
@@ -261,6 +264,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @View( VIEW_CREATE_TICKET )
     public String getCreateTicket( HttpServletRequest request )
     {
+        clearUploadFilesIfNeeded( request.getSession( ) );
         _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
         _ticket = ( _ticket != null ) ? _ticket : new Ticket(  );
 
@@ -275,24 +279,50 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private void initTicketForm(HttpServletRequest request, Map<String, Object> model)
     {
         String strGuid = request.getParameter( PARAMETER_GUID );
-        // String strFirstname = request.getParameter( PARAMETER_FIRSTNAME );
-        // String strLastname = request.getParameter( PARAMETER_LASTNAME );
-        // String strPhone = request.getParameter( PARAMETER_PHONE );
-        // String strEmail = request.getParameter( PARAMETER_EMAIL );
+        String strFirstname = request.getParameter( PARAMETER_FIRSTNAME );
+        String strLastname = request.getParameter( PARAMETER_LASTNAME );
+        String strPhone = request.getParameter( PARAMETER_PHONE );
+        String strEmail = request.getParameter( PARAMETER_EMAIL );
+        String strCategory = request.getParameter( PARAMETER_CATEGORY );
 
+        if( ! StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty(  _ticket.getFirstname() ))
+        {
+            _ticket.setFirstname( strFirstname );
+        }
+        if( ! StringUtils.isEmpty( strLastname ) && StringUtils.isEmpty(  _ticket.getLastname() ))
+        {
+            _ticket.setLastname( strLastname );
+        }
+        if( ! StringUtils.isEmpty( strPhone ) && StringUtils.isEmpty(  _ticket.getMobilePhoneNumber() ))
+        {
+            _ticket.setMobilePhoneNumber(strPhone);
+        }
+        if( ! StringUtils.isEmpty( strEmail ) && StringUtils.isEmpty(  _ticket.getEmail() ))
+        {
+            _ticket.setEmail( strEmail );
+        }
+        if( ! StringUtils.isEmpty( strCategory ) && (_ticket.getIdTicketCategory() == 0 ))
+        {
+            TicketCategory category = TicketCategoryHome.findByCode( strCategory );
+            if( category != null )
+            {
+                _ticket.setIdTicketCategory( category.getId() );
+                _ticket.setIdTicketDomain( category.getIdTicketDomain() );
+                _ticket.setIdTicketType( category.getIdTicketType() );
+            }
+        }
+        
+        
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );
-        // FIXME Dynamic filling
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
         model.put ( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList ( ) );
         model.put( MARK_TICKET, _ticket );
         model.put( MARK_GUID, strGuid );
-        // model.put(MARK_FIRSTNAME,strFirstname);
-        // model.put(MARK_LASTNAME, strLastname);
-        // model.put(MARK_PHONE, strPhone);
-        // model.put(MARK_EMAIL, strEmail);
     }
+    
+    
 
     /**
      * Process the data capture form of a new ticket
@@ -362,14 +392,12 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     public String doRemoveTicket( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKET ) );
-
         if ( WorkflowService.getInstance( ).isAvailable( ) )
         {
             WorkflowService.getInstance( ).doRemoveWorkFlowResource( nId,
                     Ticket.TICKET_RESOURCE_TYPE );
         }
-        TicketHome.removeTicketResponse( nId );
-        TicketHome.remove( nId );
+        TicketHelper.removeTicket( nId );
         addInfo( INFO_TICKET_REMOVED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETS );
@@ -409,43 +437,13 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @View( VIEW_MODIFY_TICKET )
     public String getModifyTicket( HttpServletRequest request )
     {
+        clearUploadFilesIfNeeded( request.getSession( ) );
         _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKET ) );
 
         if ( ( _ticket == null ) || ( _ticket.getId(  ) != nId ) )
         {
-            _ticket = TicketHome.findByPrimaryKey( nId );
-
-            List<Integer> listIdResponse = TicketHome.findListIdResponse( _ticket.getId( ) );
-            List<Response> listResponses = new ArrayList<Response>( listIdResponse.size( ) );
-
-            for ( int nIdResponse : listIdResponse )
-            {
-                Response response = ResponseHome.findByPrimaryKey( nIdResponse );
-
-                if ( response.getField( ) != null )
-                {
-                    response.setField( FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) ) );
-                }
-
-                if ( response.getFile( ) != null )
-                {
-                    fr.paris.lutece.portal.business.file.File file = FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) );
-                    PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) );
-                    file.setPhysicalFile( physicalFile );
-                    response.setFile( file );
-
-                    String strIdEntry = Integer.toString( response.getEntry( ).getIdEntry( ) );
-
-                    FileItem fileItem = new GenAttFileItem( physicalFile.getValue( ), file.getTitle( ), IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry, response.getIdResponse( ) );
-                    TicketAsynchronousUploadHandler.getHandler( ).addFileItemToUploadedFilesList( fileItem, IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry, request );
-                }
-
-                listResponses.add( response );
-            }
-
-            _ticket.setListResponse( listResponses );
-            _ticketFormService.saveTicketInSession( request.getSession( ), _ticket );
+            _ticket = TicketHelper.getTicketWithGenAttrResp( nId, request );
         }
 
         Map<String, Object> model = getModel(  );
@@ -730,4 +728,71 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         session.removeAttribute( SESSION_ACTION_TYPE );
     }
 
+    /**
+     * Do download a file from an appointment response
+     * 
+     * @param request
+     *            The request
+     * @param httpResponse
+     *            The response
+     * @return nothing.
+     * @throws AccessDeniedException
+     *             If the user is not authorized to access this feature
+     */
+    public String getDownloadFile(HttpServletRequest request, HttpServletResponse httpResponse)
+            throws AccessDeniedException
+    {
+        String strIdResponse = request.getParameter( PARAMETER_ID_RESPONSE );
+
+        if ( StringUtils.isEmpty( strIdResponse ) || !StringUtils.isNumeric( strIdResponse ) )
+        {
+            return redirect( request, TicketFormJspBean.getURLManageTicketForms( request ) );
+        }
+
+        int nIdResponse = Integer.parseInt( strIdResponse );
+
+        Response response = ResponseHome.findByPrimaryKey( nIdResponse );
+        File file = FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) );
+        PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( )
+                .getIdPhysicalFile( ) );
+
+        httpResponse.setHeader( "Content-Disposition", "attachment; filename=\"" + file.getTitle( )
+                + "\";" );
+        httpResponse.setHeader( "Content-type", file.getMimeType( ) );
+        httpResponse.addHeader( "Content-Encoding", "UTF-8" );
+        httpResponse.addHeader( "Pragma", "public" );
+        httpResponse.addHeader( "Expires", "0" );
+        httpResponse.addHeader( "Cache-Control", "must-revalidate,post-check=0,pre-check=0" );
+
+        try
+        {
+            OutputStream os = httpResponse.getOutputStream( );
+            os.write( physicalFile.getValue( ) );
+            // We do not close the output stream in finaly clause because it is
+            // the response stream,
+            // and an error message needs to be displayed if an exception occurs
+            os.close( );
+        } catch ( IOException e )
+        {
+            AppLogService.error( e.getStackTrace( ), e );
+        }
+
+        return StringUtils.EMPTY;
+    }
+
+    /**
+     * Clear uploaded files if needed.
+     * 
+     * @param session
+     *            The session of the current user
+     */
+    private void clearUploadFilesIfNeeded(HttpSession session)
+    {
+        // If we do not reload an appointment, we clear uploaded files.
+        if ( ( _ticketFormService.getTicketFromSession( session ) == null )
+                && ( _ticketFormService.getValidatedTicketFromSession( session ) == null ) )
+        {
+            TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session.getId( ) );
+        }
+    }
 }

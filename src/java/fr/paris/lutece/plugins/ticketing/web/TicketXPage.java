@@ -61,6 +61,7 @@ import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
+import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -182,6 +183,8 @@ public class TicketXPage extends MVCApplication
         
         addInfo( INFO_TICKET_CREATED, getLocale( request ) );
 
+        TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles(
+                request.getSession( ).getId( ) );
         return redirectView( request, VIEW_CONFIRM_TICKET );
     }
 

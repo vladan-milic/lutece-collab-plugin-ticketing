@@ -8,6 +8,8 @@
 				<input name="action" value="doModifyEntry" type="hidden">
 				<label for="title">#i18n{ticketing.createEntry.labelTitle} * </label>
 				<input type="text" name="title" id="title" class="form-control" value="${entry.title}"  maxlength="255">
+				<label for="title">#i18n{ticketing.createEntry.labelCode}* : </label>
+				<input type="text" name="entry_code" id="entry_code" class="form-control" value="${entry.code!}"  maxlength="20">
 				<span class="help-block">#i18n{ticketing.createEntry.labelTitleComment}</span>
 				<label for="help_message">#i18n{ticketing.createEntry.labelHelpMessage}</label>
 				<textarea  name="help_message"  id="help_message" rows="2" class="form-control">${entry.helpMessage}</textarea>

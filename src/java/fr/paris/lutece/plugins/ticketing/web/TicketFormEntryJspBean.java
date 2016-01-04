@@ -85,6 +85,8 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
     private static final String PARAMETER_ID_FORM = "id_form";
     private static final String PARAMETER_ID_FIELD = "id_field";
     private static final String PARAMETER_ID_ENTRY = "id_entry";
+    private static final String PARAMETER_ENTRY_CODE = "entry_code";
+    private static final String PARAMETER_FIELD_CODE = "field_code";
     private static final String PARAMETER_CANCEL = "cancel";
     private static final String PARAMETER_APPLY = "apply";
     private static final String PARAMETER_ORDER_ID = "order_id_";
@@ -98,8 +100,11 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
     private static final String PARAMETER_NO_DISPLAY_TITLE = "no_display_title";
     private static final String PARAMETER_COMMENT = "comment";
     private static final String PARAMETER_FORM_GENERICATTR = "form_genericatt";
+    private static final String FIELD_ENTRY_CODE = "ticketing.createEntry.labelCode";
     private static final String FIELD_TITLE_FIELD = "ticketing.createField.labelTitle";
+    private static final String FIELD_CODE_FIELD = "ticketing.createField.labelCode";
     private static final String FIELD_VALUE_FIELD = "ticketing.createField.labelValue";
+
 
     // Urls
     private static final String JSP_URL_MANAGE_TICKETING_FORM_ENTRIES = "jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp";
@@ -220,6 +225,8 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
             return redirect( request, TicketFormJspBean.getURLManageTicketForms( request ) );
         }
 
+
+
         String strIdType = request.getParameter( PARAMETER_ID_ENTRY_TYPE );
 
         int nIdForm = Integer.parseInt( strIdForm );
@@ -249,10 +256,18 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
 
             String strError = EntryTypeServiceManager.getEntryTypeService( entry )
                                                      .getRequestData( entry, request, getLocale(  ) );
-
             if ( strError != null )
             {
                 return redirect( request, strError );
+            }
+            // entry code is mandatory for ticketing
+            String strEntryCode = request.getParameter( PARAMETER_ENTRY_CODE );
+            if ( StringUtils.isEmpty( strEntryCode ) )
+            {
+                String [] tabErr = new String[]{FIELD_ENTRY_CODE};
+                return redirect( request, AdminMessageService.getMessageUrl( request,
+                        MESSAGE_MANDATORY_FIELD, tabErr,
+                        AdminMessage.TYPE_STOP ));
             }
 
             entry.setIdResource( nIdForm );
@@ -354,6 +369,7 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
     private String getFieldData( HttpServletRequest request, Field field )
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
+        String strCode = request.getParameter( PARAMETER_FIELD_CODE );
         String strValue = request.getParameter( PARAMETER_VALUE );
         String strDefaultValue = request.getParameter( PARAMETER_DEFAULT_VALUE );
         String strNoDisplayTitle = request.getParameter( PARAMETER_NO_DISPLAY_TITLE );
@@ -364,7 +380,11 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
         if ( StringUtils.isEmpty( strTitle ) )
         {
             strFieldError = FIELD_TITLE_FIELD;
-        }
+        } else
+            if ( StringUtils.isEmpty( strCode ) )
+            {
+                strFieldError = FIELD_CODE_FIELD;
+            }
         else if ( StringUtils.isEmpty( strValue ) )
         {
             strFieldError = FIELD_VALUE_FIELD;
@@ -385,6 +405,7 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
         field.setTitle( strTitle );
         field.setValue( strValue );
         field.setComment( strComment );
+        field.setCode( strCode );
 
         field.setDefaultValue( strDefaultValue != null );
         field.setNoDisplayTitle( strNoDisplayTitle != null );
@@ -417,6 +438,15 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
             {
                 String strError = EntryTypeServiceManager.getEntryTypeService( entry )
                                                          .getRequestData( entry, request, getLocale(  ) );
+                // entry code is mandatory for ticketing
+                String strEntryCode = request.getParameter( PARAMETER_ENTRY_CODE );
+                if ( StringUtils.isEmpty( strEntryCode ) )
+                {
+                    String[] tabErr = new String[]
+                    { FIELD_ENTRY_CODE };
+                    return redirect( request, AdminMessageService.getMessageUrl( request,
+                            MESSAGE_MANDATORY_FIELD, tabErr, AdminMessage.TYPE_STOP ) );
+                }
 
                 if ( strError != null )
                 {

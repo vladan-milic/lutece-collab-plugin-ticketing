@@ -104,12 +104,14 @@ public class TicketFormFieldJspBean extends MVCAdminJspBean
     private static final String PARAMETER_CANCEL = "cancel";
     private static final String PARAMETER_APPLY = "apply";
     private static final String PARAMETER_TITLE = "title";
+    private static final String PARAMETER_CODE = "field_code";
     private static final String PARAMETER_VALUE = "value";
     private static final String PARAMETER_DEFAULT_VALUE = "default_value";
     private static final String PARAMETER_NO_DISPLAY_TITLE = "no_display_title";
     private static final String PARAMETER_COMMENT = "comment";
     private static final String PARAMETER_FORM_GENERICATTR = "form_genericatt";
     private static final String FIELD_TITLE_FIELD = "ticketing.createField.labelTitle";
+    private static final String FIELD_CODE_FIELD = "ticketing.createField.labelCode";
     private static final String FIELD_VALUE_FIELD = "ticketing.createField.labelValue";
 
     // Templates
@@ -431,6 +433,7 @@ public class TicketFormFieldJspBean extends MVCAdminJspBean
     private String getFieldData( HttpServletRequest request, Field field )
     {
         String strTitle = request.getParameter( PARAMETER_TITLE );
+        String strCode = request.getParameter( PARAMETER_CODE );
         String strValue = request.getParameter( PARAMETER_VALUE );
         String strDefaultValue = request.getParameter( PARAMETER_DEFAULT_VALUE );
         String strNoDisplayTitle = request.getParameter( PARAMETER_NO_DISPLAY_TITLE );
@@ -441,6 +444,10 @@ public class TicketFormFieldJspBean extends MVCAdminJspBean
         if ( StringUtils.isEmpty( strTitle ) )
         {
             strFieldError = FIELD_TITLE_FIELD;
+        } else
+            if ( StringUtils.isEmpty( strCode ) )
+            {
+                strFieldError = FIELD_CODE_FIELD;
         }
         else if ( StringUtils.isEmpty( strValue ) )
         {
@@ -459,6 +466,7 @@ public class TicketFormFieldJspBean extends MVCAdminJspBean
                 AdminMessage.TYPE_STOP );
         }
 
+        field.setCode( strCode );
         field.setTitle( strTitle );
         field.setValue( strValue );
         field.setComment( strComment );
