@@ -36,6 +36,8 @@ package fr.paris.lutece.plugins.ticketing.business;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -112,7 +114,9 @@ public final class ContactModeDAO implements IContactModeDAO
             contactMode = new ContactMode();
             contactMode.setId ( daoUtil.getInt ( 1 ) );
             contactMode.setLabel ( daoUtil.getString ( 2 ) );
-            contactMode.setConfirmationMsg( daoUtil.getString( 3 ) );
+            contactMode
+                    .setConfirmationMsg( daoUtil.getString( 3 ) == null ? StringUtils.EMPTY
+                    : daoUtil.getString( 3 ) );
         }
 
         daoUtil.free(  );
@@ -165,7 +169,8 @@ public final class ContactModeDAO implements IContactModeDAO
 
             contactMode.setId ( daoUtil.getInt ( 1 ) );
             contactMode.setLabel ( daoUtil.getString ( 2 ) );
-            contactMode.setConfirmationMsg( daoUtil.getString( 3 ) );
+            contactMode.setConfirmationMsg( daoUtil.getString( 3 ) == null ? StringUtils.EMPTY
+                            : daoUtil.getString( 3 ) );
 
             contactModeList.add ( contactMode );
         }

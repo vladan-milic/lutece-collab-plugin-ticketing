@@ -103,6 +103,16 @@ public final class TicketCategoryHome
     {
         return _dao.load( nKey, _plugin );
     }
+    
+    /**
+     * Find a category by its code 
+     * @param strCode The code
+     * @return The category
+     */
+    public static TicketCategory findByCode( String strCode )
+    {
+        return _dao.loadByCode( strCode , _plugin );
+    }
 
     /**
      * Load the data of all the ticketCategory objects and returns them in form of a collection
