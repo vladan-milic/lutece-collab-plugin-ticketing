@@ -36,10 +36,14 @@ package fr.paris.lutece.plugins.ticketing.business;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormCacheService;
+import fr.paris.lutece.portal.business.file.FileHome;
+import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
+import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -86,11 +90,15 @@ public final class TicketHome
     }
 
     /**
-     * Remove the ticket whose identifier is specified in parameter
-     * @param nKey The ticket Id
+     * Remove the ticket and its generic attributes responses whose identifier
+     * is specified in parameter
+     * 
+     * @param nKey
+     *            The ticket Id
      */
     public static void remove( int nKey )
     {
+        removeTicketResponse( nKey );
         _dao.delete( nKey, _plugin );
     }
 
@@ -98,13 +106,49 @@ public final class TicketHome
     // Finders
 
     /**
-     * Returns an instance of a ticket whose identifier is specified in parameter
-     * @param nKey The ticket primary key
+     * Returns an instance of a ticket whose identifier is specified in
+     * parameter generic attributes responses are also loaded
+     * 
+     * @param nKey
+     *            The ticket primary key
      * @return an instance of Ticket
      */
     public static Ticket findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, _plugin );
+        Ticket ticket = _dao.load( nKey, _plugin );
+        if ( ticket != null )
+        {
+            // retrieving tickets generic attributes response
+            List<Integer> listIdResponse = TicketHome.findListIdResponse( ticket.getId( ) );
+            List<Response> listResponses = new ArrayList<Response>( listIdResponse.size( ) );
+
+            if ( listIdResponse != null )
+            {
+                for ( int nIdResponse : listIdResponse )
+                {
+                    Response response = ResponseHome.findByPrimaryKey( nIdResponse );
+
+                    if ( response.getField( ) != null )
+                    {
+                        response.setField( FieldHome.findByPrimaryKey( response.getField( )
+                                .getIdField( ) ) );
+                    }
+
+                    if ( response.getFile( ) != null )
+                    {
+                        fr.paris.lutece.portal.business.file.File file = FileHome
+                                .findByPrimaryKey( response.getFile( ).getIdFile( ) );
+                        PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file
+                                .getPhysicalFile( ).getIdPhysicalFile( ) );
+                        file.setPhysicalFile( physicalFile );
+                        response.setFile( file );
+                    }
+                    listResponses.add( response );
+                }
+            }
+            ticket.setListResponse( listResponses );
+        }
+        return ticket;
     }
 
     /**
@@ -146,6 +190,7 @@ public final class TicketHome
      * @param nIdticket the id of the ticket
      * @return the list of responses, or an empty list if no response was found
      */
+    @SuppressWarnings("unchecked")
     public static List<Integer> findListIdResponse( int nIdticket )
     {
         String strCacheKey = _cacheService.getTicketResponseCacheKey( nIdticket );

@@ -95,6 +95,7 @@ public class Ticket implements Serializable
     private String _strContactMode;
     private String _strTicketComment;
     private String _strConfirmationMsg;
+    private String _strGuid;
     private int _nTicketStatus;
     @Size( max = 255, message = "#i18n{ticketing.validation.ticket.TicketStatusText.size}" )
     private String _strTicketStatusText;
@@ -578,4 +579,23 @@ public class Ticket implements Serializable
     {
         this._listResponse = listResponse;
     }
+
+    /**
+     * 
+     * @return the _strGuid
+     */
+    public String getGuid()
+    {
+        return _strGuid;
+    }
+
+    /**
+     * @param Guid
+     *            the Guid to set
+     */
+    public void setGuid(String strGuid)
+    {
+        this._strGuid = strGuid;
+    }
+
 }
