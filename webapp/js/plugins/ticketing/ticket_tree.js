@@ -32,6 +32,8 @@ function lutece_ticket_tree(id_type, id_domain, id_category) {
                 var domain = types_map[type_id].domains_map[domain_id];
                 if (typeof(domain) != 'undefined') {
                     load_category_combo(domain, initial_category_id);
+                } else {
+                	resetGenericAttributesForm();
                 }
             }
         };
@@ -48,6 +50,8 @@ function lutece_ticket_tree(id_type, id_domain, id_category) {
                 var domain = types_map[type_id].domains_map[domain_id];
                 if (typeof(domain) != 'undefined') {
                     load_category_combo(domain, initial_category_id);
+                } else {
+                	resetGenericAttributesForm();
                 }
             }
         };
@@ -68,10 +72,18 @@ function lutece_ticket_tree(id_type, id_domain, id_category) {
         }
         var load_category_combo = function(domain, initial_category_id) {
             var categories = domain.categories;
+            var has_category_changed = true ;
             for (var i = 0; i<categories.length; i++) {
                 var selected = initial_category_id == categories[i].id ? " selected=\"selected\"" : "";
                 var newOption = "<option value=\"" +categories[i].id + "\"" + selected + ">" + categories[i].label + "</option>";
                 $(newOption).appendTo(id_category);
+                if (selected) {
+                	has_category_changed = false;
+                }
+            }
+            
+            if( has_category_changed ) {
+            	loadGenericAttributesForm();
             }
         }
 
@@ -80,5 +92,31 @@ function lutece_ticket_tree(id_type, id_domain, id_category) {
         var domain_id = $(id_domain).val();
         var category_id = $(id_category).val();
         change_ticket_type_impl(domain_id, category_id);
+        
     });
+}
+//load generic attributes form from selected category
+function loadGenericAttributesForm() {
+	$.ajax({
+        url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+getSelectedCategoryValue(),
+        type: "GET",
+        dataType : "html",
+        success: function( response ) {
+			$('#generic_attributes').replaceWith('<div id="generic_attributes">' + response + '</div>');
+        }
+    });
+}
+//reset generic attributes form
+function resetGenericAttributesForm() {
+	$('#generic_attributes').replaceWith('<div id="generic_attributes"></div>');
+}
+//returns selected category value
+function getSelectedCategoryValue()  {
+	var categorySelect = document.getElementById("id_ticket_category");
+	var catValue = -1;	
+	if(categorySelect.options[categorySelect.selectedIndex] != undefined) 
+	{
+		catValue = categorySelect.options[categorySelect.selectedIndex].value;
+	}
+	return catValue ;
 }

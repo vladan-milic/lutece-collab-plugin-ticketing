@@ -123,6 +123,17 @@
 
 
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
-<script src="js/plugins/ticketing/ticket_form.js"></script>
+<script language="javascript"> 
+    $(document).ready(function() {
+            lutece_ticket_tree("#id_ticket_type", "#id_ticket_domain", "#id_ticket_category");
+			if (getSelectedCategoryValue() > 0 ) {
+				loadGenericAttributesForm();
+			}
+			var categorySelect = document.getElementById("id_ticket_category");
+			categorySelect.onchange=function(){
+						loadGenericAttributesForm();
+			}
+    });
+</script>
 <@addRequiredJsFiles />
 <script type="text/javascript" src="jsp/site/plugins/asynchronousupload/GetMainUploadJs.jsp?handler=ticketAsynchronousUploadHandler" ></script>
