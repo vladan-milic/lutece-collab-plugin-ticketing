@@ -45,14 +45,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
+import fr.paris.lutece.plugins.genericattributes.business.GenAttFileItem;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
@@ -309,7 +312,10 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
                 _ticket.setIdTicketType( category.getIdTicketType() );
             }
         }
-        
+        if ( !StringUtils.isEmpty( strGuid ) && StringUtils.isEmpty( _ticket.getGuid( ) ) )
+        {
+            _ticket.setGuid( strGuid );
+        }
         
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
@@ -395,7 +401,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
             WorkflowService.getInstance( ).doRemoveWorkFlowResource( nId,
                     Ticket.TICKET_RESOURCE_TYPE );
         }
-        TicketHelper.removeTicket( nId );
+        TicketHome.remove( nId );
         addInfo( INFO_TICKET_REMOVED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETS );
@@ -441,7 +447,22 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
 
         if ( ( _ticket == null ) || ( _ticket.getId(  ) != nId ) )
         {
-            _ticket = TicketHelper.getTicketWithGenAttrResp( nId, request );
+            _ticket = TicketHome.findByPrimaryKey( nId );
+
+            for ( Response  response : _ticket.getListResponse( ))
+            {
+                if ( response.getFile( ) != null )
+                {
+                    String strIdEntry = Integer.toString( response.getEntry( ).getIdEntry( ) );
+                    
+                    FileItem fileItem = new GenAttFileItem( response.getFile( ).getPhysicalFile( ).getValue( ),
+                            response.getFile( ).getTitle( ), IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry,
+                            response.getIdResponse( ) );
+                    TicketAsynchronousUploadHandler.getHandler( )
+                            .addFileItemToUploadedFilesList( fileItem,
+                                    IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry, request );
+                }
+            }
         }
 
         Map<String, Object> model = getModel(  );
