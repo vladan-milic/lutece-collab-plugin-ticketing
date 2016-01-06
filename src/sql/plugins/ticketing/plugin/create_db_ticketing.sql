@@ -23,6 +23,8 @@ ticket_status_text varchar(255) NULL default '',
 date_update timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 date_create timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 date_close timestamp NULL,
+id_admin_user int(11) NOT NULL default '-1',
+id_unit int(11) NOT NULL default '0', 
 PRIMARY KEY (id_ticket)
 );
 
