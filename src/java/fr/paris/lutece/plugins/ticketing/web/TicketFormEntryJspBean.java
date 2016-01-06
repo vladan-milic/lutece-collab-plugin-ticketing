@@ -264,7 +264,8 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
             String strEntryCode = request.getParameter( PARAMETER_ENTRY_CODE );
             if ( StringUtils.isEmpty( strEntryCode ) )
             {
-                String [] tabErr = new String[]{FIELD_ENTRY_CODE};
+                String[] tabErr = new String[]
+                { I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) ) };
                 return redirect( request, AdminMessageService.getMessageUrl( request,
                         MESSAGE_MANDATORY_FIELD, tabErr,
                         AdminMessage.TYPE_STOP ));
@@ -443,7 +444,7 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
                 if ( StringUtils.isEmpty( strEntryCode ) )
                 {
                     String[] tabErr = new String[]
-                    { FIELD_ENTRY_CODE };
+                    { I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) ) };
                     return redirect( request, AdminMessageService.getMessageUrl( request,
                             MESSAGE_MANDATORY_FIELD, tabErr, AdminMessage.TYPE_STOP ) );
                 }
