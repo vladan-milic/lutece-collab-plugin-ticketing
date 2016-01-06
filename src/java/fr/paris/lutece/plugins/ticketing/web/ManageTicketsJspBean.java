@@ -337,14 +337,6 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( _ticket
                 .getIdTicketCategory( ) );
         int nIdWorkflow = ticketCategory.getIdWorkflow( );
-
-        if ( nIdWorkflow > 0 )
-        {
-            WorkflowService.getInstance( ).getState( _ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE,
-                    nIdWorkflow, ticketCategory.getId( ) );
-            WorkflowService.getInstance( ).executeActionAutomatic( _ticket.getId( ),
-                    Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
-        }
         
 		if ( _ticket.getListResponse( ) != null && !_ticket.getListResponse( ).isEmpty( ) )
         {
@@ -352,6 +344,22 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
             {
                 ResponseHome.create( response );
                 TicketHome.insertTicketResponse( _ticket.getId( ), response.getIdResponse( ) );
+            }
+        }
+
+        if ( nIdWorkflow > 0 )
+        {
+            try
+            {
+                WorkflowService.getInstance( ).getState( _ticket.getId( ),
+                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+                WorkflowService.getInstance( ).executeActionAutomatic( _ticket.getId( ),
+                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+            } 
+            catch ( Exception e )
+            {
+                TicketHelper.removeTicket( _ticket.getId( ) );
+                throw e;
             }
         }
         
