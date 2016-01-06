@@ -144,6 +144,8 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
     private static final String MARK_FORM = "form";
     private static final String MARK_ENTRY_TYPE_SERVICE = "entryTypeService";
 
+    private static final String ENTRY_TYPE_LUTECE_USER_BEAN_NAME = "ticketing.entryTypeMyLuteceUser";
+
     // Local variables
     private EntryService _entryService = EntryService.getService(  );
 
@@ -262,7 +264,9 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
             }
             // entry code is mandatory for ticketing
             String strEntryCode = request.getParameter( PARAMETER_ENTRY_CODE );
-            if ( StringUtils.isEmpty( strEntryCode ) )
+            if ( StringUtils.isEmpty( strEntryCode )
+                    && !entry.getEntryType( ).getBeanName( )
+                            .equals( ENTRY_TYPE_LUTECE_USER_BEAN_NAME ) )
             {
                 String[] tabErr = new String[]
                 { I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) ) };
