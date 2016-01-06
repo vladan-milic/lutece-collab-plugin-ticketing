@@ -106,6 +106,7 @@ public class Ticket implements Serializable
     private List<Response> _listResponse;   
     private int _nCriticality;
     private int _nPriority;
+    private String _strCustomerId;
    
     
     /**
@@ -636,6 +637,27 @@ public class Ticket implements Serializable
     public void setPriority( int nPriority )
     {
         _nPriority = nPriority;
+    }
+
+    /**
+     * Returns the CustomerId
+     * 
+     * @return The CustomerId
+     */
+    public String getCustomerId( )
+    {
+        return _strCustomerId;
+    }
+
+    /**
+     * Sets the CustomerId
+     * 
+     * @param strCustomerId
+     *            The CustomerId
+     */
+    public void setCustomerId( String strCustomerId )
+    {
+        _strCustomerId = strCustomerId;
     }
 
     
