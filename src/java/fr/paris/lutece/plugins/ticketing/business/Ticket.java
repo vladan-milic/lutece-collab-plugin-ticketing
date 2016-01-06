@@ -107,7 +107,8 @@ public class Ticket implements Serializable
     private int _nCriticality;
     private int _nPriority;
     private String _strCustomerId;
-   
+    private AssigneeUser _user;   
+    private AssigneeUnit _unit;   
     
     /**
      * @return */
@@ -661,4 +662,39 @@ public class Ticket implements Serializable
     }
 
     
+           /**
+        * Returns the AssigneeUser
+        * @return The AssigneeUser
+        */ 
+    public AssigneeUser getAssigneeUser()
+    {
+        return _user;
+    }
+    
+       /**
+        * Sets the AssigneeUser
+        * @param AssigneeUser The AssigneeUser
+        */ 
+    public void setAssigneeUser( AssigneeUser AssigneeUser )
+    {
+        _user = AssigneeUser;
+    }
+    
+       /**
+        * Returns the AssigneeUnit
+        * @return The AssigneeUnit
+        */ 
+    public AssigneeUnit getAssigneeUnit()
+    {
+        return _unit;
+    }
+    
+       /**
+        * Sets the AssigneeUnit
+        * @param AssigneeUnit The AssigneeUnit
+        */ 
+    public void setAssigneeUnit( AssigneeUnit AssigneeUnit )
+    {
+        _unit = AssigneeUnit;
+    }
 }
