@@ -35,6 +35,9 @@
 
 package fr.paris.lutece.plugins.ticketing.business;
 
+import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+
+
 /**
  * AssigneeUnit
  */
@@ -44,8 +47,18 @@ public class AssigneeUnit
     private int _nUnitId;
     private String _strName;
     
-    
-       /**
+    /** Constructor */
+    public AssigneeUnit() 
+    {
+    }
+
+    /** Constructor */
+    public AssigneeUnit( Unit unit ) 
+    {
+        _nUnitId = unit.getIdUnit();
+        _strName = unit.getLabel();
+    }
+    /**
         * Returns the UnitId
         * @return The UnitId
         */ 

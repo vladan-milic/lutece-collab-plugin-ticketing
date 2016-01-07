@@ -35,6 +35,8 @@
 
 package fr.paris.lutece.plugins.ticketing.business;
 
+import fr.paris.lutece.portal.business.user.AdminUser;
+
 /**
  * AssigneeUser
  */
@@ -45,7 +47,27 @@ public class AssigneeUser
     private String _strFirstname;
     private String _strLastname;
     private String _strEmail;
+
+
+    /**
+     * Constructor
+     */
+    AssigneeUser() 
+    {
+    }
     
+    /**
+     * Constructor
+     * @param user The Admin User 
+     */
+    AssigneeUser(AdminUser user) 
+    {
+        _nAdminUserId = user.getUserId();
+        _strFirstname = user.getFirstName();
+        _strLastname = user.getLastName();
+        _strEmail = user.getEmail();
+    }
+
     
        /**
         * Returns the AdminUserId
