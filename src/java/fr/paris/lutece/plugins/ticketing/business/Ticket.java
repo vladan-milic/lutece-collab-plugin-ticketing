@@ -102,6 +102,7 @@ public class Ticket implements Serializable
     private State _state;
     private Timestamp _dDateCreate;
     private Timestamp _dDateUpdate;
+    private Timestamp _dDateClose;
     private transient Collection<Action> _listWorkflowActions;
     private List<Response> _listResponse;   
     private int _nCriticality;
@@ -110,29 +111,6 @@ public class Ticket implements Serializable
     private AssigneeUser _user;   
     private AssigneeUnit _unit;   
     
-    /**
-     * @return */
-    public Timestamp getDateCreate() {
-        return _dDateCreate;
-    }
-
-     /**
-     * @param dDateCreate*/
-    public void setDateCreate(Timestamp dDateCreate) {
-        this._dDateCreate = dDateCreate;
-    }
-
-     /**
-     * @return */
-    public Timestamp getDateUpdate() {
-        return _dDateUpdate;
-    }
-
-     /**
-     * @param dDateUpdate*/
-    public void setDateUpdate(Timestamp dDateUpdate) {
-        this._dDateUpdate = dDateUpdate;
-    }
 
     /**
      * Returns the Id
@@ -465,6 +443,59 @@ public class Ticket implements Serializable
         return _strConfirmationMsg;
     }
 
+    /**
+     * Gets the create date
+     * @return the create date
+     */
+     public Timestamp getDateCreate() 
+    {
+        return _dDateCreate;
+    }
+
+    /**
+     * Sets the create date 
+     * @param dDateCreate the create date 
+     */
+    public void setDateCreate(Timestamp dDateCreate) 
+    {
+        _dDateCreate = dDateCreate;
+    }
+
+    /**
+     * Gets the update date
+     * @return the update date
+     */
+    public Timestamp getDateUpdate() 
+    {
+        return _dDateUpdate;
+    }
+
+    /**
+     * Sets the update date 
+     * @param dDateUpdate the update date
+     */
+    public void setDateUpdate(Timestamp dDateUpdate) 
+    {
+        _dDateUpdate = dDateUpdate;
+    }
+
+    /**
+     * Gets the close date
+     * @return the close date
+     */
+    public Timestamp getDateClose() 
+    {
+        return _dDateClose;
+    }
+
+    /**
+     * Sets the close date
+     * @param dDateClose The close date
+     */
+    public void setDateClose(Timestamp dDateClose) 
+    {
+        _dDateClose = dDateClose;
+    }
     /**
      * Sets the ConfirmationMsg
      * 
