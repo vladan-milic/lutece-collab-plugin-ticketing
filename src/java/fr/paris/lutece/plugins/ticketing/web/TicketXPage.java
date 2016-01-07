@@ -50,6 +50,7 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
+import fr.paris.lutece.plugins.ticketing.business.ResponseRecap;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
@@ -102,6 +103,7 @@ public class TicketXPage extends MVCApplication
     private static final String MARK_EMAIL = "email";
     private static final String MARK_FIX_PHONE_NUMBER = "fixedPhoneNumber";
     private static final String MARK_MOBILE_PHONE_NUMBER = "mobilePhoneNumber";
+    private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
 
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
 
@@ -199,9 +201,13 @@ public class TicketXPage extends MVCApplication
     public XPage getRecapTicket( HttpServletRequest request )
     {
         _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
+        List<ResponseRecap> listResponseRecap = _ticketFormService.getListResponseRecap( _ticket
+                .getListResponse( ) );
+
         Map<String, Object> model = getModel( );
         model.put( MARK_TICKET_ACTION, getActionTypeFromSession( request.getSession( ) ) );
         model.put( MARK_TICKET, _ticket );
+        model.put( MARK_RESPONSE_RECAP_LIST, listResponseRecap );
 
         removeActionTypeFromSession( request.getSession( ) );
 
@@ -418,4 +424,5 @@ public class TicketXPage extends MVCApplication
     {
         session.removeAttribute( SESSION_ACTION_TYPE );
     }
+
 }

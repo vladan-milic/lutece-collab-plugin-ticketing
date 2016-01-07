@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -53,6 +54,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.plugins.ticketing.business.ResponseRecap;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketForm;
 import fr.paris.lutece.portal.service.content.XPageAppService;
@@ -438,9 +440,57 @@ public class TicketFormService implements Serializable
     }
 
     /**
+     * Get list of response from the list of generic attributs response
+     * listResponse of the current ticket for the recap_ticket view
+     * 
+     * @param listResponse
+     *            The listReponse of the ticket
+     * @return list of ResponseRecap.
+     */
+    public List<ResponseRecap> getListResponseRecap( List<Response> listResponse )
+    {
+        Map<Integer, ResponseRecap> mapResponseRecap = new TreeMap<Integer, ResponseRecap>( );
+
+        for ( Response response : listResponse )
+        {
+            ResponseRecap responseRecap = mapResponseRecap.get( new Integer( response.getEntry( )
+                    .getIdEntry( ) ) );
+            if ( responseRecap == null )
+            {
+                responseRecap = new ResponseRecap( );
+                responseRecap.setTitle( response.getEntry( ).getTitle( ) );
+            }
+            if ( response.getField( ) != null )
+            {
+                responseRecap.addValue( response.getField( ).getTitle( ) );
+            }
+            else
+            {
+                if ( response.getFile( ) != null )
+                {
+                    responseRecap.addValue( response.getFile( ).getTitle( ) );
+                }
+                else
+                {
+                    responseRecap.addValue( response.getResponseValue( ) );
+                }
+            }
+            mapResponseRecap.put( new Integer( response.getEntry( ).getIdEntry( ) ), responseRecap );
+        }
+
+        List<ResponseRecap> listResponseRecap = new ArrayList<ResponseRecap>(
+                mapResponseRecap.values( ) );
+
+        return listResponseRecap;
+    }
+
+    /**
      * Save an ticketing in the session of the user
-     * @param session The session
-     * @param ticketing The ticketing to save
+     * 
+     * @param session
+     *            The session
+     * @param ticketing
+     *            The ticketing to save
      */
     public void saveTicketInSession(HttpSession session, Ticket ticket)
     {

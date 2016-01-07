@@ -42,6 +42,7 @@ import fr.paris.lutece.plugins.ticketing.business.ContactMode;
 import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
@@ -73,6 +74,7 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     private static final String PROPERTY_PAGE_TITLE_CREATE_CONTACTMODE = "ticketing.create_contactmode.pageTitle";
 
     // Markers
+    private static final String MARK_WEBAPP_URL = "webapp_url";
     private static final String MARK_CONTACTMODE_LIST = "contactmode_list";
     private static final String MARK_CONTACTMODE = "contactmode";
     private static final String JSP_MANAGE_CONTACTMODES = "jsp/admin/plugins/ticketing/ManageContactModes.jsp";
@@ -134,7 +136,8 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
                 : new ContactMode();
 
         Map<String, Object> model = getModel(  );
-        model.put ( MARK_CONTACTMODE, _contactmode );
+        model.put( MARK_CONTACTMODE, _contactmode );
+        model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
 
         return getPage ( PROPERTY_PAGE_TITLE_CREATE_CONTACTMODE,
                 TEMPLATE_CREATE_CONTACTMODE, model );
@@ -225,7 +228,8 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
         }
 
         Map<String, Object> model = getModel(  );
-        model.put ( MARK_CONTACTMODE, _contactmode );
+        model.put( MARK_CONTACTMODE, _contactmode );
+        model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
 
         return getPage ( PROPERTY_PAGE_TITLE_MODIFY_CONTACTMODE,
                 TEMPLATE_MODIFY_CONTACTMODE, model );
