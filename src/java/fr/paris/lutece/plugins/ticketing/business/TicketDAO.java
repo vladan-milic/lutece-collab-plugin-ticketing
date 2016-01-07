@@ -47,6 +47,7 @@ import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+import java.sql.Date;
 
 /**
  * This class provides Data Access methods for Ticket objects
@@ -56,23 +57,23 @@ public final class TicketDAO implements ITicketDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket ) FROM ticketing_ticket";
-    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, "
+    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, "
             + " a.fixed_phone_number, a.mobile_phone_number, c.id_ticket_type, c.label, d.id_ticket_domain, "
             + " d.label, a.id_ticket_category, e.label, a.id_contact_mode, f.label, a.ticket_comment,"
             + " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, a.id_unit "
             + " FROM ticketing_ticket a, ticketing_user_title b, ticketing_ticket_type c, ticketing_ticket_domain d, ticketing_ticket_category e, ticketing_contact_mode f "
             + " WHERE a.id_ticket = ? AND a.id_user_title = b.id_user_title AND a.id_ticket_category = e.id_ticket_category AND e.id_ticket_domain = d.id_ticket_domain AND d.id_ticket_type = c.id_ticket_type AND a.id_contact_mode = f.id_contact_mode";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket ( id_ticket, guid, id_user_title, firstname, lastname, email, "
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket ( id_ticket, ticket_reference , guid, id_user_title, firstname, lastname, email, "
             + " fixed_phone_number, mobile_phone_number, id_ticket_category, "
             + " id_contact_mode, ticket_comment, ticket_status, ticket_status_text, date_update, date_create, "
             + " priority, criticality, id_customer, id_admin_user, id_unit ) "
-            + " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
+            + " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_ticket WHERE id_ticket = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket SET id_ticket = ?, guid = ?, id_user_title = ?, firstname = ?, lastname = ?, email = ?, fixed_phone_number = ?, mobile_phone_number = ?, "
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket SET id_ticket = ?, ticket_reference = ?, guid = ?, id_user_title = ?, firstname = ?, lastname = ?, email = ?, fixed_phone_number = ?, mobile_phone_number = ?, "
             + " id_ticket_category = ?, id_contact_mode = ?, ticket_comment = ?, ticket_status = ?, ticket_status_text = ?, date_update = ?,"
             + " date_close = ? , priority = ? , criticality = ? , id_customer = ? , id_admin_user = ? , id_unit = ? "
             + " WHERE id_ticket = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, a.fixed_phone_number, a.mobile_phone_number,"
+    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, a.fixed_phone_number, a.mobile_phone_number,"
             + " c.id_ticket_type, c.label, d.id_ticket_domain, d.label, a.id_ticket_category, e.label, a.id_contact_mode, f.label, a.ticket_comment,"
             + " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, a.id_unit "
             + " FROM ticketing_ticket a, ticketing_user_title b, ticketing_ticket_type c, ticketing_ticket_domain d, ticketing_ticket_category e, ticketing_contact_mode f "
@@ -103,8 +104,6 @@ public final class TicketDAO implements ITicketDAO
     private static final String CONSTANT_ASC = " ASC";
     private static final String CONSTANT_DESC = " DESC";
     private static final String CONSTANT_ORDER_BY = " ORDER BY ";
-
-
 
     // SQL commands to manage ticket's generic attributes responses
     private static final String SQL_QUERY_INSERT_TICKET_RESPONSE = "INSERT INTO ticketing_ticket_response (id_ticket, id_response) VALUES (?,?)";
@@ -149,7 +148,8 @@ public final class TicketDAO implements ITicketDAO
 
         int nIndex = 1;
         daoUtil.setInt( nIndex++, ticket.getId(  ) );
-        daoUtil.setString( nIndex++, ticket.getGuid( ) );
+        daoUtil.setString( nIndex++, ticket.getReference(  ));
+        daoUtil.setString( nIndex++, ticket.getGuid(  ) );
         daoUtil.setInt( nIndex++, ticket.getIdUserTitle(  ) );
         daoUtil.setString( nIndex++, ticket.getFirstname(  ) );
         daoUtil.setString( nIndex++, ticket.getLastname(  ) );
@@ -194,6 +194,7 @@ public final class TicketDAO implements ITicketDAO
             int nIndex = 1;
             ticket = new Ticket( );
             ticket.setId( daoUtil.getInt( nIndex++ ) );
+            ticket.setReference( daoUtil.getString( nIndex++ ));
             ticket.setGuid( daoUtil.getString( nIndex++ ) );            
             ticket.setIdUserTitle( daoUtil.getInt( nIndex++ ) );
             ticket.setUserTitle( daoUtil.getString( nIndex++ ) );
@@ -258,6 +259,7 @@ public final class TicketDAO implements ITicketDAO
 
         int nIndex = 1;
         daoUtil.setInt( nIndex++, ticket.getId(  ) );
+        daoUtil.setString( nIndex++, ticket.getReference());
         daoUtil.setString( nIndex++, ticket.getGuid( ) );
         daoUtil.setInt( nIndex++, ticket.getIdUserTitle(  ) );
         daoUtil.setString( nIndex++, ticket.getFirstname(  ) );
@@ -302,6 +304,7 @@ public final class TicketDAO implements ITicketDAO
             Ticket ticket = new Ticket( );
             int nIndex = 1;
             ticket.setId( daoUtil.getInt( nIndex++ ) );
+            ticket.setReference( daoUtil.getString( nIndex++ ));
             ticket.setGuid( daoUtil.getString( nIndex++ ) );
             ticket.setIdUserTitle( daoUtil.getInt( nIndex++ ) );
             ticket.setUserTitle( daoUtil.getString( nIndex++ ) );
@@ -627,6 +630,7 @@ public final class TicketDAO implements ITicketDAO
             int nResultIndex = 1;
             Ticket ticket = new Ticket( );
             ticket.setId( daoUtil.getInt( nResultIndex++ ) );
+            ticket.setReference( daoUtil.getString( nResultIndex++ ));
             ticket.setGuid( daoUtil.getString( nResultIndex++ ) );
             ticket.setIdUserTitle( daoUtil.getInt( nResultIndex++ ) );
             ticket.setUserTitle( daoUtil.getString( nResultIndex++ ) );

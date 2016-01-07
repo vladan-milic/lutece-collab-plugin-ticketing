@@ -18,6 +18,7 @@
     <@table>
         <tr>
             <input type="hidden" id="id" name="id"/>
+            <th>#i18n{ticketing.manage_tickets.columnReference}</th>
             <th>#i18n{ticketing.manage_tickets.columnUser}</th>
             <th>#i18n{ticketing.manage_tickets.columnTicketType} / #i18n{ticketing.manage_tickets.columnTicketDomain} / #i18n{ticketing.manage_tickets.columnTicketCategory}</th>
             <th>#i18n{ticketing.manage_tickets.columnTicketComment}</th>
@@ -30,6 +31,9 @@
         <#list ticket_list as ticket >
             <tr>
                 <input type="hidden" id="id" name="id"/>
+                <td>
+                    <strong>${ticket.reference!''}</strong>
+                </td>
                 <td>
                     <i class="fa fa-user"></i> ${ticket.userTitle} <strong>${ticket.firstname} ${ticket.lastname}</strong><br>
                     <#if ticket.email ??>

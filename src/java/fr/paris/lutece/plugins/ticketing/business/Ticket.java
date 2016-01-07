@@ -61,6 +61,7 @@ public class Ticket implements Serializable
 
     // Variables declarations 
     private int _nId;
+    private String _strReference;
     private int _nIdUserTitle;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.UserTitle.size}" )
     private String _strUserTitle;
@@ -146,6 +147,24 @@ public class Ticket implements Serializable
     public void setIdUserTitle( int nIdUserTitle )
     {
         _nIdUserTitle = nIdUserTitle;
+    }
+
+    /**
+     * Returns the Reference
+     * @return The Reference
+     */
+    public String getReference(  )
+    {
+        return _strReference;
+    }
+
+    /**
+     * Sets the Reference
+     * @param strReference The Reference
+     */
+    public void setReference( String strReference )
+    {
+        _strReference = strReference;
     }
 
     /**
@@ -625,8 +644,8 @@ public class Ticket implements Serializable
     }
 
     /**
-     * @param Guid
-     *            the Guid to set
+     * Sets the GUID
+     * @param strGuid the Guid to set
      */
     public void setGuid(String strGuid)
     {
