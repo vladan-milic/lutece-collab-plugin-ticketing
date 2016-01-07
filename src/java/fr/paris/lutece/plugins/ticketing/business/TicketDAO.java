@@ -627,31 +627,45 @@ public final class TicketDAO implements ITicketDAO
 
         while ( daoUtil.next(  ) )
         {
-            int nResultIndex = 1;
+            int nIndex = 1;
             Ticket ticket = new Ticket(  );
-            ticket.setId( daoUtil.getInt( nResultIndex++ ) );
-            ticket.setReference( daoUtil.getString( nResultIndex++ ) );
-            ticket.setGuid( daoUtil.getString( nResultIndex++ ) );
-            ticket.setIdUserTitle( daoUtil.getInt( nResultIndex++ ) );
-            ticket.setUserTitle( daoUtil.getString( nResultIndex++ ) );
-            ticket.setFirstname( daoUtil.getString( nResultIndex++ ) );
-            ticket.setLastname( daoUtil.getString( nResultIndex++ ) );
-            ticket.setEmail( daoUtil.getString( nResultIndex++ ) );
-            ticket.setFixedPhoneNumber( daoUtil.getString( nResultIndex++ ) );
-            ticket.setMobilePhoneNumber( daoUtil.getString( nResultIndex++ ) );
-            ticket.setIdTicketType( daoUtil.getInt( nResultIndex++ ) );
-            ticket.setTicketType( daoUtil.getString( nResultIndex++ ) );
-            ticket.setIdTicketDomain( daoUtil.getInt( nResultIndex++ ) );
-            ticket.setTicketDomain( daoUtil.getString( nResultIndex++ ) );
-            ticket.setIdTicketCategory( daoUtil.getInt( nResultIndex++ ) );
-            ticket.setTicketCategory( daoUtil.getString( nResultIndex++ ) );
-            ticket.setIdContactMode( daoUtil.getInt( nResultIndex++ ) );
-            ticket.setContactMode( daoUtil.getString( nResultIndex++ ) );
-            ticket.setTicketComment( daoUtil.getString( nResultIndex++ ) );
-            ticket.setTicketStatus( daoUtil.getInt( nResultIndex++ ) );
-            ticket.setTicketStatusText( daoUtil.getString( nResultIndex++ ) );
-            ticket.setDateUpdate( daoUtil.getTimestamp( nResultIndex++ ) );
-            ticket.setDateCreate( daoUtil.getTimestamp( nResultIndex++ ) );
+            ticket.setId( daoUtil.getInt( nIndex++ ) );
+            ticket.setReference( daoUtil.getString( nIndex++ ) );
+            ticket.setGuid( daoUtil.getString( nIndex++ ) );
+            ticket.setIdUserTitle( daoUtil.getInt( nIndex++ ) );
+            ticket.setUserTitle( daoUtil.getString( nIndex++ ) );
+            ticket.setFirstname( daoUtil.getString( nIndex++ ) );
+            ticket.setLastname( daoUtil.getString( nIndex++ ) );
+            ticket.setEmail( daoUtil.getString( nIndex++ ) );
+            ticket.setFixedPhoneNumber( daoUtil.getString( nIndex++ ) );
+            ticket.setMobilePhoneNumber( daoUtil.getString( nIndex++ ) );
+            ticket.setIdTicketType( daoUtil.getInt( nIndex++ ) );
+            ticket.setTicketType( daoUtil.getString( nIndex++ ) );
+            ticket.setIdTicketDomain( daoUtil.getInt( nIndex++ ) );
+            ticket.setTicketDomain( daoUtil.getString( nIndex++ ) );
+            ticket.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
+            ticket.setTicketCategory( daoUtil.getString( nIndex++ ) );
+            ticket.setIdContactMode( daoUtil.getInt( nIndex++ ) );
+            ticket.setContactMode( daoUtil.getString( nIndex++ ) );
+            ticket.setTicketComment( daoUtil.getString( nIndex++ ) );
+            ticket.setTicketStatus( daoUtil.getInt( nIndex++ ) );
+            ticket.setTicketStatusText( daoUtil.getString( nIndex++ ) );
+            ticket.setDateUpdate( daoUtil.getTimestamp( nIndex++ ) );
+            ticket.setDateCreate( daoUtil.getTimestamp( nIndex++ ) );
+            ticket.setDateClose( daoUtil.getTimestamp( nIndex++ ) );
+            ticket.setPriority( daoUtil.getInt( nIndex++ ) );
+            ticket.setCriticality( daoUtil.getInt( nIndex++ ) );
+            ticket.setCustomerId( daoUtil.getString( nIndex++ ) );
+
+            int nAdminUserId = daoUtil.getInt( nIndex++ );
+            AdminUser user = AdminUserHome.findByPrimaryKey( nAdminUserId );
+            AssigneeUser assigneeUser = new AssigneeUser( user );
+            ticket.setAssigneeUser( assigneeUser );
+
+            int nUnitId = daoUtil.getInt( nIndex++ );
+            Unit unit = UnitHome.findByPrimaryKey( nUnitId );
+            AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
+            ticket.setAssigneeUnit( assigneeUnit );
             ticketList.add( ticket );
         }
 
