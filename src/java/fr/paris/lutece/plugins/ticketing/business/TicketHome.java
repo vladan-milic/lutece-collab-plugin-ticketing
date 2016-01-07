@@ -161,6 +161,19 @@ public final class TicketHome
     }
 
     /**
+     * Load the data of all the ticket objects and returns them in form of a
+     * collection
+     * 
+     * @param filter
+     *            filter to apply to ticket search
+     * @return the collection which contains the data of all the ticket objects
+     */
+    public static List<Ticket> getTicketsList(TicketFilter filter)
+    {
+        return _dao.selectTicketsList( filter, _plugin );
+    }
+
+    /**
      * Load the id of all the ticket objects and returns them in form of a collection
      * @return the collection which contains the id of all the ticket objects
      */

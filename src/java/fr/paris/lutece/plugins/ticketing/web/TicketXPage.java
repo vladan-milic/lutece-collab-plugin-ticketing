@@ -66,6 +66,7 @@ import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
@@ -172,6 +173,11 @@ public class TicketXPage extends MVCApplication
     {
         _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
         TicketHome.create( _ticket );
+
+        TicketCategory ticketCategory = TicketCategoryHome
+                .findByPrimaryKey( _ticket.getIdTicketCategory( ) );
+        int nIdWorkflow = ticketCategory.getIdWorkflow( );
+
         if ( _ticket.getListResponse( ) != null && !_ticket.getListResponse( ).isEmpty( ) )
         {
             for ( Response response : _ticket.getListResponse( ) )
@@ -181,10 +187,28 @@ public class TicketXPage extends MVCApplication
             }
         }
         
-        addInfo( INFO_TICKET_CREATED, getLocale( request ) );
+        if ( nIdWorkflow > 0 && WorkflowService.getInstance( ).isAvailable( ) )
+        {
+            try
+            {
+                WorkflowService.getInstance( ).getState( _ticket.getId( ),
+                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+                WorkflowService.getInstance( ).executeActionAutomatic( _ticket.getId( ),
+                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+            } catch ( Exception e )
+            {
+                WorkflowService.getInstance( ).doRemoveWorkFlowResource( _ticket.getId( ),
+                        Ticket.TICKET_RESOURCE_TYPE );
+                TicketHome.remove( _ticket.getId( ) );
+                throw e;
+            }
+        }
 
         TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles(
                 request.getSession( ).getId( ) );
+
+        addInfo( INFO_TICKET_CREATED, getLocale( request ) );
+
         return redirectView( request, VIEW_CONFIRM_TICKET );
     }
 

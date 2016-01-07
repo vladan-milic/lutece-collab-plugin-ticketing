@@ -34,8 +34,9 @@
  
 package fr.paris.lutece.plugins.ticketing.business;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
 import java.util.List;
+
+import fr.paris.lutece.portal.service.plugin.Plugin;
 
 
 
@@ -84,8 +85,22 @@ public interface ITicketDAO
     List<Ticket> selectTicketsList( Plugin plugin );
 
     /**
+     * Load the data of all the ticket objects matching input filter and returns
+     * them as a collection
+     *
+     * @param filter
+     *            search filter
+     * @param plugin
+     *            the Plugin
+     * @return The collection which contains the data of all the ticket objects
+     */
+    List<Ticket> selectTicketsList(TicketFilter filter, Plugin plugin);
+
+    /**
      * Load the id of all the ticket objects and returns them as a collection
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The collection which contains the id of all the ticket objects
      */
     List<Integer> selectIdTicketsList( Plugin plugin );
