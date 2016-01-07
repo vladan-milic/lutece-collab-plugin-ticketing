@@ -83,7 +83,7 @@ public interface ITicketCategoryDAO
      * @return The instance of the ticketCategory
      */
     TicketCategory loadByCode( String strCode, Plugin plugin );
-    
+
     /**
      * Load the data of all the ticketCategory objects and returns them as a collection
      * @param plugin the Plugin

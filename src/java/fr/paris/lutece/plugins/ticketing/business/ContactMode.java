@@ -33,16 +33,17 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 
 /**
  * This is the business class for the object ContactMode
  */
+
 /**
  * @author s235706
  *
@@ -96,17 +97,17 @@ public class ContactMode implements Serializable
 
     /**
      * Returns the confirmation message
-     * 
+     *
      * @return The confirmation message
      */
-    public String getConfirmationMsg( )
+    public String getConfirmationMsg(  )
     {
         return _strConfirmationMsg;
     }
 
     /**
      * Sets the confirmation message
-     * 
+     *
      * @param strConfirmationMsg
      *            The confirmation message
      */
@@ -114,5 +115,4 @@ public class ContactMode implements Serializable
     {
         _strConfirmationMsg = strConfirmationMsg;
     }
-
 }

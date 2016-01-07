@@ -33,16 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
@@ -74,6 +64,16 @@ import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 
 /**
  * This class provides the user interface to manage Ticket xpages ( manage, create, modify, remove )
@@ -82,7 +82,7 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 public class TicketXPage extends MVCApplication
 {
     // Templates
-    private static final String TEMPLATE_CREATE_TICKET="/skin/plugins/ticketing/create_ticket.html";
+    private static final String TEMPLATE_CREATE_TICKET = "/skin/plugins/ticketing/create_ticket.html";
     private static final String TEMPLATE_TICKET_FORM = "/skin/plugins/ticketing/ticket_form.html";
     private static final String TEMPLATE_RECAP_TICKET = "/skin/plugins/ticketing/recap_ticket.html";
     private static final String TEMPLATE_CONFIRM_TICKET = "/skin/plugins/ticketing/confirm_ticket.html";
@@ -103,7 +103,6 @@ public class TicketXPage extends MVCApplication
     private static final String MARK_EMAIL = "email";
     private static final String MARK_FIX_PHONE_NUMBER = "fixedPhoneNumber";
     private static final String MARK_MOBILE_PHONE_NUMBER = "mobilePhoneNumber";
-
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
 
     // Views
@@ -128,9 +127,7 @@ public class TicketXPage extends MVCApplication
 
     // Session variable to store working values
     private Ticket _ticket;
-
-    private final TicketFormService _ticketFormService = SpringContextService
-            .getBean( TicketFormService.BEAN_NAME );
+    private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
 
     /**
      * Returns the form to create a ticket
@@ -141,9 +138,10 @@ public class TicketXPage extends MVCApplication
     @View( value = VIEW_CREATE_TICKET, defaultView = true )
     public XPage getCreateTicket( HttpServletRequest request )
     {
-        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
         _ticket = ( _ticket != null ) ? _ticket : new Ticket(  );
-        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
+
+        LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
         Map<String, Object> model = getModel(  );
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );
         model.put( MARK_TICKET, _ticket );
@@ -154,10 +152,10 @@ public class TicketXPage extends MVCApplication
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
 
-        model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( ) );
+        model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList(  ) );
 
-        saveActionTypeInSession( request.getSession( ), ACTION_CREATE_TICKET );
-        _ticketFormService.removeTicketFromSession( request.getSession( ) );
+        saveActionTypeInSession( request.getSession(  ), ACTION_CREATE_TICKET );
+        _ticketFormService.removeTicketFromSession( request.getSession(  ) );
 
         return getXPage( TEMPLATE_CREATE_TICKET, request.getLocale(  ), model );
     }
@@ -171,41 +169,41 @@ public class TicketXPage extends MVCApplication
     @Action( ACTION_CREATE_TICKET )
     public XPage doCreateTicket( HttpServletRequest request )
     {
-        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
         TicketHome.create( _ticket );
 
-        TicketCategory ticketCategory = TicketCategoryHome
-                .findByPrimaryKey( _ticket.getIdTicketCategory( ) );
-        int nIdWorkflow = ticketCategory.getIdWorkflow( );
+        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( _ticket.getIdTicketCategory(  ) );
+        int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
-        if ( _ticket.getListResponse( ) != null && !_ticket.getListResponse( ).isEmpty( ) )
+        if ( ( _ticket.getListResponse(  ) != null ) && !_ticket.getListResponse(  ).isEmpty(  ) )
         {
-            for ( Response response : _ticket.getListResponse( ) )
+            for ( Response response : _ticket.getListResponse(  ) )
             {
                 ResponseHome.create( response );
-                TicketHome.insertTicketResponse( _ticket.getId( ), response.getIdResponse( ) );
+                TicketHome.insertTicketResponse( _ticket.getId(  ), response.getIdResponse(  ) );
             }
         }
-        
-        if ( nIdWorkflow > 0 && WorkflowService.getInstance( ).isAvailable( ) )
+
+        if ( ( nIdWorkflow > 0 ) && WorkflowService.getInstance(  ).isAvailable(  ) )
         {
             try
             {
-                WorkflowService.getInstance( ).getState( _ticket.getId( ),
-                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
-                WorkflowService.getInstance( ).executeActionAutomatic( _ticket.getId( ),
-                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
-            } catch ( Exception e )
+                WorkflowService.getInstance(  )
+                               .getState( _ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+                    ticketCategory.getId(  ) );
+                WorkflowService.getInstance(  )
+                               .executeActionAutomatic( _ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+                    ticketCategory.getId(  ) );
+            }
+            catch ( Exception e )
             {
-                WorkflowService.getInstance( ).doRemoveWorkFlowResource( _ticket.getId( ),
-                        Ticket.TICKET_RESOURCE_TYPE );
-                TicketHome.remove( _ticket.getId( ) );
+                WorkflowService.getInstance(  ).doRemoveWorkFlowResource( _ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE );
+                TicketHome.remove( _ticket.getId(  ) );
                 throw e;
             }
         }
 
-        TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles(
-                request.getSession( ).getId( ) );
+        TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
 
         addInfo( INFO_TICKET_CREATED, getLocale( request ) );
 
@@ -222,15 +220,15 @@ public class TicketXPage extends MVCApplication
     @View( value = VIEW_RECAP_TICKET )
     public XPage getRecapTicket( HttpServletRequest request )
     {
-        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
-        Map<String, Object> model = getModel( );
-        model.put( MARK_TICKET_ACTION, getActionTypeFromSession( request.getSession( ) ) );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
+
+        Map<String, Object> model = getModel(  );
+        model.put( MARK_TICKET_ACTION, getActionTypeFromSession( request.getSession(  ) ) );
         model.put( MARK_TICKET, _ticket );
 
-        removeActionTypeFromSession( request.getSession( ) );
+        removeActionTypeFromSession( request.getSession(  ) );
 
-        return getXPage( TEMPLATE_RECAP_TICKET, request.getLocale( ), model );
-
+        return getXPage( TEMPLATE_RECAP_TICKET, request.getLocale(  ), model );
     }
 
     /**
@@ -243,18 +241,20 @@ public class TicketXPage extends MVCApplication
     @Action( ACTION_RECAP_TICKET )
     public XPage doRecapTicket( HttpServletRequest request )
     {
-        _ticket = ( _ticket != null ) ? _ticket : new Ticket( );
+        _ticket = ( _ticket != null ) ? _ticket : new Ticket(  );
         populate( _ticket, request );
-        _ticket.setListResponse( new ArrayList<Response>( ) );
-        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
-        if ( _ticket.getIdTicketCategory( ) > 0 )
+        _ticket.setListResponse( new ArrayList<Response>(  ) );
+
+        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>(  );
+
+        if ( _ticket.getIdTicketCategory(  ) > 0 )
         {
-            EntryFilter filter = new EntryFilter( );
-            TicketForm form = TicketFormHome.findByCategoryId( _ticket.getIdTicketCategory( ) );
+            EntryFilter filter = new EntryFilter(  );
+            TicketForm form = TicketFormHome.findByCategoryId( _ticket.getIdTicketCategory(  ) );
+
             if ( form != null )
             {
-                filter.setIdResource( TicketFormHome.findByCategoryId(
-                        _ticket.getIdTicketCategory( ) ).getIdForm( ) );
+                filter.setIdResource( TicketFormHome.findByCategoryId( _ticket.getIdTicketCategory(  ) ).getIdForm(  ) );
                 filter.setResourceType( TicketForm.RESOURCE_TYPE );
                 filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
                 filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
@@ -264,61 +264,58 @@ public class TicketXPage extends MVCApplication
 
                 for ( Entry entry : listEntryFirstLevel )
                 {
-                    listFormErrors.addAll( _ticketFormService.getResponseEntry( request,
-                            entry.getIdEntry( ), getLocale( request ), _ticket ) );
+                    listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry(  ),
+                            getLocale( request ), _ticket ) );
                 }
             }
-
         }
 
         // Check constraints
         if ( !validateBean( _ticket ) )
         {
-            if ( getActionTypeFromSession( request.getSession( ) ).equals( ACTION_CREATE_TICKET ) )
+            if ( getActionTypeFromSession( request.getSession(  ) ).equals( ACTION_CREATE_TICKET ) )
             {
                 return redirectView( request, VIEW_CREATE_TICKET );
             }
         }
 
-        if ( _ticket.hasNoPhoneNumberFilled( ) )
+        if ( _ticket.hasNoPhoneNumberFilled(  ) )
         {
             addError( ERROR_PHONE_NUMBER_MISSING, getLocale( request ) );
-            if ( getActionTypeFromSession( request.getSession( ) ).equals( ACTION_CREATE_TICKET ) )
+
+            if ( getActionTypeFromSession( request.getSession(  ) ).equals( ACTION_CREATE_TICKET ) )
             {
                 return redirectView( request, VIEW_CREATE_TICKET );
             }
         }
 
-        if ( listFormErrors.size( ) > 0 )
+        if ( listFormErrors.size(  ) > 0 )
         {
             for ( GenericAttributeError error : listFormErrors )
             {
-                if ( error.getIsDisplayableError( ) )
-                    addError( error.getMessage( ) );
+                if ( error.getIsDisplayableError(  ) )
+                {
+                    addError( error.getMessage(  ) );
+                }
             }
-            if ( getActionTypeFromSession( request.getSession( ) ).equals( ACTION_CREATE_TICKET ) )
+
+            if ( getActionTypeFromSession( request.getSession(  ) ).equals( ACTION_CREATE_TICKET ) )
             {
                 return redirectView( request, VIEW_CREATE_TICKET );
             }
         }
-        
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( _ticket
-                .getIdTicketCategory( ) );
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory
-                .getIdTicketDomain( ) );
-        _ticket.setTicketCategory( ticketCategory.getLabel( ) );
-        _ticket.setTicketDomain( ticketDomain.getLabel( ) );
 
-        _ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType( ) )
-                .getLabel( ) );
-        _ticket.setContactMode( ContactModeHome.findByPrimaryKey( _ticket.getIdContactMode( ) )
-                .getLabel( ) );
-        _ticket.setUserTitle( UserTitleHome.findByPrimaryKey( _ticket.getIdUserTitle( ) )
-                .getLabel( ) );
-        _ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( _ticket.getIdContactMode( ) )
-                .getConfirmationMsg( ) );
+        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( _ticket.getIdTicketCategory(  ) );
+        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
+        _ticket.setTicketCategory( ticketCategory.getLabel(  ) );
+        _ticket.setTicketDomain( ticketDomain.getLabel(  ) );
 
-        _ticketFormService.saveTicketInSession( request.getSession( ), _ticket );
+        _ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) ).getLabel(  ) );
+        _ticket.setContactMode( ContactModeHome.findByPrimaryKey( _ticket.getIdContactMode(  ) ).getLabel(  ) );
+        _ticket.setUserTitle( UserTitleHome.findByPrimaryKey( _ticket.getIdUserTitle(  ) ).getLabel(  ) );
+        _ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( _ticket.getIdContactMode(  ) ).getConfirmationMsg(  ) );
+
+        _ticketFormService.saveTicketInSession( request.getSession(  ), _ticket );
 
         return redirectView( request, VIEW_RECAP_TICKET );
     }
@@ -333,18 +330,17 @@ public class TicketXPage extends MVCApplication
     @View( value = VIEW_CONFIRM_TICKET )
     public XPage getConfirmTicket( HttpServletRequest request )
     {
-        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
 
-        Map<String, Object> model = getModel( );
+        Map<String, Object> model = getModel(  );
         String strContent = fillTemplate( request, _ticket );
         model.put( MARK_MESSAGE, strContent );
         model.put( MARK_TICKET, _ticket );
 
-        _ticketFormService.removeTicketFromSession( request.getSession( ) );
-        removeActionTypeFromSession( request.getSession( ) );
+        _ticketFormService.removeTicketFromSession( request.getSession(  ) );
+        removeActionTypeFromSession( request.getSession(  ) );
 
-        return getXPage( TEMPLATE_CONFIRM_TICKET, request.getLocale( ), model );
-
+        return getXPage( TEMPLATE_CONFIRM_TICKET, request.getLocale(  ), model );
     }
 
     /**
@@ -359,22 +355,21 @@ public class TicketXPage extends MVCApplication
      */
     private String fillTemplate( HttpServletRequest request, Ticket ticket )
     {
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<String, Object>(  );
 
-        model.put( MARK_MESSAGE, ticket.getConfirmationMsg( ) );
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MESSAGE_CONFIRM,
-                request.getLocale( ),
-                model );
+        model.put( MARK_MESSAGE, ticket.getConfirmationMsg(  ) );
 
-        model.put( MARK_USERTITLE, ticket.getUserTitle( ) );
-        model.put( MARK_FIRSTNAME, ticket.getFirstname( ) );
-        model.put( MARK_LASTNAME, ticket.getLastname( ) );
-        model.put( MARK_EMAIL, ticket.getEmail( ) );
-        model.put( MARK_FIX_PHONE_NUMBER, ticket.getFixedPhoneNumber( ) );
-        model.put( MARK_MOBILE_PHONE_NUMBER, ticket.getMobilePhoneNumber( ) );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MESSAGE_CONFIRM, request.getLocale(  ), model );
 
-        String strContent = AppTemplateService.getTemplateFromStringFtl( template.getHtml( ),
-                request.getLocale( ), model ).getHtml( );
+        model.put( MARK_USERTITLE, ticket.getUserTitle(  ) );
+        model.put( MARK_FIRSTNAME, ticket.getFirstname(  ) );
+        model.put( MARK_LASTNAME, ticket.getLastname(  ) );
+        model.put( MARK_EMAIL, ticket.getEmail(  ) );
+        model.put( MARK_FIX_PHONE_NUMBER, ticket.getFixedPhoneNumber(  ) );
+        model.put( MARK_MOBILE_PHONE_NUMBER, ticket.getMobilePhoneNumber(  ) );
+
+        String strContent = AppTemplateService.getTemplateFromStringFtl( template.getHtml(  ), request.getLocale(  ),
+                model ).getHtml(  );
 
         return strContent;
     }
@@ -382,34 +377,40 @@ public class TicketXPage extends MVCApplication
     /**
      * Display ticket form linked to the category used for AJAX request ie.
      * standalone mode (no header/footer lutece)
-     * 
+     *
      * @param request
      *            http request, id_ticket_category must be set
      * @return form to be displayed
      */
-    @View(VIEW_TICKET_FORM)
-    public XPage getTicketForm(HttpServletRequest request)
+    @View( VIEW_TICKET_FORM )
+    public XPage getTicketForm( HttpServletRequest request )
     {
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
-        _ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
-        Map<String, Object> model = getModel( );
+        _ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
+
+        Map<String, Object> model = getModel(  );
+
         if ( !StringUtils.isEmpty( strIdCategory ) && StringUtils.isNumeric( strIdCategory ) )
         {
             int nIdCategory = Integer.parseInt( strIdCategory );
             TicketForm form = TicketFormHome.findByCategoryId( nIdCategory );
-            if ( form != null ){
-                model.put( MARK_TICKET_FORM, _ticketFormService.getHtmlForm( _ticket, form,
-                        request.getLocale( ), false, request ) );
+
+            if ( form != null )
+            {
+                model.put( MARK_TICKET_FORM,
+                    _ticketFormService.getHtmlForm( _ticket, form, request.getLocale(  ), false, request ) );
             }
         }
-        XPage page = getXPage( TEMPLATE_TICKET_FORM, request.getLocale( ), model );
+
+        XPage page = getXPage( TEMPLATE_TICKET_FORM, request.getLocale(  ), model );
         page.setStandalone( true );
+
         return page;
     }
 
     /**
      * Save the current action type in the session of the user
-     * 
+     *
      * @param session
      *            The session
      * @param actionType
@@ -422,7 +423,7 @@ public class TicketXPage extends MVCApplication
 
     /**
      * Get the current actionType from the session
-     * 
+     *
      * @param session
      *            The session of the user
      * @return The actionType
@@ -434,7 +435,7 @@ public class TicketXPage extends MVCApplication
 
     /**
      * Remove any action type stored in the session of the user
-     * 
+     *
      * @param session
      *            The session
      */

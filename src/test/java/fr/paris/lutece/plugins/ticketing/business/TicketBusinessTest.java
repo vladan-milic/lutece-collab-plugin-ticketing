@@ -78,7 +78,7 @@ public class TicketBusinessTest extends LuteceTestCase
         ticket.setFirstname( FIRSTNAME1 );
         ticket.setLastname( LASTNAME1 );
         ticket.setEmail( EMAIL1 );
-        ticket.setFixedPhoneNumber(PHONENUMBER1 );
+        ticket.setFixedPhoneNumber( PHONENUMBER1 );
         ticket.setIdTicketType( IDTICKETTYPE1 );
         ticket.setTicketType( TICKETTYPE1 );
         ticket.setIdTicketDomain( IDTICKETDOMAIN1 );

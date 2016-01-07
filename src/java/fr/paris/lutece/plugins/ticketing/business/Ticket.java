@@ -33,20 +33,22 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.workflowcore.business.action.Action;
+import fr.paris.lutece.plugins.workflowcore.business.state.State;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
+
 import java.sql.Timestamp;
+
 import java.util.Collection;
 import java.util.List;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.plugins.workflowcore.business.action.Action;
-import fr.paris.lutece.plugins.workflowcore.business.state.State;
 
 
 /**
@@ -56,7 +58,6 @@ public class Ticket implements Serializable
 {
     private static final long serialVersionUID = 1L;
     private static final String EMPTY = "";
-
     public static final String TICKET_RESOURCE_TYPE = "ticket";
 
     // Variables declarations 
@@ -79,15 +80,15 @@ public class Ticket implements Serializable
     private String _strFixedPhoneNumber;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.MobilePhoneNumber.size}" )
     private String _strMobilePhoneNumber;
-    @Min(value = 1, message = "#i18n{ticketing.validation.ticket.TicketType.mandatory}")
+    @Min( value = 1, message = "#i18n{ticketing.validation.ticket.TicketType.mandatory}" )
     private int _nIdTicketType;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketType.size}" )
     private String _strTicketType;
-    @Min(value = 1, message = "#i18n{ticketing.validation.ticket.TicketDomain.mandatory}")
+    @Min( value = 1, message = "#i18n{ticketing.validation.ticket.TicketDomain.mandatory}" )
     private int _nIdTicketDomain;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketDomain.size}" )
     private String _strTicketDomain;
-    @Min(value = 1, message = "#i18n{ticketing.validation.ticket.TicketCategory.mandatory}")
+    @Min( value = 1, message = "#i18n{ticketing.validation.ticket.TicketCategory.mandatory}" )
     private int _nIdTicketCategory;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketCategory.size}" )
     private String _strTicketCategory;
@@ -105,13 +106,12 @@ public class Ticket implements Serializable
     private Timestamp _dDateUpdate;
     private Timestamp _dDateClose;
     private transient Collection<Action> _listWorkflowActions;
-    private List<Response> _listResponse;   
+    private List<Response> _listResponse;
     private int _nCriticality;
     private int _nPriority;
     private String _strCustomerId;
-    private AssigneeUser _user;   
-    private AssigneeUnit _unit;   
-    
+    private AssigneeUser _user;
+    private AssigneeUnit _unit;
 
     /**
      * Returns the Id
@@ -241,17 +241,17 @@ public class Ticket implements Serializable
 
     /**
      * Returns the FixedPhoneNumber
-     * 
+     *
      * @return The FixedPhoneNumber
      */
-    public String getFixedPhoneNumber( )
+    public String getFixedPhoneNumber(  )
     {
         return _strFixedPhoneNumber;
     }
 
     /**
      * Sets the FixedPhoneNumber
-     * 
+     *
      * @param strFixedPhoneNumber
      *            The FixedPhoneNumber
      */
@@ -262,17 +262,17 @@ public class Ticket implements Serializable
 
     /**
      * Returns the MobilePhoneNumber
-     * 
+     *
      * @return The MobilePhoneNumber
      */
-    public String getMobilePhoneNumber( )
+    public String getMobilePhoneNumber(  )
     {
         return _strMobilePhoneNumber;
     }
 
     /**
      * Sets the MobilePhoneNumber
-     * 
+     *
      * @param strMobilePhoneNumber
      *            The MobilePhoneNumber
      */
@@ -391,17 +391,17 @@ public class Ticket implements Serializable
 
     /**
      * Returns the IdContactMode
-     * 
+     *
      * @return The IdContactMode
      */
-    public int getIdContactMode( )
+    public int getIdContactMode(  )
     {
         return _nIdContactMode;
     }
 
     /**
      * Sets the IdContactMode
-     * 
+     *
      * @param nIdContactMode
      *            The IdContactMode
      */
@@ -412,17 +412,17 @@ public class Ticket implements Serializable
 
     /**
      * Returns the ContactMode
-     * 
+     *
      * @return The ContactMode
      */
-    public String getContactMode( )
+    public String getContactMode(  )
     {
         return _strContactMode;
     }
 
     /**
      * Sets the ContactMode
-     * 
+     *
      * @param strContactMode
      *            The ContactMode
      */
@@ -433,17 +433,17 @@ public class Ticket implements Serializable
 
     /**
      * Returns the TicketComment
-     * 
+     *
      * @return The TicketComment
      */
-    public String getTicketComment( )
+    public String getTicketComment(  )
     {
         return _strTicketComment;
     }
 
     /**
      * Sets the TicketComment
-     * 
+     *
      * @param strTicketComment
      *            The TicketComment
      */
@@ -454,10 +454,10 @@ public class Ticket implements Serializable
 
     /**
      * Returns the ConfirmationMsg
-     * 
+     *
      * @return The ConfirmationMsg
      */
-    public String getConfirmationMsg( )
+    public String getConfirmationMsg(  )
     {
         return _strConfirmationMsg;
     }
@@ -466,16 +466,16 @@ public class Ticket implements Serializable
      * Gets the create date
      * @return the create date
      */
-     public Timestamp getDateCreate() 
+    public Timestamp getDateCreate(  )
     {
         return _dDateCreate;
     }
 
     /**
-     * Sets the create date 
-     * @param dDateCreate the create date 
+     * Sets the create date
+     * @param dDateCreate the create date
      */
-    public void setDateCreate(Timestamp dDateCreate) 
+    public void setDateCreate( Timestamp dDateCreate )
     {
         _dDateCreate = dDateCreate;
     }
@@ -484,16 +484,16 @@ public class Ticket implements Serializable
      * Gets the update date
      * @return the update date
      */
-    public Timestamp getDateUpdate() 
+    public Timestamp getDateUpdate(  )
     {
         return _dDateUpdate;
     }
 
     /**
-     * Sets the update date 
+     * Sets the update date
      * @param dDateUpdate the update date
      */
-    public void setDateUpdate(Timestamp dDateUpdate) 
+    public void setDateUpdate( Timestamp dDateUpdate )
     {
         _dDateUpdate = dDateUpdate;
     }
@@ -502,7 +502,7 @@ public class Ticket implements Serializable
      * Gets the close date
      * @return the close date
      */
-    public Timestamp getDateClose() 
+    public Timestamp getDateClose(  )
     {
         return _dDateClose;
     }
@@ -511,13 +511,14 @@ public class Ticket implements Serializable
      * Sets the close date
      * @param dDateClose The close date
      */
-    public void setDateClose(Timestamp dDateClose) 
+    public void setDateClose( Timestamp dDateClose )
     {
         _dDateClose = dDateClose;
     }
+
     /**
      * Sets the ConfirmationMsg
-     * 
+     *
      * @param strConfirmationMsg
      *            The ConfirmationMsg
      */
@@ -528,7 +529,7 @@ public class Ticket implements Serializable
 
     /**
      * Returns the TicketStatus
-     * 
+     *
      * @return The TicketStatus
      */
     public int getTicketStatus(  )
@@ -562,18 +563,17 @@ public class Ticket implements Serializable
     {
         _strTicketStatusText = strTicketStatusText;
     }
-    
-    
+
     /**
      * Returns true if the fixed phone number and the mobile phone number are
      * not filled, and else returns false
-     * 
+     *
      * @return boolean result
      */
-    public boolean hasNoPhoneNumberFilled( )
+    public boolean hasNoPhoneNumberFilled(  )
     {
-        return EMPTY.equals( this.getFixedPhoneNumber( ).trim( ) )
-                && EMPTY.equals( this.getMobilePhoneNumber( ).trim( ) );
+        return EMPTY.equals( this.getFixedPhoneNumber(  ).trim(  ) ) &&
+        EMPTY.equals( this.getMobilePhoneNumber(  ).trim(  ) );
     }
 
     /**
@@ -584,38 +584,38 @@ public class Ticket implements Serializable
     {
         return _state;
     }
-    
+
     /**
      * Sets the State
      * @param state The state
      */
-     public void setState( State state )
-     {
-         _state = state;
-     }
-     
-     /**
-      * Get the list of workflow actions available for this ticket. Workflow
-      * actions are NOT loaded by default, so check that they have been set
-      * before calling this method.
-      * @return The list of workflow actions available for this ticket.
-      */
-     public Collection<Action> getListWorkflowActions(  )
-     {
-         return _listWorkflowActions;
-     }
-     
-     /**
-      * Set the list of workflow actions available for this ticket.
-      * @param listWorkflowActions The list of workflow actions available for
-      *            this
-      *            ticket.
-      */
-     public void setListWorkflowActions( Collection<Action> listWorkflowActions )
-     {
-         this._listWorkflowActions = listWorkflowActions;
-     }
-    
+    public void setState( State state )
+    {
+        _state = state;
+    }
+
+    /**
+     * Get the list of workflow actions available for this ticket. Workflow
+     * actions are NOT loaded by default, so check that they have been set
+     * before calling this method.
+     * @return The list of workflow actions available for this ticket.
+     */
+    public Collection<Action> getListWorkflowActions(  )
+    {
+        return _listWorkflowActions;
+    }
+
+    /**
+     * Set the list of workflow actions available for this ticket.
+     * @param listWorkflowActions The list of workflow actions available for
+     *            this
+     *            ticket.
+     */
+    public void setListWorkflowActions( Collection<Action> listWorkflowActions )
+    {
+        this._listWorkflowActions = listWorkflowActions;
+    }
+
     /**
      * Get the list of response of this ticket
      * @return the list of response of this ticket
@@ -635,10 +635,10 @@ public class Ticket implements Serializable
     }
 
     /**
-     * 
+     *
      * @return the _strGuid
      */
-    public String getGuid()
+    public String getGuid(  )
     {
         return _strGuid;
     }
@@ -647,14 +647,14 @@ public class Ticket implements Serializable
      * Sets the GUID
      * @param strGuid the Guid to set
      */
-    public void setGuid(String strGuid)
+    public void setGuid( String strGuid )
     {
         _strGuid = strGuid;
     }
 
     /**
      * Returns the Criticality
-     * 
+     *
      * @return The Criticality
      */
     public int getCriticality(  )
@@ -673,7 +673,7 @@ public class Ticket implements Serializable
 
     /**
      * Returns the Priority
-     * 
+     *
      * @return The Priority
      */
     public int getPriority(  )
@@ -692,17 +692,17 @@ public class Ticket implements Serializable
 
     /**
      * Returns the CustomerId
-     * 
+     *
      * @return The CustomerId
      */
-    public String getCustomerId( )
+    public String getCustomerId(  )
     {
         return _strCustomerId;
     }
 
     /**
      * Sets the CustomerId
-     * 
+     *
      * @param strCustomerId
      *            The CustomerId
      */
@@ -711,38 +711,37 @@ public class Ticket implements Serializable
         _strCustomerId = strCustomerId;
     }
 
-    
-           /**
-        * Returns the AssigneeUser
-        * @return The AssigneeUser
-        */ 
-    public AssigneeUser getAssigneeUser()
+    /**
+    * Returns the AssigneeUser
+    * @return The AssigneeUser
+    */
+    public AssigneeUser getAssigneeUser(  )
     {
         return _user;
     }
-    
-       /**
-        * Sets the AssigneeUser
-        * @param AssigneeUser The AssigneeUser
-        */ 
+
+    /**
+     * Sets the AssigneeUser
+     * @param AssigneeUser The AssigneeUser
+     */
     public void setAssigneeUser( AssigneeUser AssigneeUser )
     {
         _user = AssigneeUser;
     }
-    
-       /**
-        * Returns the AssigneeUnit
-        * @return The AssigneeUnit
-        */ 
-    public AssigneeUnit getAssigneeUnit()
+
+    /**
+     * Returns the AssigneeUnit
+     * @return The AssigneeUnit
+     */
+    public AssigneeUnit getAssigneeUnit(  )
     {
         return _unit;
     }
-    
-       /**
-        * Sets the AssigneeUnit
-        * @param AssigneeUnit The AssigneeUnit
-        */ 
+
+    /**
+     * Sets the AssigneeUnit
+     * @param AssigneeUnit The AssigneeUnit
+     */
     public void setAssigneeUnit( AssigneeUnit AssigneeUnit )
     {
         _unit = AssigneeUnit;

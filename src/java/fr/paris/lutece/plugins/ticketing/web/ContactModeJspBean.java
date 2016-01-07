@@ -33,11 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.ticketing.business.ContactMode;
 import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -46,6 +41,11 @@ import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.url.UrlItem;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -110,14 +110,11 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     {
         _contactmode = null;
 
-        List<ContactMode> listContactModes = (List<ContactMode>) ContactModeHome
-                .getContactModesList();
-        Map<String, Object> model = getPaginatedListModel ( request,
-                MARK_CONTACTMODE_LIST, listContactModes,
+        List<ContactMode> listContactModes = (List<ContactMode>) ContactModeHome.getContactModesList(  );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_CONTACTMODE_LIST, listContactModes,
                 JSP_MANAGE_CONTACTMODES );
 
-        return getPage ( PROPERTY_PAGE_TITLE_MANAGE_CONTACTMODES,
-                TEMPLATE_MANAGE_CONTACTMODES, model );
+        return getPage( PROPERTY_PAGE_TITLE_MANAGE_CONTACTMODES, TEMPLATE_MANAGE_CONTACTMODES, model );
     }
 
     /**
@@ -130,14 +127,12 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     @View( VIEW_CREATE_CONTACTMODE )
     public String getCreateContactMode( HttpServletRequest request )
     {
-        _contactmode = ( _contactmode != null ) ? _contactmode
-                : new ContactMode();
+        _contactmode = ( _contactmode != null ) ? _contactmode : new ContactMode(  );
 
         Map<String, Object> model = getModel(  );
-        model.put ( MARK_CONTACTMODE, _contactmode );
+        model.put( MARK_CONTACTMODE, _contactmode );
 
-        return getPage ( PROPERTY_PAGE_TITLE_CREATE_CONTACTMODE,
-                TEMPLATE_CREATE_CONTACTMODE, model );
+        return getPage( PROPERTY_PAGE_TITLE_CREATE_CONTACTMODE, TEMPLATE_CREATE_CONTACTMODE, model );
     }
 
     /**
@@ -150,18 +145,18 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     @Action( ACTION_CREATE_CONTACTMODE )
     public String doCreateContactMode( HttpServletRequest request )
     {
-        populate ( _contactmode, request );
+        populate( _contactmode, request );
 
         // Check constraints
-        if ( !validateBean ( _contactmode, VALIDATION_ATTRIBUTES_PREFIX ) )
+        if ( !validateBean( _contactmode, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirectView ( request, VIEW_CREATE_CONTACTMODE );
+            return redirectView( request, VIEW_CREATE_CONTACTMODE );
         }
 
-        ContactModeHome.create ( _contactmode );
-        addInfo ( INFO_CONTACTMODE_CREATED, getLocale ( ) );
+        ContactModeHome.create( _contactmode );
+        addInfo( INFO_CONTACTMODE_CREATED, getLocale(  ) );
 
-        return redirectView ( request, VIEW_MANAGE_CONTACTMODES );
+        return redirectView( request, VIEW_MANAGE_CONTACTMODES );
     }
 
     /**
@@ -175,13 +170,11 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     @Action( ACTION_CONFIRM_REMOVE_CONTACTMODE )
     public String getConfirmRemoveContactMode( HttpServletRequest request )
     {
-        int nId = Integer.parseInt ( request
-                .getParameter ( PARAMETER_ID_CONTACTMODE ) );
-        UrlItem url = new UrlItem ( getActionUrl ( ACTION_REMOVE_CONTACTMODE ) );
-        url.addParameter ( PARAMETER_ID_CONTACTMODE, nId );
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTACTMODE ) );
+        UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_CONTACTMODE ) );
+        url.addParameter( PARAMETER_ID_CONTACTMODE, nId );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl ( request,
-                MESSAGE_CONFIRM_REMOVE_CONTACTMODE,
+        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_CONTACTMODE,
                 url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
@@ -197,13 +190,12 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     @Action( ACTION_REMOVE_CONTACTMODE )
     public String doRemoveContactMode( HttpServletRequest request )
     {
-        int nId = Integer.parseInt ( request
-                .getParameter ( PARAMETER_ID_CONTACTMODE ) );
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTACTMODE ) );
 
         ContactModeHome.remove( nId );
-        addInfo( INFO_CONTACTMODE_REMOVED, getLocale( ) );
+        addInfo( INFO_CONTACTMODE_REMOVED, getLocale(  ) );
 
-        return redirectView ( request, VIEW_MANAGE_CONTACTMODES );
+        return redirectView( request, VIEW_MANAGE_CONTACTMODES );
     }
 
     /**
@@ -216,19 +208,17 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     @View( VIEW_MODIFY_CONTACTMODE )
     public String getModifyContactMode( HttpServletRequest request )
     {
-        int nId = Integer.parseInt ( request
-                .getParameter ( PARAMETER_ID_CONTACTMODE ) );
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CONTACTMODE ) );
 
-        if ( ( _contactmode == null ) || ( _contactmode.getId ( ) != nId ) )
+        if ( ( _contactmode == null ) || ( _contactmode.getId(  ) != nId ) )
         {
-            _contactmode = ContactModeHome.findByPrimaryKey ( nId );
+            _contactmode = ContactModeHome.findByPrimaryKey( nId );
         }
 
         Map<String, Object> model = getModel(  );
-        model.put ( MARK_CONTACTMODE, _contactmode );
+        model.put( MARK_CONTACTMODE, _contactmode );
 
-        return getPage ( PROPERTY_PAGE_TITLE_MODIFY_CONTACTMODE,
-                TEMPLATE_MODIFY_CONTACTMODE, model );
+        return getPage( PROPERTY_PAGE_TITLE_MODIFY_CONTACTMODE, TEMPLATE_MODIFY_CONTACTMODE, model );
     }
 
     /**
@@ -241,18 +231,17 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     @Action( ACTION_MODIFY_CONTACTMODE )
     public String doModifyContactMode( HttpServletRequest request )
     {
-        populate ( _contactmode, request );
+        populate( _contactmode, request );
 
         // Check constraints
-        if ( !validateBean ( _contactmode, VALIDATION_ATTRIBUTES_PREFIX ) )
+        if ( !validateBean( _contactmode, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect ( request, VIEW_MODIFY_CONTACTMODE,
-                    PARAMETER_ID_CONTACTMODE, _contactmode.getId ( ) );
+            return redirect( request, VIEW_MODIFY_CONTACTMODE, PARAMETER_ID_CONTACTMODE, _contactmode.getId(  ) );
         }
 
-        ContactModeHome.update ( _contactmode );
-        addInfo ( INFO_CONTACTMODE_UPDATED, getLocale ( ) );
+        ContactModeHome.update( _contactmode );
+        addInfo( INFO_CONTACTMODE_UPDATED, getLocale(  ) );
 
-        return redirectView ( request, VIEW_MANAGE_CONTACTMODES );
+        return redirectView( request, VIEW_MANAGE_CONTACTMODES );
     }
 }

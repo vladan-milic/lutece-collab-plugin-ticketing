@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 
 /**
@@ -82,7 +82,7 @@ public class TicketCategory implements Serializable
      * Returns the IdTicketDomain
      * @return The IdTicketDomain
      */
-    public int getIdTicketDomain( )
+    public int getIdTicketDomain(  )
     {
         return _nIdTicketDomain;
     }
@@ -90,7 +90,7 @@ public class TicketCategory implements Serializable
     /**
      * Sets the IdTicketDomain
      * @param nIdTicketDomain The IdTicketDomain
-     */ 
+     */
     public void setIdTicketDomain( int nIdTicketDomain )
     {
         _nIdTicketDomain = nIdTicketDomain;
@@ -100,7 +100,7 @@ public class TicketCategory implements Serializable
      * Returns the IdTicketType
      * @return The IdTicketType
      */
-    public int getIdTicketType( )
+    public int getIdTicketType(  )
     {
         return _nIdTicketType;
     }
@@ -108,7 +108,7 @@ public class TicketCategory implements Serializable
     /**
      * Sets the IdTicketType
      * @param nIdTicketType The IdTicketType
-     */ 
+     */
     public void setIdTicketType( int nIdTicketType )
     {
         _nIdTicketType = nIdTicketType;
@@ -167,7 +167,7 @@ public class TicketCategory implements Serializable
     {
         _strLabel = strLabel;
     }
-    
+
     /**
      * Get the id of the workflow associated with this ticket category
      * @return The id of the workflow
@@ -185,11 +185,11 @@ public class TicketCategory implements Serializable
     {
         _nIdWorkflow = nIdWorkflow;
     }
-    
+
     /**
      * @return the _nIdTicketForm
      */
-    public int getIdTicketForm()
+    public int getIdTicketForm(  )
     {
         return _nIdTicketForm;
     }
@@ -198,7 +198,7 @@ public class TicketCategory implements Serializable
      * @param _nIdTicketForm
      *            the _nIdTicketForm to set
      */
-    public void setIdTicketForm(int _nIdTicketForm)
+    public void setIdTicketForm( int _nIdTicketForm )
     {
         this._nIdTicketForm = _nIdTicketForm;
     }
@@ -220,5 +220,4 @@ public class TicketCategory implements Serializable
     {
         _strCode = strCode;
     }
-    
 }

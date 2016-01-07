@@ -31,13 +31,11 @@
  *
  * License 1.0
  */
- 
 package fr.paris.lutece.plugins.ticketing.business;
-
-import java.util.List;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
+import java.util.List;
 
 
 /**
@@ -94,18 +92,17 @@ public interface ITicketDAO
      *            the Plugin
      * @return The collection which contains the data of all the ticket objects
      */
-    List<Ticket> selectTicketsList(TicketFilter filter, Plugin plugin);
+    List<Ticket> selectTicketsList( TicketFilter filter, Plugin plugin );
 
     /**
      * Load the id of all the ticket objects and returns them as a collection
-     * 
+     *
      * @param plugin
      *            the Plugin
      * @return The collection which contains the id of all the ticket objects
      */
     List<Integer> selectIdTicketsList( Plugin plugin );
-    
-    
+
     // ----------------------------------------
     // Ticket response management
     // ----------------------------------------
@@ -133,12 +130,13 @@ public interface ITicketDAO
      */
     void deleteTicketResponse( int nIdTicket, Plugin plugin );
 
-     /**
-     * Remove an ticket responses from the id of a response.
-     * @param nIdResponse The id of the response
-     * @param plugin The plugin
-     */
+    /**
+    * Remove an ticket responses from the id of a response.
+    * @param nIdResponse The id of the response
+    * @param plugin The plugin
+    */
     void removeTicketResponsesByIdResponse( int nIdTicket, Plugin plugin );
+
     /**
      * Find the id of the ticket associated with a given response
      * @param nIdResponse The id of the response
@@ -147,5 +145,4 @@ public interface ITicketDAO
      *         with he given response.
      */
     int findIdTicketByIdResponse( int nIdResponse, Plugin plugin );
-}    
- 
+}

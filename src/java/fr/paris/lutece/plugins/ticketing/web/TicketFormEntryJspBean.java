@@ -33,15 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
@@ -71,11 +62,20 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * JspBean to manage ticketing form entries
  */
-@Controller(controllerJsp = "ManageTicketFormEntries.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = TicketFormJspBean.RIGHT_MANAGETICKETFORM)
+@Controller( controllerJsp = "ManageTicketFormEntries.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = TicketFormJspBean.RIGHT_MANAGETICKETFORM )
 public class TicketFormEntryJspBean extends MVCAdminJspBean
 {
     private static final long serialVersionUID = -4951787792196104967L;
@@ -104,7 +104,6 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
     private static final String FIELD_TITLE_FIELD = "ticketing.createField.labelTitle";
     private static final String FIELD_CODE_FIELD = "ticketing.createField.labelCode";
     private static final String FIELD_VALUE_FIELD = "ticketing.createField.labelValue";
-
 
     // Urls
     private static final String JSP_URL_MANAGE_TICKETING_FORM_ENTRIES = "jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp";
@@ -143,7 +142,6 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
     private static final String MARK_LIST = "list";
     private static final String MARK_FORM = "form";
     private static final String MARK_ENTRY_TYPE_SERVICE = "entryTypeService";
-
     private static final String ENTRY_TYPE_LUTECE_USER_BEAN_NAME = "ticketing.entryTypeMyLuteceUser";
 
     // Local variables
@@ -192,12 +190,12 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
         entry.setIdResource( nIdForm );
         entry.setResourceType( TicketForm.RESOURCE_TYPE );
 
-        TicketForm ticketForm = TicketFormHome.findByPrimaryKey ( nIdForm );
+        TicketForm ticketForm = TicketFormHome.findByPrimaryKey( nIdForm );
 
         // Default Values
         Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_ENTRY, entry );
-        model.put ( MARK_FORM, ticketForm );
+        model.put( MARK_FORM, ticketForm );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
         model.put( MARK_ENTRY_TYPE_SERVICE, EntryTypeServiceManager.getEntryTypeService( entry ) );
@@ -226,8 +224,6 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
         {
             return redirect( request, TicketFormJspBean.getURLManageTicketForms( request ) );
         }
-
-
 
         String strIdType = request.getParameter( PARAMETER_ID_ENTRY_TYPE );
 
@@ -258,21 +254,22 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
 
             String strError = EntryTypeServiceManager.getEntryTypeService( entry )
                                                      .getRequestData( entry, request, getLocale(  ) );
+
             if ( strError != null )
             {
                 return redirect( request, strError );
             }
+
             // entry code is mandatory for ticketing
             String strEntryCode = request.getParameter( PARAMETER_ENTRY_CODE );
-            if ( StringUtils.isEmpty( strEntryCode )
-                    && !entry.getEntryType( ).getBeanName( )
-                            .equals( ENTRY_TYPE_LUTECE_USER_BEAN_NAME ) )
+
+            if ( StringUtils.isEmpty( strEntryCode ) &&
+                    !entry.getEntryType(  ).getBeanName(  ).equals( ENTRY_TYPE_LUTECE_USER_BEAN_NAME ) )
             {
-                String[] tabErr = new String[]
-                { I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) ) };
-                return redirect( request, AdminMessageService.getMessageUrl( request,
-                        MESSAGE_MANDATORY_FIELD, tabErr,
-                        AdminMessage.TYPE_STOP ));
+                String[] tabErr = new String[] { I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale(  ) ) };
+
+                return redirect( request,
+                    AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabErr, AdminMessage.TYPE_STOP ) );
             }
 
             entry.setIdResource( nIdForm );
@@ -296,8 +293,7 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
 
         if ( fieldDepend != null )
         {
-            return redirect( request,
-                TicketFormFieldJspBean.getUrlModifyField( request, fieldDepend.getIdField(  ) ) );
+            return redirect( request, TicketFormFieldJspBean.getUrlModifyField( request, fieldDepend.getIdField(  ) ) );
         }
 
         return redirect( request, TicketFormJspBean.getURLModifyAdvancedTicketForm( request, strIdForm ) );
@@ -385,11 +381,11 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
         if ( StringUtils.isEmpty( strTitle ) )
         {
             strFieldError = FIELD_TITLE_FIELD;
-        } else
-            if ( StringUtils.isEmpty( strCode ) )
-            {
-                strFieldError = FIELD_CODE_FIELD;
-            }
+        }
+        else if ( StringUtils.isEmpty( strCode ) )
+        {
+            strFieldError = FIELD_CODE_FIELD;
+        }
         else if ( StringUtils.isEmpty( strValue ) )
         {
             strFieldError = FIELD_VALUE_FIELD;
@@ -443,19 +439,22 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
             {
                 String strError = EntryTypeServiceManager.getEntryTypeService( entry )
                                                          .getRequestData( entry, request, getLocale(  ) );
+
                 // entry code is mandatory for ticketing
                 String strEntryCode = request.getParameter( PARAMETER_ENTRY_CODE );
+
                 if ( StringUtils.isEmpty( strEntryCode ) )
                 {
-                    String[] tabErr = new String[]
-                    { I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) ) };
-                    return redirect( request, AdminMessageService.getMessageUrl( request,
-                            MESSAGE_MANDATORY_FIELD, tabErr, AdminMessage.TYPE_STOP ) );
+                    String[] tabErr = new String[] { I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale(  ) ) };
+
+                    return redirect( request,
+                        AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabErr,
+                            AdminMessage.TYPE_STOP ) );
                 }
 
                 if ( strError != null )
                 {
-                    return redirect ( request, strError );
+                    return redirect( request, strError );
                 }
 
                 EntryHome.update( entry );
@@ -582,7 +581,8 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
                     TicketFormFieldJspBean.getUrlModifyField( request, entry.getFieldDepend(  ).getIdField(  ) ) );
             }
 
-            return redirect( request, TicketFormJspBean.getURLModifyAdvancedTicketForm( request, entry.getIdResource( ) ) );
+            return redirect( request,
+                TicketFormJspBean.getURLModifyAdvancedTicketForm( request, entry.getIdResource(  ) ) );
         }
 
         return redirect( request, TicketFormJspBean.getURLManageTicketForms( request ) );
@@ -697,7 +697,8 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
                     TicketFormFieldJspBean.getUrlModifyField( request, entry.getFieldDepend(  ).getIdField(  ) ) );
             }
 
-            return redirect( request, TicketFormJspBean.getURLModifyAdvancedTicketForm( request, entry.getIdResource( ) ) );
+            return redirect( request,
+                TicketFormJspBean.getURLModifyAdvancedTicketForm( request, entry.getIdResource(  ) ) );
         }
 
         return redirect( request, TicketFormJspBean.getURLManageTicketForms( request ) );
@@ -788,7 +789,8 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
                 _entryService.moveOutEntryFromGroup( entry );
             }
 
-            return redirect( request, TicketFormJspBean.getURLModifyAdvancedTicketForm( request, entry.getIdResource( ) ) );
+            return redirect( request,
+                TicketFormJspBean.getURLModifyAdvancedTicketForm( request, entry.getIdResource(  ) ) );
         }
 
         return redirect( request, TicketFormJspBean.getURLManageTicketForms( request ) );
@@ -859,6 +861,7 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
         urlItem.addParameter( MVCUtils.PARAMETER_VIEW, VIEW_GET_MODIFY_ENTRY );
         urlItem.addParameter( PARAMETER_ID_ENTRY, nIdEntry );
         urlItem.addParameter( MVCUtils.PARAMETER_PAGE, PARAMETER_FORM_GENERICATTR );
+
         return urlItem.getUrl(  );
     }
 }

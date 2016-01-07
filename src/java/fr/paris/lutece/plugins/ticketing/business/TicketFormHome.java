@@ -33,16 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.ticketing.service.TicketFormCacheService;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.List;
 
 
 /**
@@ -52,9 +52,9 @@ import fr.paris.lutece.util.ReferenceList;
 public final class TicketFormHome
 {
     // Static variable pointed at the DAO instance
-    private static ITicketFormDAO _dao = SpringContextService.getBean ( "ticketing.ticketFormDAO" );
+    private static ITicketFormDAO _dao = SpringContextService.getBean( "ticketing.ticketFormDAO" );
     private static Plugin _plugin = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME );
-    private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance ( );
+    private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance(  );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -65,61 +65,59 @@ public final class TicketFormHome
 
     /**
      * Create an ticket form
-     * 
+     *
      * @param ticketForm
      *            The instance of the TicketForm which contains the informations
      *            to store
      */
-    public static void create(TicketForm ticketForm)
+    public static void create( TicketForm ticketForm )
     {
-        _dao.insert ( ticketForm, _plugin );
-        if ( _cacheService.isCacheEnable( ) )
+        _dao.insert( ticketForm, _plugin );
+
+        if ( _cacheService.isCacheEnable(  ) )
         {
-            _cacheService.putInCache(
-                    TicketFormCacheService.getFormCacheKey( ticketForm.getIdForm( ) ),
-                    ticketForm.clone( ) );
-            _cacheService.putInCache( TicketFormCacheService.getFormByCategoryCacheKey( ticketForm
-                            .getIdCategory( ) ), ticketForm.clone( ) );
+            _cacheService.putInCache( TicketFormCacheService.getFormCacheKey( ticketForm.getIdForm(  ) ),
+                ticketForm.clone(  ) );
+            _cacheService.putInCache( TicketFormCacheService.getFormByCategoryCacheKey( ticketForm.getIdCategory(  ) ),
+                ticketForm.clone(  ) );
         }
     }
 
     /**
      * Update of the ticketForm which is specified in parameter
-     * 
+     *
      * @param ticketForm
      *            The instance of the TicketForm which contains the data to
      *            store
      */
-    public static void update(TicketForm ticketForm)
+    public static void update( TicketForm ticketForm )
     {
-        _dao.store ( ticketForm, _plugin );
-        if ( _cacheService.isCacheEnable( ) )
+        _dao.store( ticketForm, _plugin );
+
+        if ( _cacheService.isCacheEnable(  ) )
         {
-            _cacheService.putInCache(
-                    TicketFormCacheService.getFormCacheKey( ticketForm.getIdForm( ) ),
-                    ticketForm.clone( ) );
-            _cacheService.putInCache( TicketFormCacheService.getFormByCategoryCacheKey( ticketForm
-                            .getIdCategory( ) ), ticketForm.clone( ) );
+            _cacheService.putInCache( TicketFormCacheService.getFormCacheKey( ticketForm.getIdForm(  ) ),
+                ticketForm.clone(  ) );
+            _cacheService.putInCache( TicketFormCacheService.getFormByCategoryCacheKey( ticketForm.getIdCategory(  ) ),
+                ticketForm.clone(  ) );
         }
     }
 
     /**
      * Remove an ticket form by its primary key. <b>Warning, please check that
      * there is no ticket associated with the form BEFORE removing it!</b>
-     * 
+     *
      * @param nTicketFormId
      *            The ticketForm Id
      */
-    public static void remove(int nTicketFormId)
+    public static void remove( int nTicketFormId )
     {
-        _dao.delete ( nTicketFormId, _plugin );
-        if ( _cacheService.isCacheEnable( ) )
+        _dao.delete( nTicketFormId, _plugin );
+
+        if ( _cacheService.isCacheEnable(  ) )
         {
-            _cacheService
-                    .removeKey( TicketFormCacheService
-                            .getFormByCategoryCacheKey( ( (TicketForm) _cacheService
-                                    .getFromCache( TicketFormCacheService
-                                            .getFormCacheKey( nTicketFormId ) ) ).getIdCategory( ) ) );
+            _cacheService.removeKey( TicketFormCacheService.getFormByCategoryCacheKey( 
+                    ( (TicketForm) _cacheService.getFromCache( TicketFormCacheService.getFormCacheKey( nTicketFormId ) ) ).getIdCategory(  ) ) );
             _cacheService.removeKey( TicketFormCacheService.getFormCacheKey( nTicketFormId ) );
         }
     }
@@ -130,35 +128,36 @@ public final class TicketFormHome
     /**
      * Returns an instance of a ticketForm whose identifier is specified in
      * parameter
-     * 
+     *
      * @param nTicketFormId
      *            The ticketForm primary key
      * @return an instance of TicketForm
      */
-    public static TicketForm findByPrimaryKey(int nTicketFormId)
+    public static TicketForm findByPrimaryKey( int nTicketFormId )
     {
-        String strCacheKey = TicketFormCacheService.getFormCacheKey ( nTicketFormId );
+        String strCacheKey = TicketFormCacheService.getFormCacheKey( nTicketFormId );
         TicketForm form = null;
-        if ( _cacheService.isCacheEnable( ) )
+
+        if ( _cacheService.isCacheEnable(  ) )
         {
             form = (TicketForm) _cacheService.getFromCache( strCacheKey );
         }
 
         if ( form == null )
         {
-            form = _dao.load ( nTicketFormId, _plugin );
+            form = _dao.load( nTicketFormId, _plugin );
 
             if ( form != null )
             {
-                if ( _cacheService.isCacheEnable( ) )
+                if ( _cacheService.isCacheEnable(  ) )
                 {
-                    _cacheService.putInCache( strCacheKey, form.clone( ) );
+                    _cacheService.putInCache( strCacheKey, form.clone(  ) );
                 }
             }
         }
         else
         {
-            form = (TicketForm) form.clone ( );
+            form = (TicketForm) form.clone(  );
         }
 
         return form;
@@ -167,17 +166,17 @@ public final class TicketFormHome
     /**
      * Returns an instance of a ticketForm whose identifier is specified in
      * parameter
-     * 
+     *
      * @param nTicketFormId
      *            The ticketForm primary key
      * @return an instance of TicketForm
      */
-    public static TicketForm findByCategoryId(int nIdCategory)
+    public static TicketForm findByCategoryId( int nIdCategory )
     {
-
         String strCacheKey = TicketFormCacheService.getFormByCategoryCacheKey( nIdCategory );
         TicketForm form = null;
-        if ( _cacheService.isCacheEnable( ) )
+
+        if ( _cacheService.isCacheEnable(  ) )
         {
             form = (TicketForm) _cacheService.getFromCache( strCacheKey );
         }
@@ -188,14 +187,15 @@ public final class TicketFormHome
 
             if ( form != null )
             {
-                if ( _cacheService.isCacheEnable( ) )
+                if ( _cacheService.isCacheEnable(  ) )
                 {
-                    _cacheService.putInCache( strCacheKey, form.clone( ) );
+                    _cacheService.putInCache( strCacheKey, form.clone(  ) );
                 }
             }
-        } else
+        }
+        else
         {
-            form = (TicketForm) form.clone( );
+            form = (TicketForm) form.clone(  );
         }
 
         return form;
@@ -204,29 +204,31 @@ public final class TicketFormHome
     /**
      * Load the data of all the ticketForm objects and returns them in form of a
      * collection
-     * 
+     *
      * @return the list which contains the data of all the ticketForm objects
      */
-    public static List<TicketForm> getTicketFormsList()
+    public static List<TicketForm> getTicketFormsList(  )
     {
-        return _dao.selectTicketFormsList ( _plugin );
+        return _dao.selectTicketFormsList( _plugin );
     }
 
     /**
      * Load the data of all the ticketForm objects which are not linked to a
      * category and returns them in form of a collection
-     * 
+     *
      * @return the list which contains the data of all the ticketForm objects
      */
-    public static ReferenceList getAvailableTicketFormsList()
+    public static ReferenceList getAvailableTicketFormsList(  )
     {
         List<TicketForm> lstForms = _dao.getAvailableTicketForms( _plugin );
-        ReferenceList lstRef = new ReferenceList( lstForms.size( ) );
+        ReferenceList lstRef = new ReferenceList( lstForms.size(  ) );
         lstRef.addItem( 0, StringUtils.EMPTY );
+
         for ( TicketForm form : lstForms )
         {
-            lstRef.addItem( form.getIdForm( ), form.getTitle( ) );
+            lstRef.addItem( form.getIdForm(  ), form.getTitle(  ) );
         }
+
         return lstRef;
     }
 }

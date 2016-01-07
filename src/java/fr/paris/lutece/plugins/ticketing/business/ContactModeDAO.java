@@ -33,14 +33,14 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -87,11 +87,11 @@ public final class ContactModeDAO implements IContactModeDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
 
-        contactMode.setId ( newPrimaryKey ( plugin ) );
+        contactMode.setId( newPrimaryKey( plugin ) );
 
-        daoUtil.setInt ( 1, contactMode.getId ( ) );
-        daoUtil.setString ( 2, contactMode.getLabel ( ) );
-        daoUtil.setString( 3, contactMode.getConfirmationMsg( ) );
+        daoUtil.setInt( 1, contactMode.getId(  ) );
+        daoUtil.setString( 2, contactMode.getLabel(  ) );
+        daoUtil.setString( 3, contactMode.getConfirmationMsg(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -111,12 +111,11 @@ public final class ContactModeDAO implements IContactModeDAO
 
         if ( daoUtil.next(  ) )
         {
-            contactMode = new ContactMode();
-            contactMode.setId ( daoUtil.getInt ( 1 ) );
-            contactMode.setLabel ( daoUtil.getString ( 2 ) );
-            contactMode
-                    .setConfirmationMsg( daoUtil.getString( 3 ) == null ? StringUtils.EMPTY
-                    : daoUtil.getString( 3 ) );
+            contactMode = new ContactMode(  );
+            contactMode.setId( daoUtil.getInt( 1 ) );
+            contactMode.setLabel( daoUtil.getString( 2 ) );
+            contactMode.setConfirmationMsg( ( daoUtil.getString( 3 ) == null ) ? StringUtils.EMPTY
+                                                                               : daoUtil.getString( 3 ) );
         }
 
         daoUtil.free(  );
@@ -144,10 +143,10 @@ public final class ContactModeDAO implements IContactModeDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-        daoUtil.setInt ( 1, contactMode.getId ( ) );
-        daoUtil.setString ( 2, contactMode.getLabel ( ) );
-        daoUtil.setString( 3, contactMode.getConfirmationMsg( ) );
-        daoUtil.setInt( 4, contactMode.getId( ) );
+        daoUtil.setInt( 1, contactMode.getId(  ) );
+        daoUtil.setString( 2, contactMode.getLabel(  ) );
+        daoUtil.setString( 3, contactMode.getConfirmationMsg(  ) );
+        daoUtil.setInt( 4, contactMode.getId(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -159,20 +158,20 @@ public final class ContactModeDAO implements IContactModeDAO
     @Override
     public List<ContactMode> selectContactModesList( Plugin plugin )
     {
-        List<ContactMode> contactModeList = new ArrayList<ContactMode>();
+        List<ContactMode> contactModeList = new ArrayList<ContactMode>(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
         daoUtil.executeQuery(  );
 
         while ( daoUtil.next(  ) )
         {
-            ContactMode contactMode = new ContactMode();
+            ContactMode contactMode = new ContactMode(  );
 
-            contactMode.setId ( daoUtil.getInt ( 1 ) );
-            contactMode.setLabel ( daoUtil.getString ( 2 ) );
-            contactMode.setConfirmationMsg( daoUtil.getString( 3 ) == null ? StringUtils.EMPTY
-                            : daoUtil.getString( 3 ) );
+            contactMode.setId( daoUtil.getInt( 1 ) );
+            contactMode.setLabel( daoUtil.getString( 2 ) );
+            contactMode.setConfirmationMsg( ( daoUtil.getString( 3 ) == null ) ? StringUtils.EMPTY
+                                                                               : daoUtil.getString( 3 ) );
 
-            contactModeList.add ( contactMode );
+            contactModeList.add( contactMode );
         }
 
         daoUtil.free(  );
@@ -186,13 +185,13 @@ public final class ContactModeDAO implements IContactModeDAO
     @Override
     public List<Integer> selectIdContactModesList( Plugin plugin )
     {
-        List<Integer> contactModeList = new ArrayList<Integer>();
+        List<Integer> contactModeList = new ArrayList<Integer>(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
         daoUtil.executeQuery(  );
 
         while ( daoUtil.next(  ) )
         {
-            contactModeList.add ( daoUtil.getInt ( 1 ) );
+            contactModeList.add( daoUtil.getInt( 1 ) );
         }
 
         daoUtil.free(  );
@@ -206,18 +205,17 @@ public final class ContactModeDAO implements IContactModeDAO
     @Override
     public ReferenceList selectReferenceList( Plugin plugin )
     {
-        ReferenceList list = new ReferenceList();
-        DAOUtil daoUtil = new DAOUtil ( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery();
+        ReferenceList list = new ReferenceList(  );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
+        daoUtil.executeQuery(  );
 
-        while ( daoUtil.next ( ) )
+        while ( daoUtil.next(  ) )
         {
-            list.addItem ( daoUtil.getInt ( 1 ), daoUtil.getString ( 2 ) );
+            list.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
         }
 
-        daoUtil.free();
+        daoUtil.free(  );
 
         return list;
     }
-
 }

@@ -33,17 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
@@ -71,6 +60,18 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.io.FileNotFoundException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 
 /**
  * This class provides the user interface to manage TicketForm features (
@@ -83,7 +84,6 @@ public class TicketFormJspBean extends MVCAdminJspBean
      * Right to manage ticketing forms
      */
     public static final String RIGHT_MANAGETICKETFORM = "TICKETING_MANAGEMENT";
-
     private static final long serialVersionUID = 1L;
 
     // templates
@@ -91,26 +91,23 @@ public class TicketFormJspBean extends MVCAdminJspBean
     private static final String TEMPLATE_CREATE_TICKETFORM = "/admin/plugins/ticketing/ticketform/create_ticketform.html";
     private static final String TEMPLATE_MODIFY_TICKETFORM = "/admin/plugins/ticketing/ticketform/modify_ticketform.html";
     private static final String TEMPLATE_ADVANCED_MODIFY_TICKETFORM = "/admin/plugins/ticketing/ticketform/modify_advanced_ticketform.html";
-    private static final String TEMPLATE_MODIFY_TICKETFORM_GENATTR= "/admin/plugins/ticketing/ticketform/modify_form_ticketform_genattr.html";
-    
+    private static final String TEMPLATE_MODIFY_TICKETFORM_GENATTR = "/admin/plugins/ticketing/ticketform/modify_form_ticketform_genattr.html";
 
     // Parameters
     private static final String PARAMETER_ID_FORM = "id_form";
-    private static final String PARAMETER_TITLE="title";
+    private static final String PARAMETER_TITLE = "title";
     private static final String PARAMETER_DESC = "description";
     private static final String PARAMETER_ID_CATEGORY = "idCategory";
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String PARAMETER_FORCE_RELOAD = "forceReload";
     private static final String PARAMETER_FORM_GENERICATTR = "form_genericatt";
 
-
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETFORMS = "ticketing.manage_ticketforms.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_TICKETFORM = "ticketing.modify_ticketForm.titleAlterablesParameters";
     private static final String PROPERTY_PAGE_TITLE_CREATE_TICKETFORM = "ticketing.create_ticketform.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_TICKETFORM_GENATTR = "ticketing.modify_ticketform.genattr.pageTitle";
-    
-    
+
     // Markers
     private static final String MARK_TICKETFORM_LIST = "ticketform_list";
     private static final String MARK_TICKETFORM = "ticketform";
@@ -153,7 +150,6 @@ public class TicketFormJspBean extends MVCAdminJspBean
     private static final String INFO_TICKETFORM_CREATED = "ticketing.info.ticketform.created";
     private static final String INFO_TICKETFORM_UPDATED = "ticketing.info.ticketform.updated";
     private static final String INFO_TICKETFORM_REMOVED = "ticketing.info.ticketform.removed";
-
 
     // Session variable to store working values
     private static final String SESSION_ATTRIBUTE_TICKETING_FORM = "ticketing.session.ticketForm";
@@ -202,19 +198,18 @@ public class TicketFormJspBean extends MVCAdminJspBean
         List<TicketForm> listTicketForms = TicketFormHome.getTicketFormsList(  );
 
         // PAGINATOR
-        LocalizedPaginator<TicketForm> paginator = new LocalizedPaginator<TicketForm>( listTicketForms,
-                nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, strCurrentPageIndex, getLocale(  ) );
+        LocalizedPaginator<TicketForm> paginator = new LocalizedPaginator<TicketForm>( listTicketForms, nItemsPerPage,
+                strUrl, PARAMETER_PAGE_INDEX, strCurrentPageIndex, getLocale(  ) );
 
         Map<String, Object> model = getModel(  );
 
         model.put( MARK_NB_ITEMS_PER_PAGE, Integer.toString( nItemsPerPage ) );
         model.put( MARK_PAGINATOR, paginator );
 
-        model.put ( MARK_TICKETFORM_LIST, paginator.getPageItems ( ) );
+        model.put( MARK_TICKETFORM_LIST, paginator.getPageItems(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETFORMS, TEMPLATE_MANAGE_TICKETFORMS, model );
     }
-
 
     /**
      * Returns the form to create an ticketing form
@@ -224,23 +219,23 @@ public class TicketFormJspBean extends MVCAdminJspBean
      * @throws AccessDeniedException If the user is not authorized to create
      *             ticketing forms
      */
-    @View(VIEW_CREATE_TICKETFORM)
+    @View( VIEW_CREATE_TICKETFORM )
     public String getCreateTicketForm( HttpServletRequest request )
         throws AccessDeniedException
     {
-        TicketForm ticketForm = (TicketForm) request.getSession ( )
-                                                                   .getAttribute( SESSION_ATTRIBUTE_TICKETING_FORM );
-        
-        if ( ( ticketForm == null ) || ( ticketForm.getIdForm ( ) > 0 ) )
+        TicketForm ticketForm = (TicketForm) request.getSession(  ).getAttribute( SESSION_ATTRIBUTE_TICKETING_FORM );
+
+        if ( ( ticketForm == null ) || ( ticketForm.getIdForm(  ) > 0 ) )
         {
-            ticketForm = new TicketForm ( );
-            request.getSession ( ).setAttribute ( SESSION_ATTRIBUTE_TICKETING_FORM, ticketForm );
+            ticketForm = new TicketForm(  );
+            request.getSession(  ).setAttribute( SESSION_ATTRIBUTE_TICKETING_FORM, ticketForm );
         }
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_LOCALE_TINY, getLocale(  ) );
-        addElementsToModelForLeftColumn ( request, ticketForm, getUser ( ), getLocale ( ), model );
-        model.put( MARK_LOCALE, TicketingPlugin.getPluginLocale( getLocale( ) ) );
+        addElementsToModelForLeftColumn( request, ticketForm, getUser(  ), getLocale(  ), model );
+        model.put( MARK_LOCALE, TicketingPlugin.getPluginLocale( getLocale(  ) ) );
+
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKETFORM, TEMPLATE_CREATE_TICKETFORM, model );
     }
 
@@ -256,15 +251,14 @@ public class TicketFormJspBean extends MVCAdminJspBean
     public String doCreateTicketForm( HttpServletRequest request )
         throws AccessDeniedException, FileNotFoundException
     {
+        TicketForm ticketForm = (TicketForm) request.getSession(  ).getAttribute( SESSION_ATTRIBUTE_TICKETING_FORM );
 
-        TicketForm ticketForm = (TicketForm) request.getSession(  )
-                                                                   .getAttribute( SESSION_ATTRIBUTE_TICKETING_FORM );
         if ( ticketForm == null )
         {
-            ticketForm = new TicketForm( );
+            ticketForm = new TicketForm(  );
         }
 
-        populate ( ticketForm, request );
+        populate( ticketForm, request );
 
         // Check constraints
         if ( !validateBean( ticketForm, VALIDATION_ATTRIBUTES_PREFIX ) )
@@ -272,7 +266,7 @@ public class TicketFormJspBean extends MVCAdminJspBean
             return redirectView( request, VIEW_CREATE_TICKETFORM );
         }
 
-        TicketFormHome.create ( ticketForm );
+        TicketFormHome.create( ticketForm );
 
         request.getSession(  ).removeAttribute( SESSION_ATTRIBUTE_TICKETING_FORM );
         addInfo( INFO_TICKETFORM_CREATED, getLocale(  ) );
@@ -335,21 +329,20 @@ public class TicketFormJspBean extends MVCAdminJspBean
     public String getModifyTicketForm( HttpServletRequest request )
         throws AccessDeniedException
     {
-        TicketForm ticketForm = (TicketForm) request.getSession ( )
-                                                                   .getAttribute( SESSION_ATTRIBUTE_TICKETING_FORM );
+        TicketForm ticketForm = (TicketForm) request.getSession(  ).getAttribute( SESSION_ATTRIBUTE_TICKETING_FORM );
 
         int nIdForm = Integer.parseInt( request.getParameter( PARAMETER_ID_FORM ) );
         String strPage = request.getParameter( MARK_PAGE );
 
-        if ( ( ticketForm == null ) || ( nIdForm != ticketForm.getIdForm ( ) ) ||
+        if ( ( ticketForm == null ) || ( nIdForm != ticketForm.getIdForm(  ) ) ||
                 Boolean.parseBoolean( request.getParameter( PARAMETER_FORCE_RELOAD ) ) )
         {
-            ticketForm = TicketFormHome.findByPrimaryKey ( nIdForm );
-            request.getSession ( ).setAttribute ( SESSION_ATTRIBUTE_TICKETING_FORM, ticketForm );
+            ticketForm = TicketFormHome.findByPrimaryKey( nIdForm );
+            request.getSession(  ).setAttribute( SESSION_ATTRIBUTE_TICKETING_FORM, ticketForm );
         }
 
         EntryFilter entryFilter = new EntryFilter(  );
-        entryFilter.setIdResource ( ticketForm.getIdForm ( ) );
+        entryFilter.setIdResource( ticketForm.getIdForm(  ) );
         entryFilter.setResourceType( TicketForm.RESOURCE_TYPE );
         entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
@@ -368,7 +361,7 @@ public class TicketFormJspBean extends MVCAdminJspBean
             if ( entry.getEntryType(  ).getGroup(  ) )
             {
                 entryFilter = new EntryFilter(  );
-                entryFilter.setIdResource ( ticketForm.getIdForm ( ) );
+                entryFilter.setIdResource( ticketForm.getIdForm(  ) );
                 entryFilter.setResourceType( TicketForm.RESOURCE_TYPE );
                 entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
                 entryFilter.setIdEntryParent( entry.getIdEntry(  ) );
@@ -380,23 +373,23 @@ public class TicketFormJspBean extends MVCAdminJspBean
         }
 
         Map<String, Object> model = getModel(  );
-        model.put ( MARK_GROUP_ENTRY_LIST, getRefListGroups ( ticketForm.getIdForm ( ) ) );
+        model.put( MARK_GROUP_ENTRY_LIST, getRefListGroups( ticketForm.getIdForm(  ) ) );
         model.put( MARK_ENTRY_TYPE_LIST, EntryTypeService.getInstance(  ).getEntryTypeReferenceList(  ) );
         model.put( MARK_ENTRY_LIST, listEntry );
         model.put( MARK_LOCALE, getLocale(  ) );
         model.put( MARK_LOCALE_TINY, getLocale(  ) );
         model.put( MARK_LIST_ORDER_FIRST_LEVEL, listOrderFirstLevel );
-        addElementsToModelForLeftColumn ( request, ticketForm, getUser ( ), getLocale ( ), model );
+        addElementsToModelForLeftColumn( request, ticketForm, getUser(  ), getLocale(  ), model );
 
         // model.put( MARK_MAP_CHILD, mapGroupItemsNumber );
         if ( ( strPage != null ) && strPage.equals( PARAMETER_FORM_GENERICATTR ) )
         {
             return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKETFORM_GENATTR, TEMPLATE_MODIFY_TICKETFORM_GENATTR, model );
-        } else
+        }
+        else
         {
             return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKETFORM, TEMPLATE_MODIFY_TICKETFORM, model );
         }
-
     }
 
     /**
@@ -410,21 +403,19 @@ public class TicketFormJspBean extends MVCAdminJspBean
     public String getModifyTicketFormAdvanced( HttpServletRequest request )
         throws AccessDeniedException
     {
-        TicketForm ticketForm = (TicketForm) request.getSession ( )
-                                                                   .getAttribute( SESSION_ATTRIBUTE_TICKETING_FORM );
+        TicketForm ticketForm = (TicketForm) request.getSession(  ).getAttribute( SESSION_ATTRIBUTE_TICKETING_FORM );
 
         int nIdForm = Integer.parseInt( request.getParameter( PARAMETER_ID_FORM ) );
 
-        if ( ( ticketForm == null ) || ( nIdForm != ticketForm.getIdForm ( ) ) ||
+        if ( ( ticketForm == null ) || ( nIdForm != ticketForm.getIdForm(  ) ) ||
                 Boolean.parseBoolean( request.getParameter( PARAMETER_FORCE_RELOAD ) ) )
         {
-            ticketForm = TicketFormHome.findByPrimaryKey ( nIdForm );
-            request.getSession ( ).setAttribute ( SESSION_ATTRIBUTE_TICKETING_FORM, ticketForm );
+            ticketForm = TicketFormHome.findByPrimaryKey( nIdForm );
+            request.getSession(  ).setAttribute( SESSION_ATTRIBUTE_TICKETING_FORM, ticketForm );
         }
 
-
         EntryFilter entryFilter = new EntryFilter(  );
-        entryFilter.setIdResource ( ticketForm.getIdForm ( ) );
+        entryFilter.setIdResource( ticketForm.getIdForm(  ) );
         entryFilter.setResourceType( TicketForm.RESOURCE_TYPE );
         entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
@@ -444,7 +435,7 @@ public class TicketFormJspBean extends MVCAdminJspBean
             if ( entry.getEntryType(  ).getGroup(  ) )
             {
                 entryFilter = new EntryFilter(  );
-                entryFilter.setIdResource ( ticketForm.getIdForm ( ) );
+                entryFilter.setIdResource( ticketForm.getIdForm(  ) );
                 entryFilter.setResourceType( TicketForm.RESOURCE_TYPE );
                 entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
                 entryFilter.setIdEntryParent( entry.getIdEntry(  ) );
@@ -457,14 +448,14 @@ public class TicketFormJspBean extends MVCAdminJspBean
         }
 
         Map<String, Object> model = getModel(  );
-        model.put ( MARK_GROUP_ENTRY_LIST, getRefListGroups ( ticketForm.getIdForm ( ) ) );
+        model.put( MARK_GROUP_ENTRY_LIST, getRefListGroups( ticketForm.getIdForm(  ) ) );
         model.put( MARK_ENTRY_TYPE_LIST, EntryTypeService.getInstance(  ).getEntryTypeReferenceList(  ) );
         model.put( MARK_ENTRY_LIST, listEntry );
         model.put( MARK_LOCALE, getLocale(  ) );
         model.put( MARK_LOCALE_TINY, getLocale(  ) );
         model.put( MARK_LIST_ORDER_FIRST_LEVEL, listOrderFirstLevel );
-        model.put(MARK_PAGE, PARAMETER_FORM_GENERICATTR);
-        addElementsToModelForLeftColumn ( request, ticketForm, getUser ( ), getLocale ( ), model );
+        model.put( MARK_PAGE, PARAMETER_FORM_GENERICATTR );
+        addElementsToModelForLeftColumn( request, ticketForm, getUser(  ), getLocale(  ), model );
 
         //        model.put( MARK_MAP_CHILD, mapGroupItemsNumber );
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKETFORM, TEMPLATE_ADVANCED_MODIFY_TICKETFORM, model );
@@ -481,17 +472,18 @@ public class TicketFormJspBean extends MVCAdminJspBean
     public String doModifyTicketForm( HttpServletRequest request )
         throws AccessDeniedException
     {
-        TicketForm ticketForm = (TicketForm) request.getSession ( ).getAttribute ( SESSION_ATTRIBUTE_TICKETING_FORM );
+        TicketForm ticketForm = (TicketForm) request.getSession(  ).getAttribute( SESSION_ATTRIBUTE_TICKETING_FORM );
         String strIdForm = request.getParameter( PARAMETER_ID_FORM );
         String strTitle = request.getParameter( PARAMETER_TITLE );
         String strDesc = request.getParameter( PARAMETER_DESC );
         int nIdCategory = StringUtils.isEmpty( request.getParameter( PARAMETER_ID_CATEGORY ) ) ? 0
-                : Integer.parseInt( request.getParameter( PARAMETER_ID_CATEGORY ) );
+                                                                                               : Integer.parseInt( request.getParameter( 
+                    PARAMETER_ID_CATEGORY ) );
         int nIdTicketForm = Integer.parseInt( strIdForm );
 
-        if ( ( ticketForm == null ) || ( nIdTicketForm != ticketForm.getIdForm ( ) ) )
+        if ( ( ticketForm == null ) || ( nIdTicketForm != ticketForm.getIdForm(  ) ) )
         {
-            ticketForm = TicketFormHome.findByPrimaryKey ( nIdTicketForm );
+            ticketForm = TicketFormHome.findByPrimaryKey( nIdTicketForm );
         }
 
         ticketForm.setIdCategory( nIdCategory );
@@ -499,19 +491,18 @@ public class TicketFormJspBean extends MVCAdminJspBean
         ticketForm.setTitle( strTitle );
 
         // Check constraints
-        if ( !validateBean ( ticketForm, VALIDATION_ATTRIBUTES_PREFIX ) )
+        if ( !validateBean( ticketForm, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect ( request, VIEW_MODIFY_TICKETFORM, PARAMETER_ID_FORM, ticketForm.getIdForm ( ) );
+            return redirect( request, VIEW_MODIFY_TICKETFORM, PARAMETER_ID_FORM, ticketForm.getIdForm(  ) );
         }
 
-        TicketFormHome.update ( ticketForm );
+        TicketFormHome.update( ticketForm );
 
         request.getSession(  ).removeAttribute( SESSION_ATTRIBUTE_TICKETING_FORM );
         addInfo( INFO_TICKETFORM_UPDATED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETFORMS );
     }
-
 
     /**
      * Get url manage ticketing form
@@ -599,40 +590,40 @@ public class TicketFormJspBean extends MVCAdminJspBean
 
     /**
      * Get the URL to modify advanced properties of a ticketing form
-     * 
+     *
      * @param request
      *            The request
      * @param strIdForm
      *            The id of the form to modify
      * @return The URL to modify the given Ticket form
      */
-    public static String getURLModifyAdvancedTicketForm(HttpServletRequest request, String strIdForm)
+    public static String getURLModifyAdvancedTicketForm( HttpServletRequest request, String strIdForm )
     {
         UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_MANAGE_TICKETFORMS );
         urlItem.addParameter( MVCUtils.PARAMETER_VIEW, VIEW_MODIFY_TICKETFORM );
         urlItem.addParameter( PARAMETER_ID_FORM, strIdForm );
         urlItem.addParameter( MVCUtils.PARAMETER_PAGE, PARAMETER_FORM_GENERICATTR );
 
-        return urlItem.getUrl( );
+        return urlItem.getUrl(  );
     }
 
     /**
      * Get the URL to modify advanced properties of a ticketing form
-     * 
+     *
      * @param request
      *            The request
      * @param nIdForm
      *            The id of the form to modify
      * @return The URL to modify the given Ticket form
      */
-    public static String getURLModifyAdvancedTicketForm(HttpServletRequest request, int nIdForm)
+    public static String getURLModifyAdvancedTicketForm( HttpServletRequest request, int nIdForm )
     {
         return getURLModifyAdvancedTicketForm( request, Integer.toString( nIdForm ) );
     }
 
     /**
      * Get the URL to manage ticketing forms
-     * 
+     *
      * @param request
      *            The request
      * @return The URL to manage ticketing forms
@@ -648,7 +639,7 @@ public class TicketFormJspBean extends MVCAdminJspBean
     /**
      * Add elements to the model to display the left column to modify an
      * ticketing form
-     * 
+     *
      * @param request
      *            The request to store the ticketing form in session
      * @param ticketForm
@@ -660,16 +651,16 @@ public class TicketFormJspBean extends MVCAdminJspBean
      * @param model
      *            the model to add elements in
      */
-    public static void addElementsToModelForLeftColumn(HttpServletRequest request, TicketForm ticketForm,
+    public static void addElementsToModelForLeftColumn( HttpServletRequest request, TicketForm ticketForm,
         AdminUser user, Locale locale, Map<String, Object> model )
     {
-        model.put ( MARK_TICKETFORM, ticketForm );
+        model.put( MARK_TICKETFORM, ticketForm );
         model.put( MARK_LIST_WORKFLOWS, WorkflowService.getInstance(  ).getWorkflowsEnabled( user, locale ) );
 
         Plugin pluginTicketResource = PluginService.getPlugin( AppPropertiesService.getProperty( 
                     PROPERTY_MODULE_TICKETING_RESOURCE_NAME ) );
         model.put( MARK_TICKETING_RESOURCE_ENABLED,
             ( pluginTicketResource != null ) && pluginTicketResource.isInstalled(  ) );
-        request.getSession ( ).setAttribute ( SESSION_ATTRIBUTE_TICKETING_FORM, ticketForm );
+        request.getSession(  ).setAttribute( SESSION_ATTRIBUTE_TICKETING_FORM, ticketForm );
     }
 }

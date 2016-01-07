@@ -33,10 +33,10 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
+
+import java.util.List;
 
 
 /**
@@ -46,7 +46,7 @@ public interface IContactModeDAO
 {
     /**
      * Insert a new record in the table.
-     * 
+     *
      * @param contactMode
      *            instance of the contactMode object to insert
      * @param plugin
@@ -56,7 +56,7 @@ public interface IContactModeDAO
 
     /**
      * Update the record in the table
-     * 
+     *
      * @param contactMode
      *            the reference of the ContactMode
      * @param plugin
@@ -66,7 +66,7 @@ public interface IContactModeDAO
 
     /**
      * Delete a record from the table
-     * 
+     *
      * @param nKey
      *            The identifier of the ContactMode to delete
      * @param plugin
@@ -79,7 +79,7 @@ public interface IContactModeDAO
 
     /**
      * Load the data from the table
-     * 
+     *
      * @param nKey
      *            The identifier of the contactMode
      * @param plugin
@@ -91,7 +91,7 @@ public interface IContactModeDAO
     /**
      * Load the data of all the contactMode objects and returns them as a
      * collection
-     * 
+     *
      * @param plugin
      *            the Plugin
      * @return The collection which contains the data of all the contactMode
@@ -102,7 +102,7 @@ public interface IContactModeDAO
     /**
      * Load the id of all the contactMode objects and returns them as a
      * collection
-     * 
+     *
      * @param plugin
      *            the Plugin
      * @return The collection which contains the id of all the contactMode
@@ -113,11 +113,10 @@ public interface IContactModeDAO
     /**
      * Load the data of all the contactMode objects and returns them as a
      * reference list
-     * 
+     *
      * @param plugin
      *            the Plugin
      * @return The reference list
      */
     ReferenceList selectReferenceList( Plugin plugin );
-
 }

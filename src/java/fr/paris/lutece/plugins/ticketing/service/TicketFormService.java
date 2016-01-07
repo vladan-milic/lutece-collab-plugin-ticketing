@@ -33,16 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
@@ -63,6 +53,17 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
+
+import java.io.Serializable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -94,7 +95,7 @@ public class TicketFormService implements Serializable
     private static final String MARK_LIST_RESPONSES = "list_responses";
     private static final String MARK_TICKET = "ticket";
     private static final String MARK_UPLOAD_HANDLER = "uploadHandler";
-    private static final String MARK_LIST_ERRORS = "listAllErrors" ;
+    private static final String MARK_LIST_ERRORS = "listAllErrors";
 
     // Session keys
     private static final String SESSION_NOT_VALIDATED_TICKET = "ticketing.ticketFormService.notValidatedTicket";
@@ -106,12 +107,12 @@ public class TicketFormService implements Serializable
 
     /**
      * Get an Entry Filter
-     * 
+     *
      * @param idForm
      *            the id form
      * @return List a filter Entry
      */
-    private static List<Entry> getFilter(int idForm)
+    private static List<Entry> getFilter( int idForm )
     {
         EntryFilter filter = new EntryFilter(  );
         filter.setIdResource( idForm );
@@ -134,8 +135,8 @@ public class TicketFormService implements Serializable
      * @param request HttpServletRequest
      * @return the HTML code of the form
      */
-    public String getHtmlForm(Ticket ticket, TicketForm form, Locale locale,
-        boolean bDisplayFront, HttpServletRequest request )
+    public String getHtmlForm( Ticket ticket, TicketForm form, Locale locale, boolean bDisplayFront,
+        HttpServletRequest request )
     {
         Map<String, Object> model = new HashMap<String, Object>(  );
         StringBuffer strBuffer = new StringBuffer(  );
@@ -150,30 +151,30 @@ public class TicketFormService implements Serializable
         model.put( MARK_FORM, form );
         model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
         model.put( MARK_LOCALE, locale );
-        model.put ( MARK_TICKET, ticket );
-        
+        model.put( MARK_TICKET, ticket );
+
         List<GenericAttributeError> listErrors = (List<GenericAttributeError>) request.getSession(  )
-                .getAttribute( SESSION_TICKET_FORM_ERRORS );
-        
+                                                                                      .getAttribute( SESSION_TICKET_FORM_ERRORS );
+
         model.put( MARK_FORM_ERRORS, listErrors );
-        model.put( MARK_LIST_ERRORS , getAllErrors( request ) );
+        model.put( MARK_LIST_ERRORS, getAllErrors( request ) );
+
         // HtmlTemplate template = AppTemplateService.getTemplate( bDisplayFront
         // ? TEMPLATE_HTML_CODE_FORM
         // : TEMPLATE_HTML_CODE_FORM_ADMIN, locale,
         // model );
 
         // return template.getHtml( );
-        return strBuffer.toString( );
+        return strBuffer.toString(  );
     }
-    
-    private List <String> getAllErrors( HttpServletRequest request )
+
+    private List<String> getAllErrors( HttpServletRequest request )
     {
-    	  List <String> listAllErrors = new ArrayList <String>( ) ;
+        List<String> listAllErrors = new ArrayList<String>(  );
 
         // TODO
-          return listAllErrors ;
+        return listAllErrors;
     }
-
 
     /**
      * Insert in the string buffer the content of the HTML code of the entry
@@ -264,10 +265,11 @@ public class TicketFormService implements Serializable
 
         if ( request != null )
         {
-            Ticket ticket = getTicketFromSession ( request.getSession ( ) );
+            Ticket ticket = getTicketFromSession( request.getSession(  ) );
+
             if ( ticket != null )
             {
-             model.put( MARK_LIST_RESPONSES, ticket.getListResponse ( ) );
+                model.put( MARK_LIST_RESPONSES, ticket.getListResponse(  ) );
             }
         }
 
@@ -290,7 +292,7 @@ public class TicketFormService implements Serializable
      * Return null if there is no error in the response, or return the list of
      * errors Response created are stored the map of {@link Ticket}. The key of
      * the map is this id of the entry, and the value the list of responses
-     * 
+     *
      * @param request
      *            the request
      * @param nIdEntry
@@ -303,14 +305,15 @@ public class TicketFormService implements Serializable
      *         found
      */
     public List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry, Locale locale,
- Ticket ticket)
+        Ticket ticket )
     {
-        if ( ticket.getListResponse( ) == null )
+        if ( ticket.getListResponse(  ) == null )
         {
-            List<Response> listResponse = new ArrayList<Response>( );
+            List<Response> listResponse = new ArrayList<Response>(  );
             ticket.setListResponse( listResponse );
         }
-        return getResponseEntry( request, nIdEntry, ticket.getListResponse( ), false, locale, ticket );
+
+        return getResponseEntry( request, nIdEntry, ticket.getListResponse(  ), false, locale, ticket );
     }
 
     /**
@@ -327,7 +330,7 @@ public class TicketFormService implements Serializable
      *         found
      */
     private List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry,
- List<Response> listResponse, boolean bResponseNull, Locale locale, Ticket ticket)
+        List<Response> listResponse, boolean bResponseNull, Locale locale, Ticket ticket )
     {
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>(  );
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
@@ -347,7 +350,7 @@ public class TicketFormService implements Serializable
             for ( Entry entryChild : entry.getChildren(  ) )
             {
                 List<Response> listResponseChild = new ArrayList<Response>(  );
-                ticket.getListResponse ( ).addAll ( listResponseChild );
+                ticket.getListResponse(  ).addAll( listResponseChild );
 
                 listFormErrors.addAll( getResponseEntry( request, entryChild.getIdEntry(  ), listResponseChild, false,
                         locale, ticket ) );
@@ -364,7 +367,7 @@ public class TicketFormService implements Serializable
 
                 if ( formError != null )
                 {
-                        formError.setUrl ( getEntryUrl ( entry, ticket.getIdTicketCategory ( ) ) );
+                    formError.setUrl( getEntryUrl( entry, ticket.getIdTicketCategory(  ) ) );
                 }
             }
             else
@@ -442,9 +445,9 @@ public class TicketFormService implements Serializable
      * @param session The session
      * @param ticketing The ticketing to save
      */
-    public void saveTicketInSession(HttpSession session, Ticket ticket)
+    public void saveTicketInSession( HttpSession session, Ticket ticket )
     {
-        session.setAttribute ( SESSION_NOT_VALIDATED_TICKET, ticket );
+        session.setAttribute( SESSION_NOT_VALIDATED_TICKET, ticket );
     }
 
     /**
@@ -452,9 +455,9 @@ public class TicketFormService implements Serializable
      * @param session The session of the user
      * @return The ticketing form
      */
-    public Ticket getTicketFromSession(HttpSession session)
+    public Ticket getTicketFromSession( HttpSession session )
     {
-        return (Ticket) session.getAttribute ( SESSION_NOT_VALIDATED_TICKET );
+        return (Ticket) session.getAttribute( SESSION_NOT_VALIDATED_TICKET );
     }
 
     /**
@@ -463,7 +466,7 @@ public class TicketFormService implements Serializable
      */
     public void removeTicketFromSession( HttpSession session )
     {
-        session.removeAttribute( SESSION_NOT_VALIDATED_TICKET);
+        session.removeAttribute( SESSION_NOT_VALIDATED_TICKET );
     }
 
     /**

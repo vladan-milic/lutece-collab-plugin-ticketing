@@ -31,8 +31,6 @@
  *
  * License 1.0
  */
-
-
 package fr.paris.lutece.plugins.ticketing.business;
 
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
@@ -41,59 +39,59 @@ import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 /**
  * AssigneeUnit
  */
-public class AssigneeUnit 
+public class AssigneeUnit
 {
     // Variables declarations 
     private int _nUnitId;
     private String _strName;
-    
+
     /** Constructor */
-    public AssigneeUnit() 
+    public AssigneeUnit(  )
     {
     }
 
     /** Constructor
-     * @param unit The unit 
+     * @param unit The unit
      */
-    public AssigneeUnit( Unit unit ) 
+    public AssigneeUnit( Unit unit )
     {
-        _nUnitId = unit.getIdUnit();
-        _strName = unit.getLabel();
+        _nUnitId = unit.getIdUnit(  );
+        _strName = unit.getLabel(  );
     }
+
     /**
         * Returns the UnitId
         * @return The UnitId
-        */ 
-    public int getUnitId()
+        */
+    public int getUnitId(  )
     {
         return _nUnitId;
     }
-    
-       /**
-        * Sets the UnitId
-        * @param nUnitId The UnitId
-        */ 
+
+    /**
+     * Sets the UnitId
+     * @param nUnitId The UnitId
+     */
     public void setUnitId( int nUnitId )
     {
         _nUnitId = nUnitId;
     }
-    
-       /**
-        * Returns the Name
-        * @return The Name
-        */ 
-    public String getName()
+
+    /**
+     * Returns the Name
+     * @return The Name
+     */
+    public String getName(  )
     {
         return _strName;
     }
-    
-       /**
-        * Sets the Name
-        * @param strName The Name
-        */ 
+
+    /**
+     * Sets the Name
+     * @param strName The Name
+     */
     public void setName( String strName )
     {
         _strName = strName;
     }
-
 }

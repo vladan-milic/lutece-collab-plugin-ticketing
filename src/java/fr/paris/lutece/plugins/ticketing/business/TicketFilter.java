@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import java.util.Date;
-
 import org.apache.commons.lang.StringUtils;
+
+import java.util.Date;
 
 
 /**
@@ -49,13 +49,23 @@ public class TicketFilter
      * Value for boolean filters to represent Boolean.FALSE
      */
     public static final int FILTER_FALSE = 0;
+
     /**
      * Value for boolean filters to represent Boolean.TRUE
      */
     public static final int FILTER_TRUE = 1;
-
     public static final int CONSTANT_ID_NULL = -1;
 
+    /**
+     * Default order by
+     */
+    public static final String CONSTANT_DEFAULT_ORDER_BY = "id_ticket";
+    private static final String[] LIST_ORDER_BY = 
+        {
+            CONSTANT_DEFAULT_ORDER_BY, "ticket_status", "date_create", "date_update", "id_user", "id_ticket_domain",
+            "id_ticket_category", "email", "lastname", "firstname", "fixed_phone_number", "mobile_phone_number",
+            "date_close"
+        };
     private int _nIdTicket = CONSTANT_ID_NULL;
     private Date _dateLastUpdateDate = null;
     private Date _dateLastUpdateStartDate = null;
@@ -74,30 +84,15 @@ public class TicketFilter
     private String _strFirstName = null;
     private String _strFixedPhoneNumber = null;
     private String _strMobilePhoneNumber = null;
-
     private String _strOrderBy = null;
     private String _strOrderSort = null;
 
-    private enum ORDER_SORT_ALLOWED {
-        ASC, DESC
-    };
-
-    /**
-     * Default order by
-     */
-    public static final String CONSTANT_DEFAULT_ORDER_BY = "id_ticket";
-
-    private static final String[] LIST_ORDER_BY =
-    { CONSTANT_DEFAULT_ORDER_BY, "ticket_status", "date_create", "date_update", "id_user",
-            "id_ticket_domain", "id_ticket_category", "email", "lastname", "firstname",
-            "fixed_phone_number", "mobile_phone_number", "date_close" };
-
     /**
      * Check if this filter contains a idUser
-     * 
+     *
      * @return true if the filter contain an id of ticket
      */
-    public boolean containsIdUser()
+    public boolean containsIdUser(  )
     {
         return ( _nIdUser != CONSTANT_ID_NULL );
     }
@@ -105,7 +100,7 @@ public class TicketFilter
     /**
      * @return the _nIdUser
      */
-    public int getIdUser()
+    public int getIdUser(  )
     {
         return _nIdUser;
     }
@@ -114,7 +109,7 @@ public class TicketFilter
      * @param nIdUser
      *            the nIdUser to set
      */
-    public void setIdUser(int nIdUser)
+    public void setIdUser( int nIdUser )
     {
         this._nIdUser = nIdUser;
     }
@@ -122,7 +117,7 @@ public class TicketFilter
     /**
      * @return the _nIdTicket
      */
-    public int getIdTicket()
+    public int getIdTicket(  )
     {
         return _nIdTicket;
     }
@@ -131,26 +126,25 @@ public class TicketFilter
      * @param nIdTicket
      *            the nIdTicket to set
      */
-    public void setIdTicket(int nIdTicket)
+    public void setIdTicket( int nIdTicket )
     {
         this._nIdTicket = nIdTicket;
     }
 
     /**
      * Check if this filter contains a idTicket
-     * 
+     *
      * @return true if the filter contain an id of ticket
      */
-    public boolean containsIdTicket()
+    public boolean containsIdTicket(  )
     {
         return ( _nIdTicket != CONSTANT_ID_NULL );
     }
 
-
     /**
      * @return the _dateLastUpdateDate
      */
-    public Date getLastUpdateDate()
+    public Date getLastUpdateDate(  )
     {
         return _dateLastUpdateDate;
     }
@@ -159,17 +153,17 @@ public class TicketFilter
      * @param strLastUpdateDate
      *            the strLastUpdateDate to set
      */
-    public void setLastUpdateDate(Date strLastUpdateDate)
+    public void setLastUpdateDate( Date strLastUpdateDate )
     {
         this._dateLastUpdateDate = strLastUpdateDate;
     }
 
     /**
      * Check if this filter contains a _dateLastUpdateDate
-     * 
+     *
      * @return true if the filter contain _dateLastUpdateDate
      */
-    public boolean containsLastUpdateDate()
+    public boolean containsLastUpdateDate(  )
     {
         return _dateLastUpdateDate != null;
     }
@@ -177,7 +171,7 @@ public class TicketFilter
     /**
      * @return the _dateLastUpdateStartDate
      */
-    public Date getLastUpdateStartDate()
+    public Date getLastUpdateStartDate(  )
     {
         return _dateLastUpdateStartDate;
     }
@@ -186,17 +180,17 @@ public class TicketFilter
      * @param strLastUpdateStartDate
      *            the strLastUpdateStartDate to set
      */
-    public void setLastUpdateStartDate(Date strLastUpdateStartDate)
+    public void setLastUpdateStartDate( Date strLastUpdateStartDate )
     {
         this._dateLastUpdateStartDate = strLastUpdateStartDate;
     }
 
     /**
      * Check if this filter contains a _dateLastUpdateStartDate
-     * 
+     *
      * @return true if the filter contains _dateLastUpdateStartDate
      */
-    public boolean containsLastUpdateStartDate()
+    public boolean containsLastUpdateStartDate(  )
     {
         return _dateLastUpdateStartDate != null;
     }
@@ -204,7 +198,7 @@ public class TicketFilter
     /**
      * @return the _dateLastUpdateEndDate
      */
-    public Date getLastUpdateEndDate()
+    public Date getLastUpdateEndDate(  )
     {
         return _dateLastUpdateEndDate;
     }
@@ -213,17 +207,17 @@ public class TicketFilter
      * @param strLastUpdateEndDate
      *            the strLastUpdateEndDate to set
      */
-    public void setLastUpdateEndDate(Date strLastUpdateEndDate)
+    public void setLastUpdateEndDate( Date strLastUpdateEndDate )
     {
         this._dateLastUpdateEndDate = strLastUpdateEndDate;
     }
 
     /**
      * Check if this filter contains a _dateLastUpdateEndDate
-     * 
+     *
      * @return true if the filter contains _dateLastUpdateEndDate
      */
-    public boolean containsLastUpdateEndDate()
+    public boolean containsLastUpdateEndDate(  )
     {
         return _dateLastUpdateEndDate != null;
     }
@@ -231,7 +225,7 @@ public class TicketFilter
     /**
      * @return the _strCloseDate
      */
-    public Date getCloseDate()
+    public Date getCloseDate(  )
     {
         return _dateCloseDate;
     }
@@ -240,17 +234,17 @@ public class TicketFilter
      * @param strCloseDate
      *            the strCloseDate to set
      */
-    public void setCloseDate(Date strCloseDate)
+    public void setCloseDate( Date strCloseDate )
     {
         this._dateCloseDate = strCloseDate;
     }
 
     /**
      * Check if this filter contains a _dateCloseDate
-     * 
+     *
      * @return true if the filter contain _dateCloseDate
      */
-    public boolean containsCloseDate()
+    public boolean containsCloseDate(  )
     {
         return _dateCloseDate != null;
     }
@@ -258,7 +252,7 @@ public class TicketFilter
     /**
      * @return the _strCreationDate
      */
-    public Date getCreationDate()
+    public Date getCreationDate(  )
     {
         return _dateCreationDate;
     }
@@ -267,26 +261,25 @@ public class TicketFilter
      * @param strCreationDate
      *            the strCreationDate to set
      */
-    public void setCreationDate(Date strCreationDate)
+    public void setCreationDate( Date strCreationDate )
     {
         this._dateCreationDate = strCreationDate;
     }
 
     /**
      * Check if this filter contains a _dateCreationDate
-     * 
+     *
      * @return true if the filter contain _dateCreationDate
      */
-    public boolean containsCreationDate()
+    public boolean containsCreationDate(  )
     {
         return _dateCreationDate != null;
     }
 
-
     /**
      * @return the _dateCreationStartDate
      */
-    public Date getCreationStartDate()
+    public Date getCreationStartDate(  )
     {
         return _dateCreationStartDate;
     }
@@ -295,17 +288,17 @@ public class TicketFilter
      * @param strCreationStartDate
      *            the strCreationStartDate to set
      */
-    public void setCreationStartDate(Date strCreationStartDate)
+    public void setCreationStartDate( Date strCreationStartDate )
     {
         this._dateCreationStartDate = strCreationStartDate;
     }
 
     /**
      * Check if this filter contains a _dateCreationStartDate
-     * 
+     *
      * @return true if the filter contains _dateCreationStartDate
      */
-    public boolean containsCreationStartDate()
+    public boolean containsCreationStartDate(  )
     {
         return _dateCreationStartDate != null;
     }
@@ -313,7 +306,7 @@ public class TicketFilter
     /**
      * @return the _dateCreationEndDate
      */
-    public Date getCreationEndDate()
+    public Date getCreationEndDate(  )
     {
         return _dateCreationEndDate;
     }
@@ -322,17 +315,17 @@ public class TicketFilter
      * @param strCreationEndDate
      *            the strCreationEndDate to set
      */
-    public void setCreationEndDate(Date strCreationEndDate)
+    public void setCreationEndDate( Date strCreationEndDate )
     {
         this._dateCreationEndDate = strCreationEndDate;
     }
 
     /**
      * Check if this filter contains a _dateCreationEndDate
-     * 
+     *
      * @return true if the filter contains _dateCreationEndDate
      */
-    public boolean containsCreationEndDate()
+    public boolean containsCreationEndDate(  )
     {
         return _dateCreationEndDate != null;
     }
@@ -340,7 +333,7 @@ public class TicketFilter
     /**
      * @return the _nIdCategory
      */
-    public int getIdCategory()
+    public int getIdCategory(  )
     {
         return _nIdCategory;
     }
@@ -349,7 +342,7 @@ public class TicketFilter
      * @param _nIdCategory
      *            the _nIdCategory to set
      */
-    public void setIdCategory(int _nIdCategory)
+    public void setIdCategory( int _nIdCategory )
     {
         this._nIdCategory = _nIdCategory;
     }
@@ -359,7 +352,7 @@ public class TicketFilter
      *
      * @return true if the filter contain an id of category
      */
-    public boolean containsIdCategory()
+    public boolean containsIdCategory(  )
     {
         return ( _nIdCategory != CONSTANT_ID_NULL );
     }
@@ -367,7 +360,7 @@ public class TicketFilter
     /**
      * @return the _nIdDomain
      */
-    public int getIdDomain()
+    public int getIdDomain(  )
     {
         return _nIdDomain;
     }
@@ -376,7 +369,7 @@ public class TicketFilter
      * @param _nIdDomain
      *            the _nIdDomain to set
      */
-    public void setIdDomain(int _nIdDomain)
+    public void setIdDomain( int _nIdDomain )
     {
         this._nIdDomain = _nIdDomain;
     }
@@ -386,7 +379,7 @@ public class TicketFilter
      *
      * @return true if the filter contain an id of domain
      */
-    public boolean containsIdDomain()
+    public boolean containsIdDomain(  )
     {
         return ( _nIdDomain != CONSTANT_ID_NULL );
     }
@@ -394,7 +387,7 @@ public class TicketFilter
     /**
      * @return the _nIdType
      */
-    public int getIdType()
+    public int getIdType(  )
     {
         return _nIdType;
     }
@@ -403,7 +396,7 @@ public class TicketFilter
      * @param _nIdType
      *            the _nIdType to set
      */
-    public void setIdType(int _nIdType)
+    public void setIdType( int _nIdType )
     {
         this._nIdType = _nIdType;
     }
@@ -413,7 +406,7 @@ public class TicketFilter
      *
      * @return true if the filter contain an id of domain
      */
-    public boolean containsIdType()
+    public boolean containsIdType(  )
     {
         return ( _nIdType != CONSTANT_ID_NULL );
     }
@@ -421,7 +414,7 @@ public class TicketFilter
     /**
      * @return the _strStatus
      */
-    public String getStatus()
+    public String getStatus(  )
     {
         return _strStatus;
     }
@@ -430,17 +423,17 @@ public class TicketFilter
      * @param _strStatus
      *            the _strStatus to set
      */
-    public void setStatus(String _strStatus)
+    public void setStatus( String _strStatus )
     {
         this._strStatus = _strStatus;
     }
 
     /**
      * Check if this filter contains a resource id
-     * 
+     *
      * @return true if the filter contain an id of status
      */
-    public boolean containsStatus()
+    public boolean containsStatus(  )
     {
         return StringUtils.isNotEmpty( _strStatus );
     }
@@ -448,7 +441,7 @@ public class TicketFilter
     /**
      * @return the _strEmail
      */
-    public String getEmail()
+    public String getEmail(  )
     {
         return _strEmail;
     }
@@ -457,17 +450,17 @@ public class TicketFilter
      * @param _strEmail
      *            the _strEmail to set
      */
-    public void setEmail(String _strEmail)
+    public void setEmail( String _strEmail )
     {
         this._strEmail = _strEmail;
     }
 
     /**
      * Check if this filter contains a resource id
-     * 
+     *
      * @return true if the filter contain an id of Email
      */
-    public boolean containsEmail()
+    public boolean containsEmail(  )
     {
         return StringUtils.isNotEmpty( _strEmail );
     }
@@ -475,7 +468,7 @@ public class TicketFilter
     /**
      * @return the _strLastName
      */
-    public String getLastName()
+    public String getLastName(  )
     {
         return _strLastName;
     }
@@ -484,17 +477,17 @@ public class TicketFilter
      * @param _strLastName
      *            the _strLastName to set
      */
-    public void setLastName(String _strLastName)
+    public void setLastName( String _strLastName )
     {
         this._strLastName = _strLastName;
     }
 
     /**
      * Check if this filter contains a resource id
-     * 
+     *
      * @return true if the filter contain an id of LastName
      */
-    public boolean containsLastName()
+    public boolean containsLastName(  )
     {
         return StringUtils.isNotEmpty( _strLastName );
     }
@@ -502,7 +495,7 @@ public class TicketFilter
     /**
      * @return the _strFirstName
      */
-    public String getFirstName()
+    public String getFirstName(  )
     {
         return _strFirstName;
     }
@@ -511,17 +504,17 @@ public class TicketFilter
      * @param _strFirstName
      *            the _strFirstName to set
      */
-    public void setFirstName(String _strFirstName)
+    public void setFirstName( String _strFirstName )
     {
         this._strFirstName = _strFirstName;
     }
 
     /**
      * Check if this filter contains a resource id
-     * 
+     *
      * @return true if the filter contain an id of FirstName
      */
-    public boolean containsFirstName()
+    public boolean containsFirstName(  )
     {
         return StringUtils.isNotEmpty( _strFirstName );
     }
@@ -529,7 +522,7 @@ public class TicketFilter
     /**
      * @return the _strFixedPhoneNumber
      */
-    public String getFixedPhoneNumber()
+    public String getFixedPhoneNumber(  )
     {
         return _strFixedPhoneNumber;
     }
@@ -538,17 +531,17 @@ public class TicketFilter
      * @param _strFixedPhoneNumber
      *            the _strFixedPhoneNumber to set
      */
-    public void setFixedPhoneNumber(String _strFixedPhoneNumber)
+    public void setFixedPhoneNumber( String _strFixedPhoneNumber )
     {
         this._strFixedPhoneNumber = _strFixedPhoneNumber;
     }
 
     /**
      * Check if this filter contains a resource id
-     * 
+     *
      * @return true if the filter contain an id of FixedPhoneNumber
      */
-    public boolean containsFixedPhoneNumber()
+    public boolean containsFixedPhoneNumber(  )
     {
         return StringUtils.isNotEmpty( _strFixedPhoneNumber );
     }
@@ -556,7 +549,7 @@ public class TicketFilter
     /**
      * @return the _strMobilePhoneNumber
      */
-    public String getMobilePhoneNumber()
+    public String getMobilePhoneNumber(  )
     {
         return _strMobilePhoneNumber;
     }
@@ -565,30 +558,30 @@ public class TicketFilter
      * @param _strMobilePhoneNumber
      *            the _strMobilePhoneNumber to set
      */
-    public void setMobilePhoneNumber(String _strMobilePhoneNumber)
+    public void setMobilePhoneNumber( String _strMobilePhoneNumber )
     {
         this._strMobilePhoneNumber = _strMobilePhoneNumber;
     }
 
     /**
      * Check if this filter contains a resource id
-     * 
+     *
      * @return true if the filter contain an id of MobilePhoneNumber
      */
-    public boolean containsMobilePhoneNumber()
+    public boolean containsMobilePhoneNumber(  )
     {
         return StringUtils.isNotEmpty( _strMobilePhoneNumber );
     }
 
     /**
      * Set the order by attribute of this filter.
-     * 
+     *
      * @param strOrderBy
      *            The order by attribute of this filter. If the specified order
      *            does not match with column names of the ticket table of the
      *            database, then the order by is reinitialized.
      */
-    public void setOrderBy(String strOrderBy)
+    public void setOrderBy( String strOrderBy )
     {
         boolean bValidOrderBy = false;
 
@@ -605,7 +598,8 @@ public class TicketFilter
         if ( bValidOrderBy )
         {
             this._strOrderBy = strOrderBy;
-        } else
+        }
+        else
         {
             _strOrderBy = LIST_ORDER_BY[0];
         }
@@ -614,58 +608,64 @@ public class TicketFilter
     /**
      * @return the _strOrderBy
      */
-    public String getOrderBy()
+    public String getOrderBy(  )
     {
         return _strOrderBy;
     }
 
     /**
      * Check if this filter contains a order by clause
-     * 
+     *
      * @return the _strOrderBy
      */
-    public boolean containsOrderBy()
+    public boolean containsOrderBy(  )
     {
-
         return StringUtils.isNotEmpty( _strOrderBy );
     }
 
     /**
      * @return the _bOrderASC
      */
-    public boolean isOrderASC()
+    public boolean isOrderASC(  )
     {
-        return ORDER_SORT_ALLOWED.ASC.name( ).equalsIgnoreCase( _strOrderSort );
+        return ORDER_SORT_ALLOWED.ASC.name(  ).equalsIgnoreCase( _strOrderSort );
     }
 
     /**
      * Check if this filter contains a valid ordersort
-     * 
+     *
      * @return true if filter contains a valid ordersort
      */
-    public boolean containsOrderSort()
+    public boolean containsOrderSort(  )
     {
         boolean bResult = false;
-        if(StringUtils.isNotEmpty( _strOrderSort )) {
-            for (ORDER_SORT_ALLOWED osa :ORDER_SORT_ALLOWED.values( )) {
-                if (osa.name( ).equalsIgnoreCase( _strOrderSort )) {
+
+        if ( StringUtils.isNotEmpty( _strOrderSort ) )
+        {
+            for ( ORDER_SORT_ALLOWED osa : ORDER_SORT_ALLOWED.values(  ) )
+            {
+                if ( osa.name(  ).equalsIgnoreCase( _strOrderSort ) )
+                {
                     bResult = true;
+
                     break;
                 }
             }
-          
         }
+
         return bResult;
-                       
     }
 
     /**
      * @param strOrderSort
      *            the strOrderSort to set
      */
-    public void setOrderSort(String strOrderSort)
+    public void setOrderSort( String strOrderSort )
     {
         _strOrderSort = strOrderSort;
     }
-    
+    private enum ORDER_SORT_ALLOWED
+    {ASC,
+        DESC;
+    }
 }

@@ -33,14 +33,14 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import java.io.Serializable;
-
-import javax.validation.constraints.Size;
+import fr.paris.lutece.portal.service.rbac.RBACResource;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import fr.paris.lutece.portal.service.rbac.RBACResource;
-import fr.paris.lutece.portal.service.util.AppLogService;
+import java.io.Serializable;
+
+import javax.validation.constraints.Size;
 
 
 /**
@@ -52,15 +52,14 @@ public class TicketForm implements RBACResource, Cloneable, Serializable
      * Name of the resource type of Ticket Forms
      */
     public static final String RESOURCE_TYPE = "TICKET_FORM";
-
     private static final long serialVersionUID = 1L;
 
     // Variables declarations 
     private int _nIdForm;
-    @NotBlank(message = "#i18n{ticketing.validation.ticketform.Title.notEmpty}")
-    @Size(max = 255, message = "#i18n{ticketing.validation.ticketform.Title.size}")
+    @NotBlank( message = "#i18n{ticketing.validation.ticketform.Title.notEmpty}" )
+    @Size( max = 255, message = "#i18n{ticketing.validation.ticketform.Title.size}" )
     private String _strTitle;
-    @NotBlank(message = "#i18n{ticketing.validation.ticketform.Description.notEmpty}")
+    @NotBlank( message = "#i18n{ticketing.validation.ticketform.Description.notEmpty}" )
     private String _strDescription;
     private int _nIdCategory;
     private String _strTicketCategory;
@@ -103,7 +102,7 @@ public class TicketForm implements RBACResource, Cloneable, Serializable
 
     /**
      * Get the description of the ticket form
-     * 
+     *
      * @return The description of the ticket form
      */
     public String getDescription(  )
@@ -113,7 +112,7 @@ public class TicketForm implements RBACResource, Cloneable, Serializable
 
     /**
      * Set the description of the ticket form
-     * 
+     *
      * @param strDescription
      *            The description of the ticket form
      */
@@ -125,7 +124,7 @@ public class TicketForm implements RBACResource, Cloneable, Serializable
     /**
      * @return the _nIdCategory
      */
-    public int getIdCategory()
+    public int getIdCategory(  )
     {
         return _nIdCategory;
     }
@@ -134,7 +133,7 @@ public class TicketForm implements RBACResource, Cloneable, Serializable
      * @param _nIdCategory
      *            the _nIdCategory to set
      */
-    public void setIdCategory(int _nIdCategory)
+    public void setIdCategory( int _nIdCategory )
     {
         this._nIdCategory = _nIdCategory;
     }
@@ -142,7 +141,7 @@ public class TicketForm implements RBACResource, Cloneable, Serializable
     /**
      * @return the _strTicketCategory
      */
-    public String getTicketCategory()
+    public String getTicketCategory(  )
     {
         return _strTicketCategory;
     }
@@ -151,7 +150,7 @@ public class TicketForm implements RBACResource, Cloneable, Serializable
      * @param _strTicketCategory
      *            the _strTicketCategory to set
      */
-    public void setTicketCategory(String _strTicketCategory)
+    public void setTicketCategory( String _strTicketCategory )
     {
         this._strTicketCategory = _strTicketCategory;
     }
@@ -174,7 +173,6 @@ public class TicketForm implements RBACResource, Cloneable, Serializable
         return Integer.toString( getIdForm(  ) );
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -192,5 +190,4 @@ public class TicketForm implements RBACResource, Cloneable, Serializable
             return null;
         }
     }
-
 }
