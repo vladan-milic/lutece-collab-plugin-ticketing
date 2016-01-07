@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.ticketing.web;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +63,7 @@ import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.TicketForm;
 import fr.paris.lutece.plugins.ticketing.business.TicketFormHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
@@ -181,6 +183,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     
     // Errors
     private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
+    private static final String ERROR_FILTERING_INVALID_DATE = "ticketing.filter.error.date.invalid";
 
     // Session keys
     private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
@@ -196,6 +199,8 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
 
     private final TicketFormService  _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
 
+
+
     /**
      * Build the Manage View
      * @param request The HTTP request
@@ -209,7 +214,16 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles(
                 request.getSession( ).getId( ) );
 
-        List<Ticket> listTickets = (List<Ticket>) TicketHome.getTicketsList(  );
+        TicketFilter filter = null;
+        try
+        {
+            filter = TicketFilterHelper.getFilterFromRequest( request );
+        } catch ( ParseException e )
+        {
+            addError( ERROR_FILTERING_INVALID_DATE, request.getLocale( ) );
+            return redirectView( request, VIEW_MANAGE_TICKETS );
+        }
+        List<Ticket> listTickets = (List<Ticket>) TicketHome.getTicketsList( filter );
         _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
         _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
