@@ -33,14 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
@@ -58,11 +50,19 @@ import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * JspBean to manage ticketing form fields
  */
-@Controller(controllerJsp = "ManageTicketFormFields.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = TicketFormJspBean.RIGHT_MANAGETICKETFORM)
+@Controller( controllerJsp = "ManageTicketFormFields.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = TicketFormJspBean.RIGHT_MANAGETICKETFORM )
 public class TicketFormFieldJspBean extends MVCAdminJspBean
 {
     private static final long serialVersionUID = 1L;
@@ -266,8 +266,7 @@ public class TicketFormFieldJspBean extends MVCAdminJspBean
      *            conditional questions
      * @return The URL to go after performing the action
      */
-
-    @Action(ACTION_DO_MODIFY_FIELD)
+    @Action( ACTION_DO_MODIFY_FIELD )
     private String doModifyField( HttpServletRequest request, boolean bWithConditionalQuestion )
     {
         String strIdField = request.getParameter( PARAMETER_ID_FIELD );
@@ -444,10 +443,10 @@ public class TicketFormFieldJspBean extends MVCAdminJspBean
         if ( StringUtils.isEmpty( strTitle ) )
         {
             strFieldError = FIELD_TITLE_FIELD;
-        } else
-            if ( StringUtils.isEmpty( strCode ) )
-            {
-                strFieldError = FIELD_CODE_FIELD;
+        }
+        else if ( StringUtils.isEmpty( strCode ) )
+        {
+            strFieldError = FIELD_CODE_FIELD;
         }
         else if ( StringUtils.isEmpty( strValue ) )
         {
@@ -515,6 +514,7 @@ public class TicketFormFieldJspBean extends MVCAdminJspBean
         urlItem.addParameter( MVCUtils.PARAMETER_VIEW, VIEW_GET_MODIFY_FIELD_WITH_CONDITIONAL_QUESTIONS );
         urlItem.addParameter( PARAMETER_ID_FIELD, nIdField );
         urlItem.addParameter( MVCUtils.PARAMETER_PAGE, PARAMETER_FORM_GENERICATTR );
+
         return urlItem.getUrl(  );
     }
 }

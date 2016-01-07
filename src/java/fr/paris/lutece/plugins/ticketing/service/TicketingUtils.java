@@ -31,8 +31,6 @@
  *
  * License 1.0
  */
-
-
 package fr.paris.lutece.plugins.ticketing.service;
 
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
@@ -40,12 +38,14 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
+
 import java.util.Locale;
+
 
 /**
  * TicketingUtils
  */
-public class TicketingUtils 
+public class TicketingUtils
 {
     // Priorities
     private static final int PRIORITY_LOW = 0;
@@ -54,7 +54,7 @@ public class TicketingUtils
     private static final String PROPERTY_PRIORITY_LOW = "ticketing.priority.low";
     private static final String PROPERTY_PRIORITY_MEDIUM = "ticketing.priority.medium";
     private static final String PROPERTY_PRIORITY_HIGH = "ticketing.priority.high";
-    
+
     // Criticalities
     private static final int CRITICALITY_LOW = 0;
     private static final int CRITICALITY_MEDIUM = 1;
@@ -62,7 +62,7 @@ public class TicketingUtils
     private static final String PROPERTY_CRITICALITY_LOW = "ticketing.criticality.low";
     private static final String PROPERTY_CRITICALITY_MEDIUM = "ticketing.criticality.medium";
     private static final String PROPERTY_CRITICALITY_HIGH = "ticketing.criticality.high";
-    
+
     /**
      * Provides the priority list
      * @param locale The locale
@@ -70,13 +70,14 @@ public class TicketingUtils
      */
     public static ReferenceList getPriorityList( Locale locale )
     {
-        ReferenceList list = new ReferenceList();
-        list.addItem( PRIORITY_LOW , I18nService.getLocalizedString( PROPERTY_PRIORITY_LOW, locale));
-        list.addItem( PRIORITY_MEDIUM , I18nService.getLocalizedString( PROPERTY_PRIORITY_MEDIUM, locale));
-        list.addItem( PRIORITY_HIGH , I18nService.getLocalizedString( PROPERTY_PRIORITY_HIGH, locale));
+        ReferenceList list = new ReferenceList(  );
+        list.addItem( PRIORITY_LOW, I18nService.getLocalizedString( PROPERTY_PRIORITY_LOW, locale ) );
+        list.addItem( PRIORITY_MEDIUM, I18nService.getLocalizedString( PROPERTY_PRIORITY_MEDIUM, locale ) );
+        list.addItem( PRIORITY_HIGH, I18nService.getLocalizedString( PROPERTY_PRIORITY_HIGH, locale ) );
+
         return list;
     }
-    
+
     /**
      * Provides the criticality list
      * @param locale The locale
@@ -84,10 +85,11 @@ public class TicketingUtils
      */
     public static ReferenceList getCriticalityList( Locale locale )
     {
-        ReferenceList list = new ReferenceList();
-        list.addItem( CRITICALITY_LOW , I18nService.getLocalizedString( PROPERTY_CRITICALITY_LOW, locale));
-        list.addItem( CRITICALITY_MEDIUM , I18nService.getLocalizedString( PROPERTY_CRITICALITY_MEDIUM, locale));
-        list.addItem( CRITICALITY_HIGH , I18nService.getLocalizedString( PROPERTY_CRITICALITY_HIGH, locale));
+        ReferenceList list = new ReferenceList(  );
+        list.addItem( CRITICALITY_LOW, I18nService.getLocalizedString( PROPERTY_CRITICALITY_LOW, locale ) );
+        list.addItem( CRITICALITY_MEDIUM, I18nService.getLocalizedString( PROPERTY_CRITICALITY_MEDIUM, locale ) );
+        list.addItem( CRITICALITY_HIGH, I18nService.getLocalizedString( PROPERTY_CRITICALITY_HIGH, locale ) );
+
         return list;
     }
 
@@ -97,16 +99,17 @@ public class TicketingUtils
      * @param locale The locale
      * @return The label
      */
-    public static String getPriority( Ticket ticket , Locale locale )
+    public static String getPriority( Ticket ticket, Locale locale )
     {
-        for( ReferenceItem item : getPriorityList( locale ))
+        for ( ReferenceItem item : getPriorityList( locale ) )
         {
-            if( Integer.parseInt( item.getCode()) == ticket.getPriority() )
+            if ( Integer.parseInt( item.getCode(  ) ) == ticket.getPriority(  ) )
             {
-                return item.getName();
+                return item.getName(  );
             }
         }
-        throw new AppException( "TicketingUtils - Invalid Priority value : " + ticket.getPriority());
+
+        throw new AppException( "TicketingUtils - Invalid Priority value : " + ticket.getPriority(  ) );
     }
 
     /**
@@ -115,17 +118,16 @@ public class TicketingUtils
      * @param locale The locale
      * @return The label
      */
-    public static String getCriticality( Ticket ticket , Locale locale )
+    public static String getCriticality( Ticket ticket, Locale locale )
     {
-        for( ReferenceItem item : getPriorityList( locale ))
+        for ( ReferenceItem item : getPriorityList( locale ) )
         {
-            if( Integer.parseInt( item.getCode()) == ticket.getCriticality() )
+            if ( Integer.parseInt( item.getCode(  ) ) == ticket.getCriticality(  ) )
             {
-                return item.getName();
+                return item.getName(  );
             }
         }
-        throw new AppException( "TicketingUtils - Invalid Criticality value : " + ticket.getCriticality() );
-    }
 
-    
+        throw new AppException( "TicketingUtils - Invalid Criticality value : " + ticket.getCriticality(  ) );
+    }
 }

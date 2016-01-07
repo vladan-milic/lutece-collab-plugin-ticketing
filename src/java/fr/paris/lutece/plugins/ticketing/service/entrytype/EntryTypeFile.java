@@ -97,7 +97,7 @@ public class EntryTypeFile extends AbstractEntryTypeFile
     @Override
     public AbstractGenAttUploadHandler getAsynchronousUploadHandler(  )
     {
-        return TicketAsynchronousUploadHandler.getHandler ( );
+        return TicketAsynchronousUploadHandler.getHandler(  );
     }
 
     /**

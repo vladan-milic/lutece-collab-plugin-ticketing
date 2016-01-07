@@ -31,7 +31,6 @@
  *
  * License 1.0
  */
-
 package fr.paris.lutece.plugins.ticketing.service;
 
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
@@ -39,54 +38,63 @@ import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketType;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.util.ReferenceItem;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
 
 /**
  *
  * @author levy
  */
-public class CategoriesService 
+public class CategoriesService
 {
     private static final String ID = "id";
     private static final String LABEL = "label";
     private static final String TYPES = "types";
     private static final int INDENT = 4;
-    
-    
-    public static String getJsonCategories()
+
+    public static String getJsonCategories(  )
     {
-        JSONObject json = new JSONObject();
-        JSONArray jsonTypes = new JSONArray();
-        for( TicketType type : TicketTypeHome.getTicketTypesList() )
+        JSONObject json = new JSONObject(  );
+        JSONArray jsonTypes = new JSONArray(  );
+
+        for ( TicketType type : TicketTypeHome.getTicketTypesList(  ) )
         {
-            JSONObject jsonType = new JSONObject();
-            jsonType.accumulate( ID, type.getId() );
-            jsonType.accumulate( LABEL, type.getLabel() );
-            JSONArray jsonDomains = new JSONArray();
-            for( ReferenceItem domain : TicketDomainHome.getReferenceListByType( type.getId() ) )
+            JSONObject jsonType = new JSONObject(  );
+            jsonType.accumulate( ID, type.getId(  ) );
+            jsonType.accumulate( LABEL, type.getLabel(  ) );
+
+            JSONArray jsonDomains = new JSONArray(  );
+
+            for ( ReferenceItem domain : TicketDomainHome.getReferenceListByType( type.getId(  ) ) )
             {
-                int nDomainId = Integer.parseInt( domain.getCode() );
-                JSONObject jsonDomain = new JSONObject();
+                int nDomainId = Integer.parseInt( domain.getCode(  ) );
+                JSONObject jsonDomain = new JSONObject(  );
                 jsonDomain.accumulate( ID, nDomainId );
-                jsonDomain.accumulate( LABEL, domain.getName());
-                JSONArray jsonCategories = new JSONArray();
-                for( ReferenceItem category : TicketCategoryHome.getReferenceListByDomain(nDomainId))
+                jsonDomain.accumulate( LABEL, domain.getName(  ) );
+
+                JSONArray jsonCategories = new JSONArray(  );
+
+                for ( ReferenceItem category : TicketCategoryHome.getReferenceListByDomain( nDomainId ) )
                 {
-                    int nCategoryId = Integer.parseInt( category.getCode() );
-                    JSONObject jsonCategory = new JSONObject();
+                    int nCategoryId = Integer.parseInt( category.getCode(  ) );
+                    JSONObject jsonCategory = new JSONObject(  );
                     jsonCategory.accumulate( ID, nCategoryId );
-                    jsonCategory.accumulate( LABEL, category.getName());
+                    jsonCategory.accumulate( LABEL, category.getName(  ) );
                     jsonCategories.add( jsonCategory );
                 }
+
                 jsonDomain.accumulate( "categories", jsonCategories );
                 jsonDomains.add( jsonDomain );
             }
+
             jsonType.accumulate( "domains", jsonDomains );
             jsonTypes.add( jsonType );
         }
+
         json.accumulate( "types", jsonTypes );
+
         return json.toString( INDENT );
     }
-    
 }

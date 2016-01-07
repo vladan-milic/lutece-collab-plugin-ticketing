@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -47,14 +47,14 @@ public final class TicketFormDAO implements ITicketFormDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_form ) FROM ticketing_ticket_form";
-    private static final String SQL_QUERY_SELECT_COLUMNS = "SELECT form.id_form, form.title, form.description, cat.id_ticket_category, cat.label FROM ticketing_ticket_form AS form "
-            + " LEFT JOIN ticketing_ticket_category AS cat ON cat.id_ticket_form = form.id_form ";
+    private static final String SQL_QUERY_SELECT_COLUMNS = "SELECT form.id_form, form.title, form.description, cat.id_ticket_category, cat.label FROM ticketing_ticket_form AS form " +
+        " LEFT JOIN ticketing_ticket_category AS cat ON cat.id_ticket_form = form.id_form ";
     private static final String SQL_QUERY_SELECTALL = SQL_QUERY_SELECT_COLUMNS + " ORDER BY title";
     private static final String SQL_QUERY_SELECT = SQL_QUERY_SELECT_COLUMNS + " WHERE id_form = ?";
-    private static final String SQL_QUERY_SELECT_WITHOUT_CATEGORY = SQL_QUERY_SELECT_COLUMNS
-            + " WHERE form.id_form NOT IN  (SELECT id_ticket_form from ticketing_ticket_category where id_ticket_form > 0)";
-    private static final String SQL_QUERY_SELECT_BY_CATEGORY = SQL_QUERY_SELECT_COLUMNS
-            + " WHERE cat.id_ticket_category = ?";
+    private static final String SQL_QUERY_SELECT_WITHOUT_CATEGORY = SQL_QUERY_SELECT_COLUMNS +
+        " WHERE form.id_form NOT IN  (SELECT id_ticket_form from ticketing_ticket_category where id_ticket_form > 0)";
+    private static final String SQL_QUERY_SELECT_BY_CATEGORY = SQL_QUERY_SELECT_COLUMNS +
+        " WHERE cat.id_ticket_category = ?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_form ( id_form, title, description) VALUES (?, ?, ?) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_ticket_form WHERE id_form = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_form SET title = ?, description = ? WHERE id_form = ?";
@@ -145,7 +145,7 @@ public final class TicketFormDAO implements ITicketFormDAO
 
         daoUtil.setString( nIndex++, ticketForm.getTitle(  ) );
         daoUtil.setString( nIndex++, ticketForm.getDescription(  ) );
-        daoUtil.setInt( nIndex++, ticketForm.getIdForm( ) );
+        daoUtil.setInt( nIndex++, ticketForm.getIdForm(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -171,11 +171,9 @@ public final class TicketFormDAO implements ITicketFormDAO
         return ticketFormList;
     }
 
-   
-
     /**
      * Get data of an ticket form from a daoUtil
-     * 
+     *
      * @param daoUtil
      *            The daoUtil to get data from
      * @return The ticket form with data of the current row of the daoUtil
@@ -189,9 +187,10 @@ public final class TicketFormDAO implements ITicketFormDAO
         ticketForm.setTitle( daoUtil.getString( nIndex++ ) );
         ticketForm.setDescription( daoUtil.getString( nIndex++ ) );
         ticketForm.setIdCategory( daoUtil.getInt( nIndex++ ) );
+
         String strCat = daoUtil.getString( nIndex++ );
-        ticketForm.setTicketCategory( strCat == null ? org.apache.commons.lang.StringUtils.EMPTY
-                : strCat );
+        ticketForm.setTicketCategory( ( strCat == null ) ? org.apache.commons.lang.StringUtils.EMPTY : strCat );
+
         return ticketForm;
     }
 
@@ -199,20 +198,20 @@ public final class TicketFormDAO implements ITicketFormDAO
      * {@inheritDoc }
      */
     @Override
-    public TicketForm loadFormCategoryId(int nCategoryId, Plugin plugin)
+    public TicketForm loadFormCategoryId( int nCategoryId, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_CATEGORY, plugin );
         daoUtil.setInt( 1, nCategoryId );
-        daoUtil.executeQuery( );
+        daoUtil.executeQuery(  );
 
         TicketForm ticketForm = null;
 
-        if ( daoUtil.next( ) )
+        if ( daoUtil.next(  ) )
         {
             ticketForm = getTicketFormData( daoUtil );
         }
 
-        daoUtil.free( );
+        daoUtil.free(  );
 
         return ticketForm;
     }
@@ -220,18 +219,18 @@ public final class TicketFormDAO implements ITicketFormDAO
     /**
      * {@inheritDoc}
      */
-    public List<TicketForm> getAvailableTicketForms(Plugin plugin)
+    public List<TicketForm> getAvailableTicketForms( Plugin plugin )
     {
-        List<TicketForm> ticketFormList = new ArrayList<TicketForm>( );
+        List<TicketForm> ticketFormList = new ArrayList<TicketForm>(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_WITHOUT_CATEGORY, plugin );
-        daoUtil.executeQuery( );
+        daoUtil.executeQuery(  );
 
-        while ( daoUtil.next( ) )
+        while ( daoUtil.next(  ) )
         {
             ticketFormList.add( getTicketFormData( daoUtil ) );
         }
 
-        daoUtil.free( );
+        daoUtil.free(  );
 
         return ticketFormList;
     }

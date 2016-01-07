@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
+
+import java.util.List;
 
 
 /**
@@ -48,8 +48,7 @@ import fr.paris.lutece.util.ReferenceList;
 public final class ContactModeHome
 {
     // Static variable pointed at the DAO instance
-    private static IContactModeDAO _dao = SpringContextService
-            .getBean ( "ticketing.contactModeDAO" );
+    private static IContactModeDAO _dao = SpringContextService.getBean( "ticketing.contactModeDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
@@ -61,7 +60,7 @@ public final class ContactModeHome
 
     /**
      * Create an instance of the contactMode class
-     * 
+     *
      * @param contactMode
      *            The instance of the ContactMode which contains the
      *            informations to store
@@ -70,14 +69,14 @@ public final class ContactModeHome
      */
     public static ContactMode create( ContactMode contactMode )
     {
-        _dao.insert ( contactMode, _plugin );
+        _dao.insert( contactMode, _plugin );
 
         return contactMode;
     }
 
     /**
      * Update of the contactMode which is specified in parameter
-     * 
+     *
      * @param contactMode
      *            The instance of the ContactMode which contains the data to
      *            store
@@ -85,14 +84,14 @@ public final class ContactModeHome
      */
     public static ContactMode update( ContactMode contactMode )
     {
-        _dao.store ( contactMode, _plugin );
+        _dao.store( contactMode, _plugin );
 
         return contactMode;
     }
 
     /**
      * Remove the contactMode whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The contactMode Id
      */
@@ -107,7 +106,7 @@ public final class ContactModeHome
     /**
      * Returns an instance of a contactMode whose identifier is specified in
      * parameter
-     * 
+     *
      * @param nKey
      *            The contactMode primary key
      * @return an instance of ContactMode
@@ -120,36 +119,35 @@ public final class ContactModeHome
     /**
      * Load the data of all the contactMode objects and returns them in form of
      * a collection
-     * 
+     *
      * @return the collection which contains the data of all the contactMode
      *         objects
      */
-    public static List<ContactMode> getContactModesList()
+    public static List<ContactMode> getContactModesList(  )
     {
-        return _dao.selectContactModesList ( _plugin );
+        return _dao.selectContactModesList( _plugin );
     }
 
     /**
      * Load the id of all the contactMode objects and returns them in form of a
      * collection
-     * 
+     *
      * @return the collection which contains the id of all the contactMode
      *         objects
      */
-    public static List<Integer> getIdContactModesList()
+    public static List<Integer> getIdContactModesList(  )
     {
-        return _dao.selectIdContactModesList ( _plugin );
+        return _dao.selectIdContactModesList( _plugin );
     }
 
     /**
      * Load the data of all the contactMode objects and returns them as a
      * reference list
-     * 
+     *
      * @return The reference list
      */
     public static ReferenceList getReferenceList(  )
     {
         return _dao.selectReferenceList( _plugin );
     }
-
 }

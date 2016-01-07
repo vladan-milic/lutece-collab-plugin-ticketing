@@ -76,24 +76,24 @@ public final class TicketFormCacheService extends AbstractCacheableService
 
     /**
      * Get the cache key form ticket responses
-     * 
+     *
      * @param nIdTicket
      *            The id of the ticket
      * @return The cache key for the given ticket
      */
-    public String getTicketResponseCacheKey(int nIdTicket)
+    public String getTicketResponseCacheKey( int nIdTicket )
     {
         return CACHE_KEY_TICKET_RESPONSE + nIdTicket;
     }
 
     /**
      * Get the category cache key for a given form
-     * 
+     *
      * @param nIdCategory
      *            The id of the category linked to the form
      * @return The cache key for the form
      */
-    public static String getFormByCategoryCacheKey(int nIdCategory)
+    public static String getFormByCategoryCacheKey( int nIdCategory )
     {
         return CACHE_KEY_FORM_BY_CATEGORY + nIdCategory;
     }
@@ -106,6 +106,4 @@ public final class TicketFormCacheService extends AbstractCacheableService
     {
         return SERVICE_NAME;
     }
-
-
 }

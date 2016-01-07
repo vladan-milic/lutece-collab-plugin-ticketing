@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -48,18 +48,18 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket_category ) FROM ticketing_ticket_category";
-    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label,  a.id_workflow, b.label, c.label, a.id_ticket_form, c.id_ticket_type, a.category_code "
-            + " FROM ticketing_ticket_category a, ticketing_ticket_domain b , ticketing_ticket_type c "
-            + " WHERE id_ticket_category = ? AND a.id_ticket_domain = b.id_ticket_domain AND b.id_ticket_type = c.id_ticket_type";
-    private static final String SQL_QUERY_SELECT_BY_CODE = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label,  a.id_workflow, b.label, c.label, a.id_ticket_form, c.id_ticket_type, a.category_code "
-            + " FROM ticketing_ticket_category a, ticketing_ticket_domain b , ticketing_ticket_type c "
-            + " WHERE category_code = ? AND a.id_ticket_domain = b.id_ticket_domain AND b.id_ticket_type = c.id_ticket_type";
+    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label,  a.id_workflow, b.label, c.label, a.id_ticket_form, c.id_ticket_type, a.category_code " +
+        " FROM ticketing_ticket_category a, ticketing_ticket_domain b , ticketing_ticket_type c " +
+        " WHERE id_ticket_category = ? AND a.id_ticket_domain = b.id_ticket_domain AND b.id_ticket_type = c.id_ticket_type";
+    private static final String SQL_QUERY_SELECT_BY_CODE = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label,  a.id_workflow, b.label, c.label, a.id_ticket_form, c.id_ticket_type, a.category_code " +
+        " FROM ticketing_ticket_category a, ticketing_ticket_domain b , ticketing_ticket_type c " +
+        " WHERE category_code = ? AND a.id_ticket_domain = b.id_ticket_domain AND b.id_ticket_type = c.id_ticket_type";
     private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_category ( id_ticket_category, id_ticket_domain, label, id_workflow, id_ticket_form, category_code ) VALUES ( ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_ticket_category WHERE id_ticket_category = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_category SET id_ticket_category = ?, id_ticket_domain = ?, label = ?, id_workflow = ?, id_ticket_form = ?, category_code = ? WHERE id_ticket_category = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label, a.id_workflow, b.label, c.label, c.id_ticket_type, a.category_code "
-            + " FROM ticketing_ticket_category a, ticketing_ticket_domain b , ticketing_ticket_type c "
-            + " WHERE a.id_ticket_domain = b.id_ticket_domain AND b.id_ticket_type = c.id_ticket_type";
+    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label, a.id_workflow, b.label, c.label, c.id_ticket_type, a.category_code " +
+        " FROM ticketing_ticket_category a, ticketing_ticket_domain b , ticketing_ticket_type c " +
+        " WHERE a.id_ticket_domain = b.id_ticket_domain AND b.id_ticket_type = c.id_ticket_type";
     private static final String SQL_QUERY_SELECT_BY_DOMAIN = "SELECT id_ticket_category, label FROM ticketing_ticket_category WHERE id_ticket_domain = ?";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_category FROM ticketing_ticket_category";
 
@@ -99,7 +99,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.setInt( 2, ticketCategory.getIdTicketDomain(  ) );
         daoUtil.setString( 3, ticketCategory.getLabel(  ) );
         daoUtil.setInt( 4, ticketCategory.getIdWorkflow(  ) );
-        daoUtil.setInt( 5, ticketCategory.getIdTicketForm( ) );
+        daoUtil.setInt( 5, ticketCategory.getIdTicketForm(  ) );
         daoUtil.setString( 6, ticketCategory.getCode(  ) );
 
         daoUtil.executeUpdate(  );
@@ -119,6 +119,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         TicketCategory category = null;
 
         int nIndex = 1;
+
         if ( daoUtil.next(  ) )
         {
             category = new TicketCategory(  );
@@ -126,11 +127,11 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setIdTicketDomain( daoUtil.getInt( nIndex++ ) );
             category.setLabel( daoUtil.getString( nIndex++ ) );
             category.setIdWorkflow( daoUtil.getInt( nIndex++ ) );
-            category.setTicketDomain(daoUtil.getString( nIndex++ ) );
-            category.setTicketType(daoUtil.getString( nIndex++ ) );
+            category.setTicketDomain( daoUtil.getString( nIndex++ ) );
+            category.setTicketType( daoUtil.getString( nIndex++ ) );
             category.setIdTicketForm( daoUtil.getInt( nIndex++ ) );
             category.setIdTicketType( daoUtil.getInt( nIndex++ ) );
-            category.setCode( daoUtil.getString( nIndex++ ));
+            category.setCode( daoUtil.getString( nIndex++ ) );
         }
 
         daoUtil.free(  );
@@ -151,6 +152,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         TicketCategory category = null;
 
         int nIndex = 1;
+
         if ( daoUtil.next(  ) )
         {
             category = new TicketCategory(  );
@@ -158,11 +160,11 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setIdTicketDomain( daoUtil.getInt( nIndex++ ) );
             category.setLabel( daoUtil.getString( nIndex++ ) );
             category.setIdWorkflow( daoUtil.getInt( nIndex++ ) );
-            category.setTicketDomain(daoUtil.getString( nIndex++ ) );
-            category.setTicketType(daoUtil.getString( nIndex++ ) );
+            category.setTicketDomain( daoUtil.getString( nIndex++ ) );
+            category.setTicketType( daoUtil.getString( nIndex++ ) );
             category.setIdTicketForm( daoUtil.getInt( nIndex++ ) );
             category.setIdTicketType( daoUtil.getInt( nIndex++ ) );
-            category.setCode( daoUtil.getString( nIndex++ ));
+            category.setCode( daoUtil.getString( nIndex++ ) );
         }
 
         daoUtil.free(  );
@@ -193,7 +195,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.setInt( 2, ticketCategory.getIdTicketDomain(  ) );
         daoUtil.setString( 3, ticketCategory.getLabel(  ) );
         daoUtil.setInt( 4, ticketCategory.getIdWorkflow(  ) );
-        daoUtil.setInt( 5, ticketCategory.getIdTicketForm( ) );
+        daoUtil.setInt( 5, ticketCategory.getIdTicketForm(  ) );
         daoUtil.setString( 6, ticketCategory.getCode(  ) );
         daoUtil.setInt( 7, ticketCategory.getId(  ) );
 
@@ -223,7 +225,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setTicketDomain( daoUtil.getString( nIndex++ ) );
             category.setTicketType( daoUtil.getString( nIndex++ ) );
             category.setIdTicketType( daoUtil.getInt( nIndex++ ) );
-            category.setCode( daoUtil.getString( nIndex++ ));
+            category.setCode( daoUtil.getString( nIndex++ ) );
 
             ticketCategoryList.add( category );
         }
@@ -273,5 +275,4 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
 
         return list;
     }
-    
 }

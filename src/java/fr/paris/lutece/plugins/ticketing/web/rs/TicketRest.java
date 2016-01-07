@@ -33,7 +33,18 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
+import fr.paris.lutece.plugins.rest.service.RestConstants;
+import fr.paris.lutece.plugins.rest.util.json.JSONUtil;
+import fr.paris.lutece.plugins.rest.util.xml.XMLUtil;
+import fr.paris.lutece.plugins.ticketing.business.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.TicketHome;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.util.xml.XmlUtil;
+
+import net.sf.json.JSONObject;
+
 import java.io.IOException;
+
 import java.util.Collection;
 
 import javax.ws.rs.DELETE;
@@ -47,15 +58,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import net.sf.json.JSONObject;
-import fr.paris.lutece.plugins.rest.service.RestConstants;
-import fr.paris.lutece.plugins.rest.util.json.JSONUtil;
-import fr.paris.lutece.plugins.rest.util.xml.XMLUtil;
-import fr.paris.lutece.plugins.ticketing.business.Ticket;
-import fr.paris.lutece.plugins.ticketing.business.TicketHome;
-import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.util.xml.XmlUtil;
 
 
 /**
@@ -267,27 +269,27 @@ public class TicketRest
     }
 
     @POST
-    public Response createTicket( @FormParam( KEY_ID ) String id,
-            @FormParam( "id_user_title" ) String id_user_title,
-            @FormParam( "user_title" ) String user_title,
-            @FormParam( "firstname" ) String firstname,
-            @FormParam( "lastname" ) String lastname,
-            @FormParam( "email" ) String email,
-            @FormParam( "fixed_phone_number" ) String fixed_phone_number,
-            @FormParam( "mobile_phone_number" ) String mobile_phone_number,
-            @FormParam( "id_ticket_type" ) String id_ticket_type,
-            @FormParam( "ticket_type" ) String ticket_type,
-            @FormParam( "id_ticket_domain" ) String id_ticket_domain,
-            @FormParam( "ticket_domain" ) String ticket_domain,
-            @FormParam( "id_ticket_category" ) String id_ticket_category,
-            @FormParam( "ticket_category" ) String ticket_category,
-            @FormParam( "id_contact_mode" ) String id_contact_mode,
-            @FormParam( "contact_mode" ) String contact_mode,
-            @FormParam( "ticket_comment" ) String ticket_comment,
-            @FormParam( "ticket_status" ) String ticket_status,
-            @FormParam( "ticket_status_text" ) String ticket_status_text,
-            @HeaderParam( HttpHeaders.ACCEPT ) String accept,
-            @QueryParam( Constants.FORMAT_QUERY )
+    public Response createTicket( @FormParam( KEY_ID )
+    String id, @FormParam( "id_user_title" )
+    String id_user_title, @FormParam( "user_title" )
+    String user_title, @FormParam( "firstname" )
+    String firstname, @FormParam( "lastname" )
+    String lastname, @FormParam( "email" )
+    String email, @FormParam( "fixed_phone_number" )
+    String fixed_phone_number, @FormParam( "mobile_phone_number" )
+    String mobile_phone_number, @FormParam( "id_ticket_type" )
+    String id_ticket_type, @FormParam( "ticket_type" )
+    String ticket_type, @FormParam( "id_ticket_domain" )
+    String id_ticket_domain, @FormParam( "ticket_domain" )
+    String ticket_domain, @FormParam( "id_ticket_category" )
+    String id_ticket_category, @FormParam( "ticket_category" )
+    String ticket_category, @FormParam( "id_contact_mode" )
+    String id_contact_mode, @FormParam( "contact_mode" )
+    String contact_mode, @FormParam( "ticket_comment" )
+    String ticket_comment, @FormParam( "ticket_status" )
+    String ticket_status, @FormParam( "ticket_status_text" )
+    String ticket_status_text, @HeaderParam( HttpHeaders.ACCEPT )
+    String accept, @QueryParam( Constants.FORMAT_QUERY )
     String format ) throws IOException
     {
         if ( id != null )
@@ -303,16 +305,16 @@ public class TicketRest
                 ticket.setFirstname( firstname );
                 ticket.setLastname( lastname );
                 ticket.setEmail( email );
-                ticket.setFixedPhoneNumber ( fixed_phone_number );
-                ticket.setMobilePhoneNumber ( mobile_phone_number );
+                ticket.setFixedPhoneNumber( fixed_phone_number );
+                ticket.setMobilePhoneNumber( mobile_phone_number );
                 ticket.setIdTicketType( Integer.parseInt( id_ticket_type ) );
                 ticket.setTicketType( ticket_type );
                 ticket.setIdTicketDomain( Integer.parseInt( id_ticket_domain ) );
                 ticket.setTicketDomain( ticket_domain );
                 ticket.setIdTicketCategory( Integer.parseInt( id_ticket_category ) );
                 ticket.setTicketCategory( ticket_category );
-                ticket.setIdContactMode ( Integer.parseInt ( id_contact_mode ) );
-                ticket.setContactMode ( contact_mode );
+                ticket.setIdContactMode( Integer.parseInt( id_contact_mode ) );
+                ticket.setContactMode( contact_mode );
                 ticket.setTicketComment( ticket_comment );
                 ticket.setTicketStatus( Integer.parseInt( ticket_status ) );
                 ticket.setTicketStatusText( ticket_status_text );
@@ -328,16 +330,16 @@ public class TicketRest
             ticket.setFirstname( firstname );
             ticket.setLastname( lastname );
             ticket.setEmail( email );
-            ticket.setFixedPhoneNumber ( fixed_phone_number );
-            ticket.setMobilePhoneNumber ( mobile_phone_number );
+            ticket.setFixedPhoneNumber( fixed_phone_number );
+            ticket.setMobilePhoneNumber( mobile_phone_number );
             ticket.setIdTicketType( Integer.parseInt( id_ticket_type ) );
             ticket.setTicketType( ticket_type );
             ticket.setIdTicketDomain( Integer.parseInt( id_ticket_domain ) );
             ticket.setTicketDomain( ticket_domain );
             ticket.setIdTicketCategory( Integer.parseInt( id_ticket_category ) );
             ticket.setTicketCategory( ticket_category );
-            ticket.setIdContactMode ( Integer.parseInt ( id_contact_mode ) );
-            ticket.setContactMode ( contact_mode );
+            ticket.setIdContactMode( Integer.parseInt( id_contact_mode ) );
+            ticket.setContactMode( contact_mode );
             ticket.setTicketComment( ticket_comment );
             ticket.setTicketStatus( Integer.parseInt( ticket_status ) );
             ticket.setTicketStatusText( ticket_status_text );
@@ -361,21 +363,17 @@ public class TicketRest
         XmlUtil.addElement( sbXML, KEY_FIRSTNAME, ticket.getFirstname(  ) );
         XmlUtil.addElement( sbXML, KEY_LASTNAME, ticket.getLastname(  ) );
         XmlUtil.addElement( sbXML, KEY_EMAIL, ticket.getEmail(  ) );
-        XmlUtil.addElement ( sbXML, KEY_FIXED_PHONE_NUMBER,
-                ticket.getFixedPhoneNumber ( ) );
-        XmlUtil.addElement ( sbXML, KEY_MOBILE_PHONE_NUMBER,
-                ticket.getMobilePhoneNumber ( ) );
+        XmlUtil.addElement( sbXML, KEY_FIXED_PHONE_NUMBER, ticket.getFixedPhoneNumber(  ) );
+        XmlUtil.addElement( sbXML, KEY_MOBILE_PHONE_NUMBER, ticket.getMobilePhoneNumber(  ) );
         XmlUtil.addElement( sbXML, KEY_ID_TICKET_TYPE, ticket.getIdTicketType(  ) );
         XmlUtil.addElement( sbXML, KEY_TICKET_TYPE, ticket.getTicketType(  ) );
         XmlUtil.addElement( sbXML, KEY_ID_TICKET_DOMAIN, ticket.getIdTicketDomain(  ) );
         XmlUtil.addElement( sbXML, KEY_TICKET_DOMAIN, ticket.getTicketDomain(  ) );
         XmlUtil.addElement( sbXML, KEY_ID_TICKET_CATEGORY, ticket.getIdTicketCategory(  ) );
         XmlUtil.addElement( sbXML, KEY_TICKET_CATEGORY, ticket.getTicketCategory(  ) );
-        XmlUtil.addElement ( sbXML, KEY_ID_CONTACT_MODE,
-                ticket.getIdContactMode ( ) );
-        XmlUtil.addElement ( sbXML, KEY_CONTACT_MODE, ticket.getContactMode ( ) );
-        XmlUtil.addElement ( sbXML, KEY_TICKET_COMMENT,
-                ticket.getTicketComment ( ) );
+        XmlUtil.addElement( sbXML, KEY_ID_CONTACT_MODE, ticket.getIdContactMode(  ) );
+        XmlUtil.addElement( sbXML, KEY_CONTACT_MODE, ticket.getContactMode(  ) );
+        XmlUtil.addElement( sbXML, KEY_TICKET_COMMENT, ticket.getTicketComment(  ) );
         XmlUtil.addElement( sbXML, KEY_TICKET_STATUS, ticket.getTicketStatus(  ) );
         XmlUtil.addElement( sbXML, KEY_TICKET_STATUS_TEXT, ticket.getTicketStatusText(  ) );
         XmlUtil.endElement( sbXML, KEY_TICKET );
@@ -395,19 +393,16 @@ public class TicketRest
         jsonTicket.accumulate( KEY_FIRSTNAME, ticket.getFirstname(  ) );
         jsonTicket.accumulate( KEY_LASTNAME, ticket.getLastname(  ) );
         jsonTicket.accumulate( KEY_EMAIL, ticket.getEmail(  ) );
-        jsonTicket.accumulate ( KEY_FIXED_PHONE_NUMBER,
-                ticket.getFixedPhoneNumber ( ) );
-        jsonTicket.accumulate ( KEY_MOBILE_PHONE_NUMBER,
-                ticket.getMobilePhoneNumber ( ) );
+        jsonTicket.accumulate( KEY_FIXED_PHONE_NUMBER, ticket.getFixedPhoneNumber(  ) );
+        jsonTicket.accumulate( KEY_MOBILE_PHONE_NUMBER, ticket.getMobilePhoneNumber(  ) );
         jsonTicket.accumulate( KEY_ID_TICKET_TYPE, ticket.getIdTicketType(  ) );
         jsonTicket.accumulate( KEY_TICKET_TYPE, ticket.getTicketType(  ) );
         jsonTicket.accumulate( KEY_ID_TICKET_DOMAIN, ticket.getIdTicketDomain(  ) );
         jsonTicket.accumulate( KEY_TICKET_DOMAIN, ticket.getTicketDomain(  ) );
         jsonTicket.accumulate( KEY_ID_TICKET_CATEGORY, ticket.getIdTicketCategory(  ) );
         jsonTicket.accumulate( KEY_TICKET_CATEGORY, ticket.getTicketCategory(  ) );
-        jsonTicket
-                .accumulate ( KEY_ID_CONTACT_MODE, ticket.getIdContactMode ( ) );
-        jsonTicket.accumulate ( KEY_CONTACT_MODE, ticket.getContactMode ( ) );
+        jsonTicket.accumulate( KEY_ID_CONTACT_MODE, ticket.getIdContactMode(  ) );
+        jsonTicket.accumulate( KEY_CONTACT_MODE, ticket.getContactMode(  ) );
         jsonTicket.accumulate( KEY_TICKET_COMMENT, ticket.getTicketComment(  ) );
         jsonTicket.accumulate( KEY_TICKET_STATUS, ticket.getTicketStatus(  ) );
         jsonTicket.accumulate( KEY_TICKET_STATUS_TEXT, ticket.getTicketStatusText(  ) );

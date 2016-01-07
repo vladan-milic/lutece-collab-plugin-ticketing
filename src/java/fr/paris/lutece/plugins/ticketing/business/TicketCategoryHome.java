@@ -33,13 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
+import java.util.List;
 
 
 /**
@@ -103,15 +102,15 @@ public final class TicketCategoryHome
     {
         return _dao.load( nKey, _plugin );
     }
-    
+
     /**
-     * Find a category by its code 
+     * Find a category by its code
      * @param strCode The code
      * @return The category
      */
     public static TicketCategory findByCode( String strCode )
     {
-        return _dao.loadByCode( strCode , _plugin );
+        return _dao.loadByCode( strCode, _plugin );
     }
 
     /**
@@ -136,5 +135,4 @@ public final class TicketCategoryHome
     {
         return _dao.selectReferenceListByDomain( nDomainId, _plugin );
     }
-
 }

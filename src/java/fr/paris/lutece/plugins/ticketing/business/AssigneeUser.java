@@ -31,92 +31,110 @@
  *
  * License 1.0
  */
-
-
 package fr.paris.lutece.plugins.ticketing.business;
+
+import fr.paris.lutece.portal.business.user.AdminUser;
+
 
 /**
  * AssigneeUser
  */
-public class AssigneeUser 
+public class AssigneeUser
 {
     // Variables declarations 
     private int _nAdminUserId;
     private String _strFirstname;
     private String _strLastname;
     private String _strEmail;
-    
-    
-       /**
-        * Returns the AdminUserId
-        * @return The AdminUserId
-        */ 
-    public int getAdminUserId()
+
+    /**
+     * Constructor
+     */
+    AssigneeUser(  )
+    {
+    }
+
+    /**
+     * Constructor
+     * @param user The Admin User
+     */
+    AssigneeUser( AdminUser user )
+    {
+        _nAdminUserId = user.getUserId(  );
+        _strFirstname = user.getFirstName(  );
+        _strLastname = user.getLastName(  );
+        _strEmail = user.getEmail(  );
+    }
+
+    /**
+     * Returns the AdminUserId
+     * @return The AdminUserId
+     */
+    public int getAdminUserId(  )
     {
         return _nAdminUserId;
     }
-    
-       /**
-        * Sets the AdminUserId
-        * @param nAdminUserId The AdminUserId
-        */ 
+
+    /**
+     * Sets the AdminUserId
+     * @param nAdminUserId The AdminUserId
+     */
     public void setAdminUserId( int nAdminUserId )
     {
         _nAdminUserId = nAdminUserId;
     }
-    
-       /**
-        * Returns the Firstname
-        * @return The Firstname
-        */ 
-    public String getFirstname()
+
+    /**
+     * Returns the Firstname
+     * @return The Firstname
+     */
+    public String getFirstname(  )
     {
         return _strFirstname;
     }
-    
-       /**
-        * Sets the Firstname
-        * @param strFirstname The Firstname
-        */ 
+
+    /**
+     * Sets the Firstname
+     * @param strFirstname The Firstname
+     */
     public void setFirstname( String strFirstname )
     {
         _strFirstname = strFirstname;
     }
-    
-       /**
-        * Returns the Lastname
-        * @return The Lastname
-        */ 
-    public String getLastname()
+
+    /**
+     * Returns the Lastname
+     * @return The Lastname
+     */
+    public String getLastname(  )
     {
         return _strLastname;
     }
-    
-       /**
-        * Sets the Lastname
-        * @param strLastname The Lastname
-        */ 
+
+    /**
+     * Sets the Lastname
+     * @param strLastname The Lastname
+     */
     public void setLastname( String strLastname )
     {
         _strLastname = strLastname;
     }
-    
-       /**
-        * Returns the Email
-        * @return The Email
-        */ 
-    public String getEmail()
+
+    /**
+     * Returns the Email
+     * @return The Email
+     */
+    public String getEmail(  )
     {
         return _strEmail;
     }
-    
-       /**
-        * Sets the Email
-        * @param strEmail The Email
-        */ 
+
+    /**
+     * Sets the Email
+     * @param strEmail The Email
+     */
     public void setEmail( String strEmail )
     {
         _strEmail = strEmail;
     }
-
 }

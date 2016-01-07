@@ -33,11 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.ticketing.business.ContactMode;
 import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;

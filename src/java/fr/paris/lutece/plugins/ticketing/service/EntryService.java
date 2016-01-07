@@ -33,16 +33,17 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketForm;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.RemovalListenerService;
+
+import java.io.Serializable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

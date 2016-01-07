@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.ticketing.web.rs;
 import fr.paris.lutece.plugins.rest.service.RestConstants;
 import fr.paris.lutece.plugins.ticketing.service.CategoriesService;
 
-
 import java.io.IOException;
 
 import javax.ws.rs.GET;
@@ -56,7 +55,7 @@ public class CategoriesRest
 {
     @GET
     @Path( "/" )
-    public Response getCategories( ) throws IOException
+    public Response getCategories(  ) throws IOException
     {
         String strEntity = getCategoriesJson(  );
         String strMediaType = MediaType.APPLICATION_JSON;
@@ -70,7 +69,6 @@ public class CategoriesRest
      */
     public String getCategoriesJson(  )
     {
-        return CategoriesService.getJsonCategories();
+        return CategoriesService.getJsonCategories(  );
     }
-
 }

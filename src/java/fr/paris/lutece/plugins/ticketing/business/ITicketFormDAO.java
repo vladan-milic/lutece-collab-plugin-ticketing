@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import java.util.List;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
+
+import java.util.List;
 
 
 /**
@@ -78,18 +78,18 @@ public interface ITicketFormDAO
     /**
      * Load the data of all the ticketForm objects which are not linked to a
      * category and returns them as a collection
-     * 
+     *
      * @param plugin
      *            the Plugin
      * @return The collection which contains the data of all the ticketForm
      *         objects
      */
-    List<TicketForm> getAvailableTicketForms(Plugin plugin);
+    List<TicketForm> getAvailableTicketForms( Plugin plugin );
 
     /**
      * Load the data of all the ticketForm objects and returns them as a
      * collection
-     * 
+     *
      * @param plugin
      *            the Plugin
      * @return The collection which contains the data of all the ticketForm
@@ -99,12 +99,12 @@ public interface ITicketFormDAO
 
     /**
      * Load the data from the table from categoryId
-     * 
+     *
      * @param nCategoryId
      *            id of the category
      * @param plugin
      *            the Plugin
      * @return The instance of the ticketForm
      */
-    TicketForm loadFormCategoryId(int nCategoryId, Plugin plugin);
+    TicketForm loadFormCategoryId( int nCategoryId, Plugin plugin );
 }
