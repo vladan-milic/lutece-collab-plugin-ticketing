@@ -104,7 +104,11 @@ public class Ticket implements Serializable
     private Timestamp _dDateUpdate;
     private transient Collection<Action> _listWorkflowActions;
     private List<Response> _listResponse;   
-
+    private int _nCriticality;
+    private int _nPriority;
+    private String _strCustomerId;
+    private AssigneeUser _user;   
+    private AssigneeUnit _unit;   
     
     /**
      * @return */
@@ -577,7 +581,7 @@ public class Ticket implements Serializable
      */
     public void setListResponse( List<Response> listResponse )
     {
-        this._listResponse = listResponse;
+        _listResponse = listResponse;
     }
 
     /**
@@ -595,7 +599,102 @@ public class Ticket implements Serializable
      */
     public void setGuid(String strGuid)
     {
-        this._strGuid = strGuid;
+        _strGuid = strGuid;
     }
 
+    /**
+     * Returns the Criticality
+     * 
+     * @return The Criticality
+     */
+    public int getCriticality(  )
+    {
+        return _nCriticality;
+    }
+
+    /**
+     * Sets the Criticality
+     * @param nCriticality The Criticality
+     */
+    public void setCriticality( int nCriticality )
+    {
+        _nCriticality = nCriticality;
+    }
+
+    /**
+     * Returns the Priority
+     * 
+     * @return The Priority
+     */
+    public int getPriority(  )
+    {
+        return _nPriority;
+    }
+
+    /**
+     * Sets the Priority
+     * @param nPriority The Priority
+     */
+    public void setPriority( int nPriority )
+    {
+        _nPriority = nPriority;
+    }
+
+    /**
+     * Returns the CustomerId
+     * 
+     * @return The CustomerId
+     */
+    public String getCustomerId( )
+    {
+        return _strCustomerId;
+    }
+
+    /**
+     * Sets the CustomerId
+     * 
+     * @param strCustomerId
+     *            The CustomerId
+     */
+    public void setCustomerId( String strCustomerId )
+    {
+        _strCustomerId = strCustomerId;
+    }
+
+    
+           /**
+        * Returns the AssigneeUser
+        * @return The AssigneeUser
+        */ 
+    public AssigneeUser getAssigneeUser()
+    {
+        return _user;
+    }
+    
+       /**
+        * Sets the AssigneeUser
+        * @param AssigneeUser The AssigneeUser
+        */ 
+    public void setAssigneeUser( AssigneeUser AssigneeUser )
+    {
+        _user = AssigneeUser;
+    }
+    
+       /**
+        * Returns the AssigneeUnit
+        * @return The AssigneeUnit
+        */ 
+    public AssigneeUnit getAssigneeUnit()
+    {
+        return _unit;
+    }
+    
+       /**
+        * Sets the AssigneeUnit
+        * @param AssigneeUnit The AssigneeUnit
+        */ 
+    public void setAssigneeUnit( AssigneeUnit AssigneeUnit )
+    {
+        _unit = AssigneeUnit;
+    }
 }

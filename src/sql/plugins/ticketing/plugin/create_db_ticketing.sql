@@ -6,7 +6,8 @@
 DROP TABLE IF EXISTS ticketing_ticket;
 CREATE TABLE ticketing_ticket (
 id_ticket int(6) NOT NULL,
-guid varchar(20) NULL, 
+guid varchar(20) NULL,
+id_customer varchar(20) NULL, 
 id_user_title int(11) NOT NULL default '0',
 firstname varchar(50) NOT NULL default '',
 lastname varchar(50) NOT NULL default '',
@@ -16,10 +17,16 @@ mobile_phone_number varchar(50) NOT NULL default '',
 id_ticket_category int(11) NOT NULL default '0',
 id_contact_mode int(11) NOT NULL default '0',
 ticket_comment long varchar NULL ,
+ticket_reference varchar(20) NULL, 
 ticket_status int(11) NOT NULL default '0',
 ticket_status_text varchar(255) NULL default '',
+priority int(6) NOT NULL default '0',
+criticality int(6) NOT NULL default '0',
 date_update timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 date_create timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+date_close timestamp NULL,
+id_admin_user int(11) NOT NULL default '-1',
+id_unit int(11) NOT NULL default '0', 
 PRIMARY KEY (id_ticket)
 );
 
