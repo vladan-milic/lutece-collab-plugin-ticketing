@@ -353,7 +353,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
             }
         }
 
-        if ( nIdWorkflow > 0 )
+        if ( nIdWorkflow > 0 && WorkflowService.getInstance( ).isAvailable( ) )
         {
             try
             {
@@ -364,7 +364,9 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
             } 
             catch ( Exception e )
             {
-                TicketHelper.removeTicket( _ticket.getId( ) );
+                WorkflowService.getInstance( ).doRemoveWorkFlowResource( _ticket.getId( ),
+                        Ticket.TICKET_RESOURCE_TYPE );
+                TicketHome.remove( _ticket.getId( ) );
                 throw e;
             }
         }
