@@ -52,7 +52,9 @@ public class AssigneeUnit
     {
     }
 
-    /** Constructor */
+    /** Constructor
+     * @param unit The unit 
+     */
     public AssigneeUnit( Unit unit ) 
     {
         _nUnitId = unit.getIdUnit();

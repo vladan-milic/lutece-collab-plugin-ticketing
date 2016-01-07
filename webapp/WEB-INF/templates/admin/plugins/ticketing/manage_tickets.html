@@ -18,9 +18,9 @@
         <tr>
             <input type="hidden" id="id" name="id"/>
             <th>#i18n{ticketing.manage_tickets.columnUser}</th>
-            <th>#i18n{ticketing.manage_tickets.columnTicketType} / #i18n{ticketing.manage_tickets.columnTicketDomain}</th>
-            <th>#i18n{ticketing.manage_tickets.columnTicketCategory}</th>
+            <th>#i18n{ticketing.manage_tickets.columnTicketType} / #i18n{ticketing.manage_tickets.columnTicketDomain} / #i18n{ticketing.manage_tickets.columnTicketCategory}</th>
             <th>#i18n{ticketing.manage_tickets.columnTicketComment}</th>
+            <th colspan="2" >#i18n{ticketing.manage_tickets.columnTicketAssignee}</th>
             <th>#i18n{ticketing.manage_tickets.columnTicketStatus}</th>
             <th>#i18n{ticketing.manage_tickets.columnTicketState}</th>
             <th>#i18n{portal.util.labelActions}</th>
@@ -48,13 +48,25 @@
                     </#if>
                 </td>
                 <td>
-                    ${ticket.ticketType} <br>${ticket.ticketDomain} 
-                </td>
-                <td>
-                    ${ticket.ticketCategory}
+                    ${ticket.ticketType} <br>${ticket.ticketDomain} <br> <strong>${ticket.ticketCategory}</strong>
                 </td>
                 <td>
                     ${ticket.ticketComment}
+                </td>
+                <td>
+                    <#if ticket.assigneeUnit??>
+                        ${ticket.assigneeUnit.name}
+                    <#else>
+                        - 
+                    </#if>
+                </td>
+                <td>
+                    <#if ticket.assigneeUser??>                    
+                        <#if adminAvatar><img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}" alt="Avatar" title="Avatar"></#if>
+                        ${ticket.assigneeUser.firstname} ${ticket.assigneeUser.lastname}
+                    <#else>
+                        - 
+                    </#if>
                 </td>
                 <td>
                     ${ticket.ticketStatus} ${ticket.ticketStatusText!''}

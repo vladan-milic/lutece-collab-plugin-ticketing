@@ -78,6 +78,7 @@ import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -150,6 +151,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
     private static final String MARK_TASKS_FORM = "tasks_form";
+    private static final String MARK_ADMIN_AVATAR = "adminAvatar";
     private static final String JSP_MANAGE_TICKETS = "jsp/admin/plugins/ticketing/ManageTickets.jsp";
     private static final String MARK_GUID = "guid";
     
@@ -185,6 +187,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     // Session keys
     private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
 
+    private static boolean _bAdminAvatar = (PluginService.getPlugin( "adminavatar" ) != null);
 
     // Session variable to store working values
     private Ticket _ticket;
@@ -252,6 +255,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_TICKET_LIST, paginator.getPageItems(  ) );
+        model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
     }
