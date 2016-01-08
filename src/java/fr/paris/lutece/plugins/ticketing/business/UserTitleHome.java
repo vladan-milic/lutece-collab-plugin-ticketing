@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import fr.paris.lutece.plugins.ticketing.service.TicketFormCacheService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -49,6 +50,7 @@ public final class UserTitleHome
     // Static variable pointed at the DAO instance
     private static IUserTitleDAO _dao = SpringContextService.getBean( "ticketing.userTitleDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance(  );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -60,25 +62,31 @@ public final class UserTitleHome
     /**
      * Create an instance of the userTitle class
      * @param userTitle The instance of the UserTitle which contains the informations to store
-     * @return The  instance of userTitle which has been created with its primary key.
      */
-    public static UserTitle create( UserTitle userTitle )
+    public static void create( UserTitle userTitle )
     {
         _dao.insert( userTitle, _plugin );
 
-        return userTitle;
+        if ( _cacheService.isCacheEnable(  ) )
+        {
+            _cacheService.putInCache( TicketFormCacheService.getUserTitleByIdCacheKey( userTitle.getId(  ) ),
+                    userTitle.clone(  ) );
+        }
     }
 
     /**
      * Update of the userTitle which is specified in parameter
      * @param userTitle The instance of the UserTitle which contains the data to store
-     * @return The instance of the  userTitle which has been updated
      */
-    public static UserTitle update( UserTitle userTitle )
+    public static void update( UserTitle userTitle )
     {
         _dao.store( userTitle, _plugin );
 
-        return userTitle;
+        if ( _cacheService.isCacheEnable(  ) )
+        {
+            _cacheService.putInCache( TicketFormCacheService.getUserTitleByIdCacheKey( userTitle.getId(  ) ),
+                    userTitle.clone(  ) );
+        }
     }
 
     /**
@@ -88,6 +96,11 @@ public final class UserTitleHome
     public static void remove( int nKey )
     {
         _dao.delete( nKey, _plugin );
+        
+        if ( _cacheService.isCacheEnable(  ) )
+        {
+            _cacheService.removeKey( TicketFormCacheService.getUserTitleByIdCacheKey( nKey ) );
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -100,7 +113,32 @@ public final class UserTitleHome
      */
     public static UserTitle findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, _plugin );
+        String strCacheKey = TicketFormCacheService.getUserTitleByIdCacheKey( nKey );
+        UserTitle userTitle = null;
+
+        if ( _cacheService.isCacheEnable(  ) )
+        {
+            userTitle = (UserTitle) _cacheService.getFromCache( strCacheKey );
+        }
+
+        if ( userTitle == null )
+        {
+            userTitle = _dao.load( nKey, _plugin );
+
+            if ( userTitle != null )
+            {
+                if ( _cacheService.isCacheEnable(  ) )
+                {
+                    _cacheService.putInCache( strCacheKey, userTitle.clone(  ) );
+                }
+            }
+        }
+        else
+        {
+            userTitle = (UserTitle) userTitle.clone(  );
+        }
+
+        return userTitle;
     }
 
     /**

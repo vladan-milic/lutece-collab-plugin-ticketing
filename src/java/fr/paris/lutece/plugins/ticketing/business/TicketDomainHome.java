@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import fr.paris.lutece.plugins.ticketing.service.TicketFormCacheService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -49,6 +50,7 @@ public final class TicketDomainHome
     // Static variable pointed at the DAO instance
     private static ITicketDomainDAO _dao = SpringContextService.getBean( "ticketing.ticketDomainDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance(  );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -60,25 +62,31 @@ public final class TicketDomainHome
     /**
      * Create an instance of the ticketDomain class
      * @param ticketDomain The instance of the TicketDomain which contains the informations to store
-     * @return The  instance of ticketDomain which has been created with its primary key.
      */
-    public static TicketDomain create( TicketDomain ticketDomain )
+    public static void create( TicketDomain ticketDomain )
     {
         _dao.insert( ticketDomain, _plugin );
 
-        return ticketDomain;
+        if ( _cacheService.isCacheEnable(  ) )
+        {
+            _cacheService.putInCache( TicketFormCacheService.getDomainByIdCacheKey( ticketDomain.getId(  ) ),
+                    ticketDomain.clone(  ) );
+        }
     }
 
     /**
      * Update of the ticketDomain which is specified in parameter
      * @param ticketDomain The instance of the TicketDomain which contains the data to store
-     * @return The instance of the  ticketDomain which has been updated
      */
-    public static TicketDomain update( TicketDomain ticketDomain )
+    public static void update( TicketDomain ticketDomain )
     {
         _dao.store( ticketDomain, _plugin );
 
-        return ticketDomain;
+        if ( _cacheService.isCacheEnable(  ) )
+        {
+            _cacheService.putInCache( TicketFormCacheService.getDomainByIdCacheKey( ticketDomain.getId(  ) ),
+                    ticketDomain.clone(  ) );
+        }
     }
 
     /**
@@ -88,6 +96,11 @@ public final class TicketDomainHome
     public static void remove( int nKey )
     {
         _dao.delete( nKey, _plugin );
+        
+        if ( _cacheService.isCacheEnable(  ) )
+        {
+            _cacheService.removeKey( TicketFormCacheService.getDomainByIdCacheKey( nKey ) );
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -100,7 +113,32 @@ public final class TicketDomainHome
      */
     public static TicketDomain findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, _plugin );
+        String strCacheKey = TicketFormCacheService.getDomainByIdCacheKey( nKey );
+        TicketDomain domain = null;
+
+        if ( _cacheService.isCacheEnable(  ) )
+        {
+            domain = (TicketDomain) _cacheService.getFromCache( strCacheKey );
+        }
+
+        if ( domain == null )
+        {
+            domain = _dao.load( nKey, _plugin );
+
+            if ( domain != null )
+            {
+                if ( _cacheService.isCacheEnable(  ) )
+                {
+                    _cacheService.putInCache( strCacheKey, domain.clone(  ) );
+                }
+            }
+        }
+        else
+        {
+            domain = (TicketDomain) domain.clone(  );
+        }
+
+        return domain;
     }
 
     /**

@@ -35,6 +35,8 @@ package fr.paris.lutece.plugins.ticketing.business;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import fr.paris.lutece.portal.service.util.AppLogService;
+
 import java.io.Serializable;
 
 import javax.validation.constraints.Size;
@@ -48,7 +50,7 @@ import javax.validation.constraints.Size;
  * @author s235706
  *
  */
-public class ContactMode implements Serializable
+public class ContactMode implements Cloneable, Serializable
 {
     private static final long serialVersionUID = 1L;
 
@@ -114,5 +116,23 @@ public class ContactMode implements Serializable
     public void setConfirmationMsg( String strConfirmationMsg )
     {
         _strConfirmationMsg = strConfirmationMsg;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object clone(  )
+    {
+        try
+        {
+            return super.clone(  );
+        }
+        catch ( CloneNotSupportedException e )
+        {
+            AppLogService.error( e.getMessage(  ), e );
+
+            return null;
+        }
     }
 }
