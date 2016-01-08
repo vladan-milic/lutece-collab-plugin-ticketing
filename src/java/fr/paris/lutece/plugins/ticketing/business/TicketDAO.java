@@ -677,7 +677,7 @@ public final class TicketDAO implements ITicketDAO
     /**
      * returns next day from input date
      *
-     * @param date
+     * @param date date to increment
      * @return date + 1day
      */
     private java.util.Date getNextDayDate( java.util.Date date )

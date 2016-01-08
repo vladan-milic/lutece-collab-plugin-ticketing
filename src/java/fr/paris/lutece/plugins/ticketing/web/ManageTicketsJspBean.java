@@ -106,10 +106,12 @@ import javax.servlet.http.HttpSession;
 @Controller( controllerJsp = "ManageTickets.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = "TICKETING_TICKETS_MANAGEMENT" )
 public class ManageTicketsJspBean extends MVCAdminJspBean
 {
-    private static final long serialVersionUID = 1L;
+
 
     // Right
     public static final String RIGHT_MANAGETICKETS = "TICKETING_TICKETS_MANAGEMENT";
+    
+    private static final long serialVersionUID = 1L;
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String MARK_PAGINATOR = "paginator";
@@ -295,6 +297,12 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKET, TEMPLATE_CREATE_TICKET, model );
     }
 
+    /**
+     * ticket initialisation method
+     * @param request request  
+     * @param ticket ticket
+     * @param model model
+     */
     private void initTicketForm( HttpServletRequest request, Ticket ticket, Map<String, Object> model )
     {
         String strGuid = request.getParameter( PARAMETER_GUID );

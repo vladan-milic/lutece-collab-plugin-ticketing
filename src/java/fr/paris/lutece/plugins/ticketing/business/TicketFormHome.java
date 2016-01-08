@@ -167,8 +167,8 @@ public final class TicketFormHome
      * Returns an instance of a ticketForm whose identifier is specified in
      * parameter
      *
-     * @param nTicketFormId
-     *            The ticketForm primary key
+     * @param nIdCategory
+     *            The category Id
      * @return an instance of TicketForm
      */
     public static TicketForm findByCategoryId( int nIdCategory )

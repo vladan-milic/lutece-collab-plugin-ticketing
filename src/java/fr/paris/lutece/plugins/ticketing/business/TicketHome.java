@@ -195,10 +195,10 @@ public final class TicketHome
      * @param nIdTicket The id of the ticket
      * @param nIdResponse The id of the response
      */
-    public static void insertTicketResponse( int nIdticket, int nIdResponse )
+    public static void insertTicketResponse( int nIdTicket, int nIdResponse )
     {
-        _dao.insertTicketResponse( nIdticket, nIdResponse, _plugin );
-        _cacheService.removeKey( _cacheService.getTicketResponseCacheKey( nIdticket ) );
+        _dao.insertTicketResponse( nIdTicket, nIdResponse, _plugin );
+        _cacheService.removeKey( _cacheService.getTicketResponseCacheKey( nIdTicket ) );
     }
 
     /**
