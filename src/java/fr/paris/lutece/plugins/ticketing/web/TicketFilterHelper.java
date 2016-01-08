@@ -78,8 +78,8 @@ public class TicketFilterHelper
     /**
      * returns a filter instancied from a request
      *
-     * @param request
-     * @return TicketFilter
+     * @param request request
+     * @return TicketFilter filter initialised from request parameters
      * @throws ParseException
      *             if date is not well formated
      */
@@ -204,7 +204,7 @@ public class TicketFilterHelper
      * @param strDate
      *            yyyyMMdd date
      * @return date
-     * @throws ParseException
+     * @throws ParseException exception when error occurs while parsing date
      */
     private static Date getDateFromString( String strDate )
         throws ParseException

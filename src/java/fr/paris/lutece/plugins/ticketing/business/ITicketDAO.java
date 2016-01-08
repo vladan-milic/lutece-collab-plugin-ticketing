@@ -135,7 +135,7 @@ public interface ITicketDAO
     * @param nIdResponse The id of the response
     * @param plugin The plugin
     */
-    void removeTicketResponsesByIdResponse( int nIdTicket, Plugin plugin );
+    void removeTicketResponsesByIdResponse( int nIdResponse, Plugin plugin );
 
     /**
      * Find the id of the ticket associated with a given response

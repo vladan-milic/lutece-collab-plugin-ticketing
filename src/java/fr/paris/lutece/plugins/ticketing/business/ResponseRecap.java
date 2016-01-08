@@ -93,12 +93,12 @@ public class ResponseRecap implements Serializable
     /**
      * Set the list of values of this response
      * 
-     * @param listResponseValue
+     * @param listValues
      *            The list of values
      */
-    public void setListValues( List<String> _listValues )
+    public void setListValues( List<String> listValues )
     {
-        this._listValues = _listValues;
+        this._listValues = listValues;
     }
 
     /**

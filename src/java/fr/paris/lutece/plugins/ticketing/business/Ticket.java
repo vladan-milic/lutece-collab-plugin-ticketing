@@ -56,9 +56,10 @@ import javax.validation.constraints.Size;
  */
 public class Ticket implements Serializable
 {
+    public static final String TICKET_RESOURCE_TYPE = "ticket";
+    
     private static final long serialVersionUID = 1L;
     private static final String EMPTY = "";
-    public static final String TICKET_RESOURCE_TYPE = "ticket";
 
     // Variables declarations 
     private int _nId;
@@ -73,7 +74,7 @@ public class Ticket implements Serializable
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.Lastname.size}" )
     private String _strLastname;
     @NotEmpty( message = "#i18n{ticketing.validation.ticket.Email.notEmpty}" )
-    @Email( message = "#i18n{portal.validation.message.email}" )
+    @Email( message = "#i18n{ticketing.validation.ticket.Email.badFormat}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.ticket.Email.size}" )
     private String _strEmail;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.FixedPhoneNumber.size}" )
@@ -722,11 +723,11 @@ public class Ticket implements Serializable
 
     /**
      * Sets the AssigneeUser
-     * @param AssigneeUser The AssigneeUser
+     * @param assigneeUser The AssigneeUser
      */
-    public void setAssigneeUser( AssigneeUser AssigneeUser )
+    public void setAssigneeUser( AssigneeUser assigneeUser )
     {
-        _user = AssigneeUser;
+        _user = assigneeUser;
     }
 
     /**
@@ -739,11 +740,11 @@ public class Ticket implements Serializable
     }
 
     /**
-     * Sets the AssigneeUnit
-     * @param AssigneeUnit The AssigneeUnit
+     * Sets the assigneeUnit
+     * @param assigneeUnit The assigneeUnit
      */
-    public void setAssigneeUnit( AssigneeUnit AssigneeUnit )
+    public void setAssigneeUnit( AssigneeUnit assigneeUnit )
     {
-        _unit = AssigneeUnit;
+        _unit = assigneeUnit;
     }
 }

@@ -130,12 +130,12 @@ public class TicketForm implements RBACResource, Cloneable, Serializable
     }
 
     /**
-     * @param _nIdCategory
-     *            the _nIdCategory to set
+     * @param nIdCategory
+     *            the nIdCategory to set
      */
-    public void setIdCategory( int _nIdCategory )
+    public void setIdCategory( int nIdCategory )
     {
-        this._nIdCategory = _nIdCategory;
+        this._nIdCategory = nIdCategory;
     }
 
     /**
@@ -147,12 +147,12 @@ public class TicketForm implements RBACResource, Cloneable, Serializable
     }
 
     /**
-     * @param _strTicketCategory
-     *            the _strTicketCategory to set
+     * @param strTicketCategory
+     *            the strTicketCategory to set
      */
-    public void setTicketCategory( String _strTicketCategory )
+    public void setTicketCategory( String strTicketCategory )
     {
-        this._strTicketCategory = _strTicketCategory;
+        this._strTicketCategory = strTicketCategory;
     }
 
     /**

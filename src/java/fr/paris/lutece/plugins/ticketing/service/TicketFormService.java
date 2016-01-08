@@ -129,8 +129,8 @@ public class TicketFormService implements Serializable
 
     /**
      * Return the HTML code of the form
-     * @param form the form which HTML code must be return
-     * @param formMessages The form messages associated with the form
+     * @param ticket the ticket
+     * @param form The form messages associated with the form
      * @param locale the locale
      * @param bDisplayFront True if the entry will be displayed in Front Office,
      *            false if it will be displayed in Back Office.
@@ -170,6 +170,11 @@ public class TicketFormService implements Serializable
         return strBuffer.toString(  );
     }
 
+    /**
+     * returns all errors
+     * @param request request
+     * @return List of errors
+     */
     private List<String> getAllErrors( HttpServletRequest request )
     {
         List<String> listAllErrors = new ArrayList<String>(  );
@@ -301,8 +306,8 @@ public class TicketFormService implements Serializable
      *            the key of the entry
      * @param locale
      *            the locale
-     * @param ticketing
-     *            The ticketing
+     * @param ticket
+     *            The ticket
      * @return null if there is no error in the response or the list of errors
      *         found
      */
@@ -327,7 +332,7 @@ public class TicketFormService implements Serializable
      * @param listResponse The list of response to add responses found in
      * @param bResponseNull true if the response created must be null
      * @param locale the locale
-     * @param ticketing The ticketing
+     * @param ticket The ticket
      * @return null if there is no error in the response or the list of errors
      *         found
      */
@@ -426,6 +431,7 @@ public class TicketFormService implements Serializable
     /**
      * Get the URL of the anchor of an entry
      * @param entry the entry
+     * @param nIdform id of form
      * @return The URL of the anchor of an entry
      */
     public String getEntryUrl( Entry entry, int nIdform )
@@ -453,7 +459,8 @@ public class TicketFormService implements Serializable
     public List<ResponseRecap> getListResponseRecap( List<Response> listResponse )
     {
         Map<Integer, ResponseRecap> mapResponseRecap = new TreeMap<Integer, ResponseRecap>( );
-        if ( listResponse != null ) {
+        if ( listResponse != null ) 
+        {
             for ( Response response : listResponse )
             {
                 ResponseRecap responseRecap = mapResponseRecap.get( new Integer( response.getEntry( )
@@ -492,7 +499,7 @@ public class TicketFormService implements Serializable
      * 
      * @param session
      *            The session
-     * @param ticketing
+     * @param ticket
      *            The ticketing to save
      */
     public void saveTicketInSession( HttpSession session, Ticket ticket )

@@ -64,28 +64,29 @@ public class TicketFilter
         {
             CONSTANT_DEFAULT_ORDER_BY, "ticket_status", "date_create", "date_update", "id_user", "id_ticket_domain",
             "id_ticket_category", "email", "lastname", "firstname", "fixed_phone_number", "mobile_phone_number",
-            "date_close"
+            "date_close",
         };
+    
     private int _nIdTicket = CONSTANT_ID_NULL;
-    private Date _dateLastUpdateDate = null;
-    private Date _dateLastUpdateStartDate = null;
-    private Date _dateLastUpdateEndDate = null;
-    private Date _dateCreationDate = null;
-    private Date _dateCreationStartDate = null;
-    private Date _dateCreationEndDate = null;
-    private Date _dateCloseDate = null;
+    private Date _dateLastUpdateDate;
+    private Date _dateLastUpdateStartDate;
+    private Date _dateLastUpdateEndDate;
+    private Date _dateCreationDate;
+    private Date _dateCreationStartDate;
+    private Date _dateCreationEndDate;
+    private Date _dateCloseDate;
     private int _nIdUser = CONSTANT_ID_NULL;
     private int _nIdCategory = CONSTANT_ID_NULL;
     private int _nIdDomain = CONSTANT_ID_NULL;
     private int _nIdType = CONSTANT_ID_NULL;
-    private String _strStatus = null;
-    private String _strEmail = null;
-    private String _strLastName = null;
-    private String _strFirstName = null;
-    private String _strFixedPhoneNumber = null;
-    private String _strMobilePhoneNumber = null;
-    private String _strOrderBy = null;
-    private String _strOrderSort = null;
+    private String _strStatus;
+    private String _strEmail;
+    private String _strLastName;
+    private String _strFirstName;
+    private String _strFixedPhoneNumber;
+    private String _strMobilePhoneNumber;
+    private String _strOrderBy;
+    private String _strOrderSort;
 
     /**
      * Check if this filter contains a idUser
@@ -342,9 +343,9 @@ public class TicketFilter
      * @param _nIdCategory
      *            the _nIdCategory to set
      */
-    public void setIdCategory( int _nIdCategory )
+    public void setIdCategory( int nIdCategory )
     {
-        this._nIdCategory = _nIdCategory;
+        this._nIdCategory = nIdCategory;
     }
 
     /**
@@ -366,12 +367,12 @@ public class TicketFilter
     }
 
     /**
-     * @param _nIdDomain
-     *            the _nIdDomain to set
+     * @param nIdDomain
+     *            the nIdDomain to set
      */
-    public void setIdDomain( int _nIdDomain )
+    public void setIdDomain( int nIdDomain )
     {
-        this._nIdDomain = _nIdDomain;
+        this._nIdDomain = nIdDomain;
     }
 
     /**
@@ -393,12 +394,12 @@ public class TicketFilter
     }
 
     /**
-     * @param _nIdType
-     *            the _nIdType to set
+     * @param nIdType
+     *            the nIdType to set
      */
-    public void setIdType( int _nIdType )
+    public void setIdType( int nIdType )
     {
-        this._nIdType = _nIdType;
+        this._nIdType = nIdType;
     }
 
     /**
@@ -420,12 +421,12 @@ public class TicketFilter
     }
 
     /**
-     * @param _strStatus
-     *            the _strStatus to set
+     * @param strStatus
+     *            the strStatus to set
      */
-    public void setStatus( String _strStatus )
+    public void setStatus( String strStatus )
     {
-        this._strStatus = _strStatus;
+        this._strStatus = strStatus;
     }
 
     /**
@@ -447,12 +448,12 @@ public class TicketFilter
     }
 
     /**
-     * @param _strEmail
-     *            the _strEmail to set
+     * @param strEmail
+     *            the strEmail to set
      */
-    public void setEmail( String _strEmail )
+    public void setEmail( String strEmail )
     {
-        this._strEmail = _strEmail;
+        this._strEmail = strEmail;
     }
 
     /**
@@ -474,12 +475,12 @@ public class TicketFilter
     }
 
     /**
-     * @param _strLastName
-     *            the _strLastName to set
+     * @param strLastName
+     *            the strLastName to set
      */
-    public void setLastName( String _strLastName )
+    public void setLastName( String strLastName )
     {
-        this._strLastName = _strLastName;
+        this._strLastName = strLastName;
     }
 
     /**
@@ -501,12 +502,12 @@ public class TicketFilter
     }
 
     /**
-     * @param _strFirstName
-     *            the _strFirstName to set
+     * @param strFirstName
+     *            the strFirstName to set
      */
-    public void setFirstName( String _strFirstName )
+    public void setFirstName( String strFirstName )
     {
-        this._strFirstName = _strFirstName;
+        this._strFirstName = strFirstName;
     }
 
     /**
@@ -528,12 +529,12 @@ public class TicketFilter
     }
 
     /**
-     * @param _strFixedPhoneNumber
-     *            the _strFixedPhoneNumber to set
+     * @param strFixedPhoneNumber
+     *            the strFixedPhoneNumber to set
      */
-    public void setFixedPhoneNumber( String _strFixedPhoneNumber )
+    public void setFixedPhoneNumber( String strFixedPhoneNumber )
     {
-        this._strFixedPhoneNumber = _strFixedPhoneNumber;
+        this._strFixedPhoneNumber = strFixedPhoneNumber;
     }
 
     /**
@@ -555,12 +556,12 @@ public class TicketFilter
     }
 
     /**
-     * @param _strMobilePhoneNumber
-     *            the _strMobilePhoneNumber to set
+     * @param strMobilePhoneNumber
+     *            the strMobilePhoneNumber to set
      */
-    public void setMobilePhoneNumber( String _strMobilePhoneNumber )
+    public void setMobilePhoneNumber( String strMobilePhoneNumber )
     {
-        this._strMobilePhoneNumber = _strMobilePhoneNumber;
+        this._strMobilePhoneNumber = strMobilePhoneNumber;
     }
 
     /**
@@ -628,7 +629,7 @@ public class TicketFilter
      */
     public boolean isOrderASC(  )
     {
-        return ORDER_SORT_ALLOWED.ASC.name(  ).equalsIgnoreCase( _strOrderSort );
+        return OrderSortAllowed.ASC.name(  ).equalsIgnoreCase( _strOrderSort );
     }
 
     /**
@@ -642,7 +643,7 @@ public class TicketFilter
 
         if ( StringUtils.isNotEmpty( _strOrderSort ) )
         {
-            for ( ORDER_SORT_ALLOWED osa : ORDER_SORT_ALLOWED.values(  ) )
+            for ( OrderSortAllowed osa : OrderSortAllowed.values(  ) )
             {
                 if ( osa.name(  ).equalsIgnoreCase( _strOrderSort ) )
                 {
@@ -664,8 +665,10 @@ public class TicketFilter
     {
         _strOrderSort = strOrderSort;
     }
-    private enum ORDER_SORT_ALLOWED
-    {ASC,
-        DESC;
+    /**
+     * Sort order allowed 
+     */
+    private enum OrderSortAllowed
+    {ASC,DESC;
     }
 }
