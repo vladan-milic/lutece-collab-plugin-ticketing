@@ -453,34 +453,34 @@ public class TicketFormService implements Serializable
     public List<ResponseRecap> getListResponseRecap( List<Response> listResponse )
     {
         Map<Integer, ResponseRecap> mapResponseRecap = new TreeMap<Integer, ResponseRecap>( );
-
-        for ( Response response : listResponse )
-        {
-            ResponseRecap responseRecap = mapResponseRecap.get( new Integer( response.getEntry( )
-                    .getIdEntry( ) ) );
-            if ( responseRecap == null )
+        if ( listResponse != null ) {
+            for ( Response response : listResponse )
             {
-                responseRecap = new ResponseRecap( );
-                responseRecap.setTitle( response.getEntry( ).getTitle( ) );
-            }
-            if ( response.getField( ) != null )
-            {
-                responseRecap.addValue( response.getField( ).getTitle( ) );
-            }
-            else
-            {
-                if ( response.getFile( ) != null )
+                ResponseRecap responseRecap = mapResponseRecap.get( new Integer( response.getEntry( )
+                        .getIdEntry( ) ) );
+                if ( responseRecap == null )
                 {
-                    responseRecap.addValue( response.getFile( ).getTitle( ) );
+                    responseRecap = new ResponseRecap( );
+                    responseRecap.setTitle( response.getEntry( ).getTitle( ) );
+                }
+                if ( response.getField( ) != null )
+                {
+                    responseRecap.addValue( response.getField( ).getTitle( ) );
                 }
                 else
                 {
-                    responseRecap.addValue( response.getResponseValue( ) );
+                    if ( response.getFile( ) != null )
+                    {
+                        responseRecap.addValue( response.getFile( ).getTitle( ) );
+                    }
+                    else
+                    {
+                        responseRecap.addValue( response.getResponseValue( ) );
+                    }
                 }
+                mapResponseRecap.put( new Integer( response.getEntry( ).getIdEntry( ) ), responseRecap );
             }
-            mapResponseRecap.put( new Integer( response.getEntry( ).getIdEntry( ) ), responseRecap );
         }
-
         List<ResponseRecap> listResponseRecap = new ArrayList<ResponseRecap>(
                 mapResponseRecap.values( ) );
 
