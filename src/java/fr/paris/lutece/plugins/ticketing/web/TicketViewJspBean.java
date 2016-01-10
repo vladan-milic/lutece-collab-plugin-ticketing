@@ -35,9 +35,11 @@ package fr.paris.lutece.plugins.ticketing.web;
 
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
+import fr.paris.lutece.plugins.ticketing.service.TicketingUtils;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
@@ -51,6 +53,8 @@ public class TicketViewJspBean extends MVCAdminJspBean
     private static final String TEMPLATE_VIEW_TICKET_HISTORY = "/admin/plugins/ticketing/ticket/view_ticket_history.html";
 
     private static final String MARK_TICKET = "ticket";
+    private static final String MARK_PRIORITY = "priority";
+    private static final String MARK_CRITICALITY = "criticality";
     
     private static final String PARAMETER_ID_TICKET = "id";
 
@@ -75,6 +79,8 @@ public class TicketViewJspBean extends MVCAdminJspBean
         
         Map<String, Object> model = getModel();
         model.put( MARK_TICKET , ticket );
+        model.put( MARK_PRIORITY, TicketingUtils.getPriority( ticket, getLocale() ));
+        model.put( MARK_CRITICALITY, TicketingUtils.getCriticality( ticket, getLocale() ));
         
         return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS,  TEMPLATE_VIEW_TICKET_DETAILS , model );
    
