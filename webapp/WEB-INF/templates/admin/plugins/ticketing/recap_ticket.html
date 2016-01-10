@@ -2,8 +2,9 @@
     <form class="form-horizontal" method="post" name="recap_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
         <@messages errors=errors />
         <input type="hidden" id="id" name="id" value="${ticket.id}"/>
-        <input type="hidden" id="guid" name="guid" value=""/>
-        <fieldset>
+        <input type="hidden" id="guid" name="guid" value="${ticket.guid!''}"/>
+        <input type="hidden" id="customer_id" name="customer_id" value="${ticket.customerId!''}"/>
+           <fieldset>
              <div class="form-group">
                  <label for="userTitle" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.recap_ticket.labelUserTitle} : </label>
                  <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
