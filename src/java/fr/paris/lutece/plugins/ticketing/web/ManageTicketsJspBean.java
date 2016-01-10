@@ -174,7 +174,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String VIEW_WORKFLOW_ACTION_FORM = "viewWorkflowActionForm";
     private static final String VIEW_TICKET_FORM = "ticketForm";
     private static final String VIEW_RECAP_TICKET = "recapTicket";
-
+    
     // Actions
     private static final String ACTION_CREATE_TICKET = "createTicket";
     private static final String ACTION_MODIFY_TICKET = "modifyTicket";
