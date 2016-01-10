@@ -49,7 +49,6 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,9 +66,9 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_TICKETCATEGORYS = "/admin/plugins/ticketing/manage_ticketcategories.html";
-    private static final String TEMPLATE_CREATE_TICKETCATEGORY = "/admin/plugins/ticketing/create_ticketcategory.html";
-    private static final String TEMPLATE_MODIFY_TICKETCATEGORY = "/admin/plugins/ticketing/modify_ticketcategory.html";
+    private static final String TEMPLATE_MANAGE_TICKETCATEGORYS = "/admin/plugins/ticketing/admin/manage_ticket_categories.html";
+    private static final String TEMPLATE_CREATE_TICKETCATEGORY = "/admin/plugins/ticketing/admin/create_ticket_category.html";
+    private static final String TEMPLATE_MODIFY_TICKETCATEGORY = "/admin/plugins/ticketing/admin/modify_ticket_category.html";
 
     // Parameters
     private static final String PARAMETER_ID_TICKETCATEGORY = "id";
@@ -111,6 +110,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String INFO_TICKETCATEGORY_REMOVED = "ticketing.info.ticketcategory.removed";
     private static final String PATTERN_CATEGORY_CODE = "^[A-Z0-9]*";
     private static Pattern _pattern = Pattern.compile( PATTERN_CATEGORY_CODE );
+    private static final long serialVersionUID = 1L;
 
     // Session variable to store working values
     private TicketCategory _category;

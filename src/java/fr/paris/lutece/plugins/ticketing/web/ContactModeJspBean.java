@@ -61,10 +61,10 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_CONTACTMODES = "/admin/plugins/ticketing/manage_contactmodes.html";
-    private static final String TEMPLATE_CREATE_CONTACTMODE = "/admin/plugins/ticketing/create_contactmode.html";
-    private static final String TEMPLATE_MODIFY_CONTACTMODE = "/admin/plugins/ticketing/modify_contactmode.html";
-    private static final String TEMPLATE_FREEMARKER_LIST = "/admin/plugins/ticketing/freemarker_list_ticket.html";
+    private static final String TEMPLATE_MANAGE_CONTACTMODES = "/admin/plugins/ticketing/admin/manage_contact_modes.html";
+    private static final String TEMPLATE_CREATE_CONTACTMODE = "/admin/plugins/ticketing/admin/create_contact_mode.html";
+    private static final String TEMPLATE_MODIFY_CONTACTMODE = "/admin/plugins/ticketing/admin/modify_contact_mode.html";
+    private static final String TEMPLATE_FREEMARKER_LIST = "/admin/plugins/ticketing/admin/freemarker_list_ticket.html";
 
     // Parameters
     private static final String PARAMETER_ID_CONTACTMODE = "id";
@@ -100,6 +100,7 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     private static final String INFO_CONTACTMODE_CREATED = "ticketing.info.contactmode.created";
     private static final String INFO_CONTACTMODE_UPDATED = "ticketing.info.contactmode.updated";
     private static final String INFO_CONTACTMODE_REMOVED = "ticketing.info.contactmode.removed";
+    private static final long serialVersionUID = 1L;
 
     // Session variable to store working values
     private ContactMode _contactmode;

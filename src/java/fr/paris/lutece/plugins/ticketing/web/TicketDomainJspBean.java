@@ -59,9 +59,9 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_TICKETDOMAINS = "/admin/plugins/ticketing/manage_ticketdomains.html";
-    private static final String TEMPLATE_CREATE_TICKETDOMAIN = "/admin/plugins/ticketing/create_ticketdomain.html";
-    private static final String TEMPLATE_MODIFY_TICKETDOMAIN = "/admin/plugins/ticketing/modify_ticketdomain.html";
+    private static final String TEMPLATE_MANAGE_TICKETDOMAINS = "/admin/plugins/ticketing/admin/manage_ticket_domains.html";
+    private static final String TEMPLATE_CREATE_TICKETDOMAIN = "/admin/plugins/ticketing/admin/create_ticket_domain.html";
+    private static final String TEMPLATE_MODIFY_TICKETDOMAIN = "/admin/plugins/ticketing/admin/modify_ticket_domain.html";
 
     // Parameters
     private static final String PARAMETER_ID_TICKETDOMAIN = "id";
@@ -97,6 +97,7 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     private static final String INFO_TICKETDOMAIN_CREATED = "ticketing.info.ticketdomain.created";
     private static final String INFO_TICKETDOMAIN_UPDATED = "ticketing.info.ticketdomain.updated";
     private static final String INFO_TICKETDOMAIN_REMOVED = "ticketing.info.ticketdomain.removed";
+    private static final long serialVersionUID = 1L;
 
     // Session variable to store working values
     private TicketDomain _ticketdomain;
