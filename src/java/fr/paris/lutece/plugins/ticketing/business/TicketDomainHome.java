@@ -159,11 +159,20 @@ public final class TicketDomainHome
         return _dao.selectIdTicketDomainsList( _plugin );
     }
 
+    /**
+     * returns referenceList by type of input typeId
+     * @param nTicketTypeId id of type
+     * @return ReferenceList of typeId
+     */
     public static ReferenceList getReferenceListByType( int nTicketTypeId )
     {
         return _dao.selectReferenceListByType( nTicketTypeId, _plugin );
     }
 
+    /**
+     * returns referenceList
+     * @return ReferenceList
+     */
     public static ReferenceList getReferenceList(  )
     {
         return _dao.selectReferenceList( _plugin );

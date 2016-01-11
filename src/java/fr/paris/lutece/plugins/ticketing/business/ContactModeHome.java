@@ -84,7 +84,6 @@ public final class ContactModeHome
      * @param contactMode
      *            The instance of the ContactMode which contains the data to
      *            store
-     * @return The instance of the contactMode which has been updated
      */
     public static void update( ContactMode contactMode )
     {

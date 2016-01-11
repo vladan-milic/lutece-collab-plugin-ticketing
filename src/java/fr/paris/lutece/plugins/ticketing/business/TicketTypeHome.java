@@ -62,7 +62,6 @@ public final class TicketTypeHome
     /**
      * Create an instance of the ticketType class
      * @param ticketType The instance of the TicketType which contains the informations to store
-     * @return The  instance of ticketType which has been created with its primary key.
      */
     public static void create( TicketType ticketType )
     {
@@ -160,6 +159,10 @@ public final class TicketTypeHome
         return _dao.selectIdTicketTypesList( _plugin );
     }
 
+    /**
+     * returns referenceList
+     * @return ReferenceList
+     */
     public static ReferenceList getReferenceList(  )
     {
         return _dao.selectReferenceList( _plugin );

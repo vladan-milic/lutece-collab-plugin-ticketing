@@ -168,7 +168,12 @@ public final class TicketCategoryHome
     {
         return _dao.selectIdTicketCategorysList( _plugin );
     }
-
+    
+    /**
+     * returns referenceList of input domainId
+     * @param nDomainId id of domain
+     * @return ReferenceList of domainId
+     */
     public static ReferenceList getReferenceListByDomain( int nDomainId )
     {
         return _dao.selectReferenceListByDomain( nDomainId, _plugin );

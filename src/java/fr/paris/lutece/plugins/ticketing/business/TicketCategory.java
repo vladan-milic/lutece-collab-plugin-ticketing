@@ -197,12 +197,12 @@ public class TicketCategory implements Cloneable, Serializable
     }
 
     /**
-     * @param _nIdTicketForm
+     * @param nIdTicketForm
      *            the _nIdTicketForm to set
      */
-    public void setIdTicketForm( int _nIdTicketForm )
+    public void setIdTicketForm( int nIdTicketForm )
     {
-        this._nIdTicketForm = _nIdTicketForm;
+        this._nIdTicketForm = nIdTicketForm;
     }
 
     /**

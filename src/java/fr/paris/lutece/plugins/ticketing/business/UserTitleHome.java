@@ -159,6 +159,10 @@ public final class UserTitleHome
         return _dao.selectIdUserTitlesList( _plugin );
     }
 
+    /**
+     * returns referenceList
+     * @return ReferenceList
+     */
     public static ReferenceList getReferenceList(  )
     {
         return _dao.selectReferenceList( _plugin );
