@@ -134,6 +134,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String PARAMETER_ID_ACTION = "id_action";
     private static final String PARAMETER_BACK = "back";
     private static final String PARAMETER_GUID = "guid";
+    private static final String PARAMETER_CUSTOMER_ID = "cid";
     private static final String PARAMETER_ID_RESPONSE = "idResponse";
     private static final String PARAMETER_FIRSTNAME = "fn";
     private static final String PARAMETER_LASTNAME = "ln";
@@ -174,7 +175,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String VIEW_WORKFLOW_ACTION_FORM = "viewWorkflowActionForm";
     private static final String VIEW_TICKET_FORM = "ticketForm";
     private static final String VIEW_RECAP_TICKET = "recapTicket";
-
+    
     // Actions
     private static final String ACTION_CREATE_TICKET = "createTicket";
     private static final String ACTION_MODIFY_TICKET = "modifyTicket";
@@ -306,6 +307,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private void initTicketForm( HttpServletRequest request, Ticket ticket, Map<String, Object> model )
     {
         String strGuid = request.getParameter( PARAMETER_GUID );
+        String strCustomerId = request.getParameter( PARAMETER_CUSTOMER_ID );
         String strFirstname = request.getParameter( PARAMETER_FIRSTNAME );
         String strLastname = request.getParameter( PARAMETER_LASTNAME );
         String strPhone = request.getParameter( PARAMETER_PHONE );
@@ -347,6 +349,11 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         if ( !StringUtils.isEmpty( strGuid ) && StringUtils.isEmpty( ticket.getGuid(  ) ) )
         {
             ticket.setGuid( strGuid );
+        }
+
+        if ( !StringUtils.isEmpty( strCustomerId ) && StringUtils.isEmpty( ticket.getCustomerId(  ) ) )
+        {
+            ticket.setCustomerId( strCustomerId );
         }
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );

@@ -4,7 +4,8 @@
     <form class="form-horizontal" method="post" name="create_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
         <@messages errors=errors />
         <input type="hidden" id="id" name="id"/>
-        <input type="hidden" id="guid" name="guid" value=""/>
+        <input type="hidden" id="guid" name="guid" value="${ticket.guid!''}"/>
+        <input type="hidden" id="customer_id" name="customer_id" value="${ticket.customerId!''}"/>
         <@fieldInputCombo i18nLabelKey="ticketing.create_ticket.labelUserTitle" inputName="id_user_title" items=user_titles_list value="${ticket.idUserTitle!''}" i18nHelpBlockKey="ticketing.create_ticket.labelIdUserTitle.help" cssClass='' /> 
         <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelFirstname" inputName="firstname" mandatory=true value="${ticket.firstname!''}" i18nHelpBlockKey="ticketing.create_ticket.labelFirstname.help" />
         <@fieldInputText i18nLabelKey="ticketing.create_ticket.labelLastname" inputName="lastname" mandatory=true value="${ticket.lastname!''}" i18nHelpBlockKey="ticketing.create_ticket.labelLastname.help" />

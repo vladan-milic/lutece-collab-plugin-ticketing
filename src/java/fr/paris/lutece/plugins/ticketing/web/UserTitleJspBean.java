@@ -58,9 +58,9 @@ public class UserTitleJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_USERTITLES = "/admin/plugins/ticketing/manage_usertitles.html";
-    private static final String TEMPLATE_CREATE_USERTITLE = "/admin/plugins/ticketing/create_usertitle.html";
-    private static final String TEMPLATE_MODIFY_USERTITLE = "/admin/plugins/ticketing/modify_usertitle.html";
+    private static final String TEMPLATE_MANAGE_USERTITLES = "/admin/plugins/ticketing/admin/manage_user_titles.html";
+    private static final String TEMPLATE_CREATE_USERTITLE = "/admin/plugins/ticketing/admin/create_user_title.html";
+    private static final String TEMPLATE_MODIFY_USERTITLE = "/admin/plugins/ticketing/admin/modify_user_title.html";
 
     // Parameters
     private static final String PARAMETER_ID_USERTITLE = "id";
@@ -95,6 +95,7 @@ public class UserTitleJspBean extends ManageAdminTicketingJspBean
     private static final String INFO_USERTITLE_CREATED = "ticketing.info.usertitle.created";
     private static final String INFO_USERTITLE_UPDATED = "ticketing.info.usertitle.updated";
     private static final String INFO_USERTITLE_REMOVED = "ticketing.info.usertitle.removed";
+    private static final long serialVersionUID = 1L;
 
     // Session variable to store working values
     private UserTitle _usertitle;

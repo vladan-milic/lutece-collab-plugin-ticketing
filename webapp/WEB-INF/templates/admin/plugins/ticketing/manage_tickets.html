@@ -32,23 +32,31 @@
             <tr>
                 <input type="hidden" id="id" name="id"/>
                 <td>
-                    <strong>${ticket.reference!''}</strong>
+                    <#if ticket.reference??>
+                    <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}">
+                        ${ticket.reference}
+                    </a>
+                    <#else>
+                    <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}">
+                        ${ticket.id}
+                    </a>
+                    </#if>
                 </td>
                 <td>
                     <i class="fa fa-user"></i> ${ticket.userTitle} <strong>${ticket.firstname} ${ticket.lastname}</strong><br>
                     <#if ticket.email ??>
                     <small>
-                    <i class="fa fa-at"></i> ${ticket.email}<br>
+                    <i class="fa fa-envelope"></i> ${ticket.email}<br>
                     </small>
                     </#if>
-                    <#if ticket.fixedPhoneNumber ??>
+                    <#if ticket.mobilePhoneNumber ?? && ticket.mobilePhoneNumber?length &gt; 1 >
+                    <small>
+                    <i class="fa fa-mobile-phone"></i> ${ticket.mobilePhoneNumber}
+                    </small>
+                    </#if>
+                    <#if ticket.fixedPhoneNumber ?? && ticket.fixedPhoneNumber?length &gt; 1>
                     <small>
                     <i class="fa fa-phone"></i> ${ticket.fixedPhoneNumber}
-                    </small>
-                    </#if>
-                    <#if ticket.mobilePhoneNumber ??>
-                    <small>
-                    <i class="fa fa-phone"></i> ${ticket.mobilePhoneNumber}
                     </small>
                     </#if>
                 </td>

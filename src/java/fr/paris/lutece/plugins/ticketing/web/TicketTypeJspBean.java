@@ -58,9 +58,9 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_TICKETTYPES = "/admin/plugins/ticketing/manage_tickettypes.html";
-    private static final String TEMPLATE_CREATE_TICKETTYPE = "/admin/plugins/ticketing/create_tickettype.html";
-    private static final String TEMPLATE_MODIFY_TICKETTYPE = "/admin/plugins/ticketing/modify_tickettype.html";
+    private static final String TEMPLATE_MANAGE_TICKETTYPES = "/admin/plugins/ticketing/admin/manage_ticket_types.html";
+    private static final String TEMPLATE_CREATE_TICKETTYPE = "/admin/plugins/ticketing/admin/create_ticket_type.html";
+    private static final String TEMPLATE_MODIFY_TICKETTYPE = "/admin/plugins/ticketing/admin/modify_ticket_type.html";
 
     // Parameters
     private static final String PARAMETER_ID_TICKETTYPE = "id";
@@ -95,6 +95,7 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     private static final String INFO_TICKETTYPE_CREATED = "ticketing.info.tickettype.created";
     private static final String INFO_TICKETTYPE_UPDATED = "ticketing.info.tickettype.updated";
     private static final String INFO_TICKETTYPE_REMOVED = "ticketing.info.tickettype.removed";
+    private static final long serialVersionUID = 1L;
 
     // Session variable to store working values
     private TicketType _tickettype;

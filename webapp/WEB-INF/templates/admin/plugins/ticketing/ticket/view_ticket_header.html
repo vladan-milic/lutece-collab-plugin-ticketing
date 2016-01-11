@@ -1,0 +1,31 @@
+<#macro ticketHeader tab ticket >
+<div>
+    <div class="pull-right">
+        <#if ticket.customerId ?? && ticket.customerId?length &gt; 0 >
+        <a class="btn btn-primary btn-sm" href="jsp/admin/plugins/gru/ManageCustomers.jsp?view=viewCustomer&id_customer=${ticket.customerId}" >
+            GRU
+        </a>
+        </#if>
+    </div>
+    <div>
+Usager : ${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}
+    </div>
+    <div>
+Objet : ${ticket.ticketType} : ${ticket.ticketDomain} : ${ticket.ticketCategory}
+    </div>
+</div>
+<div>
+    <ul class="nav nav-tabs">
+        <li <#if tab="details">class="active"</#if>>
+            <a href="jsp/admin/plugins/ticketing/TicketView.jsp?view=ticketDetails&id=${ticket.id}">
+                #i18n{ticketing.view_ticket_header.details.pageTitle}
+            </a>
+        </li>
+        <li <#if tab="history">class="active"</#if>>
+            <a href="jsp/admin/plugins/ticketing/TicketView.jsp?view=ticketHistory&id=${ticket.id}">
+                #i18n{ticketing.view_ticket_header.history.pageTitle}
+            </a>
+        </li>
+    </ul>
+</div>
+</#macro>
