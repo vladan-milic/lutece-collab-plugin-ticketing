@@ -96,7 +96,6 @@ public class TicketXPage extends MVCApplication
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
-    private static final String MARK_TICKET_USER = "myLuteceUser";
     private static final String MARK_TICKET_ACTION = "ticket_action";
     private static final String MARK_MESSAGE = "message";
     private static final String MARK_USERTITLE = "userTitle";
@@ -149,13 +148,11 @@ public class TicketXPage extends MVCApplication
             TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
         }
         
-        LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
+        prefillTicketWithUserInfo( request , ticket );
+        
         Map<String, Object> model = getModel(  );
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );
         model.put( MARK_TICKET, ticket );
-        model.put( MARK_TICKET_USER, user );
-
-        // FIXME Dynamic filling
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
@@ -166,6 +163,35 @@ public class TicketXPage extends MVCApplication
         return getXPage( TEMPLATE_CREATE_TICKET, request.getLocale(  ), model );
     }
 
+    /**
+     * Prefill User's informations
+     * @param request The HTTP request
+     * @param ticket The ticket
+     */
+    private void prefillTicketWithUserInfo( HttpServletRequest request , Ticket ticket )
+    {
+        LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
+        if( user != null )
+        {
+            ticket.setGuid( user.getName() );
+            String strFirstname = user.getUserInfo( LuteceUser.NAME_GIVEN );
+            String strLastname = user.getUserInfo( LuteceUser.NAME_FAMILY );
+            String strEmail = user.getEmail();
+
+            if ( !StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty( ticket.getFirstname(  ) ) )
+            {
+                ticket.setFirstname( strFirstname );
+            }
+            if ( !StringUtils.isEmpty( strLastname ) && StringUtils.isEmpty( ticket.getLastname(  ) ) )
+            {
+                ticket.setLastname( strLastname );
+            }
+            if ( !StringUtils.isEmpty( strEmail ) && StringUtils.isEmpty( ticket.getEmail(  ) ) )
+            {
+                ticket.setEmail( strEmail );
+            }
+        }
+    }
     /**
      * Process the data capture form of a new ticket
      *
