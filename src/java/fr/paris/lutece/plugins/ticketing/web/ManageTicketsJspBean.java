@@ -55,7 +55,6 @@ import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
-import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
@@ -166,7 +165,6 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
-    private static final String PROPERTY_DEFAULT_LIST_TICKET_PER_PAGE = "ticketing.listTickets.itemsPerPage";
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.ticket.attribute.";
 
     // Views
@@ -184,7 +182,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String ACTION_CONFIRM_REMOVE_TICKET = "confirmRemoveTicket";
     private static final String ACTION_DO_PROCESS_WORKFLOW_ACTION = "doProcessWorkflowAction";
     private static final String ACTION_RECAP_TICKET = "recapTicket";
-
+    
     // Infos
     private static final String INFO_TICKET_CREATED = "ticketing.info.ticket.created";
     private static final String INFO_TICKET_UPDATED = "ticketing.info.ticket.updated";
@@ -379,10 +377,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         TicketHome.create( ticket );
 
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-
-        // TODO After POC GRU, set this variable with
-        // ticketCategory.getIdWorkflow( );
-        int nIdWorkflow = TicketingPocGruService.getWorkflowId( ticket );
+        int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
         if ( ( ticket.getListResponse(  ) != null ) && !ticket.getListResponse(  ).isEmpty(  ) )
         {
@@ -659,6 +654,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @Action( ACTION_RECAP_TICKET )
     public String doRecapTicket( HttpServletRequest request )
     {
+        boolean bIsFormValid = true ;
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
         ticket = ( ticket != null ) ? ticket : new Ticket(  );
         populate( ticket, request );
@@ -690,28 +686,16 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         }
 
         // Check constraints
-        if ( !validateBean( ticket, VALIDATION_ATTRIBUTES_PREFIX ) )
-        {
-            redirectAfterValidationKO( request, ticket );
-        }
-
+        bIsFormValid = validateBean( ticket, VALIDATION_ATTRIBUTES_PREFIX );
         if ( ticket.hasNoPhoneNumberFilled(  ) )
         {
+            bIsFormValid = false;
             addError( ERROR_PHONE_NUMBER_MISSING, getLocale(  ) );
-            redirectAfterValidationKO( request, ticket  );
         }
 
         if ( listFormErrors.size(  ) > 0 )
         {
-            for ( GenericAttributeError error : listFormErrors )
-            {
-                if ( error.getIsDisplayableError(  ) )
-                {
-                    addError( error.getMessage(  ) );
-                }
-            }
-
-            redirectAfterValidationKO( request, ticket );
+            bIsFormValid = false ;
         }
 
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
@@ -725,8 +709,15 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode(  ) ).getConfirmationMsg(  ) );
 
         _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );
-
-        return redirectView( request, VIEW_RECAP_TICKET );
+        
+        if( !bIsFormValid ) 
+        {
+            return redirectAfterValidationKO( request, ticket );
+        } 
+        else 
+        {
+            return redirectView( request, VIEW_RECAP_TICKET );
+        }
     }
 
     /**

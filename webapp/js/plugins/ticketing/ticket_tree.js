@@ -77,28 +77,30 @@ function lutece_ticket_tree(id_type, id_domain, id_category) {
                 var selected = initial_category_id == categories[i].id ? " selected=\"selected\"" : "";
                 var newOption = "<option value=\"" +categories[i].id + "\"" + selected + ">" + categories[i].label + "</option>";
                 $(newOption).appendTo(id_category);
-                if (selected) {
-                	has_category_changed = false;
-                }
-            }
-            
-            if( has_category_changed ) {
-            	loadGenericAttributesForm();
             }
         }
 
         $(id_type).change(change_ticket_type);
         $(id_domain).change(change_domain_type);
         var domain_id = $(id_domain).val();
-        var category_id = $(id_category).val();
         change_ticket_type_impl(domain_id, category_id);
+          
+        var categorySelect = document.getElementById("id_ticket_category");       
+        if (category_id > 0 ) {
+    		categorySelect.value=category_id;
+    	} 
+        loadGenericAttributesForm(false);
+    	categorySelect.onchange=function(){
+    		loadGenericAttributesForm(true);
+    	}
+  
         
     });
 }
 //load generic attributes form from selected category
-function loadGenericAttributesForm() {
+function loadGenericAttributesForm(bResetResponse) {
 	$.ajax({
-        url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+getSelectedCategoryValue(),
+        url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+getSelectedCategoryValue()+"&reset_response="+bResetResponse,
         type: "GET",
         dataType : "html",
         success: function( response ) {
