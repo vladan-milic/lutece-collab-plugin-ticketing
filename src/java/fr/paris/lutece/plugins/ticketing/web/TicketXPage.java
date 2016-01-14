@@ -175,7 +175,7 @@ public class TicketXPage extends MVCApplication
         {
             ticket.setGuid( user.getName() );
             String strFirstname = user.getUserInfo( LuteceUser.NAME_GIVEN );
-            String strLastname = request.getParameter( LuteceUser.NAME_FAMILY );
+            String strLastname = user.getUserInfo( LuteceUser.NAME_FAMILY );
             String strEmail = user.getEmail();
 
             if ( !StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty( ticket.getFirstname(  ) ) )
