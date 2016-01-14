@@ -1,18 +1,18 @@
 INSERT INTO genatt_entry (id_entry, id_resource, resource_type, id_type, id_parent, title, help_message, comment, mandatory, fields_in_line, pos, id_field_depend, confirm_field, confirm_field_title, field_unique, map_provider, css_class, pos_conditional, error_message, num_row, num_column, is_role_associated, code) VALUES
-(1, 1, "TICKET_FORM", 215, NULL, "Relevé d'imposition sur le revenu de l'année N-2", "Veuillez-uploader votre relevé d'imposition sur le revenu de l'année N-2", "", 0, 0, 2, NULL, 0, NULL, 0, "", "", 0, NULL, 0, 0, 0, "IncomeRevenue-Year-2"), 
-(2, 2, "TICKET_FORM", 206, NULL, "Numéro de compte Facil'familles", "Numéro de compte Facil'familles", "", 1, 0, 1, NULL, 0, NULL, 0, "", "", 0, "Le numéro de compte Facil'familles est un champ obligatoire, veuillez le renseigner.", 0, 0, 0, "FFAccountNumber"), 
-(3, 3, "TICKET_FORM", 206, NULL, "Numéro de compte Facil'familles", "Numéro de compte Facil'familles", "", 1, 0, 1, NULL, 0, NULL, 0, "", "", 0, "Le numéro de compte Facil'familles est un champ obligatoire, veuillez le renseigner.", 0, 0, 0, "FFAccountNumber"), 
-(4, 1, "TICKET_FORM", 206, NULL, "Numéro de compte Facil'familles", "Numéro de compte Facil'familles", "", 1, 0, 1, NULL, 0, NULL, 0, "", "", 0, "Le numéro de compte Facil'familles est un champ obligatoire, veuillez le renseigner.", 0, 0, 0, "FFAccountNumber");
+(201, 1, "TICKET_FORM", 215, NULL, "Relevé d'imposition sur le revenu de l'année N-2", "Veuillez-uploader votre relevé d'imposition sur le revenu de l'année N-2", "", 0, 0, 2, NULL, 0, NULL, 0, "", "", 0, NULL, 0, 0, 0, "IncomeRevenue-Year-2"), 
+(202, 2, "TICKET_FORM", 206, NULL, "Numéro de compte Facil'familles", "Numéro de compte Facil'familles", "", 1, 0, 1, NULL, 0, NULL, 0, "", "", 0, "Le numéro de compte Facil'familles est un champ obligatoire, veuillez le renseigner.", 0, 0, 0, "FFAccountNumber"), 
+(203, 3, "TICKET_FORM", 206, NULL, "Numéro de compte Facil'familles", "Numéro de compte Facil'familles", "", 1, 0, 1, NULL, 0, NULL, 0, "", "", 0, "Le numéro de compte Facil'familles est un champ obligatoire, veuillez le renseigner.", 0, 0, 0, "FFAccountNumber"), 
+(204, 1, "TICKET_FORM", 206, NULL, "Numéro de compte Facil'familles", "Numéro de compte Facil'familles", "", 1, 0, 1, NULL, 0, NULL, 0, "", "", 0, "Le numéro de compte Facil'familles est un champ obligatoire, veuillez le renseigner.", 0, 0, 0, "FFAccountNumber");
 
 
 INSERT INTO genatt_field (id_field, id_entry, title, value, height, width, default_value, max_size_enter, pos, value_type_date, no_display_title, comment, role_key, code) VALUES
-(1, 1, NULL, NULL, 0, 255, 0, 0, 1, NULL, 0, NULL, NULL, NULL), 
-(2, 1, "max_files", "1", 0, 0, 0, 0, 2, NULL, 0, NULL, NULL, NULL), 
-(3, 1, "file_max_size", "1000000", 0, 0, 0, 0, 3, NULL, 0, NULL, NULL, NULL), 
-(4, 1, "export_binary", "false", 0, 0, 0, 0, 4, NULL, 0, NULL, NULL, NULL), 
-(5, 2, NULL, "", 0, 50, 0, -1, 5, NULL, 0, NULL, NULL, "FFAccountNumber"), 
-(6, 3, NULL, "", 0, 50, 0, -1, 6, NULL, 0, NULL, NULL, "FFAccountNumber"), 
-(7, 4, NULL, "", 0, 50, 0, -1, 7, NULL, 0, NULL, NULL, "FFAccountNumber");
+(201, 201, NULL, NULL, 0, 255, 0, 0, 1, NULL, 0, NULL, NULL, NULL), 
+(202, 201, "max_files", "1", 0, 0, 0, 0, 2, NULL, 0, NULL, NULL, NULL), 
+(203, 201, "file_max_size", "1000000", 0, 0, 0, 0, 3, NULL, 0, NULL, NULL, NULL), 
+(204, 201, "export_binary", "false", 0, 0, 0, 0, 4, NULL, 0, NULL, NULL, NULL), 
+(205, 202, NULL, "", 0, 50, 0, -1, 5, NULL, 0, NULL, NULL, "FFAccountNumber"), 
+(206, 203, NULL, "", 0, 50, 0, -1, 6, NULL, 0, NULL, NULL, "FFAccountNumber"), 
+(207, 204, NULL, "", 0, 50, 0, -1, 7, NULL, 0, NULL, NULL, "FFAccountNumber");
 
 INSERT INTO ticketing_ticket_form (id_form, title, description) VALUES
 (1, "Facil'Familles - Formulaire problème tarifaire petite enfance", "Formulaire du domaine Facil'Familles - Formulaire de la problématique 'problème tarifaire petite enfance'"), 
