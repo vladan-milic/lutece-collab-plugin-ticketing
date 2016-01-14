@@ -8,28 +8,8 @@
 
             <@messages errors=errors />
             
-<#if myLuteceUser?has_content>
-	<#assign civilityName = myLuteceUser.getUserInfo( "user.name.civility" ) />
-	<#assign givenName = myLuteceUser.getUserInfo( "user.name.given" ) />
-	<#assign familyName = myLuteceUser.getUserInfo( "user.name.family" ) />
-	<#if myLuteceUser.getUserInfo( "user.business-info.online.email" )?has_content>
-		<#assign emailContact = myLuteceUser.getUserInfo( "user.business-info.online.email" ) />
-	<#elseif myLuteceUser.getUserInfo( "user.home-info.online.email" )?has_content>
-		<#assign emailContact = myLuteceUser.getUserInfo( "user.home-info.online.email" ) />
-	</#if>
-	<#if myLuteceUser.getUserInfo( "user.business-info.telecom.mobile.number" )?has_content>
-		<#assign mobilePhoneNumber = myLuteceUser.getUserInfo( "user.business-info.telecom.mobile.number" ) />
-	<#elseif myLuteceUser.getUserInfo( "user.home-info.telecom.mobile.number" )?has_content>
-		<#assign mobilePhoneNumber = myLuteceUser.getUserInfo( "user.home-info.telecom.mobile.number" ) />
-	</#if>
-    <#if myLuteceUser.getUserInfo( "user.business-info.telecom.telephone.number" )?has_content>
-        <#assign fixedPhoneNumber = myLuteceUser.getUserInfo( "user.business-info.telecom.telephone.number" ) />
-    <#elseif myLuteceUser.getUserInfo( "user.home-info.telecom.telephone.number" )?has_content>
-        <#assign fixedPhoneNumber = myLuteceUser.getUserInfo( "user.home-info.telecom.telephone.number" ) />
-    </#if>
-</#if>
             <input type="hidden" id="id" name="id"/>  
-            <input type="hidden" id="guid" name="guid" value=""/>
+            <input type="hidden" id="guid" name="guid" value="${ticket.guid!}"/>
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="id_user_title" >#i18n{ticketing.xpage.create_ticket.labelIdUserTitle} * :</label>
                 <div class="col-sm-9">
