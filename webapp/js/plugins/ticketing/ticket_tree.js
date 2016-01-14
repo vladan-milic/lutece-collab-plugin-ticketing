@@ -77,6 +77,12 @@ function lutece_ticket_tree(id_type, id_domain, id_category) {
                 var selected = initial_category_id == categories[i].id ? " selected=\"selected\"" : "";
                 var newOption = "<option value=\"" +categories[i].id + "\"" + selected + ">" + categories[i].label + "</option>";
                 $(newOption).appendTo(id_category);
+                if (selected) {
+                	has_category_changed = false;
+                }
+            }            
+            if( has_category_changed ) {
+            	loadGenericAttributesForm(true);
             }
         }
 
