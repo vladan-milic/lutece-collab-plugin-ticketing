@@ -44,7 +44,6 @@ import fr.paris.lutece.plugins.ticketing.business.ResponseRecap;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
-import fr.paris.lutece.plugins.ticketing.business.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketForm;
 import fr.paris.lutece.plugins.ticketing.business.TicketFormHome;
@@ -63,6 +62,7 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
+import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
 import org.apache.commons.lang.StringUtils;
@@ -109,7 +109,6 @@ public class TicketXPage extends MVCApplication
     private static final String PARAMETER_RESET_RESPONSE = "reset_response";
 
     // Views
-    private static final String VIEW_MANAGE_TICKETS = "manageTickets";
     private static final String VIEW_CREATE_TICKET = "createTicket";
     private static final String VIEW_RECAP_TICKET = "recapTicket";
     private static final String VIEW_CONFIRM_TICKET = "confirmTicket";
@@ -131,6 +130,13 @@ public class TicketXPage extends MVCApplication
     // Session variable to store working values
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
 
+    // Variables
+    private Map<String, String> _userTitleMap;
+    private Map<String, String> _ticketTypeMap;
+    private Map<String, String> _ticketDomainMap;
+    private Map<String, String> _ticketCategoryMap;
+    private Map<String, String> _contactModeMap;
+    
     /**
      * Returns the form to create a ticket
      *
@@ -151,13 +157,25 @@ public class TicketXPage extends MVCApplication
         prefillTicketWithUserInfo( request , ticket );
         
         Map<String, Object> model = getModel(  );
-        model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );
-        model.put( MARK_TICKET, ticket );
-        model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
-        model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
 
-        model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList(  ) );
+        ReferenceList userTitleList = UserTitleHome.getReferenceList(  );
+        ReferenceList ticketTypeList = TicketTypeHome.getReferenceList(  );
+        ReferenceList ticketDomainList = TicketDomainHome.getReferenceList(  );
+        ReferenceList ticketCategoryList = TicketCategoryHome.getReferenceListByDomain( 1 );
+        ReferenceList contactModeList = ContactModeHome.getReferenceList(  );
+
+        _userTitleMap = userTitleList.toMap( );
+        _ticketTypeMap = ticketTypeList.toMap( );
+        _ticketDomainMap = ticketDomainList.toMap( );
+        _ticketCategoryMap = ticketCategoryList.toMap( );
+        _contactModeMap = contactModeList.toMap( );
+        
+        model.put( MARK_TICKET, ticket );
+        model.put( MARK_TICKET_TYPES_LIST, ticketTypeList );
+        model.put( MARK_TICKET_DOMAINS_LIST, ticketDomainList );
+        model.put( MARK_TICKET_CATEGORIES_LIST, ticketCategoryList );
+        model.put( MARK_USER_TITLES_LIST, userTitleList );
+        model.put( MARK_CONTACT_MODES_LIST, contactModeList );
 
         saveActionTypeInSession( request.getSession(  ), ACTION_CREATE_TICKET );
         return getXPage( TEMPLATE_CREATE_TICKET, request.getLocale(  ), model );
@@ -319,15 +337,11 @@ public class TicketXPage extends MVCApplication
             bIsFormValid = false ;
         }
 
-        
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
-        ticket.setTicketCategory( ticketCategory.getLabel(  ) );
-        ticket.setTicketDomain( ticketDomain.getLabel(  ) );
-
-        ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) ).getLabel(  ) );
-        ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode(  ) ).getLabel(  ) );
-        ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle(  ) ).getLabel(  ) );
+        ticket.setTicketCategory( (String)_ticketCategoryMap.get( ticket.getIdTicketCategory(  ) ) );
+        ticket.setTicketDomain( (String)_ticketDomainMap.get( ticket.getIdTicketDomain(  ) ) );
+        ticket.setTicketType( (String)_ticketTypeMap.get( ticket.getIdTicketType(  ) ) );
+        ticket.setContactMode( (String)_contactModeMap.get( ticket.getIdContactMode(  ) ) );
+        ticket.setUserTitle( (String)_userTitleMap.get( ticket.getIdUserTitle(  ) ) );
         ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode(  ) ).getConfirmationMsg(  ) );
 
         _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );

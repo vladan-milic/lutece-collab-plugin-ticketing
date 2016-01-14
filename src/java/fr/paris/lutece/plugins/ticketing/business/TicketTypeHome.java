@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import fr.paris.lutece.plugins.ticketing.service.TicketFormCacheService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -50,7 +49,6 @@ public final class TicketTypeHome
     // Static variable pointed at the DAO instance
     private static ITicketTypeDAO _dao = SpringContextService.getBean( "ticketing.ticketTypeDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
-    private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance(  );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -66,12 +64,6 @@ public final class TicketTypeHome
     public static void create( TicketType ticketType )
     {
         _dao.insert( ticketType, _plugin );
-
-        if ( _cacheService.isCacheEnable(  ) )
-        {
-            _cacheService.putInCache( TicketFormCacheService.getTypeByIdCacheKey( ticketType.getId(  ) ),
-                    ticketType.clone(  ) );
-        }
     }
 
     /**
@@ -81,12 +73,6 @@ public final class TicketTypeHome
     public static void update( TicketType ticketType )
     {
         _dao.store( ticketType, _plugin );
-
-        if ( _cacheService.isCacheEnable(  ) )
-        {
-            _cacheService.putInCache( TicketFormCacheService.getTypeByIdCacheKey( ticketType.getId(  ) ),
-                    ticketType.clone(  ) );
-        }
     }
 
     /**
@@ -96,11 +82,6 @@ public final class TicketTypeHome
     public static void remove( int nKey )
     {
         _dao.delete( nKey, _plugin );
-        
-        if ( _cacheService.isCacheEnable(  ) )
-        {
-            _cacheService.removeKey( TicketFormCacheService.getTypeByIdCacheKey( nKey ) );
-        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -113,32 +94,7 @@ public final class TicketTypeHome
      */
     public static TicketType findByPrimaryKey( int nKey )
     {
-        String strCacheKey = TicketFormCacheService.getTypeByIdCacheKey( nKey );
-        TicketType type = null;
-
-        if ( _cacheService.isCacheEnable(  ) )
-        {
-            type = (TicketType) _cacheService.getFromCache( strCacheKey );
-        }
-
-        if ( type == null )
-        {
-            type = _dao.load( nKey, _plugin );
-
-            if ( type != null )
-            {
-                if ( _cacheService.isCacheEnable(  ) )
-                {
-                    _cacheService.putInCache( strCacheKey, type.clone(  ) );
-                }
-            }
-        }
-        else
-        {
-            type = (TicketType) type.clone(  );
-        }
-
-        return type;
+        return _dao.load( nKey, _plugin );
     }
 
     /**

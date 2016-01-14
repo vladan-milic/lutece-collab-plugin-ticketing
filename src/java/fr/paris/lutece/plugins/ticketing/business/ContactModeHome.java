@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import fr.paris.lutece.plugins.ticketing.service.TicketFormCacheService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -51,7 +50,6 @@ public final class ContactModeHome
     // Static variable pointed at the DAO instance
     private static IContactModeDAO _dao = SpringContextService.getBean( "ticketing.contactModeDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
-    private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance(  );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -70,12 +68,6 @@ public final class ContactModeHome
     public static void create( ContactMode contactMode )
     {
         _dao.insert( contactMode, _plugin );
-
-        if ( _cacheService.isCacheEnable(  ) )
-        {
-            _cacheService.putInCache( TicketFormCacheService.getContactModeByIdCacheKey( contactMode.getId(  ) ),
-                    contactMode.clone(  ) );
-        }
     }
 
     /**
@@ -88,12 +80,6 @@ public final class ContactModeHome
     public static void update( ContactMode contactMode )
     {
         _dao.store( contactMode, _plugin );
-
-        if ( _cacheService.isCacheEnable(  ) )
-        {
-            _cacheService.putInCache( TicketFormCacheService.getContactModeByIdCacheKey( contactMode.getId(  ) ),
-                    contactMode.clone(  ) );
-        }
     }
 
     /**
@@ -105,11 +91,6 @@ public final class ContactModeHome
     public static void remove( int nKey )
     {
         _dao.delete( nKey, _plugin );
-
-        if ( _cacheService.isCacheEnable(  ) )
-        {
-            _cacheService.removeKey( TicketFormCacheService.getContactModeByIdCacheKey( nKey ) );
-        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -125,32 +106,7 @@ public final class ContactModeHome
      */
     public static ContactMode findByPrimaryKey( int nKey )
     {
-        String strCacheKey = TicketFormCacheService.getContactModeByIdCacheKey( nKey );
-        ContactMode contactMode = null;
-
-        if ( _cacheService.isCacheEnable(  ) )
-        {
-            contactMode = (ContactMode) _cacheService.getFromCache( strCacheKey );
-        }
-
-        if ( contactMode == null )
-        {
-            contactMode = _dao.load( nKey, _plugin );
-
-            if ( contactMode != null )
-            {
-                if ( _cacheService.isCacheEnable(  ) )
-                {
-                    _cacheService.putInCache( strCacheKey, contactMode.clone(  ) );
-                }
-            }
-        }
-        else
-        {
-            contactMode = (ContactMode) contactMode.clone(  );
-        }
-
-        return contactMode;
+        return _dao.load( nKey, _plugin );
     }
 
     /**

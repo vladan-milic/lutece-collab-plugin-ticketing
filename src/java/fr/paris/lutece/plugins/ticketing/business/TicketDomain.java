@@ -33,19 +33,18 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import org.hibernate.validator.constraints.*;
-
-import fr.paris.lutece.portal.service.util.AppLogService;
-
 import java.io.Serializable;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 
 
 /**
  * This is the business class for the object TicketDomain
  */
-public class TicketDomain implements Cloneable, Serializable
+public class TicketDomain implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
@@ -129,21 +128,4 @@ public class TicketDomain implements Cloneable, Serializable
         _strLabel = strLabel;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object clone(  )
-    {
-        try
-        {
-            return super.clone(  );
-        }
-        catch ( CloneNotSupportedException e )
-        {
-            AppLogService.error( e.getMessage(  ), e );
-
-            return null;
-        }
-    }
 }

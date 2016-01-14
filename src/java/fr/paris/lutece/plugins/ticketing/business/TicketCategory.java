@@ -35,8 +35,6 @@ package fr.paris.lutece.plugins.ticketing.business;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import fr.paris.lutece.portal.service.util.AppLogService;
-
 import java.io.Serializable;
 
 import javax.validation.constraints.Size;
@@ -45,7 +43,7 @@ import javax.validation.constraints.Size;
 /**
  * This is the business class for the object TicketCategory
  */
-public class TicketCategory implements Cloneable, Serializable
+public class TicketCategory implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
@@ -223,21 +221,4 @@ public class TicketCategory implements Cloneable, Serializable
         _strCode = strCode;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object clone(  )
-    {
-        try
-        {
-            return super.clone(  );
-        }
-        catch ( CloneNotSupportedException e )
-        {
-            AppLogService.error( e.getMessage(  ), e );
-
-            return null;
-        }
-    }
 }
