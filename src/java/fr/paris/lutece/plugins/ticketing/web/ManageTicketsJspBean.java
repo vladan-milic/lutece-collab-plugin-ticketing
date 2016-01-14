@@ -524,7 +524,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         initTicketForm( request, ticket, model );
 
         saveActionTypeInSession( request.getSession(  ), ACTION_MODIFY_TICKET );
-
+        _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKET, TEMPLATE_MODIFY_TICKET, model );
     }
 

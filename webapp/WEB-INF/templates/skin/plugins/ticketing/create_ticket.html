@@ -1,8 +1,7 @@
 <#include "/skin/plugins/asynchronousupload/upload_commons.html" />
 <div class="row" >
     <div class="col-sm-12">
-
-    <form class="form-horizontal" role="form" method="post" action="jsp/site/Portal.jsp?page=ticket">
+    <form class="form-horizontal" role="form" method="post" action="jsp/site/Portal.jsp?page=ticket" enctype="multipart/form-data">
         <fieldset>
             <legend>#i18n{ticketing.xpage.create_ticket.title}</legend>
 
@@ -28,6 +27,8 @@
         <#assign fixedPhoneNumber = myLuteceUser.getUserInfo( "user.home-info.telecom.telephone.number" ) />
     </#if>
 </#if>
+			<input name="page" value="ticket" type="hidden">
+			<input name="action" value="recapTicket" type="hidden">
             <input type="hidden" id="id" name="id"/>  
             <input type="hidden" id="guid" name="guid" value=""/>
             <div class="form-group">

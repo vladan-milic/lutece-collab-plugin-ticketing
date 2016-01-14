@@ -306,7 +306,7 @@ public class TicketXPage extends MVCApplication
 
         _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );
 
-        if( !bIsFormValid  && getActionTypeFromSession( request.getSession(  ) ).equals( ACTION_CREATE_TICKET  )) 
+        if( !bIsFormValid  && getActionTypeFromSession( request.getSession(  ) ).equals( ACTION_CREATE_TICKET  ) ) 
         {
             return redirectView( request, VIEW_CREATE_TICKET );
         } 

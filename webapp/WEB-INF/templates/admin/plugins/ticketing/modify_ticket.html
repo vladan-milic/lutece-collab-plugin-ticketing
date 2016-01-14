@@ -1,7 +1,7 @@
 <#include "/skin/plugins/asynchronousupload/upload_commons.html" />
 
 <@rowBoxHeader i18nTitleKey="ticketing.modify_ticket.pageTitle">
-    <form class="form-horizontal" method="post" name="modify_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+    <form class="form-horizontal" method="post" name="modify_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp"  enctype="multipart/form-data">
         <@messages errors=errors />
         <input type="hidden" id="id" name="id" value="${ticket.id}"/>
         <input type="hidden" id="guid" name="guid" value=""/>
@@ -24,15 +24,9 @@
 
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
 <script language="javascript"> 
+	var category_id = ${ticket.idTicketCategory!''};
     $(document).ready(function() {
-            lutece_ticket_tree("#id_ticket_type", "#id_ticket_domain", "#id_ticket_category");
-			if (getSelectedCategoryValue() > 0 ) {
-				loadGenericAttributesForm();
-			}
-			var categorySelect = document.getElementById("id_ticket_category");
-			categorySelect.onchange=function(){
-						loadGenericAttributesForm();
-			}
+        lutece_ticket_tree("#id_ticket_type", "#id_ticket_domain", "#id_ticket_category");
     });
 </script>
 <@addRequiredJsFiles />

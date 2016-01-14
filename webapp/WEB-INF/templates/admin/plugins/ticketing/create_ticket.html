@@ -1,7 +1,7 @@
 <#include "/skin/plugins/asynchronousupload/upload_commons.html" />
 
 <@rowBoxHeader i18nTitleKey="ticketing.create_ticket.pageTitle">
-    <form class="form-horizontal" method="post" name="create_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+    <form class="form-horizontal" method="post" name="create_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp" enctype="multipart/form-data">
         <@messages errors=errors />
         <input type="hidden" id="id" name="id"/>
         <input type="hidden" id="guid" name="guid" value="${ticket.guid!''}"/>
