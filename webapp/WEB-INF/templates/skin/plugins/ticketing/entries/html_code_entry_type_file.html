@@ -1,7 +1,7 @@
 <#include "/admin/plugins/ticketing/commons.html" />
 <#include "/skin/plugins/asynchronousupload/upload_commons.html" />
 <div class="control-group">
-	<label class="control-label" for="attribute${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if></label>
+	<label class="control-label" for="attribute${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if> :</label>
 	<div class="controls">
 		<#assign fieldName='attribute'+entry.idEntry >
 		<#assign cssClass=entry.CSSClass!'' >
@@ -22,11 +22,7 @@
 			<#if response_error.entry.idEntry == entry.idEntry && response_error.entry.error?? && response_error.entry.error.isDisplayableError>
 				<div class="alert alert-error">
 					<#assign error = response_error.entry.error>
-					<#if error.mandatoryError>
 						${error.errorMessage}
-					<#else>
-						#i18n{ticketing.message.mandatory.entry}
-					</#if>
 				</div>
 			</#if>
 		</#if>

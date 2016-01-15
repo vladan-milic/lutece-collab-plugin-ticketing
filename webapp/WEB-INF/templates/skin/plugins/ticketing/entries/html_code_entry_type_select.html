@@ -1,5 +1,5 @@
 <div class="control-group">
-	<label class="control-label"  for="attribute${entry.idEntry}">${entry.title} <#if entry.mandatory>*</#if></label>
+	<label class="control-label"  for="attribute${entry.idEntry}">${entry.title} <#if entry.mandatory>*</#if> :</label>
 	<div class="controls">	 
 		<select name="attribute${entry.idEntry}" id="attribute${entry.idEntry}"
 			<#if list_responses??>
@@ -41,11 +41,7 @@
 			<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && response.entry.error.isDisplayableError>
 				<div class="alert alert-error alert-danger">
 					<#assign error = response.entry.error>
-					<#if error.mandatoryError>
 						${error.errorMessage}
-					<#else>
-						#i18n{ticketing.message.mandatory.entry}
-					</#if>
 				</div>	
 				</#if>
 			</#list>
