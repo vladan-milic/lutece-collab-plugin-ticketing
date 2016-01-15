@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import fr.paris.lutece.plugins.ticketing.service.TicketFormCacheService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -50,7 +49,6 @@ public final class TicketCategoryHome
     // Static variable pointed at the DAO instance
     private static ITicketCategoryDAO _dao = SpringContextService.getBean( "ticketing.ticketCategoryDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
-    private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance(  );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -66,12 +64,6 @@ public final class TicketCategoryHome
     public static void create( TicketCategory ticketCategory )
     {
         _dao.insert( ticketCategory, _plugin );
-
-        if ( _cacheService.isCacheEnable(  ) )
-        {
-            _cacheService.putInCache( TicketFormCacheService.getCategoryByIdCacheKey( ticketCategory.getId(  ) ),
-                    ticketCategory.clone(  ) );
-        }
     }
 
     /**
@@ -81,12 +73,6 @@ public final class TicketCategoryHome
     public static void update( TicketCategory ticketCategory )
     {
         _dao.store( ticketCategory, _plugin );
-
-        if ( _cacheService.isCacheEnable(  ) )
-        {
-            _cacheService.putInCache( TicketFormCacheService.getCategoryByIdCacheKey( ticketCategory.getId(  ) ),
-                    ticketCategory.clone(  ) );
-        }
     }
 
     /**
@@ -96,11 +82,6 @@ public final class TicketCategoryHome
     public static void remove( int nKey )
     {
         _dao.delete( nKey, _plugin );
-        
-        if ( _cacheService.isCacheEnable(  ) )
-        {
-            _cacheService.removeKey( TicketFormCacheService.getCategoryByIdCacheKey( nKey ) );
-        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -113,32 +94,7 @@ public final class TicketCategoryHome
      */
     public static TicketCategory findByPrimaryKey( int nKey )
     {
-        String strCacheKey = TicketFormCacheService.getCategoryByIdCacheKey( nKey );
-        TicketCategory category = null;
-
-        if ( _cacheService.isCacheEnable(  ) )
-        {
-            category = (TicketCategory) _cacheService.getFromCache( strCacheKey );
-        }
-
-        if ( category == null )
-        {
-            category = _dao.load( nKey, _plugin );
-
-            if ( category != null )
-            {
-                if ( _cacheService.isCacheEnable(  ) )
-                {
-                    _cacheService.putInCache( strCacheKey, category.clone(  ) );
-                }
-            }
-        }
-        else
-        {
-            category = (TicketCategory) category.clone(  );
-        }
-
-        return category;
+        return _dao.load( nKey, _plugin );
     }
 
     /**

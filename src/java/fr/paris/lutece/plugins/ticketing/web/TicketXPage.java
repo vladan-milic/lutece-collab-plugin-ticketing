@@ -52,6 +52,7 @@ import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
+import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
@@ -109,7 +110,6 @@ public class TicketXPage extends MVCApplication
     private static final String PARAMETER_RESET_RESPONSE = "reset_response";
 
     // Views
-    private static final String VIEW_MANAGE_TICKETS = "manageTickets";
     private static final String VIEW_CREATE_TICKET = "createTicket";
     private static final String VIEW_RECAP_TICKET = "recapTicket";
     private static final String VIEW_CONFIRM_TICKET = "confirmTicket";
@@ -205,7 +205,10 @@ public class TicketXPage extends MVCApplication
         TicketHome.create( ticket );
 
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-        int nIdWorkflow = ticketCategory.getIdWorkflow(  );
+
+        // TODO After POC GRU, set this variable with
+        // ticketCategory.getIdWorkflow( );
+        int nIdWorkflow = TicketingPocGruService.getWorkflowId( ticket );
 
         if ( ( ticket.getListResponse(  ) != null ) && !ticket.getListResponse(  ).isEmpty(  ) )
         {

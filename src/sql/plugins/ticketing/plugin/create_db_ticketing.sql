@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS ticketing_ticket;
 CREATE TABLE ticketing_ticket (
 id_ticket int(6) NOT NULL,
 ticket_reference varchar(20) NULL, 
-guid varchar(20) NULL,
+guid varchar(255) NULL,
 id_customer varchar(20) NULL, 
 id_user_title int(11) NOT NULL default '0',
 firstname varchar(50) NOT NULL default '',

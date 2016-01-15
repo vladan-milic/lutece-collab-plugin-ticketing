@@ -260,10 +260,10 @@ public final class TicketHome
      * @param nIdTicket
      *            The id of the ticket
      */
-    public static void removeTicketResponse( int nIdticket )
+    public static void removeTicketResponse( int nIdTicket )
     {
-        _dao.deleteTicketResponse( nIdticket, _plugin );
-        _cacheService.removeKey( _cacheService.getTicketResponseCacheKey( nIdticket ) );
+        _dao.deleteTicketResponse( nIdTicket, _plugin );
+        _cacheService.removeKey( _cacheService.getTicketResponseCacheKey( nIdTicket ) );
     }
 
     /**
