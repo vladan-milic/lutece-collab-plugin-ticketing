@@ -1,8 +1,8 @@
 <#include "/admin/plugins/ticketing/commons.html" />
 <#include "/skin/plugins/asynchronousupload/upload_commons.html" />
 <div class="control-group">
-	<label class="control-label" for="attribute${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if> :</label>
-	<div class="controls">
+	<label class="control-label col-sm-3" for="attribute${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if> :</label>
+	<div class="controls col-sm-9">
 		<#assign fieldName='attribute'+entry.idEntry >
 		<#assign cssClass=entry.CSSClass!'' >
 		<#if list_responses??>

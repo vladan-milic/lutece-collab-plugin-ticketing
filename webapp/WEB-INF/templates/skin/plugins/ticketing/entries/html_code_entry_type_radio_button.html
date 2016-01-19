@@ -7,8 +7,8 @@
 ${entry.CSSClass!}
 
 <div class="control-group">
-	<label class="control-label" for="form${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
-	<div class="controls">
+	<label class="control-label col-sm-3" for="form${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
+	<div class="controls col-sm-9">
     <#list entry.fields as field>
 			<label class="radio <#if entry.fieldInLine>inline</#if>" for="attribute${entry.idEntry}_${field.idField}" <#if field.comment?? && field.comment != ''>title="${field.comment}"</#if> > 
 			<input type="radio" class="" id="attribute${entry.idEntry}_${field.idField}" name="attribute${entry.idEntry}" value="${field.idField}"

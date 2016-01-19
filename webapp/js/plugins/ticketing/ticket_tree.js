@@ -106,7 +106,7 @@ function lutece_ticket_tree(id_type, id_domain, id_category) {
 //load generic attributes form from selected category
 function loadGenericAttributesForm(bResetResponse) {
 	$.ajax({
-        url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+getSelectedCategoryValue()+"&reset_response="+bResetResponse,
+        url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+getSelectedCategoryValue()+"&reset_response="+bResetResponse+"&display_front="+bDisplayFront,
         type: "GET",
         dataType : "html",
         success: function( response ) {

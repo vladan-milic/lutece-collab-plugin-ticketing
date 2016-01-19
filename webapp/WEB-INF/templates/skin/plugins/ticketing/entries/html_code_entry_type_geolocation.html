@@ -12,8 +12,8 @@
 	</#list>
 </#if>
 <div class="control-group">
-	<label class="control-label" for="form${entry.idEntry}_address" id="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if> :</label>
-	<div class="controls">
+	<label class="control-label col-sm-3" for="form${entry.idEntry}_address" id="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if> :</label>
+	<div class="controls col-sm-9">
     <#if list_responses??>
 		<#list list_responses as response>
 			<#if response.entry.idEntry == entry.idEntry && response.toStringValueResponse??>

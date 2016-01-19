@@ -108,6 +108,7 @@ public class TicketXPage extends MVCApplication
     private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
     private static final String PARAMETER_RESET_RESPONSE = "reset_response";
+    private static final String PARAMETER_DISPLAY_FRONT = "display_front";
 
     // Views
     private static final String VIEW_CREATE_TICKET = "createTicket";
@@ -412,6 +413,8 @@ public class TicketXPage extends MVCApplication
     {
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         String strResetResponse = request.getParameter( PARAMETER_RESET_RESPONSE );
+        String strDisplayFront =  request.getParameter( PARAMETER_DISPLAY_FRONT );
+        boolean bDisplayFront = false;
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
 
         if( StringUtils.isNotEmpty( strResetResponse ) 
@@ -424,6 +427,12 @@ public class TicketXPage extends MVCApplication
                 ticket.setListResponse( new ArrayList <Response> () );
             }
          }
+        if( StringUtils.isNotEmpty( strDisplayFront ) 
+                && strDisplayFront.equalsIgnoreCase( Boolean.TRUE.toString( ) )
+                )
+        {
+            bDisplayFront = true ;
+        }
         
         Map<String, Object> model = getModel(  );
 
@@ -435,7 +444,7 @@ public class TicketXPage extends MVCApplication
             if ( form != null )
             {
                 model.put( MARK_TICKET_FORM,
-                    _ticketFormService.getHtmlForm( ticket, form, request.getLocale(  ), false, request ) );
+                    _ticketFormService.getHtmlForm( ticket, form, request.getLocale(  ), bDisplayFront, request ) );
             }
         }
 
