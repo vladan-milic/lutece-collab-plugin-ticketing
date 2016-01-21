@@ -2,7 +2,7 @@
 	<label class="col-sm-3 control-label" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> :</label>
 	<#list entry.fields as field>
 	<div class="col-sm-9">
-		<input class="form-control" type="text" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" size="${field.width}" 
+		<input type="text" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" size="${field.width}" 
 			<#if list_responses??>
 				<#list list_responses as response>
 					<#if response.entry.idEntry == entry.idEntry>
@@ -24,7 +24,7 @@
 			<#if field.maxSizeEnter!=-1>
 				maxlength="${field.maxSizeEnter}"
 			</#if>
-			class="${entry.CSSClass!} "	/>
+			class="form-control ${entry.CSSClass!} "	/>
 		</#list>
 		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
 			<p class="help-block">${entry.helpMessage}</p>
