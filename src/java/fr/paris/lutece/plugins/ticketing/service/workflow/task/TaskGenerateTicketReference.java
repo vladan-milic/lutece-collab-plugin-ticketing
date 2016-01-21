@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.ticketing.service.workflow.task;
 
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
-import fr.paris.lutece.plugins.ticketing.service.reference.ITicketReferenceService;
+import fr.paris.lutece.plugins.ticketing.service.workflow.reference.ITicketReferenceService;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
 import fr.paris.lutece.plugins.workflowcore.service.task.SimpleTask;

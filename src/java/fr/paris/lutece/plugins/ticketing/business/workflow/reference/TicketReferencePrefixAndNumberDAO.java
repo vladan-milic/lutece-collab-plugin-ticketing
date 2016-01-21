@@ -31,18 +31,40 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business.reference;
+package fr.paris.lutece.plugins.ticketing.business.workflow.reference;
+
+import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
+import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
- * Interface to access the ticket reference
+ * This class accesses a ticket reference in the following format: <prefix><sequence>
  *
  */
-public interface ITicketReferenceDAO
+public class TicketReferencePrefixAndNumberDAO implements ITicketReferenceDAO
 {
-    /**
-     * Find the last ticket reference which begins with the specified prefix
-     * @param strPrefix the prefix
-     * @return the last ticket reference
-     */
-    String findLastTicketReference( String strPrefix );
+    // SQL QUERIES
+    private static final String SQL_QUERY_SELECT_LAST_TICKET_REFERENCE = " SELECT max( substring( ticket_reference, ? ) ) FROM ticketing_ticket WHERE ticket_reference LIKE ? ";
+    private static final String SQL_LIKE_WILDCARD = "%";
+
+    @Override
+    public String findLastTicketReference( String strPrefix )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_LAST_TICKET_REFERENCE,
+                PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME ) );
+        daoUtil.setInt( 1, strPrefix.length(  ) + 1 );
+        daoUtil.setString( 2, strPrefix + SQL_LIKE_WILDCARD );
+        daoUtil.executeQuery(  );
+
+        String lastTicketReference = null;
+
+        if ( daoUtil.next(  ) )
+        {
+            lastTicketReference = daoUtil.getString( 1 );
+        }
+
+        daoUtil.free(  );
+
+        return lastTicketReference;
+    }
 }

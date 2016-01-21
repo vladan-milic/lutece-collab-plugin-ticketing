@@ -31,12 +31,12 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.service.reference;
+package fr.paris.lutece.plugins.ticketing.service.workflow.reference;
 
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketType;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
-import fr.paris.lutece.plugins.ticketing.business.reference.ITicketReferenceDAO;
+import fr.paris.lutece.plugins.ticketing.business.workflow.reference.ITicketReferenceDAO;
 
 import org.jsoup.helper.StringUtil;
 
