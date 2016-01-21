@@ -34,8 +34,12 @@
 package fr.paris.lutece.plugins.ticketing.web;
 
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketingUtils;
+import fr.paris.lutece.plugins.workflowcore.business.workflow.Workflow;
+import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
@@ -55,6 +59,7 @@ public class TicketViewJspBean extends MVCAdminJspBean
     private static final String MARK_TICKET = "ticket";
     private static final String MARK_PRIORITY = "priority";
     private static final String MARK_CRITICALITY = "criticality";
+    private static final String MARK_HISTORY = "history";
     
     private static final String PARAMETER_ID_TICKET = "id";
 
@@ -98,9 +103,12 @@ public class TicketViewJspBean extends MVCAdminJspBean
         int nIdTicket = Integer.parseInt(strIdTicket);
         
         Ticket ticket = TicketHome.findByPrimaryKey(nIdTicket);
-        
+        TicketCategory category = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory() );
+        int nWorkflowId = category.getIdWorkflow();
+        String strHistory = WorkflowService.getInstance().getDisplayDocumentHistory( ticket.getId() , Ticket.TICKET_RESOURCE_TYPE , nWorkflowId, request, getLocale());
         Map<String, Object> model = getModel();
         model.put( MARK_TICKET , ticket );
+        model.put( MARK_HISTORY , strHistory );
         
         return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS,  TEMPLATE_VIEW_TICKET_HISTORY , model );
    
