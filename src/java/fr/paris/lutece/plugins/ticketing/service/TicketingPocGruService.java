@@ -38,15 +38,13 @@ import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
+
 /**
  * This class provides utility methods for the POC GRU
- * 
- * @author a506122
  *
  */
 public final class TicketingPocGruService
 {
-
     // Properties
     private static final String PROPERTY_POC_GRU_COMPANIES = "ticketing.pocgru.companies";
     private static final String PROPERTY_POC_GRU_USERS_COMPANY = "ticketing.pocgru.users.company.";
@@ -58,14 +56,13 @@ public final class TicketingPocGruService
     /**
      * Default constructor
      */
-    private TicketingPocGruService()
+    private TicketingPocGruService(  )
     {
-
     }
 
     /**
      * Retrieves the workflow id associated to the specified ticket
-     * 
+     *
      * @param ticket
      *            the ticket
      * @return the workflow id
@@ -74,19 +71,17 @@ public final class TicketingPocGruService
     {
         int nWorkflowId = -1;
 
-        String strCompany = getCompany( ticket.getGuid( ) );
+        String strCompany = getCompany( ticket.getGuid(  ) );
 
         if ( strCompany != null )
         {
-            nWorkflowId = Integer
-                    .parseInt( AppPropertiesService.getProperty( PROPERTY_POC_GRU_WORKFLOW_ID ) );
+            nWorkflowId = Integer.parseInt( AppPropertiesService.getProperty( PROPERTY_POC_GRU_WORKFLOW_ID ) );
         }
         else
         {
-            TicketCategory ticketCategory = TicketCategoryHome
-                    .findByPrimaryKey( ticket.getIdTicketCategory( ) );
-            
-            nWorkflowId = ticketCategory.getIdWorkflow( );
+            TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+
+            nWorkflowId = ticketCategory.getIdWorkflow(  );
         }
 
         return nWorkflowId;
@@ -105,14 +100,12 @@ public final class TicketingPocGruService
 
         if ( strGuid != null )
         {
-            String[] companies = AppPropertiesService.getProperty( PROPERTY_POC_GRU_COMPANIES )
-                    .split( SEPARATOR );
+            String[] companies = AppPropertiesService.getProperty( PROPERTY_POC_GRU_COMPANIES ).split( SEPARATOR );
 
             for ( String strCompanyFromProperties : companies )
             {
-                String[] users = AppPropertiesService
-                        .getProperty( PROPERTY_POC_GRU_USERS_COMPANY + strCompanyFromProperties )
-                        .split( SEPARATOR );
+                String[] users = AppPropertiesService.getProperty( PROPERTY_POC_GRU_USERS_COMPANY +
+                        strCompanyFromProperties ).split( SEPARATOR );
 
                 for ( String user : users )
                 {
@@ -133,5 +126,4 @@ public final class TicketingPocGruService
 
         return strCompany;
     }
-
 }
