@@ -20,9 +20,9 @@ INSERT INTO ticketing_ticket_form (id_form, title, description) VALUES
 (3, "Facil'Familles - Autre", "Formulaire du domaine Facil'Familles - problématique 'Autre'");
 
 
-INSERT INTO ticketing_ticket_type (id_ticket_type, label) VALUES
-(1, "Demande d'information"),
-(2, "Réclamation");
+INSERT INTO ticketing_ticket_type (id_ticket_type, label, reference_prefix) VALUES
+(1, "Demande d'information", "INF"),
+(2, "Réclamation", "RCL");
 
 INSERT INTO ticketing_ticket_domain (id_ticket_domain, id_ticket_type, label) VALUES
 (100, 1, "Autre" ),

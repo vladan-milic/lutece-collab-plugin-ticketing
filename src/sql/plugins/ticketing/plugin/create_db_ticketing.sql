@@ -38,6 +38,7 @@ DROP TABLE IF EXISTS ticketing_ticket_type;
 CREATE TABLE ticketing_ticket_type (
 id_ticket_type int(6) NOT NULL,
 label varchar(50) NOT NULL default '',
+reference_prefix varchar(3) NOT NULL,
 PRIMARY KEY (id_ticket_type)
 );
 

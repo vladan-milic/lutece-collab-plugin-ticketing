@@ -44,6 +44,8 @@ import fr.paris.lutece.util.url.UrlItem;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -77,6 +79,7 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETTYPE = "ticketing.message.confirmRemoveTicketType";
+    private static final String MESSAGE_ERROR_REFERENCE_PREFIX_INVALID_FORMAT = "ticketing.message.errorTicketType.referencePrefixInvalidFormat";
     private static final String PROPERTY_DEFAULT_LIST_TICKETTYPE_PER_PAGE = "ticketing.listTicketTypes.itemsPerPage";
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.tickettype.attribute.";
 
@@ -95,6 +98,10 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     private static final String INFO_TICKETTYPE_CREATED = "ticketing.info.tickettype.created";
     private static final String INFO_TICKETTYPE_UPDATED = "ticketing.info.tickettype.updated";
     private static final String INFO_TICKETTYPE_REMOVED = "ticketing.info.tickettype.removed";
+
+    // Other constants
+    private static final String PATTERN_REFERENCE_PREFIX = "^[A-Z]{3}$";
+    private static Pattern _patternReferencePrefix = Pattern.compile( PATTERN_REFERENCE_PREFIX );
     private static final long serialVersionUID = 1L;
 
     // Session variable to store working values
@@ -146,7 +153,7 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
         populate( _tickettype, request );
 
         // Check constraints
-        if ( !validateBean( _tickettype, VALIDATION_ATTRIBUTES_PREFIX ) )
+        if ( !validateBean( _tickettype, VALIDATION_ATTRIBUTES_PREFIX ) || !validate( _tickettype ) )
         {
             return redirectView( request, VIEW_CREATE_TICKETTYPE );
         }
@@ -227,7 +234,7 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
         populate( _tickettype, request );
 
         // Check constraints
-        if ( !validateBean( _tickettype, VALIDATION_ATTRIBUTES_PREFIX ) )
+        if ( !validateBean( _tickettype, VALIDATION_ATTRIBUTES_PREFIX ) || !validate( _tickettype ) )
         {
             return redirect( request, VIEW_MODIFY_TICKETTYPE, PARAMETER_ID_TICKETTYPE, _tickettype.getId(  ) );
         }
@@ -236,5 +243,48 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
         addInfo( INFO_TICKETTYPE_UPDATED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETTYPES );
+    }
+
+    /**
+     * Validate the specified TicketType object
+     * @param ticketType the TicketType object
+     * @return {@code true} if the object is valid, {@code false} otherwise
+     */
+    private boolean validate( TicketType ticketType )
+    {
+        boolean bIsValid = true;
+
+        bIsValid &= validateReferencePrefix( ticketType );
+
+        return bIsValid;
+    }
+
+    /**
+     * Validate the reference prefix
+     * @param ticketType The TicketType object containing the reference prefix
+     * @return {@code true} if the reference prefix is valid, {@code false} otherwise
+     */
+    private boolean validateReferencePrefix( TicketType ticketType )
+    {
+        boolean bIsValid = true;
+        String strReferencePrefix = ticketType.getReferencePrefix(  );
+
+        if ( ( strReferencePrefix != null ) && !strReferencePrefix.equals( "" ) )
+        {
+            Matcher matcher = _patternReferencePrefix.matcher( strReferencePrefix );
+
+            if ( !matcher.matches(  ) )
+            {
+                addError( MESSAGE_ERROR_REFERENCE_PREFIX_INVALID_FORMAT, getLocale(  ) );
+                bIsValid = false;
+            }
+        }
+        else
+        {
+            addError( MESSAGE_ERROR_REFERENCE_PREFIX_INVALID_FORMAT, getLocale(  ) );
+            bIsValid = false;
+        }
+
+        return bIsValid;
     }
 }
