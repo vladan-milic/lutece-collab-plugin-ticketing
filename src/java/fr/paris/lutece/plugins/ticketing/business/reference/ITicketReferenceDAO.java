@@ -31,80 +31,18 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business;
-
-import org.hibernate.validator.constraints.NotEmpty;
-
-import java.io.Serializable;
-
-import javax.validation.constraints.Size;
-
+package fr.paris.lutece.plugins.ticketing.business.reference;
 
 /**
- * This is the business class for the object TicketType
+ * Interface to access the ticket reference
+ *
  */
-public class TicketType implements Serializable
+public interface ITicketReferenceDAO
 {
-    private static final long serialVersionUID = 1L;
-
-    // Variables declarations 
-    private int _nId;
-    @NotEmpty( message = "#i18n{ticketing.validation.tickettype.Label.notEmpty}" )
-    @Size( max = 50, message = "#i18n{ticketing.validation.tickettype.Label.size}" )
-    private String _strLabel;
-    private String _strReferencePrefix;
-
     /**
-     * Returns the Id
-     * @return The Id
+     * Find the last ticket reference which begins with the specified prefix
+     * @param strPrefix the prefix
+     * @return the last ticket reference
      */
-    public int getId(  )
-    {
-        return _nId;
-    }
-
-    /**
-     * Sets the Id
-     * @param nId The Id
-     */
-    public void setId( int nId )
-    {
-        _nId = nId;
-    }
-
-    /**
-     * Returns the Label
-     * @return The Label
-     */
-    public String getLabel(  )
-    {
-        return _strLabel;
-    }
-
-    /**
-     * Sets the Label
-     * @param strLabel The Label
-     */
-    public void setLabel( String strLabel )
-    {
-        _strLabel = strLabel;
-    }
-
-    /**
-     * Returns the reference prefix
-     * @return The reference prefix
-     */
-    public String getReferencePrefix(  )
-    {
-        return _strReferencePrefix;
-    }
-
-    /**
-     * Sets the reference prefix
-     * @param strReferencePrefix The reference prefix
-     */
-    public void setReferencePrefix( String strReferencePrefix )
-    {
-        _strReferencePrefix = strReferencePrefix;
-    }
+    String findLastTicketReference( String strPrefix );
 }

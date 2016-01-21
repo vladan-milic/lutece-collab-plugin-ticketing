@@ -2,6 +2,7 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd" >
 
     <bean id="ticketing.ticketRest"  class="fr.paris.lutece.plugins.ticketing.web.rs.TicketRest" />
@@ -18,21 +19,32 @@
     <bean id="ticketing.ticketAsynchronousUploadHandler" class="fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler" />
     <bean id="ticketing.entryService" class="fr.paris.lutece.plugins.ticketing.service.EntryService" />    
     <bean id="ticketing.entryTypeCheckBox" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeCheckBox" />
-	<bean id="ticketing.entryTypeComment" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeComment" />
-	<bean id="ticketing.entryTypeDate" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeDate" />
-	<bean id="ticketing.entryTypeGeolocation" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeGeolocation" />
-	<bean id="ticketing.entryTypeGroup" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeGroup" />
-	<bean id="ticketing.entryTypeMyLuteceUser" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeMyLuteceUser" />
-	<bean id="ticketing.entryTypeNumbering" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeNumbering" />
-	<bean id="ticketing.entryTypeRadioButton" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeRadioButton" />
-	<bean id="ticketing.entryTypeSelect" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeSelect" />
-	<bean id="ticketing.entryTypeSelectSQL" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeSelectSQL" />
-	<bean id="ticketing.entryTypeSession" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeSession" />
-	<bean id="ticketing.entryTypeText" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeText" />
-	<bean id="ticketing.entryTypeTextArea" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeTextArea" />
-	<bean id="ticketing.entryTypeImage" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeImage" />
-	<bean id="ticketing.entryTypeFile" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeFile" />
-	<bean id="ticketing.entryTypePhone" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypePhone" />  
-	
-	
+    <bean id="ticketing.entryTypeComment" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeComment" />
+    <bean id="ticketing.entryTypeDate" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeDate" />
+    <bean id="ticketing.entryTypeGeolocation" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeGeolocation" />
+    <bean id="ticketing.entryTypeGroup" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeGroup" />
+    <bean id="ticketing.entryTypeMyLuteceUser" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeMyLuteceUser" />
+    <bean id="ticketing.entryTypeNumbering" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeNumbering" />
+    <bean id="ticketing.entryTypeRadioButton" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeRadioButton" />
+    <bean id="ticketing.entryTypeSelect" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeSelect" />
+    <bean id="ticketing.entryTypeSelectSQL" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeSelectSQL" />
+    <bean id="ticketing.entryTypeSession" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeSession" />
+    <bean id="ticketing.entryTypeText" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeText" />
+    <bean id="ticketing.entryTypeTextArea" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeTextArea" />
+    <bean id="ticketing.entryTypeImage" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeImage" />
+    <bean id="ticketing.entryTypeFile" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeFile" />
+    <bean id="ticketing.entryTypePhone" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypePhone" />  
+    
+    <!-- Task Generate ticket reference -->
+    <bean id="ticketing.ticketReferenceService" class="fr.paris.lutece.plugins.ticketing.service.reference.TicketReferencePrefixAndNumberService" >
+        <constructor-arg>
+            <bean class="fr.paris.lutece.plugins.ticketing.business.reference.TicketReferencePrefixAndNumberDAO" />
+        </constructor-arg>
+    </bean>
+    <bean id="ticketing.taskGenerateTicketReference" class="fr.paris.lutece.plugins.ticketing.service.workflow.task.TaskGenerateTicketReference" scope="prototype" />
+    <bean id="ticketing.taskTypeGenerateTicketReference" class="fr.paris.lutece.plugins.workflowcore.business.task.TaskType"
+        p:key="taskTicketingGenerateTicketReference"
+        p:titleI18nKey="ticketing.task_ticket_reference_generator.title"
+        p:beanName="ticketing.taskGenerateTicketReference"
+        p:taskForAutomaticAction="true" />
 </beans>
