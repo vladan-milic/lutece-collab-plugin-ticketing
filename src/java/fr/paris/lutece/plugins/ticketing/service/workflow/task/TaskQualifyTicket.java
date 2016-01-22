@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.ticketing.service.workflow.task;
 
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
-import fr.paris.lutece.plugins.ticketing.service.workflow.reference.ITicketReferenceService;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
 import fr.paris.lutece.plugins.workflowcore.service.task.SimpleTask;
@@ -47,20 +46,23 @@ import javax.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 /**
- * This class represents a task to generate the ticket reference
+ * This class represents a task to qualify the ticket
  *
  */
-public class TaskGenerateTicketReference extends SimpleTask
+public class TaskQualifyTicket extends SimpleTask
 {
     // Messages
-    private static final String MESSAGE_GENERATE_TICKET_REFERENCE = "ticketing.task_ticket_reference_generator.labelGenerateTicketReference";
+    private static final String MESSAGE_QUALIFY_TICKET = "ticketing.task_qualify_ticket.labelQualifyTicket";
+
+    // PARAMETERS
+    public static final String PARAMETER_TICKET_PRIORITY = "ticket_priority";
+    public static final String PARAMETER_TICKET_CRITICALITY = "ticket_criticality";
 
     // Services
     @Inject
     private IResourceHistoryService _resourceHistoryService;
-    @Inject
-    private ITicketReferenceService _ticketReferenceService;
 
     @Override
     public void processTask( int nIdResourceHistory, HttpServletRequest request, Locale locale )
@@ -74,11 +76,15 @@ public class TaskGenerateTicketReference extends SimpleTask
 
             if ( ticket != null )
             {
-                synchronized ( _ticketReferenceService )
-                {
-                    ticket.setReference( _ticketReferenceService.generateReference( ticket ) );
-                    TicketHome.update( ticket );
-                }
+                String strPriority = request.getParameter( PARAMETER_TICKET_PRIORITY );
+                int nPriority = Integer.parseInt( strPriority );
+                ticket.setPriority( nPriority );
+
+                String strCriticality = request.getParameter( PARAMETER_TICKET_CRITICALITY );
+                int nCriticality = Integer.parseInt( strCriticality );
+                ticket.setCriticality( nCriticality );
+
+                TicketHome.update( ticket );
             }
         }
     }
@@ -86,6 +92,6 @@ public class TaskGenerateTicketReference extends SimpleTask
     @Override
     public String getTitle( Locale locale )
     {
-        return I18nService.getLocalizedString( MESSAGE_GENERATE_TICKET_REFERENCE, locale );
+        return I18nService.getLocalizedString( MESSAGE_QUALIFY_TICKET, locale );
     }
 }

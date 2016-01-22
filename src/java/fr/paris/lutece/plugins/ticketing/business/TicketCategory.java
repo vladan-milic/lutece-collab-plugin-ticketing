@@ -59,6 +59,7 @@ public class TicketCategory implements Serializable
     private String _strLabel;
     private String _strCode;
     private int _nIdWorkflow;
+    private int _nIdUnit;
 
     /**
      * Returns the Id
@@ -219,6 +220,24 @@ public class TicketCategory implements Serializable
     public void setCode( String strCode )
     {
         _strCode = strCode;
+    }
+
+    /**
+     * Get the id of the unit associated with this ticket category
+     * @return The id of the unit
+     */
+    public int getIdUnit(  )
+    {
+        return _nIdUnit;
+    }
+
+    /**
+     * Set the id of the unit associated with this ticket category
+     * @param nIdUnit The id of the unit
+     */
+    public void setIdUnit( int nIdUnit )
+    {
+        _nIdUnit = nIdUnit;
     }
 
 }

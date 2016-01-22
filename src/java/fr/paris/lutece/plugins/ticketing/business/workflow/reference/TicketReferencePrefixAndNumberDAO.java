@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business.reference;
+package fr.paris.lutece.plugins.ticketing.business.workflow.reference;
 
 import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;

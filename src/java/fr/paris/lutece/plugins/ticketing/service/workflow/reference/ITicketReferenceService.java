@@ -31,18 +31,20 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business.reference;
+package fr.paris.lutece.plugins.ticketing.service.workflow.reference;
+
+import fr.paris.lutece.plugins.ticketing.business.Ticket;
 
 /**
- * Interface to access the ticket reference
+ * Interface to manage ticket reference
  *
  */
-public interface ITicketReferenceDAO
+public interface ITicketReferenceService
 {
     /**
-     * Find the last ticket reference which begins with the specified prefix
-     * @param strPrefix the prefix
-     * @return the last ticket reference
+     * Generates a reference for the specified ticket
+     * @param ticket the ticket
+     * @return the reference
      */
-    String findLastTicketReference( String strPrefix );
+    String generateReference( Ticket ticket );
 }

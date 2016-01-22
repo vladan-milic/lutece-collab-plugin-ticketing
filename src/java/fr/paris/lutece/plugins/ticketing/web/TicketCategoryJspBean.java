@@ -83,6 +83,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_TICKETCATEGORY = "ticketcategory";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_LIST_WORKFLOWS = "listWorkflows";
+    private static final String MARK_LIST_UNITS = "units_list";
     private static final String MARK_TICKET_FORM_LIST = "ticketform_list";
     private static final String JSP_MANAGE_TICKETCATEGORYS = "jsp/admin/plugins/ticketing/ManageTicketCategorys.jsp";
 
@@ -149,6 +150,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         model.put( MARK_LIST_WORKFLOWS,
             WorkflowService.getInstance(  ).getWorkflowsEnabled( getUser(  ), getLocale(  ) ) );
         model.put( MARK_TICKET_FORM_LIST, TicketFormHome.getAvailableTicketFormsList(  ) );
+        model.put( MARK_LIST_UNITS, getUnitsList(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKETCATEGORY, TEMPLATE_CREATE_TICKETCATEGORY, model );
     }
@@ -243,6 +245,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         }
 
         model.put( MARK_TICKET_FORM_LIST, lstForms );
+        model.put( MARK_LIST_UNITS, getUnitsList(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKETCATEGORY, TEMPLATE_MODIFY_TICKETCATEGORY, model );
     }
@@ -305,4 +308,5 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
         return true;
     }
+    
 }

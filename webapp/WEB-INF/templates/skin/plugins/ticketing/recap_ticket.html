@@ -3,84 +3,24 @@
         <@messages errors=errors />
         <input type="hidden" id="id" name="id" value="${ticket.id}"/>
         <fieldset>
-             <div class="form-group">
-                 <label for="userTitle" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.xpage.recap_ticket.labelUserTitle} : </label>
-                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                     ${ticket.userTitle}
-                 </div>
-             </div>
-             <div class="form-group">
-                 <label for="firstname" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.xpage.recap_ticket.labelFirstname} : </label>
-                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                     ${ticket.firstname}
-                 </div>
-             </div>
-             <div class="form-group">
-                 <label for="lastname" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.xpage.recap_ticket.labelLastname} : </label>
-                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                     ${ticket.lastname}
-                 </div>
-             </div>
-             <div class="form-group">
-                 <label for="email" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.xpage.recap_ticket.labelEmail} : </label>
-                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                     ${ticket.email}
-                 </div>
-             </div>
-             <div class="form-group">
-                 <label for="fixedPhoneNumber" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.xpage.recap_ticket.labelFixedPhoneNumber} : </label>
-                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                     ${ticket.fixedPhoneNumber}
-                 </div>
-             </div>
-             <div class="form-group">
-                 <label for="mobilePhoneNumber" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.xpage.recap_ticket.labelMobilePhoneNumber} : </label>
-                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                     ${ticket.mobilePhoneNumber}
-                 </div>
-             </div>
-             <div class="form-group">
-                 <label for="ticketType" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.xpage.recap_ticket.labelTicketType} : </label>
-                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                     ${ticket.ticketType}
-                 </div>
-             </div>
-             <div class="form-group">
-                 <label for="ticketDomain" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.xpage.recap_ticket.labelTicketDomain} : </label>
-                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                     ${ticket.ticketDomain}
-                 </div>
-             </div>
-             <div class="form-group">
-                 <label for="ticketCategory" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.xpage.recap_ticket.labelTicketCategory} : </label>
-                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                     ${ticket.ticketCategory}
-                 </div>
-             </div>
-             <div class="form-group">
-                 <label for="contactMode" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.xpage.recap_ticket.labelContactMode} : </label>
-                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                     ${ticket.contactMode}
-                 </div>
-             </div>
-             <div class="form-group">
-                 <label for="ticketComment" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">#i18n{ticketing.xpage.recap_ticket.labelTicketComment} : </label>
-                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                     ${ticket.ticketComment}
-                 </div>
-             </div>
+	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelUserTitle">${ticket.userTitle!''}</@fieldStaticText>
+	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelFirstname">${ticket.firstname!''}</@fieldStaticText>
+	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelLastname">${ticket.lastname!''}</@fieldStaticText>
+	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelEmail">${ticket.email!''}</@fieldStaticText>
+	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelFixedPhoneNumber">${ticket.fixedPhoneNumber!''}</@fieldStaticText>
+	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelMobilePhoneNumber">${ticket.mobilePhoneNumber!''}</@fieldStaticText>
+	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelTicketType">${ticket.ticketType!''}</@fieldStaticText>
+	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelTicketDomain">${ticket.ticketDomain!''}</@fieldStaticText>
+	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelTicketCategory">${ticket.ticketCategory!''}</@fieldStaticText>
+	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelContactMode">${ticket.contactMode!''}</@fieldStaticText>
+	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelTicketComment">${ticket.ticketComment!''}</@fieldStaticText>
              <#list response_recap_list as response>
                 <div class="form-group">
-                     <label for="title" class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">${response.title} : </label>
-                     <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                        <#if response.listValues?has_content>
-                             <#list response.listValues as value>
-                                <#if value?has_content>
-                                    ${value!}
-                                </#if>
-                                <#if (value_index+1) < response.listValues?size>,</#if>
-                             </#list>
-                         </#if>
+                     <label for="title" class="col-xs-12 col-sm-3 control-label">${response.title} : </label>
+                     <div class="col-xs-12 col-sm-9">
+                        <p class="form-control-static">
+                            ${response.valuesToString!''}
+                        </p>
                      </div>
                  </div>
              </#list>

@@ -48,6 +48,7 @@ public class ResponseRecap implements Serializable
      * The resource type of responses
      */
     private static final long serialVersionUID = 1L;
+    private static final String STRING_LIST_SEPARATOR = ", ";
     private String _strTitle;
     private List<String> _listValues;
 
@@ -110,6 +111,28 @@ public class ResponseRecap implements Serializable
     public void addValue( String value )
     {
         this._listValues.add( value );
+    }
+
+    /**
+     * Get the list of values of this response into a string separated by comma
+     * 
+     * @return the list of value of this response into a string separated by comma
+     */
+    public String getValuesToString( )
+    {
+        StringBuilder bufferValues = new StringBuilder(  );
+        if ( this._listValues != null && this._listValues.size( ) > 0 )
+        {
+            int i = 0;
+            while ( i < this._listValues.size( )-1 ) 
+            {
+                bufferValues.append( this._listValues.get( i ) ).append( STRING_LIST_SEPARATOR );
+                i++;
+            }
+            bufferValues.append( this._listValues.get( i ) );
+        }
+
+        return bufferValues.toString( );
     }
 
 }

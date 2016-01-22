@@ -31,20 +31,49 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.service.reference;
+package fr.paris.lutece.plugins.ticketing.business;
 
-import fr.paris.lutece.plugins.ticketing.business.Ticket;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.util.ReferenceList;
+
+import java.util.Locale;
+
 
 /**
- * Interface to manage ticket reference
+ * This enum represents the criticality of a ticket
  *
  */
-public interface ITicketReferenceService
-{
+public enum TicketCriticality
+{LOW,
+    MEDIUM,
+    HIGH;
+
+    private static final String MESSAGE_PREFIX = "ticketing.criticality.";
+
     /**
-     * Generates a reference for the specified ticket
-     * @param ticket the ticket
-     * @return the reference
+     * Gives the localized message
+     * @param locale the locale to use
+     * @return the message
      */
-    String generateReference( Ticket ticket );
+    public String getLocalizedMessage( Locale locale )
+    {
+        return I18nService.getLocalizedString( MESSAGE_PREFIX + this.name(  ).toLowerCase(  ), locale );
+    }
+
+    /**
+     * Builds a RefenrenceList object containing all the TicketCriticality objects
+     * @param locale the locale used to retrieve the localized messages
+     * @return the ReferenceList object
+     */
+    public static ReferenceList getReferenceList( Locale locale )
+    {
+        ReferenceList listCriticalities = new ReferenceList(  );
+
+        for ( TicketCriticality ticketCriticality : TicketCriticality.values(  ) )
+        {
+            listCriticalities.addItem( ticketCriticality.ordinal(  ), ticketCriticality.getLocalizedMessage( locale ) );
+        }
+
+        return listCriticalities;
+    }
 }
