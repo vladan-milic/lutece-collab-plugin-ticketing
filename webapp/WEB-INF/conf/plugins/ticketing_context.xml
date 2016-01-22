@@ -47,4 +47,15 @@
         p:titleI18nKey="ticketing.task_ticket_reference_generator.title"
         p:beanName="ticketing.taskGenerateTicketReference"
         p:taskForAutomaticAction="true" />
+    
+    <!-- Task Qualify ticket -->    
+    <bean id="ticketing.taskQualifyTicket" class="fr.paris.lutece.plugins.ticketing.service.workflow.task.TaskQualifyTicket" scope="prototype" />
+    <bean id="ticketing.taskTypeQualifyTicket" class="fr.paris.lutece.plugins.workflowcore.business.task.TaskType"
+        p:key="taskTicketingQualifyTicket"
+        p:titleI18nKey="ticketing.task_qualify_ticket.title"
+        p:beanName="ticketing.taskQualifyTicket"
+        p:formTaskRequired="true"
+        p:taskForAutomaticAction="false" />
+    <bean id="ticketing.qualifyTicketTaskComponent" class="fr.paris.lutece.plugins.ticketing.web.workflow.QualifyTicketTaskComponent"
+        p:taskType-ref="ticketing.taskTypeQualifyTicket" />
 </beans>
