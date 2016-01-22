@@ -117,5 +117,19 @@ confirmation_msg long varchar NULL,
 PRIMARY KEY (id_contact_mode)
 );
 
+--
+-- Structure for table ticketing_support_entity
+--
+DROP TABLE IF EXISTS ticketing_support_entity;
+CREATE TABLE ticketing_support_entity(
+id_support_entity int(6) NOT NULL,
+name varchar(50) NOT NULL,
+level int(2) NOT NULL,
+id_unit int(6) NOT NULL,
+id_admin_user int(6) NULL,
+id_domain int(6) NOT NULL,
+PRIMARY KEY (id_support_entity)
+);
+
 
       
