@@ -31,80 +31,40 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business;
+package fr.paris.lutece.plugins.ticketing.business.workflow.reference;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import java.io.Serializable;
-
-import javax.validation.constraints.Size;
-
+import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
+import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
- * This is the business class for the object TicketType
+ * This class accesses a ticket reference in the following format: <prefix><sequence>
+ *
  */
-public class TicketType implements Serializable
+public class TicketReferencePrefixAndNumberDAO implements ITicketReferenceDAO
 {
-    private static final long serialVersionUID = 1L;
+    // SQL QUERIES
+    private static final String SQL_QUERY_SELECT_LAST_TICKET_REFERENCE = " SELECT max( substring( ticket_reference, ? ) ) FROM ticketing_ticket WHERE ticket_reference LIKE ? ";
+    private static final String SQL_LIKE_WILDCARD = "%";
 
-    // Variables declarations 
-    private int _nId;
-    @NotEmpty( message = "#i18n{ticketing.validation.tickettype.Label.notEmpty}" )
-    @Size( max = 50, message = "#i18n{ticketing.validation.tickettype.Label.size}" )
-    private String _strLabel;
-    private String _strReferencePrefix;
-
-    /**
-     * Returns the Id
-     * @return The Id
-     */
-    public int getId(  )
+    @Override
+    public String findLastTicketReference( String strPrefix )
     {
-        return _nId;
-    }
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_LAST_TICKET_REFERENCE,
+                PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME ) );
+        daoUtil.setInt( 1, strPrefix.length(  ) + 1 );
+        daoUtil.setString( 2, strPrefix + SQL_LIKE_WILDCARD );
+        daoUtil.executeQuery(  );
 
-    /**
-     * Sets the Id
-     * @param nId The Id
-     */
-    public void setId( int nId )
-    {
-        _nId = nId;
-    }
+        String lastTicketReference = null;
 
-    /**
-     * Returns the Label
-     * @return The Label
-     */
-    public String getLabel(  )
-    {
-        return _strLabel;
-    }
+        if ( daoUtil.next(  ) )
+        {
+            lastTicketReference = daoUtil.getString( 1 );
+        }
 
-    /**
-     * Sets the Label
-     * @param strLabel The Label
-     */
-    public void setLabel( String strLabel )
-    {
-        _strLabel = strLabel;
-    }
+        daoUtil.free(  );
 
-    /**
-     * Returns the reference prefix
-     * @return The reference prefix
-     */
-    public String getReferencePrefix(  )
-    {
-        return _strReferencePrefix;
-    }
-
-    /**
-     * Sets the reference prefix
-     * @param strReferencePrefix The reference prefix
-     */
-    public void setReferencePrefix( String strReferencePrefix )
-    {
-        _strReferencePrefix = strReferencePrefix;
+        return lastTicketReference;
     }
 }

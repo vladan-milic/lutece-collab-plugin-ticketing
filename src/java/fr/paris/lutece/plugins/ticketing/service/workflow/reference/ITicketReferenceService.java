@@ -31,80 +31,20 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business;
+package fr.paris.lutece.plugins.ticketing.service.workflow.reference;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import java.io.Serializable;
-
-import javax.validation.constraints.Size;
-
+import fr.paris.lutece.plugins.ticketing.business.Ticket;
 
 /**
- * This is the business class for the object TicketType
+ * Interface to manage ticket reference
+ *
  */
-public class TicketType implements Serializable
+public interface ITicketReferenceService
 {
-    private static final long serialVersionUID = 1L;
-
-    // Variables declarations 
-    private int _nId;
-    @NotEmpty( message = "#i18n{ticketing.validation.tickettype.Label.notEmpty}" )
-    @Size( max = 50, message = "#i18n{ticketing.validation.tickettype.Label.size}" )
-    private String _strLabel;
-    private String _strReferencePrefix;
-
     /**
-     * Returns the Id
-     * @return The Id
+     * Generates a reference for the specified ticket
+     * @param ticket the ticket
+     * @return the reference
      */
-    public int getId(  )
-    {
-        return _nId;
-    }
-
-    /**
-     * Sets the Id
-     * @param nId The Id
-     */
-    public void setId( int nId )
-    {
-        _nId = nId;
-    }
-
-    /**
-     * Returns the Label
-     * @return The Label
-     */
-    public String getLabel(  )
-    {
-        return _strLabel;
-    }
-
-    /**
-     * Sets the Label
-     * @param strLabel The Label
-     */
-    public void setLabel( String strLabel )
-    {
-        _strLabel = strLabel;
-    }
-
-    /**
-     * Returns the reference prefix
-     * @return The reference prefix
-     */
-    public String getReferencePrefix(  )
-    {
-        return _strReferencePrefix;
-    }
-
-    /**
-     * Sets the reference prefix
-     * @param strReferencePrefix The reference prefix
-     */
-    public void setReferencePrefix( String strReferencePrefix )
-    {
-        _strReferencePrefix = strReferencePrefix;
-    }
+    String generateReference( Ticket ticket );
 }
