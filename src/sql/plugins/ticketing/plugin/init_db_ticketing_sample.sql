@@ -31,16 +31,16 @@ INSERT INTO ticketing_ticket_domain (id_ticket_domain, id_ticket_type, label) VA
 (200, 2, "Autre" ),
 (210, 2, "Facil'familles" );
 
-INSERT INTO ticketing_ticket_category (id_ticket_category, id_ticket_domain, label, category_code, id_ticket_form, id_workflow ) VALUES
-(1, 100, "Autre" , NULL, 0, 301 ),
-(2, 110, "Réservation de salle" , NULL, 0, 301 ),
-(3, 110, "Autre" , NULL, 0, 301 ),
-(4, 120, "Horaires de stationnement" , "DVDSSVP", 0, 301 ),
-(5, 120, "Autre" , NULL, 0, 301 ),
-(6, 200, "Autre" , NULL, 0, 301 ),
-(7, 210, "Problème tarifaire périscolaire" , "FFTARIFPERISCO", 2, 301 ),
-(8, 210, "Problème tarifaire petite enfance" , "FFTARIFPE", 1, 301 ),
-(9, 210, "Autre" , NULL, 3, 301 );
+INSERT INTO ticketing_ticket_category (id_ticket_category, id_ticket_domain, label, category_code, id_ticket_form, id_workflow, id_unit ) VALUES
+(1, 100, "Autre" , NULL, 0, 301, 5 ),
+(2, 110, "Réservation de salle" , NULL, 0, 301, 5 ),
+(3, 110, "Autre" , NULL, 0, 301, 5 ),
+(4, 120, "Horaires de stationnement" , "DVDSSVP", 0, 301, 5 ),
+(5, 120, "Autre" , NULL, 0, 301, 5 ),
+(6, 200, "Autre" , NULL, 0, 301, 5 ),
+(7, 210, "Problème tarifaire périscolaire" , "FFTARIFPERISCO", 2, 301, 7 ),
+(8, 210, "Problème tarifaire petite enfance" , "FFTARIFPE", 1, 301, 8 ),
+(9, 210, "Autre" , NULL, 3, 301, 6 );
 
 
 INSERT INTO ticketing_user_title (id_user_title, label) VALUES

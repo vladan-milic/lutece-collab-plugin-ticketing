@@ -66,6 +66,7 @@ label varchar(50) NOT NULL default '',
 id_workflow INT NOT NULL default '0',
 id_ticket_form int(6) NOT NULL default '0',
 category_code varchar(50) NULL,
+id_unit int(6) NOT NULL default '0',
 PRIMARY KEY (id_ticket_category)
 );
 

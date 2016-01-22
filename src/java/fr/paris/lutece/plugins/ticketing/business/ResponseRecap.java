@@ -120,7 +120,7 @@ public class ResponseRecap implements Serializable
      */
     public String getValuesToString( )
     {
-        StringBuilder bufferValues = new StringBuilder( "" );
+        StringBuilder bufferValues = new StringBuilder(  );
         if ( this._listValues != null && this._listValues.size( ) > 0 )
         {
             int i = 0;

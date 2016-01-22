@@ -33,9 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
+import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
+import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
@@ -93,4 +96,23 @@ public abstract class ManageAdminTicketingJspBean extends MVCAdminJspBean
 
         return model;
     }
+    
+    /**
+     * Load the data of all the unit objects and returns them in form of a collection
+     *
+     * @return the list which contains the data of all the unit objects
+     */
+    protected static ReferenceList getUnitsList(  )
+    {
+        List<Unit> lstUnits = UnitHome.findAll( );
+        ReferenceList lstRef = new ReferenceList( lstUnits.size(  ) );
+
+        for ( Unit unit : lstUnits )
+        {
+            lstRef.addItem( unit.getIdUnit(  ), unit.getLabel(  ) );
+        }
+
+        return lstRef;
+    }
+    
 }
