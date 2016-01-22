@@ -84,6 +84,7 @@ public class TicketFormService implements Serializable
     private static final long serialVersionUID = 1L;
     private static final String PARAMETER_ID_FORM = "id_form";
     private static final String PREFIX_ATTRIBUTE = "attribute";
+    private static final String EMPTY_STRING = "";
 
     // marks
     private static final String MARK_LOCALE = "locale";
@@ -482,7 +483,14 @@ public class TicketFormService implements Serializable
                     }
                     else
                     {
-                        responseRecap.addValue( response.getResponseValue( ) );
+                        if ( response.getResponseValue( ) != null )
+                        {
+                            responseRecap.addValue( response.getResponseValue( ) );
+                        }
+                        else
+                        {
+                            responseRecap.addValue( EMPTY_STRING );
+                        }
                     }
                 }
                 mapResponseRecap.put( new Integer( response.getEntry( ).getIdEntry( ) ), responseRecap );
