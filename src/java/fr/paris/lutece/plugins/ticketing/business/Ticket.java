@@ -36,14 +36,13 @@ package fr.paris.lutece.plugins.ticketing.business;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
+import fr.paris.lutece.portal.service.rbac.RBACResource;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
-
 import java.sql.Timestamp;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -54,7 +53,7 @@ import javax.validation.constraints.Size;
 /**
  * This is the business class for the object Ticket
  */
-public class Ticket implements Serializable
+public class Ticket implements Serializable, RBACResource
 {
     public static final String TICKET_RESOURCE_TYPE = "ticket";
     
@@ -746,5 +745,17 @@ public class Ticket implements Serializable
     public void setAssigneeUnit( AssigneeUnit assigneeUnit )
     {
         _unit = assigneeUnit;
+    }
+
+    @Override
+    public String getResourceId(  )
+    {
+        return String.valueOf( _nId );
+    }
+
+    @Override
+    public String getResourceTypeCode(  )
+    {
+        return TICKET_RESOURCE_TYPE;
     }
 }
