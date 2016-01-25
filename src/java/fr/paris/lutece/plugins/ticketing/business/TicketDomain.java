@@ -39,15 +39,20 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import fr.paris.lutece.portal.service.rbac.RBACResource;
+
 
 
 /**
  * This is the business class for the object TicketDomain
  */
-public class TicketDomain implements Serializable
+public class TicketDomain implements Serializable,  RBACResource
 {
+    // RBAC management
+    public static final String RESOURCE_TYPE = "TICKET_DOMAIN";
+ 
     private static final long serialVersionUID = 1L;
-
+   
     // Variables declarations 
     private int _nId;
     private int _nIdTicketType;
@@ -126,6 +131,18 @@ public class TicketDomain implements Serializable
     public void setLabel( String strLabel )
     {
         _strLabel = strLabel;
+    }
+
+    @Override
+    public String getResourceId(  )
+    {
+        return String.valueOf( _nId );
+    }
+
+    @Override
+    public String getResourceTypeCode(  )
+    {
+        return RESOURCE_TYPE;
     }
 
 }
