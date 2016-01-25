@@ -31,9 +31,12 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.web;
+package fr.paris.lutece.plugins.ticketing.business;
 
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.util.ReferenceList;
@@ -45,14 +48,23 @@ import fr.paris.lutece.util.ReferenceList;
  */
 public enum SupportLevel 
 {
-    LEVEL1( 1  ),
+    LEVEL1( 1 ),
     LEVEL2( 2 ),
     LEVEL3( 3 );
 
     private static final String MESSAGE_PREFIX = "ticketing.supportentity.level";
-        private int _nLevelValue;
-   
-        /**
+    private static Map<Integer, SupportLevel> _mapSupportLevel = new HashMap<Integer, SupportLevel> ();
+    static 
+    {
+        for ( SupportLevel enumSupportLevel : EnumSet.allOf( SupportLevel.class ) ) 
+        {
+            _mapSupportLevel.put( enumSupportLevel._nLevelValue, enumSupportLevel );
+        }
+    }
+    
+    private int _nLevelValue;
+    
+    /**
      * enum constructor
      * @param nLevelValue level value 
      */
@@ -69,6 +81,17 @@ public enum SupportLevel
     {
         return _nLevelValue;
     }
+    
+    /**
+     * returns SupportLevel enum for level value
+     * @param nLevelValue level value
+     * @return SupportLevel enum
+     */
+    public static SupportLevel valueOf( int nLevelValue ) 
+    {
+        return _mapSupportLevel.get( Integer.valueOf( nLevelValue ) );
+    }
+    
     /**
      * returns level label
      * @param locale the locale used to retrieve the localized messages

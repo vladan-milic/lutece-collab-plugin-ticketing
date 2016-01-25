@@ -43,6 +43,7 @@ import org.apache.commons.lang.StringUtils;
 import fr.paris.lutece.plugins.ticketing.business.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.SupportEntity;
 import fr.paris.lutece.plugins.ticketing.business.SupportEntityHome;
+import fr.paris.lutece.plugins.ticketing.business.SupportLevel;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
@@ -73,6 +74,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     private static final String PARAMETER_ID_SUPPORT_ENTITY = "id";
     private static final String PARAMETER_ID_TICKET_DOMAIN = "id_ticket_domain";
     private static final String PARAMETER_ID_UNIT = "id_unit";
+    private static final String PARAMETER_LEVEL = "level";
     
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_SUPPORT_ENTITIES = "ticketing.manage_supportentities.pageTitle";
@@ -163,6 +165,22 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     {
         populate( _supportEntity, request );
 
+        // Check constraints
+        if ( !validateBean( _supportEntity, VALIDATION_ATTRIBUTES_PREFIX ) )
+        {
+            return redirectView( request, VIEW_CREATE_SUPPORT_ENTITY );
+        }
+        
+        SupportEntityHome.create( _supportEntity );
+        addInfo( INFO_SUPPORT_ENTITY_CREATED, getLocale(  ) );
+        _supportEntity = null ;
+        return redirectView( request, VIEW_MANAGE_SUPPORT_ENTITIES );
+    }
+
+    @Override
+    protected void populate( Object bean, HttpServletRequest request )
+    {
+        super.populate( bean, request );
         String strIdDomain = request.getParameter( PARAMETER_ID_TICKET_DOMAIN );
         if ( StringUtils.isNotEmpty( strIdDomain ) && StringUtils.isNumeric( strIdDomain ) ) 
         {
@@ -179,19 +197,14 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
                 _supportEntity.setUnit( new AssigneeUnit( unit ) );
             }
         }
-
-        // Check constraints
-        if ( !validateBean( _supportEntity, VALIDATION_ATTRIBUTES_PREFIX ) )
+        String strLevel = request.getParameter( PARAMETER_LEVEL );
+        if ( StringUtils.isNotEmpty( strLevel ) && StringUtils.isNumeric( strLevel ) ) 
         {
-            return redirectView( request, VIEW_CREATE_SUPPORT_ENTITY );
+            _supportEntity.setSupportLevel( SupportLevel.valueOf( Integer.parseInt( strLevel  ) ) );
         }
         
-        SupportEntityHome.create( _supportEntity );
-        addInfo( INFO_SUPPORT_ENTITY_CREATED, getLocale(  ) );
-        _supportEntity = null ;
-        return redirectView( request, VIEW_MANAGE_SUPPORT_ENTITIES );
     }
-
+    
     /**
      * Manages the removal form of a supportentity whose identifier is in the http
      * request
@@ -264,23 +277,6 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     public String doModifySupportEntity( HttpServletRequest request )
     {
         populate( _supportEntity, request );
-
-        String strIdDomain = request.getParameter( PARAMETER_ID_TICKET_DOMAIN );
-        if ( StringUtils.isNotEmpty( strIdDomain ) && StringUtils.isNumeric( strIdDomain ) ) 
-        {
-            TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( Integer.parseInt( strIdDomain ) );
-            _supportEntity.setTicketDomain( ticketDomain );
-        }
-        
-        String strIdUnit = request.getParameter( PARAMETER_ID_UNIT );
-        if ( StringUtils.isNotEmpty( strIdUnit ) && StringUtils.isNumeric( strIdUnit ) ) 
-        {
-            Unit unit = UnitHome.findByPrimaryKey( Integer.parseInt( strIdUnit ) );
-            if ( unit != null )
-            {
-                _supportEntity.setUnit( new AssigneeUnit( unit ) );
-            }
-        }
 
         // Check constraints
         if ( !validateBean( _supportEntity, VALIDATION_ATTRIBUTES_PREFIX ) )

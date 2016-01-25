@@ -6,7 +6,7 @@
         <@messages errors=errors />
         <input type="hidden" id="id" name="id" value="${supportentity.id}"/>
         <@fieldInputText i18nLabelKey="ticketing.modify_supportentity.labelName" mandatory=true  inputName="name" value="${supportentity.name!''}" i18nHelpBlockKey="ticketing.modify_supportentity.labelName.help" />
-		<@fieldInputCombo i18nLabelKey="ticketing.modify_supportentity.labelLevel" mandatory=true inputName="level" items=level_list value="${supportentity.level!''}" i18nHelpBlockKey="ticketing.modify_supportentity.labelLevel.help" cssClass='' /> 
+		<@fieldInputCombo i18nLabelKey="ticketing.modify_supportentity.labelLevel" mandatory=true inputName="level" items=level_list value="${supportentity.supportLevel.levelValue!''}" i18nHelpBlockKey="ticketing.modify_supportentity.labelLevel.help" cssClass='' /> 
         <@fieldInputCombo i18nLabelKey="ticketing.modify_supportentity.labelUnit" mandatory=true inputName="id_unit" items=unit_list value="${supportentity.unit.unitId!''}" i18nHelpBlockKey="ticketing.create_supportentity.labelUnit.help" cssClass='' /> 
         <@fieldInputCombo i18nLabelKey="ticketing.modify_supportentity.labelTicketDomain" inputName="id_ticket_domain" items=ticket_domains_list value="${supportentity.ticketDomain.id!''}" i18nHelpBlockKey="ticketing.modify_supportentity.labelTicketDomain.help" cssClass='' /> 
         <@actionButtons button1Name="action_modifySupportEntity" button2Name="view_manageSupportEntities"/> 

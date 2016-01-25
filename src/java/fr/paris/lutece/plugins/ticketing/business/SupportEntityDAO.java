@@ -91,7 +91,7 @@ public final class SupportEntityDAO implements ISupportEntityDAO
         supportEntity.setId( newPrimaryKey( plugin ) );
         daoUtil.setInt( 1, supportEntity.getId(  ) );
         daoUtil.setString( 2, supportEntity.getName( ) );
-        daoUtil.setInt( 3, supportEntity.getLevel( ) );
+        daoUtil.setInt( 3, supportEntity.getSupportLevel( ).getLevelValue( ) );
         daoUtil.setInt( 4, supportEntity.getUnit( ) != null ? supportEntity.getUnit( ).getUnitId( ) : -1 );
         daoUtil.setInt( 5, supportEntity.getUser( ) != null ? supportEntity.getUser( ).getAdminUserId( ) : -1 );
         daoUtil.setInt( 6, supportEntity.getTicketDomain( ) != null ? supportEntity.getTicketDomain( ).getId( ) : -1 );
@@ -143,7 +143,7 @@ public final class SupportEntityDAO implements ISupportEntityDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
         daoUtil.setInt( 1, supportEntity.getId(  ) );
         daoUtil.setString( 2, supportEntity.getName( ) );
-        daoUtil.setInt( 3, supportEntity.getLevel( ) );
+        daoUtil.setInt( 3, supportEntity.getSupportLevel( ).getLevelValue( ) );
         daoUtil.setInt( 4, supportEntity.getUnit( ) != null ? supportEntity.getUnit( ).getUnitId( ) : -1 );
         daoUtil.setInt( 5, supportEntity.getUser( ) != null ? supportEntity.getUser( ).getAdminUserId( ) : -1 );
         daoUtil.setInt( 6, supportEntity.getTicketDomain( ) != null ? supportEntity.getTicketDomain() .getId( ) : -1 );
@@ -183,7 +183,7 @@ public final class SupportEntityDAO implements ISupportEntityDAO
         SupportEntity supportEntity = new SupportEntity(  );
         supportEntity.setId(  daoUtil.getInt( 1 ) );
         supportEntity.setName( daoUtil.getString( 2 ) );
-        supportEntity.setLevel( daoUtil.getInt( 3 ) );
+        supportEntity.setSupportLevel( SupportLevel.valueOf( daoUtil.getInt( 3 ) ) );
 
         Unit unit = UnitHome.findByPrimaryKey( daoUtil.getInt( 4 ) ); 
         if ( unit != null )

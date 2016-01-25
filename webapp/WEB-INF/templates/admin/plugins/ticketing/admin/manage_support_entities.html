@@ -35,7 +35,9 @@
                 ${supportentity.name!}
             </td>
             <td>
-                ${supportentity.level!}
+            	<#if supportentity.supportLevel??>
+                	${supportentity.supportLevel.levelValue!}
+               	</#if>
             </td>
             <td><#if supportentity.unit??>
                 	${supportentity.unit.name!} 
