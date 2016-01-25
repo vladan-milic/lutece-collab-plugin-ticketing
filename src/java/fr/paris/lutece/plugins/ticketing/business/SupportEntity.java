@@ -40,10 +40,12 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import fr.paris.lutece.portal.service.rbac.RBACResource;
+
 
 
 /**
- * AssigneeUnit
+ * SupportEntity
  */
 public class SupportEntity
 {
@@ -52,14 +54,11 @@ public class SupportEntity
     private AssigneeUser _user;
     @NotNull ( message = "#i18n{ticketing.validation.supportentity.unit.notNull}" )
     private AssigneeUnit _unit;
-
     private TicketDomain _ticketDomain;
     @NotEmpty( message = "#i18n{ticketing.validation.supportentity.name.notEmpty}" )
     @Size ( max = 50, message = "#i18n{ticketing.validation.supportentity.name.size}" )
     private String _strName;
-    @Min( value = 1, message = "#i18n{ticketing.validation.supportentity.level.minvalue}" ) 
-    @Max( value = 3, message = "#i18n{ticketing.validation.supportentity.level.maxvalue}" )
-    private int _nLevel;
+    private SupportLevel _supportLevel;
 
 
     /**
@@ -129,19 +128,19 @@ public class SupportEntity
     }
 
     /**
-     * @return the level
+     * @return the supportLevel
      */
-    public int getLevel()
+    public SupportLevel getSupportLevel()
     {
-        return _nLevel;
+        return _supportLevel;
     }
 
     /**
-     * @param nLevel the _nLevel to set
+     * @param supportLevel the _supportLevel to set
      */
-    public void setLevel( int nLevel )
+    public void setSupportLevel( SupportLevel supportLevel )
     {
-        this._nLevel = nLevel;
+        this._supportLevel = supportLevel;
     }
 
     /**
