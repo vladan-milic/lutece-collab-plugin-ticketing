@@ -308,5 +308,4 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
         return true;
     }
-    
 }

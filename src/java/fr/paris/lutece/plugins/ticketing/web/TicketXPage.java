@@ -84,6 +84,7 @@ import javax.servlet.http.HttpSession;
 public class TicketXPage extends MVCApplication
 {
     private static final long serialVersionUID = 1L;
+
     // Templates
     private static final String TEMPLATE_CREATE_TICKET = "/skin/plugins/ticketing/create_ticket.html";
     private static final String TEMPLATE_TICKET_FORM = "/skin/plugins/ticketing/ticket_form.html";
@@ -143,14 +144,14 @@ public class TicketXPage extends MVCApplication
     {
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
 
-        if ( ticket == null ) 
+        if ( ticket == null )
         {
             ticket = new Ticket(  );
             TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
         }
-        
-        prefillTicketWithUserInfo( request , ticket );
-        
+
+        prefillTicketWithUserInfo( request, ticket );
+
         Map<String, Object> model = getModel(  );
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );
         model.put( MARK_TICKET, ticket );
@@ -161,6 +162,7 @@ public class TicketXPage extends MVCApplication
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList(  ) );
 
         saveActionTypeInSession( request.getSession(  ), ACTION_CREATE_TICKET );
+
         return getXPage( TEMPLATE_CREATE_TICKET, request.getLocale(  ), model );
     }
 
@@ -169,30 +171,35 @@ public class TicketXPage extends MVCApplication
      * @param request The HTTP request
      * @param ticket The ticket
      */
-    private void prefillTicketWithUserInfo( HttpServletRequest request , Ticket ticket )
+    private void prefillTicketWithUserInfo( HttpServletRequest request, Ticket ticket )
     {
         LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
-        if( user != null )
+
+        if ( user != null )
         {
-            ticket.setGuid( user.getName() );
+            ticket.setGuid( user.getName(  ) );
+
             String strFirstname = user.getUserInfo( LuteceUser.NAME_GIVEN );
             String strLastname = user.getUserInfo( LuteceUser.NAME_FAMILY );
-            String strEmail = user.getEmail();
+            String strEmail = user.getEmail(  );
 
             if ( !StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty( ticket.getFirstname(  ) ) )
             {
                 ticket.setFirstname( strFirstname );
             }
+
             if ( !StringUtils.isEmpty( strLastname ) && StringUtils.isEmpty( ticket.getLastname(  ) ) )
             {
                 ticket.setLastname( strLastname );
             }
+
             if ( !StringUtils.isEmpty( strEmail ) && StringUtils.isEmpty( ticket.getEmail(  ) ) )
             {
                 ticket.setEmail( strEmail );
             }
         }
     }
+
     /**
      * Process the data capture form of a new ticket
      *
@@ -257,7 +264,7 @@ public class TicketXPage extends MVCApplication
     public XPage getRecapTicket( HttpServletRequest request )
     {
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
-        List<ResponseRecap> listResponseRecap = _ticketFormService.getListResponseRecap( ticket.getListResponse( ) );
+        List<ResponseRecap> listResponseRecap = _ticketFormService.getListResponseRecap( ticket.getListResponse(  ) );
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_TICKET_ACTION, getActionTypeFromSession( request.getSession(  ) ) );
@@ -279,8 +286,8 @@ public class TicketXPage extends MVCApplication
     @Action( ACTION_RECAP_TICKET )
     public XPage doRecapTicket( HttpServletRequest request )
     {
-        boolean bIsFormValid = true ;
-        Ticket ticket =  _ticketFormService.getTicketFromSession( request.getSession(  ) );
+        boolean bIsFormValid = true;
+        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
         ticket = ( ticket != null ) ? ticket : new Ticket(  );
         populate( ticket, request );
         ticket.setListResponse( new ArrayList<Response>(  ) );
@@ -311,19 +318,19 @@ public class TicketXPage extends MVCApplication
         }
 
         // Check constraints
-        bIsFormValid = validateBean( ticket ) ; 
+        bIsFormValid = validateBean( ticket );
+
         if ( ticket.hasNoPhoneNumberFilled(  ) )
         {
             addError( ERROR_PHONE_NUMBER_MISSING, getLocale( request ) );
-            bIsFormValid = false ;
+            bIsFormValid = false;
         }
 
         if ( listFormErrors.size(  ) > 0 )
         {
-            bIsFormValid = false ;
+            bIsFormValid = false;
         }
 
-        
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
         TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
         ticket.setTicketCategory( ticketCategory.getLabel(  ) );
@@ -336,11 +343,11 @@ public class TicketXPage extends MVCApplication
 
         _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );
 
-        if( !bIsFormValid  && getActionTypeFromSession( request.getSession(  ) ).equals( ACTION_CREATE_TICKET  ) ) 
+        if ( !bIsFormValid && getActionTypeFromSession( request.getSession(  ) ).equals( ACTION_CREATE_TICKET ) )
         {
             return redirectView( request, VIEW_CREATE_TICKET );
-        } 
-        else 
+        }
+        else
         {
             return redirectView( request, VIEW_RECAP_TICKET );
         }
@@ -413,27 +420,27 @@ public class TicketXPage extends MVCApplication
     {
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         String strResetResponse = request.getParameter( PARAMETER_RESET_RESPONSE );
-        String strDisplayFront =  request.getParameter( PARAMETER_DISPLAY_FRONT );
+        String strDisplayFront = request.getParameter( PARAMETER_DISPLAY_FRONT );
         boolean bDisplayFront = false;
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
 
-        if( StringUtils.isNotEmpty( strResetResponse ) 
-                && strResetResponse.equalsIgnoreCase( Boolean.TRUE.toString( ) )
-                )
-         {
-            TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
-            if ( ticket != null ) 
-            {
-                ticket.setListResponse( new ArrayList <Response> () );
-            }
-         }
-        if( StringUtils.isNotEmpty( strDisplayFront ) 
-                && strDisplayFront.equalsIgnoreCase( Boolean.TRUE.toString( ) )
-                )
+        if ( StringUtils.isNotEmpty( strResetResponse ) &&
+                strResetResponse.equalsIgnoreCase( Boolean.TRUE.toString(  ) ) )
         {
-            bDisplayFront = true ;
+            TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
+
+            if ( ticket != null )
+            {
+                ticket.setListResponse( new ArrayList<Response>(  ) );
+            }
         }
-        
+
+        if ( StringUtils.isNotEmpty( strDisplayFront ) &&
+                strDisplayFront.equalsIgnoreCase( Boolean.TRUE.toString(  ) ) )
+        {
+            bDisplayFront = true;
+        }
+
         Map<String, Object> model = getModel(  );
 
         if ( !StringUtils.isEmpty( strIdCategory ) && StringUtils.isNumeric( strIdCategory ) )
@@ -489,5 +496,4 @@ public class TicketXPage extends MVCApplication
     {
         session.removeAttribute( SESSION_ACTION_TYPE );
     }
-
 }

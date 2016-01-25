@@ -33,42 +33,42 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.util.ReferenceList;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.util.ReferenceList;
-
 /**
- * 
+ *
  * @author s267533
  * this enum represents support level
  */
-public enum SupportLevel 
-{
-    LEVEL1( 1 ),
+public enum SupportLevel
+{LEVEL1( 1 ),
     LEVEL2( 2 ),
     LEVEL3( 3 );
 
     private static final String MESSAGE_PREFIX = "ticketing.supportentity.level";
-    private static Map<Integer, SupportLevel> _mapSupportLevel = new HashMap<Integer, SupportLevel> ();
-    static 
+    private static Map<Integer,SupportLevel> _mapSupportLevel = new HashMap<Integer,SupportLevel>(  );
+
+    static
     {
-        for ( SupportLevel enumSupportLevel : EnumSet.allOf( SupportLevel.class ) ) 
+        for ( SupportLevel enumSupportLevel : EnumSet.allOf( SupportLevel.class ) )
         {
             _mapSupportLevel.put( enumSupportLevel._nLevelValue, enumSupportLevel );
         }
     }
-    
+
     private int _nLevelValue;
-    
+
     /**
      * enum constructor
-     * @param nLevelValue level value 
+     * @param nLevelValue level value
      */
-    SupportLevel ( int nLevelValue ) 
+    SupportLevel( int nLevelValue )
     {
         _nLevelValue = nLevelValue;
     }
@@ -77,21 +77,21 @@ public enum SupportLevel
      * returns level value
      * @return levelValue
      */
-    public int getLevelValue()
+    public int getLevelValue(  )
     {
         return _nLevelValue;
     }
-    
+
     /**
      * returns SupportLevel enum for level value
      * @param nLevelValue level value
      * @return SupportLevel enum
      */
-    public static SupportLevel valueOf( int nLevelValue ) 
+    public static SupportLevel valueOf( int nLevelValue )
     {
         return _mapSupportLevel.get( Integer.valueOf( nLevelValue ) );
     }
-    
+
     /**
      * returns level label
      * @param locale the locale used to retrieve the localized messages
@@ -99,9 +99,9 @@ public enum SupportLevel
      */
     public String getLocalizedMessage( Locale locale )
     {
-        return I18nService.getLocalizedString( MESSAGE_PREFIX+_nLevelValue, locale );
+        return I18nService.getLocalizedString( MESSAGE_PREFIX + _nLevelValue, locale );
     }
-    
+
     /**
      * Builds a RefenrenceList object containing all the SupportLevel objects
      * @param locale the locale used to retrieve the localized messages
@@ -109,12 +109,13 @@ public enum SupportLevel
      */
     public static ReferenceList getReferenceList( Locale locale )
     {
-        ReferenceList refListLevel = new ReferenceList( );
-        for ( SupportLevel supportLevel : SupportLevel.values( ) ) 
+        ReferenceList refListLevel = new ReferenceList(  );
+
+        for ( SupportLevel supportLevel : SupportLevel.values(  ) )
         {
-            refListLevel.addItem( supportLevel.getLevelValue( ), supportLevel.getLocalizedMessage( locale ) );  
+            refListLevel.addItem( supportLevel.getLevelValue(  ), supportLevel.getLocalizedMessage( locale ) );
         }
+
         return refListLevel;
     }
 }
-  

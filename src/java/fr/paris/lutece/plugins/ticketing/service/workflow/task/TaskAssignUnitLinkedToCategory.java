@@ -43,12 +43,13 @@ import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
 import fr.paris.lutece.plugins.workflowcore.service.task.SimpleTask;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.Locale;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -74,7 +75,9 @@ public class TaskAssignUnitLinkedToCategory extends SimpleTask
             if ( ticket != null )
             {
                 AssigneeUnit assigneeUnit = ticket.getAssigneeUnit(  );
-                Unit unit = UnitHome.findByPrimaryKey( TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) ).getIdUnit(  ) );
+                Unit unit = UnitHome.findByPrimaryKey( TicketCategoryHome.findByPrimaryKey( 
+                            ticket.getIdTicketCategory(  ) ).getIdUnit(  ) );
+
                 if ( unit != null )
                 {
                     assigneeUnit.setUnitId( unit.getIdUnit(  ) );
@@ -91,5 +94,4 @@ public class TaskAssignUnitLinkedToCategory extends SimpleTask
     {
         return StringUtils.EMPTY;
     }
-
 }

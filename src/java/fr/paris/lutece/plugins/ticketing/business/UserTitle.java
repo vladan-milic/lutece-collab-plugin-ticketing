@@ -33,12 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotEmpty;
-
 
 
 /**
@@ -89,5 +88,4 @@ public class UserTitle implements Serializable
     {
         _strLabel = strLabel;
     }
-
 }

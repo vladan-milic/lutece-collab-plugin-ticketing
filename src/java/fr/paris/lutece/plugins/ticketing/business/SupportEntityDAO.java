@@ -33,15 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -53,10 +53,10 @@ public final class SupportEntityDAO implements ISupportEntityDAO
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_support_entity ) FROM ticketing_support_entity";
     private static final String SQL_QUERY_SELECT = "SELECT a.id_support_entity, a.name, a.level, a.id_unit, a.id_admin_user, a.id_domain  FROM ticketing_support_entity a " +
         " WHERE a.id_support_entity = ? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_support_entity ( id_support_entity, name, level, id_unit, id_admin_user, id_domain ) VALUES ( ?, ?, ?, ?, ?, ? ) " ;
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_support_entity ( id_support_entity, name, level, id_unit, id_admin_user, id_domain ) VALUES ( ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_support_entity  WHERE id_support_entity = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_support_entity SET id_support_entity = ?,  name = ?, level = ?, id_unit = ?, id_admin_user = ?, id_domain = ?  WHERE id_support_entity = ?" ;
-    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_support_entity, a.name, a.level, a.id_unit, a.id_admin_user, a.id_domain  FROM ticketing_support_entity a " ;
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_support_entity SET id_support_entity = ?,  name = ?, level = ?, id_unit = ?, id_admin_user = ?, id_domain = ?  WHERE id_support_entity = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_support_entity, a.name, a.level, a.id_unit, a.id_admin_user, a.id_domain  FROM ticketing_support_entity a ";
 
     /**
      * Generates a new primary key
@@ -90,11 +90,12 @@ public final class SupportEntityDAO implements ISupportEntityDAO
 
         supportEntity.setId( newPrimaryKey( plugin ) );
         daoUtil.setInt( 1, supportEntity.getId(  ) );
-        daoUtil.setString( 2, supportEntity.getName( ) );
-        daoUtil.setInt( 3, supportEntity.getSupportLevel( ).getLevelValue( ) );
-        daoUtil.setInt( 4, supportEntity.getUnit( ) != null ? supportEntity.getUnit( ).getUnitId( ) : -1 );
-        daoUtil.setInt( 5, supportEntity.getUser( ) != null ? supportEntity.getUser( ).getAdminUserId( ) : -1 );
-        daoUtil.setInt( 6, supportEntity.getTicketDomain( ) != null ? supportEntity.getTicketDomain( ).getId( ) : -1 );
+        daoUtil.setString( 2, supportEntity.getName(  ) );
+        daoUtil.setInt( 3, supportEntity.getSupportLevel(  ).getLevelValue(  ) );
+        daoUtil.setInt( 4, ( supportEntity.getUnit(  ) != null ) ? supportEntity.getUnit(  ).getUnitId(  ) : ( -1 ) );
+        daoUtil.setInt( 5, ( supportEntity.getUser(  ) != null ) ? supportEntity.getUser(  ).getAdminUserId(  ) : ( -1 ) );
+        daoUtil.setInt( 6,
+            ( supportEntity.getTicketDomain(  ) != null ) ? supportEntity.getTicketDomain(  ).getId(  ) : ( -1 ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -142,11 +143,12 @@ public final class SupportEntityDAO implements ISupportEntityDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
         daoUtil.setInt( 1, supportEntity.getId(  ) );
-        daoUtil.setString( 2, supportEntity.getName( ) );
-        daoUtil.setInt( 3, supportEntity.getSupportLevel( ).getLevelValue( ) );
-        daoUtil.setInt( 4, supportEntity.getUnit( ) != null ? supportEntity.getUnit( ).getUnitId( ) : -1 );
-        daoUtil.setInt( 5, supportEntity.getUser( ) != null ? supportEntity.getUser( ).getAdminUserId( ) : -1 );
-        daoUtil.setInt( 6, supportEntity.getTicketDomain( ) != null ? supportEntity.getTicketDomain() .getId( ) : -1 );
+        daoUtil.setString( 2, supportEntity.getName(  ) );
+        daoUtil.setInt( 3, supportEntity.getSupportLevel(  ).getLevelValue(  ) );
+        daoUtil.setInt( 4, ( supportEntity.getUnit(  ) != null ) ? supportEntity.getUnit(  ).getUnitId(  ) : ( -1 ) );
+        daoUtil.setInt( 5, ( supportEntity.getUser(  ) != null ) ? supportEntity.getUser(  ).getAdminUserId(  ) : ( -1 ) );
+        daoUtil.setInt( 6,
+            ( supportEntity.getTicketDomain(  ) != null ) ? supportEntity.getTicketDomain(  ).getId(  ) : ( -1 ) );
         daoUtil.setInt( 7, supportEntity.getId(  ) );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -170,38 +172,42 @@ public final class SupportEntityDAO implements ISupportEntityDAO
 
         daoUtil.free(  );
 
-        return supportEntityList ;
+        return supportEntityList;
     }
-    
+
     /**
      * get SupportEntity from daoUtil
      * @param daoUtil daoUtil
      * @return SupportEntity instance load from daoUtil object
      */
-    private SupportEntity getSupportEntity( DAOUtil daoUtil ) 
+    private SupportEntity getSupportEntity( DAOUtil daoUtil )
     {
         SupportEntity supportEntity = new SupportEntity(  );
-        supportEntity.setId(  daoUtil.getInt( 1 ) );
+        supportEntity.setId( daoUtil.getInt( 1 ) );
         supportEntity.setName( daoUtil.getString( 2 ) );
         supportEntity.setSupportLevel( SupportLevel.valueOf( daoUtil.getInt( 3 ) ) );
 
-        Unit unit = UnitHome.findByPrimaryKey( daoUtil.getInt( 4 ) ); 
+        Unit unit = UnitHome.findByPrimaryKey( daoUtil.getInt( 4 ) );
+
         if ( unit != null )
         {
             supportEntity.setUnit( new AssigneeUnit( unit ) );
         }
-        
-        AdminUser adminUser = AdminUserHome.findByPrimaryKey( daoUtil.getInt( 5 ) ) ; 
-        if ( adminUser != null ) 
+
+        AdminUser adminUser = AdminUserHome.findByPrimaryKey( daoUtil.getInt( 5 ) );
+
+        if ( adminUser != null )
         {
             supportEntity.setUser( new AssigneeUser( adminUser ) );
-        }        
+        }
 
         TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( daoUtil.getInt( 6 ) );
+
         if ( ticketDomain != null )
         {
             supportEntity.setTicketDomain( ticketDomain );
         }
+
         return supportEntity;
     }
 }

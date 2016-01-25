@@ -96,7 +96,7 @@ public abstract class ManageAdminTicketingJspBean extends MVCAdminJspBean
 
         return model;
     }
-    
+
     /**
      * Load the data of all the unit objects and returns them in form of a collection
      *
@@ -104,7 +104,7 @@ public abstract class ManageAdminTicketingJspBean extends MVCAdminJspBean
      */
     protected static ReferenceList getUnitsList(  )
     {
-        List<Unit> lstUnits = UnitHome.findAll( );
+        List<Unit> lstUnits = UnitHome.findAll(  );
         ReferenceList lstRef = new ReferenceList( lstUnits.size(  ) );
 
         for ( Unit unit : lstUnits )
@@ -114,5 +114,4 @@ public abstract class ManageAdminTicketingJspBean extends MVCAdminJspBean
 
         return lstRef;
     }
-    
 }

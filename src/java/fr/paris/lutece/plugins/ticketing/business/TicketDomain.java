@@ -33,26 +33,24 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import java.io.Serializable;
-
-import javax.validation.constraints.Size;
+import fr.paris.lutece.portal.service.rbac.RBACResource;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import fr.paris.lutece.portal.service.rbac.RBACResource;
+import java.io.Serializable;
 
+import javax.validation.constraints.Size;
 
 
 /**
  * This is the business class for the object TicketDomain
  */
-public class TicketDomain implements Serializable,  RBACResource
+public class TicketDomain implements Serializable, RBACResource
 {
     // RBAC management
     public static final String RESOURCE_TYPE = "TICKET_DOMAIN";
- 
     private static final long serialVersionUID = 1L;
-   
+
     // Variables declarations 
     private int _nId;
     private int _nIdTicketType;
@@ -144,5 +142,4 @@ public class TicketDomain implements Serializable,  RBACResource
     {
         return RESOURCE_TYPE;
     }
-
 }

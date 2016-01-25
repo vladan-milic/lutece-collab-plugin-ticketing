@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.ticketing.business;
 
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,6 @@ import java.util.List;
  */
 public class ResponseRecap implements Serializable
 {
-
     /**
      * The resource type of responses
      */
@@ -57,12 +57,12 @@ public class ResponseRecap implements Serializable
      */
     public ResponseRecap(  )
     {
-        _listValues = new ArrayList<String>( );
+        _listValues = new ArrayList<String>(  );
     }
 
     /**
      * Set the response title
-     * 
+     *
      * @param strTitle
      *            the response title
      */
@@ -73,27 +73,27 @@ public class ResponseRecap implements Serializable
 
     /**
      * Get the response title
-     * 
+     *
      * @return the response title
      */
-    public String getTitle( )
+    public String getTitle(  )
     {
         return _strTitle;
     }
 
     /**
      * Get the list of values of this response
-     * 
+     *
      * @return the list of value of this response
      */
-    public List<String> getListValues( )
+    public List<String> getListValues(  )
     {
         return _listValues;
     }
 
     /**
      * Set the list of values of this response
-     * 
+     *
      * @param listValues
      *            The list of values
      */
@@ -104,7 +104,7 @@ public class ResponseRecap implements Serializable
 
     /**
      * Add a value in the list of values of this response
-     * 
+     *
      * @param value
      *            value to add
      */
@@ -115,24 +115,26 @@ public class ResponseRecap implements Serializable
 
     /**
      * Get the list of values of this response into a string separated by comma
-     * 
+     *
      * @return the list of value of this response into a string separated by comma
      */
-    public String getValuesToString( )
+    public String getValuesToString(  )
     {
         StringBuilder bufferValues = new StringBuilder(  );
-        if ( this._listValues != null && this._listValues.size( ) > 0 )
+
+        if ( ( this._listValues != null ) && ( this._listValues.size(  ) > 0 ) )
         {
             int i = 0;
-            while ( i < this._listValues.size( )-1 ) 
+
+            while ( i < ( this._listValues.size(  ) - 1 ) )
             {
                 bufferValues.append( this._listValues.get( i ) ).append( STRING_LIST_SEPARATOR );
                 i++;
             }
+
             bufferValues.append( this._listValues.get( i ) );
         }
 
-        return bufferValues.toString( );
+        return bufferValues.toString(  );
     }
-
 }

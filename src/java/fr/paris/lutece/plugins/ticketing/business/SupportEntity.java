@@ -33,13 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import fr.paris.lutece.portal.service.rbac.RBACResource;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import fr.paris.lutece.portal.service.rbac.RBACResource;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 /**
@@ -49,18 +48,17 @@ public class SupportEntity implements RBACResource
 {
     // RBAC management
     public static final String RESOURCE_TYPE = "SUPPORT_ENTITY";
-    
+
     // Variables declarations 
     private int _nId;
     private AssigneeUser _user;
-    @NotNull ( message = "#i18n{ticketing.validation.supportentity.unit.notNull}" )
+    @NotNull( message = "#i18n{ticketing.validation.supportentity.unit.notNull}" )
     private AssigneeUnit _unit;
     private TicketDomain _ticketDomain;
     @NotEmpty( message = "#i18n{ticketing.validation.supportentity.name.notEmpty}" )
-    @Size ( max = 50, message = "#i18n{ticketing.validation.supportentity.name.size}" )
+    @Size( max = 50, message = "#i18n{ticketing.validation.supportentity.name.size}" )
     private String _strName;
     private SupportLevel _supportLevel;
-
 
     /**
      * Returns the Id
@@ -79,11 +77,11 @@ public class SupportEntity implements RBACResource
     {
         _nId = nId;
     }
-    
+
     /**
      * @return the _user
      */
-    public AssigneeUser getUser()
+    public AssigneeUser getUser(  )
     {
         return _user;
     }
@@ -99,7 +97,7 @@ public class SupportEntity implements RBACResource
     /**
      * @return the _unit
      */
-    public AssigneeUnit getUnit()
+    public AssigneeUnit getUnit(  )
     {
         return _unit;
     }
@@ -115,7 +113,7 @@ public class SupportEntity implements RBACResource
     /**
      * @return the ticketDomain
      */
-    public TicketDomain getTicketDomain()
+    public TicketDomain getTicketDomain(  )
     {
         return _ticketDomain;
     }
@@ -131,7 +129,7 @@ public class SupportEntity implements RBACResource
     /**
      * @return the supportLevel
      */
-    public SupportLevel getSupportLevel()
+    public SupportLevel getSupportLevel(  )
     {
         return _supportLevel;
     }

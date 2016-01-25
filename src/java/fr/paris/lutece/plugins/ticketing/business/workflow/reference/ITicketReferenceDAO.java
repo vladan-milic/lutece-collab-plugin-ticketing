@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.workflow.reference;
 
+
 /**
  * Interface to access the ticket reference
  *

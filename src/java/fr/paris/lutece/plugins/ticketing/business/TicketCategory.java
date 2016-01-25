@@ -239,5 +239,4 @@ public class TicketCategory implements Serializable
     {
         _nIdUnit = nIdUnit;
     }
-
 }

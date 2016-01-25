@@ -33,13 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.ticketing.business.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.SupportEntity;
 import fr.paris.lutece.plugins.ticketing.business.SupportEntityHome;
@@ -54,6 +47,13 @@ import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.url.UrlItem;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -75,7 +75,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     private static final String PARAMETER_ID_TICKET_DOMAIN = "id_ticket_domain";
     private static final String PARAMETER_ID_UNIT = "id_unit";
     private static final String PARAMETER_LEVEL = "level";
-    
+
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_SUPPORT_ENTITIES = "ticketing.manage_supportentities.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_SUPPORT_ENTITY = "ticketing.modify_supportentity.pageTitle";
@@ -87,8 +87,6 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_UNIT_LIST = "unit_list";
     private static final String MARK_LEVEL_LIST = "level_list";
-    
-    
     private static final String JSP_MANAGE_SUPPORT_ENTITIES = "jsp/admin/plugins/ticketing/ManageSupportEntities.jsp";
 
     // Properties
@@ -115,8 +113,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
 
     // Session variable to store working values
     private SupportEntity _supportEntity;
-    
-    
+
     /**
      * Build the Manage View
      * @param request The HTTP request
@@ -127,7 +124,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     {
         _supportEntity = null;
 
-        List<SupportEntity> listSupportEntities = (List<SupportEntity>) SupportEntityHome.getSupportEntityList( );
+        List<SupportEntity> listSupportEntities = (List<SupportEntity>) SupportEntityHome.getSupportEntityList(  );
         Map<String, Object> model = getPaginatedListModel( request, MARK_SUPPORT_ENTITY_LIST, listSupportEntities,
                 JSP_MANAGE_SUPPORT_ENTITIES );
 
@@ -144,12 +141,12 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     public String getCreateSupportEntity( HttpServletRequest request )
     {
         _supportEntity = ( _supportEntity != null ) ? _supportEntity : new SupportEntity(  );
-        
+
         Map<String, Object> model = getModel(  );
         model.put( MARK_SUPPORT_ENTITY, _supportEntity );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
-        model.put( MARK_LEVEL_LIST, SupportLevel.getReferenceList( request.getLocale( ) ) );
-        model.put( MARK_UNIT_LIST, getUnitsList( ) );
+        model.put( MARK_LEVEL_LIST, SupportLevel.getReferenceList( request.getLocale(  ) ) );
+        model.put( MARK_UNIT_LIST, getUnitsList(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_SUPPORT_ENTITY, TEMPLATE_CREATE_SUPPORT_ENTITY, model );
     }
@@ -170,10 +167,11 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
         {
             return redirectView( request, VIEW_CREATE_SUPPORT_ENTITY );
         }
-        
+
         SupportEntityHome.create( _supportEntity );
         addInfo( INFO_SUPPORT_ENTITY_CREATED, getLocale(  ) );
-        _supportEntity = null ;
+        _supportEntity = null;
+
         return redirectView( request, VIEW_MANAGE_SUPPORT_ENTITIES );
     }
 
@@ -181,30 +179,35 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     protected void populate( Object bean, HttpServletRequest request )
     {
         super.populate( bean, request );
+
         String strIdDomain = request.getParameter( PARAMETER_ID_TICKET_DOMAIN );
-        if ( StringUtils.isNotEmpty( strIdDomain ) && StringUtils.isNumeric( strIdDomain ) ) 
+
+        if ( StringUtils.isNotEmpty( strIdDomain ) && StringUtils.isNumeric( strIdDomain ) )
         {
             TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( Integer.parseInt( strIdDomain ) );
             _supportEntity.setTicketDomain( ticketDomain );
         }
-        
+
         String strIdUnit = request.getParameter( PARAMETER_ID_UNIT );
-        if ( StringUtils.isNotEmpty( strIdUnit ) && StringUtils.isNumeric( strIdUnit ) ) 
+
+        if ( StringUtils.isNotEmpty( strIdUnit ) && StringUtils.isNumeric( strIdUnit ) )
         {
             Unit unit = UnitHome.findByPrimaryKey( Integer.parseInt( strIdUnit ) );
+
             if ( unit != null )
             {
                 _supportEntity.setUnit( new AssigneeUnit( unit ) );
             }
         }
+
         String strLevel = request.getParameter( PARAMETER_LEVEL );
-        if ( StringUtils.isNotEmpty( strLevel ) && StringUtils.isNumeric( strLevel ) ) 
+
+        if ( StringUtils.isNotEmpty( strLevel ) && StringUtils.isNumeric( strLevel ) )
         {
-            _supportEntity.setSupportLevel( SupportLevel.valueOf( Integer.parseInt( strLevel  ) ) );
+            _supportEntity.setSupportLevel( SupportLevel.valueOf( Integer.parseInt( strLevel ) ) );
         }
-        
     }
-    
+
     /**
      * Manages the removal form of a supportentity whose identifier is in the http
      * request
@@ -260,10 +263,9 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
         Map<String, Object> model = getModel(  );
         model.put( MARK_SUPPORT_ENTITY, _supportEntity );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
-        model.put( MARK_LEVEL_LIST, SupportLevel.getReferenceList( request.getLocale( ) ) );
-        model.put( MARK_UNIT_LIST, getUnitsList( ) );
-        
-        
+        model.put( MARK_LEVEL_LIST, SupportLevel.getReferenceList( request.getLocale(  ) ) );
+        model.put( MARK_UNIT_LIST, getUnitsList(  ) );
+
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_SUPPORT_ENTITY, TEMPLATE_MODIFY_SUPPORT_ENTITY, model );
     }
 

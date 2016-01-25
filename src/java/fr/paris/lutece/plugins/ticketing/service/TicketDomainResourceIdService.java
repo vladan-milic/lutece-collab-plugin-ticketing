@@ -33,9 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
-import java.util.List;
-import java.util.Locale;
-
 import fr.paris.lutece.plugins.ticketing.business.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.portal.service.rbac.Permission;
@@ -43,6 +40,9 @@ import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
 import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
 import fr.paris.lutece.util.ReferenceList;
+
+import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -52,14 +52,10 @@ import fr.paris.lutece.util.ReferenceList;
  */
 public class TicketDomainResourceIdService extends ResourceIdService
 {
-
     /** Permission for viewing a ticket domain */
     public static final String PERMISSION_VIEW = "VIEW";
-
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "ticketing.ticketdomain.resourceType";
     private static final String PROPERTY_LABEL_VIEW = "ticketing.ticketdomain.permission.label.view";
-    
-
 
     /**
      * Constructor
@@ -85,7 +81,6 @@ public class TicketDomainResourceIdService extends ResourceIdService
         p.setPermissionTitleKey( PROPERTY_LABEL_VIEW );
         rt.registerPermission( p );
 
-
         ResourceTypeManager.registerResourceType( rt );
     }
 
@@ -97,6 +92,7 @@ public class TicketDomainResourceIdService extends ResourceIdService
     public ReferenceList getResourceIdList( Locale locale )
     {
         List<TicketDomain> listTicketDomain = TicketDomainHome.getTicketDomainsList(  );
+
         return ReferenceList.convert( listTicketDomain, "id", "label", true );
     }
 
@@ -106,6 +102,7 @@ public class TicketDomainResourceIdService extends ResourceIdService
     public String getTitle( String strId, Locale locale )
     {
         TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( Integer.parseInt( strId ) );
+
         return ticketDomain.getLabel(  );
     }
 }

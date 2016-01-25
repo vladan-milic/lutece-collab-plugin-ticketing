@@ -162,7 +162,7 @@ public final class TicketFormCacheService extends AbstractCacheableService
     {
         return CACHE_KEY_TICKET_CONTACT_MODE + nIdContactMode;
     }
-    
+
     /**
      * {@inheritDoc}
      */

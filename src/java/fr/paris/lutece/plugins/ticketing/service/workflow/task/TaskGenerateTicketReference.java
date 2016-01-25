@@ -47,6 +47,7 @@ import javax.inject.Inject;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 /**
  * This class represents a task to generate the ticket reference
  *

@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 
 import java.util.Date;
 
+
 /**
  * This class manages ticket reference in the following format : <prefix><date><sequence>
  *

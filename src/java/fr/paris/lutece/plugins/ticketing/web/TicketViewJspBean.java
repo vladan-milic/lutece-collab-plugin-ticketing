@@ -43,9 +43,12 @@ import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+
 import java.util.Locale;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * TicketViewJspBean
@@ -55,20 +58,16 @@ public class TicketViewJspBean extends MVCAdminJspBean
 {
     private static final String TEMPLATE_VIEW_TICKET_DETAILS = "/admin/plugins/ticketing/ticket/view_ticket_details.html";
     private static final String TEMPLATE_VIEW_TICKET_HISTORY = "/admin/plugins/ticketing/ticket/view_ticket_history.html";
-
     private static final String MARK_TICKET = "ticket";
     private static final String MARK_PRIORITY = "priority";
     private static final String MARK_CRITICALITY = "criticality";
     private static final String MARK_HISTORY = "history";
-    
     private static final String PARAMETER_ID_TICKET = "id";
-
     private static final String PROPERTY_PAGE_TITLE_TICKET_DETAILS = "ticketing.view_ticket.pageTitle";
-            
     private static final String VIEW_DETAILS = "ticketDetails";
     private static final String VIEW_HISTORY = "ticketHistory";
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * Gets the Details tab of the Ticket View
      * @param request The HTTP request
@@ -78,19 +77,18 @@ public class TicketViewJspBean extends MVCAdminJspBean
     public String getTicketDetails( HttpServletRequest request )
     {
         String strIdTicket = request.getParameter( PARAMETER_ID_TICKET );
-        int nIdTicket = Integer.parseInt(strIdTicket);
-        
-        Ticket ticket = TicketHome.findByPrimaryKey(nIdTicket);
-        
-        Map<String, Object> model = getModel();
-        model.put( MARK_TICKET , ticket );
-        model.put( MARK_PRIORITY, TicketingUtils.getPriority( ticket, getLocale() ));
-        model.put( MARK_CRITICALITY, TicketingUtils.getCriticality( ticket, getLocale() ));
-        
-        return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS,  TEMPLATE_VIEW_TICKET_DETAILS , model );
-   
+        int nIdTicket = Integer.parseInt( strIdTicket );
+
+        Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
+
+        Map<String, Object> model = getModel(  );
+        model.put( MARK_TICKET, ticket );
+        model.put( MARK_PRIORITY, TicketingUtils.getPriority( ticket, getLocale(  ) ) );
+        model.put( MARK_CRITICALITY, TicketingUtils.getCriticality( ticket, getLocale(  ) ) );
+
+        return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS, TEMPLATE_VIEW_TICKET_DETAILS, model );
     }
-    
+
     /**
      * Gets the History tab of the Ticket View
      * @param request The HTTP request
@@ -100,19 +98,18 @@ public class TicketViewJspBean extends MVCAdminJspBean
     public String getTicketHistory( HttpServletRequest request )
     {
         String strIdTicket = request.getParameter( PARAMETER_ID_TICKET );
-        int nIdTicket = Integer.parseInt(strIdTicket);
-        
-        Ticket ticket = TicketHome.findByPrimaryKey(nIdTicket);
-        TicketCategory category = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory() );
-        int nWorkflowId = category.getIdWorkflow();
-        String strHistory = WorkflowService.getInstance().getDisplayDocumentHistory( ticket.getId() , Ticket.TICKET_RESOURCE_TYPE , nWorkflowId, request, getLocale());
-        Map<String, Object> model = getModel();
-        model.put( MARK_TICKET , ticket );
-        model.put( MARK_HISTORY , strHistory );
-        
-        return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS,  TEMPLATE_VIEW_TICKET_HISTORY , model );
-   
-    }
-    
+        int nIdTicket = Integer.parseInt( strIdTicket );
 
+        Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
+        TicketCategory category = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+        int nWorkflowId = category.getIdWorkflow(  );
+        String strHistory = WorkflowService.getInstance(  )
+                                           .getDisplayDocumentHistory( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE,
+                nWorkflowId, request, getLocale(  ) );
+        Map<String, Object> model = getModel(  );
+        model.put( MARK_TICKET, ticket );
+        model.put( MARK_HISTORY, strHistory );
+
+        return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS, TEMPLATE_VIEW_TICKET_HISTORY, model );
+    }
 }

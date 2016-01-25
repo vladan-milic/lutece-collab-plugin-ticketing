@@ -452,40 +452,42 @@ public class TicketFormService implements Serializable
     /**
      * Get list of response from the list of generic attributs response
      * listResponse of the current ticket for the recap_ticket view
-     * 
+     *
      * @param listResponse
      *            The listReponse of the ticket
      * @return list of ResponseRecap.
      */
     public List<ResponseRecap> getListResponseRecap( List<Response> listResponse )
     {
-        Map<Integer, ResponseRecap> mapResponseRecap = new TreeMap<Integer, ResponseRecap>( );
-        if ( listResponse != null ) 
+        Map<Integer, ResponseRecap> mapResponseRecap = new TreeMap<Integer, ResponseRecap>(  );
+
+        if ( listResponse != null )
         {
             for ( Response response : listResponse )
             {
-                ResponseRecap responseRecap = mapResponseRecap.get( new Integer( response.getEntry( )
-                        .getIdEntry( ) ) );
+                ResponseRecap responseRecap = mapResponseRecap.get( new Integer( response.getEntry(  ).getIdEntry(  ) ) );
+
                 if ( responseRecap == null )
                 {
-                    responseRecap = new ResponseRecap( );
-                    responseRecap.setTitle( response.getEntry( ).getTitle( ) );
+                    responseRecap = new ResponseRecap(  );
+                    responseRecap.setTitle( response.getEntry(  ).getTitle(  ) );
                 }
-                if ( response.getField( ) != null )
+
+                if ( response.getField(  ) != null )
                 {
-                    responseRecap.addValue( response.getField( ).getTitle( ) );
+                    responseRecap.addValue( response.getField(  ).getTitle(  ) );
                 }
                 else
                 {
-                    if ( response.getFile( ) != null )
+                    if ( response.getFile(  ) != null )
                     {
-                        responseRecap.addValue( response.getFile( ).getTitle( ) );
+                        responseRecap.addValue( response.getFile(  ).getTitle(  ) );
                     }
                     else
                     {
-                        if ( response.getResponseValue( ) != null )
+                        if ( response.getResponseValue(  ) != null )
                         {
-                            responseRecap.addValue( response.getResponseValue( ) );
+                            responseRecap.addValue( response.getResponseValue(  ) );
                         }
                         else
                         {
@@ -493,18 +495,19 @@ public class TicketFormService implements Serializable
                         }
                     }
                 }
-                mapResponseRecap.put( new Integer( response.getEntry( ).getIdEntry( ) ), responseRecap );
+
+                mapResponseRecap.put( new Integer( response.getEntry(  ).getIdEntry(  ) ), responseRecap );
             }
         }
-        List<ResponseRecap> listResponseRecap = new ArrayList<ResponseRecap>(
-                mapResponseRecap.values( ) );
+
+        List<ResponseRecap> listResponseRecap = new ArrayList<ResponseRecap>( mapResponseRecap.values(  ) );
 
         return listResponseRecap;
     }
 
     /**
      * Save an ticketing in the session of the user
-     * 
+     *
      * @param session
      *            The session
      * @param ticket

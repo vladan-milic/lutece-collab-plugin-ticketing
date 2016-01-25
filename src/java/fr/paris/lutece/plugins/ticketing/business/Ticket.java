@@ -42,7 +42,9 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
+
 import java.sql.Timestamp;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -56,7 +58,6 @@ import javax.validation.constraints.Size;
 public class Ticket implements Serializable, RBACResource
 {
     public static final String TICKET_RESOURCE_TYPE = "ticket";
-    
     private static final long serialVersionUID = 1L;
     private static final String EMPTY = "";
 

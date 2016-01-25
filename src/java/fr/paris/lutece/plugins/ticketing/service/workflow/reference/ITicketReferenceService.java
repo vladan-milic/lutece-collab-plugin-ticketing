@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.ticketing.service.workflow.reference;
 
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 
+
 /**
  * Interface to manage ticket reference
  *

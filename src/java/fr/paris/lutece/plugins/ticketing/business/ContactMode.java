@@ -40,7 +40,6 @@ import java.io.Serializable;
 import javax.validation.constraints.Size;
 
 
-
 /**
  * This is the business class for the object ContactMode
  */
@@ -116,5 +115,4 @@ public class ContactMode implements Serializable
     {
         _strConfirmationMsg = strConfirmationMsg;
     }
-
 }
