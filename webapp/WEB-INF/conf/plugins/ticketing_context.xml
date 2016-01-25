@@ -59,4 +59,12 @@
         p:taskForAutomaticAction="false" />
     <bean id="ticketing.qualifyTicketTaskComponent" class="fr.paris.lutece.plugins.ticketing.web.workflow.QualifyTicketTaskComponent"
         p:taskType-ref="ticketing.taskTypeQualifyTicket" />
+
+    <!-- Task Assign Unit linked to Category -->
+    <bean id="ticketing.taskAssignUnitLinkedToCategory" class="fr.paris.lutece.plugins.ticketing.service.workflow.task.TaskAssignUnitLinkedToCategory" scope="prototype" />
+    <bean id="ticketing.taskTypeAssignUnitLinkedToCategory" class="fr.paris.lutece.plugins.workflowcore.business.task.TaskType"
+        p:key="taskTicketingAssignUnitLinkedToCategory"
+        p:titleI18nKey="ticketing.task_assign_unit_linked_to_category.title"
+        p:beanName="ticketing.taskAssignUnitLinkedToCategory"
+        p:taskForAutomaticAction="true" />        
 </beans>

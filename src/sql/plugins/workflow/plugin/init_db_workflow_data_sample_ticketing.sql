@@ -9,5 +9,6 @@ INSERT INTO workflow_action VALUES (302,'Qualifier','Qualifier',301,302,303,1,0,
 INSERT INTO workflow_action VALUES (303,'Requalifier','Requalifier',301,303,303,1,0,0,3,0);
 
 INSERT INTO workflow_task VALUES (301,'taskTicketingGenerateTicketReference',301,1);
-INSERT INTO workflow_task VALUES (302,'taskTicketingQualifyTicket',302,1);
-INSERT INTO workflow_task VALUES (303,'taskTicketingQualifyTicket',303,1);
+INSERT INTO workflow_task VALUES (302,'taskTicketingAssignUnitLinkedToCategory',301,2);
+INSERT INTO workflow_task VALUES (303,'taskTicketingQualifyTicket',302,1);
+INSERT INTO workflow_task VALUES (304,'taskTicketingQualifyTicket',303,1);
