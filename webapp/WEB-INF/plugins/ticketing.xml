@@ -54,7 +54,15 @@
             <application-class>fr.paris.lutece.plugins.ticketing.web.TicketXPage</application-class>
         </application>
     </applications>
-
+    
+    <!-- RBAC Resources -->
+    <rbac-resource-types>
+        <rbac-resource-type>
+            <rbac-resource-type-class>
+                fr.paris.lutece.plugins.ticketing.service.SupportEntityResourceIdService
+			</rbac-resource-type-class>
+        </rbac-resource-type>
+    </rbac-resource-types>
     <!-- Portlet parameters -->
     <portlets>
    </portlets>

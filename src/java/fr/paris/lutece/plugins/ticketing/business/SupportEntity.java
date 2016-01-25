@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -47,8 +45,11 @@ import fr.paris.lutece.portal.service.rbac.RBACResource;
 /**
  * SupportEntity
  */
-public class SupportEntity
+public class SupportEntity implements RBACResource
 {
+    // RBAC management
+    public static final String RESOURCE_TYPE = "SUPPORT_ENTITY";
+    
     // Variables declarations 
     private int _nId;
     private AssigneeUser _user;
@@ -159,5 +160,17 @@ public class SupportEntity
     public void setName( String strName )
     {
         _strName = strName;
+    }
+
+    @Override
+    public String getResourceId(  )
+    {
+        return String.valueOf( _nId );
+    }
+
+    @Override
+    public String getResourceTypeCode(  )
+    {
+        return RESOURCE_TYPE;
     }
 }
