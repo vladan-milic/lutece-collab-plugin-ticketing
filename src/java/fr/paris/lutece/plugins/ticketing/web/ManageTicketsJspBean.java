@@ -54,19 +54,25 @@ import fr.paris.lutece.plugins.ticketing.business.TicketFormHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
+import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
+import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
+import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
+import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -111,8 +117,12 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     public static final String RIGHT_MANAGETICKETS = "TICKETING_TICKETS_MANAGEMENT";
     private static final long serialVersionUID = 1L;
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
-    private static final String PARAMETER_PAGE_INDEX = "page_index";
-    private static final String MARK_PAGINATOR = "paginator";
+    private static final String PARAMETER_PAGE_INDEX_AGENT = "page_index_agent";
+    private static final String PARAMETER_PAGE_INDEX_GROUP = "page_index_group";
+    private static final String PARAMETER_PAGE_INDEX_DOMAIN = "page_index_domain";
+    private static final String MARK_PAGINATOR_AGENT = "paginator_agent";
+    private static final String MARK_PAGINATOR_GROUP = "paginator_group";
+    private static final String MARK_PAGINATOR_DOMAIN = "paginator_domain";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
     private static final String MARK_TICKET_ACTION = "ticket_action";
 
@@ -148,7 +158,9 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String PROPERTY_PAGE_TITLE_RECAP_TICKET = "ticketing.recap_ticket.pageTitle";
 
     // Markers
-    private static final String MARK_TICKET_LIST = "ticket_list";
+    private static final String MARK_TICKET_AGENT_LIST = "ticket_agent_list";
+    private static final String MARK_TICKET_GROUP_LIST = "ticket_group_list";
+    private static final String MARK_TICKET_DOMAIN_LIST = "ticket_domain_list";
     private static final String MARK_TICKET = "ticket";
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
@@ -196,7 +208,9 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
 
     //Variables
     private int _nDefaultItemsPerPage;
-    private String _strCurrentPageIndex;
+    private String _strCurrentPageAgentIndex;
+    private String _strCurrentPageGroupIndex;
+    private String _strCurrentPageDomainIndex;
     private int _nItemsPerPage;
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
 
@@ -225,7 +239,12 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         }
 
         List<Ticket> listTickets = (List<Ticket>) TicketHome.getTicketsList( filter );
-        _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
+        _strCurrentPageAgentIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX_AGENT,
+                _strCurrentPageAgentIndex );
+        _strCurrentPageGroupIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX_GROUP,
+                _strCurrentPageGroupIndex );
+        _strCurrentPageDomainIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX_DOMAIN,
+                _strCurrentPageDomainIndex );
         _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
         _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
                 _nDefaultItemsPerPage );
@@ -233,13 +252,76 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         UrlItem url = new UrlItem( JSP_MANAGE_TICKETS );
         String strUrl = url.getUrl(  );
 
-        // PAGINATOR
-        LocalizedPaginator<Ticket> paginator = new LocalizedPaginator<Ticket>( listTickets, _nItemsPerPage, strUrl,
-                PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
+        List<Ticket> listAgentTickets = new ArrayList<Ticket>(  );
+        List<Ticket> listGroupTickets = new ArrayList<Ticket>(  );
+        List<Ticket> listDomainTickets = new ArrayList<Ticket>(  );
 
-        if ( WorkflowService.getInstance(  ).isAvailable(  ) )
+        List<Unit> lstUserUnits = UnitHome.findByIdUser( getUser(  ).getUserId(  ) );
+
+        //Filtering results
+        for ( Ticket ticket : listTickets )
         {
-            for ( Ticket ticket : paginator.getPageItems(  ) )
+            if ( RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, getUser(  ) ) )
+            {
+                if ( ( ticket.getAssigneeUser(  ) != null ) &&
+                        ( ticket.getAssigneeUser(  ).getAdminUserId(  ) == getUser(  ).getUserId(  ) ) )
+                {
+                    //ticket assign to agent
+                    listAgentTickets.add( ticket );
+                }
+                else if ( isTicketAssignedToUserGroup( ticket, lstUserUnits ) )
+                {
+                    //ticket assign to agent group
+                    listGroupTickets.add( ticket );
+                }
+                else
+                {
+                    TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain(  ) );
+
+                    if ( RBACService.isAuthorized( ticketDomain, TicketDomainResourceIdService.PERMISSION_VIEW,
+                                getUser(  ) ) )
+                    {
+                        //ticket assign to domain
+                        listDomainTickets.add( ticket );
+                    }
+                }
+            }
+        }
+
+        // PAGINATORS
+        LocalizedPaginator<Ticket> paginatorAgentTickets = new LocalizedPaginator<Ticket>( listAgentTickets,
+                _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX_AGENT, _strCurrentPageAgentIndex, getLocale(  ) );
+        LocalizedPaginator<Ticket> paginatorGroupTickets = new LocalizedPaginator<Ticket>( listGroupTickets,
+                _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX_GROUP, _strCurrentPageGroupIndex, getLocale(  ) );
+        LocalizedPaginator<Ticket> paginatorDomainTickets = new LocalizedPaginator<Ticket>( listDomainTickets,
+                _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX_DOMAIN, _strCurrentPageDomainIndex, getLocale(  ) );
+
+        setWorkflowAttributes( paginatorAgentTickets );
+        setWorkflowAttributes( paginatorGroupTickets );
+        setWorkflowAttributes( paginatorDomainTickets );
+
+        Map<String, Object> model = getModel(  );
+        model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
+        model.put( MARK_TICKET_AGENT_LIST, paginatorAgentTickets.getPageItems(  ) );
+        model.put( MARK_TICKET_GROUP_LIST, paginatorGroupTickets.getPageItems(  ) );
+        model.put( MARK_TICKET_DOMAIN_LIST, paginatorDomainTickets.getPageItems(  ) );
+        model.put( MARK_PAGINATOR_AGENT, paginatorAgentTickets );
+        model.put( MARK_PAGINATOR_GROUP, paginatorGroupTickets );
+        model.put( MARK_PAGINATOR_DOMAIN, paginatorDomainTickets );
+        model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
+
+        return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
+    }
+
+    /**
+     * set workflow attributes for displayable tickets
+     * @param paginator paginator of tickets
+     */
+    private void setWorkflowAttributes( LocalizedPaginator<Ticket> paginator )
+    {
+        for ( Ticket ticket : paginator.getPageItems(  ) )
+        {
+            if ( WorkflowService.getInstance(  ).isAvailable(  ) )
             {
                 TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
                 int nIdWorkflow = ticketCategory.getIdWorkflow(  );
@@ -264,14 +346,29 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
                 }
             }
         }
+    }
 
-        Map<String, Object> model = getModel(  );
-        model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
-        model.put( MARK_PAGINATOR, paginator );
-        model.put( MARK_TICKET_LIST, paginator.getPageItems(  ) );
-        model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
+    /**
+     * returns true if ticket is assign to user's group
+     * @param ticket ticket
+     * @param lstUserUnits user's units
+     * @return true if ticket belongs to user's group
+     */
+    private boolean isTicketAssignedToUserGroup( Ticket ticket, List<Unit> lstUserUnits )
+    {
+        boolean result = false;
 
-        return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
+        for ( Unit unit : lstUserUnits )
+        {
+            if ( unit.getIdUnit(  ) == ticket.getAssigneeUnit(  ).getUnitId(  ) )
+            {
+                result = true;
+
+                break;
+            }
+        }
+
+        return result;
     }
 
     /**
