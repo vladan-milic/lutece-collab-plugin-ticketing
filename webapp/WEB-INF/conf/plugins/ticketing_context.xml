@@ -34,37 +34,5 @@
     <bean id="ticketing.entryTypeTextArea" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeTextArea" />
     <bean id="ticketing.entryTypeImage" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeImage" />
     <bean id="ticketing.entryTypeFile" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeFile" />
-    <bean id="ticketing.entryTypePhone" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypePhone" />  
-    
-    <!-- Task Generate ticket reference -->
-    <bean id="ticketing.ticketReferenceService" class="fr.paris.lutece.plugins.ticketing.service.workflow.reference.TicketReferencePrefixAndNumberService" >
-        <constructor-arg>
-            <bean class="fr.paris.lutece.plugins.ticketing.business.workflow.reference.TicketReferencePrefixAndNumberDAO" />
-        </constructor-arg>
-    </bean>
-    <bean id="ticketing.taskGenerateTicketReference" class="fr.paris.lutece.plugins.ticketing.service.workflow.task.TaskGenerateTicketReference" scope="prototype" />
-    <bean id="ticketing.taskTypeGenerateTicketReference" class="fr.paris.lutece.plugins.workflowcore.business.task.TaskType"
-        p:key="taskTicketingGenerateTicketReference"
-        p:titleI18nKey="ticketing.task_ticket_reference_generator.title"
-        p:beanName="ticketing.taskGenerateTicketReference"
-        p:taskForAutomaticAction="true" />
-    
-    <!-- Task Qualify ticket -->    
-    <bean id="ticketing.taskQualifyTicket" class="fr.paris.lutece.plugins.ticketing.service.workflow.task.TaskQualifyTicket" scope="prototype" />
-    <bean id="ticketing.taskTypeQualifyTicket" class="fr.paris.lutece.plugins.workflowcore.business.task.TaskType"
-        p:key="taskTicketingQualifyTicket"
-        p:titleI18nKey="ticketing.task_qualify_ticket.title"
-        p:beanName="ticketing.taskQualifyTicket"
-        p:formTaskRequired="true"
-        p:taskForAutomaticAction="false" />
-    <bean id="ticketing.qualifyTicketTaskComponent" class="fr.paris.lutece.plugins.ticketing.web.workflow.QualifyTicketTaskComponent"
-        p:taskType-ref="ticketing.taskTypeQualifyTicket" />
-
-    <!-- Task Assign Unit linked to Category -->
-    <bean id="ticketing.taskAssignUnitLinkedToCategory" class="fr.paris.lutece.plugins.ticketing.service.workflow.task.TaskAssignUnitLinkedToCategory" scope="prototype" />
-    <bean id="ticketing.taskTypeAssignUnitLinkedToCategory" class="fr.paris.lutece.plugins.workflowcore.business.task.TaskType"
-        p:key="taskTicketingAssignUnitLinkedToCategory"
-        p:titleI18nKey="ticketing.task_assign_unit_linked_to_category.title"
-        p:beanName="ticketing.taskAssignUnitLinkedToCategory"
-        p:taskForAutomaticAction="true" />        
+    <bean id="ticketing.entryTypePhone" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypePhone" />        
 </beans>
