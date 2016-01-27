@@ -66,7 +66,6 @@ public class TicketFilter
             "id_ticket_category", "email", "lastname", "firstname", "fixed_phone_number", "mobile_phone_number",
             "date_close",
         };
-    
     private int _nIdTicket = CONSTANT_ID_NULL;
     private Date _dateLastUpdateDate;
     private Date _dateLastUpdateStartDate;
@@ -665,10 +664,12 @@ public class TicketFilter
     {
         _strOrderSort = strOrderSort;
     }
+
     /**
-     * Sort order allowed 
+     * Sort order allowed
      */
     private enum OrderSortAllowed
-    {ASC,DESC;
+    {ASC,
+        DESC;
     }
 }
