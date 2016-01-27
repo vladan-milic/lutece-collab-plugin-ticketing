@@ -36,7 +36,10 @@ package fr.paris.lutece.plugins.ticketing.business;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.util.ReferenceList;
 
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * This enum represents the priority of a ticket
@@ -48,6 +51,25 @@ public enum TicketPriority
     HIGH;
 
     private static final String MESSAGE_PREFIX = "ticketing.priority.";
+    private static Map<Integer,TicketPriority> _mapTicketPriority = new HashMap<Integer,TicketPriority>(  );
+
+    static
+    {
+        for ( TicketPriority enumTicketPriority : EnumSet.allOf( TicketPriority.class ) )
+        {
+            _mapTicketPriority.put( enumTicketPriority.ordinal(  ), enumTicketPriority );
+        }
+    }
+
+    /**
+     * returns TicketPriority enum from id
+     * @param nTicketPriorityId level value
+     * @return TicketPriority enum
+     */
+    public static TicketPriority valueOf( int nTicketPriorityId )
+    {
+        return _mapTicketPriority.get( Integer.valueOf( nTicketPriorityId ) );
+    }
 
     /**
      * Gives the localized message

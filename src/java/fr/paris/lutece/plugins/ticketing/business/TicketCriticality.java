@@ -36,7 +36,10 @@ package fr.paris.lutece.plugins.ticketing.business;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.util.ReferenceList;
 
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * This enum represents the criticality of a ticket
@@ -48,6 +51,25 @@ public enum TicketCriticality
     HIGH;
 
     private static final String MESSAGE_PREFIX = "ticketing.criticality.";
+    private static Map<Integer,TicketCriticality> _mapTicketCriticality = new HashMap<Integer,TicketCriticality>(  );
+
+    static
+    {
+        for ( TicketCriticality enumTicketCriticality : EnumSet.allOf( TicketCriticality.class ) )
+        {
+            _mapTicketCriticality.put( enumTicketCriticality.ordinal(  ), enumTicketCriticality );
+        }
+    }
+
+    /**
+     * returns TicketCriticality enum from id
+     * @param nTicketCriticalityId level value
+     * @return TicketCriticality enum
+     */
+    public static TicketCriticality valueOf( int nTicketCriticalityId )
+    {
+        return _mapTicketCriticality.get( Integer.valueOf( nTicketCriticalityId ) );
+    }
 
     /**
      * Gives the localized message
