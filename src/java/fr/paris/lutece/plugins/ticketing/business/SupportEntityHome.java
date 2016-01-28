@@ -33,10 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import fr.paris.lutece.plugins.ticketing.service.SupportEntityResourceIdService;
+import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
+import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -103,5 +108,25 @@ public final class SupportEntityHome
     public static List<SupportEntity> getSupportEntityList(  )
     {
         return _dao.selectSupportEntityList( _plugin );
+    }
+
+    /**
+     * Load the data of supportEntity eligible
+     * @param adminUser admin user
+     * @return the collection which contains the data of all eligible supportEntities
+     */
+    public static List<SupportEntity> getEligibleSupportEntities( AdminUser adminUser )
+    {
+        List<SupportEntity> lstSupportEntity = new ArrayList<SupportEntity>(  );
+
+        for ( SupportEntity supportEntity : _dao.selectSupportEntityList( _plugin ) )
+        {
+            if ( RBACService.isAuthorized( supportEntity, SupportEntityResourceIdService.PERMISSION_VIEW, adminUser ) )
+            {
+                lstSupportEntity.add( supportEntity );
+            }
+        }
+
+        return lstSupportEntity;
     }
 }

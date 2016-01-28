@@ -149,6 +149,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String PARAMETER_PHONE = "ph";
     private static final String PARAMETER_EMAIL = "em";
     private static final String PARAMETER_CATEGORY = "cat";
+    private static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON = "hide_next_button";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETS = "ticketing.manage_tickets.pageTitle";
@@ -688,6 +689,12 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
                 model.put( MARK_TASKS_FORM, strHtmlTasksForm );
                 model.put( PARAMETER_ID_ACTION, nIdAction );
                 model.put( PARAMETER_ID_TICKET, nIdTicket );
+
+                //used to hide next button (if an error occured in html tasks form generation)
+                if ( request.getAttribute( ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) != null )
+                {
+                    model.put( ATTRIBUTE_HIDE_NEXT_STEP_BUTTON, request.getAttribute( ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) );
+                }
 
                 return getPage( PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW, TEMPLATE_TASKS_FORM_WORKFLOW, model );
             }
