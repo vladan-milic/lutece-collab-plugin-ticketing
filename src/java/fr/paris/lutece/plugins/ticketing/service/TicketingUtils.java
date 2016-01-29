@@ -34,100 +34,56 @@
 package fr.paris.lutece.plugins.ticketing.service;
 
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.util.AppException;
-import fr.paris.lutece.util.ReferenceItem;
-import fr.paris.lutece.util.ReferenceList;
-
-import java.util.Locale;
+import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
+import fr.paris.lutece.plugins.workflowcore.business.state.State;
+import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
+import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.service.workflow.WorkflowService;
 
 
 /**
  * TicketingUtils
  */
-public class TicketingUtils
+public final class TicketingUtils
 {
-    // Priorities
-    private static final int PRIORITY_LOW = 0;
-    private static final int PRIORITY_MEDIUM = 1;
-    private static final int PRIORITY_HIGH = 2;
-    private static final String PROPERTY_PRIORITY_LOW = "ticketing.priority.low";
-    private static final String PROPERTY_PRIORITY_MEDIUM = "ticketing.priority.medium";
-    private static final String PROPERTY_PRIORITY_HIGH = "ticketing.priority.high";
-
-    // Criticalities
-    private static final int CRITICALITY_LOW = 0;
-    private static final int CRITICALITY_MEDIUM = 1;
-    private static final int CRITICALITY_HIGH = 2;
-    private static final String PROPERTY_CRITICALITY_LOW = "ticketing.criticality.low";
-    private static final String PROPERTY_CRITICALITY_MEDIUM = "ticketing.criticality.medium";
-    private static final String PROPERTY_CRITICALITY_HIGH = "ticketing.criticality.high";
-
     /**
-     * Provides the priority list
-     * @param locale The locale
-     * @return The list
+     * Default constructor
      */
-    public static ReferenceList getPriorityList( Locale locale )
+    private TicketingUtils(  )
     {
-        ReferenceList list = new ReferenceList(  );
-        list.addItem( PRIORITY_LOW, I18nService.getLocalizedString( PROPERTY_PRIORITY_LOW, locale ) );
-        list.addItem( PRIORITY_MEDIUM, I18nService.getLocalizedString( PROPERTY_PRIORITY_MEDIUM, locale ) );
-        list.addItem( PRIORITY_HIGH, I18nService.getLocalizedString( PROPERTY_PRIORITY_HIGH, locale ) );
-
-        return list;
     }
 
     /**
-     * Provides the criticality list
-     * @param locale The locale
-     * @return The list
+     * set workflow attributes for the specified ticket
+     * @param ticket the Ticket
+     * @param user the user
      */
-    public static ReferenceList getCriticalityList( Locale locale )
+    public static void setWorkflowAttributes( Ticket ticket, AdminUser user )
     {
-        ReferenceList list = new ReferenceList(  );
-        list.addItem( CRITICALITY_LOW, I18nService.getLocalizedString( PROPERTY_CRITICALITY_LOW, locale ) );
-        list.addItem( CRITICALITY_MEDIUM, I18nService.getLocalizedString( PROPERTY_CRITICALITY_MEDIUM, locale ) );
-        list.addItem( CRITICALITY_HIGH, I18nService.getLocalizedString( PROPERTY_CRITICALITY_HIGH, locale ) );
-
-        return list;
-    }
-
-    /**
-     * Get the priority label of a ticket for a given locale
-     * @param ticket The ticket
-     * @param locale The locale
-     * @return The label
-     */
-    public static String getPriority( Ticket ticket, Locale locale )
-    {
-        for ( ReferenceItem item : getPriorityList( locale ) )
+        if ( WorkflowService.getInstance(  ).isAvailable(  ) )
         {
-            if ( Integer.parseInt( item.getCode(  ) ) == ticket.getPriority(  ) )
+            TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+            int nIdWorkflow = ticketCategory.getIdWorkflow(  );
+
+            StateFilter stateFilter = new StateFilter(  );
+            stateFilter.setIdWorkflow( nIdWorkflow );
+
+            State state = WorkflowService.getInstance(  )
+                                         .getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+                    ticketCategory.getId(  ) );
+
+            if ( state != null )
             {
-                return item.getName(  );
+                ticket.setState( state );
+            }
+
+            if ( nIdWorkflow > 0 )
+            {
+                ticket.setListWorkflowActions( WorkflowService.getInstance(  )
+                                                              .getActions( ticket.getId(  ),
+                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, user ) );
             }
         }
-
-        throw new AppException( "TicketingUtils - Invalid Priority value : " + ticket.getPriority(  ) );
-    }
-
-    /**
-     * Get the criticality label of a ticket for a given locale
-     * @param ticket The ticket
-     * @param locale The locale
-     * @return The label
-     */
-    public static String getCriticality( Ticket ticket, Locale locale )
-    {
-        for ( ReferenceItem item : getPriorityList( locale ) )
-        {
-            if ( Integer.parseInt( item.getCode(  ) ) == ticket.getCriticality(  ) )
-            {
-                return item.getName(  );
-            }
-        }
-
-        throw new AppException( "TicketingUtils - Invalid Criticality value : " + ticket.getCriticality(  ) );
     }
 }

@@ -34,9 +34,22 @@
 package fr.paris.lutece.plugins.ticketing.service.entrytype;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeFile;
 import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
+import fr.paris.lutece.plugins.ticketing.service.download.TicketingFileServlet;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
+import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppPathService;
+import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.util.url.UrlItem;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -50,10 +63,16 @@ public class EntryTypeFile extends AbstractEntryTypeFile
      * Name of the bean of this service
      */
     public static final String BEAN_NAME = "ticketing.entryTypeFile";
+
+    // Templates
     private static final String TEMPLATE_CREATE = "admin/plugins/ticketing/entries/create_entry_type_file.html";
     private static final String TEMPLATE_MODIFY = "admin/plugins/ticketing/entries/modify_entry_type_file.html";
     private static final String TEMPLATE_HTML_CODE = "skin/plugins/ticketing/entries/html_code_entry_type_file.html";
     private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/ticketing/entries/html_code_entry_type_file.html";
+    private static final String TEMPLATE_READ_ONLY_HTML = "admin/plugins/ticketing/entries/read_only_entry_type_file.html";
+
+    // Markers
+    private static final String MARK_FILE_URL = "file_url";
 
     /**
      * {@inheritDoc}
@@ -86,6 +105,28 @@ public class EntryTypeFile extends AbstractEntryTypeFile
      * {@inheritDoc}
      */
     @Override
+    public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
+    {
+        Map<String, Object> model = EntryTypeUtils.initModel( entry, response );
+
+        if ( ( response.getFile(  ) != null ) && StringUtils.isNotBlank( response.getFile(  ).getTitle(  ) ) )
+        {
+            if ( response.getIdResponse(  ) > 0 )
+            {
+                model.put( MARK_FILE_URL,
+                    getUrlDownloadFile( response.getIdResponse(  ), AppPathService.getBaseUrl( request ) ) );
+            }
+        }
+
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_READ_ONLY_HTML, locale, model );
+
+        return template.getHtml(  );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected boolean checkForImages(  )
     {
         return false;
@@ -106,7 +147,9 @@ public class EntryTypeFile extends AbstractEntryTypeFile
     @Override
     public String getUrlDownloadFile( int nResponseId, String strBaseUrl )
     {
-        // TODO : implement me !
-        return null;
+        UrlItem url = new UrlItem( strBaseUrl + TicketingFileServlet.URL_SERVLET );
+        url.addParameter( TicketingFileServlet.PARAMETER_ID_RESPONSE, nResponseId );
+
+        return url.getUrl(  );
     }
 }

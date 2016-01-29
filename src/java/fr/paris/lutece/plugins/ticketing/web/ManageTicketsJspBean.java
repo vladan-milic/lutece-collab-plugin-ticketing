@@ -58,23 +58,15 @@ import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
+import fr.paris.lutece.plugins.ticketing.service.TicketingUtils;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
-import fr.paris.lutece.plugins.workflowcore.business.state.State;
-import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
-import fr.paris.lutece.portal.business.file.File;
-import fr.paris.lutece.portal.business.file.FileHome;
-import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
-import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
-import fr.paris.lutece.portal.business.user.AdminUser;
-import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
@@ -88,9 +80,6 @@ import fr.paris.lutece.util.url.UrlItem;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import java.text.ParseException;
 
 import java.util.ArrayList;
@@ -99,7 +88,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
@@ -133,17 +121,12 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String TEMPLATE_MANAGE_TICKETS = "/admin/plugins/ticketing/manage_tickets.html";
     private static final String TEMPLATE_CREATE_TICKET = "/admin/plugins/ticketing/create_ticket.html";
     private static final String TEMPLATE_MODIFY_TICKET = "/admin/plugins/ticketing/modify_ticket.html";
-    private static final String TEMPLATE_TASKS_FORM_WORKFLOW = "admin/plugins/ticketing/workflow/tasks_form_workflow.html";
     private static final String TEMPLATE_RECAP_TICKET = "/admin/plugins/ticketing/recap_ticket.html";
 
     // Parameters
-    private static final String PARAMETER_ID_TICKET = "id";
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
-    private static final String PARAMETER_ID_ACTION = "id_action";
-    private static final String PARAMETER_BACK = "back";
     private static final String PARAMETER_GUID = "guid";
     private static final String PARAMETER_CUSTOMER_ID = "cid";
-    private static final String PARAMETER_ID_RESPONSE = "idResponse";
     private static final String PARAMETER_FIRSTNAME = "fn";
     private static final String PARAMETER_LASTNAME = "ln";
     private static final String PARAMETER_PHONE = "ph";
@@ -154,7 +137,6 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETS = "ticketing.manage_tickets.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_TICKET = "ticketing.modify_ticket.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_CREATE_TICKET = "ticketing.create_ticket.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_RECAP_TICKET = "ticketing.recap_ticket.pageTitle";
 
     // Markers
@@ -167,7 +149,6 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
-    private static final String MARK_TASKS_FORM = "tasks_form";
     private static final String MARK_ADMIN_AVATAR = "adminAvatar";
     private static final String JSP_MANAGE_TICKETS = "jsp/admin/plugins/ticketing/ManageTickets.jsp";
     private static final String MARK_GUID = "guid";
@@ -321,30 +302,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     {
         for ( Ticket ticket : paginator.getPageItems(  ) )
         {
-            if ( WorkflowService.getInstance(  ).isAvailable(  ) )
-            {
-                TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-                int nIdWorkflow = ticketCategory.getIdWorkflow(  );
-
-                StateFilter stateFilter = new StateFilter(  );
-                stateFilter.setIdWorkflow( nIdWorkflow );
-
-                State state = WorkflowService.getInstance(  )
-                                             .getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                        ticketCategory.getId(  ) );
-
-                if ( state != null )
-                {
-                    ticket.setState( state );
-                }
-
-                if ( nIdWorkflow > 0 )
-                {
-                    ticket.setListWorkflowActions( WorkflowService.getInstance(  )
-                                                                  .getActions( ticket.getId(  ),
-                            Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, getUser(  ) ) );
-                }
-            }
+            TicketingUtils.setWorkflowAttributes( ticket, getUser(  ) );
         }
     }
 
@@ -521,9 +479,9 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @Action( ACTION_CONFIRM_REMOVE_TICKET )
     public String getConfirmRemoveTicket( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKET ) );
+        int nId = Integer.parseInt( request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ) );
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_TICKET ) );
-        url.addParameter( PARAMETER_ID_TICKET, nId );
+        url.addParameter( TicketingConstants.PARAMETER_ID_TICKET, nId );
 
         String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TICKET,
                 url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
@@ -540,7 +498,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @Action( ACTION_REMOVE_TICKET )
     public String doRemoveTicket( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKET ) );
+        int nId = Integer.parseInt( request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ) );
 
         if ( WorkflowService.getInstance(  ).isAvailable(  ) )
         {
@@ -594,7 +552,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
 
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
 
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKET ) );
+        int nId = Integer.parseInt( request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ) );
 
         if ( ( ticket == null ) || ( ticket.getId(  ) != nId ) )
         {
@@ -668,8 +626,8 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @View( VIEW_WORKFLOW_ACTION_FORM )
     public String getWorkflowActionForm( HttpServletRequest request )
     {
-        String strIdAction = request.getParameter( PARAMETER_ID_ACTION );
-        String strIdTicket = request.getParameter( PARAMETER_ID_TICKET );
+        String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
+        String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
 
         if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
                 StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
@@ -685,11 +643,12 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
 
                 Map<String, Object> model = new HashMap<String, Object>(  );
 
-                model.put( MARK_TASKS_FORM, strHtmlTasksForm );
-                model.put( PARAMETER_ID_ACTION, nIdAction );
-                model.put( PARAMETER_ID_TICKET, nIdTicket );
+                model.put( TicketingConstants.MARK_TASKS_FORM, strHtmlTasksForm );
+                model.put( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION, nIdAction );
+                model.put( TicketingConstants.PARAMETER_ID_TICKET, nIdTicket );
 
-                return getPage( PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW, TEMPLATE_TASKS_FORM_WORKFLOW, model );
+                return getPage( TicketingConstants.PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW,
+                    TicketingConstants.TEMPLATE_TASKS_FORM_WORKFLOW, model );
             }
 
             return doProcessWorkflowAction( request );
@@ -708,8 +667,8 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     @Action( ACTION_DO_PROCESS_WORKFLOW_ACTION )
     public String doProcessWorkflowAction( HttpServletRequest request )
     {
-        String strIdAction = request.getParameter( PARAMETER_ID_ACTION );
-        String strIdTicket = request.getParameter( PARAMETER_ID_TICKET );
+        String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
+        String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
 
         if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
                 StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
@@ -717,7 +676,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
             int nIdAction = Integer.parseInt( strIdAction );
             int nIdTicket = Integer.parseInt( strIdTicket );
 
-            if ( request.getParameter( PARAMETER_BACK ) == null )
+            if ( request.getParameter( TicketingConstants.PARAMETER_BACK ) == null )
             {
                 Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
                 TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
@@ -858,7 +817,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
 
         if ( getActionTypeFromSession( request.getSession(  ) ).equals( ACTION_MODIFY_TICKET ) )
         {
-            return redirect( request, VIEW_MODIFY_TICKET, PARAMETER_ID_TICKET, ticket.getId(  ) );
+            return redirect( request, VIEW_MODIFY_TICKET, TicketingConstants.PARAMETER_ID_TICKET, ticket.getId(  ) );
         }
         else // ACTION_CREATE_TICKET
         {
@@ -900,57 +859,6 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     public void removeActionTypeFromSession( HttpSession session )
     {
         session.removeAttribute( SESSION_ACTION_TYPE );
-    }
-
-    /**
-     * Do download a file from an appointment response
-     *
-     * @param request
-     *            The request
-     * @param httpResponse
-     *            The response
-     * @return nothing.
-     * @throws AccessDeniedException
-     *             If the user is not authorized to access this feature
-     */
-    public String getDownloadFile( HttpServletRequest request, HttpServletResponse httpResponse )
-        throws AccessDeniedException
-    {
-        String strIdResponse = request.getParameter( PARAMETER_ID_RESPONSE );
-
-        if ( StringUtils.isEmpty( strIdResponse ) || !StringUtils.isNumeric( strIdResponse ) )
-        {
-            return redirect( request, TicketFormJspBean.getURLManageTicketForms( request ) );
-        }
-
-        int nIdResponse = Integer.parseInt( strIdResponse );
-
-        Response response = ResponseHome.findByPrimaryKey( nIdResponse );
-        File file = FileHome.findByPrimaryKey( response.getFile(  ).getIdFile(  ) );
-        PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile(  ).getIdPhysicalFile(  ) );
-
-        httpResponse.setHeader( "Content-Disposition", "attachment; filename=\"" + file.getTitle(  ) + "\";" );
-        httpResponse.setHeader( "Content-type", file.getMimeType(  ) );
-        httpResponse.addHeader( "Content-Encoding", "UTF-8" );
-        httpResponse.addHeader( "Pragma", "public" );
-        httpResponse.addHeader( "Expires", "0" );
-        httpResponse.addHeader( "Cache-Control", "must-revalidate,post-check=0,pre-check=0" );
-
-        try
-        {
-            OutputStream os = httpResponse.getOutputStream(  );
-            os.write( physicalFile.getValue(  ) );
-            // We do not close the output stream in finaly clause because it is
-            // the response stream,
-            // and an error message needs to be displayed if an exception occurs
-            os.close(  );
-        }
-        catch ( IOException e )
-        {
-            AppLogService.error( e.getStackTrace(  ), e );
-        }
-
-        return StringUtils.EMPTY;
     }
 
     /**

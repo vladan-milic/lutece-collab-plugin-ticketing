@@ -81,4 +81,13 @@
     <!-- Portlet parameters -->
     <portlets>
    </portlets>
+   
+    <!-- servlets -->
+    <servlets>
+        <servlet>
+            <servlet-name>TicketingFileServlet</servlet-name>
+            <url-pattern>/servlet/plugins/ticketing/file</url-pattern>
+            <servlet-class>fr.paris.lutece.plugins.ticketing.service.download.TicketingFileServlet</servlet-class>
+        </servlet>
+    </servlets>
 </plug-in>

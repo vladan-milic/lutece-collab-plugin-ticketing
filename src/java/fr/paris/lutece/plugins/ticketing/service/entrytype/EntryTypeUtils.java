@@ -35,65 +35,41 @@ package fr.paris.lutece.plugins.ticketing.service.entrytype;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeText;
-import fr.paris.lutece.portal.service.template.AppTemplateService;
-import fr.paris.lutece.util.html.HtmlTemplate;
 
-import java.util.Locale;
+import java.util.HashMap;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * class EntryTypeText
+ * This class is a utility class for Ticketing EntryType
+ *
  */
-public class EntryTypeText extends AbstractEntryTypeText
+public final class EntryTypeUtils
 {
-    // Templates
-    private static final String TEMPLATE_CREATE = "admin/plugins/ticketing/entries/create_entry_type_text.html";
-    private static final String TEMPLATE_MODIFY = "admin/plugins/ticketing/entries/modify_entry_type_text.html";
-    private static final String TEMPLATE_HTML_CODE = "skin/plugins/ticketing/entries/html_code_entry_type_text.html";
-    private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/ticketing/entries/html_code_entry_type_text.html";
-    private static final String TEMPLATE_READ_ONLY_HTML = "admin/plugins/ticketing/entries/read_only_entry_type_text.html";
+    // Markers
+    private static final String MARK_ENTRY = "entry";
+    private static final String MARK_RESPONSE = "response";
 
     /**
-     * {@inheritDoc}
+     * Default constructor
      */
-    @Override
-    public String getTemplateHtmlForm( Entry entry, boolean bDisplayFront )
+    private EntryTypeUtils(  )
     {
-        return bDisplayFront ? TEMPLATE_HTML_CODE : TEMPLATE_HTML_CODE_ADMIN;
     }
 
     /**
-     * {@inheritDoc}
+     * Initializes the Model
+     * @param entry the Entry Object
+     * @param response the Response object
+     * @return the initialized Model
      */
-    @Override
-    public String getTemplateCreate( Entry entry, boolean bDisplayFront )
+    public static Map<String, Object> initModel( Entry entry, Response response )
     {
-        return TEMPLATE_CREATE;
-    }
+        Map<String, Object> model = new HashMap<String, Object>(  );
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getTemplateModify( Entry entry, boolean bDisplayFront )
-    {
-        return TEMPLATE_MODIFY;
-    }
+        model.put( MARK_ENTRY, entry );
+        model.put( MARK_RESPONSE, response );
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
-    {
-        Map<String, Object> model = EntryTypeUtils.initModel( entry, response );
-
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_READ_ONLY_HTML, locale, model );
-
-        return template.getHtml(  );
+        return model;
     }
 }

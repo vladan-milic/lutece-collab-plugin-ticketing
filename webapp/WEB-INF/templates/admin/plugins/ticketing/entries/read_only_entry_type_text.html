@@ -1,0 +1,10 @@
+<#if response.responseValue?has_content>
+	<div class="form-group">
+		<label for="title" class="col-xs-12 col-sm-3 control-label">${entry.title} : </label>
+		<div class="col-xs-12 col-sm-9">
+		   <p class="form-control-static">
+			   ${response.responseValue!''}
+		   </p>
+		</div>
+	</div>
+</#if>

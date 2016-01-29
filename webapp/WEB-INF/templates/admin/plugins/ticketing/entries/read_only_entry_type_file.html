@@ -1,0 +1,14 @@
+<#if response.file??>
+    <div class="form-group">
+        <label for="title" class="col-xs-12 col-sm-3 control-label">${entry.title} : </label>
+        <div class="col-xs-12 col-sm-9">
+            <p class="form-control-static">
+                <a href="${file_url}" title="${response.file.title}" >
+                    ${response.file.title}
+                </a>
+           </p>
+        </div>
+    </div>
+</#if>
+
+
