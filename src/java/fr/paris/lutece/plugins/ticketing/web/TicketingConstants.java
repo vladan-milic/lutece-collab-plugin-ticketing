@@ -48,8 +48,14 @@ public final class TicketingConstants
     public static final String PARAMETER_WORKFLOW_ID_ACTION = "id_action";
     public static final String PARAMETER_BACK = "back";
 
+    // Attributes
+    public static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON = "hide_next_button";
+
     // Markers
+    public static final String MARK_ID_TICKET = PARAMETER_ID_TICKET;
+    public static final String MARK_WORKFLOW_ID_ACTION = PARAMETER_WORKFLOW_ID_ACTION;
     public static final String MARK_TASKS_FORM = "tasks_form";
+    public static final String MARK_HIDE_NEXT_STEP_BUTTON = ATTRIBUTE_HIDE_NEXT_STEP_BUTTON;
 
     // Properties
     public static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";

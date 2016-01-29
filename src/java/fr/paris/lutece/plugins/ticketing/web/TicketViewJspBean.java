@@ -180,8 +180,15 @@ public class TicketViewJspBean extends MVCAdminJspBean
                 Map<String, Object> model = new HashMap<String, Object>(  );
 
                 model.put( TicketingConstants.MARK_TASKS_FORM, strHtmlTasksForm );
-                model.put( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION, nIdAction );
-                model.put( TicketingConstants.PARAMETER_ID_TICKET, nIdTicket );
+                model.put( TicketingConstants.MARK_WORKFLOW_ID_ACTION, nIdAction );
+                model.put( TicketingConstants.MARK_ID_TICKET, nIdTicket );
+
+                //used to hide next button (if an error occured in html tasks form generation)
+                if ( request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) != null )
+                {
+                    model.put( TicketingConstants.MARK_HIDE_NEXT_STEP_BUTTON,
+                        request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) );
+                }
 
                 return getPage( TicketingConstants.PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW,
                     TicketingConstants.TEMPLATE_TASKS_FORM_WORKFLOW, model );
