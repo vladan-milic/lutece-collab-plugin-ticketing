@@ -50,7 +50,7 @@ public class AssigneeUser
     /**
      * Constructor
      */
-    AssigneeUser(  )
+    public AssigneeUser(  )
     {
     }
 
@@ -58,7 +58,7 @@ public class AssigneeUser
      * Constructor
      * @param user The Admin User
      */
-    AssigneeUser( AdminUser user )
+    public AssigneeUser( AdminUser user )
     {
         _nAdminUserId = user.getUserId(  );
         _strFirstname = user.getFirstName(  );
