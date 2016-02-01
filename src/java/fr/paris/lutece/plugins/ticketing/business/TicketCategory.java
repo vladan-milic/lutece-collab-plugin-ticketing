@@ -37,6 +37,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 
@@ -54,11 +55,12 @@ public class TicketCategory implements Serializable
     private String _strTicketDomain;
     private String _strTicketType;
     private int _nIdTicketForm;
-    @NotEmpty( message = "#i18n{ticketing.validation.ticketcategory.Label.notEmpty}" )
-    @Size( max = 50, message = "#i18n{ticketing.validation.ticketcategory.Label.size}" )
+    @NotEmpty( message = "#i18n{ticketing.validation.ticketcategory.label.notEmpty}" )
+    @Size( max = 50, message = "#i18n{ticketing.validation.ticketcategory.label.size}" )
     private String _strLabel;
     private String _strCode;
     private int _nIdWorkflow;
+    @Min( value = 0,  message = "#i18n{ticketing.validation.ticketcategory.unit.notEmpty}" )
     private int _nIdUnit;
 
     /**
