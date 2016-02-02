@@ -1,36 +1,54 @@
+<link href="css/plugins/ticketing/ticketing.css" rel="stylesheet" >
+
+<#include "/admin/plugins/ticketing/commons.html" />
 <#include "view_ticket_header.html" />
 <@ticketHeader tab='details' ticket=ticket />
 
-<form class="form-horizontal" >
-    <fieldset>
-        <@fieldStaticText i18nLabelKey="ticketing.view_ticket_details.labelTicketCreationDate">${ticket.dateCreate!''}</@fieldStaticText>
-        <@fieldStaticText i18nLabelKey="ticketing.view_ticket_details.labelTicketType">${ticket.ticketType!''}</@fieldStaticText>
-        <@fieldStaticText i18nLabelKey="ticketing.view_ticket_details.labelTicketDomain">${ticket.ticketDomain!''}</@fieldStaticText>
-        <@fieldStaticText i18nLabelKey="ticketing.view_ticket_details.labelTicketCategory">${ticket.ticketCategory!''}</@fieldStaticText>
-        <@fieldStaticText i18nLabelKey="ticketing.view_ticket_details.labelTicketPriority">${priority!''}</@fieldStaticText>
-        <@fieldStaticText i18nLabelKey="ticketing.view_ticket_details.labelTicketCriticality">${criticality!''}</@fieldStaticText>
-        <@fieldStaticText i18nLabelKey="ticketing.view_ticket_details.labelTicketComment">${ticket.ticketComment!''}</@fieldStaticText>
-        
-        <#list read_only_reponses_html_list as html_response>
-            <#if html_response?has_content>
-                <div >
-                    ${html_response}
-                </div>
-            </#if>
-        </#list>
-    </fieldset>
+<style>
+
+</style>
+
+<div class="ticketing-ticket-details" >
+    <div class="col-md-8">
+        <fieldset class="form-horizontal">
+            <div>
+                ${ticket.dateCreate!''}
+            </div>
+            <div>
+                ${ticket.ticketComment!''}
+            </div>
+            
+            <#list read_only_reponses_html_list as html_response>
+                <#if html_response?has_content>
+                    <div class="genattr">
+                        ${html_response}
+                    </div>
+                </#if>
+            </#list>
+            
+        </fieldset>
+    </div>
+    <div class="col-md-4">
+        <fieldset class="ticketing-form-group">
+            <@fieldStaticTextTicketDetails i18nLabelKey="ticketing.view_ticket_details.labelTicketType">${ticket.ticketType!''}</@fieldStaticTextTicketDetails>
+            <@fieldStaticTextTicketDetails i18nLabelKey="ticketing.view_ticket_details.labelTicketDomain">${ticket.ticketDomain!''}</@fieldStaticTextTicketDetails>
+            <@fieldStaticTextTicketDetails i18nLabelKey="ticketing.view_ticket_details.labelTicketCategory">${ticket.ticketCategory!''}</@fieldStaticTextTicketDetails>
+        </fieldset>
+        <fieldset class="ticketing-form-group">
+            <@fieldStaticTextTicketDetails i18nLabelKey="ticketing.view_ticket_details.labelTicketPriority">${priority!''}</@fieldStaticTextTicketDetails>
+            <@fieldStaticTextTicketDetails i18nLabelKey="ticketing.view_ticket_details.labelTicketCriticality">${criticality!''}</@fieldStaticTextTicketDetails>
+        </fieldset>
     
-    <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
-        <div class="form-group">
-	        <div class="col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8">
-		        <#list ticket.listWorkflowActions as action>
-		        <a class="btn btn-sm btn-primary"
-		            href="jsp/admin/plugins/ticketing/TicketView.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}" 
-		                title="${action.name}">
-		            ${action.name}
-		        </a>
-		        </#list>
-	        </div>
-        </div>
-    </#if>
-</form>
+        <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
+            <div class="ticketing-form-group">
+                <#list ticket.listWorkflowActions as action>
+                <a class="btn btn-sm btn-primary"
+                    href="jsp/admin/plugins/ticketing/TicketView.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}" 
+                        title="${action.name}">
+                    ${action.name}
+                </a>
+                </#list>
+            </div>
+        </#if>
+    </div>
+</div>

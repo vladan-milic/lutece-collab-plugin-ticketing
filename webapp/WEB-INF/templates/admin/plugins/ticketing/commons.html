@@ -109,3 +109,12 @@
 	</#if>
 	<#return false />
 </#function>
+
+<#macro fieldStaticTextTicketDetails i18nLabelKey >
+    <div class="ticketing-form-group">
+        <p>#i18n{${i18nLabelKey}}</p>
+        <label>
+            <#nested>
+        </label>
+    </div>
+</#macro>
