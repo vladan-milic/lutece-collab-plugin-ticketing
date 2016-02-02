@@ -24,6 +24,7 @@
             <th>#i18n{ticketing.manage_ticketcategories.columnLabel}</th>
             <th>#i18n{ticketing.manage_ticketcategories.columnIdTicketDomain}</th>
             <th>#i18n{ticketing.manage_ticketcategories.columnCode}</th>
+            <th>#i18n{ticketing.manage_ticketcategories.columnUnit}</th>
             <th>#i18n{portal.util.labelActions}</th>
         </tr>
         <@tableHeadBodySeparator />
@@ -38,6 +39,9 @@
             </td>
             <td>
                 ${ticketcategory.code!'-'}
+            </td>
+            <td>
+                ${ticketcategory.assigneeUnit.name!''}
             </td>
         <td>
             <a href="jsp/admin/plugins/ticketing/ManageTicketCategorys.jsp?view=modifyTicketCategory&id=${ticketcategory.id}"

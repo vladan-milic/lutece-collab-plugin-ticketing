@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -101,7 +103,8 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.setInt( 4, ticketCategory.getIdWorkflow(  ) );
         daoUtil.setInt( 5, ticketCategory.getIdTicketForm(  ) );
         daoUtil.setString( 6, ticketCategory.getCode(  ) );
-        daoUtil.setInt( 7, ticketCategory.getIdUnit(  ) );
+        daoUtil.setInt( 7, 
+                ( ticketCategory.getAssigneeUnit(  ) != null ) ? ticketCategory.getAssigneeUnit(  ).getUnitId(  ) : 0 );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -133,7 +136,10 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setIdTicketForm( daoUtil.getInt( nIndex++ ) );
             category.setIdTicketType( daoUtil.getInt( nIndex++ ) );
             category.setCode( daoUtil.getString( nIndex++ ) );
-            category.setIdUnit( daoUtil.getInt( nIndex++ ) );
+            int nUnitId = daoUtil.getInt( nIndex++ );
+            Unit unit = UnitHome.findByPrimaryKey( nUnitId );
+            AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
+            category.setAssigneeUnit( assigneeUnit );
         }
 
         daoUtil.free(  );
@@ -167,7 +173,10 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setIdTicketForm( daoUtil.getInt( nIndex++ ) );
             category.setIdTicketType( daoUtil.getInt( nIndex++ ) );
             category.setCode( daoUtil.getString( nIndex++ ) );
-            category.setIdUnit( daoUtil.getInt( nIndex++ ) );
+            int nUnitId = daoUtil.getInt( nIndex++ );
+            Unit unit = UnitHome.findByPrimaryKey( nUnitId );
+            AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
+            category.setAssigneeUnit( assigneeUnit );
         }
 
         daoUtil.free(  );
@@ -200,7 +209,8 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.setInt( 4, ticketCategory.getIdWorkflow(  ) );
         daoUtil.setInt( 5, ticketCategory.getIdTicketForm(  ) );
         daoUtil.setString( 6, ticketCategory.getCode(  ) );
-        daoUtil.setInt( 7, ticketCategory.getIdUnit(  ) );
+        daoUtil.setInt( 7, 
+                ( ticketCategory.getAssigneeUnit(  ) != null ) ? ticketCategory.getAssigneeUnit(  ).getUnitId(  ) : 0 );
         daoUtil.setInt( 8, ticketCategory.getId(  ) );
 
         daoUtil.executeUpdate(  );
@@ -230,7 +240,10 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setTicketType( daoUtil.getString( nIndex++ ) );
             category.setIdTicketType( daoUtil.getInt( nIndex++ ) );
             category.setCode( daoUtil.getString( nIndex++ ) );
-            category.setIdUnit( daoUtil.getInt( nIndex++ ) );
+            int nUnitId = daoUtil.getInt( nIndex++ );
+            Unit unit = UnitHome.findByPrimaryKey( nUnitId );
+            AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
+            category.setAssigneeUnit( assigneeUnit );
 
             ticketCategoryList.add( category );
         }
