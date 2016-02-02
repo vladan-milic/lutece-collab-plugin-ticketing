@@ -224,7 +224,7 @@ public class TicketCategory implements Serializable
     {
         _strCode = strCode;
     }
-    
+
     /**
      * Returns the AssigneeUnit
      * @return The AssigneeUnit

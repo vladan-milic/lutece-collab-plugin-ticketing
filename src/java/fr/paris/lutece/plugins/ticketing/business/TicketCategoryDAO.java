@@ -103,8 +103,8 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.setInt( 4, ticketCategory.getIdWorkflow(  ) );
         daoUtil.setInt( 5, ticketCategory.getIdTicketForm(  ) );
         daoUtil.setString( 6, ticketCategory.getCode(  ) );
-        daoUtil.setInt( 7, 
-                ( ticketCategory.getAssigneeUnit(  ) != null ) ? ticketCategory.getAssigneeUnit(  ).getUnitId(  ) : 0 );
+        daoUtil.setInt( 7,
+            ( ticketCategory.getAssigneeUnit(  ) != null ) ? ticketCategory.getAssigneeUnit(  ).getUnitId(  ) : 0 );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -136,6 +136,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setIdTicketForm( daoUtil.getInt( nIndex++ ) );
             category.setIdTicketType( daoUtil.getInt( nIndex++ ) );
             category.setCode( daoUtil.getString( nIndex++ ) );
+
             int nUnitId = daoUtil.getInt( nIndex++ );
             Unit unit = UnitHome.findByPrimaryKey( nUnitId );
             AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
@@ -173,6 +174,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setIdTicketForm( daoUtil.getInt( nIndex++ ) );
             category.setIdTicketType( daoUtil.getInt( nIndex++ ) );
             category.setCode( daoUtil.getString( nIndex++ ) );
+
             int nUnitId = daoUtil.getInt( nIndex++ );
             Unit unit = UnitHome.findByPrimaryKey( nUnitId );
             AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
@@ -209,8 +211,8 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.setInt( 4, ticketCategory.getIdWorkflow(  ) );
         daoUtil.setInt( 5, ticketCategory.getIdTicketForm(  ) );
         daoUtil.setString( 6, ticketCategory.getCode(  ) );
-        daoUtil.setInt( 7, 
-                ( ticketCategory.getAssigneeUnit(  ) != null ) ? ticketCategory.getAssigneeUnit(  ).getUnitId(  ) : 0 );
+        daoUtil.setInt( 7,
+            ( ticketCategory.getAssigneeUnit(  ) != null ) ? ticketCategory.getAssigneeUnit(  ).getUnitId(  ) : 0 );
         daoUtil.setInt( 8, ticketCategory.getId(  ) );
 
         daoUtil.executeUpdate(  );
@@ -240,6 +242,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setTicketType( daoUtil.getString( nIndex++ ) );
             category.setIdTicketType( daoUtil.getInt( nIndex++ ) );
             category.setCode( daoUtil.getString( nIndex++ ) );
+
             int nUnitId = daoUtil.getInt( nIndex++ );
             Unit unit = UnitHome.findByPrimaryKey( nUnitId );
             AssigneeUnit assigneeUnit = new AssigneeUnit( unit );

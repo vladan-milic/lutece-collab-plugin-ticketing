@@ -314,7 +314,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
         return true;
     }
-    
+
     /**
      * Populate the bean ticketCategory using parameters in http request
      * @param ticketCategory TicketCategory to populate
@@ -323,10 +323,9 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     protected void populate( TicketCategory ticketCategory, HttpServletRequest request )
     {
         super.populate( ticketCategory, request );
-        Unit unit = UnitHome.findByPrimaryKey( 
-                Integer.valueOf( request.getParameter( PARAMETER_ID_UNIT ) ) );
+
+        Unit unit = UnitHome.findByPrimaryKey( Integer.valueOf( request.getParameter( PARAMETER_ID_UNIT ) ) );
         AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
         ticketCategory.setAssigneeUnit( assigneeUnit );
     }
-
 }
