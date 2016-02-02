@@ -33,11 +33,14 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
+import fr.paris.lutece.plugins.ticketing.business.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketForm;
 import fr.paris.lutece.plugins.ticketing.business.TicketFormHome;
+import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -46,6 +49,7 @@ import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.ReferenceList;
+import fr.paris.lutece.util.bean.BeanUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
 import java.util.List;
@@ -72,6 +76,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
     // Parameters
     private static final String PARAMETER_ID_TICKETCATEGORY = "id";
+    private static final String PARAMETER_ID_UNIT = "idUnit";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETCATEGORYS = "ticketing.manage_ticketcategories.pageTitle";
@@ -127,6 +132,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         _category = null;
 
         List<TicketCategory> listTicketCategorys = (List<TicketCategory>) TicketCategoryHome.getTicketCategorysList(  );
+
         Map<String, Object> model = getPaginatedListModel( request, MARK_TICKETCATEGORY_LIST, listTicketCategorys,
                 JSP_MANAGE_TICKETCATEGORYS );
 
@@ -307,5 +313,19 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         }
 
         return true;
+    }
+
+    /**
+     * Populate the bean ticketCategory using parameters in http request
+     * @param ticketCategory TicketCategory to populate
+     * @param request http request
+     */
+    protected void populate( TicketCategory ticketCategory, HttpServletRequest request )
+    {
+        super.populate( ticketCategory, request );
+
+        Unit unit = UnitHome.findByPrimaryKey( Integer.valueOf( request.getParameter( PARAMETER_ID_UNIT ) ) );
+        AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
+        ticketCategory.setAssigneeUnit( assigneeUnit );
     }
 }

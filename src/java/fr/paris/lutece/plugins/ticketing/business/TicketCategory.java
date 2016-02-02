@@ -38,6 +38,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.io.Serializable;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
@@ -60,8 +61,8 @@ public class TicketCategory implements Serializable
     private String _strLabel;
     private String _strCode;
     private int _nIdWorkflow;
-    @Min( value = 0,  message = "#i18n{ticketing.validation.ticketcategory.unit.notEmpty}" )
-    private int _nIdUnit;
+    @NotNull( message = "#i18n{ticketing.validation.ticketcategory.unit.notEmpty}" )
+    private AssigneeUnit _unit;
 
     /**
      * Returns the Id
@@ -225,20 +226,20 @@ public class TicketCategory implements Serializable
     }
 
     /**
-     * Get the id of the unit associated with this ticket category
-     * @return The id of the unit
+     * Returns the AssigneeUnit
+     * @return The AssigneeUnit
      */
-    public int getIdUnit(  )
+    public AssigneeUnit getAssigneeUnit(  )
     {
-        return _nIdUnit;
+        return _unit;
     }
 
     /**
-     * Set the id of the unit associated with this ticket category
-     * @param nIdUnit The id of the unit
+     * Sets the assigneeUnit
+     * @param assigneeUnit The assigneeUnit
      */
-    public void setIdUnit( int nIdUnit )
+    public void setAssigneeUnit( AssigneeUnit assigneeUnit )
     {
-        _nIdUnit = nIdUnit;
+        _unit = assigneeUnit;
     }
 }
