@@ -1,9 +1,10 @@
 <#if response.file??>
-    <div class="form-group">
+    <div class="form-group entry-type-file">
         <label for="title" class="col-xs-12 col-sm-3 control-label">${entry.title} : </label>
         <div class="col-xs-12 col-sm-9">
             <p class="form-control-static">
                 <a href="${file_url}" title="${response.file.title}" >
+                    <span class="glyphicon glyphicon-paperclip"/>
                     ${response.file.title}
                 </a>
            </p>

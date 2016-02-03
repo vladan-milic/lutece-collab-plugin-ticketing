@@ -8,14 +8,16 @@
 		   		<input name="id" value="${id}" type="hidden">
 				${tasks_form}
 			   	<div class="form-group">
-			   		<#if !hide_next_button?? || hide_next_button != true >
-						<button id="next_button" class="btn btn-sm btn-primary" type="submit" name="save">
-							<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{ticketing.tasks_form_workflow.button_save}
+			   	    <div class="col-xs-12"> 
+				   		<#if !hide_next_button?? || hide_next_button != true >
+							<button id="next_button" class="btn btn-sm btn-primary" type="submit" name="save">
+								<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{ticketing.tasks_form_workflow.button_save}
+							</button>
+						</#if>
+				  		<button class="btn btn-default btn-sm" type="submit" name="back" value="back" >
+							<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{ticketing.tasks_form_workflow.button_cancel}
 						</button>
-					</#if>
-			  		<button class="btn btn-default btn-sm" type="submit" name="back" value="back" >
-						<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{ticketing.tasks_form_workflow.button_cancel}
-					</button>
+					</div>
 				</div>
 		    </form>
    		</fieldset>
