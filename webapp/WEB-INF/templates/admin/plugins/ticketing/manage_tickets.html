@@ -18,6 +18,7 @@
 				<tr>
 					<input type="hidden" id="id" name="id"/>
 					<th>#i18n{ticketing.manage_tickets.columnReference}</th>
+					<th>#i18n{ticketing.manage_tickets.columnTimeOpenedTicket}</th>
 					<th>#i18n{ticketing.manage_tickets.columnUser}</th>
 					<th>#i18n{ticketing.manage_tickets.columnTicketType} / #i18n{ticketing.manage_tickets.columnTicketDomain} / #i18n{ticketing.manage_tickets.columnTicketCategory}</th>
 					<th>#i18n{ticketing.manage_tickets.columnTicketComment}</th>
@@ -40,6 +41,9 @@
 								${ticket.id}
 							</a>
 							</#if>
+						</td>
+						<td>
+							${displayTimeOpenedTicket(ticket.timeOpenedTicketInMs)}
 						</td>
 						<td>
 							<i class="fa fa-user"></i> ${ticket.userTitle} <strong>${ticket.firstname} ${ticket.lastname}</strong><br>
@@ -127,6 +131,7 @@
 				<tr>
 					<input type="hidden" id="id" name="id"/>
 					<th>#i18n{ticketing.manage_tickets.columnReference}</th>
+					<th>#i18n{ticketing.manage_tickets.columnTimeOpenedTicket}</th>
 					<th>#i18n{ticketing.manage_tickets.columnUser}</th>
 					<th>#i18n{ticketing.manage_tickets.columnTicketType} / #i18n{ticketing.manage_tickets.columnTicketDomain} / #i18n{ticketing.manage_tickets.columnTicketCategory}</th>
 					<th>#i18n{ticketing.manage_tickets.columnTicketComment}</th>
@@ -149,6 +154,9 @@
 								${ticket.id}
 							</a>
 							</#if>
+						</td>
+						<td>
+							${displayTimeOpenedTicket(ticket.timeOpenedTicketInMs)}
 						</td>
 						<td>
 							<i class="fa fa-user"></i> ${ticket.userTitle} <strong>${ticket.firstname} ${ticket.lastname}</strong><br>
@@ -237,6 +245,7 @@
 				<tr>
 					<input type="hidden" id="id" name="id"/>
 					<th>#i18n{ticketing.manage_tickets.columnReference}</th>
+					<th>#i18n{ticketing.manage_tickets.columnTimeOpenedTicket}</th>
 					<th>#i18n{ticketing.manage_tickets.columnUser}</th>
 					<th>#i18n{ticketing.manage_tickets.columnTicketType} / #i18n{ticketing.manage_tickets.columnTicketDomain} / #i18n{ticketing.manage_tickets.columnTicketCategory}</th>
 					<th>#i18n{ticketing.manage_tickets.columnTicketComment}</th>
@@ -259,6 +268,9 @@
 								${ticket.id}
 							</a>
 							</#if>
+						</td>
+						<td>
+							${displayTimeOpenedTicket(ticket.timeOpenedTicketInMs)}
 						</td>
 						<td>
 							<i class="fa fa-user"></i> ${ticket.userTitle} <strong>${ticket.firstname} ${ticket.lastname}</strong><br>
@@ -335,3 +347,19 @@
 	  </@boxBody>
 	</@rowBox>
 </#if>
+
+<#function displayTimeOpenedTicket time_ms>
+	<#assign days = (time_ms / 86400000)?int>
+	<#assign hours = (time_ms / 3600000)?int>
+	<#assign minutes = (time_ms / 60000)?int>
+  
+	<#if days gte 1>
+		<#return days + " #i18n{ticketing.manage_tickets.unitDay}">
+	<#else>
+		<#if hours gte 1>
+			<#return hours + " #i18n{ticketing.manage_tickets.unitHour}">
+		<#else>
+			<#return minutes + " #i18n{ticketing.manage_tickets.unitMinute}">
+		</#if>
+	</#if>
+</#function>
