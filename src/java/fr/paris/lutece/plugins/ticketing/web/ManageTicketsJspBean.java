@@ -126,7 +126,6 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     // Parameters
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
     private static final String PARAMETER_GUID = "guid";
-    private static final String PARAMETER_CUSTOMER_ID = "cid";
     private static final String PARAMETER_FIRSTNAME = "fn";
     private static final String PARAMETER_LASTNAME = "ln";
     private static final String PARAMETER_PHONE = "ph";
@@ -370,7 +369,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private void initTicketForm( HttpServletRequest request, Ticket ticket, Map<String, Object> model )
     {
         String strGuid = request.getParameter( PARAMETER_GUID );
-        String strCustomerId = request.getParameter( PARAMETER_CUSTOMER_ID );
+        String strCustomerId = request.getParameter( TicketingConstants.PARAMETER_CUSTOMER_ID );
         String strFirstname = request.getParameter( PARAMETER_FIRSTNAME );
         String strLastname = request.getParameter( PARAMETER_LASTNAME );
         String strPhone = request.getParameter( PARAMETER_PHONE );
