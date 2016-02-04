@@ -113,6 +113,7 @@ public class Ticket implements Serializable, RBACResource
     private String _strCustomerId;
     private AssigneeUser _user;
     private AssigneeUnit _unit;
+    private String _strUserMessage;
 
     /**
      * Returns the Id
@@ -758,5 +759,26 @@ public class Ticket implements Serializable, RBACResource
     public String getResourceTypeCode(  )
     {
         return TICKET_RESOURCE_TYPE;
+    }
+
+    /**
+     * Returns the user message
+     *
+     * @return The user message
+     */
+    public String getUserMessage(  )
+    {
+        return _strUserMessage;
+    }
+
+    /**
+     * Sets the user message
+     *
+     * @param strUserMessage
+     *            The user message
+     */
+    public void setUserMessage( String strUserMessage )
+    {
+        _strUserMessage = strUserMessage;
     }
 }
