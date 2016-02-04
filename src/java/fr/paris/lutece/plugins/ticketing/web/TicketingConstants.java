@@ -59,6 +59,7 @@ public final class TicketingConstants
 
     // Properties
     public static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
+    public static final String PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ME = "ticketing.workflow.action.id.assignMe";
 
     /**
      * Default constructor

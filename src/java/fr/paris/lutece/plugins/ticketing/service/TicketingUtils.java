@@ -36,10 +36,17 @@ package fr.paris.lutece.plugins.ticketing.service;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
 import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 
 /**
@@ -80,9 +87,25 @@ public final class TicketingUtils
 
             if ( nIdWorkflow > 0 )
             {
-                ticket.setListWorkflowActions( WorkflowService.getInstance(  )
-                                                              .getActions( ticket.getId(  ),
-                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, user ) );
+                Collection<Action> fullListWorkflowActions = WorkflowService.getInstance(  )
+                                                                            .getActions( ticket.getId(  ),
+                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, user );
+                Collection<Action> filteredListWorkflowActions = new ArrayList<Action>( fullListWorkflowActions );
+
+                //filtering displayable actions 
+                for ( Action action : fullListWorkflowActions )
+                {
+                    if ( ( action.getId(  ) == AppPropertiesService.getPropertyInt( 
+                                TicketingConstants.PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ME, -1 ) ) &&
+                            ( ticket.getAssigneeUser(  ) != null ) &&
+                            ( user.getUserId(  ) == ticket.getAssigneeUser(  ).getAdminUserId(  ) ) )
+                    {
+                        //self assign action for a ticket already assign to the agent => removing action from list
+                        filteredListWorkflowActions.remove( action );
+                    }
+                }
+
+                ticket.setListWorkflowActions( filteredListWorkflowActions );
             }
         }
     }
