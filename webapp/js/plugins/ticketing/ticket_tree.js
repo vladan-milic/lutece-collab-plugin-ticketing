@@ -1,5 +1,5 @@
 // Turns the 3 combos identified by the jquery selectors into dynamic combos
-function lutece_ticket_tree(id_type, id_domain, id_category) {
+function lutece_ticket_tree(id_type, id_domain, id_category, selected_category_id, is_front, is_generic_attributes_managed) {
     var base = $('head base').attr('href');
     $.getJSON( base + "rest/ticketing/categories", function( data ) {
         var types_map = {};
@@ -82,31 +82,38 @@ function lutece_ticket_tree(id_type, id_domain, id_category) {
                 }
             }            
             if( has_category_changed ) {
-            	loadGenericAttributesForm(true);
+            	if (is_generic_attributes_managed) 
+            	{
+            		loadGenericAttributesForm(true, is_front);
+            	}
             }
         }
 
         $(id_type).change(change_ticket_type);
         $(id_domain).change(change_domain_type);
         var domain_id = $(id_domain).val();
-        change_ticket_type_impl(domain_id, category_id);
+        change_ticket_type_impl(domain_id, selected_category_id);
           
         var categorySelect = document.getElementById("id_ticket_category");       
-        if (category_id > 0 ) {
-    		categorySelect.value=category_id;
+        if (selected_category_id > 0 ) {
+    		categorySelect.value=selected_category_id;
     	} 
-        loadGenericAttributesForm(false);
-    	categorySelect.onchange=function(){
-    		loadGenericAttributesForm(true);
+    	if (is_generic_attributes_managed) 
+    	{
+    		loadGenericAttributesForm(false, is_front);
     	}
-  
-        
+    	categorySelect.onchange=function(){
+        	if (is_generic_attributes_managed) 
+        	{
+        		loadGenericAttributesForm(true, is_front);
+        	}
+    	}
     });
 }
 //load generic attributes form from selected category
-function loadGenericAttributesForm(bResetResponse) {
+function loadGenericAttributesForm(is_response_reseted, is_front) {
 	$.ajax({
-        url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+getSelectedCategoryValue()+"&reset_response="+bResetResponse+"&display_front="+bDisplayFront,
+        url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+getSelectedCategoryValue()+"&reset_response="+is_response_reseted+"&display_front="+is_front,
         type: "GET",
         dataType : "html",
         success: function( response ) {
