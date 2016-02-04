@@ -149,7 +149,7 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
     private static final String MARK_ADMIN_AVATAR = "adminAvatar";
-    private static final String MARK_TICKET_CREATION_RIGHT = "ticket_creation_right"; 
+    private static final String MARK_TICKET_CREATION_RIGHT = "ticket_creation_right";
     private static final String JSP_MANAGE_TICKETS = "jsp/admin/plugins/ticketing/ManageTickets.jsp";
     private static final String MARK_GUID = "guid";
     private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
@@ -290,11 +290,11 @@ public class ManageTicketsJspBean extends MVCAdminJspBean
         model.put( MARK_PAGINATOR_GROUP, paginatorGroupTickets );
         model.put( MARK_PAGINATOR_DOMAIN, paginatorDomainTickets );
         model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
-        
-        if ( RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_CREATE, getUser(  ) ) ) 
+
+        if ( RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_CREATE, getUser(  ) ) )
         {
             model.put( MARK_TICKET_CREATION_RIGHT, Boolean.TRUE );
-        } 
+        }
         else
         {
             model.put( MARK_TICKET_CREATION_RIGHT, Boolean.FALSE );

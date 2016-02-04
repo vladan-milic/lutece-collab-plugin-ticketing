@@ -60,22 +60,22 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, " +
         " a.fixed_phone_number, a.mobile_phone_number, c.id_ticket_type, c.label, d.id_ticket_domain, " +
         " d.label, a.id_ticket_category, e.label, a.id_contact_mode, f.label, a.ticket_comment," +
-        " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, a.id_unit " +
+        " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, a.id_unit, a.user_message " +
         " FROM ticketing_ticket a, ticketing_user_title b, ticketing_ticket_type c, ticketing_ticket_domain d, ticketing_ticket_category e, ticketing_contact_mode f " +
         " WHERE a.id_ticket = ? AND a.id_user_title = b.id_user_title AND a.id_ticket_category = e.id_ticket_category AND e.id_ticket_domain = d.id_ticket_domain AND d.id_ticket_type = c.id_ticket_type AND a.id_contact_mode = f.id_contact_mode";
     private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket ( id_ticket, ticket_reference , guid, id_user_title, firstname, lastname, email, " +
         " fixed_phone_number, mobile_phone_number, id_ticket_category, " +
         " id_contact_mode, ticket_comment, ticket_status, ticket_status_text, date_update, date_create, " +
-        " priority, criticality, id_customer, id_admin_user, id_unit ) " +
-        " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
+        " priority, criticality, id_customer, id_admin_user, id_unit, user_message ) " +
+        " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_ticket WHERE id_ticket = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket SET id_ticket = ?, ticket_reference = ?, guid = ?, id_user_title = ?, firstname = ?, lastname = ?, email = ?, fixed_phone_number = ?, mobile_phone_number = ?, " +
         " id_ticket_category = ?, id_contact_mode = ?, ticket_comment = ?, ticket_status = ?, ticket_status_text = ?, date_update = ?," +
-        " date_close = ? , priority = ? , criticality = ? , id_customer = ? , id_admin_user = ? , id_unit = ? " +
+        " date_close = ? , priority = ? , criticality = ? , id_customer = ? , id_admin_user = ? , id_unit = ?, user_message = ? " +
         " WHERE id_ticket = ?";
     private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, a.fixed_phone_number, a.mobile_phone_number," +
         " c.id_ticket_type, c.label, d.id_ticket_domain, d.label, a.id_ticket_category, e.label, a.id_contact_mode, f.label, a.ticket_comment," +
-        " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, a.id_unit " +
+        " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, a.id_unit, a.user_message " +
         " FROM ticketing_ticket a, ticketing_user_title b, ticketing_ticket_type c, ticketing_ticket_domain d, ticketing_ticket_category e, ticketing_contact_mode f " +
         " WHERE a.id_user_title = b.id_user_title AND a.id_ticket_category = e.id_ticket_category AND e.id_ticket_domain = d.id_ticket_domain AND d.id_ticket_type = c.id_ticket_type AND a.id_contact_mode = f.id_contact_mode";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket FROM ticketing_ticket";
@@ -169,6 +169,7 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setInt( nIndex++,
             ( ticket.getAssigneeUser(  ) != null ) ? ticket.getAssigneeUser(  ).getAdminUserId(  ) : ( -1 ) );
         daoUtil.setInt( nIndex++, ( ticket.getAssigneeUnit(  ) != null ) ? ticket.getAssigneeUnit(  ).getUnitId(  ) : 0 );
+        daoUtil.setString( nIndex++, ticket.getUserMessage(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -231,6 +232,8 @@ public final class TicketDAO implements ITicketDAO
             Unit unit = UnitHome.findByPrimaryKey( nUnitId );
             AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
             ticket.setAssigneeUnit( assigneeUnit );
+
+            ticket.setUserMessage( daoUtil.getString( nIndex++ ) );
         }
 
         daoUtil.free(  );
@@ -283,6 +286,7 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setInt( nIndex++,
             ( ticket.getAssigneeUser(  ) != null ) ? ticket.getAssigneeUser(  ).getAdminUserId(  ) : ( -1 ) );
         daoUtil.setInt( nIndex++, ( ticket.getAssigneeUnit(  ) != null ) ? ticket.getAssigneeUnit(  ).getUnitId(  ) : 0 );
+        daoUtil.setString( nIndex++, ticket.getUserMessage(  ) );
 
         daoUtil.setInt( nIndex++, ticket.getId(  ) );
 
@@ -341,6 +345,8 @@ public final class TicketDAO implements ITicketDAO
             Unit unit = UnitHome.findByPrimaryKey( nUnitId );
             AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
             ticket.setAssigneeUnit( assigneeUnit );
+
+            ticket.setUserMessage( daoUtil.getString( nIndex++ ) );
 
             ticketList.add( ticket );
         }
@@ -674,6 +680,9 @@ public final class TicketDAO implements ITicketDAO
             Unit unit = UnitHome.findByPrimaryKey( nUnitId );
             AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
             ticket.setAssigneeUnit( assigneeUnit );
+
+            ticket.setUserMessage( daoUtil.getString( nIndex++ ) );
+
             ticketList.add( ticket );
         }
 

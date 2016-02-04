@@ -45,6 +45,7 @@ import java.io.Serializable;
 
 import java.sql.Timestamp;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -113,6 +114,7 @@ public class Ticket implements Serializable, RBACResource
     private String _strCustomerId;
     private AssigneeUser _user;
     private AssigneeUnit _unit;
+    private String _strUserMessage;
 
     /**
      * Returns the Id
@@ -758,5 +760,35 @@ public class Ticket implements Serializable, RBACResource
     public String getResourceTypeCode(  )
     {
         return TICKET_RESOURCE_TYPE;
+    }
+
+    /**
+     * Returns the user message
+     *
+     * @return The user message
+     */
+    public String getUserMessage(  )
+    {
+        return _strUserMessage;
+    }
+
+    /**
+     * Sets the user message
+     *
+     * @param strUserMessage
+     *            The user message
+     */
+    public void setUserMessage( String strUserMessage )
+    {
+        _strUserMessage = strUserMessage;
+    }
+
+    /**
+     * Returns the time since when the ticket is opened in milliseconds.
+     * @return time since when the ticket is opened
+     */
+    public long getTimeOpenedTicketInMs(  )
+    {
+        return Calendar.getInstance(  ).getTime(  ).getTime(  ) - getDateCreate(  ).getTime(  );
     }
 }
