@@ -49,7 +49,7 @@ public final class TicketingConstants
     public static final String PARAMETER_BACK = "back";
     public static final String PARAMETER_GRU_CUSTOMER_ID = "id_customer";
     public static final String PARAMETER_CUSTOMER_ID = "cid";
-    
+
     // Attributes
     public static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON = "hide_next_button";
 
@@ -59,7 +59,7 @@ public final class TicketingConstants
     public static final String MARK_TASKS_FORM = "tasks_form";
     public static final String MARK_HIDE_NEXT_STEP_BUTTON = ATTRIBUTE_HIDE_NEXT_STEP_BUTTON;
     public static final String MARK_POCGRU_URL_360 = "url_poc_gru";
-    
+
     // Properties
     public static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
     public static final String PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ME = "ticketing.workflow.action.id.assignMe";

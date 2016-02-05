@@ -108,11 +108,12 @@ public class TicketViewJspBean extends MVCAdminJspBean
         TicketingUtils.setWorkflowAttributes( ticket, getUser(  ) );
 
         String strCustomerId = request.getParameter( TicketingConstants.PARAMETER_CUSTOMER_ID );
+
         if ( !StringUtils.isEmpty( strCustomerId ) && StringUtils.isEmpty( ticket.getCustomerId(  ) ) )
         {
             ticket.setCustomerId( strCustomerId );
         }
-        
+
         Map<String, Object> model = getModel(  );
         model.put( MARK_TICKET, ticket );
         model.put( MARK_PRIORITY, TicketPriority.valueOf( ticket.getPriority(  ) ).getLocalizedMessage( getLocale(  ) ) );
@@ -129,15 +130,14 @@ public class TicketViewJspBean extends MVCAdminJspBean
                     response, getLocale(  ) ) );
         }
 
-
         if ( StringUtils.isNotEmpty( ticket.getCustomerId(  ) ) &&
                 StringUtils.isNotEmpty( AppPropertiesService.getProperty( TicketingConstants.PROPERTY_POCGRU_URL_360 ) ) )
         {
             UrlItem url = new UrlItem( AppPropertiesService.getProperty( TicketingConstants.PROPERTY_POCGRU_URL_360 ) );
-            url.addParameter( TicketingConstants.PARAMETER_GRU_CUSTOMER_ID , ticket.getCustomerId(  ) );
-            model.put( TicketingConstants.MARK_POCGRU_URL_360, url.getUrl( ) );
+            url.addParameter( TicketingConstants.PARAMETER_GRU_CUSTOMER_ID, ticket.getCustomerId(  ) );
+            model.put( TicketingConstants.MARK_POCGRU_URL_360, url.getUrl(  ) );
         }
-        
+
         model.put( MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
 
         return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS, TEMPLATE_VIEW_TICKET_DETAILS, model );
