@@ -40,8 +40,12 @@ import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketCriticality;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketPriority;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import fr.paris.lutece.util.url.UrlItem;
+
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,6 +99,13 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
         setWorkflowAttributes( ticket );
 
+        String strCustomerId = request.getParameter( TicketingConstants.PARAMETER_CUSTOMER_ID );
+
+        if ( !StringUtils.isEmpty( strCustomerId ) && StringUtils.isEmpty( ticket.getCustomerId(  ) ) )
+        {
+            ticket.setCustomerId( strCustomerId );
+        }
+
         Map<String, Object> model = getModel(  );
         model.put( MARK_TICKET, ticket );
         model.put( MARK_PRIORITY, TicketPriority.valueOf( ticket.getPriority(  ) ).getLocalizedMessage( getLocale(  ) ) );
@@ -109,6 +120,14 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
             IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( response.getEntry(  ) );
             listReadOnlyResponseHtml.add( entryTypeService.getResponseValueForRecap( response.getEntry(  ), request,
                     response, getLocale(  ) ) );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getCustomerId(  ) ) &&
+                StringUtils.isNotEmpty( AppPropertiesService.getProperty( TicketingConstants.PROPERTY_POCGRU_URL_360 ) ) )
+        {
+            UrlItem url = new UrlItem( AppPropertiesService.getProperty( TicketingConstants.PROPERTY_POCGRU_URL_360 ) );
+            url.addParameter( TicketingConstants.PARAMETER_GRU_CUSTOMER_ID, ticket.getCustomerId(  ) );
+            model.put( TicketingConstants.MARK_POCGRU_URL_360, url.getUrl(  ) );
         }
 
         model.put( MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );

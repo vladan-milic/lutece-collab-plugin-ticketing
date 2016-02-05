@@ -42,9 +42,15 @@ public final class TicketingConstants
 {
     // Parameters
     public static final String PARAMETER_ID_TICKET = "id";
+    public static final String PARAMETER_GRU_CUSTOMER_ID = "id_customer";
+    public static final String PARAMETER_CUSTOMER_ID = "cid";
 
     // Markers
     public static final String MARK_ID_TICKET = PARAMETER_ID_TICKET;
+    public static final String MARK_POCGRU_URL_360 = "url_poc_gru";
+
+    // Properties
+    public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
 
     // Other constants
     public static final String JSP_MANAGE_TICKETS = "ManageTickets.jsp";
