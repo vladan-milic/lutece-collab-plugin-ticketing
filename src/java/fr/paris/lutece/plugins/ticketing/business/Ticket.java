@@ -791,4 +791,13 @@ public class Ticket implements Serializable, RBACResource
     {
         return Calendar.getInstance(  ).getTime(  ).getTime(  ) - getDateCreate(  ).getTime(  );
     }
+
+    /**
+     * Returns urgency, it s computed from max of criticty and priority value
+     * @return urgency
+     */
+    public int getUrgency(  )
+    {
+        return ( _nCriticality >= _nPriority ) ? _nCriticality : _nPriority;
+    }
 }

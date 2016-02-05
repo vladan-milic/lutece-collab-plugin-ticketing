@@ -25,6 +25,7 @@
 					<th colspan="2" >#i18n{ticketing.manage_tickets.columnTicketAssignee}</th>
 					<th>#i18n{ticketing.manage_tickets.columnTicketStatus}</th>
 					<th>#i18n{ticketing.manage_tickets.columnTicketState}</th>
+					<th>#i18n{ticketing.manage_tickets.columnTicketUrgency}</th>
 					<th>#i18n{portal.util.labelActions}</th>
 				</tr>
 				<@tableHeadBodySeparator />
@@ -92,6 +93,9 @@
 							</#if>
 						</td>
 						<td>
+							${ticket.urgency!''}
+						</td>
+						<td>
 							<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
 							   class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
 								<i class="fa fa-pencil"></i>
@@ -138,6 +142,7 @@
 					<th colspan="2" >#i18n{ticketing.manage_tickets.columnTicketAssignee}</th>
 					<th>#i18n{ticketing.manage_tickets.columnTicketStatus}</th>
 					<th>#i18n{ticketing.manage_tickets.columnTicketState}</th>
+					<th>#i18n{ticketing.manage_tickets.columnTicketUrgency}</th>
 					<th>#i18n{portal.util.labelActions}</th>
 				</tr>
 				<@tableHeadBodySeparator />
@@ -205,6 +210,9 @@
 							</#if>
 						</td>
 						<td>
+							${ticket.urgency!''}
+						</td>
+						<td>
 							<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
 							   class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
 								<i class="fa fa-pencil"></i>
@@ -252,6 +260,7 @@
 					<th colspan="2" >#i18n{ticketing.manage_tickets.columnTicketAssignee}</th>
 					<th>#i18n{ticketing.manage_tickets.columnTicketStatus}</th>
 					<th>#i18n{ticketing.manage_tickets.columnTicketState}</th>
+					<th>#i18n{ticketing.manage_tickets.columnTicketUrgency}</th>
 					<th>#i18n{portal.util.labelActions}</th>
 				</tr>
 				<@tableHeadBodySeparator />
@@ -317,6 +326,9 @@
 						<td><#if ticket.state?? && ticket.state.name??>
 								${ticket.state.name!''}
 							</#if>
+						</td>
+						<td>
+							${ticket.urgency!''}
 						</td>
 						<td>
 							<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
