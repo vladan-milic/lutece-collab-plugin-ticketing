@@ -1,8 +1,8 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<fieldset>
-		<legend> #i18n{ticketing.taskFormWorkflow.pageTitle}</legend>
-			<form class="form-horizontal" action="jsp/admin/plugins/ticketing/ManageTickets.jsp" method="post" enctype="multipart/form-data">
+		<legend> ${workflow_action.description}</legend>
+			<form class="form-horizontal" action="${form_action}" method="post" enctype="multipart/form-data">
 				<input name="action" value="doProcessWorkflowAction" type="hidden">
 				<input name="id_action" value="${id_action}" type="hidden">
 		   		<input name="id" value="${id}" type="hidden">
