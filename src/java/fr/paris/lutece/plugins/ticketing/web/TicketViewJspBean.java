@@ -37,19 +37,11 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
-import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketCriticality;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketPriority;
-import fr.paris.lutece.plugins.ticketing.service.TicketingUtils;
-import fr.paris.lutece.portal.service.workflow.WorkflowService;
-import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
-import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
-
-import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +55,7 @@ import javax.servlet.http.HttpServletRequest;
  * TicketViewJspBean
  */
 @Controller( controllerJsp = "TicketView.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = "TICKETING_TICKETS_MANAGEMENT" )
-public class TicketViewJspBean extends MVCAdminJspBean
+public class TicketViewJspBean extends WorkflowCapableJspBean
 {
     // Templates
     private static final String TEMPLATE_VIEW_TICKET_DETAILS = "/admin/plugins/ticketing/ticket/view_ticket_details.html";
@@ -79,13 +71,12 @@ public class TicketViewJspBean extends MVCAdminJspBean
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TICKET_DETAILS = "ticketing.view_ticket.pageTitle";
 
+    // Parameters
+    private static final String PARAMETER_FORCE_MANAGE_TICKETS_VIEW = "details_to_list";
+
     // Views
     private static final String VIEW_DETAILS = "ticketDetails";
     private static final String VIEW_HISTORY = "ticketHistory";
-    private static final String VIEW_WORKFLOW_ACTION_FORM = "viewWorkflowActionForm";
-
-    // Actions
-    private static final String ACTION_DO_PROCESS_WORKFLOW_ACTION = "doProcessWorkflowAction";
 
     // Other constants
     private static final long serialVersionUID = 1L;
@@ -102,7 +93,7 @@ public class TicketViewJspBean extends MVCAdminJspBean
         int nIdTicket = Integer.parseInt( strIdTicket );
 
         Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-        TicketingUtils.setWorkflowAttributes( ticket, getUser(  ) );
+        setWorkflowAttributes( ticket );
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_TICKET, ticket );
@@ -137,11 +128,9 @@ public class TicketViewJspBean extends MVCAdminJspBean
         int nIdTicket = Integer.parseInt( strIdTicket );
 
         Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-        TicketCategory category = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-        int nWorkflowId = category.getIdWorkflow(  );
-        String strHistory = WorkflowService.getInstance(  )
-                                           .getDisplayDocumentHistory( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE,
-                nWorkflowId, request, getLocale(  ) );
+
+        String strHistory = getDisplayDocumentHistory( request, ticket );
+
         Map<String, Object> model = getModel(  );
         model.put( MARK_TICKET, ticket );
         model.put( MARK_HISTORY, strHistory );
@@ -150,100 +139,52 @@ public class TicketViewJspBean extends MVCAdminJspBean
     }
 
     /**
-     * Get the workflow action form before processing the action. If the action
-     * does not need to display any form, then redirect the user to the workflow
-     * action processing page.
-     *
-     * @param request
-     *            The request
-     * @return The HTML content to display, or the next URL to redirect the user
-     *         to
+     * {@inheritDoc }
      */
-    @View( VIEW_WORKFLOW_ACTION_FORM )
-    public String getWorkflowActionForm( HttpServletRequest request )
+    @Override
+    public String redirectAfterWorkflowAction( HttpServletRequest request )
     {
-        String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
-        String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
+        boolean bForceManageTicketsView = Boolean.parseBoolean( request.getParameter( 
+                    PARAMETER_FORCE_MANAGE_TICKETS_VIEW ) );
 
-        if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
-                StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
+        if ( bForceManageTicketsView )
         {
-            int nIdAction = Integer.parseInt( strIdAction );
-            int nIdTicket = Integer.parseInt( strIdTicket );
-
-            if ( WorkflowService.getInstance(  ).isDisplayTasksForm( nIdAction, getLocale(  ) ) )
-            {
-                String strHtmlTasksForm = WorkflowService.getInstance(  )
-                                                         .getDisplayTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE,
-                        nIdAction, request, getLocale(  ) );
-
-                Map<String, Object> model = new HashMap<String, Object>(  );
-
-                model.put( TicketingConstants.MARK_TASKS_FORM, strHtmlTasksForm );
-                model.put( TicketingConstants.MARK_WORKFLOW_ID_ACTION, nIdAction );
-                model.put( TicketingConstants.MARK_ID_TICKET, nIdTicket );
-
-                //used to hide next button (if an error occured in html tasks form generation)
-                if ( request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) != null )
-                {
-                    model.put( TicketingConstants.MARK_HIDE_NEXT_STEP_BUTTON,
-                        request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) );
-                }
-
-                return getPage( TicketingConstants.PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW,
-                    TicketingConstants.TEMPLATE_TASKS_FORM_WORKFLOW, model );
-            }
-
-            return doProcessWorkflowAction( request );
+            return redirect( request, TicketingConstants.JSP_MANAGE_TICKETS );
         }
 
-        return redirectView( request, VIEW_DETAILS );
+        return defaultRedirect( request );
     }
 
     /**
-     * Do process a workflow action over a ticket
-     *
-     * @param request
-     *            The request
-     * @return The next URL to redirect to
+     * {@inheritDoc }
      */
-    @Action( ACTION_DO_PROCESS_WORKFLOW_ACTION )
-    public String doProcessWorkflowAction( HttpServletRequest request )
+    @Override
+    public String redirectWorkflowActionCancelled( HttpServletRequest request )
     {
-        String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
+        return defaultRedirect( request );
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public String defaultRedirectWorkflowAction( HttpServletRequest request )
+    {
+        return defaultRedirect( request );
+    }
+
+    /**
+     * Redirects to the default page
+     * @param request the request
+     * @return the default page
+     */
+    private String defaultRedirect( HttpServletRequest request )
+    {
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
 
-        if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
-                StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
-        {
-            int nIdAction = Integer.parseInt( strIdAction );
-            int nIdTicket = Integer.parseInt( strIdTicket );
+        Map<String, String> mapParams = new HashMap<String, String>(  );
+        mapParams.put( TicketingConstants.PARAMETER_ID_TICKET, strIdTicket );
 
-            if ( request.getParameter( TicketingConstants.PARAMETER_BACK ) == null )
-            {
-                Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-                TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-
-                if ( WorkflowService.getInstance(  ).isDisplayTasksForm( nIdAction, getLocale(  ) ) )
-                {
-                    String strError = WorkflowService.getInstance(  )
-                                                     .doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE,
-                            nIdAction, ticketCategory.getId(  ), request, getLocale(  ) );
-
-                    if ( strError != null )
-                    {
-                        return redirect( request, strError );
-                    }
-                }
-                else
-                {
-                    WorkflowService.getInstance(  )
-                                   .doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
-                        ticketCategory.getId(  ), request, getLocale(  ), false );
-                }
-            }
-        }
-
-        return redirectView( request, VIEW_DETAILS );
+        return redirect( request, VIEW_DETAILS, mapParams );
     }
 }
