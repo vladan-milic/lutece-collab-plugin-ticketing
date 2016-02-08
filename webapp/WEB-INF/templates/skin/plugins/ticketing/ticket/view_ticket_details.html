@@ -1,0 +1,27 @@
+<@rowBoxHeader i18nTitleKey="ticketing.view_ticket_details.pageTitle">
+    <fieldset class="form-horizontal">
+        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketReference">${ticket.reference!''}</@fieldStaticText>
+        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketStatus">${ticket.ticketStatusText!''}</@fieldStaticText>
+    </fieldset>
+    
+    <fieldset class="form-horizontal">
+        <legend>#i18n{ticketing.xpage.view_ticket_details.labelRecap}</legend>
+        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelUserTitle">${ticket.userTitle!''}</@fieldStaticText>
+        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelLastname">${ticket.lastname!''}</@fieldStaticText>
+        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelFirstname">${ticket.firstname!''}</@fieldStaticText>
+        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelEmail">${ticket.email!''}</@fieldStaticText>
+        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelPhoneNumber">${ticket.fixedPhoneNumber!''}</@fieldStaticText>
+        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketType">${ticket.ticketType!''}</@fieldStaticText>
+        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketDomain">${ticket.ticketDomain!''}</@fieldStaticText>
+        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketCategory">${ticket.ticketCategory!''}</@fieldStaticText>
+        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketComment">${ticket.ticketComment!''}</@fieldStaticText>
+        
+        <#list read_only_reponses_html_list as html_response>
+            <#if html_response?has_content>
+                <div class="genattr">
+                    ${html_response}
+                </div>
+            </#if>
+        </#list>
+    </fieldset>
+</@rowBoxHeader>

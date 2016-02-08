@@ -91,8 +91,9 @@ public class TicketXPage extends MVCApplication
     private static final String TEMPLATE_RECAP_TICKET = "/skin/plugins/ticketing/recap_ticket.html";
     private static final String TEMPLATE_CONFIRM_TICKET = "/skin/plugins/ticketing/confirm_ticket.html";
     private static final String TEMPLATE_MESSAGE_CONFIRM = "/skin/plugins/ticketing/message_confirm_ticket.html";
+
+    // Marks
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";
-    private static final String MARK_TICKET = "ticket";
     private static final String MARK_TICKET_FORM = "ticket_form";
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
@@ -107,6 +108,8 @@ public class TicketXPage extends MVCApplication
     private static final String MARK_FIX_PHONE_NUMBER = "fixedPhoneNumber";
     private static final String MARK_MOBILE_PHONE_NUMBER = "mobilePhoneNumber";
     private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
+
+    // Parameters
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
     private static final String PARAMETER_RESET_RESPONSE = "reset_response";
     private static final String PARAMETER_DISPLAY_FRONT = "display_front";
@@ -154,7 +157,7 @@ public class TicketXPage extends MVCApplication
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );
-        model.put( MARK_TICKET, ticket );
+        model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
@@ -268,7 +271,7 @@ public class TicketXPage extends MVCApplication
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_TICKET_ACTION, getActionTypeFromSession( request.getSession(  ) ) );
-        model.put( MARK_TICKET, ticket );
+        model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_RESPONSE_RECAP_LIST, listResponseRecap );
 
         removeActionTypeFromSession( request.getSession(  ) );
@@ -368,7 +371,7 @@ public class TicketXPage extends MVCApplication
         Map<String, Object> model = getModel(  );
         String strContent = fillTemplate( request, ticket );
         model.put( MARK_MESSAGE, strContent );
-        model.put( MARK_TICKET, ticket );
+        model.put( TicketingConstants.MARK_TICKET, ticket );
 
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
         removeActionTypeFromSession( request.getSession(  ) );
