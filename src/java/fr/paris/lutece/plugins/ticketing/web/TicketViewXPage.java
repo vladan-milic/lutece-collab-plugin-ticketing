@@ -57,13 +57,12 @@ import javax.servlet.http.HttpServletRequest;
 @Controller( xpageName = TicketViewXPage.XPAGE_NAME, pageTitleI18nKey = TicketViewXPage.MESSAGE_PAGE_TITLE, pagePathI18nKey = TicketViewXPage.MESSAGE_PATH )
 public class TicketViewXPage extends MVCApplication
 {
-    
     protected static final String XPAGE_NAME = "ticketView";
-    
+
     // Messages
     protected static final String MESSAGE_PAGE_TITLE = "ticketing.xpage.ticket.view.pageTitle";
     protected static final String MESSAGE_PATH = "ticketing.xpage.ticket.view.pagePathLabel";
-    
+
     /**
      * Generated serial id
      */
