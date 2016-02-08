@@ -66,11 +66,9 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     private static final String TEMPLATE_VIEW_TICKET_HISTORY = "/admin/plugins/ticketing/ticket/view_ticket_history.html";
 
     // Markers
-    private static final String MARK_TICKET = "ticket";
     private static final String MARK_PRIORITY = "priority";
     private static final String MARK_CRITICALITY = "criticality";
     private static final String MARK_HISTORY = "history";
-    private static final String MARK_LIST_READ_ONLY_HTML_RESPONSES = "read_only_reponses_html_list";
 
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TICKET_DETAILS = "ticketing.view_ticket.pageTitle";
@@ -107,7 +105,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         }
 
         Map<String, Object> model = getModel(  );
-        model.put( MARK_TICKET, ticket );
+        model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_PRIORITY, TicketPriority.valueOf( ticket.getPriority(  ) ).getLocalizedMessage( getLocale(  ) ) );
         model.put( MARK_CRITICALITY,
             TicketCriticality.valueOf( ticket.getCriticality(  ) ).getLocalizedMessage( getLocale(  ) ) );
@@ -130,7 +128,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
             model.put( TicketingConstants.MARK_POCGRU_URL_360, url.getUrl(  ) );
         }
 
-        model.put( MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
+        model.put( TicketingConstants.MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
 
         return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS, TEMPLATE_VIEW_TICKET_DETAILS, model );
     }
@@ -151,7 +149,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         String strHistory = getDisplayDocumentHistory( request, ticket );
 
         Map<String, Object> model = getModel(  );
-        model.put( MARK_TICKET, ticket );
+        model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_HISTORY, strHistory );
 
         return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS, TEMPLATE_VIEW_TICKET_HISTORY, model );

@@ -137,7 +137,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String MARK_TICKET_AGENT_LIST = "ticket_agent_list";
     private static final String MARK_TICKET_GROUP_LIST = "ticket_group_list";
     private static final String MARK_TICKET_DOMAIN_LIST = "ticket_domain_list";
-    private static final String MARK_TICKET = "ticket";
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
@@ -404,7 +403,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList(  ) );
-        model.put( MARK_TICKET, ticket );
+        model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_GUID, strGuid );
     }
 
@@ -695,7 +694,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_TICKET_ACTION, getActionTypeFromSession( request.getSession(  ) ) );
-        model.put( MARK_TICKET, ticket );
+        model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_RESPONSE_RECAP_LIST, listResponseRecap );
 
         removeActionTypeFromSession( request.getSession(  ) );

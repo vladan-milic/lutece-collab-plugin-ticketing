@@ -46,8 +46,10 @@ public final class TicketingConstants
     public static final String PARAMETER_CUSTOMER_ID = "cid";
 
     // Markers
+    public static final String MARK_TICKET = "ticket";
     public static final String MARK_ID_TICKET = PARAMETER_ID_TICKET;
     public static final String MARK_POCGRU_URL_360 = "url_poc_gru";
+    public static final String MARK_LIST_READ_ONLY_HTML_RESPONSES = "read_only_reponses_html_list";
 
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
