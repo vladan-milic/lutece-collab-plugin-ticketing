@@ -1,35 +1,35 @@
 <div class="form-group">
 	<label class="col-sm-3 control-label" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> :</label>
 	<#list entry.fields as field>
-	<div class="col-sm-9">
-		<input type="text" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" size="${field.width}" 
-			<#if list_responses??>
-				<#list list_responses as response>
-					<#if response.entry.idEntry == entry.idEntry>
-						<#if response.toStringValueResponse??>
-							value="${response.toStringValueResponse}"
-						</#if>
-						<#if response.entry.error??>
-							class="error"
-						</#if>
-					</#if>
-				</#list>
-			<#else>
-				<#if field.value?exists>
-					value="${field.value}" 
-			 	<#else>
-					 value="" 
-				</#if>
-			</#if>
-			<#if field.maxSizeEnter!=-1>
-				maxlength="${field.maxSizeEnter}"
-			</#if>
-			class="form-control ${entry.CSSClass!} "	/>
-		</#list>
-		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-			<p class="help-block">${entry.helpMessage}</p>
-		</#if>
-	</div>
+    	<div class="col-sm-9">
+    		<input type="text" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" size="${field.width}" 
+    			<#if list_responses??>
+    				<#list list_responses as response>
+    					<#if response.entry.idEntry == entry.idEntry>
+    						<#if response.responseValue??>
+    							value="${response.responseValue}"
+    						</#if>
+    						<#if response.entry.error??>
+    							class="error"
+    						</#if>
+    					</#if>
+    				</#list>
+    			<#else>
+    				<#if field.value?exists>
+    					value="${field.value}" 
+    			 	<#else>
+    					 value="" 
+    				</#if>
+    			</#if>
+    			<#if field.maxSizeEnter!=-1>
+    				maxlength="${field.maxSizeEnter}"
+    			</#if>
+    			class="form-control ${entry.CSSClass!} "	/>
+    		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
+    			<p class="help-block">${entry.helpMessage}</p>
+    		</#if>
+    	</div>
+    </#list>
 </div>
 <#if list_responses??>
 	<#list list_responses as response>
