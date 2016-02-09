@@ -96,15 +96,18 @@
 							${ticket.urgency!''}
 						</td>
 						<td>
-							<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
-							   class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
-								<i class="fa fa-pencil"></i>
-							</a>
-	
-							<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}"
-							   class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
-								<i class="fa fa-trash"></i>
-							</a>
+							<#if ticket_modification_right?? && ticket_modification_right>
+								<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
+									class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
+									<i class="fa fa-pencil"></i>
+								</a>
+							</#if>
+							<#if ticket_deletion_right?? && ticket_deletion_right>
+								<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}"
+									class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
+									<i class="fa fa-trash"></i>
+								</a>
+							</#if>
 							<#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
 								<#list ticket.listWorkflowActions as action>
 								<a class="btn btn-sm btn-primary"
@@ -213,15 +216,18 @@
 							${ticket.urgency!''}
 						</td>
 						<td>
-							<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
-							   class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
-								<i class="fa fa-pencil"></i>
-							</a>
-
-							<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}"
-							   class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
-								<i class="fa fa-trash"></i>
-							</a>
+							<#if ticket_modification_right?? && ticket_modification_right>
+								<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
+									class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
+									<i class="fa fa-pencil"></i>
+								</a>
+							</#if>
+							<#if ticket_deletion_right?? && ticket_deletion_right>
+								<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}"
+									class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
+									<i class="fa fa-trash"></i>
+								</a>
+							</#if>
 							<#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
 								<#list ticket.listWorkflowActions as action>
 								<a class="btn btn-sm btn-primary"
@@ -331,15 +337,18 @@
 							${ticket.urgency!''}
 						</td>
 						<td>
-							<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
-							   class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
-								<i class="fa fa-pencil"></i>
-							</a>
-	
-							<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}"
-							   class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
-								<i class="fa fa-trash"></i>
-							</a>
+							<#if ticket_modification_right?? && ticket_modification_right>
+								<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
+									class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
+									<i class="fa fa-pencil"></i>
+								</a>
+							</#if>
+							<#if ticket_deletion_right?? && ticket_deletion_right>
+								<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}"
+									class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
+									<i class="fa fa-trash"></i>
+								</a>
+							</#if>
 							<#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
 								<#list ticket.listWorkflowActions as action>
 								<a class="btn btn-sm btn-primary"
