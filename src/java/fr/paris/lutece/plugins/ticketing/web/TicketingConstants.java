@@ -50,11 +50,14 @@ public final class TicketingConstants
     public static final String MARK_ID_TICKET = PARAMETER_ID_TICKET;
     public static final String MARK_POCGRU_URL_360 = "url_poc_gru";
     public static final String MARK_LIST_READ_ONLY_HTML_RESPONSES = "read_only_reponses_html_list";
+    public static final String MARK_WEBAPP_URL = "webapp_url";
+    public static final String MARK_LOCALE = "locale";
 
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
 
     // Other constants
+    public static final String ADMIN_CONTROLLLER_PATH = "jsp/admin/plugins/ticketing/";
     public static final String JSP_MANAGE_TICKETS = "ManageTickets.jsp";
 
     /**

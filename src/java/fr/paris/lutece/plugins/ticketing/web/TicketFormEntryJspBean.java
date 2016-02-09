@@ -135,8 +135,6 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
     private static final String ACTION_DO_INSERT_REGULAR_EXPRESSION = "doInsertRegularExpression";
 
     // Marks
-    private static final String MARK_WEBAPP_URL = "webapp_url";
-    private static final String MARK_LOCALE = "locale";
     private static final String MARK_REGULAR_EXPRESSION_LIST_REF_LIST = "regular_expression_list";
     private static final String MARK_ENTRY = "entry";
     private static final String MARK_LIST = "list";
@@ -196,8 +194,8 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
         Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_ENTRY, entry );
         model.put( MARK_FORM, ticketForm );
-        model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-        model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
+        model.put( TicketingConstants.MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
+        model.put( TicketingConstants.MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
         model.put( MARK_ENTRY_TYPE_SERVICE, EntryTypeServiceManager.getEntryTypeService( entry ) );
 
         String strTemplate = EntryTypeServiceManager.getEntryTypeService( entry ).getTemplateCreate( entry, false );
@@ -349,8 +347,8 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
                 model.put( MARK_REGULAR_EXPRESSION_LIST_REF_LIST, refListRegularExpression );
             }
 
-            model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-            model.put( MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
+            model.put( TicketingConstants.MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
+            model.put( TicketingConstants.MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
             model.put( MARK_ENTRY_TYPE_SERVICE, EntryTypeServiceManager.getEntryTypeService( entry ) );
 
             return getPage( PROPERTY_MODIFY_QUESTION_TITLE, entryTypeService.getTemplateModify( entry, false ), model );
