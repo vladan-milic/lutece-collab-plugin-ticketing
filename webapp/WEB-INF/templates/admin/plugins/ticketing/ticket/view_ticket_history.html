@@ -1,4 +1,14 @@
 <#include "view_ticket_header.html" />
-<@ticketHeader tab='history' ticket=ticket />
-
-${history!''}
+  <@ticketHeader tab='history' ticket=ticket />
+    <div class="row">
+      <div class="col-xs-12 col-sm-offset-1 col-sm-7 table-responsive">
+        ${history!''}
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $( function(){
+    $(".content-header").toggle();
+  });
+</script>

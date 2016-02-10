@@ -1,54 +1,48 @@
-<link href="css/plugins/ticketing/ticketing.css" rel="stylesheet" >
-
 <#include "/admin/plugins/ticketing/commons.html" />
 <#include "view_ticket_header.html" />
 <@ticketHeader tab='details' ticket=ticket />
-
-<style>
-
-</style>
-
-<div class="ticketing-ticket-details" >
-    <div class="col-md-8">
-        <fieldset class="form-horizontal">
-            <div>
-                ${ticket.dateCreate!''}
-            </div>
-            <div>
-                ${ticket.ticketComment!''}
-            </div>
-            
-            <#list read_only_reponses_html_list as html_response>
-                <#if html_response?has_content>
-                    <div class="genattr">
-                        ${html_response}
-                    </div>
-                </#if>
-            </#list>
-            
-        </fieldset>
-    </div>
-    <div class="col-md-4">
-        <fieldset class="ticketing-form-group">
-            <@fieldStaticTextTicketDetails i18nLabelKey="ticketing.view_ticket_details.labelTicketType">${ticket.ticketType!''}</@fieldStaticTextTicketDetails>
-            <@fieldStaticTextTicketDetails i18nLabelKey="ticketing.view_ticket_details.labelTicketDomain">${ticket.ticketDomain!''}</@fieldStaticTextTicketDetails>
-            <@fieldStaticTextTicketDetails i18nLabelKey="ticketing.view_ticket_details.labelTicketCategory">${ticket.ticketCategory!''}</@fieldStaticTextTicketDetails>
-        </fieldset>
-        <fieldset class="ticketing-form-group">
-            <@fieldStaticTextTicketDetails i18nLabelKey="ticketing.view_ticket_details.labelTicketPriority">${priority!''}</@fieldStaticTextTicketDetails>
-            <@fieldStaticTextTicketDetails i18nLabelKey="ticketing.view_ticket_details.labelTicketCriticality">${criticality!''}</@fieldStaticTextTicketDetails>
-        </fieldset>
-    
-        <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
-            <div class="ticketing-form-group">
-                <#list ticket.listWorkflowActions as action>
-                <a class="btn btn-sm btn-primary"
-                    href="jsp/admin/plugins/ticketing/TicketView.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}" 
-                        title="${action.name}">
-                    ${action.name}
-                </a>
-                </#list>
-            </div>
+<div class="row">
+  <div class="col-xs-12 col-sm-offset-1 col-sm-7">
+    <h3 class="text-darkgray">${ticket.dateCreate!''}<h3>
+    <#if ticket.ticketComment !=''>
+      <div class="text-justify">
+        ${ticket.ticketComment}
+      </div>
+    <#else>
+      <i class="fa fa-warning"></i> Pas de commentaire
+    </#if>
+      <#list read_only_reponses_html_list as html_response>
+        <#if html_response?has_content>
+          ${html_response}
         </#if>
+      </#list>
     </div>
+    <div class="col-xs-12 col-sm-4" style="border-left: 1px solid #DDD;min-height:600px;margin-top:-15px;padding:20px 20px; margin-left: -5px">
+      <h4 style="color:#808179">Nature de la demande<p>
+      <h4>${ticket.ticketType}</h4>
+      <h4 style="color:#808179">Domaine<h4>
+      <h4>${ticket.ticketDomain}</h4>
+      <h4 style="color:#808179">Cat&eacute;gorie<h4>
+      <h4>${ticket.ticketCategory}</h4>
+      <hr>
+      <h4 style="color:#808179">Pirorit&eacute;<h4>
+      <h4>${priority!''}</h4>
+      <h4 style="color:#808179">Criticit&eacute;<h4>
+      <h4>${criticality!''}</h4>
+      <hr>
+      <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
+        <#list ticket.listWorkflowActions as action>
+          <p>
+            <a class="btn btn-lg btn-primary btn-block bg-gru-light"  href="jsp/admin/plugins/ticketing/TicketView.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}" title="${action.name}">
+              <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
+            </a>
+        </p>
+      </#list>
+    </#if>
+  </div>
 </div>
+<script>
+  $( function(){
+    $(".content-header").toggle();
+  });
+</script>

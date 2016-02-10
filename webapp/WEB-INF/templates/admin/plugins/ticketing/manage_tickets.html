@@ -1,379 +1,217 @@
-<@rowBox>
-    <@boxHeader i18nTitleKey="ticketing.manage_tickets.labelAgentTickets">
-        <@headerButtons>
-	        <form class="form-inline pull-right" method="post" name="manage_tickets" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
-	        	<#if ticket_creation_right?? && ticket_creation_right>
-		            <!-- Add pull-right to class1 -->
-		            <@actionButtons button1Name="view_createTicket" icon1="icon-plus icon-white" i18nValue1Key="ticketing.manage_tickets.buttonAdd" />
-		        </#if>
-	        </form>
-	    </@headerButtons>
-    </@boxHeader>
-    <@boxBody> 
-	    <@messages infos=infos />
-	    <@messages errors=errors />
-	    <@paginationAdmin paginator=paginator_agent combo=1 />
-	    <div class="clearfix"></div>
-			<@table>
-				<tr>
-					<input type="hidden" id="id" name="id"/>
-					<th>#i18n{ticketing.manage_tickets.columnReference}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTimeOpenedTicket}</th>
-					<th>#i18n{ticketing.manage_tickets.columnUser}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketType} / #i18n{ticketing.manage_tickets.columnTicketDomain} / #i18n{ticketing.manage_tickets.columnTicketCategory}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketComment}</th>
-					<th colspan="2" >#i18n{ticketing.manage_tickets.columnTicketAssignee}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketStatus}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketState}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketUrgency}</th>
-					<th>#i18n{portal.util.labelActions}</th>
-				</tr>
-				<@tableHeadBodySeparator />
-				<#list ticket_agent_list as ticket >
-					<tr>
-						<input type="hidden" id="id" name="id"/>
-						<td>
-							<#if ticket.reference??>
-							<a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}">
-								${ticket.reference}
-							</a>
-							<#else>
-							<a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}">
-								${ticket.id}
-							</a>
-							</#if>
-						</td>
-						<td>
-							${displayTimeOpenedTicket(ticket.timeOpenedTicketInMs)}
-						</td>
-						<td>
-							<i class="fa fa-user"></i> ${ticket.userTitle} <strong>${ticket.firstname} ${ticket.lastname}</strong><br>
-							<#if ticket.email ??>
-							<small>
-							<i class="fa fa-envelope"></i> ${ticket.email}<br>
-							</small>
-							</#if>
-							<#if ticket.mobilePhoneNumber ?? && ticket.mobilePhoneNumber?length &gt; 1 >
-							<small>
-							<i class="fa fa-mobile-phone"></i> ${ticket.mobilePhoneNumber}
-							</small>
-							</#if>
-							<#if ticket.fixedPhoneNumber ?? && ticket.fixedPhoneNumber?length &gt; 1>
-							<small>
-							<i class="fa fa-phone"></i> ${ticket.fixedPhoneNumber}
-							</small>
-							</#if>
-						</td>
-						<td>
-							${ticket.ticketType} <br>${ticket.ticketDomain} <br> <strong>${ticket.ticketCategory}</strong>
-						</td>
-						<td>
-							${ticket.ticketComment}
-						</td>
-						<td>
-							<#if ticket.assigneeUnit??>
-								${ticket.assigneeUnit.name}
-							<#else>
-								-
-							</#if>
-						</td>
-						<td>
-							<#if ticket.assigneeUser??>
-								<#if adminAvatar><img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}" alt="Avatar" title="Avatar"></#if>
-								${ticket.assigneeUser.firstname} ${ticket.assigneeUser.lastname}
-							<#else>
-								-
-							</#if>
-						</td>
-						<td>
-							${ticket.ticketStatus} ${ticket.ticketStatusText!''}
-						</td>
-						<td><#if ticket.state?? && ticket.state.name??>
-								${ticket.state.name!''}
-							</#if>
-						</td>
-						<td>
-							${ticket.urgency!''}
-						</td>
-						<td>
-							<#if ticket_modification_right?? && ticket_modification_right>
-								<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
-									class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
-									<i class="fa fa-pencil"></i>
-								</a>
-							</#if>
-							<#if ticket_deletion_right?? && ticket_deletion_right>
-								<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}"
-									class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
-									<i class="fa fa-trash"></i>
-								</a>
-							</#if>
-							<#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
-								<#list ticket.listWorkflowActions as action>
-								<a class="btn btn-sm btn-primary"
-									href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}">
-										<img src="image?resource_type=workflow_icon_img&id=${action.icon.id}"
-										<#if action.icon.width!=-1> width="${action.icon.width}" </#if>
-										<#if action.icon.height!=-1> height="${action.icon.height}"</#if>
-										title="${action.name}" alt="${action.name}" />
-								</a>
-								</#list>
-							</#if>
-					</td>
-				</tr>
-			</#list>
-		</@table>
-		<@paginationAdmin paginator=paginator_agent />
- 	</@boxBody>
-</@rowBox>
+<#macro renderTabPanel panel_list active=false id=''>
+<div role="tabpanel" class="tab-pane table-responsive<#if active> active</#if>" <#if id!="">id="${id}"</#if>>
+    <table class="table table-hover table-striped">
+      <tr>
+        <th>#i18n{ticketing.manage_tickets.columnReference}</th>
+        <th><!-- #i18n{ticketing.manage_tickets.columnUser}--> Ouvert depuis</th>
+        <th><!-- #i18n{ticketing.manage_tickets.columnTicketType} / #i18n{ticketing.manage_tickets.columnTicketDomain} / #i18n{ticketing.manage_tickets.columnTicketCategory}--> Nature</th>
+        <th>#i18n{ticketing.manage_tickets.columnUser}/#i18n{ticketing.manage_tickets.columnTicketComment}</th>
+        <th>#i18n{ticketing.manage_tickets.columnTicketStatus}</th>
+        <th>#i18n{ticketing.manage_tickets.columnTicketState}</th>
+        <th> #i18n{ticketing.manage_tickets.columnTicketAssignee}</th>
+        <th>#i18n{portal.util.labelActions}</th>
+      </tr>
+      <#if panel_list?? && panel_list?has_content>
+        <#list panel_list as ticket >
+        <input type="hidden" id="id" name="id">
+        <tr>
+          <td>
+            <#assign textColor="green"/>
+            <#if ticket.urgency==1 >
+              <#assign textColor="orange"/>
+            <#elseif ticket.urgency==2 >
+              <#assign textColor="red"/>
+            </#if>
+            <#if ticket.reference??>
+              <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" title="Criticit&eacute;: 1 / Urgence: 1">
+                <i class="fa fa-circle text-${textColor}" ></i> ${ticket.reference}
+              </a>
+            <#else>
+              <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}"  title="Criticit&eacute;: 1 / Urgence: 1">
+                <i class="fa fa-circle text-${textColor}" ></i> ${ticket.id}
+              </a>
+            </#if>
+          </td>
+          <td>
+            ${displayTimeOpenedTicket(ticket.timeOpenedTicketInMs)}
+          </td>
+          <td>
+            ${ticket.ticketType} <br>${ticket.ticketDomain} <br> <strong>${ticket.ticketCategory}</strong>
+          </td>
+          <td>
+            <p>
+            <strong>${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}</strong>
+            <#if ticket.email ??>
+              <small>
+                <i class="fa fa-envelope"></i> ${ticket.email}<br>
+              </small>
+            </#if>
+            <#if ticket.mobilePhoneNumber ?? && ticket.mobilePhoneNumber?length &gt; 1 >
+              <small>
+                <i class="fa fa-mobile-phone"></i> ${ticket.mobilePhoneNumber}
+              </small>
+            </#if>
+            <#if ticket.fixedPhoneNumber ?? && ticket.fixedPhoneNumber?length &gt; 1>
+              <small>
+                <i class="fa fa-phone"></i> ${ticket.fixedPhoneNumber}
+              </small>
+            </#if>
+            </p>
+            ${ticket.ticketComment}
+          </td>
+          <td>
+            <#switch ticket.ticketStatus>
+              <#case 0>
+                En cours
+              <#break>
+              <#case 1>
+                Termin&eacute;e
+              <#break>
+            </#switch>
+            ${ticket.ticketStatusText!''}
+          </td>
+          <td><#if ticket.state?? && ticket.state.name??>
+            ${ticket.state.name!''}
+            </#if>
+          </td>
+          <td>
+            <#if ticket.assigneeUnit??>${ticket.assigneeUnit.name}</#if>
+            <#if ticket.assigneeUser??>
+              <#if adminAvatar><img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}" alt="Avatar" title="Avatar"></#if>
+              ${ticket.assigneeUser.firstname} ${ticket.assigneeUser.lastname}
+            <#else>
+              -
+            </#if>
+          </td>
+          <td>
+            <#if ticket_modification_right?? && ticket_modification_right>
+              <a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
+                class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
+                <i class="fa fa-pencil"></i>
+              </a>
+            </#if>
+            <#if ticket_deletion_right?? && ticket_deletion_right>
+              <a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}"
+                class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
+                <i class="fa fa-trash"></i>
+              </a>
+            </#if>
+            <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
+              <#list ticket.listWorkflowActions as action>
+              <a class="btn btn-sm btn-primary"
+                href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}">
+                  <img src="image?resource_type=workflow_icon_img&id=${action.icon.id}"
+                  <#if action.icon.width!=-1> width="${action.icon.width}" </#if>
+                  <#if action.icon.height!=-1> height="${action.icon.height}"</#if>
+                  title="${action.name}" alt="${action.name}" />
+              </a>
+              </#list>
+            </#if>
+        </td>
+        </tr>
+        </#list>
+      </#if>
+    </table>
+    <div class="clearfix" style="color:#000">
+      <@paginationAdmin paginator=paginator_domain combo=1 />
+    </div>
+</div>
+</#macro>
 
- <#if ticket_group_list?? && ticket_group_list?has_content>
-	<@rowBox>
-		<@boxHeader i18nTitleKey="ticketing.manage_tickets.labelGroupTickets">
-		</@boxHeader>
-		<@boxBody>
-		    <@paginationAdmin paginator=paginator_group combo=1 />
-			<div class="clearfix"></div>
-			<@table>
-				<tr>
-					<input type="hidden" id="id" name="id"/>
-					<th>#i18n{ticketing.manage_tickets.columnReference}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTimeOpenedTicket}</th>
-					<th>#i18n{ticketing.manage_tickets.columnUser}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketType} / #i18n{ticketing.manage_tickets.columnTicketDomain} / #i18n{ticketing.manage_tickets.columnTicketCategory}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketComment}</th>
-					<th colspan="2" >#i18n{ticketing.manage_tickets.columnTicketAssignee}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketStatus}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketState}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketUrgency}</th>
-					<th>#i18n{portal.util.labelActions}</th>
-				</tr>
-				<@tableHeadBodySeparator />
-				<#list ticket_group_list as ticket>
-					<tr>
-						<input type="hidden" id="id" name="id"/>
-						<td>
-							<#if ticket.reference??>
-							<a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}">
-								${ticket.reference}
-							</a>
-							<#else>
-							<a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}">
-								${ticket.id}
-							</a>
-							</#if>
-						</td>
-						<td>
-							${displayTimeOpenedTicket(ticket.timeOpenedTicketInMs)}
-						</td>
-						<td>
-							<i class="fa fa-user"></i> ${ticket.userTitle} <strong>${ticket.firstname} ${ticket.lastname}</strong><br>
-							<#if ticket.email ??>
-							<small>
-							<i class="fa fa-envelope"></i> ${ticket.email}<br>
-							</small>
-							</#if>
-							<#if ticket.mobilePhoneNumber ?? && ticket.mobilePhoneNumber?length &gt; 1 >
-							<small>
-							<i class="fa fa-mobile-phone"></i> ${ticket.mobilePhoneNumber}
-							</small>
-							</#if>
-							<#if ticket.fixedPhoneNumber ?? && ticket.fixedPhoneNumber?length &gt; 1>
-							<small>
-							<i class="fa fa-phone"></i> ${ticket.fixedPhoneNumber}
-							</small>
-							</#if>
-						</td>
-						<td>
-							${ticket.ticketType} <br>${ticket.ticketDomain} <br> <strong>${ticket.ticketCategory}</strong>
-						</td>
-						<td>
-							${ticket.ticketComment}
-						</td>
-						<td>
-							<#if ticket.assigneeUnit??>
-								${ticket.assigneeUnit.name}
-							<#else>
-								-
-							</#if>
-						</td>
-						<td>
-							<#if ticket.assigneeUser??>
-								<#if adminAvatar><img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}" alt="Avatar" title="Avatar"></#if>
-								${ticket.assigneeUser.firstname} ${ticket.assigneeUser.lastname}
-							<#else>
-								-
-							</#if>
-						</td>
-						<td>
-							${ticket.ticketStatus} ${ticket.ticketStatusText!''}
-						</td>
-						<td><#if ticket.state?? && ticket.state.name??>
-								${ticket.state.name!''}
-							</#if>
-						</td>
-						<td>
-							${ticket.urgency!''}
-						</td>
-						<td>
-							<#if ticket_modification_right?? && ticket_modification_right>
-								<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
-									class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
-									<i class="fa fa-pencil"></i>
-								</a>
-							</#if>
-							<#if ticket_deletion_right?? && ticket_deletion_right>
-								<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}"
-									class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
-									<i class="fa fa-trash"></i>
-								</a>
-							</#if>
-							<#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
-								<#list ticket.listWorkflowActions as action>
-								<a class="btn btn-sm btn-primary"
-									href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}">
-										<img src="image?resource_type=workflow_icon_img&id=${action.icon.id}"
-										<#if action.icon.width!=-1> width="${action.icon.width}" </#if>
-										<#if action.icon.height!=-1> height="${action.icon.height}"</#if>
-										title="${action.name}" alt="${action.name}" />
-								</a>
-								</#list>
-							</#if>
-						</td>
-					</tr>
-				</#list>
-			</@table>
-			<@paginationAdmin paginator=paginator_group />
-		</@boxBody>
-	</@rowBox>
-</#if>
-
-<#if ticket_domain_list?? && ticket_domain_list?has_content>
-	<@rowBox>
-		<@boxHeader i18nTitleKey="ticketing.manage_tickets.labelDomainTickets">
-		</@boxHeader>
-		<@boxBody>
-			<@paginationAdmin paginator=paginator_domain combo=1 />
-			<div class="clearfix"></div>
-			<@table>
-				<tr>
-					<input type="hidden" id="id" name="id"/>
-					<th>#i18n{ticketing.manage_tickets.columnReference}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTimeOpenedTicket}</th>
-					<th>#i18n{ticketing.manage_tickets.columnUser}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketType} / #i18n{ticketing.manage_tickets.columnTicketDomain} / #i18n{ticketing.manage_tickets.columnTicketCategory}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketComment}</th>
-					<th colspan="2" >#i18n{ticketing.manage_tickets.columnTicketAssignee}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketStatus}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketState}</th>
-					<th>#i18n{ticketing.manage_tickets.columnTicketUrgency}</th>
-					<th>#i18n{portal.util.labelActions}</th>
-				</tr>
-				<@tableHeadBodySeparator />
-				<#list ticket_domain_list as ticket >
-					<tr>
-						<input type="hidden" id="id" name="id"/>
-						<td>
-							<#if ticket.reference??>
-							<a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}">
-								${ticket.reference}
-							</a>
-							<#else>
-							<a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}">
-								${ticket.id}
-							</a>
-							</#if>
-						</td>
-						<td>
-							${displayTimeOpenedTicket(ticket.timeOpenedTicketInMs)}
-						</td>
-						<td>
-							<i class="fa fa-user"></i> ${ticket.userTitle} <strong>${ticket.firstname} ${ticket.lastname}</strong><br>
-							<#if ticket.email ??>
-							<small>
-							<i class="fa fa-envelope"></i> ${ticket.email}<br>
-							</small>
-							</#if>
-							<#if ticket.mobilePhoneNumber ?? && ticket.mobilePhoneNumber?length &gt; 1 >
-							<small>
-							<i class="fa fa-mobile-phone"></i> ${ticket.mobilePhoneNumber}
-							</small>
-							</#if>
-							<#if ticket.fixedPhoneNumber ?? && ticket.fixedPhoneNumber?length &gt; 1>
-							<small>
-							<i class="fa fa-phone"></i> ${ticket.fixedPhoneNumber}
-							</small>
-							</#if>
-						</td>
-						<td>
-							${ticket.ticketType} <br>${ticket.ticketDomain} <br> <strong>${ticket.ticketCategory}</strong>
-						</td>
-						<td>
-							${ticket.ticketComment}
-						</td>
-						<td>
-							<#if ticket.assigneeUnit??>
-								${ticket.assigneeUnit.name}
-							<#else>
-								-
-							</#if>
-						</td>
-						<td>
-							<#if ticket.assigneeUser??>
-								<#if adminAvatar><img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}" alt="Avatar" title="Avatar"></#if>
-								${ticket.assigneeUser.firstname} ${ticket.assigneeUser.lastname}
-							<#else>
-								-
-							</#if>
-						</td>
-						<td>
-							${ticket.ticketStatus} ${ticket.ticketStatusText!''}
-						</td>
-						<td><#if ticket.state?? && ticket.state.name??>
-								${ticket.state.name!''}
-							</#if>
-						</td>
-						<td>
-							${ticket.urgency!''}
-						</td>
-						<td>
-							<#if ticket_modification_right?? && ticket_modification_right>
-								<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
-									class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
-									<i class="fa fa-pencil"></i>
-								</a>
-							</#if>
-							<#if ticket_deletion_right?? && ticket_deletion_right>
-								<a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}"
-									class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
-									<i class="fa fa-trash"></i>
-								</a>
-							</#if>
-							<#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
-								<#list ticket.listWorkflowActions as action>
-								<a class="btn btn-sm btn-primary"
-									href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}">
-										<img src="image?resource_type=workflow_icon_img&id=${action.icon.id}"
-										<#if action.icon.width!=-1> width="${action.icon.width}" </#if>
-										<#if action.icon.height!=-1> height="${action.icon.height}"</#if>
-										title="${action.name}" alt="${action.name}" />
-								</a>
-								</#list>
-							</#if>
-					</td>
-					</tr>
-				</#list>
-			</@table>
-			<@paginationAdmin paginator=paginator_domain />
-	  </@boxBody>
-	</@rowBox>
-</#if>
+<!-- TEMPLATE -->
+<div class="row" id="ticketing-panel">
+  <div class="col-xs-12 col-sm12">
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="active">
+        <a href="#agent" aria-controls="agent" role="tab" data-toggle="tab">
+          <i class="fa fa-inbox"></i> Mes demandes &agrave; traiter <span class="label label-default">${ticket_agent_list?size}</label>
+        </a>
+      </li>
+      <li role="presentation">
+        <a href="#group" aria-controls="group" role="tab" data-toggle="tab">
+          <i class="fa fa-users"></i> Les demandes de mon &eacute;quipe <span class="label label-default">${ticket_group_list?size}</label>
+        </a>
+      </li>
+      <li role="presentation">
+        <a href="#domain" aria-controls="domain" role="tab" data-toggle="tab">
+          <i class="fa fa-tags"></i> Les demandes par domaine <span class="label label-default">${ticket_domain_list?size}</label>
+        </a>
+      </li>
+      <li >
+        <form method="post" name="manage_tickets" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+          <button name="view_createTicket" type="submit" class="btn btn-link">
+            <i class="fa fa-plus"></i> #i18n{ticketing.manage_tickets.buttonAdd}
+          </button>
+        </form>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div id="filter" class="row">
+        <div class="col-xs-12 col-sm-6">
+          <form class="form-inline" action="">
+            <div class="form-group">
+              <button type="submit" class="btn btn-default btn-sm bg-gru-light">Tout</button>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-danger btn-sm">Urgent</button>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-warning btn-sm">Moyen</button>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-info btn-sm">Bas</button>
+            </div>
+          </form>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <form class="form-inline" action="">
+            <div class="form-group">
+              <p class="form-control-static">Filter par :</p>
+            </div>
+            <div class="form-group">
+              <label class="select" for="nature">
+                <select name="nature" id="nature" class="form-control">
+                  <option value="all" selected="selected">Nature</option>
+                  <option value="carte">Demande de carte</option>
+                  <option value="stationnement">Horaire de stationnement</option>
+                  <option value="autre">Autre</option>
+                </select>
+              </label>
+              <label class="select" for="domaine">
+                <select name="domaine" id="domaine" class="form-control">
+                  <option value="all" selected="selected">Domaine</option>
+                  <option value="autre">Autre</option>
+                </select>
+              </label>
+              <label class="select" for="since">
+                <select name="since" id="since" class="form-control">
+                  <option value="all" selected="selected">Ouvert depuis</option>
+                  <option value="1">1 jours</option>
+                  <option value="2">1 semaine</option>
+                  <option value="3">1 mois</option>
+                </select>
+              </label>
+            </div>
+          </form>
+        </div>
+      </div>
+      <@renderTabPanel panel_list=ticket_agent_list active=true id='agent' />
+      <@renderTabPanel panel_list=ticket_group_list id='group' />
+      <@renderTabPanel panel_list=ticket_domain_list id='domain' />
+    </div>
+  </div>
+</div>
+<script>
+$( function(){
+  $(".content-header").toggle();
+});
+</script>
 
 <#function displayTimeOpenedTicket time_ms>
 	<#assign days = (time_ms / 86400000)?int>
 	<#assign hours = (time_ms / 3600000)?int>
 	<#assign minutes = (time_ms / 60000)?int>
-  
+
 	<#if days gte 1>
 		<#return days + " #i18n{ticketing.manage_tickets.unitDay}">
 	<#else>

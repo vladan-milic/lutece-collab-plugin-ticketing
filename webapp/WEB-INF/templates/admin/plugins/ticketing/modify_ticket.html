@@ -1,29 +1,86 @@
 <#include "/skin/plugins/asynchronousupload/upload_commons.html" />
-
-<@rowBoxHeader i18nTitleKey="ticketing.modify_ticket.pageTitle">
-    <form class="form-horizontal" method="post" name="modify_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp"  enctype="multipart/form-data">
-        <@messages errors=errors />
-        <input type="hidden" id="id" name="id" value="${ticket.id}"/>
-        <input type="hidden" id="guid" name="guid" value=""/>
-        <@fieldInputCombo i18nLabelKey="ticketing.modify_ticket.labelUserTitle" inputName="id_user_title" items=user_titles_list value="${ticket.idUserTitle!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelIdUserTitle.help" cssClass='' /> 
-        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelFirstname" inputName="firstname" mandatory=true value="${ticket.firstname!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelFirstname.help" />
-        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelLastname" inputName="lastname" mandatory=true value="${ticket.lastname!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelLastname.help" />
-        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelEmail" inputName="email" mandatory=true value="${ticket.email!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelEmail.help" />
-        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelFixedPhoneNumber" inputName="fixed_phone_number"  value="${ticket.fixedPhoneNumber!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelFixedPhoneNumber.help" />
-        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelMobilePhoneNumber" inputName="mobile_phone_number"  value="${ticket.mobilePhoneNumber!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelMobilePhoneNumber.help" />
-        <@fieldInputCombo i18nLabelKey="ticketing.modify_ticket.labelTicketType" inputName="id_ticket_type" items=ticket_types_list value="${ticket.idTicketType!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelTicketType.help" cssClass='' /> 
-        <@fieldInputCombo i18nLabelKey="ticketing.modify_ticket.labelTicketDomain" inputName="id_ticket_domain" items=ticket_domains_list value="${ticket.idTicketDomain!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelTicketDomain.help" cssClass='' /> 
-        <@fieldInputCombo i18nLabelKey="ticketing.modify_ticket.labelTicketCategory" inputName="id_ticket_category" items=ticket_categories_list value="${ticket.idTicketCategory!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelTicketCategory.help" cssClass='' /> 
-        <@fieldInputCombo i18nLabelKey="ticketing.modify_ticket.labelContactMode" inputName="id_contact_mode" items=contact_modes_list value="${ticket.idContactMode!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelIdContactMode.help" cssClass='' /> 
-        <@fieldInputText i18nLabelKey="ticketing.modify_ticket.labelTicketComment" inputName="ticket_comment"  value="${ticket.ticketComment!''}" i18nHelpBlockKey="ticketing.modify_ticket.labelTicketComment.help" />
- 		<div id="generic_attributes">
-		</div>
-        <@actionButtons button1Name="action_recapTicket" button2Name="view_manageTickets"/>
+<div id="ticketing-wrapper">
+  <div id="head-ticketing" class="bg-gru-dark">
+    <h2>#i18n{ticketing.modify_ticket.pageTitle}</h2>
+  </div>
+  <div id="content-ticketing">
+    <form class="form" method="post" name="modify_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp"  enctype="multipart/form-data">
+      <@messages errors=errors />
+      <input type="hidden" id="id" name="id" value="${ticket.id}">
+      <input type="hidden" id="guid" name="guid" value="">
+      <div class="row">
+        <div class="col-xs-12 col-sm-6">
+          <div class="form-group">
+            <label for="id_user_title">#i18n{ticketing.create_ticket.labelUserTitle}</label>
+            <@comboWithParams name="id_user_title" default_value="${ticket.idUserTitle!''}" additionalParameters=" id=\"id_user_title\" class=\"form-control input-lg\" " items=user_titles_list />
+          </div>
+          <div class="form-group">
+            <label for="firstname">#i18n{ticketing.create_ticket.labelFirstname} *</label>
+            <input type="text" name="firstname" id="firstname" class="form-control input-lg" value="${ticket.firstname!''}">
+          </div>
+          <div class="form-group">
+            <label for="lastname">#i18n{ticketing.create_ticket.labelLastname} *</label>
+            <input type="text" name="lastname" id="lastname" class="form-control input-lg" value="${ticket.lastname!''}">
+          </div>
+          <div class="form-group">
+            <label for="email">#i18n{ticketing.create_ticket.labelEmail} *</label>
+            <input type="text" name="email" id="email" class="form-control input-lg" value="${ticket.email!''}">
+          </div>
+          <div class="form-group">
+            <label for="fixed_phone_number">#i18n{ticketing.create_ticket.labelFixedPhoneNumber}</label>
+            <input type="text" name="fixed_phone_number" id="fixed_phone_number" class="form-control input-lg" value="${ticket.fixedPhoneNumber!''}">
+          </div>
+          <div class="form-group">
+            <label for="mobile_phone_number">#i18n{ticketing.create_ticket.labelMobilePhoneNumber}</label>
+            <input type="text" name="mobile_phone_number" id="mobile_phone_number" class="form-control input-lg" value="${ticket.mobilePhoneNumber!''}">
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <div class="form-group">
+            <label for="id_ticket_type">#i18n{ticketing.create_ticket.labelTicketType}</label>
+            <@comboWithParams name="id_ticket_type" default_value="${ticket.idTicketType!''}" additionalParameters=" id=\"id_ticket_type\" class=\"form-control input-lg\" " items=ticket_types_list />
+          </div>
+          <div class="form-group">
+            <label for="id_ticket_category">#i18n{ticketing.create_ticket.labelTicketDomain}</label>
+            <@comboWithParams name="id_ticket_domain" default_value="${ticket.idTicketDomain!''}" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=ticket_domains_list />
+          </div>
+          <div class="form-group">
+            <label for="id_contact_mode">#i18n{ticketing.create_ticket.labelTicketCategory}</label>
+            <@comboWithParams name="id_ticket_category" default_value="${ticket.idTicketCategory!''}" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=ticket_categories_list />
+          </div>
+          <div class="form-group">
+            <label for="id_contact_mode">#i18n{ticketing.create_ticket.labelContactMode}</label>
+            <@comboWithParams name="id_contact_mode" default_value="${ticket.idContactMode!''}" additionalParameters=" id=\"id_contact_mode\" class=\"form-control input-lg\" " items=contact_modes_list />
+          </div>
+          <div class="form-group">
+            <label for="ticket_comment">#i18n{ticketing.create_ticket.labelTicketComment}</label>
+            <textarea type="text" name="ticket_comment" id="ticket_comment" class="form-control" rows="4">${ticket.ticketComment!''}</textarea>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12">
+          <div class="form-group" id="generic_attributes">
+  		    </div>
+  		  </div>
+  		</div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12">
+          <div class="form-group text-center">
+            <button class="btn btn-primary btn-lg" name="action_recapTicket" type="submit">
+				      <i class="fa fa-check"></i> OK
+			      </button>
+				    <button class="btn btn-default btn-lg" name="view_manageTickets" type="submit">
+					    <i class="fa fa-close"></i> Annuler
+				    </button>
+          </div>
+        </div>
+      </div>
     </form>
-</@rowBoxHeader>
-
+  </div>
+</div>
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
-<script language="javascript"> 
+<script language="javascript">
     var category_id = ${ticket.idTicketCategory!''};
     var is_front = false ;
     var is_generic_attributes_managed = true;

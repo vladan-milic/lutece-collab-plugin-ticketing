@@ -1,29 +1,51 @@
 <#macro ticketHeader tab ticket >
-	<div>
-	    <div class="pull-right">
-			<#if url_poc_gru?? && url_poc_gru?has_content>
-	            <a class="btn btn-primary btn-sm" href="${url_poc_gru}" >#i18n{ticketing.gru.button.360View}</a>
-			</#if>
-	    </div>
-	    <div>
-			#i18n{ticketing.view_ticket_header.user} : ${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}
-	    </div>
-	    <div>
-			#i18n{ticketing.view_ticket_header.object} : ${ticket.ticketType} / ${ticket.ticketDomain} / ${ticket.ticketCategory}
-	    </div>
-	</div>
-	<div>
-	    <ul class="nav nav-tabs">
-	        <li <#if tab="details">class="active"</#if>>
-	            <a href="jsp/admin/plugins/ticketing/TicketView.jsp?view=ticketDetails&id=${ticket.id}">
-	                #i18n{ticketing.view_ticket_header.details.pageTitle}
-	            </a>
-	        </li>
-	        <li <#if tab="history">class="active"</#if>>
-	            <a href="jsp/admin/plugins/ticketing/TicketView.jsp?view=ticketHistory&id=${ticket.id}">
-	                #i18n{ticketing.view_ticket_header.history.pageTitle}
-	            </a>
-	        </li>
-	    </ul>
-	</div>
+<div id="ticketing-wrapper">
+  <div id="customer-panel" class="row bg-gru-dark">
+    <div class="col-xs-12 col-sm-offset-1 col-sm-3">
+      <h2>${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}</h2>
+      <#if url_poc_gru?? && url_poc_gru?has_content>
+    	  <a class="btn btn-primary btn-sm" href="${url_poc_gru}" >
+          #i18n{ticketing.gru.button.360View}
+        </a>
+    	</#if>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+      <p><i class="fa fa-envelope"></i> ${ticket.email!""}</p>
+      <p><i class="fa fa-phone" ></i> ${ticket.mobilePhone!""}</p>
+      <p id="info">Pour me contacter privil&eacute;gier le mail</p>
+    </div>
+    <div class="col-xs-12 col-sm-4" style="border-left: 1px solid #fff;height:160px;margin-top:-20px;padding-top:15px;">
+      <#assign textColor="green"/>
+      <#if ticket.urgency==1 >
+        <#assign textColor="orange"/>
+      <#elseif ticket.urgency==2 >
+        <#assign textColor="red"/>
+      </#if>
+        <p><i class="fa fa-circle text-${textColor}"></i> ${ticket.reference}</p>
+        <p>
+          <span class="label bg-purple">
+            <#switch ticket.ticketStatus>
+              <#case 0>
+                En cours
+              <#break>
+              <#case 1>
+                Termin&eacute;e
+              <#break>
+            </#switch>
+          </span>
+        </p>
+        <p>
+          <#if tab="history">
+          <a href="jsp/admin/plugins/ticketing/TicketView.jsp?view=ticketDetails&id=${ticket.id}">
+            #i18n{ticketing.view_ticket_header.details.pageTitle}
+          </a>
+          <#else>
+          <a href="jsp/admin/plugins/ticketing/TicketView.jsp?view=ticketHistory&id=${ticket.id}">
+            <!-- #i18n{ticketing.view_ticket_header.history.pageTitle} --> Voir l'historique
+          </a>
+          </#if>
+        </p>
+      </div>
+    </div>
+  </div>
 </#macro>
