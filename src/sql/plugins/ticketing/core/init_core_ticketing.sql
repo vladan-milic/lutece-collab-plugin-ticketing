@@ -1,5 +1,26 @@
 
 --
+-- Data for table core_admin_user
+--
+DELETE FROM core_admin_user WHERE access_code = 'ticketing_userfront';
+INSERT INTO core_admin_user VALUES 
+(5,'ticketing_userfront','ticketing','userfront','ticketing_userfront@lutece.fr',0,'ticketing','fr',0,0,0,null,null,0,'1980-01-01 00:00:00','all')
+;
+
+--
+-- Data for table core_admin_role
+--
+DELETE FROM core_admin_role WHERE role_key LIKE 'ticketing_%';
+INSERT INTO core_admin_role ( role_key , role_description ) VALUES 
+( 'ticketing_user_front' ,'Droit pour le user de front de ticketing' )
+;
+
+DELETE FROM core_user_role WHERE role_key LIKE 'ticketing_%';
+INSERT INTO core_user_role ( role_key , id_user ) VALUES
+( 'ticketing_user_front' , 5 )
+;
+
+--
 -- Data for table core_admin_right
 --
 DELETE FROM core_admin_right WHERE id_right = 'TICKETING_MANAGEMENT';

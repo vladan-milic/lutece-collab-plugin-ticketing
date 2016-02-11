@@ -24,4 +24,21 @@
             </#if>
         </#list>
     </fieldset>
+    
+    <#if is_reply_rendered && ticket.userMessage?? && ticket.userMessage?has_content>
+	    <fieldset class="form-horizontal">
+	        <legend>#i18n{ticketing.xpage.view_ticket_details.labelReply}</legend>
+	        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelUserMessage">${ticket.userMessage!''}</@fieldStaticText>
+	    </fieldset>
+    </#if>
+    
+    <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
+        <#list ticket.listWorkflowActions as action>
+          <p>
+            <a class="btn btn-lg btn-primary btn-block bg-gru-light"  href="jsp/site/Portal.jsp?page=ticketView&view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}" title="${action.name}">
+              <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
+            </a>
+        </p>
+      </#list>
+    </#if>
 </@rowBoxHeader>

@@ -39,11 +39,11 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeSer
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
-import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,13 +55,16 @@ import javax.servlet.http.HttpServletRequest;
  *
  */
 @Controller( xpageName = TicketViewXPage.XPAGE_NAME, pageTitleI18nKey = TicketViewXPage.MESSAGE_PAGE_TITLE, pagePathI18nKey = TicketViewXPage.MESSAGE_PATH )
-public class TicketViewXPage extends MVCApplication
+public class TicketViewXPage extends WorkflowCapableXPage
 {
     protected static final String XPAGE_NAME = "ticketView";
 
     // Messages
     protected static final String MESSAGE_PAGE_TITLE = "ticketing.xpage.ticket.view.pageTitle";
     protected static final String MESSAGE_PATH = "ticketing.xpage.ticket.view.pagePathLabel";
+
+    // Marks
+    private static final String MARK_IS_REPLY_RENDERED = "is_reply_rendered";
 
     /**
      * Generated serial id
@@ -86,6 +89,7 @@ public class TicketViewXPage extends MVCApplication
         int nIdTicket = Integer.parseInt( strIdTicket );
 
         Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
+        setWorkflowAttributes( request, ticket );
 
         Map<String, Object> model = getModel(  );
         model.put( TicketingConstants.MARK_TICKET, ticket );
@@ -102,6 +106,51 @@ public class TicketViewXPage extends MVCApplication
 
         model.put( TicketingConstants.MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
 
+        model.put( MARK_IS_REPLY_RENDERED,
+            isInState( ticket, WorkflowCapableXPage.PROPERTIES_WORKFLOW_STATE_WAITING_USER_REPLY ) );
+
         return getXPage( TEMPLATE_VIEW_TICKET_DETAILS, request.getLocale(  ), model );
+    }
+
+    /**
+     * Redirects to the default page
+     * @param request the request
+     * @return the default page
+     */
+    private XPage defaultRedirect( HttpServletRequest request )
+    {
+        String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
+
+        Map<String, String> mapParams = new HashMap<String, String>(  );
+        mapParams.put( TicketingConstants.PARAMETER_ID_TICKET, strIdTicket );
+
+        return redirect( request, VIEW_DETAILS, mapParams );
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    protected XPage redirectAfterWorkflowAction( HttpServletRequest request )
+    {
+        return defaultRedirect( request );
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    protected XPage redirectWorkflowActionCancelled( HttpServletRequest request )
+    {
+        return defaultRedirect( request );
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    protected XPage defaultRedirectWorkflowAction( HttpServletRequest request )
+    {
+        return defaultRedirect( request );
     }
 }

@@ -52,16 +52,13 @@ import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
-import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
-import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
-import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.util.html.HtmlTemplate;
@@ -81,7 +78,7 @@ import javax.servlet.http.HttpSession;
  * This class provides the user interface to manage Ticket xpages ( manage, create, modify, remove )
  */
 @Controller( xpageName = "ticket", pageTitleI18nKey = "ticketing.xpage.ticket.pageTitle", pagePathI18nKey = "ticketing.xpage.ticket.pagePathLabel" )
-public class TicketXPage extends MVCApplication
+public class TicketXPage extends WorkflowCapableXPage
 {
     private static final long serialVersionUID = 1L;
 
@@ -215,11 +212,7 @@ public class TicketXPage extends MVCApplication
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
         TicketHome.create( ticket );
 
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-
-        // TODO After POC GRU, set this variable with
-        // ticketCategory.getIdWorkflow( );
-        int nIdWorkflow = TicketingPocGruService.getWorkflowId( ticket );
+        doProcessWorkflowAutomaticAction( ticket );
 
         if ( ( ticket.getListResponse(  ) != null ) && !ticket.getListResponse(  ).isEmpty(  ) )
         {
@@ -227,25 +220,6 @@ public class TicketXPage extends MVCApplication
             {
                 ResponseHome.create( response );
                 TicketHome.insertTicketResponse( ticket.getId(  ), response.getIdResponse(  ) );
-            }
-        }
-
-        if ( ( nIdWorkflow > 0 ) && WorkflowService.getInstance(  ).isAvailable(  ) )
-        {
-            try
-            {
-                WorkflowService.getInstance(  )
-                               .getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticketCategory.getId(  ) );
-                WorkflowService.getInstance(  )
-                               .executeActionAutomatic( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticketCategory.getId(  ) );
-            }
-            catch ( Exception e )
-            {
-                WorkflowService.getInstance(  ).doRemoveWorkFlowResource( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE );
-                TicketHome.remove( ticket.getId(  ) );
-                throw e;
             }
         }
 
@@ -498,5 +472,23 @@ public class TicketXPage extends MVCApplication
     private void removeActionTypeFromSession( HttpSession session )
     {
         session.removeAttribute( SESSION_ACTION_TYPE );
+    }
+
+    @Override
+    protected XPage redirectAfterWorkflowAction( HttpServletRequest request )
+    {
+        return redirectView( request, VIEW_CREATE_TICKET );
+    }
+
+    @Override
+    protected XPage redirectWorkflowActionCancelled( HttpServletRequest request )
+    {
+        return redirectView( request, VIEW_CREATE_TICKET );
+    }
+
+    @Override
+    protected XPage defaultRedirectWorkflowAction( HttpServletRequest request )
+    {
+        return redirectView( request, VIEW_CREATE_TICKET );
     }
 }

@@ -40,10 +40,18 @@ package fr.paris.lutece.plugins.ticketing.web;
  */
 public final class TicketingConstants
 {
+    // Templates
+    public static final String TEMPLATE_TASKS_FORM_WORKFLOW = "admin/plugins/ticketing/workflow/tasks_form_workflow.html";
+
     // Parameters
     public static final String PARAMETER_ID_TICKET = "id";
     public static final String PARAMETER_GRU_CUSTOMER_ID = "id_customer";
     public static final String PARAMETER_CUSTOMER_ID = "cid";
+    public static final String PARAMETER_WORKFLOW_ID_ACTION = "id_action";
+    public static final String PARAMETER_BACK = "back";
+
+    // Attributes
+    public static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON = "hide_next_button";
 
     // Markers
     public static final String MARK_TICKET = "ticket";
@@ -52,9 +60,24 @@ public final class TicketingConstants
     public static final String MARK_LIST_READ_ONLY_HTML_RESPONSES = "read_only_reponses_html_list";
     public static final String MARK_WEBAPP_URL = "webapp_url";
     public static final String MARK_LOCALE = "locale";
+    public static final String MARK_WORKFLOW_ACTION = "workflow_action";
+    public static final String MARK_WORKFLOW_ID_ACTION = PARAMETER_WORKFLOW_ID_ACTION;
+    public static final String MARK_HIDE_NEXT_STEP_BUTTON = ATTRIBUTE_HIDE_NEXT_STEP_BUTTON;
+    public static final String MARK_TASKS_FORM = "tasks_form";
+    public static final String MARK_FORM_ACTION = "form_action";
+    public static final String MARK_PAGE = "page";
 
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
+
+    // Views
+    public static final String VIEW_WORKFLOW_ACTION_FORM = "viewWorkflowActionForm";
+
+    // Actions
+    public static final String ACTION_DO_PROCESS_WORKFLOW_ACTION = "doProcessWorkflowAction";
+
+    // Beans
+    public static final String BEAN_ACTION_SERVICE = "workflow.actionService";
 
     // Other constants
     public static final String ADMIN_CONTROLLLER_PATH = "jsp/admin/plugins/ticketing/";
