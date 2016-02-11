@@ -82,13 +82,14 @@
 </div>
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
 <script>
-	var category_id = ${ticket.idTicketCategory!''};
-  var bDisplayFront = false ;
+    var category_id = ${ticket.idTicketCategory!''};
+    var is_front = false ;
+    var is_generic_attributes_managed = true;
 
   $( function(){
     $(".content-header").toggle();
 
-    lutece_ticket_tree("#id_ticket_type", "#id_ticket_domain", "#id_ticket_category");
+    lutece_ticket_tree("#id_ticket_type", "#id_ticket_domain", "#id_ticket_category", category_id, is_front, is_generic_attributes_managed);
   });
 </script>
 <@addRequiredJsFiles />
