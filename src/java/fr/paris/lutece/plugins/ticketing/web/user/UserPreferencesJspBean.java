@@ -78,7 +78,7 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
 
     // Messages
     private static final String PROPERTY_PAGE_TITLE_MANAGE_USER_PREFERENCES = "ticketing.manage_user_preferences.pageTitle";
-    
+
     // Infos
     private static final String INFO_USER_PREFERENCES_SAVED = "ticketing.info.user.preferences.saved";
 
@@ -122,7 +122,7 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
         String strUserSignature = request.getParameter( PARAMETER_USER_SIGNATURE );
         _userPreferencesService.put( String.valueOf( getUser(  ).getUserId(  ) ), USER_PREFERENCE_SIGNATURE,
             strUserSignature );
-        
+
         addInfo( INFO_USER_PREFERENCES_SAVED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_USER_PREFERENCES );
