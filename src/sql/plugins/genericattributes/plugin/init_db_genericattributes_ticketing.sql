@@ -1,4 +1,4 @@
-DELETE FROM genatt_entry_type;
+DELETE FROM genatt_entry_type WHERE id_type >= 200 AND id_type <= 300;
 
 INSERT INTO genatt_entry_type (id_type,title,is_group,is_comment,is_mylutece_user,class_name,plugin) VALUES 
 (201,'Bouton radio',0,0,0,'ticketing.entryTypeRadioButton','ticketing');
