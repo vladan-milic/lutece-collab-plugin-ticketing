@@ -91,7 +91,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
      * set workflow attributes for the specified ticket
      * @param ticket the Ticket
      */
-    public void setWorkflowAttributes( Ticket ticket )
+    protected void setWorkflowAttributes( Ticket ticket )
     {
         if ( _workflowService.isAvailable(  ) )
         {

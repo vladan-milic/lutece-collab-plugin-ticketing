@@ -104,7 +104,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
      * @param request the request
      * @param ticket the Ticket
      */
-    public void setWorkflowAttributes( HttpServletRequest request, Ticket ticket )
+    protected void setWorkflowAttributes( HttpServletRequest request, Ticket ticket )
     {
         registerDefaultAdminUser( request );
 
@@ -140,7 +140,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
      * @param strStateProperty the property corresponding to the state id
      * @return {@code true} if the ticket is in the specified state, {@code false} otherwise
      */
-    public boolean isInState( Ticket ticket, String strStateProperty )
+    protected boolean isInState( Ticket ticket, String strStateProperty )
     {
         int nStateIdInConf = AppPropertiesService.getPropertyInt( strStateProperty, -1 );
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
