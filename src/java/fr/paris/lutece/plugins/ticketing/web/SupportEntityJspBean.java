@@ -59,7 +59,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * This class provides the user interface to manage SupportEntity features ( manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageSupportEntities.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = "TICKETING_MANAGEMENT" )
+@Controller( controllerJsp = "ManageSupportEntities.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
 public class SupportEntityJspBean extends ManageAdminTicketingJspBean
 {
     ////////////////////////////////////////////////////////////////////////////
@@ -91,7 +91,6 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_SUPPORT_ENTITY = "ticketing.message.confirmRemoveSupportEntity";
-    private static final String PROPERTY_DEFAULT_LIST_SUPPORT_ENTITY_PER_PAGE = "ticketing.listSupportEntities.itemsPerPage";
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.supportentity.attribute.";
 
     // Views

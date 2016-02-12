@@ -94,7 +94,7 @@ import javax.servlet.http.HttpSession;
 /**
  * This class provides the user interface to manage Ticket features ( manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageTickets.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = "TICKETING_TICKETS_MANAGEMENT" )
+@Controller( controllerJsp = "ManageTickets.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_TICKETS_MANAGEMENT" )
 public class ManageTicketsJspBean extends WorkflowCapableJspBean
 {
     // Right

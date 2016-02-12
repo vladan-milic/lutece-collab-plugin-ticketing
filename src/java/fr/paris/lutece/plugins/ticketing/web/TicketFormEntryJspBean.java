@@ -75,7 +75,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * JspBean to manage ticketing form entries
  */
-@Controller( controllerJsp = "ManageTicketFormEntries.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = TicketFormJspBean.RIGHT_MANAGETICKETFORM )
+@Controller( controllerJsp = "ManageTicketFormEntries.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = TicketFormJspBean.RIGHT_MANAGETICKETFORM )
 public class TicketFormEntryJspBean extends MVCAdminJspBean
 {
     private static final long serialVersionUID = -4951787792196104967L;

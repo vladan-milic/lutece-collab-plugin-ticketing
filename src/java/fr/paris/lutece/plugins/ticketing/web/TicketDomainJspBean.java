@@ -52,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * This class provides the user interface to manage TicketDomain features ( manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageTicketDomains.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = "TICKETING_MANAGEMENT" )
+@Controller( controllerJsp = "ManageTicketDomains.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
 public class TicketDomainJspBean extends ManageAdminTicketingJspBean
 {
     ////////////////////////////////////////////////////////////////////////////
@@ -79,7 +79,6 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETDOMAIN = "ticketing.message.confirmRemoveTicketDomain";
-    private static final String PROPERTY_DEFAULT_LIST_TICKETDOMAIN_PER_PAGE = "ticketing.listTicketDomains.itemsPerPage";
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.ticketdomain.attribute.";
 
     // Views

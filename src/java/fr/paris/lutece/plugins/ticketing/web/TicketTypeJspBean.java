@@ -53,7 +53,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * This class provides the user interface to manage TicketType features ( manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageTicketTypes.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = "TICKETING_MANAGEMENT" )
+@Controller( controllerJsp = "ManageTicketTypes.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
 public class TicketTypeJspBean extends ManageAdminTicketingJspBean
 {
     ////////////////////////////////////////////////////////////////////////////
@@ -80,7 +80,6 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETTYPE = "ticketing.message.confirmRemoveTicketType";
     private static final String MESSAGE_ERROR_REFERENCE_PREFIX_INVALID_FORMAT = "ticketing.message.errorTicketType.referencePrefixInvalidFormat";
-    private static final String PROPERTY_DEFAULT_LIST_TICKETTYPE_PER_PAGE = "ticketing.listTicketTypes.itemsPerPage";
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.tickettype.attribute.";
 
     // Views

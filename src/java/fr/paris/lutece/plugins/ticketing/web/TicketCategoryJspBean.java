@@ -49,7 +49,6 @@ import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.ReferenceList;
-import fr.paris.lutece.util.bean.BeanUtil;
 import fr.paris.lutece.util.url.UrlItem;
 
 import java.util.List;
@@ -63,7 +62,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * This class provides the user interface to manage TicketCategory features ( manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageTicketCategorys.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = "TICKETING_MANAGEMENT" )
+@Controller( controllerJsp = "ManageTicketCategorys.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
 public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 {
     ////////////////////////////////////////////////////////////////////////////
@@ -96,7 +95,6 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETCATEGORY = "ticketing.message.confirmRemoveTicketCategory";
     private static final String MESSAGE_ERROR_CODE_ALREADY_EXISTS = "ticketing.message.errorTicketCategory.codeAlreadyExists";
     private static final String MESSAGE_ERROR_CODE_INVALID_FORMAT = "ticketing.message.errorTicketCategory.codeInvlidFormat";
-    private static final String PROPERTY_DEFAULT_LIST_TICKETCATEGORY_PER_PAGE = "ticketing.listTicketCategorys.itemsPerPage";
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.ticketcategory.attribute.";
 
     // Views

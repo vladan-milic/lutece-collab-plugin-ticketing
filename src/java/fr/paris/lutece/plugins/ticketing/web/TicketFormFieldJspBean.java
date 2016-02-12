@@ -62,7 +62,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * JspBean to manage ticketing form fields
  */
-@Controller( controllerJsp = "ManageTicketFormFields.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = TicketFormJspBean.RIGHT_MANAGETICKETFORM )
+@Controller( controllerJsp = "ManageTicketFormFields.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = TicketFormJspBean.RIGHT_MANAGETICKETFORM )
 public class TicketFormFieldJspBean extends MVCAdminJspBean
 {
     private static final long serialVersionUID = 1L;

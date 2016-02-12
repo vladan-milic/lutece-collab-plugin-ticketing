@@ -58,7 +58,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * TicketViewJspBean
  */
-@Controller( controllerJsp = "TicketView.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = "TICKETING_TICKETS_MANAGEMENT" )
+@Controller( controllerJsp = "TicketView.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_TICKETS_MANAGEMENT" )
 public class TicketViewJspBean extends WorkflowCapableJspBean
 {
     // Templates

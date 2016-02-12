@@ -53,6 +53,11 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class ManageAdminTicketingJspBean extends MVCAdminJspBean
 {
+    /**
+     * Generated serial id
+     */
+    private static final long serialVersionUID = 872956829819739350L;
+
     // Right
     public static final String RIGHT_MANAGEADMINTICKETING = "TICKETING_MANAGEMENT";
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
