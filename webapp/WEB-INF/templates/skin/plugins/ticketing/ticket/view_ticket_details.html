@@ -33,12 +33,16 @@
     </#if>
     
     <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
-        <#list ticket.listWorkflowActions as action>
-          <p>
-            <a class="btn btn-lg btn-primary btn-block bg-gru-light"  href="jsp/site/Portal.jsp?page=ticketView&view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}" title="${action.name}">
-              <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
-            </a>
-        </p>
-      </#list>
+        <div class="form-horizontal" >
+	        <#list ticket.listWorkflowActions as action>
+	            <div class="form-group">
+	               <div class="col-sm-offset-3 col-sm-9">
+	                   <a class="btn btn-lg btn-primary"  href="jsp/site/Portal.jsp?page=ticketView&view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}" title="${action.name}">
+	                       <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
+	                   </a>
+	               </div>
+               </div>
+	        </#list>
+        </div>
     </#if>
 </@rowBoxHeader>
