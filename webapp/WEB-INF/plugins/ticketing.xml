@@ -94,6 +94,15 @@
         </rbac-resource-type>
     </rbac-resource-types>
     
+    <!-- Search Indexer Service -->
+    <search-indexers>
+        <search-indexer>
+            <search-indexer-class>
+                fr.paris.lutece.plugins.ticketing.search.TicketIndexer
+            </search-indexer-class>
+        </search-indexer>
+    </search-indexers>
+
     <!-- Portlet parameters -->
     <portlets>
    </portlets>

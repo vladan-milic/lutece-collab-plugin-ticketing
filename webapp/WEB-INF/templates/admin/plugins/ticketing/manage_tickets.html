@@ -1,3 +1,6 @@
+
+
+
 <#macro renderTabPanel panel_list active=false id=''>
 <div role="tabpanel" class="tab-pane table-responsive<#if active> active</#if>" <#if id!="">id="${id}"</#if>>
     <table class="table table-hover table-striped">
@@ -145,6 +148,7 @@
         </form>
       </li>
     </ul>
+	   
     <div class="tab-content">
       <div id="filter" class="row">
         <div class="col-xs-12 col-sm-6">
@@ -193,7 +197,15 @@
               </label>
             </div>
           </form>
+		  <form class="form-inline" method="post" action="jsp/admin/plugins/ticketing/TicketSearch.jsp?action=search">
+					<input type="hidden" id="searched_field" name="searched_field" value="contents"/>
+					<input class="search-query" type="text" name="query" value="" />
+					<button class="btn" type="submit" >
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+			</form>
         </div>
+		
       </div>
       <@renderTabPanel panel_list=ticket_agent_list active=true id='agent' />
       <@renderTabPanel panel_list=ticket_group_list id='group' />

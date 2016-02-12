@@ -338,13 +338,21 @@ public final class TicketDAO implements ITicketDAO
 
             int nAdminUserId = daoUtil.getInt( nIndex++ );
             AdminUser user = AdminUserHome.findByPrimaryKey( nAdminUserId );
-            AssigneeUser assigneeUser = new AssigneeUser( user );
-            ticket.setAssigneeUser( assigneeUser );
+
+            if ( user != null )
+            {
+                AssigneeUser assigneeUser = new AssigneeUser( user );
+                ticket.setAssigneeUser( assigneeUser );
+            }
 
             int nUnitId = daoUtil.getInt( nIndex++ );
             Unit unit = UnitHome.findByPrimaryKey( nUnitId );
-            AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
-            ticket.setAssigneeUnit( assigneeUnit );
+
+            if ( unit != null )
+            {
+                AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
+                ticket.setAssigneeUnit( assigneeUnit );
+            }
 
             ticket.setUserMessage( daoUtil.getString( nIndex++ ) );
 
