@@ -27,8 +27,13 @@
     
     <#if is_reply_rendered && ticket.userMessage?? && ticket.userMessage?has_content>
 	    <fieldset class="form-horizontal">
-	        <legend>#i18n{ticketing.xpage.view_ticket_details.labelReply}</legend>
-	        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelUserMessage">${ticket.userMessage!''}</@fieldStaticText>
+            <legend>#i18n{ticketing.xpage.view_ticket_details.labelReply}</legend>
+            <div class="form-group">
+    	        <label class="col-xs-12 col-sm-3 control-label">#i18n{ticketing.xpage.view_ticket_details.labelUserMessage}&nbsp; :</label>
+                <div class="col-xs-12 col-sm-9">
+                    ${ticket.userMessage!''}
+                </div>
+            </div>
 	    </fieldset>
     </#if>
     
