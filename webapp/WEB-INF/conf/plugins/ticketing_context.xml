@@ -34,5 +34,8 @@
     <bean id="ticketing.entryTypeTextArea" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeTextArea" />
     <bean id="ticketing.entryTypeImage" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeImage" />
     <bean id="ticketing.entryTypeFile" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeFile" />
-    <bean id="ticketing.entryTypePhone" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypePhone" />        
+    <bean id="ticketing.entryTypePhone" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypePhone" />
+
+    <!-- Search Engine -->
+    <bean id="ticketing.ticketSearchEngine" class="fr.paris.lutece.plugins.ticketing.search.TicketSearchEngine" />
 </beans>

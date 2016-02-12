@@ -1,0 +1,65 @@
+<@messages errors=errors />
+            
+<div class="row">
+    <div class="col-sm-12">
+        <div class="class="col-sm-2 pull-right">
+            <form class="form-search" method="post" action="jsp/admin/plugins/ticketing/TicketSearch.jsp?action=search">
+
+                <div class="input-append">
+                    <@fieldInputCombo i18nLabelKey="ticketing.search_ticket.searchType" inputName="searched_field" items=search_fields_list value="${searched_field!''}" i18nHelpBlockKey="ticketing.search_ticket.searchLabelHelp=" cssClass='' /> 
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 control-label" for="searched_field">#i18n{ticketing.search_ticket.labelKeyWord} :</label>
+						<#if query?exists>
+							<input class="search-query span2" type="text" name="query" value="${query}" />
+						<#else>
+							<input class="search-query span2" type="text" name="query" value="" />
+						</#if>
+							<button class="btn" type="submit" >
+								<span class="glyphicon glyphicon-search"></span>
+							</button>
+					</div>
+					<#if paginator?? && paginator?has_content>
+						<@pagination paginator=paginator />
+						<div class="pull-left">
+							<!-- Number of feeds per page selector -->
+							#i18n{ticketing.search_ticket.labelItemsPerPage} :
+							<select name="items_per_page">
+								<#list [ "10" , "20" , "50" , "100" ] as nb>
+									<#if nb_items_per_page = nb >
+									 <option selected="selected" value="${nb}">${nb}</option>
+									<#else>
+									 <option value="${nb}">${nb}</option>
+									</#if>
+								</#list>
+							</select>
+						</div>
+					</#if>
+                </div> 
+            </form>
+        </div>
+        <#if result?? && result?has_content>
+            <div class="col-sm-8">
+                <h1>#i18n{ticketing.search_ticket.title}</h1>
+                <ul>
+                    <#list result as ticket>
+                        <li>
+                            <a href="jsp/admin/plugins/ticketing/TicketView.jsp?page=ticketView&view=ticketDetails&id=${ticket.id!}">
+                                ${ticket.title!}
+                            </a>
+							<br>
+                            ${ticket.summary!}
+                        </li>
+                    </#list>
+                </ul>
+                <br/>
+            </div>
+         <#else> 
+			<#if !errors?? && !errors?has_content >
+                <br>
+				<div class="col-sm-8">
+					#i18n{ticketing.search_ticket.noResult}
+				</div>
+			</#if>
+        </#if>
+    </div>
+</div>
