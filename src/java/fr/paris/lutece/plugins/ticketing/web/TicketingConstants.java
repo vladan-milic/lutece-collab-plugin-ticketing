@@ -66,6 +66,9 @@ public final class TicketingConstants
     public static final String MARK_TASKS_FORM = "tasks_form";
     public static final String MARK_FORM_ACTION = "form_action";
     public static final String MARK_PAGE = "page";
+    public static final String MARK_TICKET_CREATION_RIGHT = "ticket_creation_right";
+    public static final String MARK_TICKET_DELETION_RIGHT = "ticket_deletion_right";
+    public static final String MARK_TICKET_MODIFICATION_RIGHT = "ticket_modification_right";
 
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
