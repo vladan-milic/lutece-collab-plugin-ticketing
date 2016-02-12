@@ -199,9 +199,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                 model.put( TicketingConstants.MARK_PAGE, getXPageName(  ) );
 
                 IActionService actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
-
                 Action action = actionService.findByPrimaryKey( nIdAction );
-
                 model.put( TicketingConstants.MARK_WORKFLOW_ACTION, action );
 
                 return getXPage( TicketingConstants.TEMPLATE_TASKS_FORM_WORKFLOW, getLocale( request ), model );

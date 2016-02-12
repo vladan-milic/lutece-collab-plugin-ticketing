@@ -41,6 +41,8 @@ import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
+import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
@@ -153,9 +155,6 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         {
             int nIdAction = Integer.parseInt( strIdAction );
             int nIdTicket = Integer.parseInt( strIdTicket );
-            Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-            TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-            int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
             if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale(  ) ) )
             {
@@ -175,20 +174,12 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                         request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) );
                 }
 
-                model.put( TicketingConstants.MARK_FORM_ACTION, getControllerPath(  ) + getControllerJsp(  ) );
+                model.put( TicketingConstants.MARK_FORM_ACTION,
+                    getActionUrl( TicketingConstants.ACTION_DO_PROCESS_WORKFLOW_ACTION ) );
 
-                Collection<Action> actions = _workflowService.getActions( nIdTicket, Ticket.TICKET_RESOURCE_TYPE,
-                        nIdWorkflow, getUser(  ) );
-
-                for ( Action action : actions )
-                {
-                    if ( action.getId(  ) == nIdAction )
-                    {
-                        model.put( TicketingConstants.MARK_WORKFLOW_ACTION, action );
-
-                        break;
-                    }
-                }
+                IActionService actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
+                Action action = actionService.findByPrimaryKey( nIdAction );
+                model.put( TicketingConstants.MARK_WORKFLOW_ACTION, action );
 
                 return getPage( PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW,
                     TicketingConstants.TEMPLATE_TASKS_FORM_WORKFLOW, model );
