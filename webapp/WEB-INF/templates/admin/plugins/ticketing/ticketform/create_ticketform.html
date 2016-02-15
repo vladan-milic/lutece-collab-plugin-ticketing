@@ -1,30 +1,30 @@
-
-<div class="row" >
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<form class="form-horizontal" method="post" action="jsp/admin/plugins/ticketing/ManageTicketForms.jsp" enctype="multipart/form-data">
-			<fieldset>
-				<legend>#i18n{ticketing.modify_ticketForm.titleStructuralsParameters}</legend>
+<div id="ticketing-admin-wrapper">
+	<div class="box box-primary">
+		<div class="box-header">
+			<h3 class="box-title">#i18n{ticketing.modify_ticketForm.titleStructuralsParameters}</h3>
+		</div>
+		<div class="box-body ">
+			<form class="form-horizontal" method="post" action="jsp/admin/plugins/ticketing/ManageTicketForms.jsp" enctype="multipart/form-data">
 				<@messages errors=errors />
 				<input type="hidden" id="id_form" name="id_form">
 				<@fieldInputText i18nLabelKey='ticketing.create_ticketform.labelTitle' inputName='title' mandatory=true value=ticketform.title!'' maxlength=255 />
-				<@fieldTextArea i18nLabelKey='ticketing.create_ticketform.labelDescription' inputName='description' mandatory=true value=ticketform.description!'' />	
-			
-				</fieldset>
-			
-				<fieldset>
-							
-				<legend>#i18n{ticketing.modify_ticketForm.titleAlterablesParameters}</legend>				
-				
+				<@fieldTextArea i18nLabelKey='ticketing.create_ticketform.labelDescription' inputName='description' mandatory=true value=ticketform.description!'' />
 				<div class="form-group">
-					<button name="action_createTicketForm" class="btn btn-primary btn-sm" type="submit" tabindex="19">
-						<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{portal.util.labelCreate}
-					</button>
-					<button name="view_manageTicketForms" class="btn btn-default btn-sm" type="submit" tabindex="20">
-						<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{portal.util.labelCancel}
-					</button>
+					<div class="col-xs-12 col-sm-offset-3 col-sm-9">
+						<p class="lead form-control-static">#i18n{ticketing.modify_ticketForm.titleAlterablesParameters}</p>
+					</div>
 				</div>
-			</fieldset>
-		</form>
+				<div class="form-group">
+					<div class="col-xs-12 col-sm-offset-3 col-sm-9">
+						<button name="action_createTicketForm" class="btn btn-primary" type="submit" >
+							<i class="fa fa-check"></i> #i18n{portal.util.labelCreate}
+						</button>
+						<button name="view_manageTicketForms" class="btn btn-default" type="submit">
+							<i class="fa fa-remove"></i> #i18n{portal.util.labelCancel}
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
 	</div>
 </div>
- 

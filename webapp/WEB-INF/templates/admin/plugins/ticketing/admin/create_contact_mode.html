@@ -1,24 +1,25 @@
 <#include "/admin/util/editor/editor.html" />
 <#include "admin_tabs.html" />
-<@tabs tab="contactmode" />
-
-<@rowBoxHeader i18nTitleKey="ticketing.create_contactmode.pageTitle">
-    <form class="form-horizontal" method="post" name="create_contactmode" action="jsp/admin/plugins/ticketing/ManageContactModes.jsp">
-        <@messages errors=errors />
-        <input type="hidden" id="id" name="id"/>
-        
-        <@fieldInputText i18nLabelKey="ticketing.create_contactmode.labelLabel" inputName="label" mandatory=true value="${contactmode.label!''}" i18nHelpBlockKey="ticketing.create_contactmode.labelLabel.help" />
-        <div class="form-group">
-            <label class="col-md-3 col-lg-3 col-xs-12 col-sm-3" for="confirmation_msg">#i18n{ticketing.create_contactmode.labelConfirmationMsg} : </label>
-             <div class="col-md-9 col-lg-9 col-xs-12 col-sm-9">
-                <textarea name="confirmation_msg" id="confirmation_msg" rows="5" cols="90" class="richtext"></textarea>
-                <span class="help-block">#i18n{ticketing.message.label_message_comment_confirmation}</span>
-            </div>
+<@tabsWrapper>
+  <@tabs tab="contactmode" hasTable=false/>
+  <h3>#i18n{ticketing.create_contactmode.pageTitle}</h3>
+  <form class="form-horizontal" method="post" name="create_contactmode" action="jsp/admin/plugins/ticketing/ManageContactModes.jsp">
+    <@messages errors=errors />
+    <input type="hidden" id="id" name="id">
+    <@fieldInputText i18nLabelKey="ticketing.create_contactmode.labelLabel" inputName="label" mandatory=true value="${contactmode.label!''}" i18nHelpBlockKey="ticketing.create_contactmode.labelLabel.help" />
+    <div class="form-group">
+      <label class="control-label col-xs-12 col-sm-3" for="confirmation_msg">#i18n{ticketing.create_contactmode.labelConfirmationMsg} : </label>
+        <div class="col-xs-12 col-sm-9">
+          <textarea name="confirmation_msg" id="confirmation_msg" rows="5" class="richtext form-control"></textarea>
+          <span class="help-block">#i18n{ticketing.message.label_message_comment_confirmation}</span>
         </div>
+    </div>
+    <@actionButtons button1Name="action_createContactMode" button2Name="view_manageContactModes"/>
+    <div class="form-group">
+      <div class="col-xs-12 col-sm-offset-3 col-sm-9">
         <#include "freemarker_list_confirm_ticket.html" />
-
-        <@actionButtons button1Name="action_createContactMode" button2Name="view_manageContactModes"/>
+      </div>
+    </div>
     </form>
-</@rowBoxHeader>
+</@tabsWrapper>
 <@initEditor />
-

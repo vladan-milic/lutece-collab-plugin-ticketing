@@ -1,15 +1,9 @@
 <#include "/admin/util/editor/editor.html" />
-
-<@messages infos=infos />
-<@messages errors=errors />
-
-<@rowBoxHeader i18nTitleKey="ticketing.xpage.view_ticket_details.pageTitle">
-    <form class="form-horizontal" method="post" name="modify_user_preferences" action="jsp/admin/plugins/ticketing/UserPreferences.jsp"  enctype="multipart/form-data">
-        <@fieldTextArea i18nLabelKey="ticketing.manage_user_preferences.labelUserSignature" inputName="user_signature"  value="${user_signature!''}" i18nHelpBlockKey="ticketing.manage_user_preferences.labelUserSignature.help"
-            cssClass="form-control richtext" />
-    
-        <@actionButtons button1Name="action_modifyUserPreferences" i18nValue1Key="ticketing.manage_user_preferences.button.save" />
-    </form>
-</@rowBoxHeader>
-
+<div id="ticketing-admin-wrapper">
+  <@messages infos=infos />
+  <@messages errors=errors />
+  <@rowBoxHeader i18nTitleKey="ticketing.xpage.view_ticket_details.pageTitle">
+      <form class="form-horizontal" method="post" name="modify_user_preferences" action="jsp/admin/plugins/ticketing/UserPreferences.jsp" enctype="multipart/form-data"><@fieldTextArea i18nLabelKey="ticketing.manage_user_preferences.labelUserSignature" inputName="user_signature"  value="${user_signature!''}" i18nHelpBlockKey="ticketing.manage_user_preferences.labelUserSignature.help"cssClass="form-control richtext" /><@actionButtons button1Name="action_modifyUserPreferences" i18nValue1Key="ticketing.manage_user_preferences.button.save" /></form>
+  </@rowBoxHeader>
+</div>
 <@initEditor />

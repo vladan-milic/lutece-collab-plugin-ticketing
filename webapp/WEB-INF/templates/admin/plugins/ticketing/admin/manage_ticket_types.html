@@ -1,53 +1,33 @@
 <#include "admin_tabs.html" />
-<@tabs tab="tickettype" />
-
-<@rowBox>
-    <@boxHeader i18nTitleKey="ticketing.manage_tickettypes.tableLabel">
-        <@headerButtons>
-
-        
-        <form class="form-inline pull-right" method="post" name="manage_tickettypes" action="jsp/admin/plugins/ticketing/ManageTicketTypes.jsp">
-            <!-- Add pull-right to class1 -->
-            <@actionButtons button1Name="view_createTicketType" icon1="icon-plus icon-white" i18nValue1Key="ticketing.manage_tickettypes.buttonAdd" />
-        </form>
-        
-    </@headerButtons>
-    </@boxHeader>
-    <@boxBody>    
+<@tabsWrapper>
+  <@tabs tab="tickettype" formName="manage_tickettypes" formAction="jsp/admin/plugins/ticketing/ManageTicketTypes.jsp" btnName="view_createTicketType" btnValue="ticketing.manage_tickettypes.buttonAdd" />
     <@messages infos=infos />
-    <@paginationAdmin paginator=paginator combo=1 />
-    <div class="clearfix"></div>
-    
-    <@table>
+    <table class="table table-striped table-hover">
+      <thead>
         <tr>
-            <input type="hidden" id="id" name="id"/>
-            <th>#i18n{ticketing.manage_tickettypes.columnLabel}</th>
-            <th>#i18n{portal.util.labelActions}</th>
+          <input type="hidden" id="id" name="id"/>
+          <th>#i18n{ticketing.manage_tickettypes.columnLabel}</th>
+          <th>#i18n{portal.util.labelActions}</th>
         </tr>
-        <@tableHeadBodySeparator />
-            <#list tickettype_list as tickettype >
-        <tr>
+      </thead>
+      <tbody>
+        <#list tickettype_list as tickettype >
+          <tr>
             <input type="hidden" id="id" name="id"/>
             <td>
                 ${tickettype.label}
             </td>
-        <td>
-            <a href="jsp/admin/plugins/ticketing/ManageTicketTypes.jsp?view=modifyTicketType&id=${tickettype.id}"
-               class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
+            <td>
+              <a href="jsp/admin/plugins/ticketing/ManageTicketTypes.jsp?view=modifyTicketType&id=${tickettype.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
                 <i class="fa fa-pencil"></i>
-            </a>
-
-            <a href="jsp/admin/plugins/ticketing/ManageTicketTypes.jsp?action=confirmRemoveTicketType&id=${tickettype.id}"
-               class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
-                <i class="fa fa-trash"></i>
-            </a>
-        </td>
-        </tr>
+              </a>
+              <a href="jsp/admin/plugins/ticketing/ManageTicketTypes.jsp?action=confirmRemoveTicketType&id=${tickettype.id}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
+                  <i class="fa fa-trash"></i>
+              </a>
+            </td>
+          </tr>
         </#list>
-    </@table>
-
-    <@paginationAdmin paginator=paginator />
-
-  </@boxBody>
-</@rowBox>
-
+      </tbody>
+    </table>
+  <@paginationAdmin paginator=paginator combo=1 />
+</@tabsWrapper>
