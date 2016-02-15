@@ -1,4 +1,5 @@
 <#include "/admin/plugins/ticketing/commons.html" />
+<#include "/admin/plugins/ticketing/include/popins.html" />
 <#include "view_ticket_header.html" />
 <@ticketHeader tab='details' ticket=ticket />
 <div class="row">
@@ -33,14 +34,23 @@
       <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
         <#list ticket.listWorkflowActions as action>
           <p>
-            <a class="btn btn-lg btn-primary btn-block bg-gru-light"  href="jsp/admin/plugins/ticketing/TicketView.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}" title="${action.name}">
-              <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
-            </a>
+            <#if action.displayTasksForm>
+                <a class="btn btn-lg btn-primary btn-block bg-gru-light"  href="jsp/admin/plugins/ticketing/Ajax.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}&amp;jsp=${jsp_controller}" 
+                    data-remote="false" data-toggle="modal" data-target="#modal_workflow_action_form" title="${action.name}">
+                  <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
+                </a>
+            <#else>
+                <a class="btn btn-lg btn-primary btn-block bg-gru-light"  href="jsp/admin/plugins/ticketing/TicketView.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}" 
+                    title="${action.name}">
+                  <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
+                </a>
+            </#if>
         </p>
       </#list>
     </#if>
   </div>
 </div>
+
 <script>
   $( function(){
     $(".content-header").toggle();

@@ -49,6 +49,7 @@ public final class TicketingConstants
     public static final String PARAMETER_CUSTOMER_ID = "cid";
     public static final String PARAMETER_WORKFLOW_ID_ACTION = "id_action";
     public static final String PARAMETER_BACK = "back";
+    public static final String PARAMETER_JSP_CONTROLLER = "jsp";
 
     // Attributes
     public static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON = "hide_next_button";
@@ -66,6 +67,8 @@ public final class TicketingConstants
     public static final String MARK_TASKS_FORM = "tasks_form";
     public static final String MARK_FORM_ACTION = "form_action";
     public static final String MARK_PAGE = "page";
+    public static final String MARK_POPIN_MODE = "popin_mode";
+    public static final String MARK_JSP_CONTROLLER = "jsp_controller";
 
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
@@ -82,6 +85,7 @@ public final class TicketingConstants
     // Other constants
     public static final String ADMIN_CONTROLLLER_PATH = "jsp/admin/plugins/ticketing/";
     public static final String JSP_MANAGE_TICKETS = "ManageTickets.jsp";
+    public static final String JSP_VIEW_TICKET = "TicketView.jsp";
 
     /**
      * Default constructor

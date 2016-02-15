@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<fieldset>
-		<legend> ${workflow_action.description}</legend>
+		<legend id="workflow_action_description"> ${workflow_action.description}</legend>
 			<form class="form-horizontal" action="${form_action}" method="post" enctype="multipart/form-data">
 				<input name="action" value="doProcessWorkflowAction" type="hidden">
 				<input name="id_action" value="${id_action}" type="hidden">
@@ -15,9 +15,15 @@
 								<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{ticketing.tasks_form_workflow.button_save}
 							</button>
 						</#if>
-				  		<button class="btn btn-default btn-sm" type="submit" name="back" value="back" >
-							<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{ticketing.tasks_form_workflow.button_cancel}
-						</button>
+				  		<#if popin_mode>
+                            <button class="btn btn-default btn-sm" name="back" data-dismiss="modal" >
+    							<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{ticketing.tasks_form_workflow.button_cancel}
+    						</button>
+                        <#else>
+                            <button class="btn btn-default btn-sm" type="submit" name="back" value="back" >
+                            <i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{ticketing.tasks_form_workflow.button_cancel}
+                        </button>
+                        </#if>
 					</div>
 				</div>
 		    </form>

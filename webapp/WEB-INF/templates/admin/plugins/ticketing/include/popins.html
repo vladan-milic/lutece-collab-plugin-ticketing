@@ -1,0 +1,18 @@
+<!-- Workflow actions popin -->
+<div class="modal fade" id="modal_workflow_action_form" tabindex="-1" role="dialog" aria-labelledby="workflow_action_description" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $( function(){
+    $("#modal_workflow_action_form").on("show.bs.modal", function(e) {
+        var link = $(e.relatedTarget);
+        $(this).find(".modal-body").load(link.attr("href"));
+    });
+  });
+</script>
