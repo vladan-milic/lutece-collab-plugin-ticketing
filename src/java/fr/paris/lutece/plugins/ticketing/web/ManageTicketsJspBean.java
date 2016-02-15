@@ -145,9 +145,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
     private static final String MARK_ADMIN_AVATAR = "adminAvatar";
-    private static final String MARK_TICKET_CREATION_RIGHT = "ticket_creation_right";
-    private static final String MARK_TICKET_DELETION_RIGHT = "ticket_deletion_right";
-    private static final String MARK_TICKET_MODIFICATION_RIGHT = "ticket_modification_right";
     private static final String JSP_MANAGE_TICKETS = "jsp/admin/plugins/ticketing/ManageTickets.jsp";
     private static final String MARK_GUID = "guid";
     private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
@@ -286,32 +283,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_PAGINATOR_GROUP, paginatorGroupTickets );
         model.put( MARK_PAGINATOR_DOMAIN, paginatorDomainTickets );
         model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
-        storeTicketRightsIntoModel( model, getUser(  ) );
+        TicketHelper.storeTicketRightsIntoModel( model, getUser(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
-    }
-
-    /**
-     * store user rights in model
-     * @param model model to store rights
-     * @param adminUser user
-     */
-    private void storeTicketRightsIntoModel( Map<String, Object> model, AdminUser adminUser )
-    {
-        if ( RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_CREATE, adminUser ) )
-        {
-            model.put( MARK_TICKET_CREATION_RIGHT, Boolean.TRUE );
-        }
-
-        if ( RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_DELETE, adminUser ) )
-        {
-            model.put( MARK_TICKET_DELETION_RIGHT, Boolean.TRUE );
-        }
-
-        if ( RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_MODIFY, adminUser ) )
-        {
-            model.put( MARK_TICKET_MODIFICATION_RIGHT, Boolean.TRUE );
-        }
     }
 
     /**

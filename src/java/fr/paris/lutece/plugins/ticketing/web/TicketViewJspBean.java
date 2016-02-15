@@ -130,6 +130,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         }
 
         model.put( TicketingConstants.MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
+        TicketHelper.storeTicketRightsIntoModel( model, getUser(  ) );
 
         model.put( TicketingConstants.MARK_JSP_CONTROLLER, getControllerJsp(  ) );
 

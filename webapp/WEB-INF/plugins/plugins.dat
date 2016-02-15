@@ -1,0 +1,7 @@
+core_extensions.installed=1
+lucene.installed=1
+asynchronous-upload.installed=1
+rest.installed=1
+genericattributes.installed=1
+unittree.installed=1
+ticketing.installed=1

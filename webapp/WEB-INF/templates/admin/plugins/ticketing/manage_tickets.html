@@ -12,7 +12,6 @@
         <th>#i18n{ticketing.manage_tickets.columnTicketStatus}</th>
         <th>#i18n{ticketing.manage_tickets.columnTicketState}</th>
         <th> #i18n{ticketing.manage_tickets.columnTicketAssignee}</th>
-        <th>#i18n{portal.util.labelActions}</th>
       </tr>
       <#if panel_list?? && panel_list?has_content>
         <#list panel_list as ticket >
@@ -86,31 +85,6 @@
               -
             </#if>
           </td>
-          <td>
-            <#if ticket_modification_right?? && ticket_modification_right>
-              <a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}"
-                class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
-                <i class="fa fa-pencil"></i>
-              </a>
-            </#if>
-            <#if ticket_deletion_right?? && ticket_deletion_right>
-              <a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}"
-                class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
-                <i class="fa fa-trash"></i>
-              </a>
-            </#if>
-            <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
-              <#list ticket.listWorkflowActions as action>
-              <a class="btn btn-sm btn-primary"
-                href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}">
-                  <img src="image?resource_type=workflow_icon_img&id=${action.icon.id}"
-                  <#if action.icon.width!=-1> width="${action.icon.width}" </#if>
-                  <#if action.icon.height!=-1> height="${action.icon.height}"</#if>
-                  title="${action.name}" alt="${action.name}" />
-              </a>
-              </#list>
-            </#if>
-        </td>
         </tr>
         </#list>
       </#if>
