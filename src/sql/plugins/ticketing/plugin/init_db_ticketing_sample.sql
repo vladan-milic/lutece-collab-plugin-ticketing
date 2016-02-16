@@ -31,8 +31,9 @@ INSERT INTO ticketing_ticket_category (id_ticket_category, id_ticket_domain, lab
 
 DELETE FROM ticketing_user_title ;
 INSERT INTO ticketing_user_title (id_user_title, label) VALUES
-(1, "M."),
-(2, "Mme");
+(1, "Non précisée"),
+(2, "M."),
+(3, "Mme");
 
 DELETE FROM ticketing_contact_mode ;
 INSERT INTO ticketing_contact_mode (id_contact_mode, label, confirmation_msg) VALUES
