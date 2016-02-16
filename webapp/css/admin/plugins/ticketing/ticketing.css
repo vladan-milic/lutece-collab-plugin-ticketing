@@ -82,3 +82,6 @@ font-style:normal;
 #ticketing-panel .tab-content table td{color: #656565 }
 #head-ticketing{ height: 80px; color:#fff; padding:8px 10%; margin-bottom: 20px }
 #content-ticketing{ background-color: #fff; padding:0 10% }
+#ticketing-modal-workflow-action-form .content-header{ display:none; }
+#ticketing-modal-workflow-action-form .content{padding: 0;margin: 0 }
+#ticketing-modal-workflow-action-form textarea{ width:95%; }
