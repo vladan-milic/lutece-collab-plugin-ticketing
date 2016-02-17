@@ -3,7 +3,11 @@
         <@messages errors=errors />
         <input type="hidden" id="id" name="id" value="${ticket.id}"/>
         <fieldset>
-	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelUserTitle">${ticket.userTitle!''}</@fieldStaticText>
+	        <#if ticket.userTitle?? && ticket.userTitle?has_content>
+                <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelUserTitle">${ticket.userTitle!''}</@fieldStaticText>
+            <#else>
+                <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelUserTitle">#i18n{ticketing.userTitle.empty}</@fieldStaticText>
+            </#if>
 	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelFirstname">${ticket.firstname!''}</@fieldStaticText>
 	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelLastname">${ticket.lastname!''}</@fieldStaticText>
 	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelEmail">${ticket.email!''}</@fieldStaticText>

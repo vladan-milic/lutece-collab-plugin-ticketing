@@ -6,7 +6,7 @@
     <@messages errors=errors />
     <input type="hidden" id="id" name="id" value="${usertitle.id}">
     <input type="hidden" id="guid" name="guid" value="">
-    <@fieldInputText i18nLabelKey="ticketing.modify_usertitle.labelLabel" inputName="label" mandatory=true value="${usertitle.label}" i18nHelpBlockKey="ticketing.modify_usertitle.labelLabel.help" />
+    <@fieldInputText i18nLabelKey="ticketing.modify_usertitle.labelLabel" inputName="label" mandatory=false value="${usertitle.label}" i18nHelpBlockKey="ticketing.modify_usertitle.labelLabel.help" />
     <@actionButtons button1Name="action_modifyUserTitle" button2Name="view_manageUserTitles"/>
   </form>
 </@tabsWrapper>

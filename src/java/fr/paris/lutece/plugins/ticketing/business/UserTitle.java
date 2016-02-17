@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import java.io.Serializable;
 
 import javax.validation.constraints.Size;
@@ -49,7 +47,6 @@ public class UserTitle implements Serializable
 
     // Variables declarations 
     private int _nId;
-    @NotEmpty( message = "#i18n{ticketing.validation.usertitle.Label.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.usertitle.Label.size}" )
     private String _strLabel;
 

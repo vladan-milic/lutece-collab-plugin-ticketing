@@ -33,12 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -49,6 +52,9 @@ public final class UserTitleHome
     // Static variable pointed at the DAO instance
     private static IUserTitleDAO _dao = SpringContextService.getBean( "ticketing.userTitleDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+
+    // Properties
+    private static final String PROPERTY_USER_TITLE_EMPTY = "ticketing.userTitle.empty";
 
     /**
      * Private constructor - this class need not be instantiated
@@ -119,8 +125,18 @@ public final class UserTitleHome
      * returns referenceList
      * @return ReferenceList
      */
-    public static ReferenceList getReferenceList(  )
+    public static ReferenceList getReferenceList( Locale locale )
     {
-        return _dao.selectReferenceList( _plugin );
+        ReferenceList list = _dao.selectReferenceList( _plugin );
+
+        for ( ReferenceItem item : list )
+        {
+            if ( item.getName(  ).isEmpty(  ) )
+            {
+                item.setName( I18nService.getLocalizedString( PROPERTY_USER_TITLE_EMPTY, locale ) );
+            }
+        }
+
+        return list;
     }
 }

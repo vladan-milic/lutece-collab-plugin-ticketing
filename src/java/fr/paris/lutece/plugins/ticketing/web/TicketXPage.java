@@ -154,7 +154,7 @@ public class TicketXPage extends WorkflowCapableXPage
         prefillTicketWithUserInfo( request, ticket );
 
         Map<String, Object> model = getModel(  );
-        model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList(  ) );
+        model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale(  ) ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
