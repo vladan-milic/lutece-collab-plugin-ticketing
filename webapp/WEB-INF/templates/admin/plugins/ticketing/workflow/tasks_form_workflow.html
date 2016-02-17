@@ -16,7 +16,7 @@
 							<i class="fa fa-check"></i> #i18n{ticketing.tasks_form_workflow.button_save}
 						</button>
 					</#if>
-				  	<#if popin_mode>
+				  	 <#if popin_mode?? && popin_mode>
                         <button class="btn btn-default" name="back" data-dismiss="modal" >
     						<i class="fa fa-remove"></i> #i18n{ticketing.tasks_form_workflow.button_cancel}
     					</button>

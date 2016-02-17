@@ -31,3 +31,7 @@
 #content-ticketing{ background-color: #fff; padding:0 10% }
 
 #ticketing-admin-wrapper{margin:15px }
+
+#ticketing-modal-workflow-action-form .content-header{ display:none; }
+#ticketing-modal-workflow-action-form .content{padding: 0;margin: 0 }
+#ticketing-modal-workflow-action-form textarea{ width:95%; }
