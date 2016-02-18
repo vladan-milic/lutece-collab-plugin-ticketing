@@ -2,6 +2,10 @@
 /*   / ! \ WARNING Add styles from plugins GRU is used without plugin-gru !! */
 /*  ------                                                                                   */
 /* TICKETING */
+#ticketing-wrapper{margin:-15px }
+#ticketing-admin-wrapper{margin:15px }
+
+#customer-panel #header-right{ border-left: 1px solid #fff;height:160px; margin-top:-20px; padding-top:15px }
 #customer-panel h3 a{ color:#fff; padding-right:15px; font-size: 50%; vertical-align: middle}
 #customer-panel .btn-v360{ color:#BEBEBE; border:1px solid #BEBEBE; border-radius: 4px; margin-left:30px; font-size:1.3rem; padding:5px 25px }
 #customer-panel p{ font-size: 1.6rem }
@@ -13,7 +17,7 @@
 #ticketing-panel .nav-tabs > li{ padding-right: 15px; }
 #ticketing-panel .nav-tabs > li a{ border: 1px solid #DDD; text-transform: uppercase; font-size: 1.6rem }
 #ticketing-panel .nav-tabs > li.active > a{ border-bottom:1px solid #fff }
-#ticketing-panel .nav-tabs > li form{ height:45px; padding-top:8px; padding-left:4%; width:60%; background-color: #0082D8; border-top-left-radius:6px; border-top-right-radius:6px }
+#ticketing-panel .nav-tabs > li form{ height:45px; padding-top:8px; padding-left:4%; /*width:60%;*/ background-color: #0082D8; border-top-left-radius:6px; border-top-right-radius:6px }
 #ticketing-panel .nav-tabs > li form button{ color:#fff; text-decoration: none; text-transform: uppercase }
 
 #ticketing-panel .tab-content{ margin-left: 0; padding:10px 6%; background-color: #fff }
@@ -30,7 +34,7 @@
 #head-ticketing{ height: 80px; color:#fff; padding:8px 10%; margin-bottom: 20px }
 #content-ticketing{ background-color: #fff; padding:0 10% }
 
-#ticketing-admin-wrapper{margin:15px }
+#info-right{ border-left: 1px solid #DDD;min-height:600px;margin-top:-15px;padding:20px 20px  }
 
 #ticketing-modal-workflow-action-form .content-header{ display:none; }
 #ticketing-modal-workflow-action-form .content{padding: 0;margin: 0 }
