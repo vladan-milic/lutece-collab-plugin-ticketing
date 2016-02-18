@@ -1,57 +1,32 @@
 <#include "admin_tabs.html" />
-<@tabs tab="ticketdomain" />
-
-<@rowBox>
-    <@boxHeader i18nTitleKey="ticketing.manage_ticketdomains.tableLabel">
-        <@headerButtons>
-
-        
-        <form class="form-inline pull-right" method="post" name="manage_ticketdomains" action="jsp/admin/plugins/ticketing/ManageTicketDomains.jsp">
-            <!-- Add pull-right to class1 -->
-            <@actionButtons button1Name="view_createTicketDomain" icon1="icon-plus icon-white" i18nValue1Key="ticketing.manage_ticketdomains.buttonAdd" />
-        </form>
-        
-    </@headerButtons>
-    </@boxHeader>
-    <@boxBody>    
+<@tabsWrapper>
+  <@tabs tab="ticketdomain" formName="manage_ticketdomains" formAction="jsp/admin/plugins/ticketing/ManageTicketDomains.jsp" btnName="view_createTicketDomain" btnValue="ticketing.manage_ticketdomains.buttonAdd" />
     <@messages infos=infos />
-    <@paginationAdmin paginator=paginator combo=1 />
-    <div class="clearfix"></div>
-    
-    <@table>
+    <table class="table table-striped table-hover">
+      <thead>
         <tr>
-            <input type="hidden" id="id" name="id"/>
+            <input type="hidden" id="id" name="id">
             <th>#i18n{ticketing.manage_ticketdomains.columnLabel}</th>
             <th>#i18n{ticketing.manage_ticketdomains.columnIdTicketType}</th>
             <th>#i18n{portal.util.labelActions}</th>
         </tr>
-        <@tableHeadBodySeparator />
-            <#list ticketdomain_list as ticketdomain >
+      </thead>
+      <tbody>
+        <#list ticketdomain_list as ticketdomain >
         <tr>
-            <input type="hidden" id="id" name="id"/>
-            <td>
-                ${ticketdomain.label}
-            </td>
-            <td>
-                ${ticketdomain.ticketType}
-            </td>
-        <td>
-            <a href="jsp/admin/plugins/ticketing/ManageTicketDomains.jsp?view=modifyTicketDomain&id=${ticketdomain.id}"
-               class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
-                <i class="fa fa-pencil"></i>
+          <td>${ticketdomain.label}</td>
+          <td>${ticketdomain.ticketType}</td>
+          <td>
+            <a href="jsp/admin/plugins/ticketing/ManageTicketDomains.jsp?view=modifyTicketDomain&id=${ticketdomain.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
+              <i class="fa fa-pencil"></i>
             </a>
-
-            <a href="jsp/admin/plugins/ticketing/ManageTicketDomains.jsp?action=confirmRemoveTicketDomain&id=${ticketdomain.id}"
-               class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
-                <i class="fa fa-trash"></i>
+            <a href="jsp/admin/plugins/ticketing/ManageTicketDomains.jsp?action=confirmRemoveTicketDomain&id=${ticketdomain.id}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
+              <i class="fa fa-trash"></i>
             </a>
-        </td>
+          </td>
         </tr>
         </#list>
-    </@table>
-
-    <@paginationAdmin paginator=paginator />
-
-  </@boxBody>
-</@rowBox>
-
+      </tbody>
+    </table>
+  <@paginationAdmin paginator=paginator combo=1 />
+</@tabsWrapper>
