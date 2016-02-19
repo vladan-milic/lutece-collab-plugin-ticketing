@@ -2,10 +2,19 @@
 /*   / ! \ WARNING Add styles from plugins GRU is used without plugin-gru !! */
 /*  ------                                                                                   */
 /* TICKETING */
-#ticketing-wrapper{margin:-15px }
-#ticketing-admin-wrapper{margin:15px }
+#ticketing-wrapper{ margin:-15px }
 
-#customer-panel #header-right{ border-left: 1px solid #fff;height:160px; margin-top:-20px; padding-top:15px }
+#ticketing-admin-wrapper{ margin: 15px }
+
+#ticketing-search-wrapper{ margin:-10px 0 }
+#ticketing-search-wrapper #search-header h2{ padding-left: 20px }
+#ticketing-search-wrapper #search-header form{ padding: 20px }
+#ticketing-search-wrapper #search-header form input, #ticketing-search-wrapper #search-header form select{ color: #000 }
+#ticketing-search-wrapper #search-content{ margin:0 30px}
+#ticketing-search-wrapper #search-content ul li.list-group-item:hover{ background-color: #DEDEDE }
+
+#customer-panel #info-head-right{  border-left: 1px solid #fff;height:160px;margin-top:-20px;padding-top:15px }
+#customer-panel #info-head-right>p>i.fa-circle:hover{  cursor: pointer }
 #customer-panel h3 a{ color:#fff; padding-right:15px; font-size: 50%; vertical-align: middle}
 #customer-panel .btn-v360{ color:#BEBEBE; border:1px solid #BEBEBE; border-radius: 4px; margin-left:30px; font-size:1.3rem; padding:5px 25px }
 #customer-panel p{ font-size: 1.6rem }
@@ -29,7 +38,7 @@
 #ticketing-panel .tab-content table td a{ color: #656565; text-decoration: none}
 
 #detail-panel{ border-left: 1px solid #DDD; min-height:600px; margin-top:-15px; padding:20px 20px; margin-left:-5px }
-#detail-panel p a{ text-align: left !important}
+#detail-panel p a{ text-align: left !important }
 
 #head-ticketing{ height: 80px; color:#fff; padding:8px 10%; margin-bottom: 20px }
 #content-ticketing{ background-color: #fff; padding:0 10% }
