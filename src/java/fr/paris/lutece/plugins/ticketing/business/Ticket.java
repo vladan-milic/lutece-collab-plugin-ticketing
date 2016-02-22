@@ -54,6 +54,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 
@@ -65,6 +66,7 @@ public class Ticket implements Serializable, RBACResource
     public static final String TICKET_RESOURCE_TYPE = "ticket";
     private static final long serialVersionUID = 1L;
     private static final String SEPARATOR = " ";
+    private static final String PHONE_NUMBER_REGEX = "(^$|[0-9]{10})";
 
     // Variables declarations 
     private int _nId;
@@ -82,9 +84,9 @@ public class Ticket implements Serializable, RBACResource
     @Email( message = "#i18n{ticketing.validation.ticket.Email.badFormat}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.ticket.Email.size}" )
     private String _strEmail;
-    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.FixedPhoneNumber.size}" )
+    @Pattern( regexp = PHONE_NUMBER_REGEX, message = "#i18n{ticketing.validation.ticket.FixedPhoneNumber.format}" )
     private String _strFixedPhoneNumber;
-    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.MobilePhoneNumber.size}" )
+    @Pattern( regexp = PHONE_NUMBER_REGEX, message = "#i18n{ticketing.validation.ticket.MobilePhoneNumber.format}" )
     private String _strMobilePhoneNumber;
     @Min( value = 1, message = "#i18n{ticketing.validation.ticket.TicketType.mandatory}" )
     private int _nIdTicketType;
