@@ -37,6 +37,10 @@ import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.rbac.RBACService;
+import fr.paris.lutece.util.ReferenceItem;
+import fr.paris.lutece.util.ReferenceList;
+
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Map;
 
@@ -75,5 +79,23 @@ public final class TicketHelper
         {
             model.put( TicketingConstants.MARK_TICKET_MODIFICATION_RIGHT, Boolean.TRUE );
         }
+    }
+
+    /**
+     * returns ReferenceList initialized with an Empty Item
+     * @param strEmptyLabel label for empty value
+     * @param strEmptyCode code for empty value
+     * @return   listRefEmpty referenceList initialized with an Empty Item
+     */
+    public static ReferenceList getEmptyItemReferenceList( String strEmptyLabel, String strEmptyCode )
+    {
+        ReferenceItem refItemEmpty = new ReferenceItem(  );
+        refItemEmpty.setCode( strEmptyCode );
+        refItemEmpty.setName( strEmptyLabel );
+
+        ReferenceList listRefEmpty = new ReferenceList(  );
+        listRefEmpty.add( refItemEmpty );
+
+        return listRefEmpty;
     }
 }
