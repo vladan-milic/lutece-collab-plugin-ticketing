@@ -17,8 +17,10 @@
             <div class="timeline-item">
               <h4 class="timeline-header">
                 <#if history_information.admin_user_history?exists>
+                  <a href="sip:${history_information.admin_user_history.email}">
                     <#if adminAvatar><img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}" alt="Avatar" title="Avatar"></#if>
                     <em>&nbsp; ${history_information.admin_user_history.firstName} ${history_information.admin_user_history.lastName}</em>
+                  </a>
                 <#else>
                   &nbsp;#i18n{ticketing.view_ticket_history.admin_user_undefined}
                 </#if>
