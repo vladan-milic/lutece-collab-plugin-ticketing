@@ -170,7 +170,7 @@ public class TicketFormService implements Serializable
         // return template.getHtml( );
         return strBuffer.toString(  );
     }
-    
+
     /**
      * Return the HTML code of the form for the specified list of entries
      * @param listEntryFirstLevel the list of entries
@@ -180,15 +180,16 @@ public class TicketFormService implements Serializable
      * @param request HttpServletRequest
      * @return the HTML code of the form
      */
-    public String getHtmlForm( List<Entry> listEntryFirstLevel, Locale locale, boolean bDisplayFront, HttpServletRequest request )
+    public String getHtmlForm( List<Entry> listEntryFirstLevel, Locale locale, boolean bDisplayFront,
+        HttpServletRequest request )
     {
         StringBuffer strBuffer = new StringBuffer(  );
-        
+
         for ( Entry entry : listEntryFirstLevel )
         {
             getHtmlEntry( entry.getIdEntry(  ), strBuffer, locale, bDisplayFront, request );
         }
-        
+
         return strBuffer.toString(  );
     }
 

@@ -40,12 +40,16 @@ import fr.paris.lutece.portal.service.rbac.RBACResource;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
+
 import java.sql.Timestamp;
+
 import java.text.SimpleDateFormat;
+
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
@@ -64,20 +68,24 @@ public class Ticket implements Serializable, RBACResource
     private static final long serialVersionUID = 1L;
     private static final String SEPARATOR = " ";
     private static final String PHONE_NUMBER_REGEX = "(^$|[0-9]{10})";
-
     private static final String PROPERTY_CONTACT_MODE_FIXED_PHONE_NUMBER_ID = "ticketing.contactmode.fixedPhoneNumber.id";
     private static int CONTACT_MODE_FIXED_PHONE_NUMBER_ID = 2;
+
     static
     {
-        CONTACT_MODE_FIXED_PHONE_NUMBER_ID = AppPropertiesService.getPropertyInt( PROPERTY_CONTACT_MODE_FIXED_PHONE_NUMBER_ID, CONTACT_MODE_FIXED_PHONE_NUMBER_ID );
+        CONTACT_MODE_FIXED_PHONE_NUMBER_ID = AppPropertiesService.getPropertyInt( PROPERTY_CONTACT_MODE_FIXED_PHONE_NUMBER_ID,
+                CONTACT_MODE_FIXED_PHONE_NUMBER_ID );
     }
+
     private static final String PROPERTY_CONTACT_MODE_MOBILE_PHONE_NUMBER_ID = "ticketing.contactmode.mobilePhoneNumber.id";
     private static int CONTACT_MODE_MOBILE_PHONE_NUMBER_ID = 3;
+
     static
     {
-        CONTACT_MODE_MOBILE_PHONE_NUMBER_ID = AppPropertiesService.getPropertyInt( PROPERTY_CONTACT_MODE_MOBILE_PHONE_NUMBER_ID, CONTACT_MODE_MOBILE_PHONE_NUMBER_ID );
+        CONTACT_MODE_MOBILE_PHONE_NUMBER_ID = AppPropertiesService.getPropertyInt( PROPERTY_CONTACT_MODE_MOBILE_PHONE_NUMBER_ID,
+                CONTACT_MODE_MOBILE_PHONE_NUMBER_ID );
     }
-    
+
     // Variables declarations 
     private int _nId;
     private String _strReference;
@@ -596,16 +604,17 @@ public class Ticket implements Serializable, RBACResource
     }
 
     /**
-     * Returns true if the fixed phone number or the mobile phone number is not 
+     * Returns true if the fixed phone number or the mobile phone number is not
      * filled and if the corresponding contact mode is selected, and else returns false
      *
      * @return boolean result
      */
     public boolean isInconsistentContactModeWithPhoneNumberFilled(  )
     {
-        return ( ( this.getIdContactMode( ) == CONTACT_MODE_FIXED_PHONE_NUMBER_ID && StringUtils.isEmpty( this.getFixedPhoneNumber(  ).trim(  ) ) )
-        ||
-        ( this.getIdContactMode( ) == CONTACT_MODE_MOBILE_PHONE_NUMBER_ID && StringUtils.isEmpty( this.getMobilePhoneNumber(  ).trim(  ) ) ) );
+        return ( ( ( this.getIdContactMode(  ) == CONTACT_MODE_FIXED_PHONE_NUMBER_ID ) &&
+        StringUtils.isEmpty( this.getFixedPhoneNumber(  ).trim(  ) ) ) ||
+        ( ( this.getIdContactMode(  ) == CONTACT_MODE_MOBILE_PHONE_NUMBER_ID ) &&
+        StringUtils.isEmpty( this.getMobilePhoneNumber(  ).trim(  ) ) ) );
     }
 
     /**

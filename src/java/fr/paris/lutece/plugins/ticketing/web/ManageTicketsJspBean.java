@@ -78,6 +78,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
 import java.text.ParseException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -651,7 +652,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             bIsFormValid = false;
             addError( ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED, getLocale(  ) );
         }
-        
+
         if ( listFormErrors.size(  ) > 0 )
         {
             bIsFormValid = false;
