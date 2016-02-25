@@ -70,6 +70,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
     private static final String PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ME = "ticketing.workflow.action.id.assignMe";
+    private static final String TEMPLATE_RESOURCE_HISTORY = "admin/plugins/ticketing/workflow/ticket_history.html";
 
     // Services
     private static WorkflowService _workflowService = WorkflowService.getInstance(  );
@@ -338,7 +339,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         int nWorkflowId = category.getIdWorkflow(  );
 
         return _workflowService.getDisplayDocumentHistory( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nWorkflowId,
-            request, getLocale(  ) );
+            request, getLocale(  ), TEMPLATE_RESOURCE_HISTORY);
     }
 
     /**
