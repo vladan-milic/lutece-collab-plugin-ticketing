@@ -38,6 +38,7 @@ import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import org.apache.commons.lang.StringUtils;
@@ -56,6 +57,9 @@ import java.util.List;
 public final class TicketDAO implements ITicketDAO
 {
     // Constants
+    private static final String TICKET_RESOURCE_TYPE = "ticket";
+
+    //SQL Queries
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket ) FROM ticketing_ticket";
     private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, " +
         " a.fixed_phone_number, a.mobile_phone_number, c.id_ticket_type, c.label, d.id_ticket_domain, " +
@@ -73,11 +77,13 @@ public final class TicketDAO implements ITicketDAO
         " id_ticket_category = ?, id_contact_mode = ?, ticket_comment = ?, ticket_status = ?, ticket_status_text = ?, date_update = ?," +
         " date_close = ? , priority = ? , criticality = ? , id_customer = ? , id_admin_user = ? , id_unit = ?, user_message = ? " +
         " WHERE id_ticket = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, a.fixed_phone_number, a.mobile_phone_number," +
+    private static final String SQL_QUERY_SELECTALL_SELECT_CLAUSE = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, a.fixed_phone_number, a.mobile_phone_number," +
         " c.id_ticket_type, c.label, d.id_ticket_domain, d.label, a.id_ticket_category, e.label, a.id_contact_mode, f.label, a.ticket_comment," +
         " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, a.id_unit, a.user_message " +
-        " FROM ticketing_ticket a, ticketing_user_title b, ticketing_ticket_type c, ticketing_ticket_domain d, ticketing_ticket_category e, ticketing_contact_mode f " +
-        " WHERE a.id_user_title = b.id_user_title AND a.id_ticket_category = e.id_ticket_category AND e.id_ticket_domain = d.id_ticket_domain AND d.id_ticket_type = c.id_ticket_type AND a.id_contact_mode = f.id_contact_mode";
+        " FROM (ticketing_ticket a, ticketing_user_title b, ticketing_ticket_type c, ticketing_ticket_domain d, ticketing_ticket_category e, ticketing_contact_mode f) " +
+        " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user" +
+        " LEFT JOIN unittree_unit h ON h.id_unit=a.id_unit";
+    private static final String SQL_QUERY_SELECTALL_WHERE_CLAUSE = " WHERE a.id_user_title = b.id_user_title AND a.id_ticket_category = e.id_ticket_category AND e.id_ticket_domain = d.id_ticket_domain AND d.id_ticket_type = c.id_ticket_type AND a.id_contact_mode = f.id_contact_mode";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket FROM ticketing_ticket";
     private static final String SQL_FILTER_STATUS = " AND a.ticket_status = UPPER(?) ";
     private static final String SQL_FILTER_ID_TICKET = " AND  a.id_ticket= ? ";
@@ -97,9 +103,14 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_FILTER_FIXED_PHONE_NUMBER = " AND a.fixed_phone_number = ? ";
     private static final String SQL_FILTER_MOBILE_PHONE_NUMBER = " AND a.mobile_phone_number = ? ";
     private static final String SQL_FILTER_CLOSE_DATE = " AND a.date_close <= ? AND a.date_close < ? ";
+    private static final String SQL_FILTER_URGENCY = " AND ( ( a.priority = ? AND a.criticality <= a.priority)  OR ( a.criticality = ? AND a.priority  <= a.criticality) )";
     private static final String CONSTANT_ASC = " ASC";
     private static final String CONSTANT_DESC = " DESC";
     private static final String CONSTANT_ORDER_BY = " ORDER BY ";
+    private static final String SQL_SELECT_ALL_WORKFLOW_JOIN_CLAUSE = " LEFT JOIN  workflow_resource_workflow i ON i.id_resource=a.id_ticket" +
+        " LEFT JOIN workflow_state j ON j.id_state=i.id_state";
+    private static final String SQL_SELECT_ALL_WORKFLOW_WHERE_CLAUSE = " AND i.resource_type='" + TICKET_RESOURCE_TYPE +
+        "'";
 
     // SQL commands to manage ticket's generic attributes responses
     private static final String SQL_QUERY_INSERT_TICKET_RESPONSE = "INSERT INTO ticketing_ticket_response (id_ticket, id_response) VALUES (?,?)";
@@ -295,13 +306,38 @@ public final class TicketDAO implements ITicketDAO
     }
 
     /**
+     * returns SQL_SELECT_ALL query built from workflow depency
+     * @return select all query
+     */
+    private String getSelectAllQuery(  )
+    {
+        String sqlQuery = SQL_QUERY_SELECTALL_SELECT_CLAUSE;
+
+        if ( WorkflowService.getInstance(  ).isAvailable(  ) )
+        {
+            sqlQuery += SQL_SELECT_ALL_WORKFLOW_JOIN_CLAUSE;
+        }
+
+        sqlQuery += SQL_QUERY_SELECTALL_WHERE_CLAUSE;
+
+        if ( WorkflowService.getInstance(  ).isAvailable(  ) )
+        {
+            sqlQuery += SQL_SELECT_ALL_WORKFLOW_WHERE_CLAUSE;
+        }
+
+        return sqlQuery;
+    }
+
+    /**
      * {@inheritDoc }
      */
     @Override
     public List<Ticket> selectTicketsList( Plugin plugin )
     {
         List<Ticket> ticketList = new ArrayList<Ticket>(  );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
+
+        DAOUtil daoUtil = new DAOUtil( getSelectAllQuery(  ), plugin );
+
         daoUtil.executeQuery(  );
 
         while ( daoUtil.next(  ) )
@@ -497,6 +533,7 @@ public final class TicketDAO implements ITicketDAO
         sbSQL.append( filter.containsFixedPhoneNumber(  ) ? SQL_FILTER_FIXED_PHONE_NUMBER : StringUtils.EMPTY );
         sbSQL.append( filter.containsMobilePhoneNumber(  ) ? SQL_FILTER_MOBILE_PHONE_NUMBER : StringUtils.EMPTY );
         sbSQL.append( filter.containsCloseDate(  ) ? SQL_FILTER_CLOSE_DATE : StringUtils.EMPTY );
+        sbSQL.append( filter.containsUrgency(  ) ? SQL_FILTER_URGENCY : StringUtils.EMPTY );
 
         if ( filter.containsOrderBy(  ) )
         {
@@ -617,6 +654,12 @@ public final class TicketDAO implements ITicketDAO
             daoUtil.setDate( nIndex++, new Date( filter.getCloseDate(  ).getTime(  ) ) );
             daoUtil.setDate( nIndex++, new Date( getNextDayDate( filter.getCreationDate(  ) ).getTime(  ) ) );
         }
+
+        if ( filter.containsUrgency(  ) )
+        {
+            daoUtil.setInt( nIndex++, filter.getUrgency(  ) );
+            daoUtil.setInt( nIndex++, filter.getUrgency(  ) );
+        }
     }
 
     /**
@@ -627,7 +670,7 @@ public final class TicketDAO implements ITicketDAO
     {
         List<Ticket> ticketList = new ArrayList<Ticket>(  );
 
-        StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECTALL );
+        StringBuilder sbSQL = new StringBuilder( getSelectAllQuery(  ) );
 
         if ( filter != null )
         {

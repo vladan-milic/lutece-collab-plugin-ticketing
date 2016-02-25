@@ -36,6 +36,8 @@ package fr.paris.lutece.plugins.ticketing.business;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -59,13 +61,26 @@ public class TicketFilter
     /**
      * Default order by
      */
-    public static final String CONSTANT_DEFAULT_ORDER_BY = "id_ticket";
-    private static final String[] LIST_ORDER_BY = 
-        {
-            CONSTANT_DEFAULT_ORDER_BY, "ticket_status", "date_create", "date_update", "id_user", "id_ticket_domain",
-            "id_ticket_category", "email", "lastname", "firstname", "fixed_phone_number", "mobile_phone_number",
-            "date_close",
-        };
+    public static final String CONSTANT_DEFAULT_ORDER_BY = "ticket_reference";
+    private static final Map<String, String> ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP;
+
+    static
+    {
+        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP = new HashMap<String, String>(  );
+        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "category_label", "e.label" );
+        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "ticket_reference", "ticket_reference" );
+        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "ticket_status", "ticket_status" );
+        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "date_create", "date_create" );
+        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "date_update", "date_update" );
+        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "id_user", "id_user" );
+        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "email", "email" );
+        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "lastname", "lastname" );
+        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "date_close", "date_close" );
+        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "ticket_status_text", "ticket_status_text" );
+        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "assignee", "g.last_name, h.label" );
+        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "state", "j.name" );
+    }
+
     private int _nIdTicket = CONSTANT_ID_NULL;
     private Date _dateLastUpdateDate;
     private Date _dateLastUpdateStartDate;
@@ -78,14 +93,17 @@ public class TicketFilter
     private int _nIdCategory = CONSTANT_ID_NULL;
     private int _nIdDomain = CONSTANT_ID_NULL;
     private int _nIdType = CONSTANT_ID_NULL;
+    private int _nOpenSincePeriod = CONSTANT_ID_NULL;
     private String _strStatus;
     private String _strEmail;
     private String _strLastName;
     private String _strFirstName;
+    private String _strReference;
     private String _strFixedPhoneNumber;
     private String _strMobilePhoneNumber;
     private String _strOrderBy;
     private String _strOrderSort;
+    private int _nUrgency = CONSTANT_ID_NULL;
 
     /**
      * Check if this filter contains a idUser
@@ -564,13 +582,94 @@ public class TicketFilter
     }
 
     /**
-     * Check if this filter contains a resource id
+     * Check if this filter contains a MobilePhoneNumber
      *
      * @return true if the filter contain an id of MobilePhoneNumber
      */
     public boolean containsMobilePhoneNumber(  )
     {
         return StringUtils.isNotEmpty( _strMobilePhoneNumber );
+    }
+
+    /**
+     * @return the _strReference
+     */
+    public String getReference(  )
+    {
+        return _strReference;
+    }
+
+    /**
+     * @param strReference
+     *            the reference to set
+     */
+    public void setReference( String strReference )
+    {
+        this._strReference = strReference;
+    }
+
+    /**
+     * Check if this filter contains a reference
+     *
+     * @return true if the filter contains a reference
+     */
+    public boolean containsReference(  )
+    {
+        return StringUtils.isNotEmpty( _strReference );
+    }
+
+    /**
+     * @return the _strOpenSincePeriod
+     */
+    public int getOpenSincePeriod(  )
+    {
+        return _nOpenSincePeriod;
+    }
+
+    /**
+     * @param nOpenSincePeriod
+     *            the OpenSincePeriod to set
+     */
+    public void setOpenSincePeriod( int nOpenSincePeriod )
+    {
+        this._nOpenSincePeriod = nOpenSincePeriod;
+    }
+
+    /**
+     * Check if this filter contains a OpenSincePeriod
+     *
+     * @return true if the filter contains a OpenSincePeriod
+     */
+    public boolean containsOpenSincePeriod(  )
+    {
+        return _nOpenSincePeriod != CONSTANT_ID_NULL;
+    }
+
+    /**
+     * @return the _nUrgency
+     */
+    public int getUrgency(  )
+    {
+        return _nUrgency;
+    }
+
+    /**
+     * @param nUrgency
+     *            the Urgency to set
+     */
+    public void setUrgency( int nUrgency )
+    {
+        this._nUrgency = nUrgency;
+    }
+
+    /**
+     * Check if this filter contains a Urgency
+     *
+     * @return true if the filter contains a Urgency
+     */
+    public boolean containsUrgency(  )
+    {
+        return _nUrgency != CONSTANT_ID_NULL;
     }
 
     /**
@@ -583,25 +682,13 @@ public class TicketFilter
      */
     public void setOrderBy( String strOrderBy )
     {
-        boolean bValidOrderBy = false;
-
-        for ( String strOrder : LIST_ORDER_BY )
+        if ( ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.containsKey( strOrderBy ) )
         {
-            if ( StringUtils.equals( strOrder, strOrderBy ) )
-            {
-                bValidOrderBy = true;
-
-                break;
-            }
-        }
-
-        if ( bValidOrderBy )
-        {
-            this._strOrderBy = strOrderBy;
+            this._strOrderBy = ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.get( strOrderBy );
         }
         else
         {
-            _strOrderBy = LIST_ORDER_BY[0];
+            _strOrderBy = ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.get( CONSTANT_DEFAULT_ORDER_BY );
         }
     }
 

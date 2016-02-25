@@ -88,6 +88,9 @@ public class TicketResourceIdService extends ResourceIdService
     /** Permission for returnin a ticket to assigner */
     public static final String PERMISSION_RETURN_TO_ASSIGNER = "RETURN_TO_ASSIGNER";
 
+    /** Permission for responding to assign up of a ticket */
+    public static final String PERMISSION_RESPOND_ASSIGN_UP_LEVEL = "RESPOND_ASSIGN_UP_LEVEL";
+
     /** Permission for responding to a user for a ticket */
     public static final String PERMISSION_RESPOND_TO_USER = "RESPOND_TO_USER";
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "ticketing.ticket.resourceType";
@@ -103,6 +106,7 @@ public class TicketResourceIdService extends ResourceIdService
     private static final String PROPERTY_LABEL_QUALIFY = "ticketing.ticket.permission.label.qualify";
     private static final String PROPERTY_LABEL_RETURN_TO_ASSIGNER = "ticketing.ticket.permission.label.returnToAssigner";
     private static final String PROPERTY_LABEL_RESPOND_TO_USER = "ticketing.ticket.permission.label.respondToUser";
+    private static final String PROPERTY_LABEL_RESPOND_ASSIGN_UP_LEVEL = "ticketing.ticket.permission.label.respondAssignUpLevel";
     private static final String STRING_SEPARATOR = "/";
 
     /**
@@ -182,6 +186,11 @@ public class TicketResourceIdService extends ResourceIdService
         p = new Permission(  );
         p.setPermissionKey( PERMISSION_RESPOND_TO_USER );
         p.setPermissionTitleKey( PROPERTY_LABEL_RESPOND_TO_USER );
+        rt.registerPermission( p );
+
+        p = new Permission(  );
+        p.setPermissionKey( PERMISSION_RESPOND_ASSIGN_UP_LEVEL );
+        p.setPermissionTitleKey( PROPERTY_LABEL_RESPOND_ASSIGN_UP_LEVEL );
         rt.registerPermission( p );
 
         ResourceTypeManager.registerResourceType( rt );

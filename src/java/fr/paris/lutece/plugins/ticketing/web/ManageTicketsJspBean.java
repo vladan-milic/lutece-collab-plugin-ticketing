@@ -61,7 +61,6 @@ import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUpload
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
-import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -79,7 +78,6 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
 import java.text.ParseException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -101,15 +99,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     // Right
     public static final String RIGHT_MANAGETICKETS = "TICKETING_TICKETS_MANAGEMENT";
     private static final long serialVersionUID = 1L;
-    private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
-    private static final String PARAMETER_PAGE_INDEX_AGENT = "page_index_agent";
-    private static final String PARAMETER_PAGE_INDEX_GROUP = "page_index_group";
-    private static final String PARAMETER_PAGE_INDEX_DOMAIN = "page_index_domain";
-    private static final String MARK_PAGINATOR_AGENT = "paginator_agent";
-    private static final String MARK_PAGINATOR_GROUP = "paginator_group";
-    private static final String MARK_PAGINATOR_DOMAIN = "paginator_domain";
-    private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
-    private static final String MARK_TICKET_ACTION = "ticket_action";
 
     ////////////////////////////////////////////////////////////////////////////
     // Constants
@@ -128,8 +117,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String PARAMETER_PHONE = "ph";
     private static final String PARAMETER_EMAIL = "em";
     private static final String PARAMETER_CATEGORY = "cat";
+    private static final String PARAMETER_PAGE_INDEX_AGENT = "page_index_agent";
+    private static final String PARAMETER_PAGE_INDEX_GROUP = "page_index_group";
+    private static final String PARAMETER_PAGE_INDEX_DOMAIN = "page_index_domain";
 
     // Properties for page titles
+    private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
     private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETS = "ticketing.manage_tickets.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_TICKET = "ticketing.modify_ticket.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_CREATE_TICKET = "ticketing.create_ticket.pageTitle";
@@ -145,9 +138,14 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
     private static final String MARK_ADMIN_AVATAR = "adminAvatar";
-    private static final String JSP_MANAGE_TICKETS = "jsp/admin/plugins/ticketing/ManageTickets.jsp";
     private static final String MARK_GUID = "guid";
     private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
+    private static final String MARK_PAGINATOR_AGENT = "paginator_agent";
+    private static final String MARK_PAGINATOR_GROUP = "paginator_group";
+    private static final String MARK_PAGINATOR_DOMAIN = "paginator_domain";
+    private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
+    private static final String MARK_TICKET_ACTION = "ticket_action";
+    private static final String JSP_MANAGE_TICKETS = "jsp/admin/plugins/ticketing/ManageTickets.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
@@ -175,6 +173,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     // Errors
     private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
     private static final String ERROR_FILTERING_INVALID_DATE = "ticketing.filter.error.date.invalid";
+    private static final String ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED = "ticketing.error.contactmode.inconsistent";
 
     // Session keys
     private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
@@ -283,6 +282,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_PAGINATOR_GROUP, paginatorGroupTickets );
         model.put( MARK_PAGINATOR_DOMAIN, paginatorDomainTickets );
         model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
+        TicketFilterHelper.setModel( model, filter, request );
         TicketHelper.storeTicketRightsIntoModel( model, getUser(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
@@ -646,6 +646,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             addError( ERROR_PHONE_NUMBER_MISSING, getLocale(  ) );
         }
 
+        if ( ticket.isInconsistentContactModeWithPhoneNumberFilled(  ) )
+        {
+            bIsFormValid = false;
+            addError( ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED, getLocale(  ) );
+        }
+        
         if ( listFormErrors.size(  ) > 0 )
         {
             bIsFormValid = false;

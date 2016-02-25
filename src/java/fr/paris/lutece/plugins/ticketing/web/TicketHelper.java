@@ -46,6 +46,8 @@ import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.util.ReferenceItem;
+import fr.paris.lutece.util.ReferenceList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +64,7 @@ public final class TicketHelper
 {
     // Properties
     private static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
-    
+
     /**
      * Default constructor
      */
@@ -92,14 +94,15 @@ public final class TicketHelper
             model.put( TicketingConstants.MARK_TICKET_MODIFICATION_RIGHT, Boolean.TRUE );
         }
     }
-    
+
     /**
      * Stores the read-only HTML of the ticket responses in the model
      * @param request the request
      * @param model the model
      * @param ticket the ticket
      */
-    public static void storeReadOnlyHtmlResponsesIntoModel( HttpServletRequest request, Map<String, Object> model, Ticket ticket )
+    public static void storeReadOnlyHtmlResponsesIntoModel( HttpServletRequest request, Map<String, Object> model,
+        Ticket ticket )
     {
         List<Response> listResponses = ticket.getListResponse(  );
         List<String> listReadOnlyResponseHtml = new ArrayList<String>( listResponses.size(  ) );
@@ -113,7 +116,7 @@ public final class TicketHelper
 
         model.put( TicketingConstants.MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
     }
-    
+
     /**
      * Registers the admin user for front office
      * @param request the request
@@ -135,5 +138,23 @@ public final class TicketHelper
         {
             AppLogService.error( e.getMessage(  ), e );
         }
+    }
+
+    /**
+     * returns ReferenceList initialized with an Empty Item
+     * @param strEmptyLabel label for empty value
+     * @param strEmptyCode code for empty value
+     * @return   listRefEmpty referenceList initialized with an Empty Item
+     */
+    public static ReferenceList getEmptyItemReferenceList( String strEmptyLabel, String strEmptyCode )
+    {
+        ReferenceItem refItemEmpty = new ReferenceItem(  );
+        refItemEmpty.setCode( strEmptyCode );
+        refItemEmpty.setName( strEmptyLabel );
+
+        ReferenceList listRefEmpty = new ReferenceList(  );
+        listRefEmpty.add( refItemEmpty );
+
+        return listRefEmpty;
     }
 }
