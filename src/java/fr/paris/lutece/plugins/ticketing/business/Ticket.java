@@ -139,6 +139,7 @@ public class Ticket implements Serializable, RBACResource
     private AssigneeUser _user;
     private AssigneeUnit _unit;
     private String _strUserMessage;
+    private String _strUrl;
 
     /**
      * Returns the Id
@@ -819,6 +820,27 @@ public class Ticket implements Serializable, RBACResource
     public void setUserMessage( String strUserMessage )
     {
         _strUserMessage = strUserMessage;
+    }
+
+    /**
+     * Returns the url
+     *
+     * @return The url
+     */
+    public String getUrl(  )
+    {
+        return _strUrl;
+    }
+
+    /**
+     * Sets the url
+     *
+     * @param strUrl
+     *            The url
+     */
+    public void setUrl( String strUrl )
+    {
+        _strUrl = strUrl;
     }
 
     /**
