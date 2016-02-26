@@ -120,13 +120,15 @@
           <i class="fa fa-tags"></i> Les demandes par domaine <span class="label label-default">${ticket_domain_list?size}</label>
         </a>
       </li>
-      <li>
-        <form method="post" name="manage_tickets" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
-          <button name="view_createTicket" type="submit" class="btn btn-link">
-            <i class="fa fa-plus"></i> #i18n{ticketing.manage_tickets.buttonAdd}
-          </button>
-        </form>
-      </li>
+      <#if ticket_creation_right?? && ticket_creation_right>
+          <li>
+            <form method="post" name="manage_tickets" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+              <button name="view_createTicket" type="submit" class="btn btn-link">
+                <i class="fa fa-plus"></i> #i18n{ticketing.manage_tickets.buttonAdd}
+              </button>
+            </form>
+          </li>
+      </#if>
     </ul>
     <div class="tab-content">
         <form id="filter_form" class="form-inline" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
