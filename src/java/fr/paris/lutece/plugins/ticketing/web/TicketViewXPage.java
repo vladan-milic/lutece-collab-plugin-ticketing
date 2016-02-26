@@ -33,9 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
-import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
-import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableXPage;
@@ -43,9 +40,7 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -95,17 +90,7 @@ public class TicketViewXPage extends WorkflowCapableXPage
         Map<String, Object> model = getModel(  );
         model.put( TicketingConstants.MARK_TICKET, ticket );
 
-        List<Response> listResponses = ticket.getListResponse(  );
-        List<String> listReadOnlyResponseHtml = new ArrayList<String>( listResponses.size(  ) );
-
-        for ( Response response : listResponses )
-        {
-            IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( response.getEntry(  ) );
-            listReadOnlyResponseHtml.add( entryTypeService.getResponseValueForRecap( response.getEntry(  ), request,
-                    response, request.getLocale(  ) ) );
-        }
-
-        model.put( TicketingConstants.MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
+        TicketHelper.storeReadOnlyHtmlResponsesIntoModel( request, model, ticket );
 
         model.put( MARK_IS_REPLY_RENDERED,
             isInState( ticket, WorkflowCapableXPage.PROPERTIES_WORKFLOW_STATE_WAITING_USER_REPLY ) );

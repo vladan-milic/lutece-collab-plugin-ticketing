@@ -28,6 +28,7 @@ date_close timestamp NULL,
 id_admin_user int(11) NOT NULL default '-1',
 id_unit int(11) NOT NULL default '0', 
 user_message long varchar NULL,
+url varchar(4096) NULL,
 PRIMARY KEY (id_ticket)
 );
 

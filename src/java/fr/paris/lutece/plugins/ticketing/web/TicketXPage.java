@@ -304,7 +304,7 @@ public class TicketXPage extends WorkflowCapableXPage
             addError( ERROR_PHONE_NUMBER_MISSING, getLocale( request ) );
             bIsFormValid = false;
         }
-        
+
         if ( ticket.isInconsistentContactModeWithPhoneNumberFilled(  ) )
         {
             addError( ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED, getLocale( request ) );
