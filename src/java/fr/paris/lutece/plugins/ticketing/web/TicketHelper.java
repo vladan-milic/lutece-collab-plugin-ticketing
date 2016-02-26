@@ -33,16 +33,27 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
+import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.business.user.AdminUserHome;
+import fr.paris.lutece.portal.service.admin.AccessDeniedException;
+import fr.paris.lutece.portal.service.admin.AdminAuthenticationService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
+import fr.paris.lutece.portal.service.security.UserNotSignedException;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
-import org.apache.commons.lang.StringUtils;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -51,6 +62,9 @@ import java.util.Map;
  */
 public final class TicketHelper
 {
+    // Properties
+    private static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
+
     /**
      * Default constructor
      */
@@ -78,6 +92,51 @@ public final class TicketHelper
         if ( RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_MODIFY, adminUser ) )
         {
             model.put( TicketingConstants.MARK_TICKET_MODIFICATION_RIGHT, Boolean.TRUE );
+        }
+    }
+
+    /**
+     * Stores the read-only HTML of the ticket responses in the model
+     * @param request the request
+     * @param model the model
+     * @param ticket the ticket
+     */
+    public static void storeReadOnlyHtmlResponsesIntoModel( HttpServletRequest request, Map<String, Object> model,
+        Ticket ticket )
+    {
+        List<Response> listResponses = ticket.getListResponse(  );
+        List<String> listReadOnlyResponseHtml = new ArrayList<String>( listResponses.size(  ) );
+
+        for ( Response response : listResponses )
+        {
+            IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( response.getEntry(  ) );
+            listReadOnlyResponseHtml.add( entryTypeService.getResponseValueForRecap( response.getEntry(  ), request,
+                    response, request.getLocale(  ) ) );
+        }
+
+        model.put( TicketingConstants.MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
+    }
+
+    /**
+     * Registers the admin user for front office
+     * @param request the request
+     */
+    public static void registerDefaultAdminUser( HttpServletRequest request )
+    {
+        AdminUser defaultUser = AdminUserHome.findByPrimaryKey( AppPropertiesService.getPropertyInt( 
+                    PROPERTY_ADMINUSER_FRONT_ID, -1 ) );
+
+        try
+        {
+            AdminAuthenticationService.getInstance(  ).registerUser( request, defaultUser );
+        }
+        catch ( AccessDeniedException e )
+        {
+            AppLogService.error( e.getMessage(  ), e );
+        }
+        catch ( UserNotSignedException e )
+        {
+            AppLogService.error( e.getMessage(  ), e );
         }
     }
 

@@ -174,6 +174,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     // Errors
     private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
     private static final String ERROR_FILTERING_INVALID_DATE = "ticketing.filter.error.date.invalid";
+    private static final String ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED = "ticketing.error.contactmode.inconsistent";
 
     // Session keys
     private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
@@ -644,6 +645,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             bIsFormValid = false;
             addError( ERROR_PHONE_NUMBER_MISSING, getLocale(  ) );
+        }
+
+        if ( ticket.isInconsistentContactModeWithPhoneNumberFilled(  ) )
+        {
+            bIsFormValid = false;
+            addError( ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED, getLocale(  ) );
         }
 
         if ( listFormErrors.size(  ) > 0 )

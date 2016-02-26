@@ -127,6 +127,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
     // Errors
     private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
+    private static final String ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED = "ticketing.error.contactmode.inconsistent";
 
     // Session keys
     private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
@@ -301,6 +302,12 @@ public class TicketXPage extends WorkflowCapableXPage
         if ( ticket.hasNoPhoneNumberFilled(  ) )
         {
             addError( ERROR_PHONE_NUMBER_MISSING, getLocale( request ) );
+            bIsFormValid = false;
+        }
+
+        if ( ticket.isInconsistentContactModeWithPhoneNumberFilled(  ) )
+        {
+            addError( ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED, getLocale( request ) );
             bIsFormValid = false;
         }
 

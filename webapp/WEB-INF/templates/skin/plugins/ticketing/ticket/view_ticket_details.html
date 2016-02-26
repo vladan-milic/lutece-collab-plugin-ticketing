@@ -21,25 +21,19 @@
         <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketCategory">${ticket.ticketCategory!''}</@fieldStaticText>
         <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketComment">${ticket.ticketComment!''}</@fieldStaticText>
         
-        <#list read_only_reponses_html_list as html_response>
-            <#if html_response?has_content>
-                <div class="genattr">
-                    ${html_response}
-                </div>
-            </#if>
-        </#list>
+        <#if read_only_reponses_html_list?? && read_only_reponses_html_list?size &gt; 0>
+            <#list read_only_reponses_html_list as html_response>
+                <#if html_response?has_content>
+                    <div class="genattr">
+                        ${html_response}
+                    </div>
+                </#if>
+            </#list>
+        </#if>
     </fieldset>
     
-    <#if is_reply_rendered && ticket.userMessage?? && ticket.userMessage?has_content>
-	    <fieldset class="form-horizontal">
-            <legend>#i18n{ticketing.xpage.view_ticket_details.labelReply}</legend>
-            <div class="form-group">
-    	        <label class="col-xs-12 col-sm-3 control-label">#i18n{ticketing.xpage.view_ticket_details.labelUserMessage}&nbsp; :</label>
-                <div class="col-xs-12 col-sm-9">
-                    ${ticket.userMessage!''}
-                </div>
-            </div>
-	    </fieldset>
+    <#if editable_ticket?? >
+        <#include "/skin/plugins/ticketing/ticket/edit_ticket.html" />
     </#if>
     
     <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>

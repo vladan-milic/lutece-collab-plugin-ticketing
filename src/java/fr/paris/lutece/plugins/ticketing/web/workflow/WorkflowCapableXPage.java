@@ -38,19 +38,14 @@ import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
+import fr.paris.lutece.plugins.ticketing.web.TicketHelper;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
 import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
-import fr.paris.lutece.portal.business.user.AdminUser;
-import fr.paris.lutece.portal.business.user.AdminUserHome;
-import fr.paris.lutece.portal.service.admin.AccessDeniedException;
-import fr.paris.lutece.portal.service.admin.AdminAuthenticationService;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
-import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
@@ -75,7 +70,6 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 {
     // Properties
     public static final String PROPERTIES_WORKFLOW_STATE_WAITING_USER_REPLY = "ticketing.workflow.state.id.waitingUserReply";
-    private static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
 
     // Services
     private static WorkflowService _workflowService = WorkflowService.getInstance(  );
@@ -107,7 +101,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
      */
     protected void setWorkflowAttributes( HttpServletRequest request, Ticket ticket )
     {
-        registerDefaultAdminUser( request );
+        TicketHelper.registerDefaultAdminUser( request );
 
         if ( _workflowService.isAvailable(  ) )
         {
@@ -169,7 +163,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
 
-        registerDefaultAdminUser( request );
+        TicketHelper.registerDefaultAdminUser( request );
 
         if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
                 StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
@@ -226,7 +220,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
 
-        registerDefaultAdminUser( request );
+        TicketHelper.registerDefaultAdminUser( request );
 
         if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
                 StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
@@ -305,29 +299,6 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         if ( _workflowService.isAvailable(  ) )
         {
             _workflowService.doRemoveWorkFlowResource( nTicketId, Ticket.TICKET_RESOURCE_TYPE );
-        }
-    }
-
-    /**
-     * Registers the admin user for front office
-     * @param request the request
-     */
-    private void registerDefaultAdminUser( HttpServletRequest request )
-    {
-        AdminUser defaultUser = AdminUserHome.findByPrimaryKey( AppPropertiesService.getPropertyInt( 
-                    PROPERTY_ADMINUSER_FRONT_ID, -1 ) );
-
-        try
-        {
-            AdminAuthenticationService.getInstance(  ).registerUser( request, defaultUser );
-        }
-        catch ( AccessDeniedException e )
-        {
-            AppLogService.error( e.getMessage(  ), e );
-        }
-        catch ( UserNotSignedException e )
-        {
-            AppLogService.error( e.getMessage(  ), e );
         }
     }
 
