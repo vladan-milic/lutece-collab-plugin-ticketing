@@ -47,7 +47,6 @@ import fr.paris.lutece.plugins.ticketing.business.TicketFormHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.EntryService;
 import fr.paris.lutece.plugins.ticketing.service.EntryTypeService;
-import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -194,8 +193,9 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
         Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_ENTRY, entry );
         model.put( MARK_FORM, ticketForm );
-        model.put( TicketingConstants.MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-        model.put( TicketingConstants.MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
+
+        TicketHelper.storeRichTextMarksIntoModel( request, model );
+        
         model.put( MARK_ENTRY_TYPE_SERVICE, EntryTypeServiceManager.getEntryTypeService( entry ) );
 
         String strTemplate = EntryTypeServiceManager.getEntryTypeService( entry ).getTemplateCreate( entry, false );
@@ -347,8 +347,8 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
                 model.put( MARK_REGULAR_EXPRESSION_LIST_REF_LIST, refListRegularExpression );
             }
 
-            model.put( TicketingConstants.MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-            model.put( TicketingConstants.MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
+            TicketHelper.storeRichTextMarksIntoModel( request, model );
+
             model.put( MARK_ENTRY_TYPE_SERVICE, EntryTypeServiceManager.getEntryTypeService( entry ) );
 
             return getPage( PROPERTY_MODIFY_QUESTION_TITLE, entryTypeService.getTemplateModify( entry, false ), model );
