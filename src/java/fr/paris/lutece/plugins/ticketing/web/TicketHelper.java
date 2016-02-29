@@ -37,7 +37,14 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.TicketDomain;
+import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.TicketFilter;
+import fr.paris.lutece.plugins.ticketing.business.TicketHome;
+import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
+import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
@@ -156,5 +163,72 @@ public final class TicketHelper
         listRefEmpty.add( refItemEmpty );
 
         return listRefEmpty;
+    }
+
+    /**
+     * returns true if ticket is assign to user's group
+     * @param ticket ticket
+     * @param lstUserUnits user's units
+     * @return true if ticket belongs to user's group
+     */
+    public static boolean isTicketAssignedToUserGroup( Ticket ticket, List<Unit> lstUserUnits )
+    {
+        boolean result = false;
+
+        for ( Unit unit : lstUserUnits )
+        {
+            if ( unit.getIdUnit(  ) == ticket.getAssigneeUnit(  ).getUnitId(  ) )
+            {
+                result = true;
+
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * @param ticket ticket
+     * @param user admin user
+     * @param filter ticket filter
+     * @param request http request
+     * @param lstUserUnits user's units
+     */
+    public static void setTicketsListByPerimeter( AdminUser user, TicketFilter filter, HttpServletRequest request,
+        List<Ticket> listAgentTickets, List<Ticket> listGroupTickets, List<Ticket> listDomainTickets )
+    {
+        List<Ticket> listTickets = (List<Ticket>) TicketHome.getTicketsList( filter );
+
+        List<Unit> lstUserUnits = UnitHome.findByIdUser( user.getUserId(  ) );
+
+        //Filtering results
+        for ( Ticket ticket : listTickets )
+        {
+            if ( RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, user ) )
+            {
+                if ( ( ticket.getAssigneeUser(  ) != null ) &&
+                        ( ticket.getAssigneeUser(  ).getAdminUserId(  ) == user.getUserId(  ) ) )
+                {
+                    //ticket assign to agent
+                    listAgentTickets.add( ticket );
+                }
+                else if ( TicketHelper.isTicketAssignedToUserGroup( ticket, lstUserUnits ) )
+                {
+                    //ticket assign to agent group
+                    listGroupTickets.add( ticket );
+                }
+                else
+                {
+                    TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain(  ) );
+
+                    if ( RBACService.isAuthorized( ticketDomain, TicketDomainResourceIdService.PERMISSION_VIEW, user ) )
+                    {
+                        //ticket assign to domain
+                        listDomainTickets.add( ticket );
+                    }
+                }
+            }
+        }
     }
 }

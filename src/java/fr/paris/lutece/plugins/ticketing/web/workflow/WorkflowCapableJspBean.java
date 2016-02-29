@@ -339,7 +339,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         int nWorkflowId = category.getIdWorkflow(  );
 
         return _workflowService.getDisplayDocumentHistory( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nWorkflowId,
-            request, getLocale(  ), TEMPLATE_RESOURCE_HISTORY);
+            request, getLocale(  ), TEMPLATE_RESOURCE_HISTORY );
     }
 
     /**
