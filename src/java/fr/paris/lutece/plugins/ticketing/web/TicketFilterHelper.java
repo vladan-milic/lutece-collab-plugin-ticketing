@@ -37,12 +37,14 @@ import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
 
 import org.apache.commons.lang.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -85,14 +87,13 @@ public final class TicketFilterHelper
     private static final String PARAMETER_FILTER_REFERENCE = "fltr_reference";
     private static final String PARAMETER_FILTER_ORDER_SORT = "fltr_order_sort";
     private static final String PARAMETER_SELECTED_TAB = "selected_tab";
-    
+
     //Marks
     private static final String MARK_FULL_DOMAIN_LIST = "domain_list";
     private static final String MARK_FULL_TYPE_LIST = "type_list";
     private static final String MARK_FILTER_PERIOD_LIST = "period_list";
     private static final String MARK_SELECTED_TAB = "selected_tab";
     private static final String MARK_TICKET_FILTER = "ticket_filter";
-    
     private static final String DATE_FILTER_PATTERN = "yyyyMMdd";
 
     // Properties for page titles
@@ -102,11 +103,11 @@ public final class TicketFilterHelper
     /**
      * private constructor
      */
-    private TicketFilterHelper()
+    private TicketFilterHelper(  )
     {
-       super(); 
+        super(  );
     }
-    
+
     /**
      * returns a fltrFiltre instancied from a request
      *
@@ -116,7 +117,6 @@ public final class TicketFilterHelper
      *             if date is not well formated
      */
     public static TicketFilter getFilterFromRequest( HttpServletRequest request )
-        throws ParseException
     {
         TicketFilter fltrFiltre = new TicketFilter(  );
 
@@ -314,20 +314,27 @@ public final class TicketFilterHelper
      * @throws ParseException exception when error occurs while parsing date
      */
     private static Date getDateFromString( String strDate )
-        throws ParseException
     {
         SimpleDateFormat sdf = new SimpleDateFormat( DATE_FILTER_PATTERN );
         Date date = null;
-        date = sdf.parse( strDate );
+
+        try
+        {
+            date = sdf.parse( strDate );
+        }
+        catch ( ParseException pe )
+        {
+            AppLogService.info( "Invalid date : " + strDate + ". The expected pattern is : " + DATE_FILTER_PATTERN );
+        }
 
         return date;
     }
-    
+
     /**
-     * enumeration to perdio filtering feature 
+     * enumeration to perdio filtering feature
      *
      */
-    private static enum FilterPeriod 
+    private static enum FilterPeriod
     {
         NONE( 0 ),
         DAY( 1 ),
