@@ -33,11 +33,10 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.user;
 
+import fr.paris.lutece.plugins.ticketing.web.TicketHelper;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
-import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.prefs.AdminUserPreferencesService;
 import fr.paris.lutece.portal.service.prefs.IUserPreferencesService;
-import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
@@ -105,8 +104,7 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
                 USER_PREFERENCE_SIGNATURE, StringUtils.EMPTY );
         model.put( MARK_USER_SIGNATURE, strUserSignature );
 
-        model.put( TicketingConstants.MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-        model.put( TicketingConstants.MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
+        TicketHelper.storeRichTextMarksIntoModel( request, model );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_USER_PREFERENCES, TEMPLATE_MANAGE_USER_PRFERENCES, model );
     }

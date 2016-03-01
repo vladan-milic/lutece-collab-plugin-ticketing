@@ -78,7 +78,6 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
 import java.text.ParseException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -173,7 +172,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
     // Errors
     private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
-    private static final String ERROR_FILTERING_INVALID_DATE = "ticketing.filter.error.date.invalid";
     private static final String ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED = "ticketing.error.contactmode.inconsistent";
 
     // Session keys
@@ -199,20 +197,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
         TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
 
-        TicketFilter filter = null;
+        TicketFilter filter = TicketFilterHelper.getFilterFromRequest( request );
 
-        try
-        {
-            filter = TicketFilterHelper.getFilterFromRequest( request );
-        }
-        catch ( ParseException e )
-        {
-            addError( ERROR_FILTERING_INVALID_DATE, request.getLocale(  ) );
-
-            return redirectView( request, VIEW_MANAGE_TICKETS );
-        }
-
-        List<Ticket> listTickets = (List<Ticket>) TicketHome.getTicketsList( filter );
         _strCurrentPageAgentIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX_AGENT,
                 _strCurrentPageAgentIndex );
         _strCurrentPageGroupIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX_GROUP,
@@ -230,37 +216,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         List<Ticket> listGroupTickets = new ArrayList<Ticket>(  );
         List<Ticket> listDomainTickets = new ArrayList<Ticket>(  );
 
-        List<Unit> lstUserUnits = UnitHome.findByIdUser( getUser(  ).getUserId(  ) );
-
-        //Filtering results
-        for ( Ticket ticket : listTickets )
-        {
-            if ( RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, getUser(  ) ) )
-            {
-                if ( ( ticket.getAssigneeUser(  ) != null ) &&
-                        ( ticket.getAssigneeUser(  ).getAdminUserId(  ) == getUser(  ).getUserId(  ) ) )
-                {
-                    //ticket assign to agent
-                    listAgentTickets.add( ticket );
-                }
-                else if ( isTicketAssignedToUserGroup( ticket, lstUserUnits ) )
-                {
-                    //ticket assign to agent group
-                    listGroupTickets.add( ticket );
-                }
-                else
-                {
-                    TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain(  ) );
-
-                    if ( RBACService.isAuthorized( ticketDomain, TicketDomainResourceIdService.PERMISSION_VIEW,
-                                getUser(  ) ) )
-                    {
-                        //ticket assign to domain
-                        listDomainTickets.add( ticket );
-                    }
-                }
-            }
-        }
+        TicketHelper.setTicketsListByPerimeter( getUser(  ), filter, request, listAgentTickets, listGroupTickets,
+            listDomainTickets );
 
         // PAGINATORS
         LocalizedPaginator<Ticket> paginatorAgentTickets = new LocalizedPaginator<Ticket>( listAgentTickets,
@@ -287,29 +244,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         TicketHelper.storeTicketRightsIntoModel( model, getUser(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
-    }
-
-    /**
-     * returns true if ticket is assign to user's group
-     * @param ticket ticket
-     * @param lstUserUnits user's units
-     * @return true if ticket belongs to user's group
-     */
-    private boolean isTicketAssignedToUserGroup( Ticket ticket, List<Unit> lstUserUnits )
-    {
-        boolean result = false;
-
-        for ( Unit unit : lstUserUnits )
-        {
-            if ( unit.getIdUnit(  ) == ticket.getAssigneeUnit(  ).getUnitId(  ) )
-            {
-                result = true;
-
-                break;
-            }
-        }
-
-        return result;
     }
 
     /**
