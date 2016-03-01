@@ -1,4 +1,5 @@
 <#include "/admin/plugins/ticketing/commons.html" />
+<#include "/skin/plugins/ticketing/include/popins.html" />
 <#include "/skin/plugins/asynchronousupload/upload_commons.html" />
 <div class="form-group">
 	<label class="control-label col-sm-3" for="attribute${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if> :</label>
@@ -14,6 +15,11 @@
 			</#list>
 		</#if>
 		<@addFileInput fieldName=fieldName handler=uploadHandler cssClass=cssClass multiple=true />
+        <a title="#i18n{ticketing.xpage.create_ticket.labelButtonDigitalSafeAccess}" data-remote="false" data-toggle="modal" data-target="#ticketing-modal-digital-safe" 
+            href="jsp/site/Portal.jsp?page=digitalSafe&plugin_name=library&input=undefined&media_type=3&space_id=8&browser_id_space=7&browser_selected_space_id=8" 
+            class="btn btn-primary btn-sm btn-flat">
+            #i18n{ticketing.xpage.create_ticket.labelButtonDigitalSafeAccess}
+        </a>
 		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
 			<span class="help-block">${entry.helpMessage}</span>
 		</#if>

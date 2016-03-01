@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <h4>#i18n{ticketing.xpage.digitalsafe.media_selector.labelSelection}</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="row">
+            <#list all_documents as mappingdocument>
+                <#assign mapping_id = mappingdocument.first />
+                <#assign document = mappingdocument.second />
+                    <div class="thumbnail">
+                        <div class="caption">
+                            <p>
+                            <a href="#" data-dismiss="modal" title="">
+                                <span class="badge">${document.id}</span>
+                                <small><#if document.title?length &gt; 50>${document.title?substring(0,50)}...<#else>${document.title}</#if></small></p>
+                            </a>
+                            <p>
+                        </p>
+                        </div>
+                    </div>
+            </#list>
+        </div>
+    </div>
+</div>
