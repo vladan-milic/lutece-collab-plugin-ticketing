@@ -53,6 +53,7 @@ public final class TicketingConstants
 
     // Attributes
     public static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON = "hide_next_button";
+    public static final String ATTRIBUTE_RETURN_URL = "return_url";
 
     // Markers
     public static final String MARK_TICKET = "ticket";
@@ -75,6 +76,7 @@ public final class TicketingConstants
 
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
+    public static final String PROPERTY_REDIRECT_PREFIX = "ticketing.workflow.redirect.";
 
     // Views
     public static final String VIEW_WORKFLOW_ACTION_FORM = "viewWorkflowActionForm";

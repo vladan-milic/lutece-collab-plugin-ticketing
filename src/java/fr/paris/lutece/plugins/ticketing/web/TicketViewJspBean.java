@@ -75,7 +75,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     private static final String PROPERTY_PAGE_TITLE_TICKET_DETAILS = "ticketing.view_ticket.pageTitle";
 
     // Parameters
-    private static final String PARAMETER_FORCE_MANAGE_TICKETS_VIEW = "details_to_list";
+    private static final String PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION = "redirect";
 
     // Views
     private static final String VIEW_DETAILS = "ticketDetails";
@@ -165,12 +165,25 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     @Override
     public String redirectAfterWorkflowAction( HttpServletRequest request )
     {
-        boolean bForceManageTicketsView = Boolean.parseBoolean( request.getParameter( 
-                    PARAMETER_FORCE_MANAGE_TICKETS_VIEW ) );
-
-        if ( bForceManageTicketsView )
+        if ( StringUtils.isNotEmpty( 
+                    (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL ) ) )
         {
-            return redirect( request, TicketingConstants.JSP_MANAGE_TICKETS );
+            String strRedirectUrl = (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL ); 
+            //we remove redirect session attribute before leaving
+            request.getSession(  ).removeAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
+
+            return redirect( request, strRedirectUrl );
+        }
+        else
+        {
+            if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) ) )
+            {
+                if ( _mapRedirectUrl.containsKey( request.getParameter( PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) ) )
+                {
+                    return redirect( request,
+                        _mapRedirectUrl.get( request.getParameter( PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) ) );
+                }
+            }
         }
 
         return defaultRedirect( request );

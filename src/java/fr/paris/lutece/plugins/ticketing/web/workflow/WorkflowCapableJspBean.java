@@ -55,8 +55,11 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -67,10 +70,31 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 {
+    /** redirection map */
+    protected static Map<String, String> _mapRedirectUrl ;
+    
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
     private static final String PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ME = "ticketing.workflow.action.id.assignMe";
     private static final String TEMPLATE_RESOURCE_HISTORY = "admin/plugins/ticketing/workflow/ticket_history.html";
+
+    static
+    {
+        _mapRedirectUrl = new HashMap<String, String>(  );
+
+        Enumeration<?> enumPropNames = AppPropertiesService.getProperties(  ).propertyNames(  );
+
+        while ( enumPropNames.hasMoreElements(  ) )
+        {
+            String key = (String) enumPropNames.nextElement(  );
+
+            if ( key.startsWith( TicketingConstants.PROPERTY_REDIRECT_PREFIX ) )
+            {
+                _mapRedirectUrl.put( ( key ).substring( TicketingConstants.PROPERTY_REDIRECT_PREFIX.length(  ) ),
+                    AppPropertiesService.getProperty( key ) );
+            }
+        }
+    }
 
     // Services
     private static WorkflowService _workflowService = WorkflowService.getInstance(  );
@@ -339,7 +363,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         int nWorkflowId = category.getIdWorkflow(  );
 
         return _workflowService.getDisplayDocumentHistory( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nWorkflowId,
-            request, getLocale(  ), TEMPLATE_RESOURCE_HISTORY);
+            request, getLocale(  ), TEMPLATE_RESOURCE_HISTORY );
     }
 
     /**

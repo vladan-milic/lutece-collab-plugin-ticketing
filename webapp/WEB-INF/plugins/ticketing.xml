@@ -115,7 +115,16 @@
             <servlet-class>fr.paris.lutece.plugins.ticketing.service.download.TicketingFileServlet</servlet-class>
         </servlet>
     </servlets>
-    
+
+    <!-- filters -->
+    <filters>
+          <filter>
+               <filter-name>ReturnUrlFilter</filter-name>
+               <url-pattern>/jsp/admin/plugins/ticketing/*</url-pattern>
+               <filter-class>fr.paris.lutece.plugins.ticketing.web.filter.ReturnUrlFilter</filter-class>
+          </filter>
+    </filters>
+
     <css-stylesheets>
         <css-stylesheets-scope>portal</css-stylesheets-scope>
         <css-stylesheet>ticketing/ticketing.css</css-stylesheet>
