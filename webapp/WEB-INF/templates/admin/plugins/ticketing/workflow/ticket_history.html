@@ -10,7 +10,11 @@
         <ul class="timeline">
           <li>
             <#if history_information.admin_user_history?exists>
-              <i class="fa fa-user bg-gru-cat2"></i>
+              <#if adminAvatar>
+                <img class="fa direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}" alt="Avatar" title="Avatar">
+              <#else>
+                <i class="fa fa-user bg-gru-cat2"></i>
+              </#if>
             <#else>
               <i class="fa fa-user-times bg-gru-cat2"></i>
             </#if>
@@ -18,7 +22,6 @@
               <h4 class="timeline-header">
                 <#if history_information.admin_user_history?exists>
                   <a href="sip:${history_information.admin_user_history.email}">
-                    <#if adminAvatar><img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}" alt="Avatar" title="Avatar"></#if>
                     <em>&nbsp; ${history_information.admin_user_history.firstName} ${history_information.admin_user_history.lastName}</em>
                   </a>
                 <#else>
