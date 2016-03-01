@@ -54,17 +54,12 @@ import fr.paris.lutece.plugins.ticketing.business.TicketFormHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
-import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
-import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
-import fr.paris.lutece.plugins.unittree.business.unit.Unit;
-import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
@@ -77,7 +72,6 @@ import fr.paris.lutece.util.url.UrlItem;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -144,7 +138,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String MARK_PAGINATOR_GROUP = "paginator_group";
     private static final String MARK_PAGINATOR_DOMAIN = "paginator_domain";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
-    private static final String MARK_TICKET_ACTION = "ticket_action";
     private static final String JSP_MANAGE_TICKETS = "jsp/admin/plugins/ticketing/ManageTickets.jsp";
 
     // Properties
@@ -175,7 +168,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED = "ticketing.error.contactmode.inconsistent";
 
     // Session keys
-    private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
     private static boolean _bAdminAvatar = ( PluginService.getPlugin( "adminavatar" ) != null );
 
     //Variables
@@ -185,7 +177,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private String _strCurrentPageDomainIndex;
     private int _nItemsPerPage;
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
-
+    
     /**
      * Build the Manage View
      * @param request The HTTP request
@@ -262,8 +254,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         Map<String, Object> model = getModel(  );
         initTicketForm( request, ticket, model );
-
-        saveActionTypeInSession( request.getSession(  ), ACTION_CREATE_TICKET );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKET, TEMPLATE_CREATE_TICKET, model );
     }
@@ -441,34 +431,37 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     {
         clearUploadFilesIfNeeded( request.getSession(  ) );
 
-        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
-
         int nId = Integer.parseInt( request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ) );
 
-        if ( ( ticket == null ) || ( ticket.getId(  ) != nId ) )
+        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );;
+        
+        if ( ticket == null )
         {
             ticket = TicketHome.findByPrimaryKey( nId );
+        }
+        else
+        {
+            ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
+        }
 
-            for ( Response response : ticket.getListResponse(  ) )
+        for ( Response response : ticket.getListResponse(  ) )
+        {
+            if ( response.getFile(  ) != null )
             {
-                if ( response.getFile(  ) != null )
-                {
-                    String strIdEntry = Integer.toString( response.getEntry(  ).getIdEntry(  ) );
+                String strIdEntry = Integer.toString( response.getEntry(  ).getIdEntry(  ) );
 
-                    FileItem fileItem = new GenAttFileItem( response.getFile(  ).getPhysicalFile(  ).getValue(  ),
-                            response.getFile(  ).getTitle(  ), IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry,
-                            response.getIdResponse(  ) );
-                    TicketAsynchronousUploadHandler.getHandler(  )
-                                                   .addFileItemToUploadedFilesList( fileItem,
-                        IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry, request );
-                }
+                FileItem fileItem = new GenAttFileItem( response.getFile(  ).getPhysicalFile(  ).getValue(  ),
+                        response.getFile(  ).getTitle(  ), IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry,
+                        response.getIdResponse(  ) );
+                TicketAsynchronousUploadHandler.getHandler(  )
+                                               .addFileItemToUploadedFilesList( fileItem,
+                    IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry, request );
             }
         }
 
         Map<String, Object> model = getModel(  );
         initTicketForm( request, ticket, model );
 
-        saveActionTypeInSession( request.getSession(  ), ACTION_MODIFY_TICKET );
         _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKET, TEMPLATE_MODIFY_TICKET, model );
@@ -484,6 +477,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     public String doModifyTicket( HttpServletRequest request )
     {
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
+        
+        boolean bIsFormValid = populateAndValidateFormTicket( ticket, request );
+
+        if ( !bIsFormValid )
+        {
+            return redirect( request, VIEW_MODIFY_TICKET, TicketingConstants.PARAMETER_ID_TICKET, ticket.getId(  ) );
+        }
 
         TicketHome.update( ticket );
 
@@ -500,35 +500,28 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
 
         addInfo( INFO_TICKET_UPDATED, getLocale(  ) );
-
-        return redirectView( request, VIEW_MANAGE_TICKETS );
+        
+        return redirectToViewDetails( request,  ticket);
     }
 
     /**
-     * {@inheritDoc }
+     * Returns the form to recapitulate a ticket to create
+     *
+     * @param request
+     *            The Http request
+     * @return the html code of the ticket form
      */
-    @Override
-    public String redirectAfterWorkflowAction( HttpServletRequest request )
+    @View( VIEW_RECAP_TICKET )
+    public String getRecapTicket( HttpServletRequest request )
     {
-        return redirectView( request, VIEW_MANAGE_TICKETS );
-    }
+        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
+        List<ResponseRecap> listResponseRecap = _ticketFormService.getListResponseRecap( ticket.getListResponse(  ) );
 
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public String redirectWorkflowActionCancelled( HttpServletRequest request )
-    {
-        return redirectView( request, VIEW_MANAGE_TICKETS );
-    }
+        Map<String, Object> model = getModel(  );
+        model.put( TicketingConstants.MARK_TICKET, ticket );
+        model.put( MARK_RESPONSE_RECAP_LIST, listResponseRecap );
 
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public String defaultRedirectWorkflowAction( HttpServletRequest request )
-    {
-        return redirectView( request, VIEW_MANAGE_TICKETS );
+        return getPage( PROPERTY_PAGE_TITLE_RECAP_TICKET, TEMPLATE_RECAP_TICKET, model );
     }
 
     /**
@@ -541,9 +534,45 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @Action( ACTION_RECAP_TICKET )
     public String doRecapTicket( HttpServletRequest request )
     {
-        boolean bIsFormValid = true;
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
         ticket = ( ticket != null ) ? ticket : new Ticket(  );
+
+        boolean bIsFormValid = populateAndValidateFormTicket( ticket, request );
+
+        if ( !bIsFormValid )
+        {
+            _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );
+            return redirectView( request, VIEW_CREATE_TICKET );
+        }
+        else
+        {
+            TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+            TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
+            ticket.setTicketCategory( ticketCategory.getLabel(  ) );
+            ticket.setTicketDomain( ticketDomain.getLabel(  ) );
+
+            ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) ).getLabel(  ) );
+            ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode(  ) ).getLabel(  ) );
+            ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle(  ) ).getLabel(  ) );
+            
+            _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );
+            
+            return redirectView( request, VIEW_RECAP_TICKET );
+        }
+    }
+
+    /**
+     * Populate the ticket from the request and validate the ticket form
+     *
+     * @param ticket
+     *            The ticket to populate
+     * @param request
+     *            The Http Request
+     * @return true if the ticket is valid else false
+     */
+    public boolean populateAndValidateFormTicket( Ticket ticket, HttpServletRequest request )
+    {
+        boolean bIsFormValid = true;
         populate( ticket, request );
 
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>(  );
@@ -591,107 +620,50 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             bIsFormValid = false;
         }
-
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
-        ticket.setTicketCategory( ticketCategory.getLabel(  ) );
-        ticket.setTicketDomain( ticketDomain.getLabel(  ) );
-
-        ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) ).getLabel(  ) );
-        ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode(  ) ).getLabel(  ) );
-        ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle(  ) ).getLabel(  ) );
-
-        _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );
-
-        if ( !bIsFormValid )
-        {
-            return redirectAfterValidationKO( request, ticket );
-        }
-        else
-        {
-            return redirectView( request, VIEW_RECAP_TICKET );
-        }
+        
+        return bIsFormValid;
     }
 
     /**
-     * Returns the form to recapitulate a ticket to create or modify
-     *
-     * @param request
-     *            The Http request
-     * @return the html code of the ticket form
+     * {@inheritDoc }
      */
-    @View( VIEW_RECAP_TICKET )
-    public String getRecapTicket( HttpServletRequest request )
+    @Override
+    public String redirectAfterWorkflowAction( HttpServletRequest request )
     {
-        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
-        List<ResponseRecap> listResponseRecap = _ticketFormService.getListResponseRecap( ticket.getListResponse(  ) );
-
-        Map<String, Object> model = getModel(  );
-        model.put( MARK_TICKET_ACTION, getActionTypeFromSession( request.getSession(  ) ) );
-        model.put( TicketingConstants.MARK_TICKET, ticket );
-        model.put( MARK_RESPONSE_RECAP_LIST, listResponseRecap );
-
-        removeActionTypeFromSession( request.getSession(  ) );
-
-        return getPage( PROPERTY_PAGE_TITLE_RECAP_TICKET, TEMPLATE_RECAP_TICKET, model );
+        return redirectView( request, VIEW_MANAGE_TICKETS );
     }
 
     /**
-     * redirection after validation form KO
-     *
-     * @param request
-     *            HTTP request to validate
-     * @param ticket ticket
-     * @return view at the initiative of the validation (create or modify)
+     * {@inheritDoc }
      */
-    private String redirectAfterValidationKO( HttpServletRequest request, Ticket ticket )
+    @Override
+    public String redirectWorkflowActionCancelled( HttpServletRequest request )
     {
-        _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );
-
-        if ( getActionTypeFromSession( request.getSession(  ) ).equals( ACTION_MODIFY_TICKET ) )
-        {
-            return redirect( request, VIEW_MODIFY_TICKET, TicketingConstants.PARAMETER_ID_TICKET, ticket.getId(  ) );
-        }
-        else // ACTION_CREATE_TICKET
-        {
-            return redirectView( request, VIEW_CREATE_TICKET );
-        }
+        return redirectView( request, VIEW_MANAGE_TICKETS );
     }
 
     /**
-     * Save the current action type in the session of the user
-     *
-     * @param session
-     *            The session
-     * @param actionType
-     *            The action type to save
+     * {@inheritDoc }
      */
-    public void saveActionTypeInSession( HttpSession session, String actionType )
+    @Override
+    public String defaultRedirectWorkflowAction( HttpServletRequest request )
     {
-        session.setAttribute( SESSION_ACTION_TYPE, actionType );
+        return redirectView( request, VIEW_MANAGE_TICKETS );
     }
 
     /**
-     * Get the current actionType from the session
+     * Redirect to the view details for the ticket passed in parameter
      *
-     * @param session
-     *            The session of the user
-     * @return The actionType
+     * @param request The Http request
+     * @param ticket The ticket
+     * @return The Jsp URL of the process result
      */
-    public String getActionTypeFromSession( HttpSession session )
+    public String redirectToViewDetails( HttpServletRequest request, Ticket ticket )
     {
-        return (String) session.getAttribute( SESSION_ACTION_TYPE );
-    }
+        UrlItem url = new UrlItem( TicketingConstants.JSP_VIEW_TICKET );
+        url.addParameter( TicketingConstants.PARAMETER_ID_TICKET, ticket.getId(  ) );
 
-    /**
-     * Remove any action type stored in the session of the user
-     *
-     * @param session
-     *            The session
-     */
-    public void removeActionTypeFromSession( HttpSession session )
-    {
-        session.removeAttribute( SESSION_ACTION_TYPE );
+        return redirect( request, url.getUrl(  ) );
     }
 
     /**

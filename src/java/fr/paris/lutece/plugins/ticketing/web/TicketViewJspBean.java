@@ -40,7 +40,9 @@ import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketCriticality;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketPriority;
+import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
@@ -75,7 +77,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     private static final String PROPERTY_PAGE_TITLE_TICKET_DETAILS = "ticketing.view_ticket.pageTitle";
 
     // Parameters
-    private static final String PARAMETER_FORCE_MANAGE_TICKETS_VIEW = "details_to_list";
+    private static final String PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION = "redirect";
 
     // Views
     private static final String VIEW_DETAILS = "ticketDetails";
@@ -84,6 +86,9 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     // Other constants
     private static final long serialVersionUID = 1L;
 
+    // Variable
+    private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
+    
     /**
      * Gets the Details tab of the Ticket View
      * @param request The HTTP request
@@ -133,6 +138,8 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         TicketHelper.storeTicketRightsIntoModel( model, getUser(  ) );
 
         model.put( TicketingConstants.MARK_JSP_CONTROLLER, getControllerJsp(  ) );
+        
+        _ticketFormService.removeTicketFromSession( request.getSession(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS, TEMPLATE_VIEW_TICKET_DETAILS, model );
     }
@@ -165,12 +172,25 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     @Override
     public String redirectAfterWorkflowAction( HttpServletRequest request )
     {
-        boolean bForceManageTicketsView = Boolean.parseBoolean( request.getParameter( 
-                    PARAMETER_FORCE_MANAGE_TICKETS_VIEW ) );
-
-        if ( bForceManageTicketsView )
+        if ( StringUtils.isNotEmpty( 
+                    (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL ) ) )
         {
-            return redirect( request, TicketingConstants.JSP_MANAGE_TICKETS );
+            String strRedirectUrl = (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL ); 
+            //we remove redirect session attribute before leaving
+            request.getSession(  ).removeAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
+
+            return redirect( request, strRedirectUrl );
+        }
+        else
+        {
+            if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) ) )
+            {
+                if ( _mapRedirectUrl.containsKey( request.getParameter( PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) ) )
+                {
+                    return redirect( request,
+                        _mapRedirectUrl.get( request.getParameter( PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) ) );
+                }
+            }
         }
 
         return defaultRedirect( request );
