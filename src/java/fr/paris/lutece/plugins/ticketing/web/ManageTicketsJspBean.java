@@ -656,25 +656,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             bIsFormValid = false;
         }
 
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
-        ticket.setTicketCategory( ticketCategory.getLabel(  ) );
-        ticket.setTicketDomain( ticketDomain.getLabel(  ) );
-
-        ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) ).getLabel(  ) );
-        ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode(  ) ).getLabel(  ) );
-        ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle(  ) ).getLabel(  ) );
-
-        _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );
-
-        if ( !bIsFormValid )
-        {
-            return redirectAfterValidationKO( request, ticket );
-        }
-        else
-        {
-            return redirectView( request, VIEW_RECAP_TICKET );
-        }
+      return bIsFormValid;
     }
 
     /**
