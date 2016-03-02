@@ -71,22 +71,12 @@
             </div>
           </#list>
           <div class="form-group text-center">
-            <#if ticket_action = "createTicket" >
-              <button class="btn btn-primary btn-lg" name="action_createTicket" type="submit">
-                <i class="fa fa-check"></i> OK
-              </button>
-              <button class="btn btn-default btn-lg" name="view_createTicket" type="submit">
-                <i class="fa fa-close"></i> Annuler
-              </button>
-            </#if>
-            <#if ticket_action = "modifyTicket" >
-              <button class="btn btn-primary btn-lg" name="action_modifyTicket" type="submit">
-                <i class="fa fa-check"></i> OK
-              </button>
-              <button class="btn btn-default btn-lg" name="view_modifyTicket" type="submit">
-                <i class="fa fa-close"></i> Annuler
-              </button>
-            </#if>
+             <button class="btn btn-primary btn-lg" name="action_createTicket" type="submit">
+               <i class="fa fa-check"></i> OK
+             </button>
+             <button class="btn btn-default btn-lg" name="view_createTicket" type="submit">
+               <i class="fa fa-close"></i> Annuler
+             </button>
           </div>
         </div>
       </div>

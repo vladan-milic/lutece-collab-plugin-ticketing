@@ -1,3 +1,5 @@
+<script src="js/plugins/ticketing/popin.js"></script>
+
 <!-- Workflow actions popin -->
 <div class="modal fade" id="ticketing-modal-workflow-action-form" tabindex="-1" role="dialog" aria-labelledby="ticketing-workflow-action-description" aria-hidden="true">
   <div class="modal-dialog">
@@ -9,10 +11,7 @@
 </div>
 
 <script>
-  $( function(){
-    $("#ticketing-modal-workflow-action-form").on("show.bs.modal", function(e) {
-        var link = $(e.relatedTarget);
-        $(this).find(".modal-body").load(link.attr("href"));
-    });
-  });
+$( function(){
+    loadModalContent("#ticketing-modal-workflow-action-form");
+});
 </script>
