@@ -175,7 +175,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
-    
+
     /**
      * Build the Manage View
      * @param request The HTTP request
@@ -233,7 +233,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         LocalizedPaginator<Ticket> paginatorTickets = new LocalizedPaginator<Ticket>( listTickets, _nItemsPerPage,
                 strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
         setWorkflowAttributes( paginatorTickets );
-        
+
         Map<String, Object> model = getModel(  );
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
         model.put( MARK_TICKET_LIST, paginatorTickets.getPageItems(  ) );
@@ -386,6 +386,26 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         addInfo( INFO_TICKET_CREATED, getLocale(  ) );
 
+        return redirectAfterCreateAction( request );
+    }
+
+    /**
+     * compture redirection for creation action
+     * @param request http request
+     * @return redirect view
+     */
+    public String redirectAfterCreateAction( HttpServletRequest request )
+    {
+        if ( StringUtils.isNotEmpty( 
+                    (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL ) ) )
+        {
+            String strRedirectUrl = (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
+            //we remove redirect session attribute before leaving
+            request.getSession(  ).removeAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
+
+            return redirect( request, strRedirectUrl );
+        }
+
         return redirectView( request, VIEW_MANAGE_TICKETS );
     }
 
@@ -469,8 +489,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         int nId = Integer.parseInt( request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ) );
 
-        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );;
-        
+        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
+
         if ( ticket == null )
         {
             ticket = TicketHome.findByPrimaryKey( nId );
@@ -513,7 +533,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     public String doModifyTicket( HttpServletRequest request )
     {
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
-        
+
         boolean bIsFormValid = populateAndValidateFormTicket( ticket, request );
 
         if ( !bIsFormValid )
@@ -536,8 +556,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
 
         addInfo( INFO_TICKET_UPDATED, getLocale(  ) );
-        
-        return redirectToViewDetails( request,  ticket);
+
+        return redirectToViewDetails( request, ticket );
     }
 
     /**
@@ -578,6 +598,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         if ( !bIsFormValid )
         {
             _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );
+
             return redirectView( request, VIEW_CREATE_TICKET );
         }
         else
@@ -590,9 +611,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) ).getLabel(  ) );
             ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode(  ) ).getLabel(  ) );
             ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle(  ) ).getLabel(  ) );
-            
+
             _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );
-            
+
             return redirectView( request, VIEW_RECAP_TICKET );
         }
     }
@@ -657,7 +678,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             bIsFormValid = false;
         }
 
-      return bIsFormValid;
+        return bIsFormValid;
     }
 
     /**
