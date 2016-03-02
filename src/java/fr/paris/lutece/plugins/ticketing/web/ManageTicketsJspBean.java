@@ -232,7 +232,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // PAGINATORS
         LocalizedPaginator<Ticket> paginatorTickets = new LocalizedPaginator<Ticket>( listTickets, _nItemsPerPage,
                 strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
-
+        setWorkflowAttributes( paginatorTickets );
+        
         Map<String, Object> model = getModel(  );
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
         model.put( MARK_TICKET_LIST, paginatorTickets.getPageItems(  ) );
