@@ -50,10 +50,12 @@ public final class TicketingConstants
     public static final String PARAMETER_WORKFLOW_ID_ACTION = "id_action";
     public static final String PARAMETER_BACK = "back";
     public static final String PARAMETER_JSP_CONTROLLER = "jsp";
+    public static final String PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION = "redirect";
 
     // Attributes
     public static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON = "hide_next_button";
     public static final String ATTRIBUTE_RETURN_URL = "return_url";
+    public static final String ATTRIBUTE_REDIRECT_AFTER_WORKFLOW_ACTION = "redirect";
 
     // Markers
     public static final String MARK_TICKET = "ticket";
@@ -77,6 +79,7 @@ public final class TicketingConstants
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
     public static final String PROPERTY_REDIRECT_PREFIX = "ticketing.workflow.redirect.";
+    public static final String PROPERTY_TICKET_CLOSE_ID = "ticketing.workflow.state.id.closed";
 
     // Views
     public static final String VIEW_WORKFLOW_ACTION_FORM = "viewWorkflowActionForm";

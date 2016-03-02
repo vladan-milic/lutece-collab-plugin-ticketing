@@ -76,9 +76,6 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TICKET_DETAILS = "ticketing.view_ticket.pageTitle";
 
-    // Parameters
-    private static final String PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION = "redirect";
-
     // Views
     private static final String VIEW_DETAILS = "ticketDetails";
     private static final String VIEW_HISTORY = "ticketHistory";
@@ -88,7 +85,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
     // Variable
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
-    
+
     /**
      * Gets the Details tab of the Ticket View
      * @param request The HTTP request
@@ -138,7 +135,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         TicketHelper.storeTicketRightsIntoModel( model, getUser(  ) );
 
         model.put( TicketingConstants.MARK_JSP_CONTROLLER, getControllerJsp(  ) );
-        
+
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS, TEMPLATE_VIEW_TICKET_DETAILS, model );
@@ -172,10 +169,15 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     @Override
     public String redirectAfterWorkflowAction( HttpServletRequest request )
     {
-        if ( StringUtils.isNotEmpty( 
+        String strRedirect = ( request.getAttribute( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) != null )
+            ? (String) request.getAttribute( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION )
+            : request.getParameter( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION );
+
+        if ( StringUtils.isNotEmpty( strRedirect ) &&
+                StringUtils.isNotEmpty( 
                     (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL ) ) )
         {
-            String strRedirectUrl = (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL ); 
+            String strRedirectUrl = (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
             //we remove redirect session attribute before leaving
             request.getSession(  ).removeAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
 
@@ -183,12 +185,11 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         }
         else
         {
-            if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) ) )
+            if ( StringUtils.isNotEmpty( strRedirect ) )
             {
-                if ( _mapRedirectUrl.containsKey( request.getParameter( PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) ) )
+                if ( _mapRedirectUrl.containsKey( strRedirect ) )
                 {
-                    return redirect( request,
-                        _mapRedirectUrl.get( request.getParameter( PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) ) );
+                    return redirect( request, _mapRedirectUrl.get( strRedirect ) );
                 }
             }
         }
