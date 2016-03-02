@@ -245,4 +245,23 @@ public final class TicketHelper
             }
         }
     }
+
+    public static boolean isTicketAssignToUserOrGroup( AdminUser user, Ticket ticket )
+    {
+        boolean bAssignToUserOrGroup = false;
+
+        if ( ( ticket.getAssigneeUser(  ) != null ) &&
+                ( ticket.getAssigneeUser(  ).getAdminUserId(  ) == user.getUserId(  ) ) )
+        {
+            //ticket assign to agent
+            bAssignToUserOrGroup = true;
+        }
+        else if ( TicketHelper.isTicketAssignedToUserGroup( ticket, UnitHome.findByIdUser( user.getUserId(  ) ) ) )
+        {
+            //ticket assign to agent group
+            bAssignToUserOrGroup = true;
+        }
+
+        return bAssignToUserOrGroup;
+    }
 }

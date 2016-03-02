@@ -38,6 +38,7 @@ import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
+import fr.paris.lutece.plugins.ticketing.web.TicketHelper;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
@@ -71,8 +72,8 @@ import javax.servlet.http.HttpServletRequest;
 public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 {
     /** redirection map */
-    protected static Map<String, String> _mapRedirectUrl ;
-    
+    protected static Map<String, String> _mapRedirectUrl;
+
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
     private static final String PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ME = "ticketing.workflow.action.id.assignMe";
@@ -143,16 +144,25 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 Collection<Action> fullListWorkflowActions = getActions( ticket.getId(  ), nIdWorkflow );
                 Collection<Action> filteredListWorkflowActions = new ArrayList<Action>( fullListWorkflowActions );
 
-                //filtering displayable actions 
-                for ( Action action : fullListWorkflowActions )
+                if ( TicketHelper.isTicketAssignToUserOrGroup( getUser(  ), ticket ) )
                 {
-                    if ( ( action.getId(  ) == AppPropertiesService.getPropertyInt( 
-                                PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ME, -1 ) ) && ( ticket.getAssigneeUser(  ) != null ) &&
-                            ( getUser(  ).getUserId(  ) == ticket.getAssigneeUser(  ).getAdminUserId(  ) ) )
+                    //if ticket is assign to agent or to its group 
+                    for ( Action action : fullListWorkflowActions )
                     {
-                        //self assign action for a ticket already assign to the agent => removing action from list
-                        filteredListWorkflowActions.remove( action );
+                        if ( ( action.getId(  ) == AppPropertiesService.getPropertyInt( 
+                                    PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ME, -1 ) ) &&
+                                ( ticket.getAssigneeUser(  ) != null ) &&
+                                ( getUser(  ).getUserId(  ) == ticket.getAssigneeUser(  ).getAdminUserId(  ) ) )
+                        {
+                            //self assign action for a ticket already assign to the agent => removing action from list
+                            filteredListWorkflowActions.remove( action );
+                        }
                     }
+                }
+                else
+                {
+                    //ticket is not assign to agent or its group => no Workflow actions shown
+                    filteredListWorkflowActions = new ArrayList<Action>(  );
                 }
 
                 ticket.setListWorkflowActions( filteredListWorkflowActions );
