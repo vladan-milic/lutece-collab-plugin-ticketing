@@ -54,17 +54,13 @@ import fr.paris.lutece.plugins.ticketing.business.TicketFormHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
-import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
-import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
+import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
-import fr.paris.lutece.plugins.unittree.business.unit.Unit;
-import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
@@ -77,7 +73,6 @@ import fr.paris.lutece.util.url.UrlItem;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -117,9 +112,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String PARAMETER_PHONE = "ph";
     private static final String PARAMETER_EMAIL = "em";
     private static final String PARAMETER_CATEGORY = "cat";
-    private static final String PARAMETER_PAGE_INDEX_AGENT = "page_index_agent";
-    private static final String PARAMETER_PAGE_INDEX_GROUP = "page_index_group";
-    private static final String PARAMETER_PAGE_INDEX_DOMAIN = "page_index_domain";
+    private static final String PARAMETER_PAGE_INDEX = "page_index";
+    private static final String PARAMETER_SELECTED_TAB = "selected_tab";
 
     // Properties for page titles
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
@@ -129,22 +123,22 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String PROPERTY_PAGE_TITLE_RECAP_TICKET = "ticketing.recap_ticket.pageTitle";
 
     // Markers
-    private static final String MARK_TICKET_AGENT_LIST = "ticket_agent_list";
-    private static final String MARK_TICKET_GROUP_LIST = "ticket_group_list";
-    private static final String MARK_TICKET_DOMAIN_LIST = "ticket_domain_list";
+    private static final String MARK_TICKET_LIST = "ticket_list";
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
+    private static final String MARK_NB_TICKET_AGENT = "nb_ticket_agent";
+    private static final String MARK_NB_TICKET_GROUP = "nb_ticket_group";
+    private static final String MARK_NB_TICKET_DOMAIN = "nb_ticket_domain";
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
     private static final String MARK_ADMIN_AVATAR = "adminAvatar";
     private static final String MARK_GUID = "guid";
     private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
-    private static final String MARK_PAGINATOR_AGENT = "paginator_agent";
-    private static final String MARK_PAGINATOR_GROUP = "paginator_group";
-    private static final String MARK_PAGINATOR_DOMAIN = "paginator_domain";
+    private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
     private static final String MARK_TICKET_ACTION = "ticket_action";
+    private static final String MARK_SELECTED_TAB = "selected_tab";
     private static final String JSP_MANAGE_TICKETS = "jsp/admin/plugins/ticketing/ManageTickets.jsp";
 
     // Properties
@@ -180,9 +174,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
     //Variables
     private int _nDefaultItemsPerPage;
-    private String _strCurrentPageAgentIndex;
-    private String _strCurrentPageGroupIndex;
-    private String _strCurrentPageDomainIndex;
+    private String _strCurrentPageIndex;
     private int _nItemsPerPage;
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
 
@@ -197,14 +189,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
         TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
 
-        TicketFilter filter = TicketFilterHelper.getFilterFromRequest( request );
+        TicketFilter filter = TicketFilterHelper.getFilter( request );
 
-        _strCurrentPageAgentIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX_AGENT,
-                _strCurrentPageAgentIndex );
-        _strCurrentPageGroupIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX_GROUP,
-                _strCurrentPageGroupIndex );
-        _strCurrentPageDomainIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX_DOMAIN,
-                _strCurrentPageDomainIndex );
+        _strCurrentPageIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
         _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
                 _nDefaultItemsPerPage );
@@ -219,31 +206,73 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         TicketHelper.setTicketsListByPerimeter( getUser(  ), filter, request, listAgentTickets, listGroupTickets,
             listDomainTickets );
 
-        // PAGINATORS
-        LocalizedPaginator<Ticket> paginatorAgentTickets = new LocalizedPaginator<Ticket>( listAgentTickets,
-                _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX_AGENT, _strCurrentPageAgentIndex, getLocale(  ) );
-        LocalizedPaginator<Ticket> paginatorGroupTickets = new LocalizedPaginator<Ticket>( listGroupTickets,
-                _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX_GROUP, _strCurrentPageGroupIndex, getLocale(  ) );
-        LocalizedPaginator<Ticket> paginatorDomainTickets = new LocalizedPaginator<Ticket>( listDomainTickets,
-                _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX_DOMAIN, _strCurrentPageDomainIndex, getLocale(  ) );
+        String strPreviousSelectedTab = ( request.getSession(  ).getAttribute( PARAMETER_SELECTED_TAB ) != null )
+            ? (String) request.getSession(  ).getAttribute( PARAMETER_SELECTED_TAB ) : TabulationEnum.AGENT.getLabel(  );
+        String strSelectedTab = getSelectedTab( request );
 
-        setWorkflowAttributes( paginatorAgentTickets );
-        setWorkflowAttributes( paginatorGroupTickets );
-        setWorkflowAttributes( paginatorDomainTickets );
+        if ( !strPreviousSelectedTab.equals( strSelectedTab ) )
+        {
+            //tab changes we reset index
+            _strCurrentPageIndex = "1";
+        }
+
+        List<Ticket> listTickets = null;
+
+        if ( strSelectedTab.equals( TabulationEnum.AGENT.getLabel(  ) ) )
+        {
+            listTickets = listAgentTickets;
+        }
+        else if ( strSelectedTab.equals( TabulationEnum.GROUP.getLabel(  ) ) )
+        {
+            listTickets = listGroupTickets;
+        }
+        else if ( strSelectedTab.equals( TabulationEnum.DOMAIN.getLabel(  ) ) )
+        {
+            listTickets = listDomainTickets;
+        }
+
+        // PAGINATORS
+        LocalizedPaginator<Ticket> paginatorTickets = new LocalizedPaginator<Ticket>( listTickets, _nItemsPerPage,
+                strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
-        model.put( MARK_TICKET_AGENT_LIST, paginatorAgentTickets.getPageItems(  ) );
-        model.put( MARK_TICKET_GROUP_LIST, paginatorGroupTickets.getPageItems(  ) );
-        model.put( MARK_TICKET_DOMAIN_LIST, paginatorDomainTickets.getPageItems(  ) );
-        model.put( MARK_PAGINATOR_AGENT, paginatorAgentTickets );
-        model.put( MARK_PAGINATOR_GROUP, paginatorGroupTickets );
-        model.put( MARK_PAGINATOR_DOMAIN, paginatorDomainTickets );
+        model.put( MARK_TICKET_LIST, paginatorTickets.getPageItems(  ) );
+        model.put( MARK_PAGINATOR, paginatorTickets );
+        model.put( MARK_NB_TICKET_AGENT, listAgentTickets.size(  ) );
+        model.put( MARK_NB_TICKET_GROUP, listGroupTickets.size(  ) );
+        model.put( MARK_NB_TICKET_DOMAIN, listDomainTickets.size(  ) );
+        model.put( MARK_SELECTED_TAB, strSelectedTab );
         model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
         TicketFilterHelper.setModel( model, filter, request );
         TicketHelper.storeTicketRightsIntoModel( model, getUser(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
+    }
+
+    /**
+     * returns current selectedTab
+     * @param request http request
+     * @return selectedTab
+     */
+    private String getSelectedTab( HttpServletRequest request )
+    {
+        String strSelectedTab = TabulationEnum.AGENT.getLabel(  );
+
+        if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_SELECTED_TAB ) ) )
+        {
+            strSelectedTab = request.getParameter( PARAMETER_SELECTED_TAB );
+            request.getSession(  ).setAttribute( PARAMETER_SELECTED_TAB, strSelectedTab );
+        }
+        else
+        {
+            if ( StringUtils.isNotEmpty( (String) request.getSession(  ).getAttribute( PARAMETER_SELECTED_TAB ) ) )
+            {
+                strSelectedTab = (String) request.getSession(  ).getAttribute( PARAMETER_SELECTED_TAB );
+            }
+        }
+
+        return strSelectedTab;
     }
 
     /**

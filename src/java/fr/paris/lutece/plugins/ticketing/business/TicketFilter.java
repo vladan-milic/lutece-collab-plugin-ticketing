@@ -77,7 +77,7 @@ public class TicketFilter
         ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "lastname", "lastname" );
         ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "date_close", "date_close" );
         ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "ticket_status_text", "ticket_status_text" );
-        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "assignee", "g.last_name, h.label" );
+        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "assignee", "h.label, g.last_name" );
         ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "state", "j.name" );
     }
 
@@ -104,6 +104,23 @@ public class TicketFilter
     private String _strOrderBy;
     private String _strOrderSort;
     private int _nUrgency = CONSTANT_ID_NULL;
+
+    /**
+     * returns true if filter is empty
+     * @return true if filter is empty
+     */
+    public boolean isEmpty(  )
+    {
+        return ( _nIdTicket == CONSTANT_ID_NULL ) && ( _dateLastUpdateDate == null ) &&
+        ( _dateLastUpdateStartDate == null ) && ( _dateLastUpdateEndDate == null ) && ( _dateCreationDate == null ) &&
+        ( _dateCreationStartDate == null ) && ( _dateCreationEndDate == null ) && ( _dateCloseDate == null ) &&
+        ( _nIdUser == CONSTANT_ID_NULL ) && ( _nIdCategory == CONSTANT_ID_NULL ) && ( _nIdDomain == CONSTANT_ID_NULL ) &&
+        ( _nIdType == CONSTANT_ID_NULL ) && ( _nOpenSincePeriod == CONSTANT_ID_NULL ) &&
+        StringUtils.isEmpty( _strStatus ) && StringUtils.isEmpty( _strEmail ) && StringUtils.isEmpty( _strLastName ) &&
+        StringUtils.isEmpty( _strFirstName ) && StringUtils.isEmpty( _strReference ) &&
+        StringUtils.isEmpty( _strFixedPhoneNumber ) && StringUtils.isEmpty( _strMobilePhoneNumber ) &&
+        StringUtils.isEmpty( _strOrderBy ) && StringUtils.isEmpty( _strOrderSort ) && ( _nUrgency == CONSTANT_ID_NULL );
+    }
 
     /**
      * Check if this filter contains a idUser

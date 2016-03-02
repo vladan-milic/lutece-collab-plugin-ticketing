@@ -31,11 +31,12 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.web;
+package fr.paris.lutece.plugins.ticketing.web.ticketfilter;
 
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
+import fr.paris.lutece.plugins.ticketing.web.TicketHelper;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
@@ -44,10 +45,8 @@ import org.apache.commons.lang.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -86,15 +85,14 @@ public final class TicketFilterHelper
     private static final String PARAMETER_FILTER_NEW_URGENCY = "fltr_new_urgency";
     private static final String PARAMETER_FILTER_REFERENCE = "fltr_reference";
     private static final String PARAMETER_FILTER_ORDER_SORT = "fltr_order_sort";
-    private static final String PARAMETER_SELECTED_TAB = "selected_tab";
 
     //Marks
     private static final String MARK_FULL_DOMAIN_LIST = "domain_list";
     private static final String MARK_FULL_TYPE_LIST = "type_list";
     private static final String MARK_FILTER_PERIOD_LIST = "period_list";
-    private static final String MARK_SELECTED_TAB = "selected_tab";
     private static final String MARK_TICKET_FILTER = "ticket_filter";
     private static final String DATE_FILTER_PATTERN = "yyyyMMdd";
+    private static final String SESSION_FILTER = "ticket_filter";
 
     // Properties for page titles
     private static final String PROPERTY_TICKET_TYPE_LABEL = "ticketing.model.entity.ticket.attribute.ticketType";
@@ -243,19 +241,19 @@ public final class TicketFilterHelper
             int nPeriodId = Integer.parseInt( request.getParameter( PARAMETER_FILTER_OPEN_SINCE ) );
             fltrFiltre.setOpenSincePeriod( nPeriodId );
 
-            if ( nPeriodId == FilterPeriod.DAY.getId(  ) )
+            if ( nPeriodId == TicketFilterPeriod.DAY.getId(  ) )
             {
                 cal.add( Calendar.DAY_OF_MONTH, -1 );
                 date = cal.getTime(  );
                 fltrFiltre.setCreationStartDate( date );
             }
-            else if ( nPeriodId == FilterPeriod.WEEK.getId(  ) )
+            else if ( nPeriodId == TicketFilterPeriod.WEEK.getId(  ) )
             {
                 cal.add( Calendar.DAY_OF_MONTH, -7 );
                 date = cal.getTime(  );
                 fltrFiltre.setCreationStartDate( date );
             }
-            else if ( nPeriodId == FilterPeriod.MONTH.getId(  ) )
+            else if ( nPeriodId == TicketFilterPeriod.MONTH.getId(  ) )
             {
                 cal.add( Calendar.MONTH, -1 );
                 date = cal.getTime(  );
@@ -277,6 +275,35 @@ public final class TicketFilterHelper
     }
 
     /**
+     * return filter from request / session
+     * @param request http servlet request
+     * @return filter
+     */
+    public static TicketFilter getFilter( HttpServletRequest request )
+    {
+        TicketFilter filter = null;
+
+        if ( TicketFilterHelper.getFilterFromRequest( request ).isEmpty(  ) )
+        {
+            if ( request.getSession(  ).getAttribute( SESSION_FILTER ) != null )
+            {
+                filter = (TicketFilter) request.getSession(  ).getAttribute( SESSION_FILTER );
+            }
+            else
+            {
+                filter = new TicketFilter(  );
+            }
+        }
+        else
+        {
+            filter = TicketFilterHelper.getFilterFromRequest( request );
+            request.getSession(  ).setAttribute( SESSION_FILTER, filter );
+        }
+
+        return filter;
+    }
+
+    /**
      * set filter param to model
      * @param mapModel model to update
      * @param fltrFilter filter attribute to set to model
@@ -284,7 +311,7 @@ public final class TicketFilterHelper
      */
     public static void setModel( Map<String, Object> mapModel, TicketFilter fltrFilter, HttpServletRequest request )
     {
-        mapModel.put( MARK_FILTER_PERIOD_LIST, FilterPeriod.getReferenceList( request.getLocale(  ) ) );
+        mapModel.put( MARK_FILTER_PERIOD_LIST, TicketFilterPeriod.getReferenceList( request.getLocale(  ) ) );
 
         ReferenceList refListTypes = TicketHelper.getEmptyItemReferenceList( I18nService.getLocalizedString( 
                     PROPERTY_TICKET_TYPE_LABEL, request.getLocale(  ) ), StringUtils.EMPTY );
@@ -298,10 +325,10 @@ public final class TicketFilterHelper
         {
             refListDomains.addAll( TicketDomainHome.getReferenceListByType( fltrFilter.getIdType(  ) ) );
         }
+
         mapModel.put( MARK_TICKET_FILTER, fltrFilter );
         mapModel.put( MARK_FULL_TYPE_LIST, refListTypes );
         mapModel.put( MARK_FULL_DOMAIN_LIST, refListDomains );
-        mapModel.put( MARK_SELECTED_TAB, request.getParameter( PARAMETER_SELECTED_TAB ) );
     }
 
     /**
@@ -328,64 +355,5 @@ public final class TicketFilterHelper
         }
 
         return date;
-    }
-
-    /**
-     * enumeration to perdio filtering feature
-     *
-     */
-    private static enum FilterPeriod
-    {
-        NONE( 0 ),
-        DAY( 1 ),
-        WEEK( 2 ),
-        MONTH( 3 );
-        private static final String MESSAGE_PREFIX = "ticketing.period.";
-        private int _nId;
-
-        /**
-         * constructor
-         * @param nId id of period
-         */
-        FilterPeriod( int nId )
-        {
-            _nId = nId;
-        }
-
-        /**
-         * returns period id
-         * @return period id
-         */
-        public int getId(  )
-        {
-            return _nId;
-        }
-
-        /**
-         * Gives the localized message
-         * @param locale the locale to use
-         * @return the message
-         */
-        public String getLocalizedMessage( Locale locale )
-        {
-            return I18nService.getLocalizedString( MESSAGE_PREFIX + this.name(  ).toLowerCase(  ), locale );
-        }
-
-        /**
-         * Builds a RefenrenceList object containing all the TicketPriority objects
-         * @param locale the locale used to retrieve the localized messages
-         * @return the ReferenceList object
-         */
-        public static ReferenceList getReferenceList( Locale locale )
-        {
-            ReferenceList listPeriod = new ReferenceList(  );
-
-            for ( FilterPeriod filterPeriod : FilterPeriod.values(  ) )
-            {
-                listPeriod.addItem( filterPeriod.getId(  ), filterPeriod.getLocalizedMessage( locale ) );
-            }
-
-            return listPeriod;
-        }
     }
 }

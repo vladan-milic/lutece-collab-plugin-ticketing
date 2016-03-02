@@ -96,7 +96,7 @@
 		  </tbody>
 		</table>
 		<div class="clearfix" style="color:#000">
-		  <@paginationAdmin paginator=paginator_domain combo=1 />
+		  <@paginationAdmin paginator=paginator combo=1 />
 	  </div>
 	</div>
 </#macro>
@@ -107,17 +107,17 @@
     <ul class="nav nav-tabs">
       <li role="presentation" <#if !selected_tab?? || ( selected_tab?? && selected_tab=="agent") > class="active" </#if> >
         <a href="#agent" onclick="setSelectedTab('agent')" aria-controls="agent" role="tab" data-toggle="tab">
-          <i class="fa fa-inbox"></i> Mes demandes &agrave; traiter <span class="label label-default">${ticket_agent_list?size}</label>
+          <i class="fa fa-inbox"></i> Mes demandes &agrave; traiter <span class="label label-default">${nb_ticket_agent}</label>
         </a>
       </li>
       <li role="presentation" <#if selected_tab?? && selected_tab == "group"> class="active" </#if> >
         <a href="#group" onclick="setSelectedTab('group')" aria-controls="group" role="tab" data-toggle="tab">
-          <i class="fa fa-users"></i> Les demandes de mon &eacute;quipe <span class="label label-default">${ticket_group_list?size}</label>
+          <i class="fa fa-users"></i> Les demandes de mon &eacute;quipe <span class="label label-default">${nb_ticket_group!}</label>
         </a>
       </li>
       <li role="presentation" <#if selected_tab?? && selected_tab == "domain"> class="active" </#if> >
         <a href="#domain" onclick="setSelectedTab('domain')"  aria-controls="domain" role="tab" data-toggle="tab" >
-          <i class="fa fa-tags"></i> Les demandes par domaine <span class="label label-default">${ticket_domain_list?size}</label>
+          <i class="fa fa-tags"></i> Les demandes par domaine <span class="label label-default">${nb_ticket_domain!}</label>
         </a>
       </li>
       <#if ticket_creation_right?? && ticket_creation_right>
@@ -184,19 +184,19 @@
         </div>
       </div>
 	<#if !selected_tab?? || ( selected_tab?? && selected_tab=="agent") >
-		<@renderTabPanel panel_list=ticket_agent_list active=true id='agent' />
+		<@renderTabPanel panel_list=ticket_list active=true id='agent' />
 	<#else>
-		<@renderTabPanel panel_list=ticket_agent_list active=false  id='agent' />
+		<@renderTabPanel panel_list="" active=false  id='agent' />
 	</#if>
 	<#if selected_tab?? && selected_tab=="group" >
-		<@renderTabPanel panel_list=ticket_group_list  active=true id='group' />
+		<@renderTabPanel panel_list=ticket_list  active=true id='group' />
 	<#else>
-		<@renderTabPanel panel_list=ticket_group_list active=false  id='group' />
+		<@renderTabPanel panel_list="" active=false  id='group' />
 	</#if>
 	<#if selected_tab?? && selected_tab=="domain" >
-		<@renderTabPanel panel_list=ticket_domain_list active=true id='domain' />
+		<@renderTabPanel panel_list=ticket_list active=true id='domain' />
 	<#else>
-		<@renderTabPanel panel_list=ticket_domain_list active=false id='domain' />
+		<@renderTabPanel panel_list="" active=false id='domain' />
 	</#if>
     </div>
   </div>
@@ -227,6 +227,7 @@ function sortList(field, order){
 }
 function setSelectedTab(tab){
 	$("input[name=selected_tab]").val(tab);
+	$("#filter_form").submit( );
 }
 
 </script>

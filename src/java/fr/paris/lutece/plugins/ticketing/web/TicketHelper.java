@@ -125,7 +125,7 @@ public final class TicketHelper
 
         model.put( TicketingConstants.MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
     }
-    
+
     /**
      * Completes the specified model for rich text
      * @param request the request
@@ -202,11 +202,12 @@ public final class TicketHelper
     }
 
     /**
-     * @param ticket ticket
      * @param user admin user
      * @param filter ticket filter
      * @param request http request
-     * @param lstUserUnits user's units
+     * @param listAgentTickets user's ticket
+     * @param listGroupTickets group's ticket
+     * @param listDomainTickets domain's ticket
      */
     public static void setTicketsListByPerimeter( AdminUser user, TicketFilter filter, HttpServletRequest request,
         List<Ticket> listAgentTickets, List<Ticket> listGroupTickets, List<Ticket> listDomainTickets )
