@@ -44,6 +44,7 @@ import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
 import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
+import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
@@ -59,8 +60,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -144,7 +143,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 Collection<Action> fullListWorkflowActions = getActions( ticket.getId(  ), nIdWorkflow );
                 Collection<Action> filteredListWorkflowActions = new ArrayList<Action>( fullListWorkflowActions );
 
-                if ( TicketHelper.isTicketAssignToUserOrGroup( getUser(  ), ticket ) )
+                if ( TicketHelper.isTicketAssignToUserOrGroup( getUser(  ), ticket ) ||
+                        RBACService.isUserInRole( getUser(  ), TicketingConstants.ROLE_GRU_ADMIN ) )
                 {
                     //if ticket is assign to agent or to its group 
                     for ( Action action : fullListWorkflowActions )
