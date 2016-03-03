@@ -246,6 +246,12 @@ public final class TicketHelper
         }
     }
 
+    /**
+     * returns true if ticket is assign to user or group, false otherwise
+     * @param user adminUser
+     * @param ticket ticket
+     * @return true if ticket is assign to user or group
+     */
     public static boolean isTicketAssignToUserOrGroup( AdminUser user, Ticket ticket )
     {
         boolean bAssignToUserOrGroup = false;
