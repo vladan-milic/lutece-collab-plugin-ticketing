@@ -48,20 +48,20 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+
 /**
  * filter which scan for 360 return url parameter
  *
  */
 public class ReturnUrlFilter implements Filter
 {
-    private static final  String PROPERTY_RETURN_URL_PARAMETER_NAME = "ticketing.workflow.redirect.parameterName";
+    private static final String PROPERTY_RETURN_URL_PARAMETER_NAME = "ticketing.workflow.redirect.parameterName";
     private static final String PARAM_RETURN_URL = AppPropertiesService.getProperty( PROPERTY_RETURN_URL_PARAMETER_NAME,
             "return_url" );
 
     @Override
     public void init( FilterConfig filterConfig ) throws ServletException
     {
-
     }
 
     @Override
@@ -75,12 +75,12 @@ public class ReturnUrlFilter implements Filter
             httpRequest.getSession( true )
                        .setAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL, request.getParameter( PARAM_RETURN_URL ) );
         }
+
         filterChain.doFilter( request, response );
     }
 
     @Override
     public void destroy(  )
     {
-
     }
 }

@@ -195,7 +195,7 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
         model.put( MARK_FORM, ticketForm );
 
         TicketHelper.storeRichTextMarksIntoModel( request, model );
-        
+
         model.put( MARK_ENTRY_TYPE_SERVICE, EntryTypeServiceManager.getEntryTypeService( entry ) );
 
         String strTemplate = EntryTypeServiceManager.getEntryTypeService( entry ).getTemplateCreate( entry, false );
