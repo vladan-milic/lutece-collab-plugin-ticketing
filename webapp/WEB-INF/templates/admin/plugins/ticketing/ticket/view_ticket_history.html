@@ -1,11 +1,12 @@
 <#include "view_ticket_header.html" />
-  <@ticketHeader tab='history' ticket=ticket />
-    <div class="row">
-      <div class="col-xs-12 col-sm-offset-1 col-sm-10 table-responsive">
-        ${history!''}
-      </div>
-    </div>
+<@ticketHeader tab='history' ticket=ticket />
+<div id="demand-panel" class="row ticket-content">
+  <div id="demand-content" class="col-xs-12 col-sm-offset-1 col-sm-7 table-responsive">
+    ${history!''}
   </div>
+  <div id="info-right" class="col-xs-12 col-sm-3">
+  </div>
+</div>
 </div>
 <script>
   $( function(){

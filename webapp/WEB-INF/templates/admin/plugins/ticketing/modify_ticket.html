@@ -1,10 +1,14 @@
 <#include "/skin/plugins/asynchronousupload/upload_commons.html" />
-<div id="ticketing-wrapper">
-  <div id="head-ticketing" class="bg-gru-dark">
-    <h2>#i18n{ticketing.modify_ticket.pageTitle}</h2>
+<div class="gru-wrapper">
+  <div id="customer-panel" class="row ticket-head bg-gru-light">
+    <div class="col-xs-12 col-sm-offset-1 col-sm-10">
+      <h2>#i18n{ticketing.create_ticket.pageTitle}</h2>
+      <h3>Modification d'une fiche</h3>
+    </div>
   </div>
-  <div id="content-ticketing">
-    <form class="form" method="post" name="modify_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp"  enctype="multipart/form-data">
+  <div id="demand-panel" class="row ticket-content">
+    <div class="col-xs-12 col-sm-offset-1 col-sm-10">
+      <form class="form" method="post" name="modify_ticket" action="jsp/admin/plugins/ticketing/ManageTickets.jsp"  enctype="multipart/form-data">
       <@messages errors=errors />
       <input type="hidden" id="id" name="id" value="${ticket.id}">
       <input type="hidden" id="guid" name="guid" value="">
@@ -77,6 +81,7 @@
         </div>
       </div>
     </form>
+    </div>
   </div>
 </div>
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
@@ -89,7 +94,7 @@
         $(".content-header").toggle();
         lutece_ticket_tree("#id_ticket_type", "#id_ticket_domain", "#id_ticket_category", category_id, is_front, is_generic_attributes_managed);
     });
-    
+
     $(document).ready(function() {
         $('.input-phone').change(function() {
             var result = $(this).val().replace(/\s/g,"");
