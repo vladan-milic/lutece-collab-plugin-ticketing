@@ -246,6 +246,16 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         TicketFilterHelper.setModel( model, filter, request );
         TicketHelper.storeTicketRightsIntoModel( model, getUser(  ) );
 
+        String messageInfo = (String) request.getSession(  )
+                                             .getAttribute( TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
+
+        if ( StringUtils.isNotEmpty( messageInfo ) )
+        {
+            addInfo( messageInfo );
+            request.getSession(  ).removeAttribute( TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
+            fillCommons( model );
+        }
+
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
     }
 

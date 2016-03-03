@@ -138,6 +138,16 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
 
+        String messageInfo = (String) request.getSession(  )
+                                             .getAttribute( TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
+
+        if ( StringUtils.isNotEmpty( messageInfo ) )
+        {
+            addInfo( messageInfo );
+            request.getSession(  ).removeAttribute( TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
+            fillCommons( model );
+        }
+
         return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS, TEMPLATE_VIEW_TICKET_DETAILS, model );
     }
 

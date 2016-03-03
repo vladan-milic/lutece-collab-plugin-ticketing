@@ -183,6 +183,9 @@
         	</form>
         </div>
       </div>
+      
+      <@messages infos=infos />
+      
 	<#if !selected_tab?? || ( selected_tab?? && selected_tab=="agent") >
 		<@renderTabPanel panel_list=ticket_list active=true id='agent' />
 	<#else>
