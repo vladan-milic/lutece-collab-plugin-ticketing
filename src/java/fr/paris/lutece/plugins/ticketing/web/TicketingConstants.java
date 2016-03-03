@@ -95,6 +95,7 @@ public final class TicketingConstants
     public static final String ADMIN_CONTROLLLER_PATH = "jsp/admin/plugins/ticketing/";
     public static final String JSP_MANAGE_TICKETS = "ManageTickets.jsp";
     public static final String JSP_VIEW_TICKET = "TicketView.jsp";
+    public static final String ROLE_GRU_ADMIN = "gru_admin";
 
     /**
      * Default constructor
