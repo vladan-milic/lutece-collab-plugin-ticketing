@@ -1,9 +1,9 @@
-<h3>${workflow_action.description}</h3>
 <form class="form-horizontal" action="${form_action}" method="post" enctype="multipart/form-data">
 <input name="action" value="doProcessWorkflowAction" type="hidden">
 <input name="id_action" value="${id_action}" type="hidden">
 <input name="id" value="${id}" type="hidden">
-<input name="page" value="${page!}" type="hidden"> ${tasks_form}
+<input name="page" value="${page!}" type="hidden">
+${tasks_form}
 <div class="form-group">
 	<div class="col-xs-12 col-sm-offset-3 col-sm-9">
 		<#if !hide_next_button?? || hide_next_button !=true>

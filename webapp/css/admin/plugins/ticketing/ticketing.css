@@ -86,17 +86,18 @@
 /*==========  Non-Mobile First Method  ==========*/
 /* Large Devices, Wide Screens */
 @media only screen and (max-width : 1200px) {
-  .nav-tabs{ padding-left: 3%}
+  .nav-ticket{ margin-left: 60px }
+  .nav-ticket > li > a {	padding: 15px 15px;	margin-left: 10px;	text-transform: uppercase;	font-size: 1.3rem;}
 }
 
 /* Medium Devices, Desktops */
 @media only screen and (max-width : 992px) {
-  .nav-tabs > li:first-of-type { margin-left: 80px }
-  .nav-tabs > li > a { padding: 15px 15px; margin-left: 5px; font-size: 1.2rem}
+  .nav-ticket > li > a{ padding: 15px 5px; margin-left: 5px; font-size: 1.2rem}
 }
 
 /* Small Devices, Tablets */
 @media only screen and (max-width : 768px) {
+/*
   .h1, .h2, .h3, h1, h2, h3 { margin-top: 0; margin-bottom: 5px }
 
   .nav-tabs > li:first-of-type { margin-left: 50px }
@@ -106,16 +107,23 @@
   #demand-panel{ margin:auto -30px }
   #ticketing-panel{ padding: 10px 0; min-height: 600px }
   #ticketing-wrapper { margin-top : 60px; padding-left: 15px; border-right: 0 }
+  */
+  .gru-wrapper{ margin: 15px 0; padding: 0 }
 }
 
 @media screen and (max-width: 560px) {
-
+    .nav-ticket{ margin-left: 10px }
+    #demand-panel .nav-ticket > li > a { padding: 15px 2px;	margin-left: 0;	font-size: 1rem;}
+    #customer-panel { padding: 15px 0; margin-left: -2px;	height: 150px }
+/*
   #ticketing-panel{ padding: 5px 0; min-height: 400px }
   .h1, .h2, .h3, h1, h2, h3 { margin-top: 0; margin-bottom: 5px }
+  */
 }
 
 /* Extra Small Devices, Phones */
 @media only screen and (max-width : 480px) {
+  /*
   #ticketing-wrapper { margin-top : -15px }
   #ticketing-panel{ padding: 0 5px; min-height: 400px }
 
@@ -124,6 +132,7 @@
   #filter { font-size: 1rem;	margin: 0 }
   #no-content{ min-height:640px; width:80%  }
   #no-content img{ left:80%; width:50%  }
+  */
 }
 
 /* Custom, iPhone Retina */

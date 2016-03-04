@@ -134,17 +134,17 @@
     <ul class="nav nav-tabs nav-ticket">
       <li role="presentation" <#if !selected_tab?? || ( selected_tab?? && selected_tab=="agent") > class="active" </#if> >
         <a href="#agent" onclick="setSelectedTab('agent')" aria-controls="agent" role="tab" data-toggle="tab">
-          <i class="fa fa-inbox"></i> <span class="hidden-xs">Mes demandes &agrave; traiter</span> <span class="label label-default">${nb_ticket_agent}</span>
+          <i class="fa fa-inbox"></i> Mes demandes <span class="hidden-xs">&agrave; traiter</span> <span class="label label-default">${nb_ticket_agent}</span>
         </a>
       </li>
       <li role="presentation" <#if selected_tab?? && selected_tab == "group"> class="active" </#if> >
         <a href="#group" onclick="setSelectedTab('group')" aria-controls="group" role="tab" data-toggle="tab">
-          <i class="fa fa-users"></i> <span class="hidden-xs">Les demandes de mon &eacute;quipe</span> <span class="label label-default">${nb_ticket_group!}</span>
+          <i class="fa fa-users"></i> <span class="hidden-xs">Les demandes de</span> mon &eacute;quipe <span class="label label-default">${nb_ticket_group!}</span>
         </a>
       </li>
       <li role="presentation" <#if selected_tab?? && selected_tab == "domain"> class="active" </#if> >
         <a href="#domain" onclick="setSelectedTab('domain')"  aria-controls="domain" role="tab" data-toggle="tab" >
-          <i class="fa fa-tags"></i> <span class="hidden-xs">Les demandes par domaine</span> <span class="label label-default">${nb_ticket_domain!}</span>
+          <i class="fa fa-tags"></i> <span class="hidden-xs">Les demandes </span>par domaine <span class="label label-default">${nb_ticket_domain!}</span>
         </a>
       </li>
     </ul>
