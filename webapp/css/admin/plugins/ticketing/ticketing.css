@@ -2,58 +2,12 @@
 /*   / ! \ WARNING Add styles from plugins GRU if is used without plugin-gru !! */
 /*  ------                                                                                   */
 /* TICKETING */
-/*
-#ticketing-admin-wrapper{ margin:0 15px; }
-#ticketing-wrapper{ margin:-15px; padding-top:20px; background-color:#0375BE; color:#fff;  }
-
-#no-content{ margin:0 auto; width:100%; text-align: center; min-height:620px }
-#no-content img{ position: absolute; top: 60%; left: 60%; margin-top: -250px; margin-left: -250px }
-*/
 
 #info-head-right{ border-left: 1px solid #fff; height:215px; margin-top:0 ;padding-top:0 }
-/*
-#info-head-right>p>i.fa-circle:hover{  cursor: pointer }
-*/
 .nav-ticket{ margin-left: 135px }
 
 .ticket-head{ height: 200px !important }
 .ticket-content{ margin: 15px -15px !important }
-/*
-#ticketing-wrapper h3 a{ color:#fff; padding-right:15px; font-size: 50%; vertical-align: middle}
-#ticketing-wrapper .btn-v360{ color:#BEBEBE; border:1px solid #BEBEBE; border-radius: 4px; margin-left:30px; font-size:1.3rem; padding:5px 25px }
-#ticketing-wrapper p{ font-size: 1.6rem }
-#ticketing-wrapper p i{ margin-right: 15px }
-#ticketing-wrapper p span{ padding:5px 15px; font-size: 1.4rem; font-weight: normal }
-#ticketing-wrapper form label{ color: #000 }
-
-#ticketing-wrapper #info-head-right>p>a:hover{ color: #DED }
-#ticketing-search-wrapper{ margin:-10px 0 }
-#ticketing-search-wrapper #search-header { background-color:#0375BE; color:#fff }
-#ticketing-search-wrapper #search-header h2{ padding-left: 20px }
-#ticketing-search-wrapper #search-header form{ padding: 20px }
-#ticketing-search-wrapper #search-header form input, #ticketing-search-wrapper #search-header form select{ color: #000 }
-#ticketing-search-wrapper #search-content{ margin:15px 30px}
-#ticketing-search-wrapper #search-content ul li.list-group-item:hover{ background-color: #DEDEDE }
-
-#ticketing-panel{ padding: 15px 0; color:#fff; min-height: 800px }
-#ticketing-panel .nav-tabs{ margin-bottom:0; padding-left: 5%}
-#ticketing-panel .nav-tabs > li{ padding-right: 5px }
-#ticketing-panel .nav-tabs > li a{ border: 1px solid #DDD; background:#FFF ; text-transform: uppercase; font-size: 1.6rem }
-#ticketing-panel .nav-tabs > li.active > a{ border-bottom:1px solid #fff }
-#ticketing-panel .nav-tabs > li form{ height:45px; padding-top:8px; padding-left:4%; background-color: #000; border-top-left-radius:6px; border-top-right-radius:6px }
-#ticketing-panel .nav-tabs > li form button{ color:#fff; text-decoration: none; text-transform: uppercase }
-
-#ticketing-panel .tab-content{ margin-left: 0; padding:10px 6%; background-color: #fff; min-height: 800px }
-#ticketing-panel .tab-content table{ color: #BEBEBE }
-#ticketing-panel .tab-content table tr:hover{ cursor: pointer  }
-#ticketing-panel .tab-content table tr:first-of-type{ background-color: #fff; color: #000  }
-#ticketing-panel .tab-content table th{ border-top: 0; text-transform: uppercase }
-#ticketing-panel .tab-content table td{color: #656565 }
-#ticketing-panel .tab-content table td a{ color: #656565; text-decoration: none}
-
-#detail-panel{ border-left: 1px solid #DDD; min-height:600px; margin-top:-15px; padding:20px 20px; margin-left:-5px }
-#detail-panel p a{ text-align: left !important }
-*/
 
 #ticketing-history-panel{ padding: 15px 0 }
 #ticketing-history-panel .panel{ padding: 15px; background-color: #EEE; width:98% }
@@ -66,11 +20,10 @@
 #info-right{ border-left: 1px solid #DDD;min-height:600px;margin-top: -15px; padding:20px 20px  }
 #info-right h5{ color:#808179 }
 
-/*
-#ticketing-modal-workflow-action-form .content-header{ display:none; }
-#ticketing-modal-workflow-action-form .content{padding: 0;margin: 0 }
-#ticketing-modal-workflow-action-form textarea{ width:95%; }
-*/
+.avatar-label{ display:inline-block; line-height:40px; vertical-align: middle; margin-left: 5px }
+
+.modal-body>.content-header{ display: none }
+
 /* FILTERS */
 #filter-ticket{ font-size: 1.2rem; color:#000;margin:35px 0 }
 #filter-ticket .form-control{ border-color: #000 }
@@ -97,17 +50,6 @@
 
 /* Small Devices, Tablets */
 @media only screen and (max-width : 768px) {
-/*
-  .h1, .h2, .h3, h1, h2, h3 { margin-top: 0; margin-bottom: 5px }
-
-  .nav-tabs > li:first-of-type { margin-left: 50px }
-  .nav-tabs > li > a { padding: 15px 10px; margin-left: 10px; font-size: 1.2rem }
-  .nav-tabs .dropdown-menu { padding: 0 11px }
-
-  #demand-panel{ margin:auto -30px }
-  #ticketing-panel{ padding: 10px 0; min-height: 600px }
-  #ticketing-wrapper { margin-top : 60px; padding-left: 15px; border-right: 0 }
-  */
   .gru-wrapper{ margin: 15px 0; padding: 0 }
 }
 
@@ -115,24 +57,10 @@
     .nav-ticket{ margin-left: 10px }
     #demand-panel .nav-ticket > li > a { padding: 15px 2px;	margin-left: 0;	font-size: 1rem;}
     #customer-panel { padding: 15px 0; margin-left: -2px;	height: 150px }
-/*
-  #ticketing-panel{ padding: 5px 0; min-height: 400px }
-  .h1, .h2, .h3, h1, h2, h3 { margin-top: 0; margin-bottom: 5px }
-  */
 }
 
 /* Extra Small Devices, Phones */
 @media only screen and (max-width : 480px) {
-  /*
-  #ticketing-wrapper { margin-top : -15px }
-  #ticketing-panel{ padding: 0 5px; min-height: 400px }
-
-  .nav-tabs .dropdown-menu { padding: 0 6px }
-
-  #filter { font-size: 1rem;	margin: 0 }
-  #no-content{ min-height:640px; width:80%  }
-  #no-content img{ left:80%; width:50%  }
-  */
 }
 
 /* Custom, iPhone Retina */
