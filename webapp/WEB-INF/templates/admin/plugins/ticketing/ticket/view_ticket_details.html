@@ -33,12 +33,12 @@
       <#list ticket.listWorkflowActions as action>
         <p>
           <#if action.displayTasksForm>
-            <a class="btn btn-lg btn-primary btn-block bg-gru-light"  href="jsp/admin/plugins/ticketing/Ajax.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}&amp;jsp=${jsp_controller}"
-              data-remote="false" data-toggle="modal" data-target="#ticketing-modal-workflow-action-form" title="${action.name}">
+            <a class="btn btn-lg btn-primary btn-block bg-gru-dark"  href="jsp/admin/plugins/ticketing/Ajax.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}&amp;jsp=${jsp_controller}"
+              data-remote="false" data-toggle="modal" data-title="${action.name}" data-target="#ticketing-modal-workflow-action-form" title="${action.name}">
               <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
             </a>
           <#else>
-            <a class="btn btn-lg btn-primary btn-block bg-gru-light"  href="jsp/admin/plugins/ticketing/TicketView.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}"
+            <a class="btn btn-lg btn-primary btn-block bg-gru-dark" data-title="${action.name}" href="jsp/admin/plugins/ticketing/TicketView.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}"
                 title="${action.name}">
                 <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
             </a>
@@ -48,14 +48,14 @@
       </#if>
       <#if ticket_modification_right?? && ticket_modification_right>
        <p>
-           <a class="btn btn-lg btn-primary btn-block bg-gru-light"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}" title="#i18n{portal.util.labelModify}">
+           <a class="btn btn-lg btn-primary btn-block bg-gru-dark"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}" title="#i18n{portal.util.labelModify}">
              <i class="fa fa-pencil"></i>  #i18n{portal.util.labelModify}
            </a>
        </p>
      </#if>
      <#if ticket_deletion_right?? && ticket_deletion_right>
          <p>
-           <a class="btn btn-lg btn-primary btn-block bg-gru-light"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}" title="#i18n{portal.util.labelDelete}">
+           <a class="btn btn-lg btn-primary btn-block bg-gru-dark"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}" title="#i18n{portal.util.labelDelete}">
              <i class="fa fa-trash"></i>  #i18n{portal.util.labelDelete}
            </a>
          </p>
