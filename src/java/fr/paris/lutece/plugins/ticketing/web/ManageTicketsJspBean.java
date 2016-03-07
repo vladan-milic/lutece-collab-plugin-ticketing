@@ -107,6 +107,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     // Parameters
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
     private static final String PARAMETER_GUID = "guid";
+    private static final String PARAMETER_CID = "cid";
+    private static final String PARAMETER_USER_TITLE = "ut";
     private static final String PARAMETER_FIRSTNAME = "fn";
     private static final String PARAMETER_LASTNAME = "ln";
     private static final String PARAMETER_PHONE = "ph";
@@ -314,11 +316,17 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     {
         String strGuid = request.getParameter( PARAMETER_GUID );
         String strCustomerId = request.getParameter( TicketingConstants.PARAMETER_CUSTOMER_ID );
+        String strUserTitle = request.getParameter( PARAMETER_USER_TITLE );
         String strFirstname = request.getParameter( PARAMETER_FIRSTNAME );
         String strLastname = request.getParameter( PARAMETER_LASTNAME );
         String strPhone = request.getParameter( PARAMETER_PHONE );
         String strEmail = request.getParameter( PARAMETER_EMAIL );
         String strCategory = request.getParameter( PARAMETER_CATEGORY );
+
+        if ( !StringUtils.isEmpty( strUserTitle ) )
+        {
+            ticket.setIdUserTitle( Integer.parseInt( strUserTitle ) );
+        }
 
         if ( !StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty( ticket.getFirstname(  ) ) )
         {
