@@ -15,10 +15,10 @@
       			<th>#i18n{ticketing.manage_tickets.columnReference} <@sortColumn field='reference'/></th>
       			<th>#i18n{ticketing.manage_tickets.columnOpenPeriod} <@sortColumn field='date_create'/></th>
       			<th>#i18n{ticketing.manage_tickets.columnTicketType} <@sortColumn field='category_label'/></th>
-      			<th>#i18n{ticketing.manage_tickets.columnUser}/#i18n{ticketing.manage_tickets.columnTicketComment} <@sortColumn field='lastname'/></th>
+      			<th>#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment} <@sortColumn field='lastname'/></th>
       			<th>#i18n{ticketing.manage_tickets.columnTicketStatus} <@sortColumn field='ticket_status_text'/></th>
       			<th>#i18n{ticketing.manage_tickets.columnTicketState} <@sortColumn field='state'/></th>
-      			<th>#i18n{ticketing.manage_tickets.columnTicketAssignee} <@sortColumn field='assignee'/></th>
+      			<th><!-- #i18n{ticketing.manage_tickets.columnTicketAssignee}--> Assignation <@sortColumn field='assignee'/></th>
       		  </tr>
       	  </thead>
       		<tbody>
@@ -41,7 +41,7 @@
     				  </a>
     				</#if>
     			  </td>
-    			  <td>
+    			  <td class="text-center text-gru">
     				${displayTimeOpenedTicket(ticket.timeOpenedTicketInMs)}
     			  </td>
     			  <td>
@@ -66,7 +66,9 @@
     				  </small>
     				</#if>
     				</p>
-    				${ticket.ticketComment}
+            <div class="ticket-comments">
+    				  ${ticket.ticketComment}
+            </div>
     			  </td>
     			  <td>
     				<#switch ticket.ticketStatus>
@@ -84,13 +86,18 @@
     				</#if>
     			  </td>
     			  <td>
-    				<#if ticket.assigneeUnit??>${ticket.assigneeUnit.name}</#if>
+    				<#if ticket.assigneeUnit??>
+            <p>
+              <strong><i class=" fa fa-sitemap"></i> ${ticket.assigneeUnit.name}</strong>
+            </p>
+            </#if>
     				<#if ticket.assigneeUser??>
-    				  <#if adminAvatar><img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}" alt="Avatar" title="Avatar"></#if>
-    				  ${ticket.assigneeUser.firstname} ${ticket.assigneeUser.lastname}
-    				<#else>
-    				  -
-    				</#if>
+              <p>
+    				  <#if adminAvatar>
+                <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}" alt="" title="Avatar"></#if>
+    				    <span class="avatar-label">${ticket.assigneeUser.firstname} ${ticket.assigneeUser.lastname}</span>
+    				  </#if>
+            </p>
     			  </td>
     			</tr>
     			</#list>
@@ -134,17 +141,17 @@
     <ul class="nav nav-tabs nav-ticket">
       <li role="presentation" <#if !selected_tab?? || ( selected_tab?? && selected_tab=="agent") > class="active" </#if> >
         <a href="#agent" onclick="setSelectedTab('agent')" aria-controls="agent" role="tab" data-toggle="tab">
-          <i class="fa fa-inbox"></i> Mes demandes <span class="hidden-xs">&agrave; traiter</span> <span class="label label-default">${nb_ticket_agent}</span>
+          <i class="fa fa-inbox"></i> Mes demandes <span class="hidden-xs hidden-sm">&agrave; traiter</span> <span class="label label-default">${nb_ticket_agent}</span>
         </a>
       </li>
       <li role="presentation" <#if selected_tab?? && selected_tab == "group"> class="active" </#if> >
         <a href="#group" onclick="setSelectedTab('group')" aria-controls="group" role="tab" data-toggle="tab">
-          <i class="fa fa-users"></i> <span class="hidden-xs">Les demandes de</span> mon &eacute;quipe <span class="label label-default">${nb_ticket_group!}</span>
+          <i class="fa fa-users"></i> <span class="hidden-xs  hidden-sm">Les demandes de</span> mon &eacute;quipe <span class="label label-default">${nb_ticket_group!}</span>
         </a>
       </li>
       <li role="presentation" <#if selected_tab?? && selected_tab == "domain"> class="active" </#if> >
         <a href="#domain" onclick="setSelectedTab('domain')"  aria-controls="domain" role="tab" data-toggle="tab" >
-          <i class="fa fa-tags"></i> <span class="hidden-xs">Les demandes </span>par domaine <span class="label label-default">${nb_ticket_domain!}</span>
+          <i class="fa fa-tags"></i> <span class="hidden-xs  hidden-sm">Les demandes </span>par domaine <span class="label label-default">${nb_ticket_domain!}</span>
         </a>
       </li>
     </ul>
@@ -250,12 +257,12 @@ function setSelectedTab(tab){
 	<#assign minutes = (time_ms / 60000)?int>
 
 	<#if days gte 1>
-		<#return days + " #i18n{ticketing.manage_tickets.unitDay}">
+		<#return "<strong class=\"lead\">" + days + "</strong><br> #i18n{ticketing.manage_tickets.unitDay}">
 	<#else>
 		<#if hours gte 1>
-			<#return hours + " #i18n{ticketing.manage_tickets.unitHour}">
+			<#return "<strong class=\"lead\">" + hours + "</strong><br> #i18n{ticketing.manage_tickets.unitHour}">
 		<#else>
-			<#return minutes + " #i18n{ticketing.manage_tickets.unitMinute}">
+			<#return "<strong class=\"lead\">" + minutes + "</strong><br> #i18n{ticketing.manage_tickets.unitMinute}">
 		</#if>
 	</#if>
 </#function>
