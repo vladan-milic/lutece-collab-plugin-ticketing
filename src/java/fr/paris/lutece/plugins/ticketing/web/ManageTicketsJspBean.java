@@ -186,6 +186,16 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     {
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
         TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
+        
+        if ( request.getParameter( TicketingConstants.PARAMETER_BACK ) != null && StringUtils.isNotEmpty( 
+                (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL ) ) )
+        {
+            String strRedirectUrl = (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
+            //we remove redirect session attribute before leaving
+            request.getSession(  ).removeAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
+    
+            return redirect( request, strRedirectUrl );
+        }
 
         TicketFilter filter = TicketFilterHelper.getFilter( request );
 
