@@ -4,7 +4,7 @@
 --
 DELETE FROM core_admin_user WHERE access_code = 'ticketing_userfront';
 INSERT INTO core_admin_user VALUES 
-(5,'ticketing_userfront','ticketing','userfront','ticketing_userfront@lutece.fr',0,'ticketing','fr',0,0,0,null,null,0,'1980-01-01 00:00:00','all')
+(5,'ticketing_userfront','Usager de la Mairie de Paris',' ','ticketing_userfront@lutece.fr',0,'ticketing','fr',0,0,0,null,null,0,'1980-01-01 00:00:00','all')
 ;
 
 --
