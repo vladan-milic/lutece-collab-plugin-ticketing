@@ -123,8 +123,13 @@
     <!-- filters -->
     <filters>
           <filter>
-               <filter-name>TicketingSessionFilter</filter-name>
+               <filter-name>TicketingBackOfficeSessionFilter</filter-name>
                <url-pattern>/jsp/admin/plugins/*</url-pattern>
+               <filter-class>fr.paris.lutece.plugins.ticketing.web.filter.SessionFilter</filter-class>
+          </filter>
+          <filter>
+               <filter-name>TicketingFrontOfficeSessionFilter</filter-name>
+               <url-pattern>/jsp/site/Portal.jsp</url-pattern>
                <filter-class>fr.paris.lutece.plugins.ticketing.web.filter.SessionFilter</filter-class>
           </filter>
     </filters>

@@ -116,6 +116,7 @@ public class TicketXPage extends WorkflowCapableXPage
     private static final String VIEW_CREATE_TICKET = "createTicket";
     private static final String VIEW_RECAP_TICKET = "recapTicket";
     private static final String VIEW_CONFIRM_TICKET = "confirmTicket";
+    private static final String VIEW_REDIRECT_AFTER_CREATE_ACTION = "redirectAfterCreateAction";
     private static final String VIEW_TICKET_FORM = "ticketForm";
 
     // Actions
@@ -359,6 +360,26 @@ public class TicketXPage extends WorkflowCapableXPage
         removeActionTypeFromSession( request.getSession(  ) );
 
         return getXPage( TEMPLATE_CONFIRM_TICKET, request.getLocale(  ), model );
+    }
+
+    /**
+     * Computes redirection for creation action
+     *
+     * @param request
+     *            The Http request
+     * @return the correct XPage
+     */
+    @View( value = VIEW_REDIRECT_AFTER_CREATE_ACTION )
+    public XPage redirectAfterCreateAction( HttpServletRequest request )
+    {
+        String strRedirectUrl = TicketHelper.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
+
+        if ( StringUtils.isNotEmpty( strRedirectUrl ) )
+        {
+            return redirect( request, strRedirectUrl );
+        }
+
+        return redirectView( request, VIEW_CREATE_TICKET );
     }
 
     /**
