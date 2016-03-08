@@ -400,7 +400,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         Action action = actionService.findByPrimaryKey( nIdAction );
         String strMessage = MessageFormat.format( I18nService.getLocalizedString( INFO_WORKFLOW_ACTION_EXECUTED,
                     Locale.FRENCH ), action.getName(  ) );
-        request.getSession(  ).setAttribute( TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO, strMessage );
+        TicketHelper.setParameter( request, TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO, strMessage );
     }
 
     /**

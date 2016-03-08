@@ -270,4 +270,31 @@ public final class TicketHelper
 
         return bAssignToUserOrGroup;
     }
+
+    /**
+     * Sets the parameter with the specified value
+     * @param request the request
+     * @param strParameter the parameter
+     * @param strValue the value
+     */
+    public static void setParameter( HttpServletRequest request, String strParameter, String strValue )
+    {
+        request.getSession(  ).setAttribute( strParameter, strValue );
+    }
+
+    /**
+     * Gives the value of the specified parameter
+     * @param request the request
+     * @param strParameter the parameter
+     * @return the parameter value
+     */
+    public static String getParameter( HttpServletRequest request, String strParameter )
+    {
+        String strRedirectUrl = (String) request.getSession(  ).getAttribute( strParameter );
+
+        // we remove session attribute after consuming it
+        request.getSession(  ).removeAttribute( strParameter );
+
+        return strRedirectUrl;
+    }
 }

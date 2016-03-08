@@ -188,14 +188,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     {
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
         TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
-        
-        if ( request.getParameter( TicketingConstants.PARAMETER_BACK ) != null && StringUtils.isNotEmpty( 
-                (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL ) ) )
+
+        String strRedirectUrl = TicketHelper.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
+
+        if ( ( request.getParameter( TicketingConstants.PARAMETER_BACK ) != null ) &&
+                StringUtils.isNotEmpty( strRedirectUrl ) )
         {
-            String strRedirectUrl = (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
-            //we remove redirect session attribute before leaving
-            request.getSession(  ).removeAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
-    
             return redirect( request, strRedirectUrl );
         }
 
@@ -258,13 +256,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         TicketFilterHelper.setModel( model, filter, request );
         TicketHelper.storeTicketRightsIntoModel( model, getUser(  ) );
 
-        String messageInfo = (String) request.getSession(  )
-                                             .getAttribute( TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
+        String messageInfo = TicketHelper.getParameter( request,
+                TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
 
         if ( StringUtils.isNotEmpty( messageInfo ) )
         {
             addInfo( messageInfo );
-            request.getSession(  ).removeAttribute( TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
             fillCommons( model );
         }
 
@@ -412,27 +409,24 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         doProcessWorkflowAutomaticAction( ticket );
 
-        addInfo( INFO_TICKET_CREATED, getLocale(  ) );
-
         return redirectAfterCreateAction( request );
     }
 
     /**
-     * compture redirection for creation action
+     * Computes redirection for creation action
      * @param request http request
      * @return redirect view
      */
     public String redirectAfterCreateAction( HttpServletRequest request )
     {
-        if ( StringUtils.isNotEmpty( 
-                    (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL ) ) )
-        {
-            String strRedirectUrl = (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
-            //we remove redirect session attribute before leaving
-            request.getSession(  ).removeAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = TicketHelper.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
 
+        if ( StringUtils.isNotEmpty( strRedirectUrl ) )
+        {
             return redirect( request, strRedirectUrl );
         }
+
+        addInfo( INFO_TICKET_CREATED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETS );
     }

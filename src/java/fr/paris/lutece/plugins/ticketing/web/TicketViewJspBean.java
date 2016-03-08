@@ -138,13 +138,12 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
 
-        String messageInfo = (String) request.getSession(  )
-                                             .getAttribute( TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
+        String messageInfo = TicketHelper.getParameter( request,
+                TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
 
         if ( StringUtils.isNotEmpty( messageInfo ) )
         {
             addInfo( messageInfo );
-            request.getSession(  ).removeAttribute( TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
             fillCommons( model );
         }
 
@@ -183,14 +182,10 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
             ? (String) request.getAttribute( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION )
             : request.getParameter( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION );
 
-        if ( StringUtils.isNotEmpty( strRedirect ) &&
-                StringUtils.isNotEmpty( 
-                    (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL ) ) )
-        {
-            String strRedirectUrl = (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
-            //we remove redirect session attribute before leaving
-            request.getSession(  ).removeAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = TicketHelper.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
 
+        if ( StringUtils.isNotEmpty( strRedirect ) && StringUtils.isNotEmpty( strRedirectUrl ) )
+        {
             return redirect( request, strRedirectUrl );
         }
         else
