@@ -33,18 +33,17 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.search;
 
-import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.search.SearchEngine;
 import fr.paris.lutece.portal.service.search.SearchResult;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
-import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.utils.MVCMessage;
+import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
+import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
+import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.util.ErrorMessage;
-import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
@@ -62,14 +61,18 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * TicketSearch
  */
-@Controller( controllerJsp = "TicketSearch.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_TICKETS_MANAGEMENT" )
-public class TicketSearchJspBean extends MVCAdminJspBean
+@Controller( xpageName = TicketSearchXPage.XPAGE_NAME, pageTitleI18nKey = TicketSearchXPage.MESSAGE_PAGE_TITLE, pagePathI18nKey = TicketSearchXPage.MESSAGE_PATH )
+public class TicketSearchXPage extends MVCApplication
 {
+    protected static final String XPAGE_NAME = "ticketSearch";
+    protected static final String MESSAGE_PAGE_TITLE = "ticketing.xpage.ticketsearch.pageTitle";
+    protected static final String MESSAGE_PATH = "ticketing.xpage.ticketsearch.pagePathLabel";
+
     // Templates
-    private static final String TEMPLATE_SEARCH_TICKET = "/admin/plugins/ticketing/search/search_ticket.html";
+    private static final String TEMPLATE_SEARCH_RESPONSE_RESULTS = "/admin/plugins/ticketing/search/search_response_results.html";
 
     // Actions
-    private static final String ACTION_SEARCH_TICKET = "search";
+    private static final String ACTION_SEARCH_RESPONSE = "search_response";
 
     // Other constants
     private static final long serialVersionUID = 1L;
@@ -78,29 +81,24 @@ public class TicketSearchJspBean extends MVCAdminJspBean
     private int _nItemsPerPage;
 
     /**
-     * Search tickets
+     * Search response for tickets
      * @param request The HTTP request
      * @return The view
      */
-    @Action( value = ACTION_SEARCH_TICKET )
+    @Action( value = ACTION_SEARCH_RESPONSE )
     @SuppressWarnings( {"rawtypes",
         "unchecked"
     } )
-    public String searchTickets( HttpServletRequest request )
+    public XPage searchResponse( HttpServletRequest request )
     {
         String strQuery = request.getParameter( SearchConstants.PARAMETER_QUERY );
         Map<String, Object> model = new HashMap<String, Object>(  );
 
         String strSearchField = request.getParameter( SearchConstants.PARAMETER_SEARCH_FIELD );
 
-        if ( StringUtils.isEmpty( strSearchField ) )
-        {
-            strSearchField = TicketSearchItem.FIELD_CONTENTS;
-        }
-
         if ( StringUtils.isNotEmpty( strQuery ) )
         {
-            UrlItem url = new UrlItem( getActionUrl( ACTION_SEARCH_TICKET ) );
+            UrlItem url = new UrlItem( getDefaultPagePath( request.getLocale(  ) ) );
             url.addParameter( SearchConstants.PARAMETER_QUERY, strQuery );
 
             _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
@@ -122,33 +120,15 @@ public class TicketSearchJspBean extends MVCAdminJspBean
         }
         else
         {
-            addError( model, SearchConstants.PROPERTY_SEARCH_NO_INPUT, getLocale(  ) );
+            addError( model, SearchConstants.PROPERTY_SEARCH_NO_INPUT, request.getLocale(  ) );
         }
 
-        model.put( SearchConstants.MARK_SEARCH_FIELDS_LIST, getCriteriaReferenceList( request.getLocale(  ) ) );
         model.put( SearchConstants.MARK_SEARCH_FIELD, strSearchField );
 
-        return getPage( SearchConstants.PROPERTY_PAGE_TITLE_TICKET_SEARCH, TEMPLATE_SEARCH_TICKET, model );
-    }
+        XPage page = getXPage( TEMPLATE_SEARCH_RESPONSE_RESULTS, request.getLocale(  ), model );
+        page.setStandalone( true );
 
-
-    /**
-     * returns criteria reference list
-     * @param locale the locale used to retrieve the localized messages
-     * @return the ReferenceList object
-     */
-    private static ReferenceList getCriteriaReferenceList( Locale locale )
-    {
-        ReferenceList listCriterias = new ReferenceList(  );
-
-        listCriterias.addItem( TicketSearchItem.FIELD_CONTENTS,
-            I18nService.getLocalizedString( SearchConstants.PROPERTY_SEARCH_CONTENT_CRITERIA, locale ) );
-        listCriterias.addItem( TicketSearchItem.FIELD_REFERENCE,
-            I18nService.getLocalizedString( SearchConstants.PROPERTY_SEARCH_REFERENCE_CRITERIA, locale ) );
-        listCriterias.addItem( TicketSearchItem.FIELD_CATEGORY,
-            I18nService.getLocalizedString( SearchConstants.PROPERTY_SEARCH_CATEGORY_CRITERIA, locale ) );
-
-        return listCriterias;
+        return page;
     }
 
     /**
@@ -157,6 +137,7 @@ public class TicketSearchJspBean extends MVCAdminJspBean
      * @param strMessageKey message key
      * @param locale locale
      */
+    @SuppressWarnings( "unchecked" )
     protected void addError( Map<String, Object> model, String strMessageKey, Locale locale )
     {
         if ( model.get( SearchConstants.MARK_ERRORS ) == null )

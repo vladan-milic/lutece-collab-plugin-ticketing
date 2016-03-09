@@ -73,6 +73,10 @@
             <application-id>digitalSafe</application-id>
             <application-class>fr.paris.lutece.plugins.ticketing.web.digitalsafe.DigitalSafeServiceXPage</application-class>
         </application>
+        <application>
+            <application-id>ticketSearch</application-id>
+            <application-class>fr.paris.lutece.plugins.ticketing.web.search.TicketSearchXPage</application-class>
+        </application>
     </applications>
     
     <!-- RBAC Resources -->
@@ -102,7 +106,7 @@
     <search-indexers>
         <search-indexer>
             <search-indexer-class>
-                fr.paris.lutece.plugins.ticketing.search.TicketIndexer
+                fr.paris.lutece.plugins.ticketing.web.search.TicketIndexer
             </search-indexer-class>
         </search-indexer>
     </search-indexers>

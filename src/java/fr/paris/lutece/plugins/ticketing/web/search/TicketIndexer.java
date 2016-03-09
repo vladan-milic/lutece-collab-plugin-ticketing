@@ -31,11 +31,15 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.search;
+package fr.paris.lutece.plugins.ticketing.web.search;
 
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.workflowcore.business.state.State;
+import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
 import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -43,7 +47,10 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.search.SearchIndexer;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.url.UrlItem;
+
+import org.apache.commons.lang.StringUtils;
 
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
@@ -51,6 +58,8 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+
+import org.jsoup.Jsoup;
 
 import java.io.IOException;
 
@@ -76,6 +85,9 @@ public class TicketIndexer implements SearchIndexer
     private static final String ENABLE_VALUE_TRUE = "1";
     private static final String JSP_VIEW_TICKET = "jsp/admin/plugins/ticketing/TicketView.jsp";
     private static final String JSP_SEARCH_TICKET = "jsp/admin/plugins/ticketing/TicketSearch.jsp?action=search";
+
+    // Services
+    private static WorkflowService _workflowService = WorkflowService.getInstance(  );
 
     /**
      * {@inheritDoc }
@@ -233,11 +245,52 @@ public class TicketIndexer implements SearchIndexer
         String strDate = DateTools.dateToString( ticket.getDateCreate(  ), DateTools.Resolution.DAY );
         doc.add( new Field( TicketSearchItem.FIELD_DATE, strDate, ftNotStored ) );
 
+        //add response for closed tickets with response 
+        if ( ( getStateId( ticket ) == AppPropertiesService.getPropertyInt( 
+                    TicketingConstants.PROPERTY_TICKET_CLOSE_ID, -1 ) ) &&
+                StringUtils.isNotEmpty( ticket.getUserMessage(  ) ) )
+        {
+            //escape html from response for indexation, not stored
+            doc.add( new Field( TicketSearchItem.FIELD_TXT_RESPONSE, Jsoup.parse( ticket.getUserMessage(  ) ).text(  ),
+                    ftNotStored ) );
+            doc.add( new Field( TicketSearchItem.FIELD_RESPONSE, ticket.getUserMessage(  ), ft ) );
+            doc.add( new Field( TicketSearchItem.FIELD_COMMENT, ticket.getTicketComment(  ), ft ) );
+        }
+
         doc.add( new Field( TicketSearchItem.FIELD_SUMMARY, ticket.getDisplaySummary(  ), ft ) );
         doc.add( new Field( TicketSearchItem.FIELD_TITLE, ticket.getDisplayTitle(  ), ft ) );
         doc.add( new Field( TicketSearchItem.FIELD_TYPE, getDocumentType(  ), ft ) );
 
         return doc;
+    }
+
+    /**
+     * return state id of ticket
+     * @param ticket ticket
+     * @return id of ticket state
+     */
+    private static int getStateId( Ticket ticket )
+    {
+        int nStateId = 0;
+
+        if ( _workflowService.isAvailable(  ) )
+        {
+            TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+            int nIdWorkflow = ticketCategory.getIdWorkflow(  );
+
+            StateFilter stateFilter = new StateFilter(  );
+            stateFilter.setIdWorkflow( nIdWorkflow );
+
+            State state = _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+                    ticketCategory.getId(  ) );
+
+            if ( state != null )
+            {
+                nStateId = state.getId(  );
+            }
+        }
+
+        return nStateId;
     }
 
     /**

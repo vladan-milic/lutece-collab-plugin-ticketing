@@ -1,0 +1,33 @@
+<div>
+	  <div class="col-xs-12 col-sm-9 col-sm-offset-1">
+		  <div class="form-group">
+			<textarea class="form-control"  id="query" rows = "3">${ticket.ticketComment!}</textarea>
+		  </div>
+		</div> 
+		<div class="col-xs-12 col-sm-1 input-group-btn">
+			<br>
+			<div class="btn btn-default " id="search_button" >
+				<i class="fa fa-search"></i>
+			</div>
+	  </div>
+</div>
+<div id="results" class="pre-scrollable col-xs-12 col-sm-11"></div>
+
+<script>
+  $( function(){
+	  $("#search_button").click(function(){
+		  var targetUrl="jsp/site/Portal.jsp";
+		  var dataToSend="page=ticketSearch&action=search_response&searched_field=ticket_response&query="+$("#query").val()+"&category=${ticket.ticketCategory!}";
+		  $.ajax({
+			  url: targetUrl,
+			  type: "POST",
+			  data: dataToSend,
+			  dataType : "html",
+			  success: function( response ) {
+					$('#results').replaceWith('<div id="results" class="pre-scrollable col-xs-12 col-sm-11">' + response + '</div>');
+			  }
+		  });
+	  });
+  });  
+
+</script>
