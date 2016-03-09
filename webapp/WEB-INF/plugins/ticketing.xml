@@ -127,9 +127,9 @@
     <!-- filters -->
     <filters>
           <filter>
-               <filter-name>ReturnUrlFilter</filter-name>
-               <url-pattern>/jsp/admin/plugins/ticketing/*</url-pattern>
-               <filter-class>fr.paris.lutece.plugins.ticketing.web.filter.ReturnUrlFilter</filter-class>
+               <filter-name>TicketingSessionFilter</filter-name>
+               <url-pattern>/jsp/admin/plugins/*</url-pattern>
+               <filter-class>fr.paris.lutece.plugins.ticketing.web.filter.SessionFilter</filter-class>
           </filter>
     </filters>
 

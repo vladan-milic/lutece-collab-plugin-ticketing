@@ -47,21 +47,22 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 
 /**
- * filter which scan for 360 return url parameter
+ * Filter which manages session for Ticketing plugin
  *
  */
-public class ReturnUrlFilter implements Filter
+public class SessionFilter implements Filter
 {
-    private static final  String PROPERTY_RETURN_URL_PARAMETER_NAME = "ticketing.workflow.redirect.parameterName";
+    private static final String PROPERTY_RETURN_URL_PARAMETER_NAME = "ticketing.workflow.redirect.parameterName";
     private static final String PARAM_RETURN_URL = AppPropertiesService.getProperty( PROPERTY_RETURN_URL_PARAMETER_NAME,
             "return_url" );
 
     @Override
     public void init( FilterConfig filterConfig ) throws ServletException
     {
-
     }
 
     @Override
@@ -69,18 +70,33 @@ public class ReturnUrlFilter implements Filter
         throws IOException, ServletException
     {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+        String url = httpRequest.getRequestURL(  ).toString(  );
 
-        if ( StringUtils.isNotEmpty( (String) request.getParameter( PARAM_RETURN_URL ) ) )
+        if ( url.contains( TicketingConstants.ADMIN_CONTROLLLER_PATH ) )
         {
-            httpRequest.getSession( true )
-                       .setAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL, request.getParameter( PARAM_RETURN_URL ) );
+            if ( StringUtils.isNotEmpty( (String) request.getParameter( PARAM_RETURN_URL ) ) )
+            {
+                httpRequest.getSession( true )
+                           .setAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL,
+                    request.getParameter( PARAM_RETURN_URL ) );
+            }
         }
+        else
+        {
+            // Clean the session
+            HttpSession session = httpRequest.getSession(  );
+            session.removeAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
+            session.removeAttribute( TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
+            session.removeAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET );
+            session.removeAttribute( TicketingConstants.SESSION_VALIDATED_TICKET_FORM );
+            session.removeAttribute( TicketingConstants.SESSION_TICKET_FORM_ERRORS );
+        }
+
         filterChain.doFilter( request, response );
     }
 
     @Override
     public void destroy(  )
     {
-
     }
 }

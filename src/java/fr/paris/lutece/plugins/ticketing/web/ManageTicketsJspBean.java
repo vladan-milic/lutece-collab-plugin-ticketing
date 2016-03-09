@@ -107,6 +107,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     // Parameters
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
     private static final String PARAMETER_GUID = "guid";
+    private static final String PARAMETER_CID = "cid";
+    private static final String PARAMETER_USER_TITLE = "ut";
     private static final String PARAMETER_FIRSTNAME = "fn";
     private static final String PARAMETER_LASTNAME = "ln";
     private static final String PARAMETER_PHONE = "ph";
@@ -187,6 +189,14 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
         TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
 
+        String strRedirectUrl = TicketHelper.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
+
+        if ( ( request.getParameter( TicketingConstants.PARAMETER_BACK ) != null ) &&
+                StringUtils.isNotEmpty( strRedirectUrl ) )
+        {
+            return redirect( request, strRedirectUrl );
+        }
+
         TicketFilter filter = TicketFilterHelper.getFilter( request );
 
         _strCurrentPageIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
@@ -246,6 +256,15 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         TicketFilterHelper.setModel( model, filter, request );
         TicketHelper.storeTicketRightsIntoModel( model, getUser(  ) );
 
+        String messageInfo = TicketHelper.getParameter( request,
+                TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
+
+        if ( StringUtils.isNotEmpty( messageInfo ) )
+        {
+            addInfo( messageInfo );
+            fillCommons( model );
+        }
+
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
     }
 
@@ -304,11 +323,17 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     {
         String strGuid = request.getParameter( PARAMETER_GUID );
         String strCustomerId = request.getParameter( TicketingConstants.PARAMETER_CUSTOMER_ID );
+        String strUserTitle = request.getParameter( PARAMETER_USER_TITLE );
         String strFirstname = request.getParameter( PARAMETER_FIRSTNAME );
         String strLastname = request.getParameter( PARAMETER_LASTNAME );
         String strPhone = request.getParameter( PARAMETER_PHONE );
         String strEmail = request.getParameter( PARAMETER_EMAIL );
         String strCategory = request.getParameter( PARAMETER_CATEGORY );
+
+        if ( !StringUtils.isEmpty( strUserTitle ) )
+        {
+            ticket.setIdUserTitle( Integer.parseInt( strUserTitle ) );
+        }
 
         if ( !StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty( ticket.getFirstname(  ) ) )
         {
@@ -384,27 +409,24 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         doProcessWorkflowAutomaticAction( ticket );
 
-        addInfo( INFO_TICKET_CREATED, getLocale(  ) );
-
         return redirectAfterCreateAction( request );
     }
 
     /**
-     * compture redirection for creation action
+     * Computes redirection for creation action
      * @param request http request
      * @return redirect view
      */
     public String redirectAfterCreateAction( HttpServletRequest request )
     {
-        if ( StringUtils.isNotEmpty( 
-                    (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL ) ) )
-        {
-            String strRedirectUrl = (String) request.getSession(  ).getAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
-            //we remove redirect session attribute before leaving
-            request.getSession(  ).removeAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = TicketHelper.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
 
+        if ( StringUtils.isNotEmpty( strRedirectUrl ) )
+        {
             return redirect( request, strRedirectUrl );
         }
+
+        addInfo( INFO_TICKET_CREATED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETS );
     }

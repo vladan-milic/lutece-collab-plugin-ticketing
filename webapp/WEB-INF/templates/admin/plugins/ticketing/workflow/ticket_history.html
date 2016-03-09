@@ -1,7 +1,7 @@
 <#if history_information_list?has_content>
-
   <div id="ticketing-history-panel" class="row">
     <div class="panel">
+      <#assign defaultUserFrontId=5>
       <#list history_information_list as history_information>
         <p>
           <strong class="text-gru">${history_information.resource_history.creationDate!'Date missing'}</strong> &nbsp;
@@ -21,9 +21,13 @@
             <div class="timeline-item">
               <h4 class="timeline-header">
                 <#if history_information.admin_user_history?exists>
-                  <a href="sip:${history_information.admin_user_history.email}">
-                    <em>&nbsp; ${history_information.admin_user_history.firstName} ${history_information.admin_user_history.lastName}</em>
-                  </a>
+                  <#if history_information.admin_user_history.userId?string != "${defaultUserFrontId}">
+                    <a href="sip:${history_information.admin_user_history.email}">
+	                  <em>&nbsp; ${history_information.admin_user_history.firstName} ${history_information.admin_user_history.lastName}</em>
+	                </a>
+                  <#else>
+                      <em>&nbsp; ${history_information.admin_user_history.firstName} ${history_information.admin_user_history.lastName}</em>
+                  </#if>
                 <#else>
                   &nbsp;#i18n{ticketing.view_ticket_history.admin_user_undefined}
                 </#if>

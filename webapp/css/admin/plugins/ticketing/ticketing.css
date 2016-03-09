@@ -1,54 +1,71 @@
 /*     /\                                                                                    */
-/*   / ! \ WARNING Add styles from plugins GRU is used without plugin-gru !! */
+/*   / ! \ WARNING Add styles from plugins GRU if is used without plugin-gru !! */
 /*  ------                                                                                   */
 /* TICKETING */
-#ticketing-wrapper{ margin:-15px }
+#info-head-right{ border-left: 1px solid #fff; height:215px; margin-top:0 ;padding-top:0 }
+.nav-ticket{ margin-left: 135px }
 
-#ticketing-admin-wrapper{ margin: 15px }
-
-#ticketing-search-wrapper{ margin:-10px 0 }
-#ticketing-search-wrapper #search-header h2{ padding-left: 20px }
-#ticketing-search-wrapper #search-header form{ padding: 20px }
-#ticketing-search-wrapper #search-header form input, #ticketing-search-wrapper #search-header form select{ color: #000 }
-#ticketing-search-wrapper #search-content{ margin:0 30px}
-#ticketing-search-wrapper #search-content ul li.list-group-item:hover{ background-color: #DEDEDE }
-
-#customer-panel #info-head-right{  border-left: 1px solid #fff;height:160px;margin-top:-20px;padding-top:15px }
-#customer-panel #info-head-right>p>i.fa-circle:hover{  cursor: pointer }
-#customer-panel h3 a{ color:#fff; padding-right:15px; font-size: 50%; vertical-align: middle}
-#customer-panel .btn-v360{ color:#BEBEBE; border:1px solid #BEBEBE; border-radius: 4px; margin-left:30px; font-size:1.3rem; padding:5px 25px }
-#customer-panel p{ font-size: 1.6rem }
-#customer-panel p i{ margin-right: 15px }
-#customer-panel p span{ padding:5px 15px; font-size: 1.4rem; font-weight: normal }
-
-#ticketing-panel{ padding: 15px 0; background-color: #F3F7FA; color:#fff; min-height: 800px}
-#ticketing-panel .nav-tabs{ margin-bottom:0; padding-left: 5%}
-#ticketing-panel .nav-tabs > li{ padding-right: 15px; }
-#ticketing-panel .nav-tabs > li a{ border: 1px solid #DDD; text-transform: uppercase; font-size: 1.6rem }
-#ticketing-panel .nav-tabs > li.active > a{ border-bottom:1px solid #fff }
-#ticketing-panel .nav-tabs > li form{ height:45px; padding-top:8px; padding-left:4%; /*width:60%;*/ background-color: #0082D8; border-top-left-radius:6px; border-top-right-radius:6px }
-#ticketing-panel .nav-tabs > li form button{ color:#fff; text-decoration: none; text-transform: uppercase }
-
-#ticketing-panel .tab-content{ margin-left: 0; padding:10px 6%; background-color: #fff }
-#ticketing-panel .tab-content table{ color: #BEBEBE }
-#ticketing-panel .tab-content table tr:hover{ cursor: pointer  }
-#ticketing-panel .tab-content table tr:first-of-type{ background-color: #fff; color: #000  }
-#ticketing-panel .tab-content table th{ border-top: 0; text-transform: uppercase }
-#ticketing-panel .tab-content table td{color: #656565 }
-#ticketing-panel .tab-content table td a{ color: #656565; text-decoration: none}
-
-#detail-panel{ border-left: 1px solid #DDD; min-height:600px; margin-top:-15px; padding:20px 20px; margin-left:-5px }
-#detail-panel p a{ text-align: left !important }
+.ticket-head{ height: 200px !important }
+.ticket-content{ margin: 15px -15px !important }
 
 #ticketing-history-panel{ padding: 15px 0 }
-#ticketing-history-panel .panel{ padding: 15px; background-color: #EEE; width: 98% }
-#ticketing-history-panel .timeline > li > .fa { width: 40px; height: 40px; left: 13px; line-height: 40px}
+#ticketing-history-panel .panel{ padding: 15px; background-color: #EEE; width:98% }
 
-#head-ticketing{ height: 80px; color:#fff; padding:8px 10%; margin-bottom: 20px }
-#content-ticketing{ background-color: #fff; padding:0 10% }
+#head-ticketing{ height: 210px; color:#fff; padding:0 10%  }
+#content-ticketing{ background-color: #fff; color: #000; padding: 0 10% }
 
-#info-right{ border-left: 1px solid #DDD;min-height:600px;margin-top:-15px;padding:20px 20px  }
+#demand-content{ margin-left: 149px }
 
-#ticketing-modal-workflow-action-form .content-header{ display:none; }
-#ticketing-modal-workflow-action-form .content{padding: 0;margin: 0 }
-#ticketing-modal-workflow-action-form textarea{ width:95%; }
+#info-right{ border-left: 1px solid #DDD;min-height:600px;margin-top: -15px; padding:20px 20px  }
+#info-right h5{ color:#808179 }
+
+.avatar-label{ display:inline-block; line-height:40px; vertical-align: middle; margin-left: 5px }
+
+.modal-body>.content-header{ display: none }
+
+/* FILTERS */
+#filter-ticket{ font-size: 1.2rem; color:#000;margin:35px 0 }
+#filter-ticket .form-control{ border-color: #000 }
+#filter-ticket .form-control-static{ text-transform: uppercase }
+#filter-ticket select{ height:28px; min-width:150px; font-weight:normal; padding:1px; margin:0 15px; background: #FFF; color:#000; border: 1px solid "000"; border-radius: 6px;outline:none;display: inline-block;-webkit-appearance:none;-moz-appearance:none;appearance:none;cursor:pointer}
+/* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
+@media screen and (-webkit-min-device-pixel-ratio:0) { #filter select {padding-right: 18px} }
+#filter-ticket label.select{ position:relative }
+#filter-ticket label.select:last-of-type{ margin-right:0 }
+#filter-ticket label.select:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; font-size:20px; right:20px; top:0px; position:absolute; pointer-events:none }
+#filter-ticket .btn{ color:#fff; min-width: 50px }
+
+/*==========  Non-Mobile First Method  ==========*/
+/* Large Devices, Wide Screens */
+@media only screen and (max-width : 1200px) {
+  #demand-panel .nav-ticket{ margin-left: 60px }
+  #demand-panel .nav-ticket > li > a {	padding: 15px 15px;	margin-left: 10px;	text-transform: uppercase;	font-size: 1.3rem;}
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (max-width : 992px) {
+  #demand-panel .nav-ticket > li > a{ padding: 15px 5px; margin-left: 5px; font-size: 1.2rem}
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width : 768px) {
+  .gru-wrapper{ margin: 15px -15px; padding: 0 }
+}
+
+@media screen and (max-width: 560px) {
+    #demand-panel .nav-ticket{ margin-left: 10px }
+    #demand-panel .nav-ticket > li > a { padding: 15px 2px;	margin-left: 0;	font-size: 1rem;}
+    #customer-panel { padding: 15px 0; margin-left: -2px;	height: 150px }
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width : 480px) {
+    .gru-wrapper{ margin:0 -15px; padding: 0 }
+    #demand-panel .nav-ticket{ margin-left: 5px }
+    #demand-panel .nav-ticket > li > a { padding: 15px 2px;	font-size: 0.9rem;}
+}
+
+/* Custom, iPhone Retina */
+@media only screen and (max-width : 320px) {
+
+}

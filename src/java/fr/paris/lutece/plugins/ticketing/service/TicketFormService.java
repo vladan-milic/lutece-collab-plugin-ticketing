@@ -46,6 +46,7 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeSer
 import fr.paris.lutece.plugins.ticketing.business.ResponseRecap;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketForm;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
@@ -100,11 +101,6 @@ public class TicketFormService implements Serializable
     private static final String MARK_UPLOAD_HANDLER = "uploadHandler";
     private static final String MARK_LIST_ERRORS = "listAllErrors";
 
-    // Session keys
-    private static final String SESSION_NOT_VALIDATED_TICKET = "ticketing.ticketFormService.notValidatedTicket";
-    private static final String SESSION_VALIDATED_TICKET_FORM = "ticketing.ticketFormService.validatedTicket";
-    private static final String SESSION_TICKET_FORM_ERRORS = "ticketing.session.formErrors";
-
     // Templates
     private static final String TEMPLATE_DIV_CONDITIONAL_ENTRY = "skin/plugins/ticketing/html_code_div_conditional_entry.html";
 
@@ -157,7 +153,7 @@ public class TicketFormService implements Serializable
         model.put( MARK_TICKET, ticket );
 
         List<GenericAttributeError> listErrors = (List<GenericAttributeError>) request.getSession(  )
-                                                                                      .getAttribute( SESSION_TICKET_FORM_ERRORS );
+                                                                                      .getAttribute( TicketingConstants.SESSION_TICKET_FORM_ERRORS );
 
         model.put( MARK_FORM_ERRORS, listErrors );
         model.put( MARK_LIST_ERRORS, getAllErrors( request ) );
@@ -537,7 +533,7 @@ public class TicketFormService implements Serializable
      */
     public void saveTicketInSession( HttpSession session, Ticket ticket )
     {
-        session.setAttribute( SESSION_NOT_VALIDATED_TICKET, ticket );
+        session.setAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET, ticket );
     }
 
     /**
@@ -547,7 +543,7 @@ public class TicketFormService implements Serializable
      */
     public Ticket getTicketFromSession( HttpSession session )
     {
-        return (Ticket) session.getAttribute( SESSION_NOT_VALIDATED_TICKET );
+        return (Ticket) session.getAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET );
     }
 
     /**
@@ -556,7 +552,7 @@ public class TicketFormService implements Serializable
      */
     public void removeTicketFromSession( HttpSession session )
     {
-        session.removeAttribute( SESSION_NOT_VALIDATED_TICKET );
+        session.removeAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET );
     }
 
     /**
@@ -567,7 +563,7 @@ public class TicketFormService implements Serializable
     public void saveValidatedTicketForm( HttpSession session, Ticket ticketing )
     {
         removeTicketFromSession( session );
-        session.setAttribute( SESSION_VALIDATED_TICKET_FORM, ticketing );
+        session.setAttribute( TicketingConstants.SESSION_VALIDATED_TICKET_FORM, ticketing );
     }
 
     /**
@@ -577,7 +573,7 @@ public class TicketFormService implements Serializable
      */
     public Ticket getValidatedTicketFromSession( HttpSession session )
     {
-        return (Ticket) session.getAttribute( SESSION_VALIDATED_TICKET_FORM );
+        return (Ticket) session.getAttribute( TicketingConstants.SESSION_VALIDATED_TICKET_FORM );
     }
 
     /**
@@ -586,6 +582,6 @@ public class TicketFormService implements Serializable
      */
     public void removeValidatedTicketFromSession( HttpSession session )
     {
-        session.removeAttribute( SESSION_VALIDATED_TICKET_FORM );
+        session.removeAttribute( TicketingConstants.SESSION_VALIDATED_TICKET_FORM );
     }
 }

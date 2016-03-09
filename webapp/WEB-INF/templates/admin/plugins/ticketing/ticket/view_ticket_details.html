@@ -2,69 +2,67 @@
 <#include "/admin/plugins/ticketing/include/popins.html" />
 <#include "view_ticket_header.html" />
 <@ticketHeader tab='details' ticket=ticket />
-<div class="row">
-  <div class="col-xs-12 col-sm-offset-1 col-sm-7">
+<div id="demand-panel" class="row ticket-content">
+  <@messages infos=infos />
+  <div id="demand-content" class="col-xs-12 col-sm-offset-1 col-sm-7">
     <h3 class="text-darkgray">${ticket.dateCreate!''}</h3>
     <#if ticket.ticketComment !=''>
       <div class="text-justify">
         ${ticket.ticketComment}
       </div>
     <#else>
-      <div class="callout callout-warning">
         <p class="lead">
           <i class="fa fa-warning"></i> Pas de commentaire
         </p>
-      </div>
     </#if>
       <#list read_only_reponses_html_list as html_response>
         <#if html_response?has_content>
           ${html_response}
         </#if>
       </#list>
-    </div>
-    <div id="info-right" class="col-xs-12 col-sm-4">
-      <h4 style="color:#808179">Nature de la demande<p>
-      <h4>${ticket.ticketType}</h4>
-      <h4 style="color:#808179">Domaine<h4>
-      <h4>${ticket.ticketDomain}</h4>
-      <h4 style="color:#808179">Cat&eacute;gorie<h4>
-      <h4>${ticket.ticketCategory}</h4>
-
-      <hr>
-      <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
-        <#list ticket.listWorkflowActions as action>
-          <p>
-            <#if action.displayTasksForm>
-                <a class="btn btn-lg btn-primary btn-block bg-gru-light"  href="jsp/admin/plugins/ticketing/Ajax.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}&amp;jsp=${jsp_controller}"
-                    data-remote="false" data-toggle="modal" data-target="#ticketing-modal-workflow-action-form" title="${action.name}">
-                  <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
-                </a>
-            <#else>
-                <a class="btn btn-lg btn-primary btn-block bg-gru-light"  href="jsp/admin/plugins/ticketing/TicketView.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}"
-                    title="${action.name}">
-                  <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
-                </a>
-            </#if>
+  </div>
+  <div id="info-right" class="col-xs-12 col-sm-3">
+    <h5>Nature de la demande<p>
+    <h4>${ticket.ticketType}</h4>
+    <h5>Domaine</h5>
+    <h4>${ticket.ticketDomain}</h4>
+    <h5>Cat&eacute;gorie</h5>
+    <h4>${ticket.ticketCategory}</h4>
+    <hr>
+    <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
+      <#list ticket.listWorkflowActions as action>
+        <p>
+          <#if action.displayTasksForm>
+            <a class="btn btn-lg btn-primary btn-block bg-gru-dark"  href="jsp/admin/plugins/ticketing/Ajax.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}&amp;jsp=${jsp_controller}"
+              data-remote="false" data-toggle="modal" data-title="${action.name}" data-target="#ticketing-modal-workflow-action-form" title="${action.name}">
+              <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
+            </a>
+          <#else>
+            <a class="btn btn-lg btn-primary btn-block bg-gru-dark" data-title="${action.name}" href="jsp/admin/plugins/ticketing/TicketView.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}"
+                title="${action.name}">
+                <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
+            </a>
+          </#if>
           </p>
         </#list>
       </#if>
       <#if ticket_modification_right?? && ticket_modification_right>
-        <p>
-            <a class="btn btn-lg btn-primary btn-block bg-gru-light"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}" title="#i18n{portal.util.labelModify}">
-              <i class="fa fa-pencil"></i>  #i18n{portal.util.labelModify}
-            </a>
-        </p>
-      </#if>
-      <#if ticket_deletion_right?? && ticket_deletion_right>
-          <p>
-            <a class="btn btn-lg btn-primary btn-block bg-gru-light"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}" title="#i18n{portal.util.labelDelete}">
-              <i class="fa fa-trash"></i>  #i18n{portal.util.labelDelete}
-            </a>
-          </p>
-      </#if>
+       <p>
+           <a class="btn btn-lg btn-primary btn-block bg-gru-dark"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}" title="#i18n{portal.util.labelModify}">
+             <i class="fa fa-pencil"></i>  #i18n{portal.util.labelModify}
+           </a>
+       </p>
+     </#if>
+     <#if ticket_deletion_right?? && ticket_deletion_right>
+         <p>
+           <a class="btn btn-lg btn-primary btn-block bg-gru-dark"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}" title="#i18n{portal.util.labelDelete}">
+             <i class="fa fa-trash"></i>  #i18n{portal.util.labelDelete}
+           </a>
+         </p>
+     </#if>
   </div>
 </div>
-
+</div>
 <script>
   $( function(){
     $(".content-header").toggle();

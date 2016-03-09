@@ -44,6 +44,7 @@ import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
 import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -54,11 +55,14 @@ import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.text.MessageFormat;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -76,7 +80,12 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
     private static final String PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ME = "ticketing.workflow.action.id.assignMe";
+
+    // Templates
     private static final String TEMPLATE_RESOURCE_HISTORY = "admin/plugins/ticketing/workflow/ticket_history.html";
+
+    // Infos
+    private static final String INFO_WORKFLOW_ACTION_EXECUTED = "ticketing.info.workflow.action.executed";
 
     static
     {
@@ -301,11 +310,15 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                     {
                         return redirect( request, strError );
                     }
+
+                    addInfoWorkflowAction( request, nIdAction );
                 }
                 else
                 {
                     _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
                         ticketCategory.getId(  ), request, getLocale(  ), false );
+
+                    addInfoWorkflowAction( request, nIdAction );
                 }
             }
             else
@@ -374,6 +387,20 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
         return _workflowService.getDisplayDocumentHistory( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nWorkflowId,
             request, getLocale(  ), TEMPLATE_RESOURCE_HISTORY );
+    }
+
+    /**
+     * Adds information message for workflow action
+     * @param request the request
+     * @param nIdAction the action id
+     */
+    private void addInfoWorkflowAction( HttpServletRequest request, int nIdAction )
+    {
+        IActionService actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
+        Action action = actionService.findByPrimaryKey( nIdAction );
+        String strMessage = MessageFormat.format( I18nService.getLocalizedString( INFO_WORKFLOW_ACTION_EXECUTED,
+                    Locale.FRENCH ), action.getName(  ) );
+        TicketHelper.setParameter( request, TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO, strMessage );
     }
 
     /**
