@@ -1,0 +1,63 @@
+<@rowBox>
+    <@boxHeader i18nTitleKey="ticketing.manage_instantresponses.tableLabel">
+        <@headerButtons>
+
+        
+        <form class="form-inline pull-right" method="post" name="manage_instantresponses" action="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp">
+            <!-- Add pull-right to class1 -->
+            <@actionButtons button1Name="view_createInstantResponse" icon1="icon-plus icon-white" i18nValue1Key="ticketing.manage_instantresponses.buttonAdd" />
+        </form>
+        
+    </@headerButtons>
+    </@boxHeader>
+    <@boxBody>    
+    <@messages infos=infos />
+    <@paginationAdmin paginator=paginator combo=1 />
+    <div class="clearfix"></div>
+    
+    <@table>
+        <tr>
+            <input type="hidden" id="id" name="id"/>
+            <th>#i18n{ticketing.manage_instantresponses.columnIdTicketCategory}</th>
+            <th>#i18n{ticketing.manage_instantresponses.columnSubject}</th>
+            <th>#i18n{ticketing.manage_instantresponses.columnAdminUser}</th>
+            <th>#i18n{portal.util.labelActions}</th>
+        </tr>
+        <@tableHeadBodySeparator />
+            <#list instantresponse_list as instantresponse >
+        <tr>
+            <input type="hidden" id="id" name="id"/>
+            <td>
+                ${instantresponse.type} / ${instantresponse.domain} / ${instantresponse.category}
+            </td>
+            <td>
+                ${instantresponse.subject}
+            </td>
+            <td>
+    		<#if adminAvatar>
+                    <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${instantresponse.idAdminUser}" alt="" title="Avatar">
+                </#if>
+    				    <span class="avatar-label">${instantresponse.userFirstname} ${instantresponse.userLastname}</span>
+    		
+                
+            </td>
+        <td>
+            <a href="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp?view=modifyInstantResponse&id=${instantresponse.id}"
+               class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
+                <i class="fa fa-pencil"></i>
+            </a>
+
+            <a href="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp?action=confirmRemoveInstantResponse&id=${instantresponse.id}"
+               class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
+                <i class="fa fa-trash"></i>
+            </a>
+        </td>
+        </tr>
+        </#list>
+    </@table>
+
+    <@paginationAdmin paginator=paginator />
+
+  </@boxBody>
+</@rowBox>
+

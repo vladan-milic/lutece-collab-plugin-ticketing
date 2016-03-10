@@ -134,5 +134,19 @@ id_domain int(6) NOT NULL,
 PRIMARY KEY (id_support_entity)
 );
 
+--
+-- Structure for table ticketing_instant_response
+--
+
+DROP TABLE IF EXISTS ticketing_instant_response;
+CREATE TABLE ticketing_instant_response (
+id_instant_response int(6) NOT NULL,
+id_ticket_category int(11) NOT NULL default '0',
+subject long varchar NULL ,
+id_admin_user int(11) NOT NULL default '0',
+PRIMARY KEY (id_instant_response)
+);
+
+
 
       
