@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.search;
+package fr.paris.lutece.plugins.ticketing.web.search;
 
 import fr.paris.lutece.portal.service.search.SearchItem;
 
@@ -46,11 +46,16 @@ public class TicketSearchItem extends SearchItem
     public static final String FIELD_CATEGORY = "category";
     public static final String FIELD_REFERENCE = "reference";
     public static final String FIELD_TICKET_ID = "ticket_id";
+    public static final String FIELD_RESPONSE = "ticket_response";
+    public static final String FIELD_TXT_RESPONSE = "ticket_txt_response";
+    public static final String FIELD_COMMENT = "ticket_comment";
 
     // Variables declarations
     private String _strReference;
     private String _strTicketId;
     private String _strCategory;
+    private String _strResponse;
+    private String _strComment;
 
     /**
      * Constructor
@@ -62,6 +67,8 @@ public class TicketSearchItem extends SearchItem
         _strReference = document.get( FIELD_REFERENCE );
         _strTicketId = document.get( FIELD_TICKET_ID );
         _strCategory = document.get( FIELD_CATEGORY );
+        _strResponse = document.get( FIELD_RESPONSE );
+        _strComment = document.get( FIELD_COMMENT );
     }
 
     /**
@@ -110,5 +117,37 @@ public class TicketSearchItem extends SearchItem
     public void setCategory( String strCategory )
     {
         this._strCategory = strCategory;
+    }
+
+    /**
+     * @return the _strResponse
+     */
+    public String getResponse(  )
+    {
+        return _strResponse;
+    }
+
+    /**
+     * @param strResponse the strResponse to set
+     */
+    public void setResponse( String strResponse )
+    {
+        this._strResponse = strResponse;
+    }
+
+    /**
+     * @return the _strComment
+     */
+    public String getComment(  )
+    {
+        return _strComment;
+    }
+
+    /**
+     * @param strComment the strComment to set
+     */
+    public void setComment( String strComment )
+    {
+        this._strComment = strComment;
     }
 }

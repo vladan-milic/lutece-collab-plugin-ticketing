@@ -37,5 +37,5 @@
     <bean id="ticketing.entryTypePhone" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypePhone" />
 
     <!-- Search Engine -->
-    <bean id="ticketing.ticketSearchEngine" class="fr.paris.lutece.plugins.ticketing.search.TicketSearchEngine" />
+    <bean id="ticketing.ticketSearchEngine" class="fr.paris.lutece.plugins.ticketing.web.search.TicketSearchEngine" />
 </beans>

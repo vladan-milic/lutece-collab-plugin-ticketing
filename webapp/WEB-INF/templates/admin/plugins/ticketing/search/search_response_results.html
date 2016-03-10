@@ -1,0 +1,27 @@
+#i18n{ticketing.search_ticket.results}
+<div class="row">
+	<div class="col-xs-12 col-sm-offset-1 col-sm-11">
+	  <@messages errors=errors />
+	</div>
+</div>
+<div id="search-content" class="row">
+	<div class="col-xs-12 col-sm-offset-1 col-sm-11">
+	<#if result?? && result?has_content>
+		<ul class="list-group">
+		  <#list result as ticket>
+			<li class="list-group-item" id="content_response_${ticket.id!}">
+				${ticket.response!}
+			</li>
+			<a id="response_${ticket.id}" name="response_${ticket.id}" class="btn btn-link">ins&eacute;rer cette r&eacute;ponse</a>
+			<br>
+		  </#list>
+		</ul>
+	<#else>
+		<#if !errors?? && !errors?has_content >
+			<br>
+			<div class="callout callout-warning">
+				<h4>#i18n{ticketing.search_ticket.noResult}</h4>
+			</div>
+		</#if>
+	</#if>
+</div>

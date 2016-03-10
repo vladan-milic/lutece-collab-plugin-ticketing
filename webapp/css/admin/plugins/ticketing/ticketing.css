@@ -2,7 +2,6 @@
 /*   / ! \ WARNING Add styles from plugins GRU if is used without plugin-gru !! */
 /*  ------                                                                                   */
 /* TICKETING */
-
 #info-head-right{ border-left: 1px solid #fff; height:215px; margin-top:0 ;padding-top:0 }
 .nav-ticket{ margin-left: 135px }
 
@@ -39,28 +38,31 @@
 /*==========  Non-Mobile First Method  ==========*/
 /* Large Devices, Wide Screens */
 @media only screen and (max-width : 1200px) {
-  .nav-ticket{ margin-left: 60px }
-  .nav-ticket > li > a {	padding: 15px 15px;	margin-left: 10px;	text-transform: uppercase;	font-size: 1.3rem;}
+  #demand-panel .nav-ticket{ margin-left: 60px }
+  #demand-panel .nav-ticket > li > a {	padding: 15px 15px;	margin-left: 10px;	text-transform: uppercase;	font-size: 1.3rem;}
 }
 
 /* Medium Devices, Desktops */
 @media only screen and (max-width : 992px) {
-  .nav-ticket > li > a{ padding: 15px 5px; margin-left: 5px; font-size: 1.2rem}
+  #demand-panel .nav-ticket > li > a{ padding: 15px 5px; margin-left: 5px; font-size: 1.2rem}
 }
 
 /* Small Devices, Tablets */
 @media only screen and (max-width : 768px) {
-  .gru-wrapper{ margin: 15px 0; padding: 0 }
+  .gru-wrapper{ margin: 15px -15px; padding: 0 }
 }
 
 @media screen and (max-width: 560px) {
-    .nav-ticket{ margin-left: 10px }
+    #demand-panel .nav-ticket{ margin-left: 10px }
     #demand-panel .nav-ticket > li > a { padding: 15px 2px;	margin-left: 0;	font-size: 1rem;}
     #customer-panel { padding: 15px 0; margin-left: -2px;	height: 150px }
 }
 
 /* Extra Small Devices, Phones */
 @media only screen and (max-width : 480px) {
+    .gru-wrapper{ margin:0 -15px; padding: 0 }
+    #demand-panel .nav-ticket{ margin-left: 5px }
+    #demand-panel .nav-ticket > li > a { padding: 15px 2px;	font-size: 0.9rem;}
 }
 
 /* Custom, iPhone Retina */
