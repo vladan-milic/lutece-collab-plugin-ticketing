@@ -31,8 +31,6 @@
  *
  * License 1.0
  */
-
- 
 package fr.paris.lutece.plugins.ticketing.web;
 
 import fr.paris.lutece.plugins.ticketing.business.InstantResponse;
@@ -52,16 +50,17 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
-import java.sql.Timestamp;
-import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.sql.Timestamp;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 
 /**
  * This class provides the user interface to manage InstantResponse features ( manage, create, modify, remove )
@@ -69,7 +68,6 @@ import org.apache.commons.lang.StringUtils;
 @Controller( controllerJsp = "ManageInstantResponses.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = "TICKETING_INSTANT_RESPONSE_MANAGEMENT" )
 public class InstantResponseJspBean extends MVCAdminJspBean
 {
-
     ////////////////////////////////////////////////////////////////////////////
     // Constants
 
@@ -77,7 +75,6 @@ public class InstantResponseJspBean extends MVCAdminJspBean
     private static final String TEMPLATE_MANAGE_INSTANT_RESPONSES = "/admin/plugins/ticketing/instantresponse/manage_instant_responses.html";
     private static final String TEMPLATE_CREATE_INSTANT_RESPONSE = "/admin/plugins/ticketing/instantresponse/create_instant_response.html";
     private static final String TEMPLATE_MODIFY_INSTANT_RESPONSE = "/admin/plugins/ticketing/instantresponse/modify_instant_response.html";
-
 
     // Parameters
     private static final String PARAMETER_ID_INSTANT_RESPONSE = "id";
@@ -94,13 +91,11 @@ public class InstantResponseJspBean extends MVCAdminJspBean
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
     private static final String MARK_ADMIN_AVATAR = "adminAvatar";
-
     private static final String JSP_MANAGE_INSTANT_RESPONSES = "jsp/admin/plugins/ticketing/ManageInstantResponses.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_INSTANT_RESPONSE = "ticketing.message.confirmRemoveInstantResponse";
     private static final String PROPERTY_DEFAULT_LIST_INSTANT_RESPONSE_PER_PAGE = "ticketing.listInstantResponses.itemsPerPage";
- 
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.instantresponse.attribute.";
 
     // Views
@@ -118,24 +113,23 @@ public class InstantResponseJspBean extends MVCAdminJspBean
     private static final String INFO_INSTANT_RESPONSE_CREATED = "ticketing.info.instantresponse.created";
     private static final String INFO_INSTANT_RESPONSE_UPDATED = "ticketing.info.instantresponse.updated";
     private static final String INFO_INSTANT_RESPONSE_REMOVED = "ticketing.info.instantresponse.removed";
-    
-    // Session variable to store working values
-    private InstantResponse _instantresponse;
-    
+
     // Right
     public static final String RIGHT_MANAGEINSTANTRESPONSE = "TICKETING_INSTANT_RESPONSE_MANAGEMENT";
-    
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
+    private static boolean _bAdminAvatar = PluginService.isPluginEnable( "adminavatar" );
+
+    // Session variable to store working values
+    private InstantResponse _instantresponse;
 
     //Variables
     private int _nDefaultItemsPerPage;
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
-    
-    private static boolean _bAdminAvatar = PluginService.isPluginEnable( "adminavatar");
+
     /**
      * Return a model that contains the list and paginator infos
      * @param request The HTTP request
@@ -166,7 +160,8 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         model.put( strBookmark, paginator.getPageItems(  ) );
 
         return model;
-    }    
+    }
+
     /**
      * Build the Manage View
      * @param request The HTTP request
@@ -184,12 +179,13 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         {
             return redirect( request, strRedirectUrl );
         }
-        
+
         List<InstantResponse> listInstantResponses = InstantResponseHome.getInstantResponsesList(  );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_INSTANT_RESPONSE_LIST, listInstantResponses, JSP_MANAGE_INSTANT_RESPONSES );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_INSTANT_RESPONSE_LIST, listInstantResponses,
+                JSP_MANAGE_INSTANT_RESPONSES );
 
         model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
-        
+
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_INSTANT_RESPONSES, TEMPLATE_MANAGE_INSTANT_RESPONSES, model );
     }
 
@@ -229,11 +225,12 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         {
             return redirectView( request, VIEW_CREATE_INSTANT_RESPONSE );
         }
-        int nUserId = getUser().getUserId();
+
+        int nUserId = getUser(  ).getUserId(  );
         _instantresponse.setIdAdminUser( nUserId );
-        _instantresponse.setIdUnit( UnitHome.findByIdUser( nUserId ).get( 0 ).getIdUnit() );
-        _instantresponse.setDateCreate( new Timestamp( ( new Date() ).getTime() ) );
-        
+        _instantresponse.setIdUnit( UnitHome.findByIdUser( nUserId ).get( 0 ).getIdUnit(  ) );
+        _instantresponse.setDateCreate( new Timestamp( ( new Date(  ) ).getTime(  ) ) );
+
         InstantResponseHome.create( _instantresponse );
 
         return redirectAfterCreateAction( request );
@@ -286,7 +283,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_INSTANT_RESPONSE ) );
 
-        if ( _instantresponse == null || ( _instantresponse.getId(  ) != nId ))
+        if ( ( _instantresponse == null ) || ( _instantresponse.getId(  ) != nId ) )
         {
             _instantresponse = InstantResponseHome.findByPrimaryKey( nId );
         }
@@ -311,7 +308,8 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         // Check constraints
         if ( !validateBean( _instantresponse, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect( request, VIEW_MODIFY_INSTANT_RESPONSE, PARAMETER_ID_INSTANT_RESPONSE, _instantresponse.getId( ) );
+            return redirect( request, VIEW_MODIFY_INSTANT_RESPONSE, PARAMETER_ID_INSTANT_RESPONSE,
+                _instantresponse.getId(  ) );
         }
 
         InstantResponseHome.update( _instantresponse );
@@ -319,7 +317,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
 
         return redirectView( request, VIEW_MANAGE_INSTANT_RESPONSES );
     }
-    
+
     /**
      * Computes redirection for creation action
      * @param request http request

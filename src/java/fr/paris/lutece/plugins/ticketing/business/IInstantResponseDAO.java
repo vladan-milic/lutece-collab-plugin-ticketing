@@ -31,12 +31,11 @@
  *
  * License 1.0
  */
- 
 package fr.paris.lutece.plugins.ticketing.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import java.util.List;
 
+import java.util.List;
 
 
 /**
@@ -82,7 +81,7 @@ public interface IInstantResponseDAO
      * @return The collection which contains the data of all the instantResponse objects
      */
     List<InstantResponse> selectInstantResponsesList( Plugin plugin );
-    
+
     /**
      * Load the id of all the instantResponse objects and returns them as a collection
      * @param plugin the Plugin
@@ -90,4 +89,3 @@ public interface IInstantResponseDAO
      */
     List<Integer> selectIdInstantResponsesList( Plugin plugin );
 }
-

@@ -131,7 +131,6 @@ public class TicketSearchJspBean extends MVCAdminJspBean
         return getPage( SearchConstants.PROPERTY_PAGE_TITLE_TICKET_SEARCH, TEMPLATE_SEARCH_TICKET, model );
     }
 
-
     /**
      * returns criteria reference list
      * @param locale the locale used to retrieve the localized messages

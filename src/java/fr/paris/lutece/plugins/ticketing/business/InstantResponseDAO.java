@@ -31,7 +31,6 @@
  *
  * License 1.0
  */
-
 package fr.paris.lutece.plugins.ticketing.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -40,10 +39,10 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * This class provides Data Access methods for InstantResponse objects
  */
-
 public final class InstantResponseDAO implements IInstantResponseDAO
 {
     // Constants
@@ -52,7 +51,7 @@ public final class InstantResponseDAO implements IInstantResponseDAO
     private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_instant_response ( id_instant_response, id_ticket_category, subject, id_admin_user, id_unit, date_create ) VALUES ( ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_instant_response WHERE id_instant_response = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_instant_response SET id_instant_response = ?, id_ticket_category = ?, subject = ?, id_admin_user = ?, id_unit = ? WHERE id_instant_response = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_instant_response, a.id_ticket_category, b.label, c.label, d.label, a.subject, a.date_create, a.id_admin_user , e.first_name , e.last_name, a.id_unit, f.label " +    
+    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_instant_response, a.id_ticket_category, b.label, c.label, d.label, a.subject, a.date_create, a.id_admin_user , e.first_name , e.last_name, a.id_unit, f.label " +
         " FROM ticketing_instant_response a, ticketing_ticket_category b, ticketing_ticket_domain c , ticketing_ticket_type d, core_admin_user e, unittree_unit f " +
         " WHERE a.id_ticket_category = b.id_ticket_category AND b.id_ticket_domain = c.id_ticket_domain AND c.id_ticket_type = d.id_ticket_type AND a.id_admin_user = e.id_user AND a.id_unit = f.id_unit";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_instant_response FROM ticketing_instant_response";
@@ -62,19 +61,19 @@ public final class InstantResponseDAO implements IInstantResponseDAO
      * @param plugin The Plugin
      * @return The new primary key
      */
-    public int newPrimaryKey( Plugin plugin)
+    public int newPrimaryKey( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK , plugin  );
-        daoUtil.executeQuery( );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
+        daoUtil.executeQuery(  );
 
         int nKey = 1;
 
-        if( daoUtil.next( ) )
+        if ( daoUtil.next(  ) )
         {
-                nKey = daoUtil.getInt( 1 ) + 1;
+            nKey = daoUtil.getInt( 1 ) + 1;
         }
 
-        daoUtil.free();
+        daoUtil.free(  );
 
         return nKey;
     }
@@ -90,16 +89,16 @@ public final class InstantResponseDAO implements IInstantResponseDAO
         instantResponse.setId( newPrimaryKey( plugin ) );
 
         int nIndex = 1;
-        daoUtil.setInt( nIndex++ , instantResponse.getId( ) );
-        
-        daoUtil.setInt( nIndex++ , instantResponse.getIdTicketCategory( ) );
-        daoUtil.setString( nIndex++ , instantResponse.getSubject( ) );
-        daoUtil.setInt( nIndex++ , instantResponse.getIdAdminUser( ) );
-        daoUtil.setInt( nIndex++ , instantResponse.getIdUnit() );
-        daoUtil.setTimestamp( nIndex++ , instantResponse.getDateCreate() );
+        daoUtil.setInt( nIndex++, instantResponse.getId(  ) );
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.setInt( nIndex++, instantResponse.getIdTicketCategory(  ) );
+        daoUtil.setString( nIndex++, instantResponse.getSubject(  ) );
+        daoUtil.setInt( nIndex++, instantResponse.getIdAdminUser(  ) );
+        daoUtil.setInt( nIndex++, instantResponse.getIdUnit(  ) );
+        daoUtil.setTimestamp( nIndex++, instantResponse.getDateCreate(  ) );
+
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -109,22 +108,23 @@ public final class InstantResponseDAO implements IInstantResponseDAO
     public InstantResponse load( int nKey, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.setInt( 1 , nKey );
-        daoUtil.executeQuery( );
+        daoUtil.setInt( 1, nKey );
+        daoUtil.executeQuery(  );
 
         InstantResponse instantResponse = null;
 
-        if ( daoUtil.next( ) )
+        if ( daoUtil.next(  ) )
         {
             int nIndex = 1;
-            instantResponse = new InstantResponse();
+            instantResponse = new InstantResponse(  );
             instantResponse.setId( daoUtil.getInt( nIndex++ ) );
             instantResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
             instantResponse.setSubject( daoUtil.getString( nIndex++ ) );
             instantResponse.setIdAdminUser( daoUtil.getInt( nIndex++ ) );
         }
 
-        daoUtil.free( );
+        daoUtil.free(  );
+
         return instantResponse;
     }
 
@@ -135,9 +135,9 @@ public final class InstantResponseDAO implements IInstantResponseDAO
     public void delete( int nKey, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1 , nKey );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        daoUtil.setInt( 1, nKey );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -147,17 +147,17 @@ public final class InstantResponseDAO implements IInstantResponseDAO
     public void store( InstantResponse instantResponse, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        
-        int nIndex = 1;
-        daoUtil.setInt( nIndex++ , instantResponse.getId( ) );
-        daoUtil.setInt( nIndex++ , instantResponse.getIdTicketCategory( ) );
-        daoUtil.setString( nIndex++ , instantResponse.getSubject( ) );
-        daoUtil.setInt( nIndex++ , instantResponse.getIdAdminUser( ) );
-        daoUtil.setInt( nIndex++ , instantResponse.getIdUnit() );
-        daoUtil.setInt( nIndex , instantResponse.getId( ) );
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        int nIndex = 1;
+        daoUtil.setInt( nIndex++, instantResponse.getId(  ) );
+        daoUtil.setInt( nIndex++, instantResponse.getIdTicketCategory(  ) );
+        daoUtil.setString( nIndex++, instantResponse.getSubject(  ) );
+        daoUtil.setInt( nIndex++, instantResponse.getIdAdminUser(  ) );
+        daoUtil.setInt( nIndex++, instantResponse.getIdUnit(  ) );
+        daoUtil.setInt( nIndex, instantResponse.getId(  ) );
+
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     /**
@@ -180,7 +180,7 @@ public final class InstantResponseDAO implements IInstantResponseDAO
             instantResponse.setDomain( daoUtil.getString( nIndex++ ) );
             instantResponse.setType( daoUtil.getString( nIndex++ ) );
             instantResponse.setSubject( daoUtil.getString( nIndex++ ) );
-            instantResponse.setDateCreate( daoUtil.getTimestamp( nIndex++ ));
+            instantResponse.setDateCreate( daoUtil.getTimestamp( nIndex++ ) );
             instantResponse.setIdAdminUser( daoUtil.getInt( nIndex++ ) );
             instantResponse.setUserFirstname( daoUtil.getString( nIndex++ ) );
             instantResponse.setUserLastname( daoUtil.getString( nIndex++ ) );
@@ -190,26 +190,28 @@ public final class InstantResponseDAO implements IInstantResponseDAO
             instantResponseList.add( instantResponse );
         }
 
-        daoUtil.free( );
+        daoUtil.free(  );
+
         return instantResponseList;
     }
-    
+
     /**
      * {@inheritDoc }
      */
     @Override
     public List<Integer> selectIdInstantResponsesList( Plugin plugin )
     {
-            List<Integer> instantResponseList = new ArrayList<Integer>( );
-            DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
-            daoUtil.executeQuery(  );
+        List<Integer> instantResponseList = new ArrayList<Integer>(  );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
+        daoUtil.executeQuery(  );
 
-            while ( daoUtil.next(  ) )
-            {
-                instantResponseList.add( daoUtil.getInt( 1 ) );
-            }
+        while ( daoUtil.next(  ) )
+        {
+            instantResponseList.add( daoUtil.getInt( 1 ) );
+        }
 
-            daoUtil.free( );
-            return instantResponseList;
+        daoUtil.free(  );
+
+        return instantResponseList;
     }
 }

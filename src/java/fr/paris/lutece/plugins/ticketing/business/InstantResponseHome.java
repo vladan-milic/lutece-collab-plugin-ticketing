@@ -31,22 +31,21 @@
  *
  * License 1.0
  */
- 
 package fr.paris.lutece.plugins.ticketing.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+
 import java.util.List;
+
 
 /**
  * This class provides instances management methods (create, find, ...) for InstantResponse objects
  */
-
 public final class InstantResponseHome
 {
     // Static variable pointed at the DAO instance
-
     private static IInstantResponseDAO _dao = SpringContextService.getBean( "ticketing.instantResponseDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
@@ -100,25 +99,24 @@ public final class InstantResponseHome
      */
     public static InstantResponse findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, _plugin);
+        return _dao.load( nKey, _plugin );
     }
 
     /**
      * Load the data of all the instantResponse objects and returns them in form of a collection
      * @return the collection which contains the data of all the instantResponse objects
      */
-    public static List<InstantResponse> getInstantResponsesList( )
+    public static List<InstantResponse> getInstantResponsesList(  )
     {
         return _dao.selectInstantResponsesList( _plugin );
     }
-    
+
     /**
      * Load the id of all the instantResponse objects and returns them in form of a collection
      * @return the collection which contains the id of all the instantResponse objects
      */
-    public static List<Integer> getIdInstantResponsesList( )
+    public static List<Integer> getIdInstantResponsesList(  )
     {
         return _dao.selectIdInstantResponsesList( _plugin );
     }
 }
-
