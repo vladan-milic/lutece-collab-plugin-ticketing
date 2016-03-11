@@ -61,6 +61,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 
 /**
  * This class provides the user interface to manage InstantResponse features ( manage, create, modify, remove )
@@ -175,6 +176,15 @@ public class InstantResponseJspBean extends MVCAdminJspBean
     public String getManageInstantResponses( HttpServletRequest request )
     {
         _instantresponse = null;
+
+        String strRedirectUrl = TicketHelper.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
+
+        if ( ( request.getParameter( TicketingConstants.PARAMETER_BACK ) != null ) &&
+                StringUtils.isNotEmpty( strRedirectUrl ) )
+        {
+            return redirect( request, strRedirectUrl );
+        }
+        
         List<InstantResponse> listInstantResponses = InstantResponseHome.getInstantResponsesList(  );
         Map<String, Object> model = getPaginatedListModel( request, MARK_INSTANT_RESPONSE_LIST, listInstantResponses, JSP_MANAGE_INSTANT_RESPONSES );
 
@@ -225,9 +235,8 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         _instantresponse.setDateCreate( new Timestamp( ( new Date() ).getTime() ) );
         
         InstantResponseHome.create( _instantresponse );
-        addInfo( INFO_INSTANT_RESPONSE_CREATED, getLocale(  ) );
 
-        return redirectView( request, VIEW_MANAGE_INSTANT_RESPONSES );
+        return redirectAfterCreateAction( request );
     }
 
     /**
@@ -307,6 +316,25 @@ public class InstantResponseJspBean extends MVCAdminJspBean
 
         InstantResponseHome.update( _instantresponse );
         addInfo( INFO_INSTANT_RESPONSE_UPDATED, getLocale(  ) );
+
+        return redirectView( request, VIEW_MANAGE_INSTANT_RESPONSES );
+    }
+    
+    /**
+     * Computes redirection for creation action
+     * @param request http request
+     * @return redirect view
+     */
+    private String redirectAfterCreateAction( HttpServletRequest request )
+    {
+        String strRedirectUrl = TicketHelper.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
+
+        if ( StringUtils.isNotEmpty( strRedirectUrl ) )
+        {
+            return redirect( request, strRedirectUrl );
+        }
+
+        addInfo( INFO_INSTANT_RESPONSE_CREATED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_INSTANT_RESPONSES );
     }
