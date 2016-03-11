@@ -16,7 +16,6 @@
       			<th>#i18n{ticketing.manage_tickets.columnOpenPeriod} <@sortColumn field='date_create'/></th>
       			<th>#i18n{ticketing.manage_tickets.columnTicketType} <@sortColumn field='category_label'/></th>
       			<th>#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment} <@sortColumn field='lastname'/></th>
-      			<th>#i18n{ticketing.manage_tickets.columnTicketStatus} <@sortColumn field='ticket_status_text'/></th>
       			<th>#i18n{ticketing.manage_tickets.columnTicketState} <@sortColumn field='state'/></th>
       			<th><!-- #i18n{ticketing.manage_tickets.columnTicketAssignee}--> Assignation <@sortColumn field='assignee'/></th>
       		  </tr>
@@ -55,17 +54,6 @@
             <div class="ticket-comments">
     				  ${ticket.ticketComment}
             </div>
-    			  </td>
-    			  <td>
-    				<#switch ticket.ticketStatus>
-    				  <#case 0>
-    					En cours
-    				  <#break>
-    				  <#case 1>
-    					Termin&eacute;e
-    				  <#break>
-    				</#switch>
-    				${ticket.ticketStatusText!''}
     			  </td>
     			  <td><#if ticket.state?? && ticket.state.name??>
     				${ticket.state.name!''}
@@ -126,17 +114,17 @@
     <div class="col-xs-12 col-sm-12">
     <ul class="nav nav-tabs nav-ticket">
       <li role="presentation" <#if !selected_tab?? || ( selected_tab?? && selected_tab=="agent") > class="active" </#if> >
-        <a href="#agent" onclick="setSelectedTab('agent')" aria-controls="agent" role="tab" data-toggle="tab">
+        <a href="#" onclick="setSelectedTab('agent')" aria-controls="agent" role="tab" data-toggle="tab">
           <i class="fa fa-inbox"></i> Mes demandes <span class="label label-default">${nb_ticket_agent}</span>
         </a>
       </li>
       <li role="presentation" <#if selected_tab?? && selected_tab == "group"> class="active" </#if> >
-        <a href="#group" onclick="setSelectedTab('group')" aria-controls="group" role="tab" data-toggle="tab">
+        <a href="#" onclick="setSelectedTab('group')" aria-controls="group" role="tab" data-toggle="tab">
           <i class="fa fa-users"></i> Mon &eacute;quipe <span class="label label-default">${nb_ticket_group!}</span>
         </a>
       </li>
       <li role="presentation" <#if selected_tab?? && selected_tab == "domain"> class="active" </#if> >
-        <a href="#domain" onclick="setSelectedTab('domain')"  aria-controls="domain" role="tab" data-toggle="tab" >
+        <a href="#" onclick="setSelectedTab('domain')"  aria-controls="domain" role="tab" data-toggle="tab" >
           <i class="fa fa-tags"></i> Mon domaine <span class="label label-default">${nb_ticket_domain!}</span>
         </a>
       </li>

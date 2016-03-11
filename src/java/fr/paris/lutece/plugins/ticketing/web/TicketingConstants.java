@@ -101,6 +101,7 @@ public final class TicketingConstants
     public static final String JSP_MANAGE_TICKETS = "ManageTickets.jsp";
     public static final String JSP_VIEW_TICKET = "TicketView.jsp";
     public static final String ROLE_GRU_ADMIN = "gru_admin";
+    public static final String ROLE_LEVEL_3 = "gru_level_3";
 
     /**
      * Default constructor

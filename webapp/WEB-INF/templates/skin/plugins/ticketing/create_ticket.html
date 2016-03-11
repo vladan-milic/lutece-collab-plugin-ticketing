@@ -12,77 +12,77 @@
             <input type="hidden" id="id" name="id"/>  
             <input type="hidden" id="guid" name="guid" value="${ticket.guid!}"/>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="id_user_title" >#i18n{ticketing.xpage.create_ticket.labelIdUserTitle} * :</label>
+                <label class="col-sm-3 control-label" for="id_user_title" >#i18n{ticketing.xpage.create_ticket.labelIdUserTitle}&#8239;*&#8239;:</label>
                 <div class="col-sm-9">
                     <@comboWithParams name="id_user_title" default_value="${civilityName!''}"  additionalParameters="class=\"form-control\""  items=user_titles_list />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdUserTitle.help}</span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="lastname" >#i18n{ticketing.xpage.create_ticket.labelLastname} * :</label>
+                <label class="col-sm-3 control-label" for="lastname" >#i18n{ticketing.xpage.create_ticket.labelLastname}&#8239;*&#8239;:</label>
                 <div class="col-sm-9">
                     <input class="form-control" type="text" id="lastname" name="lastname" value="${ticket.lastname!''}"  maxlength="50" tabindex="3" />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelLastname.help}</span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="firstname" >#i18n{ticketing.xpage.create_ticket.labelFirstname} * :</label>
+                <label class="col-sm-3 control-label" for="firstname" >#i18n{ticketing.xpage.create_ticket.labelFirstname}&#8239;*&#8239;:</label>
                 <div class="col-sm-9">
                     <input class="form-control" type="text" id="firstname" name="firstname" value="${ticket.firstname!}"  maxlength="50" tabindex="2" />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelFirstname.help}</span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="email" >#i18n{ticketing.xpage.create_ticket.labelEmail} * :</label>
+                <label class="col-sm-3 control-label" for="email" >#i18n{ticketing.xpage.create_ticket.labelEmail}&#8239;*&#8239;:</label>
                 <div class="col-sm-9">
                     <input class="form-control" type="text" id="email" name="email" value="${ticket.email!''}"  maxlength="255" tabindex="4" />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelEmail.help}</span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="fixed_phone_number" >#i18n{ticketing.xpage.create_ticket.labelFixedPhoneNumber} :</label>
+                <label class="col-sm-3 control-label" for="fixed_phone_number" >#i18n{ticketing.xpage.create_ticket.labelFixedPhoneNumber}&#8239;:</label>
                 <div class="col-sm-9">
                     <input class="form-control input-phone" type="text" id="fixed_phone_number" name="fixed_phone_number" value="${ticket.fixedPhoneNumber!''}"  maxlength="50" tabindex="5" />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="mobile_phone_number" >#i18n{ticketing.xpage.create_ticket.labelMobilePhoneNumber} :</label>
+                <label class="col-sm-3 control-label" for="mobile_phone_number" >#i18n{ticketing.xpage.create_ticket.labelMobilePhoneNumber}&#8239;:</label>
                 <div class="col-sm-9">
                     <input class="form-control input-phone" type="text" id="mobile_phone_number" name="mobile_phone_number" value="${ticket.mobilePhoneNumber!''}"  maxlength="50" tabindex="5" />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="id_ticket_type" >#i18n{ticketing.xpage.create_ticket.labelTicketType} * :</label>
+                <label class="col-sm-3 control-label" for="id_ticket_type" >#i18n{ticketing.xpage.create_ticket.labelTicketType}&#8239;*&#8239;:</label>
                 <div class="col-sm-9">
                     <@comboWithParams name="id_ticket_type" default_value="${ticket.idTicketType!''}"  additionalParameters="class=\"form-control\""  items=ticket_types_list />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdTicketType.help}</span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="id_ticket_domain" >#i18n{ticketing.xpage.create_ticket.labelTicketDomain} * :</label>
+                <label class="col-sm-3 control-label" for="id_ticket_domain" >#i18n{ticketing.xpage.create_ticket.labelTicketDomain}&#8239;*&#8239;:</label>
                 <div class="col-sm-9">
                     <@comboWithParams name="id_ticket_domain" default_value="${ticket.idTicketDomain!''}"  additionalParameters="class=\"form-control\""  items=ticket_domains_list />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdTicketDomain.help}</span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="id_ticket_category" >#i18n{ticketing.xpage.create_ticket.labelTicketCategory} * :</label>
+                <label class="col-sm-3 control-label" for="id_ticket_category" >#i18n{ticketing.xpage.create_ticket.labelTicketCategory}&#8239;*&#8239;:</label>
                 <div class="col-sm-9">
                     <@comboWithParams name="id_ticket_category" default_value="${ticket.idTicketCategory!''}"  additionalParameters="class=\"form-control\""  items=ticket_categories_list />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdTicketCategory.help}</span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="id_contact_mode" >#i18n{ticketing.xpage.create_ticket.labelContactMode} * :</label>
+                <label class="col-sm-3 control-label" for="id_contact_mode" >#i18n{ticketing.xpage.create_ticket.labelContactMode}&#8239;*&#8239;:</label>
                 <div class="col-sm-9">
                     <@comboWithParams name="id_contact_mode" default_value="${ticket.idContactMode!''}"  additionalParameters="class=\"form-control\""  items=contact_modes_list />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelContactMode.help}</span>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="ticket_comment" >#i18n{ticketing.xpage.create_ticket.labelTicketComment} :</label>
+                <label class="col-sm-3 control-label" for="ticket_comment" >#i18n{ticketing.xpage.create_ticket.labelTicketComment}&#8239;:</label>
                 <div class="col-sm-9">
                     <textarea class="form-control" id="ticket_comment" name="ticket_comment" >${ticket.ticketComment!''} </textarea>
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelTicketComment.help}</span>

@@ -1,4 +1,4 @@
-<@rowBoxHeader i18nTitleKey="ticketing.recap_ticket.pageTitle">
+<@rowBoxHeader i18nTitleKey="ticketing.xpage.recap_ticket.pageTitle">
     <form class="form-horizontal" role="form" method="post" action="jsp/site/Portal.jsp?page=ticket">
         <@messages errors=errors />
         <input type="hidden" id="id" name="id" value="${ticket.id}"/>
@@ -20,7 +20,7 @@
 	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelTicketComment">${ticket.ticketComment!''}</@fieldStaticText>
              <#list response_recap_list as response>
                 <div class="form-group">
-                     <label for="title" class="col-xs-12 col-sm-3 control-label">${response.title} : </label>
+                     <label for="title" class="col-xs-12 col-sm-3 control-label">${response.title}&#8239;:&#8239;</label>
                      <div class="col-xs-12 col-sm-9">
                         <p class="form-control-static">
                             ${response.valuesToString!''}

@@ -23,15 +23,15 @@
             </#if>
           </div>
           <div class="form-group">
-            <label for="firstname">#i18n{ticketing.create_ticket.labelFirstname} *</label>
+            <label for="firstname">#i18n{ticketing.create_ticket.labelFirstname}&#8239;*</label>
             <p class="form-control-static">${ticket.firstname!''}</p>
           </div>
           <div class="form-group">
-            <label for="lastname">#i18n{ticketing.create_ticket.labelLastname} *</label>
+            <label for="lastname">#i18n{ticketing.create_ticket.labelLastname}&#8239;*</label>
             <p class="form-control-static">${ticket.lastname!''}</p>
           </div>
           <div class="form-group">
-            <label for="email">#i18n{ticketing.create_ticket.labelEmail} *</label>
+            <label for="email">#i18n{ticketing.create_ticket.labelEmail}&#8239;*</label>
             <p class="form-control-static">${ticket.email!''}</p>
           </div>
           <div class="form-group">
@@ -70,7 +70,7 @@
         <div class="col-xs-12 col-sm-12">
           <#list response_recap_list as response>
             <div class="form-group">
-              <label for="title" class="col-xs-12 col-sm-3 control-label">${response.title} : </label>
+              <label for="title" class="col-xs-12 col-sm-3 control-label">${response.title}&#8239;: </label>
              <p class="form-control-static">${response.valuesToString!''}</p>
             </div>
           </#list>

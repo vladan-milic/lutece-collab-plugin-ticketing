@@ -3,7 +3,7 @@
   <div id="customer-panel" class="row ticket-head bg-gru-light">
     <div class="col-xs-12 col-sm-offset-1 col-sm-10">
       <h2>#i18n{ticketing.create_ticket.pageTitle}</h2>
-      <h3>Ajout d'une fiche</h3>
+      <h3>#i18n{ticketing.create_ticket.title}</h3>
       <h2>
         <a class="btn btn-border" href="jsp/admin/plugins/ticketing/ManageTickets.jsp?plugin_name=ticketing" >
           <i class="fa fa-arrow-left"></i> Retour
@@ -25,15 +25,15 @@
             <@comboWithParams name="id_user_title" default_value="${ticket.idUserTitle!''}" additionalParameters=" id=\"id_user_title\" class=\"form-control input-lg\" " items=user_titles_list />
           </div>
           <div class="form-group">
-            <label for="firstname">#i18n{ticketing.create_ticket.labelFirstname} *</label>
+            <label for="firstname">#i18n{ticketing.create_ticket.labelFirstname}&#8239;*</label>
             <input type="text" name="firstname" id="firstname" class="form-control input-lg" value="${ticket.firstname!''}">
           </div>
           <div class="form-group">
-            <label for="lastname">#i18n{ticketing.create_ticket.labelLastname} *</label>
+            <label for="lastname">#i18n{ticketing.create_ticket.labelLastname}&#8239;*</label>
             <input type="text" name="lastname" id="lastname" class="form-control input-lg" value="${ticket.lastname!''}">
           </div>
           <div class="form-group">
-            <label for="email">#i18n{ticketing.create_ticket.labelEmail} *</label>
+            <label for="email">#i18n{ticketing.create_ticket.labelEmail}&#8239;*</label>
             <input type="text" name="email" id="email" class="form-control input-lg" value="${ticket.email!''}">
           </div>
           <div class="form-group">
