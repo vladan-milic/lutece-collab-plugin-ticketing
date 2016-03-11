@@ -67,6 +67,34 @@
             <@comboWithParams name="id_contact_mode" default_value="${ticket.idContactMode!''}" additionalParameters=" id=\"id_contact_mode\" class=\"form-control input-lg\" " items=contact_modes_list />
           </div>
           <div class="form-group">
+            <label for="id_channel">#i18n{ticketing.create_ticket.labelChannel}</label>
+              <select id="id_channel" name="id_channel" class="form-control">
+                <#if selectable_id_channel_list?? && selectable_id_channel_list?has_content>
+	              <#list channels_list as channel>
+	                <#assign is_selectable = false>
+	                <#if selectable_id_channel_list?? && selectable_id_channel_list?has_content>
+	                  <#list selectable_id_channel_list as selectable_channel_id>
+	                    <#if "${channel.code}" == "${selectable_channel_id}">
+	                       <#assign is_selectable = true>
+	                    </#if>
+	                  </#list>
+	                </#if>
+	                <#if is_selectable == true>
+	                  <#if "${channel.code}" == "${preferred_id_channel}">
+	                    <option selected="selected" value="${channel.code}" >${channel.name}</option>
+	                  <#else>
+	                    <option value="${channel.code}" >${channel.name}</option>
+	                  </#if>
+	                </#if>
+	              </#list>
+                <#else>
+                  <#list channels_list as channel>
+                    <option value="${channel.code}" >${channel.name}</option>
+                  </#list>
+                </#if>
+              </select>
+          </div>
+          <div class="form-group">
             <label for="ticket_comment">#i18n{ticketing.create_ticket.labelTicketComment}</label>
             <textarea type="text" name="ticket_comment" id="ticket_comment" class="form-control" rows="4">${ticket.ticketComment!''}</textarea>
           </div>

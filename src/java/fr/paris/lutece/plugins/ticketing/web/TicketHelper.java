@@ -61,6 +61,7 @@ import fr.paris.lutece.util.ReferenceList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -73,6 +74,9 @@ public final class TicketHelper
 {
     // Properties
     private static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
+
+    // Other
+    private static final String CHANNELS_ID_SEPARATOR = ",";
 
     /**
      * Default constructor
@@ -296,5 +300,51 @@ public final class TicketHelper
         request.getSession(  ).removeAttribute( strParameter );
 
         return strRedirectUrl;
+    }
+
+    /**
+     * Get list of channel id of the user
+     *
+     * @param strIdChannelList
+     *            channel list of the user
+     * @return list of channel id of the user.
+     */
+    public static List<String> getIdChannelList( String strIdChannelList )
+    {
+        List<String> listIdChannel = new ArrayList<String>(  );
+        StringTokenizer st = new StringTokenizer( strIdChannelList, CHANNELS_ID_SEPARATOR );
+
+        while ( st.hasMoreElements(  ) )
+        {
+            listIdChannel.add( st.nextToken(  ) );
+        }
+
+        return listIdChannel;
+    }
+
+    /**
+     * Get string represented the list of channel separated by comma
+     *
+     * @param idChannelList
+     *            channel list of the user
+     * @return string represented the list of channel.
+     */
+    public static String convertIdChannelListToString( String[] idChannelList )
+    {
+        StringBuilder strIdChannelList = new StringBuilder(  );
+        int i = 0;
+
+        if ( idChannelList != null )
+        {
+            while ( i < ( idChannelList.length - 1 ) )
+            {
+                strIdChannelList.append( idChannelList[i] ).append( CHANNELS_ID_SEPARATOR );
+                i++;
+            }
+
+            strIdChannelList.append( idChannelList[i] );
+        }
+
+        return strIdChannelList.toString(  );
     }
 }

@@ -140,6 +140,8 @@ public class Ticket implements Serializable, RBACResource
     private AssigneeUnit _unit;
     private String _strUserMessage;
     private String _strUrl;
+    private int _nIdChannel;
+    private String _strChannel;
 
     /**
      * Returns the Id
@@ -841,6 +843,45 @@ public class Ticket implements Serializable, RBACResource
     public void setUrl( String strUrl )
     {
         _strUrl = strUrl;
+    }
+
+    /**
+     * Returns the IdChannel
+     * @return The IdChannel
+     */
+    public int getIdChannel(  )
+    {
+        return _nIdChannel;
+    }
+
+    /**
+     * Sets the IdChannel
+     * @param nIdChannel The IdChannel
+     */
+    public void setIdChannel( int nIdChannel )
+    {
+        _nIdChannel = nIdChannel;
+    }
+
+    /**
+     * Returns the Channel
+     *
+     * @return The Channel
+     */
+    public String getChannel(  )
+    {
+        return _strChannel;
+    }
+
+    /**
+     * Sets the Channel
+     *
+     * @param strChannel
+     *            The Channel
+     */
+    public void setChannel( String strChannel )
+    {
+        _strChannel = strChannel;
     }
 
     /**
