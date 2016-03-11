@@ -29,6 +29,7 @@ id_admin_user int(11) NOT NULL default '-1',
 id_unit int(11) NOT NULL default '0', 
 user_message long varchar NULL,
 url varchar(4096) NULL,
+id_channel int(11) NOT NULL default '0',
 PRIMARY KEY (id_ticket)
 );
 
@@ -149,6 +150,16 @@ id_admin_user int(11) NOT NULL default '0',
 PRIMARY KEY (id_instant_response)
 );
 
+--
+-- Structure for table ticketing_channel
+--
+
+DROP TABLE IF EXISTS ticketing_channel;
+CREATE TABLE ticketing_channel (
+id_channel int(6) NOT NULL,
+label varchar(50) NOT NULL default '',
+PRIMARY KEY (id_channel)
+);
 
 
       

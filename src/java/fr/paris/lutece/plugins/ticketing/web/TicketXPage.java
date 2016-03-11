@@ -213,6 +213,7 @@ public class TicketXPage extends WorkflowCapableXPage
     public XPage doCreateTicket( HttpServletRequest request )
     {
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
+        ticket.setIdChannel( TicketingConstants.WEB_ID_CHANNEL );
         TicketHome.create( ticket );
 
         doProcessWorkflowAutomaticAction( ticket );

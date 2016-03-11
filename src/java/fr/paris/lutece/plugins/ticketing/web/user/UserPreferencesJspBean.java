@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.user;
 
+import fr.paris.lutece.plugins.ticketing.business.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketHelper;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.prefs.AdminUserPreferencesService;
@@ -44,6 +45,7 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,8 +58,6 @@ import javax.servlet.http.HttpServletRequest;
 @Controller( controllerJsp = UserPreferencesJspBean.CONTROLLER_JSP, controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = UserPreferencesJspBean.CONTROLLER_RIGHT )
 public class UserPreferencesJspBean extends MVCAdminJspBean
 {
-    // User preferences keys
-    public static final String USER_PREFERENCE_SIGNATURE = "ticketingUserSignature";
     protected static final String CONTROLLER_JSP = "UserPreferences.jsp";
     protected static final String CONTROLLER_RIGHT = "TICKETING_USER_PREFERENCES_MANAGEMENT";
 
@@ -67,13 +67,7 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
     private static final long serialVersionUID = 591571470516993886L;
 
     // templates
-    private static final String TEMPLATE_MANAGE_USER_PRFERENCES = "/admin/plugins/ticketing/user/manage_user_preferences.html";
-
-    // Marks
-    private static final String MARK_USER_SIGNATURE = "user_signature";
-
-    // Parameters
-    private static final String PARAMETER_USER_SIGNATURE = "user_signature";
+    private static final String TEMPLATE_MANAGE_USER_PREFERENCES = "/admin/plugins/ticketing/user/manage_user_preferences.html";
 
     // Messages
     private static final String PROPERTY_PAGE_TITLE_MANAGE_USER_PREFERENCES = "ticketing.manage_user_preferences.pageTitle";
@@ -101,12 +95,23 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
         Map<String, Object> model = getModel(  );
 
         String strUserSignature = _userPreferencesService.get( String.valueOf( getUser(  ).getUserId(  ) ),
-                USER_PREFERENCE_SIGNATURE, StringUtils.EMPTY );
-        model.put( MARK_USER_SIGNATURE, strUserSignature );
+                TicketingConstants.USER_PREFERENCE_SIGNATURE, StringUtils.EMPTY );
+        model.put( TicketingConstants.MARK_USER_SIGNATURE, strUserSignature );
+
+        model.put( TicketingConstants.MARK_CHANNELS_LIST, ChannelHome.getReferenceList(  ) );
+
+        String strIdChannelList = _userPreferencesService.get( String.valueOf( getUser(  ).getUserId(  ) ),
+                TicketingConstants.USER_PREFERENCE_CHANNELS_LIST, StringUtils.EMPTY );
+        List<String> idChannelList = TicketHelper.getIdChannelList( strIdChannelList );
+        model.put( TicketingConstants.MARK_SELECTABLE_ID_CHANNEL_LIST, idChannelList );
+
+        String strPreferredIdChannel = _userPreferencesService.get( String.valueOf( getUser(  ).getUserId(  ) ),
+                TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, StringUtils.EMPTY );
+        model.put( TicketingConstants.MARK_PREFERRED_ID_CHANNEL, strPreferredIdChannel );
 
         TicketHelper.storeRichTextMarksIntoModel( request, model );
 
-        return getPage( PROPERTY_PAGE_TITLE_MANAGE_USER_PREFERENCES, TEMPLATE_MANAGE_USER_PRFERENCES, model );
+        return getPage( PROPERTY_PAGE_TITLE_MANAGE_USER_PREFERENCES, TEMPLATE_MANAGE_USER_PREFERENCES, model );
     }
 
     /**
@@ -117,9 +122,18 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
     @Action( ACTION_MODIFY_USER_PREFERENCES )
     public String doModifyUserPreferences( HttpServletRequest request )
     {
-        String strUserSignature = request.getParameter( PARAMETER_USER_SIGNATURE );
-        _userPreferencesService.put( String.valueOf( getUser(  ).getUserId(  ) ), USER_PREFERENCE_SIGNATURE,
-            strUserSignature );
+        String strUserSignature = request.getParameter( TicketingConstants.PARAMETER_USER_SIGNATURE );
+        _userPreferencesService.put( String.valueOf( getUser(  ).getUserId(  ) ),
+            TicketingConstants.USER_PREFERENCE_SIGNATURE, strUserSignature );
+
+        String[] strIdChannelList = request.getParameterValues( TicketingConstants.PARAMETER_SELECTABLE_ID_CHANNEL_LIST );
+        _userPreferencesService.put( String.valueOf( getUser(  ).getUserId(  ) ),
+            TicketingConstants.USER_PREFERENCE_CHANNELS_LIST,
+            TicketHelper.convertIdChannelListToString( strIdChannelList ) );
+
+        String strPreferredIdChannel = request.getParameter( TicketingConstants.PARAMETER_SELECTED_ID_CHANNEL );
+        _userPreferencesService.put( String.valueOf( getUser(  ).getUserId(  ) ),
+            TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, strPreferredIdChannel );
 
         addInfo( INFO_USER_PREFERENCES_SAVED, getLocale(  ) );
 

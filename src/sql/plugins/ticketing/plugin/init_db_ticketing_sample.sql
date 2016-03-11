@@ -63,3 +63,11 @@ INSERT INTO ticketing_support_entity (id_support_entity, name, level, id_unit, i
 (3, 'SN2 Facil Famille tarif. périscolaire', 2, 20, -1, 210),
 (4, 'SN3 DFPE - BEF', 3, 40, -1, 210),
 (5, 'SN2 Voirie', 2, 30, -1, 120);
+
+DELETE FROM ticketing_channel ;
+INSERT INTO ticketing_channel (id_channel, label) VALUES
+(1, "Téléphone"),
+(2, "Visite"),
+(3, "E-mail"),
+(4, "Twitter"),
+(5, "Web");

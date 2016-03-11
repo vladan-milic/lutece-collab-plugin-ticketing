@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
+
 
 /**
  * Class providing constants for Ticketing
@@ -51,6 +53,10 @@ public final class TicketingConstants
     public static final String PARAMETER_BACK = "back";
     public static final String PARAMETER_JSP_CONTROLLER = "jsp";
     public static final String PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION = "redirect";
+    public static final String PARAMETER_ID_CHANNEL = "id_channel";
+    public static final String PARAMETER_USER_SIGNATURE = "user_signature";
+    public static final String PARAMETER_SELECTABLE_ID_CHANNEL_LIST = "selectable_channels";
+    public static final String PARAMETER_SELECTED_ID_CHANNEL = "selected_channel";
 
     // Attributes
     public static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON = "hide_next_button";
@@ -76,6 +82,11 @@ public final class TicketingConstants
     public static final String MARK_TICKET_MODIFICATION_RIGHT = "ticket_modification_right";
     public static final String MARK_POPIN_MODE = "popin_mode";
     public static final String MARK_JSP_CONTROLLER = "jsp_controller";
+    public static final String MARK_CHANNELS_LIST = "channels_list";
+    public static final String MARK_PREFERRED_ID_CHANNEL = "preferred_id_channel";
+    public static final String MARK_SELECTABLE_ID_CHANNEL_LIST = "selectable_id_channel_list";
+    public static final String MARK_USER_SIGNATURE = "user_signature";
+    public static final String MARK_AGENT_VIEW = "agent_view";
 
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
@@ -96,12 +107,25 @@ public final class TicketingConstants
     // Beans
     public static final String BEAN_ACTION_SERVICE = "workflow.actionService";
 
+    // User preferences
+    public static final String USER_PREFERENCE_SIGNATURE = "ticketingUserSignature";
+    public static final String USER_PREFERENCE_CHANNELS_LIST = "ticketingUserChannelsList";
+    public static final String USER_PREFERENCE_PREFERRED_CHANNEL = "ticketingUserPreferredChannel";
+
     // Other constants
     public static final String ADMIN_CONTROLLLER_PATH = "jsp/admin/plugins/ticketing/";
     public static final String JSP_MANAGE_TICKETS = "ManageTickets.jsp";
     public static final String JSP_VIEW_TICKET = "TicketView.jsp";
     public static final String ROLE_GRU_ADMIN = "gru_admin";
     public static final String ROLE_LEVEL_3 = "gru_level_3";
+    public static final int NO_ID_CHANNEL = 0;
+    private static final String PROPERTY_CHANNEL_ID = "ticketing.channel.webChannel.id";
+    public static int WEB_ID_CHANNEL = 5;
+
+    static
+    {
+        WEB_ID_CHANNEL = AppPropertiesService.getPropertyInt( PROPERTY_CHANNEL_ID, WEB_ID_CHANNEL );
+    }
 
     /**
      * Default constructor
