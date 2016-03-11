@@ -42,6 +42,12 @@
             <label for="mobile_phone_number">#i18n{ticketing.create_ticket.labelMobilePhoneNumber}</label>
             <p class="form-control-static">${ticket.mobilePhoneNumber!''}</p>
           </div>
+          <#list response_recap_list as response>
+            <div class="form-group">
+              <label for="title" >${response.title}</label>
+              <p class="form-control-static">${response.valuesToString!''}</p>
+            </div>
+          </#list>
         </div>
         <div class="col-xs-12 col-sm-6">
           <div class="form-group">
@@ -68,12 +74,6 @@
       </div>
       <div class="row">
         <div class="col-xs-12 col-sm-12">
-          <#list response_recap_list as response>
-            <div class="form-group">
-              <label for="title" class="col-xs-12 col-sm-3 control-label">${response.title} : </label>
-             <p class="form-control-static">${response.valuesToString!''}</p>
-            </div>
-          </#list>
           <div class="form-group text-center">
              <button class="btn btn-primary btn-lg" name="action_createTicket" type="submit">
                <i class="fa fa-check"></i> OK

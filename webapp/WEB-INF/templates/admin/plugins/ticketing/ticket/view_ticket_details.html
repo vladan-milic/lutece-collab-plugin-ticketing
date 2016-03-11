@@ -15,11 +15,13 @@
           <i class="fa fa-warning"></i> Pas de commentaire
         </p>
     </#if>
-      <#list read_only_reponses_html_list as html_response>
-        <#if html_response?has_content>
-          ${html_response}
-        </#if>
-      </#list>
+    <br/>
+    <br/>
+    <#list read_only_reponses_html_list as html_response>
+      <#if html_response?has_content>
+        ${html_response}
+      </#if>
+    </#list>
   </div>
   <div id="info-right" class="col-xs-12 col-sm-3">
     <h5>Nature de la demande<p>
