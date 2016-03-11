@@ -169,6 +169,14 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_HISTORY, strHistory );
 
+        if ( StringUtils.isNotEmpty( ticket.getCustomerId(  ) ) &&
+                StringUtils.isNotEmpty( AppPropertiesService.getProperty( TicketingConstants.PROPERTY_POCGRU_URL_360 ) ) )
+        {
+            UrlItem url = new UrlItem( AppPropertiesService.getProperty( TicketingConstants.PROPERTY_POCGRU_URL_360 ) );
+            url.addParameter( TicketingConstants.PARAMETER_GRU_CUSTOMER_ID, ticket.getCustomerId(  ) );
+            model.put( TicketingConstants.MARK_POCGRU_URL_360, url.getUrl(  ) );
+        }
+
         return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS, TEMPLATE_VIEW_TICKET_HISTORY, model );
     }
 

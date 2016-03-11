@@ -1,0 +1,12 @@
+<@rowBoxHeader i18nTitleKey="ticketing.modify_instantresponse.pageTitle">
+    <form class="form-horizontal" method="post" name="modify_instantresponse" action="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp">
+        <@messages errors=errors />
+        <input type="hidden" id="id" name="id" value="${instantresponse.id}"/>
+        
+        <@fieldInputText i18nLabelKey="ticketing.modify_instantresponse.labelIdTicketCategory" inputName="id_ticket_category" mandatory=true value="${instantresponse.idTicketCategory}" i18nHelpBlockKey="ticketing.modify_instantresponse.labelIdTicketCategory.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_instantresponse.labelSubject" inputName="subject"  value="${instantresponse.subject}" i18nHelpBlockKey="ticketing.modify_instantresponse.labelSubject.help" />
+        <@fieldInputText i18nLabelKey="ticketing.modify_instantresponse.labelIdAdminUser" inputName="id_admin_user"  value="${instantresponse.idAdminUser}" i18nHelpBlockKey="ticketing.modify_instantresponse.labelIdAdminUser.help" />
+        <@actionButtons button1Name="action_modifyInstantResponse" button2Name="view_manageInstantResponses"/>
+    </form>
+</@rowBoxHeader>
+

@@ -207,7 +207,7 @@ public class TicketSearchEngine implements SearchEngine
                     TicketSearchItem.FIELD_TXT_RESPONSE, IndexationService.getAnalyser(  ) );
             parserResponse.setAllowLeadingWildcard( true );
             query.add( parserResponse.parse( "*" + strQuery.replaceAll( " ", "*" ) + "*" ), BooleanClause.Occur.SHOULD );
-       
+
             QueryParser parserComment = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
                     TicketSearchItem.FIELD_COMMENT, IndexationService.getAnalyser(  ) );
             parserComment.setAllowLeadingWildcard( true );

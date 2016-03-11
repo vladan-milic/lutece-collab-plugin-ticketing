@@ -28,7 +28,7 @@
             <feature-level>0</feature-level>
             <feature-url>jsp/admin/plugins/ticketing/ManageTicketCategorys.jsp</feature-url>
             <feature-icon-url></feature-icon-url>
-      </admin-feature>
+        </admin-feature>
         <admin-feature>
             <feature-id>TICKETING_TICKETS_MANAGEMENT</feature-id>
             <feature-title>ticketing.adminFeature.ManageTickets.name</feature-title>
@@ -36,26 +36,36 @@
             <feature-level>2</feature-level>
             <feature-url>jsp/admin/plugins/ticketing/ManageTickets.jsp</feature-url>
             <feature-icon-url></feature-icon-url>
-      </admin-feature>
-      <admin-feature>
+        </admin-feature>
+        <admin-feature>
             <feature-id>TICKETING_FORM_MANAGEMENT</feature-id>
             <feature-title>ticketing.adminFeature.ManageTicketForms.name</feature-title>
             <feature-description>ticketing.adminFeature.ManageTicketForms.description</feature-description>
             <feature-level>2</feature-level>
             <feature-url>jsp/admin/plugins/ticketing/ManageTicketForms.jsp</feature-url>
             <feature-icon-url></feature-icon-url>
-      </admin-feature>
-      <admin-feature>
+        </admin-feature>
+        <admin-feature>
             <feature-id>TICKETING_USER_PREFERENCES_MANAGEMENT</feature-id>
             <feature-title>ticketing.adminFeature.ManageUserPreferences.name</feature-title>
             <feature-description>ticketing.adminFeature.ManageUserPreferences.description</feature-description>
             <feature-level>2</feature-level>
             <feature-url>jsp/admin/plugins/ticketing/UserPreferences.jsp</feature-url>
             <feature-icon-url></feature-icon-url>
-      </admin-feature>
+        </admin-feature>
+        <admin-feature>
+            <feature-id>TICKETING_INSTANT_RESPONSE_MANAGEMENT</feature-id>
+            <feature-title>ticketing.adminFeature.ManageInstantResponse.name</feature-title>
+            <feature-description>ticketing.adminFeature.ManageInstantResponse.description</feature-description>
+            <feature-level>0</feature-level>
+            <feature-url>jsp/admin/plugins/ticketing/ManageInstantResponses.jsp</feature-url>
+            <feature-icon-url></feature-icon-url>
+        </admin-feature>
+      
+      
     </admin-features>    
 
-	<admin-css-stylesheets>
+    <admin-css-stylesheets>
         <admin-css-stylesheet>css/admin/plugins/ticketing/ticketing.css</admin-css-stylesheet>
     </admin-css-stylesheets>
 	
@@ -84,21 +94,21 @@
         <rbac-resource-type>
             <rbac-resource-type-class>
                 fr.paris.lutece.plugins.ticketing.service.SupportEntityResourceIdService
-			</rbac-resource-type-class>
+            </rbac-resource-type-class>
         </rbac-resource-type>
     </rbac-resource-types>
     <rbac-resource-types>
         <rbac-resource-type>
             <rbac-resource-type-class>
                 fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService
-			</rbac-resource-type-class>
+            </rbac-resource-type-class>
         </rbac-resource-type>
     </rbac-resource-types>
     <rbac-resource-types>
         <rbac-resource-type>
             <rbac-resource-type-class>
                 fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService
-			</rbac-resource-type-class>
+            </rbac-resource-type-class>
         </rbac-resource-type>
     </rbac-resource-types>
     
@@ -113,7 +123,7 @@
 
     <!-- Portlet parameters -->
     <portlets>
-   </portlets>
+    </portlets>
    
     <!-- servlets -->
     <servlets>
@@ -126,11 +136,16 @@
 
     <!-- filters -->
     <filters>
-          <filter>
-               <filter-name>TicketingSessionFilter</filter-name>
-               <url-pattern>/jsp/admin/plugins/*</url-pattern>
-               <filter-class>fr.paris.lutece.plugins.ticketing.web.filter.SessionFilter</filter-class>
-          </filter>
+        <filter>
+            <filter-name>TicketingBackOfficeSessionFilter</filter-name>
+            <url-pattern>/jsp/admin/plugins/*</url-pattern>
+            <filter-class>fr.paris.lutece.plugins.ticketing.web.filter.SessionFilter</filter-class>
+        </filter>
+        <filter>
+            <filter-name>TicketingFrontOfficeSessionFilter</filter-name>
+            <url-pattern>/jsp/site/Portal.jsp</url-pattern>
+            <filter-class>fr.paris.lutece.plugins.ticketing.web.filter.SessionFilter</filter-class>
+        </filter>
     </filters>
 
     <css-stylesheets>

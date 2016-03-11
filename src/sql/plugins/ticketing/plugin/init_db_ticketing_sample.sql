@@ -61,5 +61,5 @@ INSERT INTO ticketing_support_entity (id_support_entity, name, level, id_unit, i
 (1, 'SN2 Facil Famille ', 1, 2, -1, 210), 
 (2, 'SN2 Facil Famille tarif. Petite Enfance. ', 2, 21, -1, 210), 
 (3, 'SN2 Facil Famille tarif. périscolaire', 2, 20, -1, 210),
-(4, 'SN3 DFPE - BEF', 3, 40, -1, 210);
+(4, 'SN3 DFPE - BEF', 3, 40, -1, 210),
 (5, 'SN2 Voirie', 2, 30, -1, 120);

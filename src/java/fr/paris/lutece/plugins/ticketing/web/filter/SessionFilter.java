@@ -33,12 +33,17 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.filter;
 
+import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.portal.web.xpages.XPageApplicationEntry;
 
 import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
+
+import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -56,9 +61,13 @@ import javax.servlet.http.HttpSession;
  */
 public class SessionFilter implements Filter
 {
+    // Properties
     private static final String PROPERTY_RETURN_URL_PARAMETER_NAME = "ticketing.workflow.redirect.parameterName";
+
+    // Parameters
     private static final String PARAM_RETURN_URL = AppPropertiesService.getProperty( PROPERTY_RETURN_URL_PARAMETER_NAME,
             "return_url" );
+    private static final String PARAMETER_XPAGE = "page";
 
     @Override
     public void init( FilterConfig filterConfig ) throws ServletException
@@ -70,9 +79,8 @@ public class SessionFilter implements Filter
         throws IOException, ServletException
     {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String url = httpRequest.getRequestURL(  ).toString(  );
 
-        if ( url.contains( TicketingConstants.ADMIN_CONTROLLLER_PATH ) )
+        if ( isTicketingBackOfficeUrl( httpRequest ) || isTicketingFrontOfficeUrl( httpRequest ) )
         {
             if ( StringUtils.isNotEmpty( (String) request.getParameter( PARAM_RETURN_URL ) ) )
             {
@@ -98,5 +106,41 @@ public class SessionFilter implements Filter
     @Override
     public void destroy(  )
     {
+    }
+
+    /**
+     * Tests if the request is for the back office of Ticketing plugin
+     * @param request the request
+     * @return {@code true} if the request is for the back office of Ticketing, {@code false} otherwise
+     */
+    private static boolean isTicketingBackOfficeUrl( HttpServletRequest request )
+    {
+        String url = request.getRequestURL(  ).toString(  );
+
+        return url.contains( TicketingConstants.ADMIN_CONTROLLLER_PATH );
+    }
+
+    /**
+     * Tests if the request is for the front office of Ticketing plugin
+     * @param request the request
+     * @return {@code true} if the request is for the front office of Ticketing, {@code false} otherwise
+     */
+    private static boolean isTicketingFrontOfficeUrl( HttpServletRequest request )
+    {
+        boolean bFound = false;
+        String strXPage = request.getParameter( PARAMETER_XPAGE );
+        List<XPageApplicationEntry> listXPages = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME ).getApplications(  );
+
+        for ( XPageApplicationEntry entry : listXPages )
+        {
+            if ( entry.getId(  ).equals( strXPage ) )
+            {
+                bFound = true;
+
+                break;
+            }
+        }
+
+        return bFound;
     }
 }

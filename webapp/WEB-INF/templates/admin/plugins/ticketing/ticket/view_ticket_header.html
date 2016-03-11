@@ -1,23 +1,44 @@
 <#macro ticketHeader tab ticket >
 <div class="gru-wrapper">
   <div id="customer-panel" class="row ticket-head bg-gru-light">
-    <div class="col-xs-12 col-sm-offset-1 col-sm-3">
+    <div class="col-xs-8 col-sm-offset-1 col-sm-3">
       <h2>${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}</h2>
-      <h2>
-        &nbsp;
-      </h2>
-        <h2>
-          <a class="btn btn-border" href="jsp/admin/plugins/ticketing/ManageTickets.jsp?plugin_name=ticketing" >
-            <i class="fa fa-arrow-left"></i> Retour
-          </a>
-          <#if url_poc_gru?? && url_poc_gru?has_content>
-          <a class="btn btn-border" href="${url_poc_gru!}" >
-           <i class="fa fa-compass"></i> #i18n{ticketing.gru.button.360View}
-          </a>
+      <h2 class="hidden-xs">&nbsp;</h2>
+      <div class="visible-xs">
+        <p><i class="fa fa-envelope"></i> ${ticket.email!""}</p>
+        <#if ticket.fixedPhoneNumber?has_content>
+        <p>
+          <i class="fa fa-phone" ></i>
+          <#if ticket.fixedPhoneNumber?length == 10>
+          ${ticket.fixedPhoneNumber[0..1]} ${ticket.fixedPhoneNumber[2..3]} ${ticket.fixedPhoneNumber[4..5]} ${ticket.fixedPhoneNumber[6..7]} ${ticket.fixedPhoneNumber[8..9]}
+          <#else>
+          ${ticket.fixedPhoneNumber!}
           </#if>
-        </h2>
+        </p>
+        </#if>
+        <#if ticket.mobilePhone?has_content>
+        <p>
+          <i class="fa fa-mobile" ></i>
+          <#if ticket.mobilePhone?length == 10>
+          ${ticket.mobilePhone[0..1]} ${ticket.mobilePhone[2..3]} ${ticket.mobilePhone[4..5]} ${ticket.mobilePhone[6..7]} ${ticket.mobilePhone[8..9]}
+          <#else>
+          ${ticket.mobilePhone!}
+          </#if>
+        </p>
+        </#if>
+      </div>
+      <h2>
+        <a class="btn btn-border" href="jsp/admin/plugins/ticketing/ManageTickets.jsp?plugin_name=ticketing" >
+          <i class="fa fa-arrow-left"></i> Retour
+        </a>
+        <#if url_poc_gru?? && url_poc_gru?has_content>
+          <a class="btn btn-border" href="${url_poc_gru!}" >
+            <i class="fa fa-compass"></i> #i18n{ticketing.gru.button.360View}
+          </a>
+        </#if>
+      </h2>
     </div>
-    <div class="col-xs-12 col-sm-4">
+    <div class="hidden-xs col-sm-4">
       <p><i class="fa fa-envelope"></i> ${ticket.email!""}</p>
       <#if ticket.fixedPhoneNumber?has_content>
         <p>
@@ -44,7 +65,7 @@
         <p id="info">Pour me contacter privil&eacute;gier le mail</p>
       -->
     </div>
-    <div class="col-xs-12 col-sm-4" id="info-head-right">
+    <div class="col-xs-4 col-sm-4" id="info-head-right">
       <#assign textColor="green"/>
       <#if ticket.urgency==1 >
         <#assign textColor="orange"/>
@@ -72,7 +93,9 @@
         </a>
       <#else>
         <a class="btn bg-gru-dark" href="jsp/admin/plugins/ticketing/TicketView.jsp?view=ticketHistory&id=${ticket.id}">
-          <!-- #i18n{ticketing.view_ticket_header.history.pageTitle} --> Voir l'historique
+          <!-- #i18n{ticketing.view_ticket_header.history.pageTitle} -->
+          <span class="hidden-xs">Voir l'historique</span>
+          <span class="vissible-xs">Historique</span>
         </a>
       </#if>
       </p>
