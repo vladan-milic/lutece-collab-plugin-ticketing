@@ -1,17 +1,17 @@
-<div>
-	  <div class="col-xs-12 col-sm-9 col-sm-offset-1">
-		  <div class="form-group">
-			<textarea class="form-control"  id="query" rows = "3">${ticket.ticketComment!}</textarea>
-		  </div>
-		</div> 
-		<div class="col-xs-12 col-sm-1 input-group-btn">
-			<br>
-			<div class="btn btn-default " id="search_button" >
-				<i class="fa fa-search"></i>
-			</div>
-	  </div>
+<div class="form-group">
+	<label class="col-xs-12 col-sm-3 control-label" for="user_message">Recherche :</label>
+	<div class="col-xs-11 col-sm-8">
+		<textarea class="form-control"  id="query" rows = "3">${ticket.ticketComment!}</textarea>
+	</div>
+	<div class="col-xs-1 col-sm-1 input-group-btn">
+		<br/>
+		<div class="btn btn-default " id="search_button" >
+			<i class="fa fa-search"></i>
+		</div>
+	</div>
 </div>
-<div id="results" class="pre-scrollable col-xs-12 col-sm-11"></div>
+<div id="results" class="form-group">
+</div>
 
 <script>
   $( function(){
@@ -24,7 +24,7 @@
 			  data: dataToSend,
 			  dataType : "html",
 			  success: function( response ) {
-					$('#results').replaceWith('<div id="results" class="pre-scrollable col-xs-12 col-sm-11">' + response + '</div>');
+					$('#results').replaceWith('<div id="results" class="form-group">' + response + '</div>');
 			  }
 		  });
 	  });

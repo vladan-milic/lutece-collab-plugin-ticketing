@@ -13,6 +13,7 @@
 
 #head-ticketing{ height: 210px; color:#fff; padding:0 10%  }
 #content-ticketing{ background-color: #fff; color: #000; padding: 0 10% }
+
 /*
 #demand-content{ margin-left: 142px }
 */
@@ -75,7 +76,7 @@
 @media screen and (max-width: 560px) {
   #demand-panel .nav-ticket{ padding-left: 10px }
   #demand-panel .nav-ticket > li > a { padding: 15px 2px;	margin-left: 0;	font-size: 1rem;}
-  #customer-panel { padding: 15px 0; margin-left: -2px;	height: 150px }
+  #customer-panel { padding: 15px 0; height: 150px }
   #info-head-right p{ font-size: 1.3rem }
   #info-head-right p a{ font-size: 1.3rem }
 }
