@@ -52,7 +52,7 @@
 	</#if>
 </#function>
 
-<#-- 
+<#--
 -- Get the field value from a given entry and a given title
 -- @param entry the entry
 -- @param fieldTitle the title
@@ -66,7 +66,7 @@
 	<#return "">
 </#function>
 
-<#-- 
+<#--
 -- Get the max files value of an entry
 -- @param entry the entry
 -- @return the number of max authorized uploaded files
@@ -79,7 +79,7 @@
 	<#return "1">
 </#function>
 
-<#-- 
+<#--
 -- Get the max size an uploaded file is authorized to have
 -- @param entry the entry
 -- @return the max size
@@ -91,7 +91,7 @@
 	<#else>
 		<#if getField( entry, "option" )??>
 			<#assign fieldFileMaxSize = getField( entry, "option" )>
-			<#return fieldFileMaxSize.width> 
+			<#return fieldFileMaxSize.width>
 		</#if>
 	</#if>
 	<#return "5242880">
@@ -117,4 +117,38 @@
             <#nested>
         </label>
     </div>
+</#macro>
+
+
+<#-- Macro messages : display message block for errors or infos -->
+<#macro notification infos=[] type="info" pos="bottom-left">
+  <#-- Error messages handling -->
+  <#-- Info messages handling -->
+  <#if infos??>
+    <#if infos?size &gt; 0 >
+      <div class="notifications ${pos}">
+        <span>
+        <#list infos as info >
+          <i class="fa fa-info-circle"></i> ${info.message} <a class="close" data-dismiss="alert" href="#">x</a><br>
+        </#list>
+        </span>
+      </div>
+    <script src="js/jquery/plugins/bnotify/bootstrap-notify.js"></script>
+    <script>
+    <#list infos as info >
+      var txt = "${info.message}";
+    </#list>
+    $( function(){
+      $(".notifications span").hide();
+      $(".notifications").notify({
+        message: { text: txt + " " },
+        type: '${type}',
+        fadeOut: {
+            delay: Math.floor(Math.random() * 500) + 2500
+            }
+          }).show();
+        });
+        </script>
+      </#if>
+    </#if>
 </#macro>
