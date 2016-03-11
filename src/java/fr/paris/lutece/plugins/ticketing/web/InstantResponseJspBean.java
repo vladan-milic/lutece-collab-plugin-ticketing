@@ -40,6 +40,7 @@ import fr.paris.lutece.plugins.ticketing.business.InstantResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
+import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -51,6 +52,8 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import java.util.List;
 import java.util.Map;
@@ -216,7 +219,11 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         {
             return redirectView( request, VIEW_CREATE_INSTANT_RESPONSE );
         }
-        _instantresponse.setIdAdminUser(  getUser().getUserId() );
+        int nUserId = getUser().getUserId();
+        _instantresponse.setIdAdminUser( nUserId );
+        _instantresponse.setIdUnit( UnitHome.findByIdUser( nUserId ).get( 0 ).getIdUnit() );
+        _instantresponse.setDateCreate( new Timestamp( ( new Date() ).getTime() ) );
+        
         InstantResponseHome.create( _instantresponse );
         addInfo( INFO_INSTANT_RESPONSE_CREATED, getLocale(  ) );
 

@@ -143,6 +143,8 @@ CREATE TABLE ticketing_instant_response (
 id_instant_response int(6) NOT NULL,
 id_ticket_category int(11) NOT NULL default '0',
 subject long varchar NULL ,
+date_create timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+id_unit int(11) NOT NULL default '0', 
 id_admin_user int(11) NOT NULL default '0',
 PRIMARY KEY (id_instant_response)
 );

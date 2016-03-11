@@ -18,6 +18,7 @@
     <@table>
         <tr>
             <input type="hidden" id="id" name="id"/>
+            <th>#i18n{ticketing.manage_instantresponses.columnDateCreate}</th>
             <th>#i18n{ticketing.manage_instantresponses.columnIdTicketCategory}</th>
             <th>#i18n{ticketing.manage_instantresponses.columnSubject}</th>
             <th>#i18n{ticketing.manage_instantresponses.columnAdminUser}</th>
@@ -28,18 +29,24 @@
         <tr>
             <input type="hidden" id="id" name="id"/>
             <td>
+                ${displayTimeOpenedTicket(instantresponse.timeOpenedTicketInMs)}
+            </td>
+            <td>
                 ${instantresponse.type} / ${instantresponse.domain} / ${instantresponse.category}
             </td>
             <td>
                 ${instantresponse.subject}
             </td>
             <td>
+                <p>
+                    <i class="fa fa-tree"></i>  ${instantresponse.unit}
+                </p>
+                <p>
     		<#if adminAvatar>
                     <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${instantresponse.idAdminUser}" alt="" title="Avatar">
                 </#if>
-    				    <span class="avatar-label">${instantresponse.userFirstname} ${instantresponse.userLastname}</span>
-    		
-                
+    		    <span class="avatar-label">${instantresponse.userFirstname} ${instantresponse.userLastname}</span>
+                </p>
             </td>
         <td>
             <a href="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp?view=modifyInstantResponse&id=${instantresponse.id}"
@@ -60,4 +67,21 @@
 
   </@boxBody>
 </@rowBox>
+
+<#function displayTimeOpenedTicket time_ms>
+	<#assign days = (time_ms / 86400000)?int>
+	<#assign hours = (time_ms / 3600000)?int>
+	<#assign minutes = (time_ms / 60000)?int>
+
+	<#if days gte 1>
+		<#return "<strong class=\"lead\">" + days + "</strong><br> #i18n{ticketing.manage_tickets.unitDay}">
+	<#else>
+		<#if hours gte 1>
+			<#return "<strong class=\"lead\">" + hours + "</strong><br> #i18n{ticketing.manage_tickets.unitHour}">
+		<#else>
+			<#return "<strong class=\"lead\">" + minutes + "</strong><br> #i18n{ticketing.manage_tickets.unitMinute}">
+		</#if>
+	</#if>
+</#function>
+
 

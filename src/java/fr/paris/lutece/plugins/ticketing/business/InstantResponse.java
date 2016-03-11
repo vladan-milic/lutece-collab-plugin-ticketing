@@ -33,10 +33,9 @@
  */ 
 package fr.paris.lutece.plugins.ticketing.business;
 
-import javax.validation.constraints.*;
-import org.hibernate.validator.constraints.*;
-
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Calendar;
 
 
 /**
@@ -50,13 +49,15 @@ public class InstantResponse implements Serializable
     private int _nId;
     private int _nIdTicketCategory;
     private String _strSubject;
-    private int _nIdAdminUser;
     private String _strType;
     private String _strDomain;
     private String _strCategory;
+    private Timestamp _dDateCreate;
+    private int _nIdAdminUser;
     private String _strUserFirstname;
     private String _strUserLastname;
-    
+    private int _nIdUnit;
+    private String _strUnit;
     
     /**
      * Returns the Id
@@ -215,4 +216,70 @@ public class InstantResponse implements Serializable
     {
         _strUserLastname = strUserLastname;
     }
+    
+
+       /**
+        * Returns the IdUnit
+        * @return The IdUnit
+        */ 
+    public int getIdUnit()
+    {
+        return _nIdUnit;
+    }
+    
+       /**
+        * Sets the IdUnit
+        * @param nIdUnit The IdUnit
+        */ 
+    public void setIdUnit( int nIdUnit )
+    {
+        _nIdUnit = nIdUnit;
+    }
+    
+       /**
+        * Returns the Unit
+        * @return The Unit
+        */ 
+    public String getUnit()
+    {
+        return _strUnit;
+    }
+    
+       /**
+        * Sets the Unit
+        * @param strUnit The Unit
+        */ 
+    public void setUnit( String strUnit )
+    {
+        _strUnit = strUnit;
+    }
+
+    /**
+     * Gets the create date
+     * @return the create date
+     */
+    public Timestamp getDateCreate(  )
+    {
+        return _dDateCreate;
+    }
+
+    /**
+     * Sets the create date
+     * @param dDateCreate the create date
+     */
+    public void setDateCreate( Timestamp dDateCreate )
+    {
+        _dDateCreate = dDateCreate;
+    }
+
+    /**
+     * Returns the time since when the ticket is opened in milliseconds.
+     * @return time since when the ticket is opened
+     */
+    public long getTimeOpenedTicketInMs(  )
+    {
+        return Calendar.getInstance(  ).getTime(  ).getTime(  ) - getDateCreate(  ).getTime(  );
+    }
+
+    
 }
