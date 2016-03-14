@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.ticketing.web;
 
 import fr.paris.lutece.plugins.ticketing.business.InstantResponse;
 import fr.paris.lutece.plugins.ticketing.business.InstantResponseHome;
+import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
@@ -90,6 +91,8 @@ public class InstantResponseJspBean extends MVCAdminJspBean
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
+    private static final String MARK_TYPE_ID = "type_id";
+    private static final String MARK_DOMAIN_ID = "domain_id";
     private static final String MARK_ADMIN_AVATAR = "adminAvatar";
     private static final String JSP_MANAGE_INSTANT_RESPONSES = "jsp/admin/plugins/ticketing/ManageInstantResponses.jsp";
 
@@ -286,10 +289,17 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         if ( ( _instantresponse == null ) || ( _instantresponse.getId(  ) != nId ) )
         {
             _instantresponse = InstantResponseHome.findByPrimaryKey( nId );
+            
         }
+        TicketCategory category = TicketCategoryHome.findByPrimaryKey( _instantresponse.getIdTicketCategory() );
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_INSTANT_RESPONSE, _instantresponse );
+        model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
+        model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
+        model.put( MARK_TYPE_ID , category.getIdTicketType() );
+        model.put( MARK_DOMAIN_ID , category.getIdTicketDomain() );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_INSTANT_RESPONSE, TEMPLATE_MODIFY_INSTANT_RESPONSE, model );
     }
