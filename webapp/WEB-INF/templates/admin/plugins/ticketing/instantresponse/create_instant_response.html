@@ -1,30 +1,51 @@
-<@rowBoxHeader i18nTitleKey="ticketing.create_instantresponse.pageTitle">
-<form class="form-horizontal" method="post" name="create_instantresponse" action="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp">
-    <@messages errors=errors />
-    <input type="hidden" id="id" name="id"/>
-
-    <div class="col-xs-12 col-sm-8 col-sm-offset-2">
-        <div class="form-group">
-            <label for="id_ticket_type">#i18n{ticketing.create_instantresponse.labelTicketType}</label>
-            <@comboWithParams name="id_ticket_type" default_value="0" additionalParameters=" id=\"id_ticket_type\" class=\"form-control input-lg\" " items=ticket_types_list />
-        </div>
-        <div class="form-group">
-            <label for="id_ticket_category">#i18n{ticketing.create_instantresponse.labelTicketDomain}</label>
-            <@comboWithParams name="id_ticket_domain" default_value="0" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=ticket_domains_list />
-        </div>
-        <div class="form-group">
-            <label for="id_contact_mode">#i18n{ticketing.create_instantresponse.labelTicketCategory}</label>
-            <@comboWithParams name="id_ticket_category" default_value="0" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=ticket_categories_list />
-        </div>
-        <div class="form-group">
-            <label for="subject">#i18n{ticketing.create_instantresponse.labelSubject}</label>
-            <textarea type="text" name="subject" id="subject" class="form-control" rows="4"></textarea>
-        </div>
+<#include "/admin/plugins/ticketing/commons.html" />
+<div class="gru-wrapper">
+  <div id="head-ticketing" class="row bg-gru-light">
+    <div class="col-xs-12 col-sm-12">
+      <h2>#i18n{ticketing.adminFeature.ManageInstantResponse.name}</h2>
+      <h3>#i18n{ticketing.create_instantresponse.pageTitle}</h3>
     </div>
-
-    <@actionButtons button1Name="action_createInstantResponse" button2Name="back"/>
-</form>
-</@rowBoxHeader>
+  </div>
+  <div id="content-ticketing" class="row content-padding">
+  <div class="col-xs-12 col-sm-12">
+    <form class="form-horizontal" method="post" name="create_instantresponse" action="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp">
+      <@notification infos=errors type="danger" pos="top-right" />
+      <input type="hidden" id="id" name="id">
+      <div class="form-group">
+        <label class="col-xs-12 col-sm-2 control-label" for="id_ticket_type">#i18n{ticketing.create_instantresponse.labelTicketType}</label>
+          <div class="col-xs-12 col-sm-9">
+          <@comboWithParams name="id_ticket_type" default_value="0" additionalParameters=" id=\"id_ticket_type\" class=\"form-control input-lg\" " items=ticket_types_list />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-12 col-sm-2 control-label" for="id_ticket_category">#i18n{ticketing.create_instantresponse.labelTicketDomain}</label>
+          <div class="col-xs-12 col-sm-9">
+            <@comboWithParams name="id_ticket_domain" default_value="0" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=ticket_domains_list />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-12 col-sm-2 control-label" for="id_contact_mode">#i18n{ticketing.create_instantresponse.labelTicketCategory}</label>
+          <div class="col-xs-12 col-sm-9">
+            <@comboWithParams name="id_ticket_category" default_value="0" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=ticket_categories_list />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-12 col-sm-2 control-label" for="subject">#i18n{ticketing.create_instantresponse.labelSubject}</label>
+            <div class="col-xs-12 col-sm-9">
+            <textarea type="text" name="subject" id="subject" class="form-control" rows="4"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-12 col-sm-offset-2 col-sm-9" for="subject">
+            <div class="col-xs-12 col-sm-9">
+              <@actionButtons button1Name="action_createInstantResponse" button2Name="back"/>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
 <script>
@@ -45,4 +66,3 @@
         });
     });
 </script>
-

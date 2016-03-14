@@ -161,10 +161,10 @@
           <input type="hidden" name="fltr_order_sort" value="${orderSort!}">
           <input type="hidden" name="fltr_order_by" value="${orderBy!}">
     			<div class="col-xs-12 col-sm-offset-1 col-sm-3">
-            <button type="submit" name="fltr_new_urgency" value="-1" class="btn btn-default btn-xs <#if ticket_filter.urgency==-1>btn-primary<#else>text-gru</#if>">#i18n{ticketing.manage_tickets.urgency.all}</button>
-    				<button type="submit" name="fltr_new_urgency" value="2" class="btn btn-xs <#if ticket_filter.urgency==2>btn-danger<#else>text-red</#if>">#i18n{ticketing.manage_tickets.urgency.high}</button>
-    				<button type="submit" name="fltr_new_urgency" value="1" class="btn btn-xs <#if ticket_filter.urgency==1>btn-warning<#else>text-orange</#if>">#i18n{ticketing.manage_tickets.urgency.medium}</button>
-    				<button type="submit" name="fltr_new_urgency" value="0" class="btn btn-xs <#if ticket_filter.urgency==0>btn-info<#else>text-aqua</#if>">#i18n{ticketing.manage_tickets.urgency.low}</button>
+            <button type="submit" name="fltr_new_urgency" value="-1" class="btn btn-link btn-xs <#if ticket_filter.urgency==-1>btn-primary<#else>border-gru text-gru</#if>">#i18n{ticketing.manage_tickets.urgency.all}</button>
+    				<button type="submit" name="fltr_new_urgency" value="2" class="btn btn-link btn-xs <#if ticket_filter.urgency==2>btn-danger<#else>border-red text-red</#if>">#i18n{ticketing.manage_tickets.urgency.high}</button>
+    				<button type="submit" name="fltr_new_urgency" value="1" class="btn btn-link btn-xs <#if ticket_filter.urgency==1>btn-warning<#else>border-orange text-orange</#if>">#i18n{ticketing.manage_tickets.urgency.medium}</button>
+    				<button type="submit" name="fltr_new_urgency" value="0" class="btn btn-link btn-xs <#if ticket_filter.urgency==0>btn-info<#else>border-info text-aqua</#if>">#i18n{ticketing.manage_tickets.urgency.low}</button>
     			</div>
     			<div class="col-xs-12 col-sm-4">
     				<!-- span class="hidden-xs hidden-sm">#i18n{ticketing.manage_tickets.sortBy} :</span -->
@@ -194,7 +194,7 @@
           	</form>
           </div>
         </div>
-        <@messages infos=infos />
+        <@notification infos=infos />
         <#if !selected_tab?? || ( selected_tab?? && selected_tab=="agent") >
         	<@renderTabPanel panel_list=ticket_list active=true id='agent' />
         <#else>
