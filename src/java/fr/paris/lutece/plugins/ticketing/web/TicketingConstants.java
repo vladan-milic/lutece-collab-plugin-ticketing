@@ -92,6 +92,13 @@ public final class TicketingConstants
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
     public static final String PROPERTY_REDIRECT_PREFIX = "ticketing.workflow.redirect.";
     public static final String PROPERTY_TICKET_CLOSE_ID = "ticketing.workflow.state.id.closed";
+    public static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
+    private static final String PROPERTY_CHANNEL_ID = "ticketing.channel.webChannel.id";
+    public static int WEB_ID_CHANNEL = 99;
+    static
+    {
+        WEB_ID_CHANNEL = AppPropertiesService.getPropertyInt( PROPERTY_CHANNEL_ID, WEB_ID_CHANNEL );
+    }
 
     // Session keys
     public static final String SESSION_NOT_VALIDATED_TICKET = "ticketing.ticketFormService.notValidatedTicket";
@@ -119,13 +126,6 @@ public final class TicketingConstants
     public static final String ROLE_GRU_ADMIN = "gru_admin";
     public static final String ROLE_LEVEL_3 = "gru_level_3";
     public static final int NO_ID_CHANNEL = 0;
-    private static final String PROPERTY_CHANNEL_ID = "ticketing.channel.webChannel.id";
-    public static int WEB_ID_CHANNEL = 5;
-
-    static
-    {
-        WEB_ID_CHANNEL = AppPropertiesService.getPropertyInt( PROPERTY_CHANNEL_ID, WEB_ID_CHANNEL );
-    }
 
     /**
      * Default constructor
