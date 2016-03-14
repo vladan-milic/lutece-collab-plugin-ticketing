@@ -40,23 +40,25 @@ import fr.paris.lutece.portal.service.search.SearchResult;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 
-import java.text.ParseException;
+import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,23 +97,32 @@ public class TicketSearchEngine implements SearchEngine
                 if ( StringUtils.isNotEmpty( strSearchedField ) &&
                         strSearchedField.equals( TicketSearchItem.FIELD_CONTENTS ) )
                 {
-                    QueryParser parser = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
+                    ComplexPhraseQueryParser parser = new ComplexPhraseQueryParser( IndexationService.LUCENE_INDEX_VERSION, 
                             TicketSearchItem.FIELD_CONTENTS, IndexationService.getAnalyser(  ) );
-                    query.add( parser.parse( strQuery ), BooleanClause.Occur.MUST );
+                    parser.setInOrder( false );
+                    parser.setPhraseSlop( 1 );
+                    query.add( parser.parse( strQuery.toLowerCase( ) ), BooleanClause.Occur.MUST );
+
+                    
                 }
                 else if ( StringUtils.isNotEmpty( strSearchedField ) &&
                         strSearchedField.equals( TicketSearchItem.FIELD_CATEGORY ) )
                 {
-                    QueryParser parserCategory = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
+                    ComplexPhraseQueryParser parser = new ComplexPhraseQueryParser( IndexationService.LUCENE_INDEX_VERSION, 
                             TicketSearchItem.FIELD_CATEGORY, IndexationService.getAnalyser(  ) );
-                    query.add( parserCategory.parse( strQuery ), BooleanClause.Occur.MUST );
+                    parser.setInOrder( false );
+                    parser.setPhraseSlop( 1 );
+                    query.add( parser.parse( strQuery.toLowerCase( ) ), BooleanClause.Occur.MUST );
                 }
                 else if ( StringUtils.isNotEmpty( strSearchedField ) &&
                         strSearchedField.equals( TicketSearchItem.FIELD_REFERENCE ) )
                 {
-                    QueryParser parserCategory = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
+                    ComplexPhraseQueryParser parser = new ComplexPhraseQueryParser( IndexationService.LUCENE_INDEX_VERSION, 
                             TicketSearchItem.FIELD_REFERENCE, IndexationService.getAnalyser(  ) );
-                    query.add( parserCategory.parse( strQuery ), BooleanClause.Occur.MUST );
+                    parser.setInOrder( false );
+                    parser.setPhraseSlop( 1 );
+                    query.add( parser.parse( strQuery.toLowerCase( ) ), BooleanClause.Occur.MUST );
+                    
                 }
             }
 
@@ -202,16 +213,18 @@ public class TicketSearchEngine implements SearchEngine
         throws org.apache.lucene.queryparser.classic.ParseException
     {
         if ( StringUtils.isNotEmpty( strQuery ) )
-        {
-            QueryParser parserResponse = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
-                    TicketSearchItem.FIELD_TXT_RESPONSE, IndexationService.getAnalyser(  ) );
-            parserResponse.setAllowLeadingWildcard( true );
-            query.add( parserResponse.parse( "*" + strQuery.replaceAll( " ", "*" ) + "*" ), BooleanClause.Occur.SHOULD );
-
-            QueryParser parserComment = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
+        {           
+            ComplexPhraseQueryParser parserComment = new ComplexPhraseQueryParser( IndexationService.LUCENE_INDEX_VERSION, 
                     TicketSearchItem.FIELD_COMMENT, IndexationService.getAnalyser(  ) );
-            parserComment.setAllowLeadingWildcard( true );
-            query.add( parserComment.parse( "*" + strQuery.replaceAll( " ", "*" ) + "*" ), BooleanClause.Occur.SHOULD );
+            parserComment.setInOrder( false );
+            parserComment.setPhraseSlop( 1 );
+            query.add( parserComment.parse( strQuery.toLowerCase( ) ), BooleanClause.Occur.SHOULD );
+            
+            ComplexPhraseQueryParser parserResponse = new ComplexPhraseQueryParser( IndexationService.LUCENE_INDEX_VERSION, 
+                    TicketSearchItem.FIELD_TXT_RESPONSE, IndexationService.getAnalyser(  ) );
+            parserResponse.setInOrder( false );
+            parserResponse.setPhraseSlop( 1 );
+            query.add( parserResponse.parse( strQuery.toLowerCase( ) ), BooleanClause.Occur.SHOULD );
         }
 
         QueryParser parserCategory = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,

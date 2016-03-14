@@ -49,6 +49,7 @@ public class TicketSearchItem extends SearchItem
     public static final String FIELD_RESPONSE = "ticket_response";
     public static final String FIELD_TXT_RESPONSE = "ticket_txt_response";
     public static final String FIELD_COMMENT = "ticket_comment";
+    public static final String FIELD_TXT_COMMENT = "ticket_txt_comment";
 
     // Variables declarations
     private String _strReference;

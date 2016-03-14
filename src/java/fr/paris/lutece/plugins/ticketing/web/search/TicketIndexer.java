@@ -238,7 +238,7 @@ public class TicketIndexer implements SearchIndexer
         String strIdTicket = String.valueOf( ticket.getId(  ) );
         doc.add( new Field( TicketSearchItem.FIELD_UID, strIdTicket + "_" + SHORT_NAME_TICKET, ftNotStored ) );
         doc.add( new Field( TicketSearchItem.FIELD_TICKET_ID, strIdTicket, TextField.TYPE_STORED ) );
-        doc.add( new Field( TicketSearchItem.FIELD_CONTENTS, ticket.toString(  ), TextField.TYPE_NOT_STORED ) );
+        doc.add( new Field( TicketSearchItem.FIELD_CONTENTS, ticket.toString(  ).toLowerCase( ), TextField.TYPE_NOT_STORED ) );
         doc.add( new Field( TicketSearchItem.FIELD_CATEGORY, ticket.getTicketCategory(  ), TextField.TYPE_STORED ) );
         doc.add( new Field( TicketSearchItem.FIELD_REFERENCE, ticket.getReference(  ), TextField.TYPE_STORED ) );
 
@@ -251,9 +251,10 @@ public class TicketIndexer implements SearchIndexer
                 StringUtils.isNotEmpty( ticket.getUserMessage(  ) ) )
         {
             //escape html from response for indexation, not stored
-            doc.add( new Field( TicketSearchItem.FIELD_TXT_RESPONSE, Jsoup.parse( ticket.getUserMessage(  ) ).text(  ),
+            doc.add( new Field( TicketSearchItem.FIELD_TXT_RESPONSE, Jsoup.parse( ticket.getUserMessage(  ) ).text(  ).toLowerCase( ),
                     ftNotStored ) );
             doc.add( new Field( TicketSearchItem.FIELD_RESPONSE, ticket.getUserMessage(  ), ft ) );
+            doc.add( new Field( TicketSearchItem.FIELD_TXT_COMMENT, ticket.getTicketComment(  ).toLowerCase( ), ftNotStored ) );
             doc.add( new Field( TicketSearchItem.FIELD_COMMENT, ticket.getTicketComment(  ), ft ) );
         }
 
