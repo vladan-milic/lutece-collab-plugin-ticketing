@@ -2,6 +2,10 @@
 /*   / ! \ WARNING Add styles from plugins GRU if is used without plugin-gru !! */
 /*  ------                                                                                   */
 /* TICKETING */
+.border-gru{border:1px solid #0082D8 !important;}
+.border-info{border:1px solid  #00acd6 !important;}
+.border-orange{border:1px solid orange !important;}
+.border-red{border:1px solid red !important;}
 #info-head-right{ border-left: 1px solid #fff; height:215px; margin-top:0; padding-top:0 }
 .nav-ticket{ padding-left: 140px }
 
@@ -11,8 +15,9 @@
 #ticketing-history-panel{ padding: 15px 0 }
 #ticketing-history-panel .panel{ padding: 15px; background-color: #EEE; width:98% }
 
-#head-ticketing{ height: 210px; color:#fff; padding:0 10%  }
+#head-ticketing{ height: 200px; color:#fff; padding:0 10%  }
 #content-ticketing{ background-color: #fff; color: #000; padding: 0 10% }
+#content-ticketing form{ margin-top: 20px}
 
 /*
 #demand-content{ margin-left: 142px }
