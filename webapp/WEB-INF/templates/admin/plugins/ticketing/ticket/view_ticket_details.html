@@ -4,23 +4,35 @@
 <@ticketHeader tab='details' ticket=ticket />
 <div id="demand-panel" class="row ticket-content">
   <@notification infos=infos />
+
   <div id="demand-content" class="col-xs-12 col-sm-offset-1 col-sm-7">
+
     <h3 class="text-darkgray">${ticket.dateCreate!''}</h3>
+
     <#if ticket.ticketComment !=''>
       <div class="text-justify">
         ${ticket.ticketComment}
       </div>
     <#else>
-        <p class="lead">
-          <i class="fa fa-warning"></i> Pas de commentaire
-        </p>
+      <p class="lead">
+        <i class="fa fa-warning"></i> Pas de commentaire
+      </p>
     </#if>
+
+    <#if read_only_reponses_html_list?has_content>
+      <hr/>
       <#list read_only_reponses_html_list as html_response>
         <#if html_response?has_content>
           ${html_response}
         </#if>
       </#list>
+    </#if>
+
+    <hr/>
+    ${history!''}
+
   </div>
+
   <div id="info-right" class="col-xs-12 col-sm-4">
     <h5>Nature de la demande<p>
     <h4>${ticket.ticketType}</h4>
@@ -48,9 +60,9 @@
       </#if>
       <#if ticket_modification_right?? && ticket_modification_right>
        <p>
-           <a class="btn btn-lg btn-primary btn-block bg-gru-dark"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}" title="#i18n{portal.util.labelModify}">
-             <i class="fa fa-pencil"></i>  #i18n{portal.util.labelModify}
-           </a>
+         <a class="btn btn-lg btn-primary btn-block bg-gru-dark"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}" title="#i18n{portal.util.labelModify}">
+           <i class="fa fa-pencil"></i>  #i18n{portal.util.labelModify}
+         </a>
        </p>
      </#if>
      <#if ticket_deletion_right?? && ticket_deletion_right>

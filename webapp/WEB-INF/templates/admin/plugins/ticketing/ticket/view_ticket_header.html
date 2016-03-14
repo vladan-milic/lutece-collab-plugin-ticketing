@@ -85,21 +85,6 @@
           <#break>
         </#switch>
       </p>
-      <br>
-      <p>
-      <#if tab="history">
-        <a class="btn bg-gru-dark" href="jsp/admin/plugins/ticketing/TicketView.jsp?view=ticketDetails&id=${ticket.id}">
-          <span class="hidden-xs">#i18n{ticketing.view_ticket_header.details.pageTitle}</span>
-          <span class="visible-xs">#i18n{ticketing.view_ticket_header.details.shortPageTitle}</span>
-        </a>
-      <#else>
-        <a class="btn bg-gru-dark" href="jsp/admin/plugins/ticketing/TicketView.jsp?view=ticketHistory&id=${ticket.id}">
-          <!-- #i18n{ticketing.view_ticket_header.history.pageTitle} -->
-          <span class="hidden-xs">#i18n{ticketing.view_ticket_header.history.pageTitle}</span>
-          <span class="visible-xs">#i18n{ticketing.view_ticket_header.history.shortPageTitle}</span>
-        </a>
-      </#if>
-      </p>
     </div>
   </div>
 </#macro>

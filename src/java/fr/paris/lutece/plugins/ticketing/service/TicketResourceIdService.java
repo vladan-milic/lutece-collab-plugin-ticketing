@@ -33,19 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
+import java.util.Locale;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
-import fr.paris.lutece.plugins.ticketing.business.TicketHome;
-import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.portal.service.rbac.Permission;
 import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
 import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
 import fr.paris.lutece.util.ReferenceList;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -66,9 +63,6 @@ public class TicketResourceIdService extends ResourceIdService
 
     /** Permission for deleting a ticket */
     public static final String PERMISSION_VIEW = "VIEW";
-
-    /** Permission for viewing history of a ticket */
-    public static final String PERMISSION_VIEW_HISTORY = "VIEW_HISTORY";
 
     /** Permission for self assigning a ticket */
     public static final String PERMISSION_SELF_ASSIGN = "SELF_ASSIGN";
@@ -98,7 +92,6 @@ public class TicketResourceIdService extends ResourceIdService
     private static final String PROPERTY_LABEL_MODIFY = "ticketing.ticket.permission.label.modify";
     private static final String PROPERTY_LABEL_DELETE = "ticketing.ticket.permission.label.delete";
     private static final String PROPERTY_LABEL_VIEW = "ticketing.ticket.permission.label.view";
-    private static final String PROPERTY_LABEL_VIEW_HISTORY = "ticketing.ticket.permission.label.viewHistory";
     private static final String PROPERTY_LABEL_SELF_ASSIGN = "ticketing.ticket.permission.label.selfAssign";
     private static final String PROPERTY_LABEL_ASSIGN_TO_UNIT = "ticketing.ticket.permission.label.assignToUnit";
     private static final String PROPERTY_LABEL_ASSIGN_TO_USER = "ticketing.ticket.permission.label.assignToUser";
@@ -146,11 +139,6 @@ public class TicketResourceIdService extends ResourceIdService
         p = new Permission(  );
         p.setPermissionKey( PERMISSION_VIEW );
         p.setPermissionTitleKey( PROPERTY_LABEL_VIEW );
-        rt.registerPermission( p );
-
-        p = new Permission(  );
-        p.setPermissionKey( PERMISSION_VIEW_HISTORY );
-        p.setPermissionTitleKey( PROPERTY_LABEL_VIEW_HISTORY );
         rt.registerPermission( p );
 
         p = new Permission(  );
