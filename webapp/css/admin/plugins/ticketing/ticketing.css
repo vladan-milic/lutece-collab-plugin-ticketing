@@ -49,6 +49,10 @@
 #filter-ticket label.select:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; font-size:18px; right:10px; top: -2px; position:absolute; pointer-events:none }
 #filter-ticket .btn{ color:#fff; min-width: 50px }
 
+.timeline-body > hr {
+    margin: 0;
+}
+
 /*==========  Non-Mobile First Method  ==========*/
 /* Large Devices, Wide Screens */
 @media only screen and (max-width : 1200px) {
