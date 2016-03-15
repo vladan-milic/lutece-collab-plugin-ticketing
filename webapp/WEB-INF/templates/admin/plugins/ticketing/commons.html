@@ -119,7 +119,6 @@
     </div>
 </#macro>
 
-
 <#-- Macro messages : display message block for errors or infos -->
 <#macro notification infos=[] type="info" pos="bottom-left">
   <#-- Error messages handling -->
@@ -135,13 +134,22 @@
       </div>
     <script src="js/jquery/plugins/bnotify/bootstrap-notify.js"></script>
     <script>
+		function htmlDecode( input ) {
+    return String(input)
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>');
+		}
+
     <#list infos as info >
-      var txt = "${info.message}";
+      var txt = htmlDecode( "${info.message?html}" );
     </#list>
+
     $( function(){
       $(".notifications span").hide();
       $(".notifications").notify({
-        message: { text: txt + " " },
+        message: { text: txt },
         type: '${type}',
         fadeOut: {
             delay: Math.floor(Math.random() * 500) + 2500

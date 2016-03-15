@@ -18,15 +18,29 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-12 col-sm-2 control-label" for="id_ticket_category">#i18n{ticketing.create_instantresponse.labelTicketDomain}</label>
+          <label class="col-xs-12 col-sm-2 control-label" for="id_ticket_domain">#i18n{ticketing.create_instantresponse.labelTicketDomain}</label>
           <div class="col-xs-12 col-sm-9">
             <@comboWithParams name="id_ticket_domain" default_value="0" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=ticket_domains_list />
           </div>
         </div>
         <div class="form-group">
-          <label class="col-xs-12 col-sm-2 control-label" for="id_contact_mode">#i18n{ticketing.create_instantresponse.labelTicketCategory}</label>
+          <label class="col-xs-12 col-sm-2 control-label" for="id_ticket_category">#i18n{ticketing.create_instantresponse.labelTicketCategory}</label>
           <div class="col-xs-12 col-sm-9">
             <@comboWithParams name="id_ticket_category" default_value="0" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=ticket_categories_list />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-12 col-sm-2 control-label" for="id_channel">#i18n{ticketing.create_instantresponse.labelChannel}</label>
+          <div class="col-xs-12 col-sm-9">
+            <#if selectable_channels_list?? && selectable_channels_list?has_content>
+              <#if preferred_id_channel?? && preferred_id_channel?has_content>
+                <@comboWithParams name="id_channel" default_value="${preferred_id_channel}" additionalParameters=" id=\"id_channel\" class=\"form-control input-lg\" " items=selectable_channels_list />
+              <#else>
+                <@comboWithParams name="id_channel" default_value="" additionalParameters=" id=\"id_channel\" class=\"form-control input-lg\" " items=selectable_channels_list />
+              </#if>
+            <#else>
+              <@comboWithParams name="id_channel" default_value="" additionalParameters=" id=\"id_channel\" class=\"form-control input-lg\" " items=channels_list />
+            </#if>
           </div>
         </div>
         <div class="form-group">

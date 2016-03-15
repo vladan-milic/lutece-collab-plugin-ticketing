@@ -59,11 +59,9 @@ import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
-import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.prefs.AdminUserPreferencesService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
@@ -385,23 +383,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList(  ) );
-        model.put( TicketingConstants.MARK_CHANNELS_LIST, ChannelHome.getReferenceList(  ) );
-
-        String strIdChannelList = AdminUserPreferencesService.instance(  )
-                                                             .get( String.valueOf( 
-                    AdminUserService.getAdminUser( request ).getUserId(  ) ),
-                TicketingConstants.USER_PREFERENCE_CHANNELS_LIST, StringUtils.EMPTY );
-        List<String> idChannelList = TicketHelper.getIdChannelList( strIdChannelList );
-        model.put( TicketingConstants.MARK_SELECTABLE_ID_CHANNEL_LIST, idChannelList );
-
-        String strPreferredIdChannel = AdminUserPreferencesService.instance(  )
-                                                                  .get( String.valueOf( 
-                    AdminUserService.getAdminUser( request ).getUserId(  ) ),
-                TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, StringUtils.EMPTY );
-        model.put( TicketingConstants.MARK_PREFERRED_ID_CHANNEL, strPreferredIdChannel );
-
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_GUID, strGuid );
+        TicketHelper.storeChannelsMarksIntoModel( request, model );
     }
 
     /**
