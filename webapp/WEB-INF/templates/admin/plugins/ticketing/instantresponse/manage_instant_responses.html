@@ -1,4 +1,7 @@
 <#include "/admin/plugins/ticketing/commons.html" />
+<#macro sortColumn field=''>
+    <i class="fa fa-chevron-up" onclick="sortList('${field}','asc')"></i>&nbsp;<i class="fa fa-chevron-down" onclick="sortList('${field}','desc')"></i>
+</#macro>
 <div class="gru-wrapper">
   <div id="head-ticketing" class="row bg-gru-light">
     <div class="col-xs-12 col-sm-8">
@@ -6,7 +9,7 @@
       <h3>#i18n{ticketing.manage_instantresponses.pageTitle}</h3>
     </div>
     <div class="col-xs-12 col-sm-2">
-        <form method="post" class="form" name="manage_instantresponses" action="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp">
+        <form method="post" class="form" name="manage_instantresponses" id="manage_instantresponses" action="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp">
           <h2>
             <button name="view_createInstantResponse" type="submit" class="btn btn-border bg-gru-light">
               <i class="fa fa-plus"></i> #i18n{ticketing.manage_instantresponses.buttonAdd}
@@ -18,15 +21,14 @@
   <div id="content-ticketing" class="row">
     <div class="col-xs-12 col-sm-12">
       <@notification infos=infos />
-      <table class="table table-hover">
+      <table id="instant-response" class="table table-hover">
         <thead>
           <tr>
               <input type="hidden" id="id" name="id">
-              <th class="text-center">#i18n{ticketing.manage_instantresponses.columnDateCreate}</th>
-              <th>#i18n{ticketing.manage_instantresponses.columnIdTicketCategory}</th>
+              <th class="text-center">#i18n{ticketing.manage_instantresponses.columnDateCreate} <@sortColumn field='date_create'/></th>
+              <th>#i18n{ticketing.manage_instantresponses.columnIdTicketCategory} <@sortColumn field='category_label'/></th>
               <th>#i18n{ticketing.manage_instantresponses.columnSubject}</th>
-              <th>#i18n{ticketing.manage_instantresponses.columnAdminUser}</th>
-              <th>#i18n{portal.util.labelActions}</th>
+              <th>#i18n{ticketing.manage_instantresponses.columnAdminUser} <@sortColumn field='unit_label'/></th>
           </tr>
         </thead>
         <tbody>
@@ -40,7 +42,9 @@
                   ${instantresponse.type} / ${instantresponse.domain} / ${instantresponse.category}
               </td>
               <td>
+                <div class="detail">
                   ${instantresponse.subject}
+                </div>
               </td>
               <td>
                   <p><i class="fa fa-sitemap"></i>  ${instantresponse.unit}</p>
@@ -51,6 +55,7 @@
         		        <span class="avatar-label">${instantresponse.userFirstname} ${instantresponse.userLastname}</span>
                   </p>
               </td>
+              <!--
               <td>
                   <a href="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp?view=modifyInstantResponse&id=${instantresponse.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
                       <i class="fa fa-pencil"></i>
@@ -59,6 +64,7 @@
                       <i class="fa fa-trash"></i>
                   </a>
               </td>
+            -->
           </tr>
           </#list>
         </tbody>
@@ -71,6 +77,12 @@
 $( function(){
   $(".content-header").toggle();
 });
+
+function sortList(field, order){
+	$("input[name=fltr_order_sort]").val(order);
+	$("input[name=fltr_order_by]").val(field);
+	$("#manage_instantresponses").submit( );
+}
 </script>
 
 <#function displayTimeOpenedTicket time_ms>
@@ -79,12 +91,12 @@ $( function(){
 	<#assign minutes = (time_ms / 60000)?int>
 
 	<#if days gte 1>
-		<#return "<strong class=\"lead\">" + days + "</strong><br> #i18n{ticketing.manage_tickets.unitDay}">
+		<#return "<strong class=\"lead\">" + days + "</strong><br class=\"hidden-xs\"> #i18n{ticketing.manage_tickets.unitDay}">
 	<#else>
 		<#if hours gte 1>
-			<#return "<strong class=\"lead\">" + hours + "</strong><br> #i18n{ticketing.manage_tickets.unitHour}">
+			<#return "<strong class=\"lead\">" + hours + "</strong><br class=\"hidden-xs\"> #i18n{ticketing.manage_tickets.unitHour}">
 		<#else>
-			<#return "<strong class=\"lead\">" + minutes + "</strong><br> #i18n{ticketing.manage_tickets.unitMinute}">
+			<#return "<strong class=\"lead\">" + minutes + "</strong><br class=\"hidden-xs\"> #i18n{ticketing.manage_tickets.unitMinute}">
 		</#if>
 	</#if>
 </#function>
