@@ -55,7 +55,6 @@ import fr.paris.lutece.util.url.UrlItem;
 import org.apache.commons.lang.StringUtils;
 
 import java.sql.Timestamp;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -208,6 +207,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
+        TicketHelper.storeChannelsMarksIntoModel( request, model );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_INSTANT_RESPONSE, TEMPLATE_CREATE_INSTANT_RESPONSE, model );
     }

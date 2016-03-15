@@ -36,6 +36,8 @@ package fr.paris.lutece.plugins.ticketing.web;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.plugins.ticketing.business.ChannelHome;
+import fr.paris.lutece.plugins.ticketing.business.ResponseRecap;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
@@ -50,6 +52,7 @@ import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.admin.AdminAuthenticationService;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
+import fr.paris.lutece.portal.service.prefs.AdminUserPreferencesService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -59,11 +62,17 @@ import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -139,6 +148,23 @@ public final class TicketHelper
     {
         model.put( TicketingConstants.MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( TicketingConstants.MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
+    }
+
+    /**
+     * Completes the specified model for channels selection
+     * @param request the request
+     * @param model the model to complete
+     */
+    public static void storeChannelsMarksIntoModel( HttpServletRequest request, Map<String, Object> model )
+    {
+        model.put( TicketingConstants.MARK_CHANNELS_LIST, ChannelHome.getReferenceList(  ) );
+        model.put( TicketingConstants.MARK_SELECTABLE_CHANNELS_LIST, TicketHelper.getSelectableChannelsList( request ) );
+
+        String strPreferredIdChannel = AdminUserPreferencesService.instance(  )
+                .get( String.valueOf( 
+                 AdminUserService.getAdminUser( request ).getUserId(  ) ),
+                 TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, StringUtils.EMPTY );
+        model.put( TicketingConstants.MARK_PREFERRED_ID_CHANNEL, strPreferredIdChannel );
     }
 
     /**
@@ -346,5 +372,32 @@ public final class TicketHelper
         }
 
         return strIdChannelList.toString(  );
+    }
+    
+    /**
+     * Get list of selectable channels of the user
+     *
+     * @param request
+     *            http request
+     * @return list of selectable channels of the user.
+     */
+    public static ReferenceList getSelectableChannelsList( HttpServletRequest request  )
+    {
+        ReferenceList channelList = ChannelHome.getReferenceList(  );
+        
+        String strIdSelectableChannelList = AdminUserPreferencesService.instance(  )
+                .get( String.valueOf( 
+                AdminUserService.getAdminUser( request ).getUserId(  ) ),
+                TicketingConstants.USER_PREFERENCE_CHANNELS_LIST, StringUtils.EMPTY );
+        
+        List<String> idSelectableChannelList = getIdChannelList( strIdSelectableChannelList );
+        Map<String, String> selectableChannelsMap = new HashMap<String, String>(  );
+        Map<String, String> channelsMap = channelList.toMap(  );
+
+        for (String channelId : idSelectableChannelList ) {
+            selectableChannelsMap.put( channelId, channelsMap.get( channelId ) );
+        }        
+        
+        return ReferenceList.convert( selectableChannelsMap );
     }
 }

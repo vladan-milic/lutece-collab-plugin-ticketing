@@ -83,6 +83,7 @@ public final class TicketingConstants
     public static final String MARK_POPIN_MODE = "popin_mode";
     public static final String MARK_JSP_CONTROLLER = "jsp_controller";
     public static final String MARK_CHANNELS_LIST = "channels_list";
+    public static final String MARK_SELECTABLE_CHANNELS_LIST = "selectable_channels_list";
     public static final String MARK_PREFERRED_ID_CHANNEL = "preferred_id_channel";
     public static final String MARK_SELECTABLE_ID_CHANNEL_LIST = "selectable_id_channel_list";
     public static final String MARK_USER_SIGNATURE = "user_signature";
