@@ -10,6 +10,8 @@
     </div>
     <div class="col-xs-12 col-sm-2">
         <form method="post" class="form" name="manage_instantresponses" id="manage_instantresponses" action="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp">
+          <input type="hidden" name="fltr_order_sort" value="${orderSort!}">
+          <input type="hidden" name="fltr_order_by" value="${orderBy!}">
           <h2>
             <button name="view_createInstantResponse" type="submit" class="btn btn-border bg-gru-light">
               <i class="fa fa-plus"></i> #i18n{ticketing.manage_instantresponses.buttonAdd}
@@ -24,17 +26,15 @@
       <table id="instant-response" class="table table-hover">
         <thead>
           <tr>
-              <input type="hidden" id="id" name="id">
-              <th class="text-center">#i18n{ticketing.manage_instantresponses.columnDateCreate} <@sortColumn field='date_create'/></th>
-              <th>#i18n{ticketing.manage_instantresponses.columnIdTicketCategory} <@sortColumn field='category_label'/></th>
+              <th class="text-center">#i18n{ticketing.manage_instantresponses.columnDateCreate}</th>
+              <th>#i18n{ticketing.manage_instantresponses.columnIdTicketCategory}</th>
               <th>#i18n{ticketing.manage_instantresponses.columnSubject}</th>
-              <th>#i18n{ticketing.manage_instantresponses.columnAdminUser} <@sortColumn field='unit_label'/></th>
+              <th>#i18n{ticketing.manage_instantresponses.columnAdminUser} </th>
           </tr>
         </thead>
         <tbody>
           <#list instantresponse_list as instantresponse >
           <tr>
-              <input type="hidden" id="id" name="id">
               <td class="text-gru text-center">
                   ${displayTimeOpenedTicket(instantresponse.timeOpenedTicketInMs)}
               </td>
