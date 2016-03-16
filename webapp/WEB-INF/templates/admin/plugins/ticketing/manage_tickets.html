@@ -156,10 +156,11 @@
     <div class="tab-content">
     	<div id="filter-ticket" class="row">
         <form id="filter_form" class="form-inline" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+          <input type="hidden" name="submitted_form" value="1">
           <input type="hidden" name="fltr_urgency" value="${ticket_filter.urgency!}">
           <input type="hidden" name="selected_tab" value="<#if selected_tab?? && selected_tab?has_content>${selected_tab}<#else>agent</#if>">
-          <input type="hidden" name="fltr_order_sort" value="${orderSort!}">
-          <input type="hidden" name="fltr_order_by" value="${orderBy!}">
+          <input type="hidden" name="fltr_order_sort" value="${ticket_filter.orderSort!}">
+          <input type="hidden" name="fltr_order_by" value="${ticket_filter.orderBy!}">
     			<div class="col-xs-12 col-sm-offset-1 col-sm-3">
             <button type="submit" name="fltr_new_urgency" value="-1" class="btn btn-link btn-xs <#if ticket_filter.urgency==-1>btn-primary<#else>border-gru text-gru</#if>">#i18n{ticketing.manage_tickets.urgency.all}</button>
     				<button type="submit" name="fltr_new_urgency" value="2" class="btn btn-link btn-xs <#if ticket_filter.urgency==2>btn-danger<#else>border-red text-red</#if>">#i18n{ticketing.manage_tickets.urgency.high}</button>
@@ -178,7 +179,7 @@
     					<@comboWithParams name="fltr_open_since" default_value="${ticket_filter.openSincePeriod}" additionalParameters=" id=\"fltr_open_since\" class=\"form-control input-xs\" " items=period_list/>
     				</label>
     				</div>
-    			</form>
+    	</form>
           <div class="col-xs-8 col-sm-4">
             <form class="form-inline" method="post" action="jsp/admin/plugins/ticketing/TicketSearch.jsp?action=search&page_index=1">
           		<input type="hidden" id="searched_field" name="searched_field" value="contents">
@@ -269,7 +270,7 @@ function setSelectedTab(tab){
       </#if>
       <#break>
     <#case 1>
-      <i class="fa fa-remove fa-2x"></i>
+      <#return "<i class=\"fa fa-check fa-2x\"></i>">
       <#break>
   </#switch>
 </#function>

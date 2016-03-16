@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.ticketing.web.filter;
 
 import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.xpages.XPageApplicationEntry;
@@ -98,6 +99,8 @@ public class SessionFilter implements Filter
             session.removeAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET );
             session.removeAttribute( TicketingConstants.SESSION_VALIDATED_TICKET_FORM );
             session.removeAttribute( TicketingConstants.SESSION_TICKET_FORM_ERRORS );
+            session.removeAttribute( TicketingConstants.SESSION_TICKET_FILTER );
+            session.removeAttribute( TicketingConstants.SESSION_INSTANTRESPONSE_FILTER );
         }
 
         filterChain.doFilter( request, response );

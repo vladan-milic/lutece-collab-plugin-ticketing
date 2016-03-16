@@ -112,6 +112,16 @@ public final class InstantResponseHome
     }
 
     /**
+     * Load the data of all the instantResponse objects and returns them in form of a collection
+     * @param filter filter used to filter response list
+     * @return the collection which contains the data of all the instantResponse objects
+     */
+    public static List<InstantResponse> getInstantResponsesList( InstantResponseFilter filter )
+    {
+        return _dao.selectInstantResponsesList( filter, _plugin );
+    }
+
+    /**
      * Load the id of all the instantResponse objects and returns them in form of a collection
      * @return the collection which contains the id of all the instantResponse objects
      */

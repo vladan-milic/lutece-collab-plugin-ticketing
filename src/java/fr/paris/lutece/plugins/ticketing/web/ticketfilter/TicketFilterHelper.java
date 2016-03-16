@@ -37,6 +37,7 @@ import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketHelper;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
@@ -86,6 +87,7 @@ public final class TicketFilterHelper
     private static final String PARAMETER_FILTER_NEW_URGENCY = "fltr_new_urgency";
     private static final String PARAMETER_FILTER_REFERENCE = "fltr_reference";
     private static final String PARAMETER_FILTER_ORDER_SORT = "fltr_order_sort";
+    private static final String PARAMETER_FILTER_SUBMITTED_FORM = "submitted_form";
 
     //Marks
     private static final String MARK_FULL_DOMAIN_LIST = "domain_list";
@@ -93,7 +95,6 @@ public final class TicketFilterHelper
     private static final String MARK_FILTER_PERIOD_LIST = "period_list";
     private static final String MARK_TICKET_FILTER = "ticket_filter";
     private static final String DATE_FILTER_PATTERN = "yyyyMMdd";
-    private static final String SESSION_FILTER = "ticket_filter";
 
     // Properties for page titles
     private static final String PROPERTY_TICKET_TYPE_LABEL = "ticketing.model.entity.ticket.attribute.ticketType";
@@ -118,6 +119,8 @@ public final class TicketFilterHelper
     public static TicketFilter getFilterFromRequest( HttpServletRequest request )
     {
         TicketFilter fltrFiltre = new TicketFilter(  );
+        //by default search is only made on opened ticket
+        fltrFiltre.setStatus( String.valueOf( TicketingConstants.TICKET_OPEN_STATUS ) );
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_DOMAIN ) ) &&
                 StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_DOMAIN ) ) )
@@ -233,7 +236,8 @@ public final class TicketFilterHelper
         }
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_OPEN_SINCE ) ) &&
-                StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_OPEN_SINCE ) ) )
+                StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_OPEN_SINCE ) ) &&
+                ( Integer.parseInt( request.getParameter( PARAMETER_FILTER_OPEN_SINCE ) ) != TicketFilterPeriod.NONE.getId(  ) ) )
         {
             Date date = new Date(  );
             Calendar cal = Calendar.getInstance(  );
@@ -260,6 +264,10 @@ public final class TicketFilterHelper
                 date = cal.getTime(  );
                 fltrFiltre.setCreationStartDate( date );
             }
+            else if ( nPeriodId == TicketFilterPeriod.CLOSED.getId(  ) )
+            {
+                fltrFiltre.setStatus( String.valueOf( TicketingConstants.TICKET_CLOSED_STATUS ) );
+            }
         }
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_URGENCY ) ) )
@@ -284,21 +292,26 @@ public final class TicketFilterHelper
     {
         TicketFilter filter = null;
 
-        if ( TicketFilterHelper.getFilterFromRequest( request ).isEmpty(  ) )
+        if ( StringUtils.isEmpty( request.getParameter( PARAMETER_FILTER_SUBMITTED_FORM ) ) )
         {
-            if ( request.getSession(  ).getAttribute( SESSION_FILTER ) != null )
+            //filter form has not been submitted => we use the one stored in session if exists
+            if ( request.getSession(  ).getAttribute( TicketingConstants.SESSION_TICKET_FILTER ) != null )
             {
-                filter = (TicketFilter) request.getSession(  ).getAttribute( SESSION_FILTER );
+                filter = (TicketFilter) request.getSession(  ).getAttribute( TicketingConstants.SESSION_TICKET_FILTER );
             }
             else
             {
                 filter = new TicketFilter(  );
+                filter.setOrderBy( TicketFilter.CONSTANT_DEFAULT_ORDER_BY );
+                filter.setOrderSort( TicketFilter.getDefaultOrderSort(  ) );
+                filter.setStatus( String.valueOf( TicketingConstants.TICKET_OPEN_STATUS ) );
+                request.getSession(  ).setAttribute( TicketingConstants.SESSION_TICKET_FILTER, filter );
             }
         }
         else
         {
             filter = TicketFilterHelper.getFilterFromRequest( request );
-            request.getSession(  ).setAttribute( SESSION_FILTER, filter );
+            request.getSession(  ).setAttribute( TicketingConstants.SESSION_TICKET_FILTER, filter );
         }
 
         return filter;

@@ -95,6 +95,7 @@ public final class TicketingConstants
     public static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
     private static final String PROPERTY_CHANNEL_ID = "ticketing.channel.webChannel.id";
     public static int WEB_ID_CHANNEL = 99;
+
     static
     {
         WEB_ID_CHANNEL = AppPropertiesService.getPropertyInt( PROPERTY_CHANNEL_ID, WEB_ID_CHANNEL );
@@ -104,6 +105,8 @@ public final class TicketingConstants
     public static final String SESSION_NOT_VALIDATED_TICKET = "ticketing.ticketFormService.notValidatedTicket";
     public static final String SESSION_VALIDATED_TICKET_FORM = "ticketing.ticketFormService.validatedTicket";
     public static final String SESSION_TICKET_FORM_ERRORS = "ticketing.session.formErrors";
+    public static final String SESSION_TICKET_FILTER = "ticketing.ticket_filter";
+    public static final String SESSION_INSTANTRESPONSE_FILTER = "ticketing.instantresponse_filter";
 
     // Views
     public static final String VIEW_WORKFLOW_ACTION_FORM = "viewWorkflowActionForm";
@@ -126,6 +129,9 @@ public final class TicketingConstants
     public static final String ROLE_GRU_ADMIN = "gru_admin";
     public static final String ROLE_LEVEL_3 = "gru_level_3";
     public static final int NO_ID_CHANNEL = 0;
+    public static final int TICKET_OPEN_STATUS = 0;
+    public static final int TICKET_CLOSED_STATUS  = 1;
+    
 
     /**
      * Default constructor
