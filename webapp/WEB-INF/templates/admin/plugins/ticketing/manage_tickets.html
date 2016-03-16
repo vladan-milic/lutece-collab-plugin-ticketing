@@ -92,8 +92,8 @@
     				  <#if adminAvatar>
                 <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}" alt="" title="Avatar"></#if>
     				    <span class="avatar-label">${ticket.assigneeUser.firstname} ${ticket.assigneeUser.lastname}</span>
-    				  </#if>
             </p>
+            </#if>
     			  </td>
     			</tr>
     			</#list>
@@ -221,9 +221,14 @@ $( function(){
 	// Set link on whole tr
 	$("tbody > tr ").on( 'click', function(e){
 		//only for ticket lines not for table header
-    if ( $(this).attr("data-url") != undefined ){
-      location.replace( $(this).attr("data-url") );
-    }
+		if ( $(this).attr("data-url") != undefined ){
+		    var form = $('<form>', 
+		    	{ 'action':$(this).attr("data-url"),
+		    	'method':'post'}
+	       );
+	       form.appendTo('body');
+	       form.submit().remove();
+	    }
 	});
 
   $("#fltr_id_type").on( 'change', function(e){
