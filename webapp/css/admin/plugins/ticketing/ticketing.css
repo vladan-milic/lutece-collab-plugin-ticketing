@@ -52,7 +52,7 @@
 #filter-ticket .btn{ color:#fff; min-width: 50px }
 
 .timeline-body > hr {
-    margin: 0;
+    margin: 5px 0;
 }
 
 /*==========  Non-Mobile First Method  ==========*/
