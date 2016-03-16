@@ -120,7 +120,7 @@ public final class TicketFilterHelper
     {
         TicketFilter fltrFiltre = new TicketFilter(  );
         //by default search is only made on opened ticket
-        fltrFiltre.setStatus( String.valueOf( TicketingConstants.TICKET_OPEN_STATUS ) );
+        fltrFiltre.setStatus( String.valueOf( TicketingConstants.TICKET_STATUS_IN_PROGRESS ) );
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_DOMAIN ) ) &&
                 StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_DOMAIN ) ) )
@@ -266,7 +266,7 @@ public final class TicketFilterHelper
             }
             else if ( nPeriodId == TicketFilterPeriod.CLOSED.getId(  ) )
             {
-                fltrFiltre.setStatus( String.valueOf( TicketingConstants.TICKET_CLOSED_STATUS ) );
+                fltrFiltre.setStatus( String.valueOf( TicketingConstants.TICKET_STATUS_CLOSED ) );
             }
         }
 
@@ -304,7 +304,7 @@ public final class TicketFilterHelper
                 filter = new TicketFilter(  );
                 filter.setOrderBy( TicketFilter.CONSTANT_DEFAULT_ORDER_BY );
                 filter.setOrderSort( TicketFilter.getDefaultOrderSort(  ) );
-                filter.setStatus( String.valueOf( TicketingConstants.TICKET_OPEN_STATUS ) );
+                filter.setStatus( String.valueOf( TicketingConstants.TICKET_STATUS_IN_PROGRESS ) );
                 request.getSession(  ).setAttribute( TicketingConstants.SESSION_TICKET_FILTER, filter );
             }
         }

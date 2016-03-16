@@ -6,22 +6,20 @@
 .border-info{border:1px solid  #00acd6 !important;}
 .border-orange{border:1px solid orange !important;}
 .border-red{border:1px solid red !important;}
+
 #info-head-right{ border-left: 1px solid #fff; height:215px; margin-top:0; padding-top:0 }
 .nav-ticket{ padding-left: 140px }
 
 .ticket-head{ height: 200px !important }
 .ticket-content{ margin-left: 0 }
 
-#ticketing-history-panel{ padding: 15px 0 }
-#ticketing-history-panel .panel{ padding: 15px; background-color: #EEE; }
+#ticketing-history-panel{ padding: 15px 0; }
+#ticketing-history-panel .panel{ padding: 15px; background-color: #EEE; margin-bottom: 0; margin-top: 15px }
 
 #head-ticketing{ height: 200px; color:#fff; padding:0 10%  }
 #content-ticketing{ background-color: #fff; color: #000; padding: 0 10% }
 #content-ticketing form{ margin-top: 20px}
 
-/*
-#demand-content{ margin-left: 142px }
-*/
 #demand-panel.tickets .tab-content{ padding-left: 0 }
 #demand-panel.tickets .tab-content table td{ padding: 15px 15px }
 #demand-panel.tickets .tab-content table td:nth-of-type(2){ padding: 0 15px }
@@ -39,8 +37,12 @@
 #filter-ticket .form-control{ border-color: #000 }
 #filter-ticket .input-group-btn > .btn { border: 1px solid #3c8dbc}
 #filter-ticket span{ text-transform: uppercase }
-
 #filter-ticket select{ height:20px; font-weight:normal; padding: 1px 15px 0 2px; margin:0; background: #FFF; color:#000; border: 1px solid "000";border-radius: 6px; outline:none; display: inline-block; -webkit-appearance:none; -moz-appearance:none; appearance:none; cursor:pointer }
+
+#instant-response tr td strong.lead{ font-size: 4rem; font-weight: bold  }
+#instant-response tr td:first-of-type{ width: 15rem }
+#instant-response tr td:nth-of-type(2){ width: 30rem }
+#instant-response tr td .detail{ width: 50rem; max-height: 100px; overflow: auto; background: #EEE; padding: 10px; margin:10px;  border-radius: 8px }
 
 /* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
 @media screen and (-webkit-min-device-pixel-ratio:0) { #filter-ticket select {padding-right: 18px} }
@@ -49,26 +51,37 @@
 #filter-ticket label.select:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; font-size:18px; right:10px; top: -2px; position:absolute; pointer-events:none }
 #filter-ticket .btn{ color:#fff; min-width: 50px }
 
+.timeline-body > hr {
+    margin: 5px 0;
+}
+
 /*==========  Non-Mobile First Method  ==========*/
 /* Large Devices, Wide Screens */
 @media only screen and (max-width : 1200px) {
   #demand-panel .nav-ticket{ padding-left: 100px }
   #demand-panel .nav-ticket > li > a {	padding: 15px 15px;	margin-left: 10px;	text-transform: uppercase;	font-size: 1.3rem;}
+  #instant-response tr td:nth-of-type(2){ width: 20rem }
+  #instant-response td .detail{ width: 40rem !important}
 }
 
 /* Medium Devices, Desktops */
 @media only screen and (max-width : 992px) {
   #demand-panel .nav-ticket{ padding-left: 80px }
-  #demand-panel .nav-ticket > li > a{ padding: 15px 5px; margin-left: 5px; font-size: 1.2rem}
-  #customer-panel h2, #customer-panel h3{ text-align: center}
-  #customer-panel p{  text-align: center}
+  #demand-panel .nav-ticket > li > a{ padding: 15px 5px; margin-left: 5px; font-size: 1.2rem }
+  #customer-panel h2, #customer-panel h3{ text-align: center }
+  #customer-panel p{ text-align: center }
+  #instant-response tr td:nth-of-type(2){ width: 10rem }
+  #instant-response td .detail{ width: 20rem !important }
 }
 
 /* Small Devices, Tablets */
 @media only screen and (max-width : 768px) {
+
   #customer-panel { padding: 15px 0 }
   #demand-panel .nav-ticket{ padding-left: 60px }
   .gru-wrapper{ margin: 15px -15px; padding: 0 }
+
+  #head-ticketing{ height: auto; padding:0 5%; margin-bottom: 15px }
 
   #demand-panel.tickets .tab-content td:nth-of-type(1):before { content: "Reference"; }
   #demand-panel.tickets .tab-content td:nth-of-type(2):before { content: "Ouvert depuis"; }
@@ -76,6 +89,23 @@
   #demand-panel.tickets .tab-content td:nth-of-type(4):before { content: "Usager / Objet"; }
   #demand-panel.tickets .tab-content td:nth-of-type(5):before { content: "Etat"; }
   #demand-panel.tickets .tab-content td:nth-of-type(6):before { content: "Assignation"; }
+
+  /* Force table to not be like tables anymore */
+  #instant-response table, #instant-response thead, #instant-response tbody, #instant-response th, #instant-response td, #instant-response tr { display: block; }
+  /* Hide table headers (but not display: none;, for accessibility) */
+  #instant-response thead tr { position: absolute; top: -9999px; left: -9999px }
+  #instant-response tr {  border: 1px solid #ccc	}
+  #instant-response td { font-size: 1.2rem !important; vertical-align: middle; width: auto !important; padding: 0; margin: 0 /* Behave  like a "row" */	border: none;	border-bottom: 1px solid #eee; position: relative;	padding-left: 50%; min-height: 40px	}
+  #instant-response td strong.lead{ font-size: 1.2rem !important }
+  #instant-response td .detail{ width: auto !important }
+  #instant-response td:before { /* Now like a table header */	position: absolute;	/* Top/left values mimic padding */	top: 6px;	left: 6px;	width: 45%; padding-right: 10px; 	white-space: nowrap	}
+  /*	Label the data*/
+  #instant-response td:nth-of-type(1):before { content: "Il y a :"; }
+  #instant-response td:nth-of-type(2):before { content: "Problématique"; }
+  #instant-response td:nth-of-type(3):before { content: "Détail"; }
+  #instant-response td:nth-of-type(4):before { content: "Entité/Agent"; }
+
+
 }
 
 @media screen and (max-width: 560px) {

@@ -78,10 +78,10 @@
       <p>
         <#switch ticket.ticketStatus>
           <#case 0>
-            <i class="fa fa-hourglass-half fa-fw"></i> En cours
+            <i class="fa fa-hourglass-half fa-fw"></i> ${ticket.state.name}
           <#break>
           <#case 1>
-            <i class="fa fa-check fa-fw"></i> Termin&eacute;e
+            <i class="fa fa-check fa-fw"></i> ${ticket.state.name}
           <#break>
         </#switch>
       </p>
