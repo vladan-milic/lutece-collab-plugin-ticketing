@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import fr.paris.lutece.plugins.ticketing.business.OrderByFilter.OrderSortAllowed;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -548,13 +549,21 @@ public final class TicketDAO implements ITicketDAO
             sbSQL.append( CONSTANT_ORDER_BY );
             // sbSQL.append( filter.getOrderBy( ).replaceAll( ",", strOrderType
             // + "," ) );
-            sbSQL.append( filter.getOrderBy(  ) );
+            sbSQL.append( filter.getOrderBySqlColumn(  ) );
 
             if ( filter.containsOrderSort(  ) )
             {
                 String strOrderType = filter.isOrderASC(  ) ? CONSTANT_ASC : CONSTANT_DESC;
                 sbSQL.append( strOrderType );
             }
+        }
+        else
+        {
+            //always apply default sorting
+            sbSQL.append( CONSTANT_ORDER_BY );
+            sbSQL.append( TicketFilter.getDefaultOrderBySqlColumn(  ) );
+            sbSQL.append( TicketFilter.getDefaultOrderSort(  ).equals( OrderSortAllowed.ASC.name(  ) ) ? CONSTANT_ASC
+                                                                                                       : CONSTANT_DESC );
         }
     }
 

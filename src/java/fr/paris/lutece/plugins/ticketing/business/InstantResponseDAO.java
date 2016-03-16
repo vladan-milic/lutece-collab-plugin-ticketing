@@ -36,6 +36,8 @@ package fr.paris.lutece.plugins.ticketing.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +57,11 @@ public final class InstantResponseDAO implements IInstantResponseDAO
         " FROM ticketing_instant_response a, ticketing_ticket_category b, ticketing_ticket_domain c , ticketing_ticket_type d, core_admin_user e, unittree_unit f " +
         " WHERE a.id_ticket_category = b.id_ticket_category AND b.id_ticket_domain = c.id_ticket_domain AND c.id_ticket_type = d.id_ticket_type AND a.id_admin_user = e.id_user AND a.id_unit = f.id_unit";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_instant_response FROM ticketing_instant_response";
+
+    // for sorting 
+    private static final String CONSTANT_ASC = " ASC";
+    private static final String CONSTANT_DESC = " DESC";
+    private static final String CONSTANT_ORDER_BY = " ORDER BY ";
 
     /**
      * Generates a new primary key
@@ -166,30 +173,10 @@ public final class InstantResponseDAO implements IInstantResponseDAO
     @Override
     public List<InstantResponse> selectInstantResponsesList( Plugin plugin )
     {
-        List<InstantResponse> instantResponseList = new ArrayList<InstantResponse>(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
         daoUtil.executeQuery(  );
 
-        while ( daoUtil.next(  ) )
-        {
-            InstantResponse instantResponse = new InstantResponse(  );
-            int nIndex = 1;
-            instantResponse.setId( daoUtil.getInt( nIndex++ ) );
-            instantResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
-            instantResponse.setCategory( daoUtil.getString( nIndex++ ) );
-            instantResponse.setDomain( daoUtil.getString( nIndex++ ) );
-            instantResponse.setType( daoUtil.getString( nIndex++ ) );
-            instantResponse.setSubject( daoUtil.getString( nIndex++ ) );
-            instantResponse.setDateCreate( daoUtil.getTimestamp( nIndex++ ) );
-            instantResponse.setIdAdminUser( daoUtil.getInt( nIndex++ ) );
-            instantResponse.setUserFirstname( daoUtil.getString( nIndex++ ) );
-            instantResponse.setUserLastname( daoUtil.getString( nIndex++ ) );
-            instantResponse.setIdUnit( daoUtil.getInt( nIndex++ ) );
-            instantResponse.setUnit( daoUtil.getString( nIndex++ ) );
-
-            instantResponseList.add( instantResponse );
-        }
-
+        List<InstantResponse> instantResponseList = getInstantResponsesFromQuery( daoUtil );
         daoUtil.free(  );
 
         return instantResponseList;
@@ -213,5 +200,83 @@ public final class InstantResponseDAO implements IInstantResponseDAO
         daoUtil.free(  );
 
         return instantResponseList;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<InstantResponse> selectInstantResponsesList( InstantResponseFilter filter, Plugin plugin )
+    {
+        StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECTALL );
+        addFilterCriteriaClauses( sbSQL, filter );
+
+        DAOUtil daoUtil = new DAOUtil( sbSQL.toString(  ), plugin );
+
+        daoUtil.executeQuery(  );
+
+        List<InstantResponse> instantResponseList = getInstantResponsesFromQuery( daoUtil );
+
+        daoUtil.free(  );
+
+        return instantResponseList;
+    }
+
+    /**
+     * returns instantResponseList
+     * @param daoUtil daoUtil which has executed query and still contain element
+     * @return list of instant responses
+     */
+    private List<InstantResponse> getInstantResponsesFromQuery( DAOUtil daoUtil )
+    {
+        List<InstantResponse> instantResponseList = new ArrayList<InstantResponse>(  );
+
+        if ( daoUtil != null )
+        {
+            while ( daoUtil.next(  ) )
+            {
+                InstantResponse instantResponse = new InstantResponse(  );
+                int nIndex = 1;
+                instantResponse.setId( daoUtil.getInt( nIndex++ ) );
+                instantResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
+                instantResponse.setCategory( daoUtil.getString( nIndex++ ) );
+                instantResponse.setDomain( daoUtil.getString( nIndex++ ) );
+                instantResponse.setType( daoUtil.getString( nIndex++ ) );
+                instantResponse.setSubject( daoUtil.getString( nIndex++ ) );
+                instantResponse.setDateCreate( daoUtil.getTimestamp( nIndex++ ) );
+                instantResponse.setIdAdminUser( daoUtil.getInt( nIndex++ ) );
+                instantResponse.setUserFirstname( daoUtil.getString( nIndex++ ) );
+                instantResponse.setUserLastname( daoUtil.getString( nIndex++ ) );
+                instantResponse.setIdUnit( daoUtil.getInt( nIndex++ ) );
+                instantResponse.setUnit( daoUtil.getString( nIndex++ ) );
+
+                instantResponseList.add( instantResponse );
+            }
+        }
+
+        return instantResponseList;
+    }
+
+    /**
+     * add criteria to request
+     *
+     * @param sbSQL
+     *            request
+     * @param filter
+     *            filter
+     */
+    private void addFilterCriteriaClauses( StringBuilder sbSQL, InstantResponseFilter filter )
+    {
+        if ( filter.containsOrderBy(  ) )
+        {
+            sbSQL.append( CONSTANT_ORDER_BY );
+            sbSQL.append( filter.getOrderBySqlColumn(  ) );
+
+            if ( filter.containsOrderSort(  ) )
+            {
+                String strOrderType = filter.isOrderASC(  ) ? CONSTANT_ASC : CONSTANT_DESC;
+                sbSQL.append( strOrderType );
+            }
+        }
     }
 }

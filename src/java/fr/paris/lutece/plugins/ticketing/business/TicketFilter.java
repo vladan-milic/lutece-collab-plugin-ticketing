@@ -37,7 +37,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -45,7 +44,7 @@ import java.util.Map;
  * class TicketFilter
  *
  */
-public class TicketFilter
+public class TicketFilter extends OrderByFilter
 {
     /**
      * Value for boolean filters to represent Boolean.FALSE
@@ -61,26 +60,7 @@ public class TicketFilter
     /**
      * Default order by
      */
-    public static final String CONSTANT_DEFAULT_ORDER_BY = "ticket_reference";
-    private static final Map<String, String> ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP;
-
-    static
-    {
-        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP = new HashMap<String, String>(  );
-        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "category_label", "e.label" );
-        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "ticket_reference", "ticket_reference" );
-        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "ticket_status", "ticket_status" );
-        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "date_create", "date_create" );
-        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "date_update", "date_update" );
-        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "id_user", "id_user" );
-        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "email", "email" );
-        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "lastname", "lastname" );
-        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "date_close", "date_close" );
-        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "ticket_status_text", "ticket_status_text" );
-        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "assignee", "h.label, g.last_name" );
-        ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.put( "state", "j.name" );
-    }
-
+    public static final String CONSTANT_DEFAULT_ORDER_BY = "date_create";
     private int _nIdTicket = CONSTANT_ID_NULL;
     private Date _dateLastUpdateDate;
     private Date _dateLastUpdateStartDate;
@@ -101,8 +81,6 @@ public class TicketFilter
     private String _strReference;
     private String _strFixedPhoneNumber;
     private String _strMobilePhoneNumber;
-    private String _strOrderBy;
-    private String _strOrderSort;
     private int _nUrgency = CONSTANT_ID_NULL;
 
     /**
@@ -119,7 +97,8 @@ public class TicketFilter
         StringUtils.isEmpty( _strStatus ) && StringUtils.isEmpty( _strEmail ) && StringUtils.isEmpty( _strLastName ) &&
         StringUtils.isEmpty( _strFirstName ) && StringUtils.isEmpty( _strReference ) &&
         StringUtils.isEmpty( _strFixedPhoneNumber ) && StringUtils.isEmpty( _strMobilePhoneNumber ) &&
-        StringUtils.isEmpty( _strOrderBy ) && StringUtils.isEmpty( _strOrderSort ) && ( _nUrgency == CONSTANT_ID_NULL );
+        StringUtils.isEmpty( getOrderBy(  ) ) && StringUtils.isEmpty( getOrderSort(  ) ) &&
+        ( _nUrgency == CONSTANT_ID_NULL );
     }
 
     /**
@@ -374,7 +353,7 @@ public class TicketFilter
     }
 
     /**
-     * @param _nIdCategory
+     * @param nIdCategory
      *            the _nIdCategory to set
      */
     public void setIdCategory( int nIdCategory )
@@ -689,91 +668,21 @@ public class TicketFilter
         return _nUrgency != CONSTANT_ID_NULL;
     }
 
-    /**
-     * Set the order by attribute of this filter.
-     *
-     * @param strOrderBy
-     *            The order by attribute of this filter. If the specified order
-     *            does not match with column names of the ticket table of the
-     *            database, then the order by is reinitialized.
-     */
-    public void setOrderBy( String strOrderBy )
+    @Override
+    protected void initOrderNameToColumnNameMap(  )
     {
-        if ( ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.containsKey( strOrderBy ) )
-        {
-            this._strOrderBy = ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.get( strOrderBy );
-        }
-        else
-        {
-            _strOrderBy = ORDER_BY_FUNCTIONAL_TO_TECH_NAME_MAP.get( CONSTANT_DEFAULT_ORDER_BY );
-        }
-    }
-
-    /**
-     * @return the _strOrderBy
-     */
-    public String getOrderBy(  )
-    {
-        return _strOrderBy;
-    }
-
-    /**
-     * Check if this filter contains a order by clause
-     *
-     * @return the _strOrderBy
-     */
-    public boolean containsOrderBy(  )
-    {
-        return StringUtils.isNotEmpty( _strOrderBy );
-    }
-
-    /**
-     * @return the _bOrderASC
-     */
-    public boolean isOrderASC(  )
-    {
-        return OrderSortAllowed.ASC.name(  ).equalsIgnoreCase( _strOrderSort );
-    }
-
-    /**
-     * Check if this filter contains a valid ordersort
-     *
-     * @return true if filter contains a valid ordersort
-     */
-    public boolean containsOrderSort(  )
-    {
-        boolean bResult = false;
-
-        if ( StringUtils.isNotEmpty( _strOrderSort ) )
-        {
-            for ( OrderSortAllowed osa : OrderSortAllowed.values(  ) )
-            {
-                if ( osa.name(  ).equalsIgnoreCase( _strOrderSort ) )
-                {
-                    bResult = true;
-
-                    break;
-                }
-            }
-        }
-
-        return bResult;
-    }
-
-    /**
-     * @param strOrderSort
-     *            the strOrderSort to set
-     */
-    public void setOrderSort( String strOrderSort )
-    {
-        _strOrderSort = strOrderSort;
-    }
-
-    /**
-     * Sort order allowed
-     */
-    private enum OrderSortAllowed
-    {ASC,
-        DESC;
+        _mapOrderNameToColumnName = new HashMap<String, String>(  );
+        _mapOrderNameToColumnName.put( "category_label", "e.label" );
+        _mapOrderNameToColumnName.put( "ticket_reference", "ticket_reference" );
+        _mapOrderNameToColumnName.put( "ticket_status", "ticket_status" );
+        _mapOrderNameToColumnName.put( "date_create", "date_create" );
+        _mapOrderNameToColumnName.put( "date_update", "date_update" );
+        _mapOrderNameToColumnName.put( "id_user", "id_user" );
+        _mapOrderNameToColumnName.put( "email", "email" );
+        _mapOrderNameToColumnName.put( "lastname", "lastname" );
+        _mapOrderNameToColumnName.put( "date_close", "date_close" );
+        _mapOrderNameToColumnName.put( "ticket_status_text", "ticket_status_text" );
+        _mapOrderNameToColumnName.put( "assignee", "h.label, g.last_name" );
+        _mapOrderNameToColumnName.put( "state", "j.name" );
     }
 }

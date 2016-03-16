@@ -22,6 +22,11 @@
   </div>
   <div id="content-ticketing" class="row">
     <div class="col-xs-12 col-sm-12">
+          <form id="filter_form" class="form-inline" action="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp">
+              <input type="hidden" name="submitted_form" value="1">
+              <input type="hidden" name="fltr_order_sort" value="${orderSort!}">
+              <input type="hidden" name="fltr_order_by" value="${orderBy!}">
+           </form>
       <@notification infos=infos />
       <table id="instant-response" class="table table-hover">
         <thead>
@@ -29,12 +34,13 @@
               <th class="text-center">#i18n{ticketing.manage_instantresponses.columnDateCreate}</th>
               <th>#i18n{ticketing.manage_instantresponses.columnIdTicketCategory}</th>
               <th>#i18n{ticketing.manage_instantresponses.columnSubject}</th>
-              <th>#i18n{ticketing.manage_instantresponses.columnAdminUser} </th>
+              <th>#i18n{ticketing.manage_instantresponses.columnAdminUser}</th>
+			  <!-- <th>#i18n{portal.util.labelActions}</th> -->
           </tr>
         </thead>
         <tbody>
           <#list instantresponse_list as instantresponse >
-          <tr>
+              <tr data-url="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp?view=modifyInstantResponse&id=${instantresponse.id}">
               <td class="text-gru text-center">
                   ${displayTimeOpenedTicket(instantresponse.timeOpenedTicketInMs)}
               </td>
@@ -76,12 +82,18 @@
 <script>
 $( function(){
   $(".content-header").toggle();
+	// Set link on whole tr
+	$("tbody > tr ").on( 'click', function(e){
+		//only for ticket lines not for table header
+      if ( $(this).attr("data-url") != undefined ){
+        location.replace( $(this).attr("data-url") );
+      }
+	});
 });
-
 function sortList(field, order){
-	$("input[name=fltr_order_sort]").val(order);
-	$("input[name=fltr_order_by]").val(field);
-	$("#manage_instantresponses").submit( );
+    $("input[name=fltr_order_sort]").val(order);
+    $("input[name=fltr_order_by]").val(field);
+    $("#filter_form").submit( );
 }
 </script>
 
