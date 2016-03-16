@@ -85,9 +85,14 @@ $( function(){
 	// Set link on whole tr
 	$("tbody > tr ").on( 'click', function(e){
 		//only for ticket lines not for table header
-      if ( $(this).attr("data-url") != undefined ){
-        location.replace( $(this).attr("data-url") );
-      }
+		if ( $(this).attr("data-url") != undefined ){
+            var form = $('<form>', 
+                { 'action':$(this).attr("data-url"),
+                'method':'post'}
+           );
+           form.appendTo('body');
+           form.submit().remove();
+        }
 	});
 });
 function sortList(field, order){
