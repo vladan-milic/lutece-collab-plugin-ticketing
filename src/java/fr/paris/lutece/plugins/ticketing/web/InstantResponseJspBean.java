@@ -34,11 +34,13 @@
 package fr.paris.lutece.plugins.ticketing.web;
 
 import fr.paris.lutece.plugins.ticketing.business.InstantResponse;
+import fr.paris.lutece.plugins.ticketing.business.InstantResponseFilter;
 import fr.paris.lutece.plugins.ticketing.business.InstantResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
+import fr.paris.lutece.plugins.ticketing.web.ticketfilter.InstantResponseFilterHelper;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -181,13 +183,13 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         {
             return redirect( request, strRedirectUrl );
         }
-
-        List<InstantResponse> listInstantResponses = InstantResponseHome.getInstantResponsesList(  );
+        InstantResponseFilter filter = InstantResponseFilterHelper.getFilter( request );
+        List<InstantResponse> listInstantResponses = InstantResponseHome.getInstantResponsesList( filter );
         Map<String, Object> model = getPaginatedListModel( request, MARK_INSTANT_RESPONSE_LIST, listInstantResponses,
                 JSP_MANAGE_INSTANT_RESPONSES );
 
         model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
-
+        InstantResponseFilterHelper.setModel( model, filter, request );
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_INSTANT_RESPONSES, TEMPLATE_MANAGE_INSTANT_RESPONSES, model );
     }
 
@@ -289,17 +291,17 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         if ( ( _instantresponse == null ) || ( _instantresponse.getId(  ) != nId ) )
         {
             _instantresponse = InstantResponseHome.findByPrimaryKey( nId );
-            
         }
-        TicketCategory category = TicketCategoryHome.findByPrimaryKey( _instantresponse.getIdTicketCategory() );
+
+        TicketCategory category = TicketCategoryHome.findByPrimaryKey( _instantresponse.getIdTicketCategory(  ) );
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_INSTANT_RESPONSE, _instantresponse );
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
-        model.put( MARK_TYPE_ID , category.getIdTicketType() );
-        model.put( MARK_DOMAIN_ID , category.getIdTicketDomain() );
+        model.put( MARK_TYPE_ID, category.getIdTicketType(  ) );
+        model.put( MARK_DOMAIN_ID, category.getIdTicketDomain(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_INSTANT_RESPONSE, TEMPLATE_MODIFY_INSTANT_RESPONSE, model );
     }

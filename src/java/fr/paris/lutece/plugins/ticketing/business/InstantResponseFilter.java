@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2014, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,70 +31,35 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.web.ticketfilter;
+package fr.paris.lutece.plugins.ticketing.business;
 
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.util.ReferenceList;
+import java.util.HashMap;
 
-import java.util.Locale;
 
 /**
  *
- * enum which represents period for ticket filtering
+ * class TicketFilter
  *
  */
-public enum TicketFilterPeriod
-{NONE( 0 ),
-    DAY( 1 ),
-    WEEK( 2 ),
-    MONTH( 3 ),
-    CLOSED( 4 );
-
-    private static final String MESSAGE_PREFIX = "ticketing.period.";
-    private int _nId;
-
+public class InstantResponseFilter extends OrderByFilter
+{
     /**
-     * constructor
-     * @param nId id of period
+     *
      */
-    TicketFilterPeriod( int nId )
+    public InstantResponseFilter(  )
     {
-        _nId = nId;
+        super(  );
+        initOrderNameToColumnNameMap(  );
     }
 
-    /**
-     * returns period id
-     * @return period id
-     */
-    public int getId(  )
+    @Override
+    protected void initOrderNameToColumnNameMap(  )
     {
-        return _nId;
-    }
-
-    /**
-     * Gives the localized message
-     * @param locale the locale to use
-     * @return the message
-     */
-    public String getLocalizedMessage( Locale locale )
-    {
-        return I18nService.getLocalizedString( MESSAGE_PREFIX + this.name(  ).toLowerCase(  ), locale );
-    }
-
-    /**
-     * Builds a RefenrenceList object containing all the TicketPriority objects
-     * @param locale the locale used to retrieve the localized messages
-     * @return the ReferenceList object
-     */
-    public static ReferenceList getReferenceList( Locale locale )
-    {
-        ReferenceList listPeriod = new ReferenceList(  );
-
-        for ( TicketFilterPeriod filterPeriod : TicketFilterPeriod.values(  ) )
-        {
-            listPeriod.addItem( filterPeriod.getId(  ), filterPeriod.getLocalizedMessage( locale ) );
-        }
-
-        return listPeriod;
+        _mapOrderNameToColumnName = new HashMap<String, String>(  );
+        _mapOrderNameToColumnName.put( "id", "a.id_instant_response" );
+        _mapOrderNameToColumnName.put( "category", "b.label " );
+        _mapOrderNameToColumnName.put( "subject", "a.subject" );
+        _mapOrderNameToColumnName.put( "date_create", "a.date_create" );
+        _mapOrderNameToColumnName.put( "assignee", "f.label" );
     }
 }

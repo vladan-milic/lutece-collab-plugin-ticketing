@@ -16,5 +16,16 @@
 <script>
 $( function(){
     loadModalContent("#ticketing-modal-workflow-action-form");
+    
+    $(".modal-dialog").draggable({
+        handle: ".modal-header",
+        start: function( event, ui ){
+            $(".modal-header").css("cursor","grabbing")
+        },
+        stop: function( event, ui ){
+            $(".modal-header").css("cursor","grab")
+        }
+    });
+    $(".modal-header").css("cursor","grab");
 });
 </script>

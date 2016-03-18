@@ -23,6 +23,10 @@
 #demand-panel.tickets .tab-content{ padding-left: 0 }
 #demand-panel.tickets .tab-content table td{ padding: 15px 15px }
 #demand-panel.tickets .tab-content table td:nth-of-type(2){ padding: 0 15px }
+#demand-panel.tickets .tab-content table td .ticket-comments{ margin-top:20px }
+
+#demand-panel .tab-content table th.th-sort-desc:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; right:5px }
+#demand-panel .tab-content table th.th-sort-asc:after{ content:'\f106'; color:#606059; font-family: 'FontAwesome'; right:5px }
 
 #info-right{ border-left: 1px solid #DDD;min-height:600px;margin-top: -15px; padding:20px 20px  }
 #info-right h5{ color:#808179 }
@@ -48,12 +52,10 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) { #filter-ticket select {padding-right: 18px} }
 #filter-ticket label.select{ position:relative }
 #filter-ticket label.select:last-of-type{ margin-right:0 }
-#filter-ticket label.select:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; font-size:18px; right:10px; top: -2px; position:absolute; pointer-events:none }
+#filter-ticket label.select:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; font-size:18px; right: 5px; top: -2px; position:absolute; pointer-events:none }
 #filter-ticket .btn{ color:#fff; min-width: 50px }
 
-.timeline-body > hr {
-    margin: 5px 0;
-}
+.timeline-body > hr { margin: 5px 0 }
 
 /*==========  Non-Mobile First Method  ==========*/
 /* Large Devices, Wide Screens */

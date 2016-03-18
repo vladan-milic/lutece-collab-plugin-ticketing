@@ -12,33 +12,61 @@
   	    <table class="table table-hover table-striped">
       		<thead>
       		  <tr>
+              <!--
       			<th>#i18n{ticketing.manage_tickets.columnReference} <@sortColumn field='reference'/></th>
       			<th>#i18n{ticketing.manage_tickets.columnOpenPeriod} <@sortColumn field='date_create'/></th>
       			<th>#i18n{ticketing.manage_tickets.columnTicketType} <@sortColumn field='category_label'/></th>
       			<th>#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment} <@sortColumn field='lastname'/></th>
       			<th>#i18n{ticketing.manage_tickets.columnTicketState} <@sortColumn field='state'/></th>
-      			<th><!-- #i18n{ticketing.manage_tickets.columnTicketAssignee}--> Assignation <@sortColumn field='assignee'/></th>
+      			<th>Assignation <@sortColumn field='assignee'/></th>
+          -->
+              <th data-field="reference">#i18n{ticketing.manage_tickets.columnReference} </th>
+        			<th data-field="date_create">#i18n{ticketing.manage_tickets.columnOpenPeriod}</th>
+        			<th data-field="category_label">#i18n{ticketing.manage_tickets.columnTicketType}</th>
+        			<th data-field="lastname">#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment}</th>
+        			<th data-field="state">#i18n{ticketing.manage_tickets.columnTicketState}</th>
+        			<th data-field="assignee"><!-- #i18n{ticketing.manage_tickets.columnTicketAssignee}--> Assignation </th>
       		  </tr>
       	  </thead>
       		<tbody>
     			<#list panel_list as ticket >
     			<tr data-url="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}">
     			  <td>
-                <#assign textColor="aqua"/>
-                <#if ticket.urgency==1 >
-                  <#assign textColor="orange"/>
-                <#elseif ticket.urgency==2 >
-                  <#assign textColor="red"/>
-                </#if>
-                <#if ticket.reference??>
-                  <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" title="Criticit&eacute;: ${ticket.criticality!}/ Priorit&eacute;: ${ticket.priority!}">
-                    <i class="fa fa-circle text-${textColor}" ></i> ${ticket.reference}
-                  </a>
-                <#else>
-                  <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" title="Criticit&eacute;: ${ticket.criticality!}/ Priorit&eacute;: ${ticket.priority!}">
-                    <i class="fa fa-circle text-${textColor}" ></i> ${ticket.id}
-                  </a>
-                </#if>
+              <#assign textColor="aqua"/>
+              <#if ticket.urgency==1 >
+                <#assign textColor="orange"/>
+              <#elseif ticket.urgency==2 >
+                <#assign textColor="red"/>
+              </#if>
+              <#switch ticket.criticality>
+              <#case 1>
+                <#assign criticality="Mod&eacute;r&eacute;"/>
+                <#break>
+              <#case 2>
+                <#assign criticality="Elev&eacute;e"/>
+                <#break>
+              <#default>
+                <#assign criticality="Faible"/>
+            </#switch>
+            <#switch ticket.priority>
+              <#case 1>
+                <#assign priority="Moyenne"/>
+                <#break>
+              <#case 2>
+                <#assign priority="Urgente"/>
+                <#break>
+              <#default>
+                <#assign priority="Basse"/>
+            </#switch>
+              <#if ticket.reference??>
+                <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" data-toggle="tooltip" data-placement="bottom" title="Criticit&eacute;:  ${criticality!''} / Priorit&eacute;: ${priority!''}" >
+                  <i class="fa fa-circle text-${textColor}" ></i> ${ticket.reference}
+                </a>
+              <#else>
+                <a data-toggle="tooltip" data-placement="bottom" href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" title="Criticit&eacute;: ${criticality!''} / Priorit&eacute;: ${priority!''}">
+                  <i class="fa fa-circle text-${textColor}" ></i> ${ticket.id}
+                </a>
+              </#if>
             </td>
     			  <td class="text-gru">
     				${displayTimeOpenedTicket(ticket.timeOpenedTicketInMs, ticket.ticketStatus ) }
@@ -92,8 +120,8 @@
     				  <#if adminAvatar>
                 <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}" alt="" title="Avatar"></#if>
     				    <span class="avatar-label">${ticket.assigneeUser.firstname} ${ticket.assigneeUser.lastname}</span>
-    				  </#if>
             </p>
+            </#if>
     			  </td>
     			</tr>
     			</#list>
@@ -156,12 +184,13 @@
     <div class="tab-content">
     	<div id="filter-ticket" class="row">
         <form id="filter_form" class="form-inline" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+          <input type="hidden" name="submitted_form" value="1">
           <input type="hidden" name="fltr_urgency" value="${ticket_filter.urgency!}">
           <input type="hidden" name="selected_tab" value="<#if selected_tab?? && selected_tab?has_content>${selected_tab}<#else>agent</#if>">
-          <input type="hidden" name="fltr_order_sort" value="${orderSort!}">
-          <input type="hidden" name="fltr_order_by" value="${orderBy!}">
+          <input type="hidden" name="fltr_order_sort" value="${ticket_filter.orderSort!}">
+          <input type="hidden" name="fltr_order_by" value="${ticket_filter.orderBy!}">
     			<div class="col-xs-12 col-sm-offset-1 col-sm-3">
-            <button type="submit" name="fltr_new_urgency" value="-1" class="btn btn-link btn-xs <#if ticket_filter.urgency==-1>btn-primary<#else>border-gru text-gru</#if>">#i18n{ticketing.manage_tickets.urgency.all}</button>
+            <button type="submit" name="fltr_new_urgency" value="-1" class="btn btn-link btn-xs <#if ticket_filter.urgency==-1>btn-primary border-gru<#else>border-gru text-gru</#if>">#i18n{ticketing.manage_tickets.urgency.all}</button>
     				<button type="submit" name="fltr_new_urgency" value="2" class="btn btn-link btn-xs <#if ticket_filter.urgency==2>btn-danger<#else>border-red text-red</#if>">#i18n{ticketing.manage_tickets.urgency.high}</button>
     				<button type="submit" name="fltr_new_urgency" value="1" class="btn btn-link btn-xs <#if ticket_filter.urgency==1>btn-warning<#else>border-orange text-orange</#if>">#i18n{ticketing.manage_tickets.urgency.medium}</button>
     				<button type="submit" name="fltr_new_urgency" value="0" class="btn btn-link btn-xs <#if ticket_filter.urgency==0>btn-info<#else>border-info text-aqua</#if>">#i18n{ticketing.manage_tickets.urgency.low}</button>
@@ -171,14 +200,16 @@
     				<label class="select" for="nature">
     					<@comboWithParams name="fltr_id_type" default_value="${ticket_filter.idType}" additionalParameters=" id=\"fltr_id_type\" class=\"form-control input-xs\" " items=type_list />
     				</label>
+            <!--
     				<label class="select" for="domaine">
     					<@comboWithParams name="fltr_id_domain" default_value="${ticket_filter.idDomain}" additionalParameters=" id=\"fltr_id_domain\" class=\"form-control input-xs\" " items=domain_list/>
     				</label>
+          -->
     				<label class="select" for="since">
     					<@comboWithParams name="fltr_open_since" default_value="${ticket_filter.openSincePeriod}" additionalParameters=" id=\"fltr_open_since\" class=\"form-control input-xs\" " items=period_list/>
     				</label>
     				</div>
-    			</form>
+    	</form>
           <div class="col-xs-8 col-sm-4">
             <form class="form-inline" method="post" action="jsp/admin/plugins/ticketing/TicketSearch.jsp?action=search&page_index=1">
           		<input type="hidden" id="searched_field" name="searched_field" value="contents">
@@ -221,10 +252,40 @@ $( function(){
 	// Set link on whole tr
 	$("tbody > tr ").on( 'click', function(e){
 		//only for ticket lines not for table header
-    if ( $(this).attr("data-url") != undefined ){
-      location.replace( $(this).attr("data-url") );
-    }
+		if ( $(this).attr("data-url") != undefined ){
+		    var form = $('<form>', 
+		    	{ 'action':$(this).attr("data-url"),
+		    	'method':'post'}
+	       );
+	       form.appendTo('body');
+	       form.submit().remove();
+	    }
 	});
+
+  // Recharge la page
+  setTimeout(function() { location.reload() },30000);
+
+  // Tooltip
+  $('[data-toggle="tooltip"]').tooltip();
+
+  // Order Management
+  // Init Order
+  var sort_order = $("input[name=fltr_order_sort]").val();
+  var sort_field = $("input[name=fltr_order_by]").val()=="" ? 'th[data-field="date_create"]' : 'th[data-field="' + $("input[name=fltr_order_by]").val() + '"]';
+  $(sort_field).addClass( "th-sort-" + sort_order )
+
+  // Column order
+  $("th").on( 'click', function( e ){
+    var field = $(this).attr('data-field');
+    var order = sort_order=="asc" ? "desc" : "asc";
+    sortList( field, order);
+  });
+
+  function sortList(field, order){
+    	$("input[name=fltr_order_sort]").val(order);
+    	$("input[name=fltr_order_by]").val(field);
+    	$("#filter_form").submit( );
+    }
 
   $("#fltr_id_type").on( 'change', function(e){
 		$("#fltr_id_domain").val( -1 );
@@ -239,12 +300,6 @@ $( function(){
 		$("#filter_form").submit( );
 	});
 });
-
-function sortList(field, order){
-	$("input[name=fltr_order_sort]").val(order);
-	$("input[name=fltr_order_by]").val(field);
-	$("#filter_form").submit( );
-}
 
 function setSelectedTab(tab){
 	$("input[name=selected_tab]").val(tab);
