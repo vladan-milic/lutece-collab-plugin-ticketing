@@ -147,6 +147,7 @@ subject long varchar NULL ,
 date_create timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 id_unit int(11) NOT NULL default '0', 
 id_admin_user int(11) NOT NULL default '0',
+id_channel int(11) NOT NULL default '0',
 PRIMARY KEY (id_instant_response)
 );
 

@@ -34,9 +34,7 @@
 package fr.paris.lutece.plugins.ticketing.business;
 
 import java.io.Serializable;
-
 import java.sql.Timestamp;
-
 import java.util.Calendar;
 
 
@@ -60,6 +58,7 @@ public class InstantResponse implements Serializable
     private String _strUserLastname;
     private int _nIdUnit;
     private String _strUnit;
+    private int _nIdChannel;
 
     /**
      * Returns the Id
@@ -284,5 +283,23 @@ public class InstantResponse implements Serializable
     public long getTimeOpenedTicketInMs(  )
     {
         return Calendar.getInstance(  ).getTime(  ).getTime(  ) - getDateCreate(  ).getTime(  );
+    }
+
+    /**
+     * Returns the IdChannel
+     * @return The IdChannel
+     */
+    public int getIdChannel(  )
+    {
+        return _nIdChannel;
+    }
+
+    /**
+     * Sets the IdChannel
+     * @param nIdChannel The IdChannel
+     */
+    public void setIdChannel( int nIdChannel )
+    {
+        _nIdChannel = nIdChannel;
     }
 }
