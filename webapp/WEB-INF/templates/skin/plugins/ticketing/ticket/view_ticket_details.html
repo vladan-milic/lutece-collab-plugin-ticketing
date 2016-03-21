@@ -1,3 +1,4 @@
+<#include "/admin/plugins/ticketing/commons.html" />
 <@rowBoxHeader i18nTitleKey="ticketing.xpage.view_ticket_details.pageTitle">
     <fieldset class="form-horizontal">
         <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketReference">${ticket.reference!''}</@fieldStaticText>
@@ -25,7 +26,7 @@
         <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketType">${ticket.ticketType!''}</@fieldStaticText>
         <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketDomain">${ticket.ticketDomain!''}</@fieldStaticText>
         <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketCategory">${ticket.ticketCategory!''}</@fieldStaticText>
-        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketComment">${ticket.ticketComment!''}</@fieldStaticText>
+        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketComment">${convertNewLineToHtml(ticket.ticketComment!'')}</@fieldStaticText>
         
         <#if read_only_reponses_html_list?? && read_only_reponses_html_list?size &gt; 0>
             <div class="form-group">

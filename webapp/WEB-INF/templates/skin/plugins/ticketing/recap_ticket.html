@@ -1,3 +1,4 @@
+<#include "/admin/plugins/ticketing/commons.html" />
 <@rowBoxHeader i18nTitleKey="ticketing.xpage.recap_ticket.pageTitle">
     <form class="form-horizontal" role="form" method="post" action="jsp/site/Portal.jsp?page=ticket">
         <@messages errors=errors />
@@ -17,7 +18,7 @@
 	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelTicketDomain">${ticket.ticketDomain!''}</@fieldStaticText>
 	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelTicketCategory">${ticket.ticketCategory!''}</@fieldStaticText>
 	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelContactMode">${ticket.contactMode!''}</@fieldStaticText>
-	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelTicketComment">${ticket.ticketComment!''}</@fieldStaticText>
+	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelTicketComment">${convertNewLineToHtml(ticket.ticketComment!'')}</@fieldStaticText>
              <#list response_recap_list as response>
                 <div class="form-group">
                      <label for="title" class="col-xs-12 col-sm-3 control-label">${response.title}&#8239;:&#8239;</label>

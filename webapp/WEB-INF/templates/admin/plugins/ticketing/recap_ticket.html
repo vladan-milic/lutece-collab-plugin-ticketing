@@ -1,3 +1,4 @@
+<#include "/admin/plugins/ticketing/commons.html" />
 <div class="gru-wrapper">
   <div id="customer-panel" class="row ticket-head bg-gru-light">
     <div class="col-xs-12 col-sm-offset-1 col-sm-10">
@@ -72,7 +73,7 @@
           </div>
           <div class="form-group">
             <label for="ticket_comment">#i18n{ticketing.create_ticket.labelTicketComment}</label>
-            <p class="form-control-static">${ticket.ticketComment!''}</p>
+            <p class="form-control-static">${convertNewLineToHtml(ticket.ticketComment!'')}</p>
           </div>
         </div>
       </div>

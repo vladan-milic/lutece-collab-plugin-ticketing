@@ -99,7 +99,7 @@
     				</p>
             <#if ticket.ticketComment?has_content>
               <div class="ticket-comments text-left">
-    				    ${ticket.ticketComment}
+                ${convertNewLineToHtml(ticket.ticketComment)}
               </div>
             </#if>
     			  </td>

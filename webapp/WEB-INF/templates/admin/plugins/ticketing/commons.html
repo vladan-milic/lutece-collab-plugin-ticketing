@@ -110,6 +110,10 @@
 	<#return false />
 </#function>
 
+<#function convertNewLineToHtml message>
+    <#return message?html?replace('\n', '<br>')/>
+</#function>
+
 <#macro fieldStaticTextTicketDetails i18nLabelKey >
     <div class="ticketing-form-group">
         <p>#i18n{${i18nLabelKey}}</p>
