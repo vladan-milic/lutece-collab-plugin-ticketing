@@ -41,7 +41,7 @@
         <tbody>
           <#list instantresponse_list as instantresponse >
               <tr data-url="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp?view=modifyInstantResponse&id=${instantresponse.id}">
-              <td class="text-gru lead">
+              <td>
                   ${instantresponse.dateCreate?string["dd/MM/yyyy HH:mm"]}
               </td>
               <td>
