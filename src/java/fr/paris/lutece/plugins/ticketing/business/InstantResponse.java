@@ -277,15 +277,6 @@ public class InstantResponse implements Serializable
     }
 
     /**
-     * Returns the time since when the ticket is opened in milliseconds.
-     * @return time since when the ticket is opened
-     */
-    public long getTimeOpenedTicketInMs(  )
-    {
-        return Calendar.getInstance(  ).getTime(  ).getTime(  ) - getDateCreate(  ).getTime(  );
-    }
-
-    /**
      * Returns the IdChannel
      * @return The IdChannel
      */
