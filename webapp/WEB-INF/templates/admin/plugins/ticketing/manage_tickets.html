@@ -21,7 +21,7 @@
       			<th>Assignation <@sortColumn field='assignee'/></th>
           -->
               <th data-field="reference">#i18n{ticketing.manage_tickets.columnReference} </th>
-        			<th data-field="date_create">#i18n{ticketing.manage_tickets.columnOpenPeriod}</th>
+        			<th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate}</th>
         			<th data-field="category_label">#i18n{ticketing.manage_tickets.columnTicketType}</th>
         			<th data-field="lastname">#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment}</th>
         			<th data-field="state">#i18n{ticketing.manage_tickets.columnTicketState}</th>
@@ -68,8 +68,8 @@
                 </a>
               </#if>
             </td>
-    			  <td class="text-gru">
-    				${displayTimeOpenedTicket(ticket.timeOpenedTicketInMs, ticket.ticketStatus ) }
+    			  <td class="text-gru lead">
+    				${ticket.dateCreate?string["dd/MM/yyyy HH:mm"]}
     			  </td>
     			  <td>
     				  ${ticket.ticketType} <br>Domaine: ${ticket.ticketDomain} <br>Cat&eacute;gorie: <strong>${ticket.ticketCategory}</strong>
@@ -263,7 +263,6 @@ $( function(){
 	});
 
   // Recharge la page
-  setTimeout(function() { location.reload() },30000);
 
   // Tooltip
   $('[data-toggle="tooltip"]').tooltip();
@@ -306,25 +305,3 @@ function setSelectedTab(tab){
 	$("#filter_form").submit( );
 }
 </script>
-
-<#function displayTimeOpenedTicket time_ms status>
-	<#assign days = (time_ms / 86400000)?int>
-	<#assign hours = (time_ms / 3600000)?int>
-	<#assign minutes = (time_ms / 60000)?int>
-  <#switch status>
-    <#case 0>
-      <#if days gte 1>
-        <#return "<strong class=\"lead\">" + days + "</strong><br class=\"hidden-xs\"> #i18n{ticketing.manage_tickets.unitDay}">
-      <#else>
-        <#if hours gte 1>
-          <#return "<strong class=\"lead\">" + hours + "</strong><br class=\"hidden-xs\"> #i18n{ticketing.manage_tickets.unitHour}">
-        <#else>
-          <#return "<strong class=\"lead\">" + minutes + "</strong><br class=\"hidden-xs\"> #i18n{ticketing.manage_tickets.unitMinute}">
-        </#if>
-      </#if>
-      <#break>
-    <#case 1>
-      <#return "<i class=\"fa fa-check fa-2x\" style=\"margin-top:20px\"></i>">
-      <#break>
-  </#switch>
-</#function>

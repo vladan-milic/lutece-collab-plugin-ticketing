@@ -394,7 +394,7 @@ public final class TicketHelper
         Map<String, String> selectableChannelsMap = new HashMap<String, String>(  );
         Map<String, String> channelsMap = channelList.toMap(  );
 
-        for (String channelId : idSelectableChannelList ) {
+        for ( String channelId : idSelectableChannelList ) {
             selectableChannelsMap.put( channelId, channelsMap.get( channelId ) );
         }        
         

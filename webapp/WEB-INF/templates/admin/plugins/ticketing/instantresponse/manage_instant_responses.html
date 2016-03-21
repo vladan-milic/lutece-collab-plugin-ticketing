@@ -41,8 +41,8 @@
         <tbody>
           <#list instantresponse_list as instantresponse >
               <tr data-url="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp?view=modifyInstantResponse&id=${instantresponse.id}">
-              <td class="text-gru text-center">
-                  ${displayTimeOpenedTicket(instantresponse.timeOpenedTicketInMs)}
+              <td class="text-gru lead">
+                  ${instantresponse.dateCreate?string["dd/MM/yyyy HH:mm"]}
               </td>
               <td>
                   ${instantresponse.type} / ${instantresponse.domain} / ${instantresponse.category}
@@ -101,19 +101,3 @@ function sortList(field, order){
     $("#filter_form").submit( );
 }
 </script>
-
-<#function displayTimeOpenedTicket time_ms>
-	<#assign days = (time_ms / 86400000)?int>
-	<#assign hours = (time_ms / 3600000)?int>
-	<#assign minutes = (time_ms / 60000)?int>
-
-	<#if days gte 1>
-		<#return "<strong class=\"lead\">" + days + "</strong><br class=\"hidden-xs\"> #i18n{ticketing.manage_tickets.unitDay}">
-	<#else>
-		<#if hours gte 1>
-			<#return "<strong class=\"lead\">" + hours + "</strong><br class=\"hidden-xs\"> #i18n{ticketing.manage_tickets.unitHour}">
-		<#else>
-			<#return "<strong class=\"lead\">" + minutes + "</strong><br class=\"hidden-xs\"> #i18n{ticketing.manage_tickets.unitMinute}">
-		</#if>
-	</#if>
-</#function>
