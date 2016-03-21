@@ -41,7 +41,7 @@
 #filter-ticket .form-control{ border-color: #000 }
 #filter-ticket .input-group-btn > .btn { border: 1px solid #3c8dbc}
 #filter-ticket span{ text-transform: uppercase }
-#filter-ticket select{ height:20px; font-weight:normal; padding: 1px 15px 0 2px; margin:0; background: #FFF; color:#000; border: 1px solid "000";border-radius: 6px; outline:none; display: inline-block; -webkit-appearance:none; -moz-appearance:none; appearance:none; cursor:pointer }
+#filter-ticket select{ height:22px; font-weight:normal; padding: 1px 20px 0 2px; margin:0; background: #FFF; color:#000; border: 1px solid "000";border-radius: 3px; outline:none; display: inline-block; -webkit-appearance:none; -moz-appearance:none; appearance:none; cursor:pointer }
 
 #instant-response tr td strong.lead{ font-size: 4rem; font-weight: bold  }
 #instant-response tr td:first-of-type{ width: 15rem }
