@@ -102,7 +102,8 @@ public class TicketSearchJspBean extends MVCAdminJspBean
         {
             UrlItem url = new UrlItem( getActionUrl( ACTION_SEARCH_TICKET ) );
             url.addParameter( SearchConstants.PARAMETER_QUERY, strQuery );
-            url.addParameter( SearchConstants.PARAMETER_SEARCH_FIELD, request.getParameter(  SearchConstants.PARAMETER_SEARCH_FIELD ) );
+            url.addParameter( SearchConstants.PARAMETER_SEARCH_FIELD,
+                request.getParameter( SearchConstants.PARAMETER_SEARCH_FIELD ) );
 
             _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
             _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_DEFAULT_RESULT_PER_PAGE,

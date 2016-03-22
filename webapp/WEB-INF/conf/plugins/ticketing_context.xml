@@ -45,4 +45,6 @@
 
     <!-- Search Engine -->
     <bean id="ticketing.ticketSearchEngine" class="fr.paris.lutece.plugins.ticketing.web.search.TicketSearchEngine" />
+    <bean id="ticketing.ticketIndexerActionDAO"  class="fr.paris.lutece.plugins.ticketing.business.search.IndexerActionDAO" />
+    <bean id="ticketing.ticketIndexer"  class="fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer" />
 </beans>
