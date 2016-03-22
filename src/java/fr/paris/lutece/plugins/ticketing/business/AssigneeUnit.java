@@ -34,13 +34,17 @@
 package fr.paris.lutece.plugins.ticketing.business;
 
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+import fr.paris.lutece.portal.service.rbac.RBACResource;
 
 
 /**
  * AssigneeUnit
  */
-public class AssigneeUnit
+public class AssigneeUnit implements RBACResource
 {
+    public static final String PERMISSION_ASSIGN = "ASSIGN";    
+    public static final String RESOURCE_TYPE = "assigneeUnit";
+    
     // Variables declarations 
     private int _nUnitId;
     private String _strName;
@@ -93,5 +97,26 @@ public class AssigneeUnit
     public void setName( String strName )
     {
         _strName = strName;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // RBAC Resource implementation
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public String getResourceTypeCode(  )
+    {
+        return RESOURCE_TYPE;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public String getResourceId(  )
+    {
+        return String.valueOf( _nUnitId );
     }
 }
