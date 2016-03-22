@@ -49,8 +49,8 @@ public final class InstantResponseDAO implements IInstantResponseDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_instant_response ) FROM ticketing_instant_response";
-    private static final String SQL_QUERY_SELECT = "SELECT id_instant_response, id_ticket_category, subject, id_admin_user FROM ticketing_instant_response WHERE id_instant_response = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_instant_response ( id_instant_response, id_ticket_category, subject, id_admin_user, id_unit, date_create ) VALUES ( ?, ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_instant_response, id_ticket_category, subject, id_admin_user, id_channel FROM ticketing_instant_response WHERE id_instant_response = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_instant_response ( id_instant_response, id_ticket_category, subject, id_admin_user, id_unit, date_create, id_channel ) VALUES ( ?, ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_instant_response WHERE id_instant_response = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_instant_response SET id_instant_response = ?, id_ticket_category = ?, subject = ?, id_admin_user = ?, id_unit = ? WHERE id_instant_response = ?";
     private static final String SQL_QUERY_SELECTALL = "SELECT a.id_instant_response, a.id_ticket_category, b.label, c.label, d.label, a.subject, a.date_create, a.id_admin_user , e.first_name , e.last_name, a.id_unit, f.label " +
@@ -103,6 +103,7 @@ public final class InstantResponseDAO implements IInstantResponseDAO
         daoUtil.setInt( nIndex++, instantResponse.getIdAdminUser(  ) );
         daoUtil.setInt( nIndex++, instantResponse.getIdUnit(  ) );
         daoUtil.setTimestamp( nIndex++, instantResponse.getDateCreate(  ) );
+        daoUtil.setInt( nIndex++, instantResponse.getIdChannel(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -128,6 +129,7 @@ public final class InstantResponseDAO implements IInstantResponseDAO
             instantResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
             instantResponse.setSubject( daoUtil.getString( nIndex++ ) );
             instantResponse.setIdAdminUser( daoUtil.getInt( nIndex++ ) );
+            instantResponse.setIdChannel( daoUtil.getInt( nIndex++ ) );
         }
 
         daoUtil.free(  );

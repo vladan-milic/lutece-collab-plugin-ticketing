@@ -22,7 +22,6 @@
 
 #demand-panel.tickets .tab-content{ padding-left: 0 }
 #demand-panel.tickets .tab-content table td{ padding: 15px 15px }
-#demand-panel.tickets .tab-content table td:nth-of-type(2){ padding: 0 15px }
 #demand-panel.tickets .tab-content table td .ticket-comments{ margin-top:20px }
 
 #demand-panel .tab-content table th.th-sort-desc:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; right:5px }
@@ -41,7 +40,7 @@
 #filter-ticket .form-control{ border-color: #000 }
 #filter-ticket .input-group-btn > .btn { border: 1px solid #3c8dbc}
 #filter-ticket span{ text-transform: uppercase }
-#filter-ticket select{ height:20px; font-weight:normal; padding: 1px 15px 0 2px; margin:0; background: #FFF; color:#000; border: 1px solid "000";border-radius: 6px; outline:none; display: inline-block; -webkit-appearance:none; -moz-appearance:none; appearance:none; cursor:pointer }
+#filter-ticket select{ height:22px; font-weight:normal; padding: 1px 20px 0 2px; margin:0; background: #FFF; color:#000; border: 1px solid "000";border-radius: 3px; outline:none; display: inline-block; -webkit-appearance:none; -moz-appearance:none; appearance:none; cursor:pointer }
 
 #instant-response tr td strong.lead{ font-size: 4rem; font-weight: bold  }
 #instant-response tr td:first-of-type{ width: 15rem }
@@ -86,7 +85,7 @@
   #head-ticketing{ height: auto; padding:0 5%; margin-bottom: 15px }
 
   #demand-panel.tickets .tab-content td:nth-of-type(1):before { content: "Reference"; }
-  #demand-panel.tickets .tab-content td:nth-of-type(2):before { content: "Ouvert depuis"; }
+  #demand-panel.tickets .tab-content td:nth-of-type(2):before { content: "Créée le"; }
   #demand-panel.tickets .tab-content td:nth-of-type(3):before { content: "Nature"; }
   #demand-panel.tickets .tab-content td:nth-of-type(4):before { content: "Usager / Objet"; }
   #demand-panel.tickets .tab-content td:nth-of-type(5):before { content: "Etat"; }
@@ -102,7 +101,7 @@
   #instant-response td .detail{ width: auto !important }
   #instant-response td:before { /* Now like a table header */	position: absolute;	/* Top/left values mimic padding */	top: 6px;	left: 6px;	width: 45%; padding-right: 10px; 	white-space: nowrap	}
   /*	Label the data*/
-  #instant-response td:nth-of-type(1):before { content: "Il y a :"; }
+  #instant-response td:nth-of-type(1):before { content: "Créée le"; }
   #instant-response td:nth-of-type(2):before { content: "Problématique"; }
   #instant-response td:nth-of-type(3):before { content: "Détail"; }
   #instant-response td:nth-of-type(4):before { content: "Entité/Agent"; }

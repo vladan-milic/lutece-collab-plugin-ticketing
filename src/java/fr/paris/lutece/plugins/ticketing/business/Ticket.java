@@ -885,15 +885,6 @@ public class Ticket implements Serializable, RBACResource
     }
 
     /**
-     * Returns the time since when the ticket is opened in milliseconds.
-     * @return time since when the ticket is opened
-     */
-    public long getTimeOpenedTicketInMs(  )
-    {
-        return Calendar.getInstance(  ).getTime(  ).getTime(  ) - getDateCreate(  ).getTime(  );
-    }
-
-    /**
      * Returns urgency, it s computed from max of criticty and priority value
      * @return urgency
      */
