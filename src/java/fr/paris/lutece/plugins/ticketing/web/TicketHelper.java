@@ -61,6 +61,8 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -71,8 +73,6 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -161,9 +161,9 @@ public final class TicketHelper
         model.put( TicketingConstants.MARK_SELECTABLE_CHANNELS_LIST, TicketHelper.getSelectableChannelsList( request ) );
 
         String strPreferredIdChannel = AdminUserPreferencesService.instance(  )
-                .get( String.valueOf( 
-                 AdminUserService.getAdminUser( request ).getUserId(  ) ),
-                 TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, StringUtils.EMPTY );
+                                                                  .get( String.valueOf( 
+                    AdminUserService.getAdminUser( request ).getUserId(  ) ),
+                TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_PREFERRED_ID_CHANNEL, strPreferredIdChannel );
     }
 
@@ -232,6 +232,29 @@ public final class TicketHelper
     }
 
     /**
+     * returns true if ticket is assign up from user's group
+     * @param ticket ticket
+     * @param lstUserUnits user's units
+     * @return true if ticket belongs to user's group
+     */
+    public static boolean isTicketAssignedUpFromUserGroup( Ticket ticket, List<Unit> lstUserUnits )
+    {
+        boolean result = false;
+
+        for ( Unit unit : lstUserUnits )
+        {
+            if ( unit.getIdUnit(  ) == ticket.getAssignerUnit(  ).getUnitId(  ) )
+            {
+                result = true;
+
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * @param user admin user
      * @param filter ticket filter
      * @param request http request
@@ -251,13 +274,16 @@ public final class TicketHelper
         {
             if ( RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, user ) )
             {
-                if ( ( ticket.getAssigneeUser(  ) != null ) &&
-                        ( ticket.getAssigneeUser(  ).getAdminUserId(  ) == user.getUserId(  ) ) )
+                if ( ( ( ticket.getAssigneeUser(  ) != null ) &&
+                        ( ticket.getAssigneeUser(  ).getAdminUserId(  ) == user.getUserId(  ) ) ) ||
+                        ( ( ticket.getAssignerUser(  ) != null ) &&
+                        ( ticket.getAssignerUser(  ).getAdminUserId(  ) == user.getUserId(  ) ) ) )
                 {
                     //ticket assign to agent
                     listAgentTickets.add( ticket );
                 }
-                else if ( TicketHelper.isTicketAssignedToUserGroup( ticket, lstUserUnits ) )
+                else if ( TicketHelper.isTicketAssignedToUserGroup( ticket, lstUserUnits ) ||
+                        TicketHelper.isTicketAssignedUpFromUserGroup( ticket, lstUserUnits ) )
                 {
                     //ticket assign to agent group
                     listGroupTickets.add( ticket );
@@ -373,7 +399,7 @@ public final class TicketHelper
 
         return strIdChannelList.toString(  );
     }
-    
+
     /**
      * Get list of selectable channels of the user
      *
@@ -381,23 +407,24 @@ public final class TicketHelper
      *            http request
      * @return list of selectable channels of the user.
      */
-    public static ReferenceList getSelectableChannelsList( HttpServletRequest request  )
+    public static ReferenceList getSelectableChannelsList( HttpServletRequest request )
     {
         ReferenceList channelList = ChannelHome.getReferenceList(  );
-        
+
         String strIdSelectableChannelList = AdminUserPreferencesService.instance(  )
-                .get( String.valueOf( 
-                AdminUserService.getAdminUser( request ).getUserId(  ) ),
+                                                                       .get( String.valueOf( 
+                    AdminUserService.getAdminUser( request ).getUserId(  ) ),
                 TicketingConstants.USER_PREFERENCE_CHANNELS_LIST, StringUtils.EMPTY );
-        
+
         List<String> idSelectableChannelList = getIdChannelList( strIdSelectableChannelList );
         Map<String, String> selectableChannelsMap = new HashMap<String, String>(  );
         Map<String, String> channelsMap = channelList.toMap(  );
 
-        for ( String channelId : idSelectableChannelList ) {
+        for ( String channelId : idSelectableChannelList )
+        {
             selectableChannelsMap.put( channelId, channelsMap.get( channelId ) );
-        }        
-        
+        }
+
         return ReferenceList.convert( selectableChannelsMap );
     }
 }

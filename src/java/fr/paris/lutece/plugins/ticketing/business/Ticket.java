@@ -138,6 +138,8 @@ public class Ticket implements Serializable, RBACResource
     private String _strCustomerId;
     private AssigneeUser _user;
     private AssigneeUnit _unit;
+    private AssigneeUser _assignerUser;
+    private AssigneeUnit _assignerUnit;
     private String _strUserMessage;
     private String _strUrl;
     private int _nIdChannel;
@@ -789,6 +791,42 @@ public class Ticket implements Serializable, RBACResource
     public void setAssigneeUnit( AssigneeUnit assigneeUnit )
     {
         _unit = assigneeUnit;
+    }
+
+    /**
+    * Returns the user from assign up
+    * @return The user from assign up
+    */
+    public AssigneeUser getAssignerUser(  )
+    {
+        return _assignerUser;
+    }
+
+    /**
+     * Sets the user from assign up
+     * @param userFromAssignUp The user from assign up
+     */
+    public void setAssignerUser( AssigneeUser assignerUser )
+    {
+        _assignerUser = assignerUser;
+    }
+
+    /**
+     * Returns the unit from assign up
+     * @return The unit from assign up
+     */
+    public AssigneeUnit getAssignerUnit(  )
+    {
+        return _assignerUnit;
+    }
+
+    /**
+     * Sets the unit from assign up
+     * @param assignerUnit The unit from assign up
+     */
+    public void setAssignerUnit( AssigneeUnit assignerUnit )
+    {
+        _assignerUnit = assignerUnit;
     }
 
     @Override
