@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2014, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,92 +31,85 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business;
-
-import fr.paris.lutece.plugins.unittree.business.unit.Unit;
-import fr.paris.lutece.portal.service.rbac.RBACResource;
+package fr.paris.lutece.plugins.ticketing.business.search;
 
 
 /**
- * AssigneeUnit
+ *
+ * IndexerAction
+ *
  */
-public class AssigneeUnit implements RBACResource
+public class IndexerAction
 {
-    public static final String PERMISSION_ASSIGN = "ASSIGN";    
-    public static final String RESOURCE_TYPE = "assigneeUnit";
-    
-    // Variables declarations 
-    private int _nUnitId;
-    private String _strName;
-
-    /** Constructor */
-    public AssigneeUnit(  )
-    {
-    }
-
-    /** Constructor
-     * @param unit The unit
+    /**
+     * Add a document to the index
      */
-    public AssigneeUnit( Unit unit )
+    public static final int TASK_CREATE = 1;
+
+    /**
+     * Update a document of the index
+     */
+    public static final int TASK_MODIFY = 2;
+
+    /**
+     * Remove a document from the index
+     */
+    public static final int TASK_DELETE = 3;
+    private int _nIdAction;
+    private int _nIdTask;
+    private int _nIdTicket;
+
+    /**
+     * gets the action id
+     * @return the action id
+     */
+    public int getIdAction(  )
     {
-        _nUnitId = unit.getIdUnit(  );
-        _strName = unit.getLabel(  );
+        return _nIdAction;
     }
 
     /**
-        * Returns the UnitId
-        * @return The UnitId
-        */
-    public int getUnitId(  )
+     * set the action id
+     * @param nIdAction idAction
+     */
+    public void setIdAction( int nIdAction )
     {
-        return _nUnitId;
+        _nIdAction = nIdAction;
     }
 
     /**
-     * Sets the UnitId
-     * @param nUnitId The UnitId
+     * gets ticket id
+     * @return the record Id
      */
-    public void setUnitId( int nUnitId )
+    public int getIdTicket(  )
     {
-        _nUnitId = nUnitId;
+        return _nIdTicket;
     }
 
     /**
-     * Returns the Name
-     * @return The Name
+     * set the recordId
+     * @param nIdTicket record if
      */
-    public String getName(  )
+    public void setIdTicket( int nIdTicket )
     {
-        return _strName;
+        _nIdTicket = nIdTicket;
     }
 
     /**
-     * Sets the Name
-     * @param strName The Name
+     * get the task id
+     * @return the task id
      */
-    public void setName( String strName )
+    public int getIdTask(  )
     {
-        _strName = strName;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // RBAC Resource implementation
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public String getResourceTypeCode(  )
-    {
-        return RESOURCE_TYPE;
+        return _nIdTask;
     }
 
     /**
-     * {@inheritDoc }
+     * set the task id
+     * @param nIdTask the task id
      */
-    @Override
-    public String getResourceId(  )
+    public void setIdTask( int nIdTask )
     {
-        return String.valueOf( _nUnitId );
+        _nIdTask = nIdTask;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2014, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,92 +31,74 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business;
-
-import fr.paris.lutece.plugins.unittree.business.unit.Unit;
-import fr.paris.lutece.portal.service.rbac.RBACResource;
+package fr.paris.lutece.plugins.ticketing.business.search;
 
 
 /**
- * AssigneeUnit
+ *
+ * class IndexerActionFilter
+ *
  */
-public class AssigneeUnit implements RBACResource
+public class IndexerActionFilter
 {
-    public static final String PERMISSION_ASSIGN = "ASSIGN";    
-    public static final String RESOURCE_TYPE = "assigneeUnit";
-    
-    // Variables declarations 
-    private int _nUnitId;
-    private String _strName;
-
-    /** Constructor */
-    public AssigneeUnit(  )
-    {
-    }
-
-    /** Constructor
-     * @param unit The unit
+    /**
+     * Represent any integer
      */
-    public AssigneeUnit( Unit unit )
+    public static final int ALL_INT = -1;
+    private int _nIdTask = ALL_INT;
+    private int _nIdTicket = ALL_INT;
+
+    /**
+     * gets the id of task
+     * @return the task id insert in the filter
+     */
+    public int getIdTask(  )
     {
-        _nUnitId = unit.getIdUnit(  );
-        _strName = unit.getLabel(  );
+        return _nIdTask;
     }
 
     /**
-        * Returns the UnitId
-        * @return The UnitId
-        */
-    public int getUnitId(  )
+     * set the task id in the filter
+     * @param idTask the task id to insert in the filter
+     */
+    public void setIdTask( int idTask )
     {
-        return _nUnitId;
+        _nIdTask = idTask;
     }
 
     /**
-     * Sets the UnitId
-     * @param nUnitId The UnitId
+     * weather or not it contains the task
+     * @return true if the filter contain a task id
      */
-    public void setUnitId( int nUnitId )
+    public boolean containsIdTask(  )
     {
-        _nUnitId = nUnitId;
+        return ( _nIdTask != ALL_INT );
     }
 
     /**
-     * Returns the Name
-     * @return The Name
+     * Get the id of the Ticket
+     * @return The id of the Ticket
      */
-    public String getName(  )
+    public int getIdTicket(  )
     {
-        return _strName;
+        return _nIdTicket;
     }
 
     /**
-     * Sets the Name
-     * @param strName The Name
+     * Set the id of the Ticket
+     * @param nIdTicket The id of the Ticket
      */
-    public void setName( String strName )
+    public void setIdTicket( int nIdTicket )
     {
-        _strName = strName;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // RBAC Resource implementation
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public String getResourceTypeCode(  )
-    {
-        return RESOURCE_TYPE;
+        this._nIdTicket = nIdTicket;
     }
 
     /**
-     * {@inheritDoc }
+     * Check if this filter contains an Ticket id
+     * @return True if this filter contains an Ticket id, false otherwise
      */
-    @Override
-    public String getResourceId(  )
+    public boolean containsIdTicket(  )
     {
-        return String.valueOf( _nUnitId );
+        return ( _nIdTicket != ALL_INT );
     }
 }

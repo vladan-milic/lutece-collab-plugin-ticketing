@@ -31,92 +31,46 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business;
+package fr.paris.lutece.plugins.ticketing.service.daemon;
 
-import fr.paris.lutece.plugins.unittree.business.unit.Unit;
-import fr.paris.lutece.portal.service.rbac.RBACResource;
-
+import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
+import fr.paris.lutece.portal.service.daemon.Daemon;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 /**
- * AssigneeUnit
+ * @author s267533
+ *
+ *  Daemon used to index Tickets in incremental mode 
  */
-public class AssigneeUnit implements RBACResource
+public class TicketIndexerDaemon extends Daemon
 {
-    public static final String PERMISSION_ASSIGN = "ASSIGN";    
-    public static final String RESOURCE_TYPE = "assigneeUnit";
-    
-    // Variables declarations 
-    private int _nUnitId;
-    private String _strName;
 
-    /** Constructor */
-    public AssigneeUnit(  )
-    {
-    }
-
-    /** Constructor
-     * @param unit The unit
+    /**
+     * Constructor
      */
-    public AssigneeUnit( Unit unit )
+    public TicketIndexerDaemon()
     {
-        _nUnitId = unit.getIdUnit(  );
-        _strName = unit.getLabel(  );
+        super( );
     }
 
     /**
-        * Returns the UnitId
-        * @return The UnitId
-        */
-    public int getUnitId(  )
-    {
-        return _nUnitId;
-    }
-
-    /**
-     * Sets the UnitId
-     * @param nUnitId The UnitId
-     */
-    public void setUnitId( int nUnitId )
-    {
-        _nUnitId = nUnitId;
-    }
-
-    /**
-     * Returns the Name
-     * @return The Name
-     */
-    public String getName(  )
-    {
-        return _strName;
-    }
-
-    /**
-     * Sets the Name
-     * @param strName The Name
-     */
-    public void setName( String strName )
-    {
-        _strName = strName;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // RBAC Resource implementation
-
-    /**
-     * {@inheritDoc }
+     * {@inheritDoc}
      */
     @Override
-    public String getResourceTypeCode(  )
+    public void run()
     {
-        return RESOURCE_TYPE;
+        String strIndexationResult;
+        try
+        {
+            //launch indexer in incremental mode
+            strIndexationResult = TicketSearchService.getInstance( ).processIndexing( false ) ;
+        }
+        catch ( Exception e )
+        {
+            strIndexationResult = "Ticketing indexing error : " + e.getMessage(  );
+            AppLogService.error( strIndexationResult, e );
+        }
+        setLastRunLogs( strIndexationResult );
     }
 
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public String getResourceId(  )
-    {
-        return String.valueOf( _nUnitId );
-    }
 }

@@ -110,12 +110,19 @@
             </rbac-resource-type-class>
         </rbac-resource-type>
     </rbac-resource-types>
+    <rbac-resource-types>
+        <rbac-resource-type>
+            <rbac-resource-type-class>
+                fr.paris.lutece.plugins.ticketing.service.AssigneeUnitResourceIdService
+            </rbac-resource-type-class>
+        </rbac-resource-type>
+    </rbac-resource-types>
     
     <!-- Search Indexer Service -->
     <search-indexers>
         <search-indexer>
             <search-indexer-class>
-                fr.paris.lutece.plugins.ticketing.web.search.TicketIndexer
+                fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer
             </search-indexer-class>
         </search-indexer>
     </search-indexers>
@@ -160,5 +167,15 @@
             <dashboard-feature-right>TICKETING_TICKETS_MANAGEMENT</dashboard-feature-right>
         </dashboard-component>
     </dashboard-components>
+    
+    <!-- Daemons -->
+	<daemons>
+		<daemon>
+			<daemon-id>ticketIndexerDaemon</daemon-id>
+			<daemon-name>ticketing.daemon.indexerDameon.name</daemon-name>
+			<daemon-description>ticketing.daemon.indexerDameon.description</daemon-description>
+			<daemon-class>fr.paris.lutece.plugins.ticketing.service.daemon.TicketIndexerDaemon</daemon-class>
+		</daemon>
+	</daemons>
     
 </plug-in>
