@@ -207,20 +207,12 @@ public class TicketSearchEngine implements SearchEngine
     {
         if ( StringUtils.isNotEmpty( strQuery ) )
         {
-
-            ComplexPhraseQueryParser parserComment = new ComplexPhraseQueryParser( IndexationService.LUCENE_INDEX_VERSION,
-                    TicketSearchItem.FIELD_TXT_COMMENT, IndexationService.getAnalyser(  ) );
-            parserComment.setInOrder( false );
-            parserComment.setPhraseSlop( 1 );
-            query.add( parserComment.parse(  strQuery.toLowerCase(  ).replaceAll( "\\p{Punct}|\\d" , "" )  ), BooleanClause.Occur.SHOULD );
-            
-            
-            ComplexPhraseQueryParser parserContent = new ComplexPhraseQueryParser( IndexationService.LUCENE_INDEX_VERSION,
-                    TicketSearchItem.FIELD_TXT_RESPONSE, IndexationService.getAnalyser(  ) );
-            parserContent.setInOrder( false );
-            parserContent.setPhraseSlop( 1 );
-            query.add( parserContent.parse(  strQuery.toLowerCase(  ).replaceAll( "\\p{Punct}|\\d" , "" )  ), BooleanClause.Occur.SHOULD );
-             
+            ComplexPhraseQueryParser parser = new ComplexPhraseQueryParser( IndexationService.LUCENE_INDEX_VERSION,
+                    TicketSearchItem.FIELD_CONTENTS, IndexationService.getAnalyser(  ) );
+            parser.setInOrder( false );
+            parser.setPhraseSlop( 1 );
+            query.add( parser.parse(  strQuery.toLowerCase(  ).replaceAll( "\\p{Punct}|\\d" , "" ) ), BooleanClause.Occur.SHOULD );
+    
         }
         QueryParser parserCategory = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
                 TicketSearchItem.FIELD_CATEGORY, IndexationService.getAnalyser(  ) );
