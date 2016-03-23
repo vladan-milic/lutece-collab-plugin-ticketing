@@ -30,6 +30,8 @@ id_unit int(11) NOT NULL default '0',
 user_message long varchar NULL,
 url varchar(4096) NULL,
 id_channel int(11) NOT NULL default '0',
+id_assigner_user int(11) NOT NULL default '-1',
+id_assigner_unit int(11) NOT NULL default '0', 
 PRIMARY KEY (id_ticket)
 );
 
