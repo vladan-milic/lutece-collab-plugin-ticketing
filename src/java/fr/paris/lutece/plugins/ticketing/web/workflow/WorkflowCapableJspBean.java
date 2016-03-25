@@ -372,6 +372,52 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     }
 
     /**
+     * Do process a workflow action over a ticket
+     *
+     * @param ticket
+     *            The ticket
+     * @param request http request
+     */
+    protected void doProcessNextWorkflowAction( Ticket ticket, HttpServletRequest request )
+    {
+        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+
+        // TODO After POC GRU, set this variable with
+        // ticketCategory.getIdWorkflow( );
+        int nIdWorkflow = TicketingPocGruService.getWorkflowId( ticket );
+
+        if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable(  ) )
+        {
+            try
+            {
+                _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+                    ticketCategory.getId(  ) );
+
+                Collection<Action> actions = _workflowService.getActions( ticket.getId(  ),
+                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, getUser(  ) );
+
+                if ( actions.size(  ) == 1 )
+                {
+                    Action action = actions.iterator(  ).next(  );
+                    _workflowService.doProcessAction( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, action.getId(  ),
+                        ticketCategory.getId(  ), request, request.getLocale(  ), false );
+                }
+                else
+                {
+                    //multiple actions or no action => ambiguous case 
+                    //TODO throw an exception
+                }
+            }
+            catch ( Exception e )
+            {
+                doRemoveWorkFlowResource( ticket.getId(  ) );
+                TicketHome.remove( ticket.getId(  ) );
+                throw e;
+            }
+        }
+    }
+
+    /**
      * Do remove a workflow resource
      * @param nTicketId the ticket id associated to the workflow resource
      */

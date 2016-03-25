@@ -409,7 +409,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             }
         }
 
-        doProcessWorkflowAutomaticAction( ticket );
+        doProcessNextWorkflowAction( ticket, request );
 
         return redirectAfterCreateAction( request );
     }

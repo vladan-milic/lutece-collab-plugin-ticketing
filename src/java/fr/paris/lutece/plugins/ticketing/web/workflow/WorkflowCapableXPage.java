@@ -44,6 +44,8 @@ import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
 import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
+import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.service.admin.AdminAuthenticationService;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -280,6 +282,54 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                     ticketCategory.getId(  ) );
                 _workflowService.executeActionAutomatic( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
                     ticketCategory.getId(  ) );
+            }
+            catch ( Exception e )
+            {
+                doRemoveWorkFlowResource( ticket.getId(  ) );
+                TicketHome.remove( ticket.getId(  ) );
+                throw e;
+            }
+        }
+    }
+
+    /**
+     * Do process a workflow action over a ticket
+     *
+     * @param ticket
+     *            The ticket
+     * @param request http request
+     */
+    protected void doProcessNextWorkflowAction( Ticket ticket, HttpServletRequest request )
+    {
+        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+
+        // TODO After POC GRU, set this variable with
+        // ticketCategory.getIdWorkflow( );
+        TicketHelper.registerDefaultAdminUser( request );
+        AdminUser userFront = AdminAuthenticationService.getInstance(  ).getRegisteredUser( request );
+        int nIdWorkflow = TicketingPocGruService.getWorkflowId( ticket );
+
+        if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable(  ) )
+        {
+            try
+            {
+                _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+                    ticketCategory.getId(  ) );
+
+                Collection<Action> actions = _workflowService.getActions( ticket.getId(  ),
+                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, userFront );
+
+                if ( actions.size(  ) == 1 )
+                {
+                    Action action = actions.iterator(  ).next(  );
+                    _workflowService.doProcessAction( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, action.getId(  ),
+                        ticketCategory.getId(  ), request, request.getLocale(  ), false );
+                }
+                else
+                {
+                    //multiple actions or no action => ambiguous case 
+                    //TODO throw an exception
+                }
             }
             catch ( Exception e )
             {

@@ -216,7 +216,7 @@ public class TicketXPage extends WorkflowCapableXPage
         ticket.setIdChannel( TicketingConstants.WEB_ID_CHANNEL );
         TicketHome.create( ticket );
 
-        doProcessWorkflowAutomaticAction( ticket );
+        doProcessNextWorkflowAction( ticket, request );
 
         if ( ( ticket.getListResponse(  ) != null ) && !ticket.getListResponse(  ).isEmpty(  ) )
         {
