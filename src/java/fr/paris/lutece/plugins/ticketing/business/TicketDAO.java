@@ -239,6 +239,7 @@ public final class TicketDAO implements ITicketDAO
             // assignee user
             int nId = daoUtil.getInt( nIndex++ );
             AdminUser user = AdminUserHome.findByPrimaryKey( nId );
+
             if ( user != null )
             {
                 AssigneeUser assigneeUser = new AssigneeUser( user );
@@ -247,13 +248,16 @@ public final class TicketDAO implements ITicketDAO
 
             // assignee unit
             nId = daoUtil.getInt( nIndex++ );
+
             Unit unit = UnitHome.findByPrimaryKey( nId );
             AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
             ticket.setAssigneeUnit( assigneeUnit );
 
             // assigner user
             nId = daoUtil.getInt( nIndex++ );
+
             AdminUser assignerAdminUser = AdminUserHome.findByPrimaryKey( nId );
+
             if ( assignerAdminUser != null )
             {
                 AssigneeUser assignerUser = new AssigneeUser( assignerAdminUser );
@@ -262,6 +266,7 @@ public final class TicketDAO implements ITicketDAO
 
             // assigner unit
             nId = daoUtil.getInt( nIndex++ );
+
             Unit assignerUnitFound = UnitHome.findByPrimaryKey( nId );
             AssigneeUnit assignerUnit = new AssigneeUnit( assignerUnitFound );
             ticket.setAssignerUnit( assignerUnit );
@@ -404,6 +409,7 @@ public final class TicketDAO implements ITicketDAO
             // assignee user
             int nId = daoUtil.getInt( nIndex++ );
             AdminUser user = AdminUserHome.findByPrimaryKey( nId );
+
             if ( user != null )
             {
                 AssigneeUser assigneeUser = new AssigneeUser( user );
@@ -412,7 +418,9 @@ public final class TicketDAO implements ITicketDAO
 
             // assignee unit
             nId = daoUtil.getInt( nIndex++ );
+
             Unit unit = UnitHome.findByPrimaryKey( nId );
+
             if ( unit != null )
             {
                 AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
@@ -421,7 +429,9 @@ public final class TicketDAO implements ITicketDAO
 
             // assigner user
             nId = daoUtil.getInt( nIndex++ );
+
             AdminUser assignerAdminUser = AdminUserHome.findByPrimaryKey( nId );
+
             if ( assignerAdminUser != null )
             {
                 AssigneeUser assignerUser = new AssigneeUser( assignerAdminUser );
@@ -430,7 +440,9 @@ public final class TicketDAO implements ITicketDAO
 
             // assigner user
             nId = daoUtil.getInt( nIndex++ );
+
             Unit assignerUpUnit = UnitHome.findByPrimaryKey( nId );
+
             if ( assignerUpUnit != null )
             {
                 AssigneeUnit assignerUnit = new AssigneeUnit( assignerUpUnit );
@@ -778,6 +790,7 @@ public final class TicketDAO implements ITicketDAO
             // assignee user
             int nId = daoUtil.getInt( nIndex++ );
             AdminUser user = AdminUserHome.findByPrimaryKey( nId );
+
             if ( user != null )
             {
                 AssigneeUser assigneeUser = new AssigneeUser( user );
@@ -786,13 +799,16 @@ public final class TicketDAO implements ITicketDAO
 
             // assignee unit
             nId = daoUtil.getInt( nIndex++ );
+
             Unit unit = UnitHome.findByPrimaryKey( nId );
             AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
             ticket.setAssigneeUnit( assigneeUnit );
 
             // assigner user
             nId = daoUtil.getInt( nIndex++ );
+
             AdminUser assignerAdminUser = AdminUserHome.findByPrimaryKey( nId );
+
             if ( assignerAdminUser != null )
             {
                 AssigneeUser assignerUser = new AssigneeUser( assignerAdminUser );
@@ -801,6 +817,7 @@ public final class TicketDAO implements ITicketDAO
 
             // assigner unit
             nId = daoUtil.getInt( nIndex++ );
+
             Unit assignerUpUnit = UnitHome.findByPrimaryKey( nId );
             AssigneeUnit assignerUnit = new AssigneeUnit( assignerUpUnit );
             ticket.setAssignerUnit( assignerUnit );

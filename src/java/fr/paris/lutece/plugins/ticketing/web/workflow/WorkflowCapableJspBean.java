@@ -167,10 +167,10 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                             //self assign action for a ticket already assign to the agent => removing action from list
                             filteredListWorkflowActions.remove( action );
                         }
-                        
+
                         if ( ( action.getId(  ) == AppPropertiesService.getPropertyInt( 
-                                PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ENTITY, -1 ) ) 
-                                && RBACService.isUserInRole( getUser(  ), TicketingConstants.ROLE_LEVEL_3 ) ) 
+                                    PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ENTITY, -1 ) ) &&
+                                RBACService.isUserInRole( getUser(  ), TicketingConstants.ROLE_LEVEL_3 ) )
                         {
                             // action assign to another entity is not allowed for level3 agent
                             filteredListWorkflowActions.remove( action );

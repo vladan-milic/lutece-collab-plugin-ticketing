@@ -33,21 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.search;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.document.DateTools;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.FieldType;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.Term;
-import org.jsoup.Jsoup;
-
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
@@ -67,6 +52,24 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.lang.StringUtils;
+
+import org.apache.lucene.document.DateTools;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
+
+import org.jsoup.Jsoup;
+
+import java.io.IOException;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Ticket Indexer
@@ -74,7 +77,7 @@ import fr.paris.lutece.util.url.UrlItem;
  */
 public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 {
-    public  static final String PROPERTY_INDEXER_NAME = "ticketing.indexer.name";
+    public static final String PROPERTY_INDEXER_NAME = "ticketing.indexer.name";
     private static final String SHORT_NAME_TICKET = "tck";
     private static final String PARAMETER_TICKET_ID = "ticket_id";
     private static final String PLUGIN_NAME = "ticketing";
@@ -147,7 +150,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
     @Override
     public void indexDocuments(  ) throws IOException, InterruptedException, SiteMessageException
     {
-        TicketSearchService.getInstance( ).processIndexing( true );
+        TicketSearchService.getInstance(  ).processIndexing( true );
     }
 
     /**
@@ -176,7 +179,8 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
      * @throws IOException if an IO error occurs
      * @throws InterruptedException if a Thread error occurs
      */
-    public void indexTicket( IndexWriter indexWriter, Ticket ticket ) throws IOException, InterruptedException
+    public void indexTicket( IndexWriter indexWriter, Ticket ticket )
+        throws IOException, InterruptedException
     {
         Plugin plugin = PluginService.getPlugin( PLUGIN_NAME );
         UrlItem urlTicket = new UrlItem( JSP_VIEW_TICKET );
@@ -250,7 +254,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             doc.add( new Field( TicketSearchItem.FIELD_RESPONSE, ticket.getUserMessage(  ), ft ) );
             doc.add( new Field( TicketSearchItem.FIELD_TXT_COMMENT, ticket.getTicketComment(  ).toLowerCase(  ),
                     ftNotStored ) );
-            doc.add( new Field( TicketSearchItem.FIELD_COMMENT, ticket.getTicketComment(  ), ft ) );           
+            doc.add( new Field( TicketSearchItem.FIELD_COMMENT, ticket.getTicketComment(  ), ft ) );
         }
 
         doc.add( new Field( TicketSearchItem.FIELD_SUMMARY, ticket.getDisplaySummary(  ), ft ) );
@@ -277,7 +281,8 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             StateFilter stateFilter = new StateFilter(  );
             stateFilter.setIdWorkflow( nIdWorkflow );
 
-            State state = WorkflowService.getInstance(  ).getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+            State state = WorkflowService.getInstance(  )
+                                         .getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
                     ticketCategory.getId(  ) );
 
             if ( state != null )
@@ -318,80 +323,80 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
     {
         return AppPropertiesService.getProperty( PROPERTY_DOCUMENT_TYPE );
     }
-    
-    
+
     /**
      * process indexation
      * @param indexWriter index writer
      * @param bCreate true if index must be created (full mode) false if incremental update
-     * @param sbLogs log message 
+     * @param sbLogs log message
      * @throws IOException io error when creating/accessing index
      * @throws InterruptedException interrupted exception
-     * 
+     *
      */
     public synchronized void processIndexing( IndexWriter indexWriter, boolean bCreate, StringBuffer sbLogs )
-            throws IOException, InterruptedException
+        throws IOException, InterruptedException
+    {
+        Plugin plugin = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME );
+        List<Integer> listIdTicket = new ArrayList<Integer>(  );
+
+        if ( !bCreate )
         {
-            Plugin plugin = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME );
-            List<Integer> listIdTicket = new ArrayList<Integer>(  );
-
-            if ( !bCreate )
+            //incremental indexing
+            //delete all record which must be deleted
+            for ( IndexerAction action : IndexerActionHome.getAllIndexerActionByTask( IndexerAction.TASK_DELETE ) )
             {
-                //incremental indexing
-                //delete all record which must be deleted
-                for ( IndexerAction action : IndexerActionHome.getAllIndexerActionByTask( IndexerAction.TASK_DELETE ) ) 
+                sbLogTicket( sbLogs, action.getIdTicket(  ), IndexerAction.TASK_DELETE );
+
+                Term term = new Term( TicketSearchItem.FIELD_TICKET_ID, Integer.toString( action.getIdTicket(  ) ) );
+                Term[] terms = { term };
+
+                indexWriter.deleteDocuments( terms );
+                IndexerActionHome.remove( action.getIdAction(  ) );
+            }
+
+            //add all record which must be added
+            for ( IndexerAction action : IndexerActionHome.getAllIndexerActionByTask( IndexerAction.TASK_CREATE ) )
+            {
+                sbLogTicket( sbLogs, action.getIdTicket(  ), IndexerAction.TASK_CREATE );
+                listIdTicket.add( action.getIdTicket(  ) );
+
+                Ticket ticket = TicketHome.findByPrimaryKey( action.getIdTicket(  ) );
+
+                if ( ticket != null )
                 {
-                    sbLogTicket( sbLogs, action.getIdTicket(  ), IndexerAction.TASK_DELETE );
-
-                    Term term = new Term( TicketSearchItem.FIELD_TICKET_ID, Integer.toString( action.getIdTicket(  ) ) );
-                    Term[] terms = { term };
-
-                    indexWriter.deleteDocuments( terms );
-                    IndexerActionHome.remove( action.getIdAction(  ) );
-                }
-
-                //add all record which must be added
-                for ( IndexerAction action : IndexerActionHome.getAllIndexerActionByTask( IndexerAction.TASK_CREATE ) )
-                {
-                    sbLogTicket( sbLogs, action.getIdTicket(  ), IndexerAction.TASK_CREATE );
-                    listIdTicket.add( action.getIdTicket(  ) );
-                    Ticket ticket = TicketHome.findByPrimaryKey( action.getIdTicket( ) );
-                    if ( ticket != null ) 
-                    {
-                        indexTicket( indexWriter, ticket );
-                        IndexerActionHome.remove( action.getIdAction(  ) );
-                    }
-                }
-                
-                //Update all record which must be updated
-                for ( IndexerAction action : IndexerActionHome.getAllIndexerActionByTask( IndexerAction.TASK_MODIFY ) )
-                {
-                    sbLogTicket( sbLogs, action.getIdTicket(  ), IndexerAction.TASK_MODIFY );
-                    Ticket ticket = TicketHome.findByPrimaryKey( action.getIdTicket( ) );
-                    Term term = new Term( TicketSearchItem.FIELD_TICKET_ID, Integer.toString( action.getIdTicket(  ) ) );
-                    Term[] terms = { term };
-                    indexWriter.deleteDocuments( terms );
-
-                    listIdTicket.add( action.getIdTicket(  ) );
                     indexTicket( indexWriter, ticket );
                     IndexerActionHome.remove( action.getIdAction(  ) );
                 }
             }
-            else
+
+            //Update all record which must be updated
+            for ( IndexerAction action : IndexerActionHome.getAllIndexerActionByTask( IndexerAction.TASK_MODIFY ) )
             {
-                for ( Ticket ticket : TicketHome.getTicketsList(  ) )
-                {
-                        sbLogs.append( "Indexing Ticket" );
-                        sbLogs.append( "\r\n" );
-                        sbLogTicket( sbLogs, ticket.getId(  ), IndexerAction.TASK_CREATE );
-                        indexTicket( indexWriter, ticket );
-                }
+                sbLogTicket( sbLogs, action.getIdTicket(  ), IndexerAction.TASK_MODIFY );
 
+                Ticket ticket = TicketHome.findByPrimaryKey( action.getIdTicket(  ) );
+                Term term = new Term( TicketSearchItem.FIELD_TICKET_ID, Integer.toString( action.getIdTicket(  ) ) );
+                Term[] terms = { term };
+                indexWriter.deleteDocuments( terms );
+
+                listIdTicket.add( action.getIdTicket(  ) );
+                indexTicket( indexWriter, ticket );
+                IndexerActionHome.remove( action.getIdAction(  ) );
             }
-
-            indexWriter.commit(  );
         }
-    
+        else
+        {
+            for ( Ticket ticket : TicketHome.getTicketsList(  ) )
+            {
+                sbLogs.append( "Indexing Ticket" );
+                sbLogs.append( "\r\n" );
+                sbLogTicket( sbLogs, ticket.getId(  ), IndexerAction.TASK_CREATE );
+                indexTicket( indexWriter, ticket );
+            }
+        }
+
+        indexWriter.commit(  );
+    }
 
     /**
      * Indexing action performed on the recording

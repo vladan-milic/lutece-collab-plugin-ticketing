@@ -33,16 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
-import java.util.Locale;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.portal.service.rbac.Permission;
 import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
 import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
 import fr.paris.lutece.util.ReferenceList;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Locale;
 
 
 /**

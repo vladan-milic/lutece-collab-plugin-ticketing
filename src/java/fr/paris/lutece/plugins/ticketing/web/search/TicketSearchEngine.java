@@ -33,13 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.search;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
+import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
+import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
+import fr.paris.lutece.portal.service.search.IndexationService;
+import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
+import fr.paris.lutece.portal.service.search.SearchEngine;
+import fr.paris.lutece.portal.service.search.SearchResult;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
@@ -53,13 +56,12 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 
-import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
-import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
-import fr.paris.lutece.portal.service.search.IndexationService;
-import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
-import fr.paris.lutece.portal.service.search.SearchEngine;
-import fr.paris.lutece.portal.service.search.SearchResult;
-import fr.paris.lutece.portal.service.util.AppLogService;
+import java.text.ParseException;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -83,7 +85,7 @@ public class TicketSearchEngine implements SearchEngine
 
         try
         {
-            searcher = TicketSearchService.getInstance( ).getSearcher( );
+            searcher = TicketSearchService.getInstance(  ).getSearcher(  );
 
             BooleanQuery query = new BooleanQuery(  );
 
@@ -211,9 +213,10 @@ public class TicketSearchEngine implements SearchEngine
                     TicketSearchItem.FIELD_CONTENTS, IndexationService.getAnalyser(  ) );
             parser.setInOrder( false );
             parser.setPhraseSlop( 1 );
-            query.add( parser.parse(  strQuery.toLowerCase(  ).replaceAll( "\\p{Punct}|\\d" , "" ) ), BooleanClause.Occur.SHOULD );
-    
+            query.add( parser.parse( strQuery.toLowerCase(  ).replaceAll( "\\p{Punct}|\\d", "" ) ),
+                BooleanClause.Occur.SHOULD );
         }
+
         QueryParser parserCategory = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
                 TicketSearchItem.FIELD_CATEGORY, IndexationService.getAnalyser(  ) );
         query.add( parserCategory.parse( request.getParameter( SearchConstants.PARAMETER_CATEGORY ) ),

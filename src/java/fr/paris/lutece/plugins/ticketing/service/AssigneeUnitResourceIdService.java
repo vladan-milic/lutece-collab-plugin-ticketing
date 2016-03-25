@@ -33,9 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
-import java.util.List;
-import java.util.Locale;
-
 import fr.paris.lutece.plugins.ticketing.business.AssigneeUnit;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
@@ -44,6 +41,9 @@ import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
 import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
 import fr.paris.lutece.util.ReferenceList;
+
+import java.util.List;
+import java.util.Locale;
 
 
 /**

@@ -34,7 +34,9 @@
 package fr.paris.lutece.plugins.ticketing.business;
 
 import java.io.Serializable;
+
 import java.sql.Timestamp;
+
 import java.util.Calendar;
 
 

@@ -33,12 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.search;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppException;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPathService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.miscellaneous.LimitTokenCountAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
@@ -49,17 +52,17 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.LogDocMergePolicy;
 import org.apache.lucene.index.LogMergePolicy;
 import org.apache.lucene.search.IndexSearcher;
+
 //import org.apache.lucene.search.Searcher;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.util.Version;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.portal.service.util.AppException;
-import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPathService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import java.io.File;
+import java.io.IOException;
+
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -117,20 +120,21 @@ public final class TicketSearchService
         {
             _analyzer = (Analyzer) Class.forName( strAnalyserClassName ).newInstance(  );
         }
-//        catch ( InstantiationException ie )
-//        {
-//            Class classAnalyzer;
-//            try
-//            {
-//                classAnalyzer = Class.forName( strAnalyserClassName );
-//                java.lang.reflect.Constructor constructeur =  classAnalyzer.getConstructor( Version.class );
-//                _analyzer = (Analyzer) constructeur.newInstance ( new Object [] {  Version.LUCENE_46} );
-//                
-//            } catch ( Exception e )
-//            {
-//                throw new AppException( "Failed to load Lucene Analyzer class", e );
-//            }
-//        }
+
+        //        catch ( InstantiationException ie )
+        //        {
+        //            Class classAnalyzer;
+        //            try
+        //            {
+        //                classAnalyzer = Class.forName( strAnalyserClassName );
+        //                java.lang.reflect.Constructor constructeur =  classAnalyzer.getConstructor( Version.class );
+        //                _analyzer = (Analyzer) constructeur.newInstance ( new Object [] {  Version.LUCENE_46} );
+        //                
+        //            } catch ( Exception e )
+        //            {
+        //                throw new AppException( "Failed to load Lucene Analyzer class", e );
+        //            }
+        //        }
         catch ( Exception e )
         {
             throw new AppException( "Failed to load Lucene Analyzer class", e );
@@ -234,28 +238,28 @@ public final class TicketSearchService
                 /*  writer = new IndexWriter( dir, _analyzer, bCreateIndex, IndexWriter.MaxFieldLength.UNLIMITED );
                   writer.setMergeFactor( _nWriterMergeFactor );
                   writer.setMaxFieldLength( _nWriterMaxSectorLength );
-
+                
                   Date start = new Date(  );
-
+                
                   sbLogs.append( "\r\n<strong>Indexer : " );
                   sbLogs.append( _indexer.getName(  ) );
                   sbLogs.append( " - " );
                   sbLogs.append( _indexer.getDescription(  ) );
                   sbLogs.append( "</strong>\r\n" );
                   _indexer.processIndexing( writer, bCreateIndex, sbLogs );
-
+                
                   Date end = new Date(  );
-
+                
                   sbLogs.append( "Duration of the treatment : " );
                   sbLogs.append( end.getTime(  ) - start.getTime(  ) );
                   sbLogs.append( " milliseconds\r\n" );
-
+                
                   writer.optimize(  );*/
                 Date start = new Date(  );
 
                 IndexWriterConfig conf = new IndexWriterConfig( Version.LUCENE_46,
                         new LimitTokenCountAnalyzer( _analyzer, _nWriterMaxSectorLength ) );
-                        
+
                 LogMergePolicy mergePolicy = new LogDocMergePolicy(  );
                 mergePolicy.setMergeFactor( _nWriterMergeFactor );
 
@@ -286,7 +290,7 @@ public final class TicketSearchService
                 sbLogs.append( "Duration of the treatment : " );
                 sbLogs.append( end.getTime(  ) - start.getTime(  ) );
                 sbLogs.append( " milliseconds\r\n" );
-                AppLogService.info( sbLogs.toString( ) );
+                AppLogService.info( sbLogs.toString(  ) );
             }
         }
         catch ( Exception e )
@@ -376,5 +380,4 @@ public final class TicketSearchService
     {
         return _analyzer;
     }
-
 }

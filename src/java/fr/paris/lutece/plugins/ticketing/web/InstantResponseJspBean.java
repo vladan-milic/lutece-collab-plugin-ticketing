@@ -57,6 +57,7 @@ import fr.paris.lutece.util.url.UrlItem;
 import org.apache.commons.lang.StringUtils;
 
 import java.sql.Timestamp;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -183,6 +184,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         {
             return redirect( request, strRedirectUrl );
         }
+
         InstantResponseFilter filter = InstantResponseFilterHelper.getFilter( request );
         List<InstantResponse> listInstantResponses = InstantResponseHome.getInstantResponsesList( filter );
         Map<String, Object> model = getPaginatedListModel( request, MARK_INSTANT_RESPONSE_LIST, listInstantResponses,
@@ -190,6 +192,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
 
         model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
         InstantResponseFilterHelper.setModel( model, filter, request );
+
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_INSTANT_RESPONSES, TEMPLATE_MANAGE_INSTANT_RESPONSES, model );
     }
 

@@ -144,17 +144,18 @@ public final class IndexerActionHome
     {
         return _dao.selectList( filter, _plugin );
     }
-    
+
     /**
      * Loads the data of all the IndexerAction matching task and returns
      * them in a list
      * @param taskId the id of the task
      * @return the list which contains the data of all the indexerAction
      */
-    public static List<IndexerAction>  getAllIndexerActionByTask( int taskId )
+    public static List<IndexerAction> getAllIndexerActionByTask( int taskId )
     {
-        IndexerActionFilter filter = new IndexerActionFilter();
+        IndexerActionFilter filter = new IndexerActionFilter(  );
         filter.setIdTask( taskId );
+
         return getList( filter );
     }
 }

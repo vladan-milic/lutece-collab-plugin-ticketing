@@ -37,40 +37,41 @@ import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
 import fr.paris.lutece.portal.service.daemon.Daemon;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
+
 /**
  * @author s267533
  *
- *  Daemon used to index Tickets in incremental mode 
+ *  Daemon used to index Tickets in incremental mode
  */
 public class TicketIndexerDaemon extends Daemon
 {
-
     /**
      * Constructor
      */
-    public TicketIndexerDaemon()
+    public TicketIndexerDaemon(  )
     {
-        super( );
+        super(  );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void run()
+    public void run(  )
     {
         String strIndexationResult;
+
         try
         {
             //launch indexer in incremental mode
-            strIndexationResult = TicketSearchService.getInstance( ).processIndexing( false ) ;
+            strIndexationResult = TicketSearchService.getInstance(  ).processIndexing( false );
         }
         catch ( Exception e )
         {
             strIndexationResult = "Ticketing indexing error : " + e.getMessage(  );
             AppLogService.error( strIndexationResult, e );
         }
+
         setLastRunLogs( strIndexationResult );
     }
-
 }
