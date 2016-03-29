@@ -216,7 +216,7 @@ public final class TicketHelper
 
         for ( Unit unit : lstUserUnits )
         {
-            if ( unit.getIdUnit(  ) == ticket.getAssigneeUnit(  ).getUnitId(  ) )
+            if (  ticket.getAssigneeUnit(  ) != null && unit.getIdUnit(  ) == ticket.getAssigneeUnit(  ).getUnitId(  ) )
             {
                 result = true;
 
@@ -239,7 +239,7 @@ public final class TicketHelper
 
         for ( Unit unit : lstUserUnits )
         {
-            if ( unit.getIdUnit(  ) == ticket.getAssignerUnit(  ).getUnitId(  ) )
+            if ( ticket.getAssignerUnit(  ) != null && unit.getIdUnit(  ) == ticket.getAssignerUnit(  ).getUnitId(  ) )
             {
                 result = true;
 
