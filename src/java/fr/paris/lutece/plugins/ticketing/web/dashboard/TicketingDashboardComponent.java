@@ -34,23 +34,15 @@
 package fr.paris.lutece.plugins.ticketing.web.dashboard;
 
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
-import fr.paris.lutece.plugins.ticketing.business.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketFilter;
-import fr.paris.lutece.plugins.ticketing.business.TicketHome;
-import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
-import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
-import fr.paris.lutece.plugins.ticketing.web.TicketHelper;
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
-import fr.paris.lutece.plugins.unittree.business.unit.Unit;
-import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.portal.business.right.Right;
 import fr.paris.lutece.portal.business.right.RightHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.dashboard.DashboardComponent;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
@@ -100,7 +92,7 @@ public class TicketingDashboardComponent extends DashboardComponent
         List<Ticket> listGroupTickets = new ArrayList<Ticket>(  );
         List<Ticket> listDomainTickets = new ArrayList<Ticket>(  );
 
-        TicketHelper.setTicketsListByPerimeter( user, filter, request, listAgentTickets, listGroupTickets,
+        TicketUtils.setTicketsListByPerimeter( user, filter, request, listAgentTickets, listGroupTickets,
             listDomainTickets );
 
         Map<String, Object> model = new HashMap<String, Object>(  );

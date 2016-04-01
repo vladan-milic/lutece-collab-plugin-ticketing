@@ -38,8 +38,8 @@ import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
-import fr.paris.lutece.plugins.ticketing.web.TicketHelper;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
@@ -103,7 +103,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
      */
     protected void setWorkflowAttributes( HttpServletRequest request, Ticket ticket )
     {
-        TicketHelper.registerDefaultAdminUser( request );
+        TicketUtils.registerDefaultAdminUser( request );
 
         if ( _workflowService.isAvailable(  ) )
         {
@@ -165,7 +165,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
 
-        TicketHelper.registerDefaultAdminUser( request );
+        TicketUtils.registerDefaultAdminUser( request );
 
         if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
                 StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
@@ -222,7 +222,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
 
-        TicketHelper.registerDefaultAdminUser( request );
+        TicketUtils.registerDefaultAdminUser( request );
 
         if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
                 StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
@@ -305,7 +305,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
         // TODO After POC GRU, set this variable with
         // ticketCategory.getIdWorkflow( );
-        TicketHelper.registerDefaultAdminUser( request );
+        TicketUtils.registerDefaultAdminUser( request );
         AdminUser userFront = AdminAuthenticationService.getInstance(  ).getRegisteredUser( request );
         int nIdWorkflow = TicketingPocGruService.getWorkflowId( ticket );
 
