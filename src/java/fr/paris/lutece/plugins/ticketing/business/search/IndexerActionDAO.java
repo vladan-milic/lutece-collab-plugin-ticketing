@@ -45,11 +45,10 @@ import java.util.List;
  */
 public final class IndexerActionDAO implements IIndexerActionDAO
 {
-
     //Constants
     public static final String CONSTANT_WHERE = " WHERE ";
     public static final String CONSTANT_AND = " AND ";
-    
+
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_action ) FROM ticketing_indexer_action";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_action,id_ticket,id_task" +
@@ -62,7 +61,6 @@ public final class IndexerActionDAO implements IIndexerActionDAO
     private static final String SQL_FILTER_ID_TASK = " id_task = ? ";
     private static final String SQL_FILTER_id_ticket = " id_ticket = ? ";
 
-    
     /**
      * {@inheritDoc}
      */
@@ -194,8 +192,7 @@ public final class IndexerActionDAO implements IIndexerActionDAO
 
         return indexerActionList;
     }
-    
-     
+
     /**
      * Builds a query with filters placed in parameters
      * @param strSelect the select of the query
@@ -232,5 +229,4 @@ public final class IndexerActionDAO implements IIndexerActionDAO
 
         return strBuffer.toString(  );
     }
-
 }

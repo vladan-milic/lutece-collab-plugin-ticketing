@@ -97,8 +97,7 @@ public final class ModelUtils
      * @param model the model to complete
      * @param ticket the ticket
      */
-    public static void storeReadOnlyHtmlResponses( HttpServletRequest request, Map<String, Object> model,
-        Ticket ticket )
+    public static void storeReadOnlyHtmlResponses( HttpServletRequest request, Map<String, Object> model, Ticket ticket )
     {
         List<Response> listResponses = ticket.getListResponse(  );
         List<String> listReadOnlyResponseHtml = new ArrayList<String>( listResponses.size(  ) );
@@ -140,7 +139,7 @@ public final class ModelUtils
                 TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_PREFERRED_ID_CHANNEL, strPreferredIdChannel );
     }
-    
+
     /**
      * Completes the specified model for the user signature
      * @param request the request
@@ -149,10 +148,10 @@ public final class ModelUtils
     public static void storeUserSignature( HttpServletRequest request, Map<String, Object> model )
     {
         String strUserSignature = AdminUserPreferencesService.instance(  )
-                            .get( String.valueOf( 
-            AdminUserService.getAdminUser( request ).getUserId(  ) ),
-            TicketingConstants.USER_PREFERENCE_SIGNATURE, StringUtils.EMPTY );
-        
+                                                             .get( String.valueOf( 
+                    AdminUserService.getAdminUser( request ).getUserId(  ) ),
+                TicketingConstants.USER_PREFERENCE_SIGNATURE, StringUtils.EMPTY );
+
         model.put( TicketingConstants.MARK_USER_SIGNATURE, strUserSignature );
     }
 }

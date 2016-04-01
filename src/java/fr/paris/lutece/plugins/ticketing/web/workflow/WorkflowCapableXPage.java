@@ -306,6 +306,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         // TODO After POC GRU, set this variable with
         // ticketCategory.getIdWorkflow( );
         TicketUtils.registerDefaultAdminUser( request );
+
         AdminUser userFront = AdminAuthenticationService.getInstance(  ).getRegisteredUser( request );
         int nIdWorkflow = TicketingPocGruService.getWorkflowId( ticket );
 
