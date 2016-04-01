@@ -47,6 +47,7 @@ import fr.paris.lutece.plugins.ticketing.business.TicketFormHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.EntryService;
 import fr.paris.lutece.plugins.ticketing.service.EntryTypeService;
+import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -194,7 +195,7 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
         model.put( MARK_ENTRY, entry );
         model.put( MARK_FORM, ticketForm );
 
-        TicketHelper.storeRichTextMarksIntoModel( request, model );
+        ModelUtils.storeRichText( request, model );
 
         model.put( MARK_ENTRY_TYPE_SERVICE, EntryTypeServiceManager.getEntryTypeService( entry ) );
 
@@ -347,7 +348,7 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
                 model.put( MARK_REGULAR_EXPRESSION_LIST_REF_LIST, refListRegularExpression );
             }
 
-            TicketHelper.storeRichTextMarksIntoModel( request, model );
+            ModelUtils.storeRichText( request, model );
 
             model.put( MARK_ENTRY_TYPE_SERVICE, EntryTypeServiceManager.getEntryTypeService( entry ) );
 

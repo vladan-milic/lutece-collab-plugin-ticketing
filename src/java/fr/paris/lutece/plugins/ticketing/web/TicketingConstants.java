@@ -133,7 +133,6 @@ public final class TicketingConstants
     public static final int TICKET_STATUS_IN_PROGRESS = 0;
     public static final int TICKET_STATUS_CLOSED = 1;
 
-
     /**
      * Default constructor
      */

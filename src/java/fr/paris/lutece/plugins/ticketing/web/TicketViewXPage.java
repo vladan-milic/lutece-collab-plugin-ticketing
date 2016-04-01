@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.ticketing.web;
 
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
+import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableXPage;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
@@ -90,7 +91,7 @@ public class TicketViewXPage extends WorkflowCapableXPage
         Map<String, Object> model = getModel(  );
         model.put( TicketingConstants.MARK_TICKET, ticket );
 
-        TicketHelper.storeReadOnlyHtmlResponsesIntoModel( request, model, ticket );
+        ModelUtils.storeReadOnlyHtmlResponses( request, model, ticket );
 
         model.put( MARK_IS_REPLY_RENDERED,
             isInState( ticket, WorkflowCapableXPage.PROPERTIES_WORKFLOW_STATE_WAITING_USER_REPLY ) );

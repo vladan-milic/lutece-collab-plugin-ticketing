@@ -33,15 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.ticketfilter;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.ticketing.business.InstantResponseFilter;
 import fr.paris.lutece.plugins.ticketing.business.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -133,7 +133,8 @@ public final class InstantResponseFilterHelper
      * @param fltrFilter filter attribute to set to model
      * @param request http request
      */
-    public static void setModel( Map<String, Object> mapModel, InstantResponseFilter fltrFilter, HttpServletRequest request )
+    public static void setModel( Map<String, Object> mapModel, InstantResponseFilter fltrFilter,
+        HttpServletRequest request )
     {
         mapModel.put( MARK_INSTANTRESPONSE_FILTER, fltrFilter );
     }

@@ -31,11 +31,8 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.web;
+package fr.paris.lutece.plugins.ticketing.web.util;
 
-import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
-import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomain;
@@ -44,6 +41,7 @@ import fr.paris.lutece.plugins.ticketing.business.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -55,7 +53,6 @@ import fr.paris.lutece.portal.service.prefs.AdminUserPreferencesService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
@@ -75,7 +72,7 @@ import javax.servlet.http.HttpServletRequest;
  * Class providing helper for Ticket web management
  *
  */
-public final class TicketHelper
+public final class TicketUtils
 {
     // Properties
     private static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
@@ -86,81 +83,8 @@ public final class TicketHelper
     /**
      * Default constructor
      */
-    private TicketHelper(  )
+    private TicketUtils(  )
     {
-    }
-
-    /**
-     * store user rights in model
-     * @param model model to store rights
-     * @param adminUser user
-     */
-    public static void storeTicketRightsIntoModel( Map<String, Object> model, AdminUser adminUser )
-    {
-        if ( RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_CREATE, adminUser ) )
-        {
-            model.put( TicketingConstants.MARK_TICKET_CREATION_RIGHT, Boolean.TRUE );
-        }
-
-        if ( RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_DELETE, adminUser ) )
-        {
-            model.put( TicketingConstants.MARK_TICKET_DELETION_RIGHT, Boolean.TRUE );
-        }
-
-        if ( RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_MODIFY, adminUser ) )
-        {
-            model.put( TicketingConstants.MARK_TICKET_MODIFICATION_RIGHT, Boolean.TRUE );
-        }
-    }
-
-    /**
-     * Stores the read-only HTML of the ticket responses in the model
-     * @param request the request
-     * @param model the model
-     * @param ticket the ticket
-     */
-    public static void storeReadOnlyHtmlResponsesIntoModel( HttpServletRequest request, Map<String, Object> model,
-        Ticket ticket )
-    {
-        List<Response> listResponses = ticket.getListResponse(  );
-        List<String> listReadOnlyResponseHtml = new ArrayList<String>( listResponses.size(  ) );
-
-        for ( Response response : listResponses )
-        {
-            IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( response.getEntry(  ) );
-            listReadOnlyResponseHtml.add( entryTypeService.getResponseValueForRecap( response.getEntry(  ), request,
-                    response, request.getLocale(  ) ) );
-        }
-
-        model.put( TicketingConstants.MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
-    }
-
-    /**
-     * Completes the specified model for rich text
-     * @param request the request
-     * @param model the model to complete
-     */
-    public static void storeRichTextMarksIntoModel( HttpServletRequest request, Map<String, Object> model )
-    {
-        model.put( TicketingConstants.MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-        model.put( TicketingConstants.MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
-    }
-
-    /**
-     * Completes the specified model for channels selection
-     * @param request the request
-     * @param model the model to complete
-     */
-    public static void storeChannelsMarksIntoModel( HttpServletRequest request, Map<String, Object> model )
-    {
-        model.put( TicketingConstants.MARK_CHANNELS_LIST, ChannelHome.getReferenceList(  ) );
-        model.put( TicketingConstants.MARK_SELECTABLE_CHANNELS_LIST, TicketHelper.getSelectableChannelsList( request ) );
-
-        String strPreferredIdChannel = AdminUserPreferencesService.instance(  )
-                                                                  .get( String.valueOf( 
-                    AdminUserService.getAdminUser( request ).getUserId(  ) ),
-                TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, StringUtils.EMPTY );
-        model.put( TicketingConstants.MARK_PREFERRED_ID_CHANNEL, strPreferredIdChannel );
     }
 
     /**
@@ -216,7 +140,8 @@ public final class TicketHelper
 
         for ( Unit unit : lstUserUnits )
         {
-            if (  ticket.getAssigneeUnit(  ) != null && unit.getIdUnit(  ) == ticket.getAssigneeUnit(  ).getUnitId(  ) )
+            if ( ( ticket.getAssigneeUnit(  ) != null ) &&
+                    ( unit.getIdUnit(  ) == ticket.getAssigneeUnit(  ).getUnitId(  ) ) )
             {
                 result = true;
 
@@ -239,7 +164,8 @@ public final class TicketHelper
 
         for ( Unit unit : lstUserUnits )
         {
-            if ( ticket.getAssignerUnit(  ) != null && unit.getIdUnit(  ) == ticket.getAssignerUnit(  ).getUnitId(  ) )
+            if ( ( ticket.getAssignerUnit(  ) != null ) &&
+                    ( unit.getIdUnit(  ) == ticket.getAssignerUnit(  ).getUnitId(  ) ) )
             {
                 result = true;
 
@@ -278,8 +204,8 @@ public final class TicketHelper
                     //ticket assign to agent
                     listAgentTickets.add( ticket );
                 }
-                else if ( TicketHelper.isTicketAssignedToUserGroup( ticket, lstUserUnits ) ||
-                        TicketHelper.isTicketAssignedUpFromUserGroup( ticket, lstUserUnits ) )
+                else if ( isTicketAssignedToUserGroup( ticket, lstUserUnits ) ||
+                        isTicketAssignedUpFromUserGroup( ticket, lstUserUnits ) )
                 {
                     //ticket assign to agent group
                     listGroupTickets.add( ticket );
@@ -314,7 +240,7 @@ public final class TicketHelper
             //ticket assign to agent
             bAssignToUserOrGroup = true;
         }
-        else if ( TicketHelper.isTicketAssignedToUserGroup( ticket, UnitHome.findByIdUser( user.getUserId(  ) ) ) )
+        else if ( isTicketAssignedToUserGroup( ticket, UnitHome.findByIdUser( user.getUserId(  ) ) ) )
         {
             //ticket assign to agent group
             bAssignToUserOrGroup = true;

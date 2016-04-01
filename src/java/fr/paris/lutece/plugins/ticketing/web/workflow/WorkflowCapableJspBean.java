@@ -38,8 +38,8 @@ import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
-import fr.paris.lutece.plugins.ticketing.web.TicketHelper;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
@@ -153,7 +153,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 Collection<Action> fullListWorkflowActions = getActions( ticket.getId(  ), nIdWorkflow );
                 Collection<Action> filteredListWorkflowActions = new ArrayList<Action>( fullListWorkflowActions );
 
-                if ( TicketHelper.isTicketAssignToUserOrGroup( getUser(  ), ticket ) ||
+                if ( TicketUtils.isTicketAssignToUserOrGroup( getUser(  ), ticket ) ||
                         RBACService.isUserInRole( getUser(  ), TicketingConstants.ROLE_GRU_ADMIN ) )
                 {
                     //if ticket is assign to agent or to its group 
@@ -455,7 +455,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         Action action = actionService.findByPrimaryKey( nIdAction );
         String strMessage = MessageFormat.format( I18nService.getLocalizedString( INFO_WORKFLOW_ACTION_EXECUTED,
                     Locale.FRENCH ), action.getName(  ) );
-        TicketHelper.setParameter( request, TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO, strMessage );
+        TicketUtils.setParameter( request, TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO, strMessage );
     }
 
     /**
