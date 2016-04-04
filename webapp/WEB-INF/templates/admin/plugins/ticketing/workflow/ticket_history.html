@@ -11,7 +11,13 @@
           <li>
             <#if history_information.admin_user_history?exists>
               <#if adminAvatar>
-                <img class="fa direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}" alt="Avatar" title="Avatar">
+                <#if history_information.admin_user_history.userId?string != "${defaultUserFrontId}">
+                  <a href="sip:${history_information.admin_user_history.email}">
+                    <img class="fa direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}" alt="Avatar" title="Avatar">
+                    </a>
+                <#else>
+                  <img class="fa direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}" alt="Avatar" title="Avatar">
+                </#if>
               <#else>
                 <i class="fa fa-user bg-gru-cat2"></i>
               </#if>
