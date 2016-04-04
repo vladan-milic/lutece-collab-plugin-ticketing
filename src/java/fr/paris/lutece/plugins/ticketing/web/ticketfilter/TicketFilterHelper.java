@@ -36,8 +36,8 @@ package fr.paris.lutece.plugins.ticketing.web.ticketfilter;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
-import fr.paris.lutece.plugins.ticketing.web.TicketHelper;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
@@ -327,12 +327,12 @@ public final class TicketFilterHelper
     {
         mapModel.put( MARK_FILTER_PERIOD_LIST, TicketFilterPeriod.getReferenceList( request.getLocale(  ) ) );
 
-        ReferenceList refListTypes = TicketHelper.getEmptyItemReferenceList( I18nService.getLocalizedString( 
+        ReferenceList refListTypes = TicketUtils.getEmptyItemReferenceList( I18nService.getLocalizedString( 
                     PROPERTY_TICKET_TYPE_LABEL, request.getLocale(  ) ), StringUtils.EMPTY );
         refListTypes.addAll( TicketTypeHome.getReferenceList(  ) );
 
         ReferenceList refListDomains = new ReferenceList(  );
-        refListDomains = TicketHelper.getEmptyItemReferenceList( I18nService.getLocalizedString( 
+        refListDomains = TicketUtils.getEmptyItemReferenceList( I18nService.getLocalizedString( 
                     PROPERTY_TICKET_DOMAIN_LABEL, request.getLocale(  ) ), StringUtils.EMPTY );
 
         if ( fltrFilter.getIdType(  ) > 0 )

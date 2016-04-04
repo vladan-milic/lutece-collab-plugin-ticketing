@@ -41,6 +41,8 @@ import fr.paris.lutece.plugins.ticketing.business.TicketCriticality;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketPriority;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
+import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -131,7 +133,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         }
 
         model.put( TicketingConstants.MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
-        TicketHelper.storeTicketRightsIntoModel( model, getUser(  ) );
+        ModelUtils.storeTicketRights( model, getUser(  ) );
 
         model.put( TicketingConstants.MARK_JSP_CONTROLLER, getControllerJsp(  ) );
 
@@ -141,7 +143,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
 
-        String messageInfo = TicketHelper.getParameter( request,
+        String messageInfo = TicketUtils.getParameter( request,
                 TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
 
         if ( StringUtils.isNotEmpty( messageInfo ) )
@@ -163,7 +165,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
             ? (String) request.getAttribute( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION )
             : request.getParameter( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION );
 
-        String strRedirectUrl = TicketHelper.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = TicketUtils.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
 
         if ( StringUtils.isNotEmpty( strRedirect ) && StringUtils.isNotEmpty( strRedirectUrl ) )
         {

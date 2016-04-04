@@ -44,6 +44,8 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import org.jsoup.Jsoup;
+
 import java.io.Serializable;
 
 import java.sql.Timestamp;
@@ -1062,7 +1064,7 @@ public class Ticket implements Serializable, RBACResource
 
         if ( _strUserMessage != null )
         {
-            sb.append( _strUserMessage ).append( SEPARATOR );
+            sb.append( Jsoup.parse( _strUserMessage ).text(  ) ).append( SEPARATOR );
         }
 
         if ( _nCriticality > 0 )

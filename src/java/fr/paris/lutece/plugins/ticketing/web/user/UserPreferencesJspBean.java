@@ -34,8 +34,9 @@
 package fr.paris.lutece.plugins.ticketing.web.user;
 
 import fr.paris.lutece.plugins.ticketing.business.ChannelHome;
-import fr.paris.lutece.plugins.ticketing.web.TicketHelper;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.portal.service.prefs.AdminUserPreferencesService;
 import fr.paris.lutece.portal.service.prefs.IUserPreferencesService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
@@ -102,14 +103,14 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
 
         String strIdChannelList = _userPreferencesService.get( String.valueOf( getUser(  ).getUserId(  ) ),
                 TicketingConstants.USER_PREFERENCE_CHANNELS_LIST, StringUtils.EMPTY );
-        List<String> idChannelList = TicketHelper.getIdChannelList( strIdChannelList );
+        List<String> idChannelList = TicketUtils.getIdChannelList( strIdChannelList );
         model.put( TicketingConstants.MARK_SELECTABLE_ID_CHANNEL_LIST, idChannelList );
 
         String strPreferredIdChannel = _userPreferencesService.get( String.valueOf( getUser(  ).getUserId(  ) ),
                 TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_PREFERRED_ID_CHANNEL, strPreferredIdChannel );
 
-        TicketHelper.storeRichTextMarksIntoModel( request, model );
+        ModelUtils.storeRichText( request, model );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_USER_PREFERENCES, TEMPLATE_MANAGE_USER_PREFERENCES, model );
     }
@@ -129,7 +130,7 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
         String[] strIdChannelList = request.getParameterValues( TicketingConstants.PARAMETER_SELECTABLE_ID_CHANNEL_LIST );
         _userPreferencesService.put( String.valueOf( getUser(  ).getUserId(  ) ),
             TicketingConstants.USER_PREFERENCE_CHANNELS_LIST,
-            TicketHelper.convertIdChannelListToString( strIdChannelList ) );
+            TicketUtils.convertIdChannelListToString( strIdChannelList ) );
 
         String strPreferredIdChannel = request.getParameter( TicketingConstants.PARAMETER_SELECTED_ID_CHANNEL );
         _userPreferencesService.put( String.valueOf( getUser(  ).getUserId(  ) ),

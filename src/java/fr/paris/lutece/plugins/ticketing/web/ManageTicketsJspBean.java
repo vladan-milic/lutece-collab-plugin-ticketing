@@ -58,6 +58,8 @@ import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
+import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -190,7 +192,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
         TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
 
-        String strRedirectUrl = TicketHelper.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = TicketUtils.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
 
         if ( ( request.getParameter( TicketingConstants.PARAMETER_BACK ) != null ) &&
                 StringUtils.isNotEmpty( strRedirectUrl ) )
@@ -212,7 +214,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         List<Ticket> listGroupTickets = new ArrayList<Ticket>(  );
         List<Ticket> listDomainTickets = new ArrayList<Ticket>(  );
 
-        TicketHelper.setTicketsListByPerimeter( getUser(  ), filter, request, listAgentTickets, listGroupTickets,
+        TicketUtils.setTicketsListByPerimeter( getUser(  ), filter, request, listAgentTickets, listGroupTickets,
             listDomainTickets );
 
         String strPreviousSelectedTab = ( request.getSession(  ).getAttribute( PARAMETER_SELECTED_TAB ) != null )
@@ -255,9 +257,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_SELECTED_TAB, strSelectedTab );
         model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
         TicketFilterHelper.setModel( model, filter, request );
-        TicketHelper.storeTicketRightsIntoModel( model, getUser(  ) );
+        ModelUtils.storeTicketRights( model, getUser(  ) );
 
-        String messageInfo = TicketHelper.getParameter( request,
+        String messageInfo = TicketUtils.getParameter( request,
                 TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
 
         if ( StringUtils.isNotEmpty( messageInfo ) )
@@ -385,7 +387,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList(  ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_GUID, strGuid );
-        TicketHelper.storeChannelsMarksIntoModel( request, model );
+        ModelUtils.storeChannels( request, model );
     }
 
     /**
@@ -421,7 +423,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      */
     public String redirectAfterCreateAction( HttpServletRequest request )
     {
-        String strRedirectUrl = TicketHelper.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = TicketUtils.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
 
         if ( StringUtils.isNotEmpty( strRedirectUrl ) )
         {

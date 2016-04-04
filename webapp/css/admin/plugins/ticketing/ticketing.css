@@ -34,6 +34,10 @@
 
 .modal-body>.content-header{ display: none }
 
+.modal-dialog .content {
+    min-height: 100px;
+}
+
 /* FILTERS */
 #filter-ticket{ font-size: 1rem; color:#000; margin: 5px 0 }
 #filter-ticket #filter_form div{ padding-bottom: 4px }
