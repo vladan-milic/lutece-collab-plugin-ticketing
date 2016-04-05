@@ -15,11 +15,6 @@
 			</#list>
 		</#if>
 		<@addFileInput fieldName=fieldName handler=uploadHandler cssClass=cssClass multiple=true />
-        <a title="#i18n{ticketing.xpage.create_ticket.labelButtonDigitalSafeAccess}" data-remote="false" data-toggle="modal" data-target="#ticketing-modal-digital-safe" 
-            href="jsp/site/Portal.jsp?page=digitalSafe" 
-            class="btn btn-primary btn-sm btn-flat">
-            #i18n{ticketing.xpage.create_ticket.labelButtonDigitalSafeAccess}
-        </a>
 		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
 			<span class="help-block">${entry.helpMessage}</span>
 		</#if>
