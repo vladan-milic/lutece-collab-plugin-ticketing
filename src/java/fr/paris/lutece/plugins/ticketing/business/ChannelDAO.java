@@ -48,11 +48,11 @@ public final class ChannelDAO implements IChannelDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_channel ) FROM ticketing_channel";
-    private static final String SQL_QUERY_SELECT = "SELECT id_channel, label FROM ticketing_channel WHERE id_channel = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_channel ( id_channel, label ) VALUES ( ?, ? ) ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_channel, label, icon_font FROM ticketing_channel WHERE id_channel = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_channel ( id_channel, label, icon_font ) VALUES ( ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_channel WHERE id_channel = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_channel SET id_channel = ?, label = ? WHERE id_channel = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_channel, label FROM ticketing_channel";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_channel SET id_channel = ?, label = ?, icon_font = ? WHERE id_channel = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_channel, label, icon_font FROM ticketing_channel";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_channel FROM ticketing_channel";
 
     /**
@@ -89,6 +89,7 @@ public final class ChannelDAO implements IChannelDAO
 
         daoUtil.setInt( 1, channel.getId(  ) );
         daoUtil.setString( 2, channel.getLabel(  ) );
+        daoUtil.setString( 3, channel.getIconFont(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -111,6 +112,7 @@ public final class ChannelDAO implements IChannelDAO
             channel = new Channel(  );
             channel.setId( daoUtil.getInt( 1 ) );
             channel.setLabel( daoUtil.getString( 2 ) );
+            channel.setIconFont( daoUtil.getString( 3 ) );
         }
 
         daoUtil.free(  );
@@ -140,7 +142,8 @@ public final class ChannelDAO implements IChannelDAO
 
         daoUtil.setInt( 1, channel.getId(  ) );
         daoUtil.setString( 2, channel.getLabel(  ) );
-        daoUtil.setInt( 3, channel.getId(  ) );
+        daoUtil.setString( 3, channel.getIconFont(  ) );
+        daoUtil.setInt( 4, channel.getId(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -162,6 +165,7 @@ public final class ChannelDAO implements IChannelDAO
 
             channel.setId( daoUtil.getInt( 1 ) );
             channel.setLabel( daoUtil.getString( 2 ) );
+            channel.setIconFont( daoUtil.getString( 3 ) );
 
             channelList.add( channel );
         }

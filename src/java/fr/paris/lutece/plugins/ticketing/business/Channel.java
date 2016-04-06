@@ -57,6 +57,8 @@ public class Channel implements Serializable
     @NotEmpty( message = "#i18n{ticketing.validation.channel.Label.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.channel.Label.size}" )
     private String _strLabel;
+    @Size( max = 50, message = "#i18n{ticketing.validation.channel.IconFont.size}" )
+    private String _strIconFont;
 
     /**
      * Returns the Id
@@ -92,5 +94,23 @@ public class Channel implements Serializable
     public void setLabel( String strLabel )
     {
         _strLabel = strLabel;
+    }
+
+    /**
+     * Returns the Icon font label
+     * @return The Icon font label
+     */
+    public String getIconFont(  )
+    {
+        return _strIconFont;
+    }
+
+    /**
+     * Sets the Icon font label
+     * @param strIconFont The Icon font label
+     */
+    public void setIconFont( String strIconFont )
+    {
+        _strIconFont = strIconFont;
     }
 }

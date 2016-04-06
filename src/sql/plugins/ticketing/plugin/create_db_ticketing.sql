@@ -161,6 +161,7 @@ DROP TABLE IF EXISTS ticketing_channel;
 CREATE TABLE ticketing_channel (
 id_channel int(6) NOT NULL,
 label varchar(50) NOT NULL default '',
+icon_font varchar(50) NULL default '',
 PRIMARY KEY (id_channel)
 );
 
@@ -176,7 +177,5 @@ CREATE TABLE ticketing_indexer_action (
   PRIMARY KEY (id_action)
   );
 CREATE INDEX ticketing_id_indexer_task ON ticketing_indexer_action (id_task);
-
-
 
       

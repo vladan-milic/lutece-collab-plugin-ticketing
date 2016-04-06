@@ -99,7 +99,7 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
                 TicketingConstants.USER_PREFERENCE_SIGNATURE, StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_USER_SIGNATURE, strUserSignature );
 
-        model.put( TicketingConstants.MARK_CHANNELS_LIST, ChannelHome.getReferenceList(  ) );
+        model.put( TicketingConstants.MARK_CHANNELS_LIST, ChannelHome.getChannelList(  ) );
 
         String strIdChannelList = _userPreferencesService.get( String.valueOf( getUser(  ).getUserId(  ) ),
                 TicketingConstants.USER_PREFERENCE_CHANNELS_LIST, StringUtils.EMPTY );

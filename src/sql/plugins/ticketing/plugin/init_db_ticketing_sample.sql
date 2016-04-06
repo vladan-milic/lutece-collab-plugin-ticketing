@@ -65,10 +65,10 @@ INSERT INTO ticketing_support_entity (id_support_entity, name, level, id_unit, i
 (5, 'SN2 Voirie', 2, 30, -1, 120);
 
 DELETE FROM ticketing_channel ;
-INSERT INTO ticketing_channel (id_channel, label) VALUES
-(1, "Téléphone"),
-(2, "Visite"),
-(3, "E-mail"),
-(4, "Twitter"),
-(5, "Facebook"),
-(99, "Guichet (Web)");
+INSERT INTO ticketing_channel (id_channel, label, icon_font) VALUES
+(1, "Téléphone", "fa fa-phone"),
+(2, "Visite", "fa fa-user"),
+(3, "E-mail", "fa fa-envelope"),
+(4, "Twitter", "fa fa-twitter"),
+(5, "Facebook", "fa fa-facebook"),
+(99, "Guichet (Web)", "fa fa-desktop");
