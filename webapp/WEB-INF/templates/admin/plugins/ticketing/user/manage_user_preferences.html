@@ -23,52 +23,55 @@
         <div class="col-xs-12 col-sm-offset-1 col-sm-9">
           <form id="" class="form-horizontal" method="post" name="modify_user_preferences" action="jsp/admin/plugins/ticketing/UserPreferences.jsp" enctype="multipart/form-data">
             <@fieldTextArea i18nLabelKey="ticketing.manage_user_preferences.labelUserSignature" inputName="user_signature" value="${user_signature!''}" i18nHelpBlockKey="ticketing.manage_user_preferences.labelUserSignature.help" cssClass="form-control richtext" />
-             <div class="form-group">
-               <label class="col-xs-12 col-sm-3 control-label">#i18n{ticketing.manage_user_preferences.labelChannels} :</label>
-               <div class="col-xs-12 col-sm-9">
-                 <select id="selectable_channels" name="selectable_channels" multiple="multiple" class="form-control">
-                   <#list channels_list as channel>
-                     <#assign is_selectable = false>
-                     <#if selectable_id_channel_list?? && selectable_id_channel_list?has_content>
-                       <#list selectable_id_channel_list as selectable_channel_id>
-                         <#if "${channel.code}" == "${selectable_channel_id}">
-                            <#assign is_selectable = true>
-                         </#if>
-                       </#list>
-                     </#if>
-                     <#if is_selectable == true>
-                       <option selected="selected" value="${channel.code}" >${channel.name}</option>
-                     <#else>
-                       <option value="${channel.code}" >${channel.name}</option>
-                     </#if>
-                   </#list>
-                 </select>
-               </div>
-             </div>
-             <div class="form-group">
-               <label class="col-xs-12 col-sm-3 control-label">#i18n{ticketing.manage_user_preferences.labelDefaultChannel} :</label>
-               <div class="col-xs-12 col-sm-9">
-                 <select id="selected_channel" name="selected_channel" class="form-control">
-                   <#list channels_list as channel>
-                     <#assign is_selectable = false>
-                     <#if selectable_id_channel_list?? && selectable_id_channel_list?has_content>
-                       <#list selectable_id_channel_list as selectable_channel_id>
-                         <#if "${channel.code}" == "${selectable_channel_id}">
-                            <#assign is_selectable = true>
-                         </#if>
-                       </#list>
-                     </#if>
-                     <#if is_selectable == true>
-                       <#if "${channel.code}" == "${preferred_id_channel}">
-                         <option selected="selected" value="${channel.code}" >${channel.name}</option>
-                       <#else>
-                         <option value="${channel.code}" >${channel.name}</option>
-                       </#if>
-                     </#if>
-                   </#list>
-                 </select>
-               </div>
-             </div>
+            <div class="form-group">
+              <label class="col-xs-12 col-sm-3 control-label">#i18n{ticketing.manage_user_preferences.labelChannels} :</label>
+              <div class="col-xs-12 col-sm-9">
+                <#list channels_list as channel>
+                  <#assign is_selectable = false>
+                  <#if selectable_id_channel_list?? && selectable_id_channel_list?has_content>
+                    <#list selectable_id_channel_list as selectable_channel_id>
+                      <#if "${channel.id}" == "${selectable_channel_id}">
+                        <#assign is_selectable = true>
+                      </#if>
+                    </#list>
+                  </#if>
+                  <div class="col-xs-12 col-sm-9">
+                    <#if is_selectable == true>
+                      <input type="checkbox" name="selectable_channels" id="check_${channel.id}" value="${channel.id}" checked/>
+                    <#else>
+                      <input type="checkbox" name="selectable_channels" id="check_${channel.id}" value="${channel.id}"/>
+                    </#if>
+                    <label for="check_${channel.id}" name="${channel.label}">
+                      <span class="${channel.iconFont}"></span>&nbsp;${channel.label}
+                    </label> <br >           
+                  </div>
+                </#list>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-xs-12 col-sm-3 control-label">#i18n{ticketing.manage_user_preferences.labelDefaultChannel} :</label>
+              <div class="col-xs-12 col-sm-9">
+                <select id="selected_channel" name="selected_channel" class="form-control">
+                  <#list channels_list as channel>
+                    <#assign is_selectable = false>
+                    <#if selectable_id_channel_list?? && selectable_id_channel_list?has_content>
+                      <#list selectable_id_channel_list as selectable_channel_id>
+                        <#if "${channel.id}" == "${selectable_channel_id}">
+                          <#assign is_selectable = true>
+                        </#if>
+                      </#list>
+                    </#if>
+                    <#if is_selectable == true>
+                      <#if "${channel.id}" == "${preferred_id_channel}">
+                        <option selected="selected" value="${channel.id}" >${channel.label}</option>
+                      <#else>
+                        <option value="${channel.id}" >${channel.label}</option>
+                      </#if>
+                    </#if>
+                  </#list>
+                </select>
+              </div>
+            </div>
             <@actionButtons button1Name="action_modifyUserPreferences" i18nValue1Key="ticketing.manage_user_preferences.button.save" offset=3 />
           </form>
         </div>
@@ -83,18 +86,29 @@
   });
 </script>
 <script language="javascript">
-    $('#selectable_channels').change(function() {
-        var selectedChannelId = $("#selected_channel").val();
-        $("#selected_channel").empty();
+  $('#selectable_channels').change(function() {
+    var selectedChannelId = $("#selected_channel").val();
+    $("#selected_channel").empty();
         
-        $('#selectable_channels :selected').each(function(){
-        	if (selectedChannelId == $(this).val()) {
-        		$("#selected_channel").append('<option selected="selected" value="' + $(this).val() + '">' + $(this).text() + '</option>')
-        	} else {
-        	    $("#selected_channel").append('<option value="' + $(this).val() + '">' + $(this).text() + '</option>')
-        	}
-        });	
+    $('#selectable_channels :selected').each(function(){
+      if (selectedChannelId == $(this).val()) {
+        $("#selected_channel").append('<option selected="selected" value="' + $(this).val() + '">' + $(this).text() + '</option>')
+      } else {
+        $("#selected_channel").append('<option value="' + $(this).val() + '">' + $(this).text() + '</option>')
+      }
+    }); 
+  });
+</script>
+<script language="javascript">
+  $('input:checkbox[name=selectable_channels]').click(function(){
+    $("#selected_channel").empty();
+    $('input:checkbox[name=selectable_channels]').each(function(){
+      if($(this).is(":checked")) {
+        var text = $(this).next('label').attr('name');
+        $("#selected_channel").append('<option value="' + $(this).val() + '">' + text + '</option>')
+      }
     });
+  });  
 </script>
 
 
