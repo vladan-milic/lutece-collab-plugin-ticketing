@@ -12,7 +12,7 @@
       </div>
     <#else>
       <p class="lead">
-        <i class="fa fa-warning"></i> Pas de commentaire
+        <i class="fa fa-warning"></i> #i18n{ticketing.view_ticket_details.labelNoComment}
       </p>
     </#if>
     <#if read_only_reponses_html_list?has_content>
@@ -27,11 +27,11 @@
     ${history!''}
   </div>
   <div id="info-right" class="col-xs-12 col-sm-3">
-    <h5>Nature de la demande<h5>
+    <h5>#i18n{ticketing.view_ticket_details.labelTicketType}<h5>
     <h4>${ticket.ticketType}</h4>
-    <h5>Domaine</h5>
+    <h5>#i18n{ticketing.view_ticket_details.labelTicketDomain}</h5>
     <h4>${ticket.ticketDomain}</h4>
-    <h5>Cat&eacute;gorie</h5>
+    <h5>#i18n{ticketing.view_ticket_details.labelTicketCategory}</h5>
     <h4>${ticket.ticketCategory}</h4>
     <hr>
     <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
