@@ -1,5 +1,6 @@
 <#include "/admin/plugins/ticketing/commons.html" />
 <@rowBoxHeader i18nTitleKey="ticketing.xpage.view_ticket_details.pageTitle">
+    <@messages errors=errors />
     <fieldset class="form-horizontal">
         <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketReference">${ticket.reference!''}</@fieldStaticText>
         <#switch ticket.ticketStatus>
