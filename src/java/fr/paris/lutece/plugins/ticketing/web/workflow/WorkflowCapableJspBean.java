@@ -88,7 +88,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     // Infos
     private static final String INFO_WORKFLOW_ACTION_EXECUTED = "ticketing.info.workflow.action.executed";
-    
+
     // Errors
     public static final String ERROR_WORKFLOW_ACTION_ABORTED = "ticketing.error.workflow.action.aborted.backoffice";
 
@@ -315,24 +315,24 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 {
                     Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
                     TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-    
+
                     if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale(  ) ) )
                     {
                         strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
                                 ticketCategory.getId(  ), request, getLocale(  ) );
-    
+
                         if ( strError != null )
                         {
                             return redirect( request, strError );
                         }
-    
+
                         addInfoWorkflowAction( request, nIdAction );
                     }
                     else
                     {
                         _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
                             ticketCategory.getId(  ), request, getLocale(  ), false );
-    
+
                         addInfoWorkflowAction( request, nIdAction );
                     }
                 }
@@ -340,6 +340,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 {
                     addErrorWorkflowAction( request, nIdAction );
                     AppLogService.error( e );
+
                     return redirectWorkflowActionCancelled( request );
                 }
             }
@@ -470,7 +471,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                     Locale.FRENCH ), action.getName(  ) );
         TicketUtils.setParameter( request, TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO, strMessage );
     }
-    
+
     /**
      * Adds error message for workflow action
      * @param request the request

@@ -60,6 +60,7 @@ import fr.paris.lutece.portal.web.xpages.XPage;
 import org.apache.commons.lang.StringUtils;
 
 import java.text.MessageFormat;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
@@ -76,7 +77,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 {
     // Properties
     public static final String PROPERTIES_WORKFLOW_STATE_WAITING_USER_REPLY = "ticketing.workflow.state.id.waitingUserReply";
-    
+
     // Errors
     public static final String ERROR_WORKFLOW_ACTION_ABORTED = "ticketing.error.workflow.action.aborted.frontoffice";
 
@@ -243,12 +244,12 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                 {
                     Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
                     TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-    
+
                     if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( request ) ) )
                     {
                         strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
                                 ticketCategory.getId(  ), request, getLocale( request ) );
-    
+
                         if ( strError != null )
                         {
                             return redirect( request, strError );
@@ -264,6 +265,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                 {
                     addErrorWorkflowAction( request, nIdAction );
                     AppLogService.error( e );
+
                     return redirectWorkflowActionCancelled( request );
                 }
             }
@@ -368,7 +370,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
             _workflowService.doRemoveWorkFlowResource( nTicketId, Ticket.TICKET_RESOURCE_TYPE );
         }
     }
-    
+
     /**
      * Adds error message for workflow action
      * @param request the request

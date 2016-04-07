@@ -112,8 +112,7 @@ public class ChannelJspBean extends ManageAdminTicketingJspBean
         _channel = null;
 
         List<Channel> listChannels = (List<Channel>) ChannelHome.getChannelList(  );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_CHANNEL_LIST, listChannels,
-                JSP_MANAGE_CHANNELS );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_CHANNEL_LIST, listChannels, JSP_MANAGE_CHANNELS );
         model.put( MARK_DEFAULT_CHANNEL, TicketingConstants.WEB_ID_CHANNEL );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_CHANNELS, TEMPLATE_MANAGE_CHANNELS, model );
@@ -193,9 +192,8 @@ public class ChannelJspBean extends ManageAdminTicketingJspBean
     public String doRemoveChannel( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CHANNEL ) );
-        
-        //TODO : remove channel id in user preference if present
 
+        //TODO : remove channel id in user preference if present
         ChannelHome.remove( nId );
         addInfo( INFO_CHANNEL_REMOVED, getLocale(  ) );
 

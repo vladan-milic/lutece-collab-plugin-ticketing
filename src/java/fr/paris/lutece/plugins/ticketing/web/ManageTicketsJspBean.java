@@ -405,7 +405,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
             TicketHome.create( ticket );
-    
+
             if ( ( ticket.getListResponse(  ) != null ) && !ticket.getListResponse(  ).isEmpty(  ) )
             {
                 for ( Response response : ticket.getListResponse(  ) )
@@ -414,15 +414,16 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                     TicketHome.insertTicketResponse( ticket.getId(  ), response.getIdResponse(  ) );
                 }
             }
-    
+
             doProcessNextWorkflowAction( ticket, request );
         }
         catch ( Exception e )
         {
             addError( ERROR_TICKET_CREATION_ABORTED, getLocale(  ) );
             AppLogService.error( e );
+
             return redirectView( request, VIEW_MANAGE_TICKETS );
-         }
+        }
 
         return redirectAfterCreateAction( request );
     }

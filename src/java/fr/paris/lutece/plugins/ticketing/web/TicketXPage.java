@@ -220,9 +220,9 @@ public class TicketXPage extends WorkflowCapableXPage
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
             ticket.setIdChannel( TicketingConstants.WEB_ID_CHANNEL );
             TicketHome.create( ticket );
-    
+
             doProcessNextWorkflowAction( ticket, request );
-    
+
             if ( ( ticket.getListResponse(  ) != null ) && !ticket.getListResponse(  ).isEmpty(  ) )
             {
                 for ( Response response : ticket.getListResponse(  ) )
@@ -231,17 +231,18 @@ public class TicketXPage extends WorkflowCapableXPage
                     TicketHome.insertTicketResponse( ticket.getId(  ), response.getIdResponse(  ) );
                 }
             }
-    
+
             TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
-    
+
             addInfo( INFO_TICKET_CREATED, getLocale( request ) );
         }
         catch ( Exception e )
         {
             addError( ERROR_TICKET_CREATION_ABORTED, request.getLocale(  ) );
             AppLogService.error( e );
+
             return redirectView( request, VIEW_CREATE_TICKET );
-         }
+        }
 
         return redirectView( request, VIEW_CONFIRM_TICKET );
     }
