@@ -47,7 +47,9 @@ import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AdminAuthenticationService;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
@@ -57,8 +59,10 @@ import fr.paris.lutece.portal.web.xpages.XPage;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,6 +76,9 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 {
     // Properties
     public static final String PROPERTIES_WORKFLOW_STATE_WAITING_USER_REPLY = "ticketing.workflow.state.id.waitingUserReply";
+    
+    // Errors
+    public static final String ERROR_WORKFLOW_ACTION_ABORTED = "ticketing.error.workflow.action.aborted.frontoffice";
 
     // Services
     private static WorkflowService _workflowService = WorkflowService.getInstance(  );
@@ -232,23 +239,32 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
             if ( request.getParameter( TicketingConstants.PARAMETER_BACK ) == null )
             {
-                Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-                TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-
-                if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( request ) ) )
+                try
                 {
-                    strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
-                            ticketCategory.getId(  ), request, getLocale( request ) );
-
-                    if ( strError != null )
+                    Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
+                    TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+    
+                    if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( request ) ) )
                     {
-                        return redirect( request, strError );
+                        strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
+                                ticketCategory.getId(  ), request, getLocale( request ) );
+    
+                        if ( strError != null )
+                        {
+                            return redirect( request, strError );
+                        }
+                    }
+                    else
+                    {
+                        _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
+                            ticketCategory.getId(  ), request, getLocale( request ), false );
                     }
                 }
-                else
+                catch ( Exception e )
                 {
-                    _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
-                        ticketCategory.getId(  ), request, getLocale( request ), false );
+                    addErrorWorkflowAction( request, nIdAction );
+                    AppLogService.error( e );
+                    return redirectWorkflowActionCancelled( request );
                 }
             }
             else
@@ -351,6 +367,21 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         {
             _workflowService.doRemoveWorkFlowResource( nTicketId, Ticket.TICKET_RESOURCE_TYPE );
         }
+    }
+    
+    /**
+     * Adds error message for workflow action
+     * @param request the request
+     * @param nIdAction the action id
+     */
+    private void addErrorWorkflowAction( HttpServletRequest request, int nIdAction )
+    {
+        IActionService actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
+        Action action = actionService.findByPrimaryKey( nIdAction );
+        String strError = MessageFormat.format( I18nService.getLocalizedString( ERROR_WORKFLOW_ACTION_ABORTED,
+                    Locale.FRENCH ), action.getName(  ) );
+        addError( strError );
+        ;
     }
 
     /**

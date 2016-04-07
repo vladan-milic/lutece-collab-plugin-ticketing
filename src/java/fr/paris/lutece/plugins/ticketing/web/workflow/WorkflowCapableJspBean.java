@@ -47,6 +47,7 @@ import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
@@ -87,6 +88,9 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     // Infos
     private static final String INFO_WORKFLOW_ACTION_EXECUTED = "ticketing.info.workflow.action.executed";
+    
+    // Errors
+    public static final String ERROR_WORKFLOW_ACTION_ABORTED = "ticketing.error.workflow.action.aborted.backoffice";
 
     static
     {
@@ -307,27 +311,36 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
             if ( request.getParameter( TicketingConstants.PARAMETER_BACK ) == null )
             {
-                Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-                TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-
-                if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale(  ) ) )
+                try
                 {
-                    strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
-                            ticketCategory.getId(  ), request, getLocale(  ) );
-
-                    if ( strError != null )
+                    Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
+                    TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+    
+                    if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale(  ) ) )
                     {
-                        return redirect( request, strError );
+                        strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
+                                ticketCategory.getId(  ), request, getLocale(  ) );
+    
+                        if ( strError != null )
+                        {
+                            return redirect( request, strError );
+                        }
+    
+                        addInfoWorkflowAction( request, nIdAction );
                     }
-
-                    addInfoWorkflowAction( request, nIdAction );
+                    else
+                    {
+                        _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
+                            ticketCategory.getId(  ), request, getLocale(  ), false );
+    
+                        addInfoWorkflowAction( request, nIdAction );
+                    }
                 }
-                else
+                catch ( Exception e )
                 {
-                    _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
-                        ticketCategory.getId(  ), request, getLocale(  ), false );
-
-                    addInfoWorkflowAction( request, nIdAction );
+                    addErrorWorkflowAction( request, nIdAction );
+                    AppLogService.error( e );
+                    return redirectWorkflowActionCancelled( request );
                 }
             }
             else
@@ -456,6 +469,21 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         String strMessage = MessageFormat.format( I18nService.getLocalizedString( INFO_WORKFLOW_ACTION_EXECUTED,
                     Locale.FRENCH ), action.getName(  ) );
         TicketUtils.setParameter( request, TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO, strMessage );
+    }
+    
+    /**
+     * Adds error message for workflow action
+     * @param request the request
+     * @param nIdAction the action id
+     */
+    private void addErrorWorkflowAction( HttpServletRequest request, int nIdAction )
+    {
+        IActionService actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
+        Action action = actionService.findByPrimaryKey( nIdAction );
+        String strError = MessageFormat.format( I18nService.getLocalizedString( ERROR_WORKFLOW_ACTION_ABORTED,
+                    Locale.FRENCH ), action.getName(  ) );
+        addError( strError );
+        ;
     }
 
     /**

@@ -174,7 +174,8 @@
       </li>
     </ul>
     <div class="tab-content">
-    	<div id="filter-ticket" class="row">
+    	<@messages errors=errors />
+        <div id="filter-ticket" class="row">
         <form id="filter_form" class="form-inline" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
           <input type="hidden" name="submitted_form" value="1">
           <input type="hidden" name="fltr_urgency" value="${ticket_filter.urgency!}">

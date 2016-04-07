@@ -65,6 +65,7 @@ import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
@@ -171,6 +172,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     // Errors
     private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
     private static final String ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED = "ticketing.error.contactmode.inconsistent";
+    private static final String ERROR_TICKET_CREATION_ABORTED = "ticketing.error.ticket.creation.aborted.backoffice";
 
     // Session keys
     private static boolean _bAdminAvatar = ( PluginService.getPlugin( "adminavatar" ) != null );
@@ -399,19 +401,28 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @Action( ACTION_CREATE_TICKET )
     public String doCreateTicket( HttpServletRequest request )
     {
-        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
-        TicketHome.create( ticket );
-
-        if ( ( ticket.getListResponse(  ) != null ) && !ticket.getListResponse(  ).isEmpty(  ) )
+        try
         {
-            for ( Response response : ticket.getListResponse(  ) )
+            Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
+            TicketHome.create( ticket );
+    
+            if ( ( ticket.getListResponse(  ) != null ) && !ticket.getListResponse(  ).isEmpty(  ) )
             {
-                ResponseHome.create( response );
-                TicketHome.insertTicketResponse( ticket.getId(  ), response.getIdResponse(  ) );
+                for ( Response response : ticket.getListResponse(  ) )
+                {
+                    ResponseHome.create( response );
+                    TicketHome.insertTicketResponse( ticket.getId(  ), response.getIdResponse(  ) );
+                }
             }
+    
+            doProcessNextWorkflowAction( ticket, request );
         }
-
-        doProcessNextWorkflowAction( ticket, request );
+        catch ( Exception e )
+        {
+            addError( ERROR_TICKET_CREATION_ABORTED, getLocale(  ) );
+            AppLogService.error( e );
+            return redirectView( request, VIEW_MANAGE_TICKETS );
+         }
 
         return redirectAfterCreateAction( request );
     }

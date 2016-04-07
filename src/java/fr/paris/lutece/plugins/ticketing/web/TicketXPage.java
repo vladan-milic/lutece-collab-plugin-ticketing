@@ -59,6 +59,7 @@ import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
@@ -130,6 +131,7 @@ public class TicketXPage extends WorkflowCapableXPage
     // Errors
     private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
     private static final String ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED = "ticketing.error.contactmode.inconsistent";
+    private static final String ERROR_TICKET_CREATION_ABORTED = "ticketing.error.ticket.creation.aborted.frontoffice";
 
     // Session keys
     private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
@@ -213,24 +215,33 @@ public class TicketXPage extends WorkflowCapableXPage
     @Action( ACTION_CREATE_TICKET )
     public XPage doCreateTicket( HttpServletRequest request )
     {
-        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
-        ticket.setIdChannel( TicketingConstants.WEB_ID_CHANNEL );
-        TicketHome.create( ticket );
-
-        doProcessNextWorkflowAction( ticket, request );
-
-        if ( ( ticket.getListResponse(  ) != null ) && !ticket.getListResponse(  ).isEmpty(  ) )
+        try
         {
-            for ( Response response : ticket.getListResponse(  ) )
+            Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
+            ticket.setIdChannel( TicketingConstants.WEB_ID_CHANNEL );
+            TicketHome.create( ticket );
+    
+            doProcessNextWorkflowAction( ticket, request );
+    
+            if ( ( ticket.getListResponse(  ) != null ) && !ticket.getListResponse(  ).isEmpty(  ) )
             {
-                ResponseHome.create( response );
-                TicketHome.insertTicketResponse( ticket.getId(  ), response.getIdResponse(  ) );
+                for ( Response response : ticket.getListResponse(  ) )
+                {
+                    ResponseHome.create( response );
+                    TicketHome.insertTicketResponse( ticket.getId(  ), response.getIdResponse(  ) );
+                }
             }
+    
+            TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
+    
+            addInfo( INFO_TICKET_CREATED, getLocale( request ) );
         }
-
-        TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
-
-        addInfo( INFO_TICKET_CREATED, getLocale( request ) );
+        catch ( Exception e )
+        {
+            addError( ERROR_TICKET_CREATION_ABORTED, request.getLocale(  ) );
+            AppLogService.error( e );
+            return redirectView( request, VIEW_CREATE_TICKET );
+         }
 
         return redirectView( request, VIEW_CONFIRM_TICKET );
     }
