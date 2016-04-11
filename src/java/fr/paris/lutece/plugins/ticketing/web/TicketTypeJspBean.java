@@ -98,6 +98,9 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     private static final String INFO_TICKETTYPE_UPDATED = "ticketing.info.tickettype.updated";
     private static final String INFO_TICKETTYPE_REMOVED = "ticketing.info.tickettype.removed";
 
+    //Messages
+    private static final String MESSAGE_CAN_NOT_REMOVE_TYPE_DOMAINS_ARE_ASSOCIATE = "ticketing.message.canNotRemoveTypeDomainsAreAssociate";
+
     // Other constants
     private static final String PATTERN_REFERENCE_PREFIX = "^[A-Z]{3}$";
     private static Pattern _patternReferencePrefix = Pattern.compile( PATTERN_REFERENCE_PREFIX );
@@ -174,6 +177,14 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     public String getConfirmRemoveTicketType( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETTYPE ) );
+
+        if ( !TicketTypeHome.canRemove( nId ) )
+        {
+            return redirect( request,
+                AdminMessageService.getMessageUrl( request, MESSAGE_CAN_NOT_REMOVE_TYPE_DOMAINS_ARE_ASSOCIATE,
+                    AdminMessage.TYPE_STOP ) );
+        }
+
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_TICKETTYPE ) );
         url.addParameter( PARAMETER_ID_TICKETTYPE, nId );
 

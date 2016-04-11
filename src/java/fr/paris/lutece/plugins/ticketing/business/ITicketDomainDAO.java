@@ -104,4 +104,12 @@ public interface ITicketDomainDAO
      * @return The reference list
      */
     ReferenceList selectReferenceList( Plugin plugin );
+
+    /**
+     * check if domain can be removed
+     * @param nKey The identifier of the ticketDomain
+     * @param plugin the Plugin
+     * @return true if domain can be removed, false otherwise
+     */
+    boolean canRemoveDomain( int nKey, Plugin plugin );
 }

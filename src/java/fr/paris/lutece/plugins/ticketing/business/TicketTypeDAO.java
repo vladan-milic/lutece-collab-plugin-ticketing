@@ -48,12 +48,13 @@ public final class TicketTypeDAO implements ITicketTypeDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket_type ) FROM ticketing_ticket_type";
-    private static final String SQL_QUERY_SELECT = "SELECT id_ticket_type, label, reference_prefix FROM ticketing_ticket_type WHERE id_ticket_type = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_type ( id_ticket_type, label, reference_prefix ) VALUES ( ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_ticket_type WHERE id_ticket_type = ? ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_ticket_type, label, reference_prefix FROM ticketing_ticket_type WHERE id_ticket_type = ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_type ( id_ticket_type, label, reference_prefix, inactive ) VALUES ( ?, ?, ?, 0 ) ";
+    private static final String SQL_QUERY_DELETE = "UPDATE ticketing_ticket_type SET inactive = 1 WHERE id_ticket_type = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_type SET id_ticket_type = ?, label = ?, reference_prefix = ? WHERE id_ticket_type = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_ticket_type, label, reference_prefix FROM ticketing_ticket_type";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_type FROM ticketing_ticket_type";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_ticket_type, label, reference_prefix FROM ticketing_ticket_type WHERE inactive <> 1 ";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_type FROM ticketing_ticket_type WHERE inactive <> 1 ";
+    private static final String SQL_QUERY_COUNT_DOMAIN_BY_TYPE = "SELECT COUNT(1) FROM ticketing_ticket_domain WHERE id_ticket_type = ? AND inactive <> 1 ";
 
     /**
      * Generates a new primary key
@@ -213,5 +214,29 @@ public final class TicketTypeDAO implements ITicketTypeDAO
         daoUtil.free(  );
 
         return list;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public boolean canRemoveType( int nKey, Plugin plugin )
+    {
+        boolean bResult = false;
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_DOMAIN_BY_TYPE, plugin );
+        daoUtil.setInt( 1, nKey );
+        daoUtil.executeQuery(  );
+
+        if ( daoUtil.next(  ) )
+        {
+            if ( daoUtil.getInt( 1 ) == 0 )
+            {
+                bResult = true;
+            }
+        }
+
+        daoUtil.free(  );
+
+        return bResult;
     }
 }

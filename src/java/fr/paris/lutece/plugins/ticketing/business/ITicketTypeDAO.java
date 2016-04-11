@@ -96,4 +96,12 @@ public interface ITicketTypeDAO
      * @return The reference list
      */
     ReferenceList selectReferenceList( Plugin plugin );
+
+    /**
+     * check if type can be removed
+     * @param nKey The identifier of the TicketType to delete
+     * @param plugin the Plugin
+     * @return true if type can be removed, false otherwise
+     */
+    boolean canRemoveType( int nKey, Plugin plugin );
 }

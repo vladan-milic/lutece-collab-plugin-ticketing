@@ -48,12 +48,12 @@ public final class ChannelDAO implements IChannelDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_channel ) FROM ticketing_channel";
-    private static final String SQL_QUERY_SELECT = "SELECT id_channel, label, icon_font FROM ticketing_channel WHERE id_channel = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_channel ( id_channel, label, icon_font ) VALUES ( ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_channel WHERE id_channel = ? ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_channel, label, icon_font FROM ticketing_channel WHERE id_channel = ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_channel ( id_channel, label, icon_font, inactive ) VALUES ( ?, ?, ?, 0 ) ";
+    private static final String SQL_QUERY_DELETE = "UPDATE ticketing_channel SET inactive = 1 WHERE id_channel = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_channel SET id_channel = ?, label = ?, icon_font = ? WHERE id_channel = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_channel, label, icon_font FROM ticketing_channel";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_channel FROM ticketing_channel";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_channel, label, icon_font FROM ticketing_channel WHERE inactive <> 1";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_channel FROM ticketing_channel WHERE inactive <> 1";
 
     /**
      * Generates a new primary key

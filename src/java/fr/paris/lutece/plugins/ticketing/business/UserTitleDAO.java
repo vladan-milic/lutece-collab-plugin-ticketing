@@ -48,12 +48,12 @@ public final class UserTitleDAO implements IUserTitleDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_user_title ) FROM ticketing_user_title";
-    private static final String SQL_QUERY_SELECT = "SELECT id_user_title, label FROM ticketing_user_title WHERE id_user_title = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_user_title ( id_user_title, label ) VALUES ( ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_user_title WHERE id_user_title = ? ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_user_title, label FROM ticketing_user_title WHERE id_user_title = ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_user_title ( id_user_title, label, inactive ) VALUES ( ?, ?, 0 ) ";
+    private static final String SQL_QUERY_DELETE = "UPDATE ticketing_user_title SET inactive = 1 WHERE id_user_title = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_user_title SET id_user_title = ?, label = ? WHERE id_user_title = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_user_title, label FROM ticketing_user_title";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_user_title FROM ticketing_user_title";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_user_title, label FROM ticketing_user_title WHERE inactive <> 1 ";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_user_title FROM ticketing_user_title WHERE inactive <> 1 ";
 
     /**
      * Generates a new primary key
