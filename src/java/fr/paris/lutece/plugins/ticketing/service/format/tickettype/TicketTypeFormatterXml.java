@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format.tickettype;
 
-import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
-import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
-import fr.paris.lutece.plugins.ticketing.business.TicketType;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
 import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
 import fr.paris.lutece.plugins.ticketing.service.format.IFormatter;
 import fr.paris.lutece.util.ReferenceItem;

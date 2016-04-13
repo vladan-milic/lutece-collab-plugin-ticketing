@@ -33,13 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
-import fr.paris.lutece.plugins.ticketing.business.InstantResponse;
-import fr.paris.lutece.plugins.ticketing.business.InstantResponseFilter;
-import fr.paris.lutece.plugins.ticketing.business.InstantResponseHome;
-import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
-import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
-import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponse;
+import fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponseFilter;
+import fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponseHome;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.InstantResponseFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;

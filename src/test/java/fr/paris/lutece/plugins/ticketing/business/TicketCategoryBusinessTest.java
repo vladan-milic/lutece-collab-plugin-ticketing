@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.test.LuteceTestCase;
 
 

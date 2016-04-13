@@ -33,8 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
-import fr.paris.lutece.plugins.ticketing.business.Ticket;
-import fr.paris.lutece.plugins.ticketing.business.TicketHome;
+import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableXPage;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;

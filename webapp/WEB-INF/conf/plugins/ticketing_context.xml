@@ -12,16 +12,16 @@
     <bean id="ticketing.userTitleRest"  class="fr.paris.lutece.plugins.ticketing.web.rs.UserTitleRest" />
 
     <!-- DAO -->
-    <bean id="ticketing.ticketDAO"  class="fr.paris.lutece.plugins.ticketing.business.TicketDAO" />  
-    <bean id="ticketing.ticketTypeDAO"  class="fr.paris.lutece.plugins.ticketing.business.TicketTypeDAO" />  
-    <bean id="ticketing.ticketDomainDAO"  class="fr.paris.lutece.plugins.ticketing.business.TicketDomainDAO" />  
-    <bean id="ticketing.ticketCategoryDAO"  class="fr.paris.lutece.plugins.ticketing.business.TicketCategoryDAO" />  
-    <bean id="ticketing.userTitleDAO"  class="fr.paris.lutece.plugins.ticketing.business.UserTitleDAO" />
-    <bean id="ticketing.contactModeDAO"  class="fr.paris.lutece.plugins.ticketing.business.ContactModeDAO" /> 
-    <bean id="ticketing.channelDAO"  class="fr.paris.lutece.plugins.ticketing.business.ChannelDAO" /> 
-    <bean id="ticketing.supportEntityDAO"  class="fr.paris.lutece.plugins.ticketing.business.SupportEntityDAO" />  
-    <bean id="ticketing.ticketFormDAO"  class="fr.paris.lutece.plugins.ticketing.business.TicketFormDAO" />  
-    <bean id="ticketing.instantResponseDAO"  class="fr.paris.lutece.plugins.ticketing.business.InstantResponseDAO" />  
+    <bean id="ticketing.ticketDAO"  class="fr.paris.lutece.plugins.ticketing.business.ticket.TicketDAO" />  
+    <bean id="ticketing.ticketTypeDAO"  class="fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeDAO" />  
+    <bean id="ticketing.ticketDomainDAO"  class="fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainDAO" />  
+    <bean id="ticketing.ticketCategoryDAO"  class="fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryDAO" />  
+    <bean id="ticketing.userTitleDAO"  class="fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleDAO" />
+    <bean id="ticketing.contactModeDAO"  class="fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeDAO" /> 
+    <bean id="ticketing.channelDAO"  class="fr.paris.lutece.plugins.ticketing.business.channel.ChannelDAO" /> 
+    <bean id="ticketing.supportEntityDAO"  class="fr.paris.lutece.plugins.ticketing.business.supportentity.SupportEntityDAO" />  
+    <bean id="ticketing.ticketFormDAO"  class="fr.paris.lutece.plugins.ticketing.business.ticketform.TicketFormDAO" />  
+    <bean id="ticketing.instantResponseDAO"  class="fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponseDAO" />  
 
     
     

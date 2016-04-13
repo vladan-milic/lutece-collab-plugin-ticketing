@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.ticketfilter;
 
-import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
-import fr.paris.lutece.plugins.ticketing.business.TicketFilter;
-import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;

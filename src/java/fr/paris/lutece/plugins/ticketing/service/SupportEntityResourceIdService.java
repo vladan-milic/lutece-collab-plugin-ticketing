@@ -33,8 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
-import fr.paris.lutece.plugins.ticketing.business.SupportEntity;
-import fr.paris.lutece.plugins.ticketing.business.SupportEntityHome;
+import fr.paris.lutece.plugins.ticketing.business.supportentity.SupportEntity;
+import fr.paris.lutece.plugins.ticketing.business.supportentity.SupportEntityHome;
 import fr.paris.lutece.portal.service.rbac.Permission;
 import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;

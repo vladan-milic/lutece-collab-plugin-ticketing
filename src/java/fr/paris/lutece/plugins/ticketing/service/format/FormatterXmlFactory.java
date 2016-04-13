@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format;
 
-import fr.paris.lutece.plugins.ticketing.business.Channel;
-import fr.paris.lutece.plugins.ticketing.business.ContactMode;
-import fr.paris.lutece.plugins.ticketing.business.Ticket;
-import fr.paris.lutece.plugins.ticketing.business.TicketType;
-import fr.paris.lutece.plugins.ticketing.business.UserTitle;
+import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
+import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
+import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.service.format.channel.ChannelFormatterXml;
 import fr.paris.lutece.plugins.ticketing.service.format.contactmode.ContactModeFormatterXml;
 import fr.paris.lutece.plugins.ticketing.service.format.ticket.TicketFormatterXml;

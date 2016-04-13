@@ -34,8 +34,8 @@
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
 import fr.paris.lutece.plugins.rest.service.RestConstants;
-import fr.paris.lutece.plugins.ticketing.business.UserTitle;
-import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
 
 import java.util.List;

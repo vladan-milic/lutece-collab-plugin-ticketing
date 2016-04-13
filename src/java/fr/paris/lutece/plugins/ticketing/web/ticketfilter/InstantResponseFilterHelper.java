@@ -33,8 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.ticketfilter;
 
-import fr.paris.lutece.plugins.ticketing.business.InstantResponseFilter;
-import fr.paris.lutece.plugins.ticketing.business.TicketFilter;
+import fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponseFilter;
+import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 
 import org.apache.commons.lang.StringUtils;

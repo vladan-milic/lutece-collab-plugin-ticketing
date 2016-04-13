@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.user;
 
-import fr.paris.lutece.plugins.ticketing.business.ChannelHome;
+import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;

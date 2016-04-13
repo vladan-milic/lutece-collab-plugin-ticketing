@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
-import fr.paris.lutece.plugins.ticketing.business.AssigneeUnit;
+import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.rbac.Permission;

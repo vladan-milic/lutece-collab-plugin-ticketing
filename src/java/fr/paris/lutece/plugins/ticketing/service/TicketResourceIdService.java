@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
-import fr.paris.lutece.plugins.ticketing.business.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.portal.service.rbac.Permission;
 import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
@@ -100,7 +100,6 @@ public class TicketResourceIdService extends ResourceIdService
     private static final String PROPERTY_LABEL_RETURN_TO_ASSIGNER = "ticketing.ticket.permission.label.returnToAssigner";
     private static final String PROPERTY_LABEL_RESPOND_TO_USER = "ticketing.ticket.permission.label.respondToUser";
     private static final String PROPERTY_LABEL_RESPOND_ASSIGN_UP_LEVEL = "ticketing.ticket.permission.label.respondAssignUpLevel";
-    private static final String STRING_SEPARATOR = "/";
 
     /**
      * Constructor

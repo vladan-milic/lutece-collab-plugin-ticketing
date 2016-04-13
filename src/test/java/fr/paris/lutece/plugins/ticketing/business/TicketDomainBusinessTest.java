@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.test.LuteceTestCase;
 
 

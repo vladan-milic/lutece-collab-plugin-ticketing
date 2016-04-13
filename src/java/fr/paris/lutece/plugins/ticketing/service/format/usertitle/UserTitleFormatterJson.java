@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format.usertitle;
 
-import fr.paris.lutece.plugins.ticketing.business.UserTitle;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
 import fr.paris.lutece.plugins.ticketing.service.format.IFormatter;
 

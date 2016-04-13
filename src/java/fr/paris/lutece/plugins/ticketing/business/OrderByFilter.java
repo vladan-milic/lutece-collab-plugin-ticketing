@@ -40,7 +40,7 @@ import java.util.Map;
 
 /**
  *
- * class TicketFilter
+ * abstract class OrderByFilter
  *
  */
 public abstract class OrderByFilter

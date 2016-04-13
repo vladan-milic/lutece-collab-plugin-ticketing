@@ -34,8 +34,8 @@
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
 import fr.paris.lutece.plugins.rest.service.RestConstants;
-import fr.paris.lutece.plugins.ticketing.business.ContactMode;
-import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
+import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
+import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
 
 import java.util.List;

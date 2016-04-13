@@ -33,15 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.util;
 
-import fr.paris.lutece.plugins.ticketing.business.Channel;
-import fr.paris.lutece.plugins.ticketing.business.ChannelHome;
-import fr.paris.lutece.plugins.ticketing.business.ContactMode;
-import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
-import fr.paris.lutece.plugins.ticketing.business.Ticket;
-import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
-import fr.paris.lutece.plugins.ticketing.business.UserTitle;
-import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
+import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
+import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
+import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
+import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.util.beanvalidation.BeanValidationUtil;

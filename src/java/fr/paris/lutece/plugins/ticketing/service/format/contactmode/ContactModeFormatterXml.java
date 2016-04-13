@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format.contactmode;
 
-import fr.paris.lutece.plugins.ticketing.business.ContactMode;
+import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
 import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
 import fr.paris.lutece.plugins.ticketing.service.format.IFormatter;
 import fr.paris.lutece.util.xml.XmlUtil;

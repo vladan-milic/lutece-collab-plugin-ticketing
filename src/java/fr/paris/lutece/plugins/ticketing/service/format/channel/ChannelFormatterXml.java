@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format.channel;
 
-import fr.paris.lutece.plugins.ticketing.business.Channel;
+import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
 import fr.paris.lutece.plugins.ticketing.service.format.IFormatter;
 import fr.paris.lutece.util.xml.XmlUtil;

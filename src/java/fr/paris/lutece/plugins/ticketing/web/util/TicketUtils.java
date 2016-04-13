@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.util;
 
-import fr.paris.lutece.plugins.ticketing.business.ChannelHome;
-import fr.paris.lutece.plugins.ticketing.business.Ticket;
-import fr.paris.lutece.plugins.ticketing.business.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
-import fr.paris.lutece.plugins.ticketing.business.TicketFilter;
-import fr.paris.lutece.plugins.ticketing.business.TicketHome;
+import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
+import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;

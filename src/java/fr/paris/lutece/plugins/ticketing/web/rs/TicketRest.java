@@ -34,14 +34,14 @@
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
 import fr.paris.lutece.plugins.rest.service.RestConstants;
-import fr.paris.lutece.plugins.ticketing.business.ChannelHome;
-import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
-import fr.paris.lutece.plugins.ticketing.business.Ticket;
-import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
-import fr.paris.lutece.plugins.ticketing.business.TicketHome;
-import fr.paris.lutece.plugins.ticketing.business.UserTitle;
-import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
+import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
+import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
