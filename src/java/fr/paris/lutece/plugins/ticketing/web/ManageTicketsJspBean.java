@@ -268,7 +268,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_NB_TICKET_DOMAIN, listDomainTickets.size(  ) );
         model.put( MARK_SELECTED_TAB, strSelectedTab );
         model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
-        TicketFilterHelper.setModel( model, filter, request );
+        TicketFilterHelper.setModel( model, filter, request, getUser(  ) );
         ModelUtils.storeTicketRights( model, getUser(  ) );
 
         String messageInfo = TicketUtils.getParameter( request,

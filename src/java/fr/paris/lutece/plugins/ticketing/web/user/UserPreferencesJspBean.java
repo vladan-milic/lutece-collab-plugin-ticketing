@@ -103,7 +103,7 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
 
         String strIdChannelList = _userPreferencesService.get( String.valueOf( getUser(  ).getUserId(  ) ),
                 TicketingConstants.USER_PREFERENCE_CHANNELS_LIST, StringUtils.EMPTY );
-        List<String> idChannelList = TicketUtils.getIdChannelList( strIdChannelList );
+        List<Integer> idChannelList = TicketUtils.extractListIdFromString( strIdChannelList );
         model.put( TicketingConstants.MARK_SELECTABLE_ID_CHANNEL_LIST, idChannelList );
 
         String strPreferredIdChannel = _userPreferencesService.get( String.valueOf( getUser(  ).getUserId(  ) ),
@@ -127,10 +127,10 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
         _userPreferencesService.put( String.valueOf( getUser(  ).getUserId(  ) ),
             TicketingConstants.USER_PREFERENCE_SIGNATURE, strUserSignature );
 
-        String[] strIdChannelList = request.getParameterValues( TicketingConstants.PARAMETER_SELECTABLE_ID_CHANNEL_LIST );
+        String[] tabIdChannelList = request.getParameterValues( TicketingConstants.PARAMETER_SELECTABLE_ID_CHANNEL_LIST );
         _userPreferencesService.put( String.valueOf( getUser(  ).getUserId(  ) ),
             TicketingConstants.USER_PREFERENCE_CHANNELS_LIST,
-            TicketUtils.convertIdChannelListToString( strIdChannelList ) );
+            StringUtils.join( tabIdChannelList, TicketingConstants.FIELD_ID_SEPARATOR ) );
 
         String strPreferredIdChannel = request.getParameter( TicketingConstants.PARAMETER_SELECTED_ID_CHANNEL );
         _userPreferencesService.put( String.valueOf( getUser(  ).getUserId(  ) ),

@@ -1,4 +1,9 @@
 <#include "/admin/plugins/ticketing/commons.html" />
+
+<!-- Include the plugin's CSS and JS for multiselect bootstrap -->
+<script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
+<link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css"/>
+
 <#macro sortColumn field=''>
     <i class="fa fa-chevron-up" onclick="sortList('${field}','asc')"></i>&nbsp;<i class="fa fa-chevron-down" onclick="sortList('${field}','desc')"></i>
 </#macro>
@@ -201,7 +206,18 @@
     				<label class="select" for="since">
     					<@comboWithParams name="fltr_open_since" default_value="${ticket_filter.openSincePeriod}" additionalParameters=" id=\"fltr_open_since\" class=\"form-control input-xs\" " items=period_list/>
     				</label>
-    				</div>
+                    
+                    <!-- multi select state list -->
+                    <select name="fltr_state_ids" id="fltr_state_ids" multiple="multiple">
+						<#list state_list as state>
+							<#if state.checked ?? && state.checked == true>
+								<option value="${state.code!}" selected> ${state.name!}</option>
+							<#else>
+								<option value="${state.code!}">${state.name!}</option>
+							</#if>
+						</#list>
+                    </select>
+    			</div>
     	</form>
           <div class="col-xs-8 col-sm-4">
             <form class="form-inline" method="post" action="jsp/admin/plugins/ticketing/TicketSearch.jsp?action=search&page_index=1">
@@ -241,6 +257,8 @@
 
 <script>
 $( function(){
+
+    
   $(".content-header").toggle();
 	// Set link on whole tr
 	$("tbody > tr ").on( 'click', function(e){
@@ -255,9 +273,7 @@ $( function(){
 	    }
 	});
 
-  // Recharge la page
-
-  // Tooltip
+	// Tooltip
   $('[data-toggle="tooltip"]').tooltip();
 
   // Order Management
@@ -291,10 +307,53 @@ $( function(){
   $("#fltr_open_since").on( 'change', function(e){
 		$("#filter_form").submit( );
 	});
+	
+  $("#fltr_state_ids").on( 'change', function(e){
+        $("#filter_form").submit( );
+    });
+    
 });
 
 function setSelectedTab(tab){
 	$("input[name=selected_tab]").val(tab);
 	$("#filter_form").submit( );
 }
+</script>
+
+<script type="text/javascript">
+ // initialization functions for multiselect state list
+    $(document).ready(function() {
+        var orderCount = 0;
+        $('#fltr_state_ids').multiselect({
+            buttonText: function(options) {
+                if (options.length === 0) {
+                    return '#i18n{ticketing.manage_tickets.filter.state.allLabel}';
+                }
+                else {
+					return getSelectStateLabel(options);
+				}
+            },
+        });
+
+        //compute label to display
+		function getSelectStateLabel(options) {
+			var maxSize = 25;
+			var text = '';
+			var selected = [];
+			options.each(function() {
+				selected.push([$(this).text(), $(this).data('OK')]);
+			});
+			for (var i = 0; i < selected.length; i++) {
+				text += selected[i][0] + ', ';
+			}
+			//remove trailing ', '
+			text = text.substr(0, text.length -2);
+			
+			//add etc label if string is too long
+			if  ( text.length > maxSize ){
+				text = text.substr(0, maxSize - 4) + '#i18n{ticketing.manage_tickets.filter.state.etcLabel}';
+			}
+			return text;
+		}
+    });
 </script>

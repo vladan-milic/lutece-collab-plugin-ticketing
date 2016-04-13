@@ -93,6 +93,7 @@ public final class TicketingConstants
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
     public static final String PROPERTY_REDIRECT_PREFIX = "ticketing.workflow.redirect.";
     public static final String PROPERTY_TICKET_CLOSE_ID = "ticketing.workflow.state.id.closed";
+    public static final String PROPERTY_TICKET_WORKFLOW_ID = "ticketing.workflow.id";
     public static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
     private static final String PROPERTY_CHANNEL_ID = "ticketing.channel.webChannel.id";
     public static int WEB_ID_CHANNEL = 99;
@@ -132,6 +133,7 @@ public final class TicketingConstants
     public static final int NO_ID_CHANNEL = 0;
     public static final int TICKET_STATUS_IN_PROGRESS = 0;
     public static final int TICKET_STATUS_CLOSED = 1;
+    public static final String FIELD_ID_SEPARATOR = ",";
 
     /**
      * Default constructor

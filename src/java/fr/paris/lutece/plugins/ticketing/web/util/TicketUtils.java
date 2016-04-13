@@ -77,9 +77,6 @@ public final class TicketUtils
     // Properties
     private static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
 
-    // Other
-    private static final String CHANNELS_ID_SEPARATOR = ",";
-
     /**
      * Default constructor
      */
@@ -277,49 +274,23 @@ public final class TicketUtils
     }
 
     /**
-     * Get list of channel id of the user
+     * Get list of id from a comma separated string
      *
-     * @param strIdChannelList
-     *            channel list of the user
+     * @param strIdList
+     *            list of the user
      * @return list of channel id of the user.
      */
-    public static List<String> getIdChannelList( String strIdChannelList )
+    public static List<Integer> extractListIdFromString( String strIdList )
     {
-        List<String> listIdChannel = new ArrayList<String>(  );
-        StringTokenizer st = new StringTokenizer( strIdChannelList, CHANNELS_ID_SEPARATOR );
+        List<Integer> listId = new ArrayList<Integer>(  );
+        StringTokenizer st = new StringTokenizer( strIdList, TicketingConstants.FIELD_ID_SEPARATOR );
 
         while ( st.hasMoreElements(  ) )
         {
-            listIdChannel.add( st.nextToken(  ) );
+            listId.add( Integer.parseInt( st.nextToken(  ) ) );
         }
 
-        return listIdChannel;
-    }
-
-    /**
-     * Get string represented the list of channel separated by comma
-     *
-     * @param idChannelList
-     *            channel list of the user
-     * @return string represented the list of channel.
-     */
-    public static String convertIdChannelListToString( String[] idChannelList )
-    {
-        StringBuilder strIdChannelList = new StringBuilder(  );
-        int i = 0;
-
-        if ( idChannelList != null )
-        {
-            while ( i < ( idChannelList.length - 1 ) )
-            {
-                strIdChannelList.append( idChannelList[i] ).append( CHANNELS_ID_SEPARATOR );
-                i++;
-            }
-
-            strIdChannelList.append( idChannelList[i] );
-        }
-
-        return strIdChannelList.toString(  );
+        return listId;
     }
 
     /**
@@ -338,13 +309,13 @@ public final class TicketUtils
                     AdminUserService.getAdminUser( request ).getUserId(  ) ),
                 TicketingConstants.USER_PREFERENCE_CHANNELS_LIST, StringUtils.EMPTY );
 
-        List<String> idSelectableChannelList = getIdChannelList( strIdSelectableChannelList );
+        List<Integer> idSelectableChannelList = extractListIdFromString( strIdSelectableChannelList );
         Map<String, String> selectableChannelsMap = new HashMap<String, String>(  );
         Map<String, String> channelsMap = channelList.toMap(  );
 
-        for ( String channelId : idSelectableChannelList )
+        for ( Integer channelId : idSelectableChannelList )
         {
-            selectableChannelsMap.put( channelId, channelsMap.get( channelId ) );
+            selectableChannelsMap.put( String.valueOf( channelId ), channelsMap.get( channelId ) );
         }
 
         return ReferenceList.convert( selectableChannelsMap );

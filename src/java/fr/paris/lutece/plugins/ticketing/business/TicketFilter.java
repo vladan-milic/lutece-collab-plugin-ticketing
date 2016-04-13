@@ -35,8 +35,10 @@ package fr.paris.lutece.plugins.ticketing.business;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -82,24 +84,7 @@ public class TicketFilter extends OrderByFilter
     private String _strFixedPhoneNumber;
     private String _strMobilePhoneNumber;
     private int _nUrgency = CONSTANT_ID_NULL;
-
-    /**
-     * returns true if filter is empty
-     * @return true if filter is empty
-     */
-    public boolean isEmpty(  )
-    {
-        return ( _nIdTicket == CONSTANT_ID_NULL ) && ( _dateLastUpdateDate == null ) &&
-        ( _dateLastUpdateStartDate == null ) && ( _dateLastUpdateEndDate == null ) && ( _dateCreationDate == null ) &&
-        ( _dateCreationStartDate == null ) && ( _dateCreationEndDate == null ) && ( _dateCloseDate == null ) &&
-        ( _nIdUser == CONSTANT_ID_NULL ) && ( _nIdCategory == CONSTANT_ID_NULL ) && ( _nIdDomain == CONSTANT_ID_NULL ) &&
-        ( _nIdType == CONSTANT_ID_NULL ) && ( _nOpenSincePeriod == CONSTANT_ID_NULL ) &&
-        StringUtils.isEmpty( _strStatus ) && StringUtils.isEmpty( _strEmail ) && StringUtils.isEmpty( _strLastName ) &&
-        StringUtils.isEmpty( _strFirstName ) && StringUtils.isEmpty( _strReference ) &&
-        StringUtils.isEmpty( _strFixedPhoneNumber ) && StringUtils.isEmpty( _strMobilePhoneNumber ) &&
-        StringUtils.isEmpty( getOrderBy(  ) ) && StringUtils.isEmpty( getOrderSort(  ) ) &&
-        ( _nUrgency == CONSTANT_ID_NULL );
-    }
+    private List<Integer> _listIdWorkflowState = new ArrayList<Integer>(  );
 
     /**
      * Check if this filter contains a idUser
@@ -126,6 +111,47 @@ public class TicketFilter extends OrderByFilter
     public void setIdUser( int nIdUser )
     {
         this._nIdUser = nIdUser;
+    }
+
+    /**
+     * Check if this filter contains a idUser
+     *
+     * @return true if the filter contain an id of ticket
+     */
+    public boolean containsListIdWorkflowState(  )
+    {
+        return ( ( _listIdWorkflowState != null ) && ( _listIdWorkflowState.size(  ) > 0 ) );
+    }
+
+    /**
+     * @return the _nIdWorkflowState
+     */
+    public List<Integer> getListIdWorkflowState(  )
+    {
+        return _listIdWorkflowState;
+    }
+
+    /**
+     * @param lstIdWorkflowState
+     *            the lstIdWorkflowState to set
+     */
+    public void setListIdWorkflowState( List<Integer> lstIdWorkflowState )
+    {
+        this._listIdWorkflowState = lstIdWorkflowState;
+    }
+
+    /**
+     * @param tabIdWorkflowState
+     *            the tabIdWorkflowState to set
+     */
+    public void setListIdWorkflowState( String[] tabIdWorkflowState )
+    {
+        this._listIdWorkflowState = new ArrayList<Integer>(  );
+
+        for ( String strId : tabIdWorkflowState )
+        {
+            this._listIdWorkflowState.add( new Integer( strId ) );
+        }
     }
 
     /**
