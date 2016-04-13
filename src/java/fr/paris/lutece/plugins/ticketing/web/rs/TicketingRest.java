@@ -33,28 +33,54 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
+import fr.paris.lutece.plugins.ticketing.service.format.FormatterJsonFactory;
+import fr.paris.lutece.plugins.ticketing.service.format.FormatterXmlFactory;
+import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.ws.rs.core.MediaType;
+
 
 /**
- * This class provides constants for REST services
+ * Common method used in REST services for ticketing resources
  *
  */
-public final class Constants
+public class TicketingRest
 {
-    public static final String TICKET_PATH = "ticket/";
-    public static final String TYPE_PATH = "type/";
-    public static final String USER_TITLE_PATH = "usertitle/";
-    public static final String CONTACT_MODE_PATH = "contactmode/";
-    public static final String CHANNEL_PATH = "channel/";
-    public static final String PLUGIN_PATH = "ticketing/";
-    public static final String ID_PATH = "id";
-    public static final String ALL_PATH = "s";
-    public static final String FORMAT_QUERY = "format";
-    public static final String MEDIA_TYPE_JSON = "json";
+    protected static Map<String, IFormatterFactory> _formatterFactories;
 
     /**
      * Default constructor
      */
-    private Constants(  )
+    public TicketingRest(  )
     {
+        _formatterFactories = new HashMap<String, IFormatterFactory>(  );
+        _formatterFactories.put( MediaType.APPLICATION_JSON, new FormatterJsonFactory(  ) );
+        _formatterFactories.put( MediaType.APPLICATION_XML, new FormatterXmlFactory(  ) );
+    }
+
+    /**
+     * Gives the media type depending on the specified parameters
+     * @param accept the accepted format
+     * @param format the format
+     * @return the media type
+     */
+    protected String getMediaType( String accept, String format )
+    {
+        String strMediaType;
+
+        if ( ( ( accept != null ) && accept.contains( MediaType.APPLICATION_JSON ) ) ||
+                ( ( format != null ) && format.equals( Constants.MEDIA_TYPE_JSON ) ) )
+        {
+            strMediaType = MediaType.APPLICATION_JSON;
+        }
+        else
+        {
+            strMediaType = MediaType.APPLICATION_XML;
+        }
+
+        return strMediaType;
     }
 }

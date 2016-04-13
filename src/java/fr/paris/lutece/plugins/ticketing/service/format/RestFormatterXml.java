@@ -31,30 +31,33 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.web.rs;
+package fr.paris.lutece.plugins.ticketing.service.format;
+
+import fr.paris.lutece.plugins.rest.util.xml.XMLUtil;
+
+import java.util.List;
 
 
 /**
- * This class provides constants for REST services
+ * XML formatter for REST purpose
  *
  */
-public final class Constants
+public class RestFormatterXml implements IRestFormatter
 {
-    public static final String TICKET_PATH = "ticket/";
-    public static final String TYPE_PATH = "type/";
-    public static final String USER_TITLE_PATH = "usertitle/";
-    public static final String CONTACT_MODE_PATH = "contactmode/";
-    public static final String CHANNEL_PATH = "channel/";
-    public static final String PLUGIN_PATH = "ticketing/";
-    public static final String ID_PATH = "id";
-    public static final String ALL_PATH = "s";
-    public static final String FORMAT_QUERY = "format";
-    public static final String MEDIA_TYPE_JSON = "json";
-
-    /**
-     * Default constructor
-     */
-    private Constants(  )
+    @Override
+    public String formatErrors( List<String> errors )
     {
+        StringBuffer sbErrors = new StringBuffer(  );
+
+        for ( String error : errors )
+        {
+            sbErrors.append( XMLUtil.formatError( error, 3 ) );
+
+            // breaks to the first error because XMLUtil.formatError adds the XML header
+            // => to have a valid XML document, only one error must be present
+            break;
+        }
+
+        return sbErrors.toString(  );
     }
 }

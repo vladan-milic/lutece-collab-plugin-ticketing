@@ -31,30 +31,66 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.web.rs;
+package fr.paris.lutece.plugins.ticketing.web.util;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 
 /**
- * This class provides constants for REST services
+ * Factory of TicketValidator.
+ * Designed as a singleton
  *
  */
-public final class Constants
+public final class TicketValidatorFactory
 {
-    public static final String TICKET_PATH = "ticket/";
-    public static final String TYPE_PATH = "type/";
-    public static final String USER_TITLE_PATH = "usertitle/";
-    public static final String CONTACT_MODE_PATH = "contactmode/";
-    public static final String CHANNEL_PATH = "channel/";
-    public static final String PLUGIN_PATH = "ticketing/";
-    public static final String ID_PATH = "id";
-    public static final String ALL_PATH = "s";
-    public static final String FORMAT_QUERY = "format";
-    public static final String MEDIA_TYPE_JSON = "json";
+    private static volatile TicketValidatorFactory _instance;
+    private Map<Locale, TicketValidator> _validators;
 
     /**
      * Default constructor
      */
-    private Constants(  )
+    private TicketValidatorFactory(  )
     {
+        _validators = new HashMap<Locale, TicketValidator>(  );
+    }
+
+    /**
+     * Creates a TicketValidator
+     * @param locale the locale used to select the correct validation error messages
+     * @return the TicketValidator
+     */
+    public TicketValidator create( Locale locale )
+    {
+        TicketValidator validator = _validators.get( locale );
+
+        if ( validator == null )
+        {
+            validator = new TicketValidator( locale );
+            _validators.put( locale, validator );
+        }
+
+        return validator;
+    }
+
+    /**
+     * Gives the instance
+     * @return the instance
+     */
+    public static TicketValidatorFactory getInstance(  )
+    {
+        if ( _instance == null )
+        {
+            synchronized ( TicketValidatorFactory.class )
+            {
+                if ( _instance == null )
+                {
+                    _instance = new TicketValidatorFactory(  );
+                }
+            }
+        }
+
+        return _instance;
     }
 }

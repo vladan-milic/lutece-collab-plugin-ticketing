@@ -1,7 +1,7 @@
 // Turns the 3 combos identified by the jquery selectors into dynamic combos
 function lutece_ticket_tree(id_type, id_domain, id_category, selected_category_id, is_front, is_generic_attributes_managed) {
     var base = $('head base').attr('href');
-    $.getJSON( base + "rest/ticketing/categories", function( data ) {
+    $.getJSON( base + "rest/ticketing/type/s?format=json", function( data ) {
         var types_map = {};
         for (var i = 0; i<data.types.length; i++) {
             var type = data.types[i];

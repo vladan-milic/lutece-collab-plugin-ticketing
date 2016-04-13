@@ -34,378 +34,221 @@
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
 import fr.paris.lutece.plugins.rest.service.RestConstants;
-import fr.paris.lutece.plugins.rest.util.json.JSONUtil;
-import fr.paris.lutece.plugins.rest.util.xml.XMLUtil;
+import fr.paris.lutece.plugins.ticketing.business.ChannelHome;
+import fr.paris.lutece.plugins.ticketing.business.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketHome;
-import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.util.xml.XmlUtil;
+import fr.paris.lutece.plugins.ticketing.business.UserTitle;
+import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
+import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.workflow.WorkflowService;
 
-import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 
-import java.util.Collection;
+import javax.servlet.http.HttpServletRequest;
 
-import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 
 /**
- * Page resource
+ * REST service for ticket resource
  */
 @Path( RestConstants.BASE_PATH + Constants.PLUGIN_PATH + Constants.TICKET_PATH )
-public class TicketRest
+public class TicketRest extends TicketingRest
 {
-    private static final String KEY_TICKETS = "tickets";
-    private static final String KEY_TICKET = "ticket";
-    private static final String KEY_ID = "id";
-    private static final String KEY_ID_USER_TITLE = "id_user_title";
-    private static final String KEY_USER_TITLE = "user_title";
-    private static final String KEY_FIRSTNAME = "firstname";
-    private static final String KEY_LASTNAME = "lastname";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_FIXED_PHONE_NUMBER = "fixed_phone_number";
-    private static final String KEY_MOBILE_PHONE_NUMBER = "mobile_phone_number";
-    private static final String KEY_ID_TICKET_TYPE = "id_ticket_type";
-    private static final String KEY_TICKET_TYPE = "ticket_type";
-    private static final String KEY_ID_TICKET_DOMAIN = "id_ticket_domain";
-    private static final String KEY_TICKET_DOMAIN = "ticket_domain";
-    private static final String KEY_ID_TICKET_CATEGORY = "id_ticket_category";
-    private static final String KEY_TICKET_CATEGORY = "ticket_category";
-    private static final String KEY_ID_CONTACT_MODE = "id_contact_mode";
-    private static final String KEY_CONTACT_MODE = "contact_mode";
-    private static final String KEY_TICKET_COMMENT = "ticket_comment";
-    private static final String KEY_TICKET_STATUS = "ticket_status";
-    private static final String KEY_TICKET_STATUS_TEXT = "ticket_status_text";
+    // Parameters
+    private static final String PARAMETER_TICKET_CATEGORY_CODE = "ticket_category_code";
+    private static final String PARAMETER_TICKET_CONTACT_MODE_ID = "ticket_contact_mode_id";
+    private static final String PARAMETER_TICKET_COMMENT = "ticket_comment";
+    private static final String PARAMETER_USER_TITLE_ID = "user_title_id";
+    private static final String PARAMETER_USER_FIRST_NAME = "user_first_name";
+    private static final String PARAMETER_USER_LAST_NAME = "user_last_name";
+    private static final String PARAMETER_USER_EMAIL = "user_email";
+    private static final String PARAMETER_USER_FIXED_PHONE_NUMBER = "user_fixed_phone_number";
+    private static final String PARAMETER_USER_MOBILE_PHONE_NUMBER = "user_mobile_phone_number";
+    private static final String PARAMETER_TICKET_CHANNEL_ID = "ticket_channel_id";
 
-    @GET
-    @Path( Constants.ALL_PATH )
-    public Response getTickets( @HeaderParam( HttpHeaders.ACCEPT )
+    // Services
+    private static WorkflowService _workflowService;
+
+    /**
+     * Default constructor
+     */
+    public TicketRest(  )
+    {
+        super(  );
+    }
+
+    /**
+     * Creates a ticket
+     * @param strIdUserTitle the user title id
+     * @param strFirstname the user first name
+     * @param strLastname the user last name
+     * @param strEmail the email
+     * @param strFixedPhoneNumber the user fixed phone number
+     * @param strMobilePhoneNumber the user mobile phone number
+     * @param strCategoryCode the category code
+     * @param strIdContactMode the contact mode
+     * @param strIdChannel the channel id
+     * @param strComment the comment
+     * @param strGuid the guid
+     * @param strIdCustomer the customer id
+     * @param accept the accepted format
+     * @param format the format
+     * @param request the request
+     * @return the reference of the created ticket
+     */
+    @PUT
+    public Response createTicket( @FormParam( PARAMETER_USER_TITLE_ID )
+    String strIdUserTitle, @FormParam( PARAMETER_USER_FIRST_NAME )
+    String strFirstname, @FormParam( PARAMETER_USER_LAST_NAME )
+    String strLastname, @FormParam( PARAMETER_USER_EMAIL )
+    String strEmail, @FormParam( PARAMETER_USER_FIXED_PHONE_NUMBER )
+    String strFixedPhoneNumber, @FormParam( PARAMETER_USER_MOBILE_PHONE_NUMBER )
+    String strMobilePhoneNumber, @FormParam( PARAMETER_TICKET_CATEGORY_CODE )
+    String strCategoryCode, @FormParam( PARAMETER_TICKET_CONTACT_MODE_ID )
+    String strIdContactMode, @FormParam( PARAMETER_TICKET_CHANNEL_ID )
+    String strIdChannel, @FormParam( PARAMETER_TICKET_COMMENT )
+    String strComment, @FormParam( TicketingConstants.PARAMETER_GUID )
+    String strGuid, @FormParam( TicketingConstants.PARAMETER_CUSTOMER_ID )
+    String strIdCustomer, @HeaderParam( HttpHeaders.ACCEPT )
     String accept, @QueryParam( Constants.FORMAT_QUERY )
-    String format ) throws IOException
+    String format, @Context
+    HttpServletRequest request )
     {
-        String entity;
-        String mediaType;
+        String strMediaType = getMediaType( accept, format );
 
-        if ( ( ( accept != null ) && accept.contains( MediaType.APPLICATION_JSON ) ) ||
-                ( ( format != null ) && format.equals( Constants.MEDIA_TYPE_JSON ) ) )
+        Ticket ticket = new Ticket(  );
+
+        String strModifiedIdUserTitle = strIdUserTitle;
+
+        if ( StringUtils.isEmpty( strIdUserTitle ) )
         {
-            entity = getTicketsJson(  );
-            mediaType = MediaType.APPLICATION_JSON;
-        }
-        else
-        {
-            entity = getTicketsXml(  );
-            mediaType = MediaType.APPLICATION_XML;
-        }
+            List<UserTitle> listUserTitle = UserTitleHome.getUserTitlesList(  );
+            Iterator<UserTitle> iterator = listUserTitle.iterator(  );
 
-        return Response.ok( entity, mediaType ).build(  );
-    }
-
-    /**
-     * Gets all resources list in XML format
-     * @return The list
-     */
-    public String getTicketsXml(  )
-    {
-        StringBuffer sbXML = new StringBuffer( XmlUtil.getXmlHeader(  ) );
-        Collection<Ticket> list = TicketHome.getTicketsList(  );
-
-        XmlUtil.beginElement( sbXML, KEY_TICKETS );
-
-        for ( Ticket ticket : list )
-        {
-            addTicketXml( sbXML, ticket );
-        }
-
-        XmlUtil.endElement( sbXML, KEY_TICKETS );
-
-        return sbXML.toString(  );
-    }
-
-    /**
-     * Gets all resources list in JSON format
-     * @return The list
-     */
-    public String getTicketsJson(  )
-    {
-        JSONObject jsonTicket = new JSONObject(  );
-        JSONObject json = new JSONObject(  );
-
-        Collection<Ticket> list = TicketHome.getTicketsList(  );
-
-        for ( Ticket ticket : list )
-        {
-            addTicketJson( jsonTicket, ticket );
-        }
-
-        json.accumulate( KEY_TICKETS, jsonTicket );
-
-        return json.toString(  );
-    }
-
-    @GET
-    @Path( "{" + Constants.ID_PATH + "}" )
-    public Response getTicket( @PathParam( Constants.ID_PATH )
-    String strId, @HeaderParam( HttpHeaders.ACCEPT )
-    String accept, @QueryParam( Constants.FORMAT_QUERY )
-    String format ) throws IOException
-    {
-        String entity;
-        String mediaType;
-
-        if ( ( ( accept != null ) && accept.contains( MediaType.APPLICATION_JSON ) ) ||
-                ( ( format != null ) && format.equals( Constants.MEDIA_TYPE_JSON ) ) )
-        {
-            entity = getTicketJson( strId );
-            mediaType = MediaType.APPLICATION_JSON;
-        }
-        else
-        {
-            entity = getTicketXml( strId );
-            mediaType = MediaType.APPLICATION_XML;
-        }
-
-        return Response.ok( entity, mediaType ).build(  );
-    }
-
-    /**
-     * Gets a resource in XML format
-     * @param strId The resource ID
-     * @return The XML output
-     */
-    public String getTicketXml( String strId )
-    {
-        StringBuffer sbXML = new StringBuffer(  );
-
-        try
-        {
-            int nId = Integer.parseInt( strId );
-            Ticket ticket = TicketHome.findByPrimaryKey( nId );
-
-            if ( ticket != null )
+            if ( iterator.hasNext(  ) )
             {
-                sbXML.append( "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" );
-                addTicketXml( sbXML, ticket );
+                strModifiedIdUserTitle = String.valueOf( iterator.next(  ).getId(  ) );
             }
         }
-        catch ( NumberFormatException e )
+
+        String strModifiedIdContactMode = strIdContactMode;
+
+        if ( StringUtils.isEmpty( strIdContactMode ) )
         {
-            sbXML.append( XMLUtil.formatError( "Invalid ticket number", 3 ) );
-        }
-        catch ( Exception e )
-        {
-            sbXML.append( XMLUtil.formatError( "Ticket not found", 1 ) );
+            List<Integer> listIdContactMode = ContactModeHome.getIdContactModesList(  );
+            Iterator<Integer> iterator = listIdContactMode.iterator(  );
+
+            if ( iterator.hasNext(  ) )
+            {
+                strModifiedIdContactMode = iterator.next(  ).toString(  );
+            }
         }
 
-        return sbXML.toString(  );
+        String strModifiedIdChannel = strIdChannel;
+
+        if ( StringUtils.isEmpty( strIdChannel ) )
+        {
+            List<Integer> listIdChannel = ChannelHome.getIdChannelList(  );
+            Iterator<Integer> iterator = listIdChannel.iterator(  );
+
+            if ( iterator.hasNext(  ) )
+            {
+                strModifiedIdChannel = iterator.next(  ).toString(  );
+            }
+        }
+
+        ticket.enrich( strModifiedIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber,
+            strEmail, strCategoryCode, strModifiedIdContactMode, strModifiedIdChannel, strComment, strGuid,
+            strIdCustomer );
+
+        IFormatterFactory formatterFactory = _formatterFactories.get( strMediaType );
+
+        TicketValidator validator = TicketValidatorFactory.getInstance(  ).create( request.getLocale(  ) );
+        List<String> listValidationErrors = validator.validateBean( ticket );
+        listValidationErrors.addAll( validator.validate( ticket ) );
+
+        if ( !listValidationErrors.isEmpty(  ) )
+        {
+            String strValidationErrorsMessage = formatterFactory.createRestFormatter(  )
+                                                                .formatErrors( listValidationErrors );
+
+            return Response.ok( strValidationErrorsMessage, strMediaType ).build(  );
+        }
+
+        List<String> creationErrors = create( ticket );
+
+        if ( !creationErrors.isEmpty(  ) )
+        {
+            String strCreationErrorsMessage = formatterFactory.createRestFormatter(  ).formatErrors( creationErrors );
+
+            return Response.ok( strCreationErrorsMessage, strMediaType ).build(  );
+        }
+
+        // Reloads the ticket to have the data updated by the workflow
+        ticket = TicketHome.findByPrimaryKey( ticket.getId(  ) );
+
+        String strResponse = formatterFactory.createFormatter( Ticket.class ).formatResponse( ticket );
+
+        return Response.ok( strResponse, strMediaType ).build(  );
     }
 
     /**
-     * Gets a resource in JSON format
-     * @param strId The resource ID
-     * @return The JSON output
+     * Creates the specified ticket. The ticket is saved and injected in the workflow.
+     * @param ticket the ticket to create
+     * @return the list of errors which occurred during the creation
      */
-    public String getTicketJson( String strId )
+    private List<String> create( Ticket ticket )
     {
-        JSONObject json = new JSONObject(  );
-        String strJson = "";
+        List<String> errors = new ArrayList<String>(  );
+        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+        int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
-        try
+        if ( _workflowService == null )
         {
-            int nId = Integer.parseInt( strId );
-            Ticket ticket = TicketHome.findByPrimaryKey( nId );
+            _workflowService = WorkflowService.getInstance(  );
+        }
 
-            if ( ticket != null )
+        TicketHome.create( ticket );
+
+        if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable(  ) )
+        {
+            try
             {
-                addTicketJson( json, ticket );
-                strJson = json.toString(  );
+                _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+                    ticketCategory.getId(  ) );
+                _workflowService.executeActionAutomatic( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+                    ticketCategory.getId(  ) );
+            }
+            catch ( Exception e )
+            {
+                _workflowService.doRemoveWorkFlowResource( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE );
+                TicketHome.remove( ticket.getId(  ) );
+
+                errors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_TICKET_CREATION_ABORTED,
+                        Locale.FRENCH ) );
             }
         }
-        catch ( NumberFormatException e )
-        {
-            strJson = JSONUtil.formatError( "Invalid ticket number", 3 );
-        }
-        catch ( Exception e )
-        {
-            strJson = JSONUtil.formatError( "Ticket not found", 1 );
-        }
 
-        return strJson;
-    }
-
-    @DELETE
-    @Path( "{" + Constants.ID_PATH + "}" )
-    public Response deleteTicket( @PathParam( Constants.ID_PATH )
-    String strId, @HeaderParam( HttpHeaders.ACCEPT )
-    String accept, @QueryParam( Constants.FORMAT_QUERY )
-    String format ) throws IOException
-    {
-        try
-        {
-            int nId = Integer.parseInt( strId );
-
-            if ( TicketHome.findByPrimaryKey( nId ) != null )
-            {
-                TicketHome.remove( nId );
-            }
-        }
-        catch ( NumberFormatException e )
-        {
-            AppLogService.error( "Invalid ticket number" );
-        }
-
-        return getTickets( accept, format );
-    }
-
-    @POST
-    public Response createTicket( @FormParam( KEY_ID )
-    String id, @FormParam( "id_user_title" )
-    String id_user_title, @FormParam( "user_title" )
-    String user_title, @FormParam( "firstname" )
-    String firstname, @FormParam( "lastname" )
-    String lastname, @FormParam( "email" )
-    String email, @FormParam( "fixed_phone_number" )
-    String fixed_phone_number, @FormParam( "mobile_phone_number" )
-    String mobile_phone_number, @FormParam( "id_ticket_type" )
-    String id_ticket_type, @FormParam( "ticket_type" )
-    String ticket_type, @FormParam( "id_ticket_domain" )
-    String id_ticket_domain, @FormParam( "ticket_domain" )
-    String ticket_domain, @FormParam( "id_ticket_category" )
-    String id_ticket_category, @FormParam( "ticket_category" )
-    String ticket_category, @FormParam( "id_contact_mode" )
-    String id_contact_mode, @FormParam( "contact_mode" )
-    String contact_mode, @FormParam( "ticket_comment" )
-    String ticket_comment, @FormParam( "ticket_status" )
-    String ticket_status, @FormParam( "ticket_status_text" )
-    String ticket_status_text, @HeaderParam( HttpHeaders.ACCEPT )
-    String accept, @QueryParam( Constants.FORMAT_QUERY )
-    String format ) throws IOException
-    {
-        if ( id != null )
-        {
-            int nId = Integer.parseInt( KEY_ID );
-
-            Ticket ticket = TicketHome.findByPrimaryKey( nId );
-
-            if ( ticket != null )
-            {
-                ticket.setIdUserTitle( Integer.parseInt( id_user_title ) );
-                ticket.setUserTitle( user_title );
-                ticket.setFirstname( firstname );
-                ticket.setLastname( lastname );
-                ticket.setEmail( email );
-                ticket.setFixedPhoneNumber( fixed_phone_number );
-                ticket.setMobilePhoneNumber( mobile_phone_number );
-                ticket.setIdTicketType( Integer.parseInt( id_ticket_type ) );
-                ticket.setTicketType( ticket_type );
-                ticket.setIdTicketDomain( Integer.parseInt( id_ticket_domain ) );
-                ticket.setTicketDomain( ticket_domain );
-                ticket.setIdTicketCategory( Integer.parseInt( id_ticket_category ) );
-                ticket.setTicketCategory( ticket_category );
-                ticket.setIdContactMode( Integer.parseInt( id_contact_mode ) );
-                ticket.setContactMode( contact_mode );
-                ticket.setTicketComment( ticket_comment );
-                ticket.setTicketStatus( Integer.parseInt( ticket_status ) );
-                ticket.setTicketStatusText( ticket_status_text );
-                TicketHome.update( ticket );
-            }
-        }
-        else
-        {
-            Ticket ticket = new Ticket(  );
-
-            ticket.setIdUserTitle( Integer.parseInt( id_user_title ) );
-            ticket.setUserTitle( user_title );
-            ticket.setFirstname( firstname );
-            ticket.setLastname( lastname );
-            ticket.setEmail( email );
-            ticket.setFixedPhoneNumber( fixed_phone_number );
-            ticket.setMobilePhoneNumber( mobile_phone_number );
-            ticket.setIdTicketType( Integer.parseInt( id_ticket_type ) );
-            ticket.setTicketType( ticket_type );
-            ticket.setIdTicketDomain( Integer.parseInt( id_ticket_domain ) );
-            ticket.setTicketDomain( ticket_domain );
-            ticket.setIdTicketCategory( Integer.parseInt( id_ticket_category ) );
-            ticket.setTicketCategory( ticket_category );
-            ticket.setIdContactMode( Integer.parseInt( id_contact_mode ) );
-            ticket.setContactMode( contact_mode );
-            ticket.setTicketComment( ticket_comment );
-            ticket.setTicketStatus( Integer.parseInt( ticket_status ) );
-            ticket.setTicketStatusText( ticket_status_text );
-            TicketHome.create( ticket );
-        }
-
-        return getTickets( accept, format );
-    }
-
-    /**
-     * Write a ticket into a buffer
-     * @param sbXML The buffer
-     * @param ticket The ticket
-     */
-    private void addTicketXml( StringBuffer sbXML, Ticket ticket )
-    {
-        XmlUtil.beginElement( sbXML, KEY_TICKET );
-        XmlUtil.addElement( sbXML, KEY_ID, ticket.getId(  ) );
-        XmlUtil.addElement( sbXML, KEY_ID_USER_TITLE, ticket.getIdUserTitle(  ) );
-        XmlUtil.addElement( sbXML, KEY_USER_TITLE, ticket.getUserTitle(  ) );
-        XmlUtil.addElement( sbXML, KEY_FIRSTNAME, ticket.getFirstname(  ) );
-        XmlUtil.addElement( sbXML, KEY_LASTNAME, ticket.getLastname(  ) );
-        XmlUtil.addElement( sbXML, KEY_EMAIL, ticket.getEmail(  ) );
-        XmlUtil.addElement( sbXML, KEY_FIXED_PHONE_NUMBER, ticket.getFixedPhoneNumber(  ) );
-        XmlUtil.addElement( sbXML, KEY_MOBILE_PHONE_NUMBER, ticket.getMobilePhoneNumber(  ) );
-        XmlUtil.addElement( sbXML, KEY_ID_TICKET_TYPE, ticket.getIdTicketType(  ) );
-        XmlUtil.addElement( sbXML, KEY_TICKET_TYPE, ticket.getTicketType(  ) );
-        XmlUtil.addElement( sbXML, KEY_ID_TICKET_DOMAIN, ticket.getIdTicketDomain(  ) );
-        XmlUtil.addElement( sbXML, KEY_TICKET_DOMAIN, ticket.getTicketDomain(  ) );
-        XmlUtil.addElement( sbXML, KEY_ID_TICKET_CATEGORY, ticket.getIdTicketCategory(  ) );
-        XmlUtil.addElement( sbXML, KEY_TICKET_CATEGORY, ticket.getTicketCategory(  ) );
-        XmlUtil.addElement( sbXML, KEY_ID_CONTACT_MODE, ticket.getIdContactMode(  ) );
-        XmlUtil.addElement( sbXML, KEY_CONTACT_MODE, ticket.getContactMode(  ) );
-        XmlUtil.addElement( sbXML, KEY_TICKET_COMMENT, ticket.getTicketComment(  ) );
-        XmlUtil.addElement( sbXML, KEY_TICKET_STATUS, ticket.getTicketStatus(  ) );
-        XmlUtil.addElement( sbXML, KEY_TICKET_STATUS_TEXT, ticket.getTicketStatusText(  ) );
-        XmlUtil.endElement( sbXML, KEY_TICKET );
-    }
-
-    /**
-     * Write a ticket into a JSON Object
-     * @param json The JSON Object
-     * @param ticket The ticket
-     */
-    private void addTicketJson( JSONObject json, Ticket ticket )
-    {
-        JSONObject jsonTicket = new JSONObject(  );
-        jsonTicket.accumulate( KEY_ID, ticket.getId(  ) );
-        jsonTicket.accumulate( KEY_ID_USER_TITLE, ticket.getIdUserTitle(  ) );
-        jsonTicket.accumulate( KEY_USER_TITLE, ticket.getUserTitle(  ) );
-        jsonTicket.accumulate( KEY_FIRSTNAME, ticket.getFirstname(  ) );
-        jsonTicket.accumulate( KEY_LASTNAME, ticket.getLastname(  ) );
-        jsonTicket.accumulate( KEY_EMAIL, ticket.getEmail(  ) );
-        jsonTicket.accumulate( KEY_FIXED_PHONE_NUMBER, ticket.getFixedPhoneNumber(  ) );
-        jsonTicket.accumulate( KEY_MOBILE_PHONE_NUMBER, ticket.getMobilePhoneNumber(  ) );
-        jsonTicket.accumulate( KEY_ID_TICKET_TYPE, ticket.getIdTicketType(  ) );
-        jsonTicket.accumulate( KEY_TICKET_TYPE, ticket.getTicketType(  ) );
-        jsonTicket.accumulate( KEY_ID_TICKET_DOMAIN, ticket.getIdTicketDomain(  ) );
-        jsonTicket.accumulate( KEY_TICKET_DOMAIN, ticket.getTicketDomain(  ) );
-        jsonTicket.accumulate( KEY_ID_TICKET_CATEGORY, ticket.getIdTicketCategory(  ) );
-        jsonTicket.accumulate( KEY_TICKET_CATEGORY, ticket.getTicketCategory(  ) );
-        jsonTicket.accumulate( KEY_ID_CONTACT_MODE, ticket.getIdContactMode(  ) );
-        jsonTicket.accumulate( KEY_CONTACT_MODE, ticket.getContactMode(  ) );
-        jsonTicket.accumulate( KEY_TICKET_COMMENT, ticket.getTicketComment(  ) );
-        jsonTicket.accumulate( KEY_TICKET_STATUS, ticket.getTicketStatus(  ) );
-        jsonTicket.accumulate( KEY_TICKET_STATUS_TEXT, ticket.getTicketStatusText(  ) );
-        json.accumulate( KEY_TICKET, jsonTicket );
+        return errors;
     }
 }

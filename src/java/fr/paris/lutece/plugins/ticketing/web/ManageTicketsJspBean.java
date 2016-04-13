@@ -60,6 +60,8 @@ import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUpload
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -110,8 +112,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
     // Parameters
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
-    private static final String PARAMETER_GUID = "guid";
-    private static final String PARAMETER_CID = "cid";
     private static final String PARAMETER_USER_TITLE = "ut";
     private static final String PARAMETER_FIRSTNAME = "fn";
     private static final String PARAMETER_LASTNAME = "ln";
@@ -148,7 +148,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
-    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.ticket.attribute.";
 
     // Views
     private static final String VIEW_MANAGE_TICKETS = "manageTickets";
@@ -168,11 +167,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String INFO_TICKET_CREATED = "ticketing.info.ticket.created";
     private static final String INFO_TICKET_UPDATED = "ticketing.info.ticket.updated";
     private static final String INFO_TICKET_REMOVED = "ticketing.info.ticket.removed";
-
-    // Errors
-    private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
-    private static final String ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED = "ticketing.error.contactmode.inconsistent";
-    private static final String ERROR_TICKET_CREATION_ABORTED = "ticketing.error.ticket.creation.aborted.backoffice";
 
     // Session keys
     private static boolean _bAdminAvatar = ( PluginService.getPlugin( "adminavatar" ) != null );
@@ -326,61 +320,17 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      */
     private void initTicketForm( HttpServletRequest request, Ticket ticket, Map<String, Object> model )
     {
-        String strGuid = request.getParameter( PARAMETER_GUID );
-        String strCustomerId = request.getParameter( TicketingConstants.PARAMETER_CUSTOMER_ID );
-        String strUserTitle = request.getParameter( PARAMETER_USER_TITLE );
+        String strGuid = request.getParameter( TicketingConstants.PARAMETER_GUID );
+        String strIdCustomer = request.getParameter( TicketingConstants.PARAMETER_CUSTOMER_ID );
+        String strIdUserTitle = request.getParameter( PARAMETER_USER_TITLE );
         String strFirstname = request.getParameter( PARAMETER_FIRSTNAME );
         String strLastname = request.getParameter( PARAMETER_LASTNAME );
-        String strPhone = request.getParameter( PARAMETER_PHONE );
+        String strMobilePhoneNumber = request.getParameter( PARAMETER_PHONE );
         String strEmail = request.getParameter( PARAMETER_EMAIL );
-        String strCategory = request.getParameter( PARAMETER_CATEGORY );
+        String strCategoryCode = request.getParameter( PARAMETER_CATEGORY );
 
-        if ( !StringUtils.isEmpty( strUserTitle ) )
-        {
-            ticket.setIdUserTitle( Integer.parseInt( strUserTitle ) );
-        }
-
-        if ( !StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty( ticket.getFirstname(  ) ) )
-        {
-            ticket.setFirstname( strFirstname );
-        }
-
-        if ( !StringUtils.isEmpty( strLastname ) && StringUtils.isEmpty( ticket.getLastname(  ) ) )
-        {
-            ticket.setLastname( strLastname );
-        }
-
-        if ( !StringUtils.isEmpty( strPhone ) && StringUtils.isEmpty( ticket.getMobilePhoneNumber(  ) ) )
-        {
-            ticket.setMobilePhoneNumber( strPhone );
-        }
-
-        if ( !StringUtils.isEmpty( strEmail ) && StringUtils.isEmpty( ticket.getEmail(  ) ) )
-        {
-            ticket.setEmail( strEmail );
-        }
-
-        if ( !StringUtils.isEmpty( strCategory ) && ( ticket.getIdTicketCategory(  ) == 0 ) )
-        {
-            TicketCategory category = TicketCategoryHome.findByCode( strCategory );
-
-            if ( category != null )
-            {
-                ticket.setIdTicketCategory( category.getId(  ) );
-                ticket.setIdTicketDomain( category.getIdTicketDomain(  ) );
-                ticket.setIdTicketType( category.getIdTicketType(  ) );
-            }
-        }
-
-        if ( !StringUtils.isEmpty( strGuid ) && StringUtils.isEmpty( ticket.getGuid(  ) ) )
-        {
-            ticket.setGuid( strGuid );
-        }
-
-        if ( !StringUtils.isEmpty( strCustomerId ) && StringUtils.isEmpty( ticket.getCustomerId(  ) ) )
-        {
-            ticket.setCustomerId( strCustomerId );
-        }
+        ticket.enrich( strIdUserTitle, strFirstname, strLastname, null, strMobilePhoneNumber, strEmail,
+            strCategoryCode, null, null, null, strGuid, strIdCustomer );
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale(  ) ) );
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
@@ -419,7 +369,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
         catch ( Exception e )
         {
-            addError( ERROR_TICKET_CREATION_ABORTED, getLocale(  ) );
+            addError( TicketingConstants.ERROR_TICKET_CREATION_ABORTED, getLocale(  ) );
             AppLogService.error( e );
 
             return redirectView( request, VIEW_MANAGE_TICKETS );
@@ -706,18 +656,15 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
 
         // Check constraints
-        bIsFormValid = validateBean( ticket, VALIDATION_ATTRIBUTES_PREFIX );
+        bIsFormValid = validateBean( ticket, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
 
-        if ( ticket.hasNoPhoneNumberFilled(  ) )
-        {
-            bIsFormValid = false;
-            addError( ERROR_PHONE_NUMBER_MISSING, getLocale(  ) );
-        }
+        TicketValidator validator = TicketValidatorFactory.getInstance(  ).create( request.getLocale(  ) );
+        List<String> listValidationErrors = validator.validate( ticket, false );
 
-        if ( ticket.isInconsistentContactModeWithPhoneNumberFilled(  ) )
+        for ( String error : listValidationErrors )
         {
+            addError( error );
             bIsFormValid = false;
-            addError( ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED, getLocale(  ) );
         }
 
         if ( listFormErrors.size(  ) > 0 )

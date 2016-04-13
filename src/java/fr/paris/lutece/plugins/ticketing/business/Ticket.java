@@ -52,7 +52,6 @@ import java.sql.Timestamp;
 
 import java.text.SimpleDateFormat;
 
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -146,6 +145,93 @@ public class Ticket implements Serializable, RBACResource
     private String _strUrl;
     private int _nIdChannel;
     private String _strChannel;
+
+    /**
+     * Enriches empty ticket attributes with specified values
+     * @param strIdUserTitle the user title id as String
+     * @param strFirstname the first name
+     * @param strLastname the last name
+     * @param strFixedPhoneNumber the fixed phone number
+     * @param strMobilePhoneNumber the mobile phone number
+     * @param strEmail the email
+     * @param strCategoryCode the categoryCode
+     * @param strIdContactMode the contact mode id
+     * @param strIdChannel the channel id
+     * @param strComment the comment
+     * @param strGuid the guid
+     * @param strCustomerId the customer id
+     */
+    public void enrich( String strIdUserTitle, String strFirstname, String strLastname, String strFixedPhoneNumber,
+        String strMobilePhoneNumber, String strEmail, String strCategoryCode, String strIdContactMode,
+        String strIdChannel, String strComment, String strGuid, String strCustomerId )
+    {
+        if ( !StringUtils.isEmpty( strIdUserTitle ) )
+        {
+            setIdUserTitle( Integer.parseInt( strIdUserTitle ) );
+        }
+
+        if ( !StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty( getFirstname(  ) ) )
+        {
+            setFirstname( strFirstname );
+        }
+
+        if ( !StringUtils.isEmpty( strLastname ) && StringUtils.isEmpty( getLastname(  ) ) )
+        {
+            setLastname( strLastname );
+        }
+
+        if ( !StringUtils.isEmpty( strFixedPhoneNumber ) && StringUtils.isEmpty( getFixedPhoneNumber(  ) ) )
+        {
+            setFixedPhoneNumber( strFixedPhoneNumber );
+        }
+
+        if ( !StringUtils.isEmpty( strMobilePhoneNumber ) && StringUtils.isEmpty( getMobilePhoneNumber(  ) ) )
+        {
+            setMobilePhoneNumber( strMobilePhoneNumber );
+        }
+
+        if ( !StringUtils.isEmpty( strEmail ) && StringUtils.isEmpty( getEmail(  ) ) )
+        {
+            setEmail( strEmail );
+        }
+
+        if ( !StringUtils.isEmpty( strCategoryCode ) && ( getIdTicketCategory(  ) == 0 ) )
+        {
+            TicketCategory category = TicketCategoryHome.findByCode( strCategoryCode );
+
+            if ( category != null )
+            {
+                setIdTicketCategory( category.getId(  ) );
+                setIdTicketDomain( category.getIdTicketDomain(  ) );
+                setIdTicketType( category.getIdTicketType(  ) );
+            }
+        }
+
+        if ( !StringUtils.isEmpty( strIdContactMode ) )
+        {
+            setIdContactMode( Integer.parseInt( strIdContactMode ) );
+        }
+
+        if ( !StringUtils.isEmpty( strIdChannel ) )
+        {
+            setIdChannel( Integer.parseInt( strIdChannel ) );
+        }
+
+        if ( !StringUtils.isEmpty( strComment ) && StringUtils.isEmpty( getTicketComment(  ) ) )
+        {
+            setTicketComment( strComment );
+        }
+
+        if ( !StringUtils.isEmpty( strGuid ) && StringUtils.isEmpty( getGuid(  ) ) )
+        {
+            setGuid( strGuid );
+        }
+
+        if ( !StringUtils.isEmpty( strCustomerId ) && StringUtils.isEmpty( getCustomerId(  ) ) )
+        {
+            setCustomerId( strCustomerId );
+        }
+    }
 
     /**
      * Returns the Id

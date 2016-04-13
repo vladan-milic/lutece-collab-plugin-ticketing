@@ -49,6 +49,7 @@ public final class TicketingConstants
     public static final String PARAMETER_ID_TICKET = "id";
     public static final String PARAMETER_GRU_CUSTOMER_ID = "id_customer";
     public static final String PARAMETER_CUSTOMER_ID = "cid";
+    public static final String PARAMETER_GUID = "guid";
     public static final String PARAMETER_WORKFLOW_ID_ACTION = "id_action";
     public static final String PARAMETER_BACK = "back";
     public static final String PARAMETER_JSP_CONTROLLER = "jsp";
@@ -96,6 +97,7 @@ public final class TicketingConstants
     public static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
     private static final String PROPERTY_CHANNEL_ID = "ticketing.channel.webChannel.id";
     public static int WEB_ID_CHANNEL = 99;
+    public static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.ticket.attribute.";
 
     static
     {
@@ -117,6 +119,9 @@ public final class TicketingConstants
 
     // Beans
     public static final String BEAN_ACTION_SERVICE = "workflow.actionService";
+
+    // Errors
+    public static final String ERROR_TICKET_CREATION_ABORTED = "ticketing.error.ticket.creation.aborted.backoffice";
 
     // User preferences
     public static final String USER_PREFERENCE_SIGNATURE = "ticketingUserSignature";

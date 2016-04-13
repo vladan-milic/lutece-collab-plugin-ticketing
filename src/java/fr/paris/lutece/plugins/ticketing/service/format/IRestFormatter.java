@@ -31,30 +31,21 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.web.rs;
+package fr.paris.lutece.plugins.ticketing.service.format;
+
+import java.util.List;
 
 
 /**
- * This class provides constants for REST services
+ * Formatter for REST purpose
  *
  */
-public final class Constants
+public interface IRestFormatter
 {
-    public static final String TICKET_PATH = "ticket/";
-    public static final String TYPE_PATH = "type/";
-    public static final String USER_TITLE_PATH = "usertitle/";
-    public static final String CONTACT_MODE_PATH = "contactmode/";
-    public static final String CHANNEL_PATH = "channel/";
-    public static final String PLUGIN_PATH = "ticketing/";
-    public static final String ID_PATH = "id";
-    public static final String ALL_PATH = "s";
-    public static final String FORMAT_QUERY = "format";
-    public static final String MEDIA_TYPE_JSON = "json";
-
     /**
-     * Default constructor
+     * Formats the errors
+     * @param errors the errors to format
+     * @return the formated message
      */
-    private Constants(  )
-    {
-    }
+    String formatErrors( List<String> errors );
 }

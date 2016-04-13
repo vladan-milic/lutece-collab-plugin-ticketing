@@ -54,6 +54,8 @@ import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableXPage;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
@@ -129,8 +131,6 @@ public class TicketXPage extends WorkflowCapableXPage
     private static final String INFO_TICKET_CREATED = "ticketing.info.ticket.created";
 
     // Errors
-    private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
-    private static final String ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED = "ticketing.error.contactmode.inconsistent";
     private static final String ERROR_TICKET_CREATION_ABORTED = "ticketing.error.ticket.creation.aborted.frontoffice";
 
     // Session keys
@@ -314,15 +314,12 @@ public class TicketXPage extends WorkflowCapableXPage
         // Check constraints
         bIsFormValid = validateBean( ticket );
 
-        if ( ticket.hasNoPhoneNumberFilled(  ) )
-        {
-            addError( ERROR_PHONE_NUMBER_MISSING, getLocale( request ) );
-            bIsFormValid = false;
-        }
+        TicketValidator validator = TicketValidatorFactory.getInstance(  ).create( request.getLocale(  ) );
+        List<String> listValidationErrors = validator.validate( ticket, false );
 
-        if ( ticket.isInconsistentContactModeWithPhoneNumberFilled(  ) )
+        for ( String error : listValidationErrors )
         {
-            addError( ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED, getLocale( request ) );
+            addError( error );
             bIsFormValid = false;
         }
 

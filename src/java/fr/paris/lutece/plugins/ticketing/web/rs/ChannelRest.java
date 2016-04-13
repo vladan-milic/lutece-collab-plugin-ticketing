@@ -33,28 +33,48 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
+import fr.paris.lutece.plugins.rest.service.RestConstants;
+import fr.paris.lutece.plugins.ticketing.business.Channel;
+import fr.paris.lutece.plugins.ticketing.business.ChannelHome;
+import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
+
+import java.util.List;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
+
 
 /**
- * This class provides constants for REST services
+ * REST service for channel resource
  *
  */
-public final class Constants
+@Path( RestConstants.BASE_PATH + Constants.PLUGIN_PATH + Constants.CHANNEL_PATH )
+public class ChannelRest extends TicketingRest
 {
-    public static final String TICKET_PATH = "ticket/";
-    public static final String TYPE_PATH = "type/";
-    public static final String USER_TITLE_PATH = "usertitle/";
-    public static final String CONTACT_MODE_PATH = "contactmode/";
-    public static final String CHANNEL_PATH = "channel/";
-    public static final String PLUGIN_PATH = "ticketing/";
-    public static final String ID_PATH = "id";
-    public static final String ALL_PATH = "s";
-    public static final String FORMAT_QUERY = "format";
-    public static final String MEDIA_TYPE_JSON = "json";
-
     /**
-     * Default constructor
+     * Gives the channels
+     * @param accept the accepted format
+     * @param format the format
+     * @return the list of channels
      */
-    private Constants(  )
+    @GET
+    @Path( Constants.ALL_PATH )
+    public Response getChannels( @HeaderParam( HttpHeaders.ACCEPT )
+    String accept, @QueryParam( Constants.FORMAT_QUERY )
+    String format )
     {
+        String strMediaType = getMediaType( accept, format );
+
+        IFormatterFactory formatterFactory = _formatterFactories.get( strMediaType );
+
+        List<Channel> listUserTitles = ChannelHome.getChannelList(  );
+
+        String strResponse = formatterFactory.createFormatter( Channel.class ).format( listUserTitles );
+
+        return Response.ok( strResponse, strMediaType ).build(  );
     }
 }

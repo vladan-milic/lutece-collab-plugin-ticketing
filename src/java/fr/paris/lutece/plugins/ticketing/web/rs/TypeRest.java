@@ -33,28 +33,47 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
+import fr.paris.lutece.plugins.rest.service.RestConstants;
+import fr.paris.lutece.plugins.ticketing.business.TicketType;
+import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
+import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
+
+import java.util.List;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
+
 
 /**
- * This class provides constants for REST services
- *
+ * REST service for ticket type resource
  */
-public final class Constants
+@Path( RestConstants.BASE_PATH + Constants.PLUGIN_PATH + Constants.TYPE_PATH )
+public class TypeRest extends TicketingRest
 {
-    public static final String TICKET_PATH = "ticket/";
-    public static final String TYPE_PATH = "type/";
-    public static final String USER_TITLE_PATH = "usertitle/";
-    public static final String CONTACT_MODE_PATH = "contactmode/";
-    public static final String CHANNEL_PATH = "channel/";
-    public static final String PLUGIN_PATH = "ticketing/";
-    public static final String ID_PATH = "id";
-    public static final String ALL_PATH = "s";
-    public static final String FORMAT_QUERY = "format";
-    public static final String MEDIA_TYPE_JSON = "json";
-
     /**
-     * Default constructor
+     * Gives the ticket types
+     * @param accept the accepted format
+     * @param format the format
+     * @return the list of ticket types
      */
-    private Constants(  )
+    @GET
+    @Path( Constants.ALL_PATH )
+    public Response getTypes( @HeaderParam( HttpHeaders.ACCEPT )
+    String accept, @QueryParam( Constants.FORMAT_QUERY )
+    String format )
     {
+        String strMediaType = getMediaType( accept, format );
+
+        IFormatterFactory formatterFactory = _formatterFactories.get( strMediaType );
+
+        List<TicketType> listTicketTypes = TicketTypeHome.getTicketTypesList(  );
+
+        String strResponse = formatterFactory.createFormatter( TicketType.class ).format( listTicketTypes );
+
+        return Response.ok( strResponse, strMediaType ).build(  );
     }
 }

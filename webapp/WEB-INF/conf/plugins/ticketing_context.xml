@@ -6,7 +6,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd" >
 
     <bean id="ticketing.ticketRest"  class="fr.paris.lutece.plugins.ticketing.web.rs.TicketRest" />
-    <bean id="ticketing.categories"  class="fr.paris.lutece.plugins.ticketing.web.rs.CategoriesRest" />
+    <bean id="ticketing.typeRest"  class="fr.paris.lutece.plugins.ticketing.web.rs.TypeRest" />
+    <bean id="ticketing.channelRest"  class="fr.paris.lutece.plugins.ticketing.web.rs.ChannelRest" />
+    <bean id="ticketing.contactModeRest"  class="fr.paris.lutece.plugins.ticketing.web.rs.ContactModeRest" />
+    <bean id="ticketing.userTitleRest"  class="fr.paris.lutece.plugins.ticketing.web.rs.UserTitleRest" />
 
     <!-- DAO -->
     <bean id="ticketing.ticketDAO"  class="fr.paris.lutece.plugins.ticketing.business.TicketDAO" />  

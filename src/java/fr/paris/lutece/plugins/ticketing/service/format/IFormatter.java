@@ -31,30 +31,20 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.web.rs;
+package fr.paris.lutece.plugins.ticketing.service.format;
 
 
 /**
- * This class provides constants for REST services
+ * Interface to format a REST response
  *
+ * @param <T> the resource used to format the REST response
  */
-public final class Constants
+public interface IFormatter<T> extends fr.paris.lutece.plugins.rest.service.formatters.IFormatter<T>
 {
-    public static final String TICKET_PATH = "ticket/";
-    public static final String TYPE_PATH = "type/";
-    public static final String USER_TITLE_PATH = "usertitle/";
-    public static final String CONTACT_MODE_PATH = "contactmode/";
-    public static final String CHANNEL_PATH = "channel/";
-    public static final String PLUGIN_PATH = "ticketing/";
-    public static final String ID_PATH = "id";
-    public static final String ALL_PATH = "s";
-    public static final String FORMAT_QUERY = "format";
-    public static final String MEDIA_TYPE_JSON = "json";
-
     /**
-     * Default constructor
+     * Formats the REST response by using the specified resource
+     * @param object the resource
+     * @return the formatting REST response
      */
-    private Constants(  )
-    {
-    }
+    String formatResponse( T object );
 }
