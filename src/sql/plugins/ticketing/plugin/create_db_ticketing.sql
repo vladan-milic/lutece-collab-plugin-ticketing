@@ -44,6 +44,7 @@ CREATE TABLE ticketing_ticket_type (
 id_ticket_type int(6) NOT NULL,
 label varchar(50) NOT NULL default '',
 reference_prefix varchar(3) NOT NULL,
+inactive int(1)  NOT NULL default '0',
 PRIMARY KEY (id_ticket_type)
 );
 
@@ -56,6 +57,7 @@ CREATE TABLE ticketing_ticket_domain (
 id_ticket_domain int(6) NOT NULL,
 id_ticket_type int(11) NOT NULL default '0',
 label varchar(50) NOT NULL default '',
+inactive int(1)  NOT NULL default '0',
 PRIMARY KEY (id_ticket_domain)
 );
 
@@ -72,6 +74,7 @@ id_workflow INT NOT NULL default '0',
 id_ticket_form int(6) NOT NULL default '0',
 category_code varchar(50) NULL,
 id_unit int(6) NOT NULL default '0',
+inactive int(1)  NOT NULL default '0',
 PRIMARY KEY (id_ticket_category)
 );
 
@@ -83,6 +86,7 @@ DROP TABLE IF EXISTS ticketing_user_title;
 CREATE TABLE ticketing_user_title (
 id_user_title int(6) NOT NULL,
 label varchar(50) NOT NULL default '',
+inactive int(1)  NOT NULL default '0',
 PRIMARY KEY (id_user_title)
 );
 
@@ -120,6 +124,7 @@ CREATE TABLE ticketing_contact_mode (
 id_contact_mode int(6) NOT NULL,
 label varchar(50) NOT NULL default '',
 confirmation_msg long varchar NULL,
+inactive int(1)  NOT NULL default '0',
 PRIMARY KEY (id_contact_mode)
 );
 
@@ -162,6 +167,7 @@ CREATE TABLE ticketing_channel (
 id_channel int(6) NOT NULL,
 label varchar(50) NOT NULL default '',
 icon_font varchar(50) NULL default '',
+inactive int(1)  NOT NULL default '0',
 PRIMARY KEY (id_channel)
 );
 

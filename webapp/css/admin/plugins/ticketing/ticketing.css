@@ -46,6 +46,34 @@
 #filter-ticket span{ text-transform: uppercase }
 #filter-ticket select{ height:22px; font-weight:normal; padding: 1px 20px 0 2px; margin:0; background: #FFF; color:#000; border: 1px solid "000";border-radius: 3px; outline:none; display: inline-block; -webkit-appearance:none; -moz-appearance:none; appearance:none; cursor:pointer }
 
+/* multiselect state */
+#filter-ticket .multiselect-selected-text {
+	text-transform: none;
+	color: #000;
+	background-color: #FFFFFF ;
+	border-color: #000;
+    cursor: pointer;
+}
+
+#filter-ticket .caret {
+	color: #000 ;
+}
+
+#filter-ticket .btn-default  {
+	background-color: #FFFFFF ;
+	padding: 0px 1px;
+    border-bottom-width: 0px;
+	font-size: 12px;	
+}
+#filter-ticket div .btn-group  {
+	border-color: #000;
+    border-style: solid;
+    border-width: 1px;
+	border-radius: 3px;
+	padding-bottom: 3px;
+}
+
+
 #instant-response tr td strong.lead{ font-size: 4rem; font-weight: bold  }
 #instant-response tr td:first-of-type{ width: 15rem }
 #instant-response tr td:nth-of-type(2){ width: 30rem }
@@ -89,7 +117,7 @@
   #head-ticketing{ height: auto; padding:0 5%; margin-bottom: 15px }
 
   #demand-panel.tickets .tab-content td:nth-of-type(1):before { content: "Reference"; }
-  #demand-panel.tickets .tab-content td:nth-of-type(2):before { content: "CrÃ©Ã©e le"; }
+  #demand-panel.tickets .tab-content td:nth-of-type(2):before { content: "Créée le"; }
   #demand-panel.tickets .tab-content td:nth-of-type(3):before { content: "Nature"; }
   #demand-panel.tickets .tab-content td:nth-of-type(4):before { content: "Usager / Objet"; }
   #demand-panel.tickets .tab-content td:nth-of-type(5):before { content: "Etat"; }
@@ -105,10 +133,10 @@
   #instant-response td .detail{ width: auto !important }
   #instant-response td:before { /* Now like a table header */	position: absolute;	/* Top/left values mimic padding */	top: 6px;	left: 6px;	width: 45%; padding-right: 10px; 	white-space: nowrap	}
   /*	Label the data*/
-  #instant-response td:nth-of-type(1):before { content: "CrÃ©Ã©e le"; }
-  #instant-response td:nth-of-type(2):before { content: "ProblÃ©matique"; }
-  #instant-response td:nth-of-type(3):before { content: "DÃ©tail"; }
-  #instant-response td:nth-of-type(4):before { content: "EntitÃ©/Agent"; }
+  #instant-response td:nth-of-type(1):before { content: "Créée le"; }
+  #instant-response td:nth-of-type(2):before { content: "Problématique"; }
+  #instant-response td:nth-of-type(3):before { content: "Détail"; }
+  #instant-response td:nth-of-type(4):before { content: "Entité/Agent"; }
 
 
 }

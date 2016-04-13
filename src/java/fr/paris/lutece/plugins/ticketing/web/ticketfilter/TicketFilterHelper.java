@@ -38,8 +38,13 @@ import fr.paris.lutece.plugins.ticketing.business.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
+import fr.paris.lutece.plugins.workflowcore.business.state.State;
+import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.portal.service.workflow.WorkflowService;
+import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
 import org.apache.commons.lang.StringUtils;
@@ -47,8 +52,11 @@ import org.apache.commons.lang.StringUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -88,17 +96,22 @@ public final class TicketFilterHelper
     private static final String PARAMETER_FILTER_REFERENCE = "fltr_reference";
     private static final String PARAMETER_FILTER_ORDER_SORT = "fltr_order_sort";
     private static final String PARAMETER_FILTER_SUBMITTED_FORM = "submitted_form";
+    private static final String PARAMETER_FILTER_WORKFLOW_STATE_IDS = "fltr_state_ids";
 
     //Marks
     private static final String MARK_FULL_DOMAIN_LIST = "domain_list";
     private static final String MARK_FULL_TYPE_LIST = "type_list";
     private static final String MARK_FILTER_PERIOD_LIST = "period_list";
     private static final String MARK_TICKET_FILTER = "ticket_filter";
+    private static final String MARK_FULL_STATE_LIST = "state_list";
     private static final String DATE_FILTER_PATTERN = "yyyyMMdd";
 
     // Properties for page titles
     private static final String PROPERTY_TICKET_TYPE_LABEL = "ticketing.model.entity.ticket.attribute.ticketType";
     private static final String PROPERTY_TICKET_DOMAIN_LABEL = "ticketing.model.entity.ticket.attribute.ticketDomain";
+    private static final String PROPERTY_TICKET_STATE_FILTERED_DEFAULT_IDS = "ticketing.workflow.state.filter.default.selected.ids";
+    private static final String PROPERTY_TICKET_STATE_FILTER_IGNORE_IDS = "ticketing.workflow.state.filter.ignore.ids";
+    private static final String NO_SELECTED_FIELD_ID = "-1";
 
     /**
      * private constructor
@@ -119,8 +132,17 @@ public final class TicketFilterHelper
     public static TicketFilter getFilterFromRequest( HttpServletRequest request )
     {
         TicketFilter fltrFiltre = new TicketFilter(  );
-        //by default search is only made on opened ticket
-        fltrFiltre.setStatus( String.valueOf( TicketingConstants.TICKET_STATUS_IN_PROGRESS ) );
+
+        if ( ( request.getParameterValues( PARAMETER_FILTER_WORKFLOW_STATE_IDS ) != null ) &&
+                ( request.getParameterValues( PARAMETER_FILTER_WORKFLOW_STATE_IDS ).length > 0 ) )
+        {
+            fltrFiltre.setListIdWorkflowState( request.getParameterValues( PARAMETER_FILTER_WORKFLOW_STATE_IDS ) );
+        }
+        else
+        {
+            //no state selected => we put a dummy one
+            fltrFiltre.setListIdWorkflowState( new String[] { NO_SELECTED_FIELD_ID } );
+        }
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_DOMAIN ) ) &&
                 StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_DOMAIN ) ) )
@@ -200,11 +222,6 @@ public final class TicketFilterHelper
             fltrFiltre.setCloseDate( getDateFromString( request.getParameter( PARAMETER_FILTER_CLOSE_DATE ) ) );
         }
 
-        if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_STATUS ) ) )
-        {
-            fltrFiltre.setStatus( request.getParameter( PARAMETER_FILTER_STATUS ) );
-        }
-
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_EMAIL ) ) )
         {
             fltrFiltre.setEmail( request.getParameter( PARAMETER_FILTER_EMAIL ) );
@@ -264,10 +281,6 @@ public final class TicketFilterHelper
                 date = cal.getTime(  );
                 fltrFiltre.setCreationStartDate( date );
             }
-            else if ( nPeriodId == TicketFilterPeriod.CLOSED.getId(  ) )
-            {
-                fltrFiltre.setStatus( String.valueOf( TicketingConstants.TICKET_STATUS_CLOSED ) );
-            }
         }
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_URGENCY ) ) )
@@ -301,10 +314,12 @@ public final class TicketFilterHelper
             }
             else
             {
+                //set default value
                 filter = new TicketFilter(  );
                 filter.setOrderBy( TicketFilter.CONSTANT_DEFAULT_ORDER_BY );
                 filter.setOrderSort( TicketFilter.getDefaultOrderSort(  ) );
-                filter.setStatus( String.valueOf( TicketingConstants.TICKET_STATUS_IN_PROGRESS ) );
+                filter.setListIdWorkflowState( AppPropertiesService.getProperty( 
+                        PROPERTY_TICKET_STATE_FILTERED_DEFAULT_IDS ).split( TicketingConstants.FIELD_ID_SEPARATOR ) );
                 request.getSession(  ).setAttribute( TicketingConstants.SESSION_TICKET_FILTER, filter );
             }
         }
@@ -322,8 +337,10 @@ public final class TicketFilterHelper
      * @param mapModel model to update
      * @param fltrFilter filter attribute to set to model
      * @param request http request
+     * @param user current admin user
      */
-    public static void setModel( Map<String, Object> mapModel, TicketFilter fltrFilter, HttpServletRequest request )
+    public static void setModel( Map<String, Object> mapModel, TicketFilter fltrFilter, HttpServletRequest request,
+        AdminUser user )
     {
         mapModel.put( MARK_FILTER_PERIOD_LIST, TicketFilterPeriod.getReferenceList( request.getLocale(  ) ) );
 
@@ -340,9 +357,47 @@ public final class TicketFilterHelper
             refListDomains.addAll( TicketDomainHome.getReferenceListByType( fltrFilter.getIdType(  ) ) );
         }
 
+        ReferenceList refListStates = new ReferenceList(  );
+        refListStates.addAll( getWorkflowStates( user, fltrFilter.getListIdWorkflowState(  ) ) );
+
         mapModel.put( MARK_TICKET_FILTER, fltrFilter );
         mapModel.put( MARK_FULL_TYPE_LIST, refListTypes );
         mapModel.put( MARK_FULL_DOMAIN_LIST, refListDomains );
+        mapModel.put( MARK_FULL_STATE_LIST, refListStates );
+    }
+
+    /**
+     * returns workflow states for filtering
+     * @param user admin user
+     * @param listSelectedStates list of states selected by user
+     * @return ReferenceList filled with all states
+     */
+    public static ReferenceList getWorkflowStates( AdminUser user, List<Integer> listSelectedStates )
+    {
+        ReferenceList refList = new ReferenceList(  );
+        Collection<State> collState = WorkflowService.getInstance(  )
+                                                     .getAllStateByWorkflow( AppPropertiesService.getPropertyInt( 
+                    TicketingConstants.PROPERTY_TICKET_WORKFLOW_ID, -1 ), user );
+
+        //id of states to ignore 
+        List<String> listIdStatesIgnored = Arrays.asList( AppPropertiesService.getProperty( 
+                    PROPERTY_TICKET_STATE_FILTER_IGNORE_IDS )
+                                                                              .split( "\\s*" +
+                    TicketingConstants.FIELD_ID_SEPARATOR + "\\s*" ) );
+
+        for ( State state : collState )
+        {
+            if ( !listIdStatesIgnored.contains( String.valueOf( state.getId(  ) ) ) )
+            {
+                ReferenceItem item = new ReferenceItem(  );
+                item.setCode( String.valueOf( state.getId(  ) ) );
+                item.setName( state.getName(  ) );
+                item.setChecked( listSelectedStates.contains( new Integer( state.getId(  ) ) ) );
+                refList.add( item );
+            }
+        }
+
+        return refList;
     }
 
     /**

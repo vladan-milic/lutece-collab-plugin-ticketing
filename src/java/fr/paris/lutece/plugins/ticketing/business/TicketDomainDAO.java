@@ -49,14 +49,15 @@ public final class TicketDomainDAO implements ITicketDomainDAO
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket_domain ) FROM ticketing_ticket_domain";
     private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label FROM ticketing_ticket_domain a, ticketing_ticket_type b " +
-        " WHERE a.id_ticket_domain = ? AND a.id_ticket_type = b.id_ticket_type";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_domain ( id_ticket_domain, id_ticket_type, label ) VALUES ( ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_ticket_domain WHERE id_ticket_domain = ? ";
+        " WHERE a.id_ticket_domain = ? AND a.id_ticket_type = b.id_ticket_type ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_domain ( id_ticket_domain, id_ticket_type, label, inactive ) VALUES ( ?, ?, ?, 0 ) ";
+    private static final String SQL_QUERY_DELETE = "UPDATE ticketing_ticket_domain SET inactive = 1 WHERE id_ticket_domain = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_domain SET id_ticket_domain = ?, id_ticket_type = ?, label = ? WHERE id_ticket_domain = ?";
     private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label FROM ticketing_ticket_domain a, ticketing_ticket_type b " +
-        " WHERE a.id_ticket_type = b.id_ticket_type";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_domain FROM ticketing_ticket_domain";
-    private static final String SQL_QUERY_SELECT_BY_TYPE = "SELECT id_ticket_domain , label FROM ticketing_ticket_domain WHERE id_ticket_type = ?";
+        " WHERE a.id_ticket_type = b.id_ticket_type  AND a.inactive <> 1 AND b.inactive <> 1 ";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_domain FROM ticketing_ticket_domain  AND inactive <> 1 ";
+    private static final String SQL_QUERY_SELECT_BY_TYPE = "SELECT id_ticket_domain , label FROM ticketing_ticket_domain WHERE id_ticket_type = ?  AND inactive <> 1 ";
+    private static final String SQL_QUERY_COUNT_CATEGORY_BY_DOMAIN = "SELECT COUNT(1) FROM ticketing_ticket_category WHERE id_ticket_domain = ? AND inactive <> 1 ";
 
     /**
      * Generates a new primary key
@@ -122,6 +123,30 @@ public final class TicketDomainDAO implements ITicketDomainDAO
         daoUtil.free(  );
 
         return ticketDomain;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public boolean canRemoveDomain( int nKey, Plugin plugin )
+    {
+        boolean bResult = false;
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_CATEGORY_BY_DOMAIN, plugin );
+        daoUtil.setInt( 1, nKey );
+        daoUtil.executeQuery(  );
+
+        if ( daoUtil.next(  ) )
+        {
+            if ( daoUtil.getInt( 1 ) == 0 )
+            {
+                bResult = true;
+            }
+        }
+
+        daoUtil.free(  );
+
+        return bResult;
     }
 
     /**

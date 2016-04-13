@@ -47,8 +47,7 @@ public enum TicketFilterPeriod
 {NONE( 0 ),
     DAY( 1 ),
     WEEK( 2 ),
-    MONTH( 3 ),
-    CLOSED( 4 );
+    MONTH( 3 );
 
     private static final String MESSAGE_PREFIX = "ticketing.period.";
     private int _nId;

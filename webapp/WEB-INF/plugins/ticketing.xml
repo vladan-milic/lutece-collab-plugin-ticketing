@@ -74,10 +74,11 @@
             <application-id>ticket</application-id>
             <application-class>fr.paris.lutece.plugins.ticketing.web.TicketXPage</application-class>
         </application>
-        <application>
+        <!-- ticket view xpage temporarly removed for security purpose
+         <application>
             <application-id>ticketView</application-id>
             <application-class>fr.paris.lutece.plugins.ticketing.web.TicketViewXPage</application-class>
-        </application>
+        </application> -->
         <application>
             <application-id>ticketSearch</application-id>
             <application-class>fr.paris.lutece.plugins.ticketing.web.search.TicketSearchXPage</application-class>

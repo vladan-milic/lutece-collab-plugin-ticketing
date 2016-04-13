@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.ticketing.business;
 
 import fr.paris.lutece.plugins.ticketing.business.OrderByFilter.OrderSortAllowed;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -49,6 +50,7 @@ import java.sql.Timestamp;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -105,9 +107,14 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_FILTER_MOBILE_PHONE_NUMBER = " AND a.mobile_phone_number = ? ";
     private static final String SQL_FILTER_CLOSE_DATE = " AND a.date_close <= ? AND a.date_close < ? ";
     private static final String SQL_FILTER_URGENCY = " AND ( ( a.priority = ? AND a.criticality <= a.priority)  OR ( a.criticality = ? AND a.priority  <= a.criticality) )";
+    private static final String SQL_FILTER_ID_SINGLE_STATE = " AND j.id_state = ? ";
+    private static final String SQL_FILTER_ID_MULTIPLE_STATES_START = " AND ( ";
+    private static final String SQL_FILTER_ID_STATE = " j.id_state = ? ";
+    private static final String SQL_FILTER_ID_MULTIPLE_STATES_END = " ) ";
     private static final String CONSTANT_ASC = " ASC";
     private static final String CONSTANT_DESC = " DESC";
     private static final String CONSTANT_ORDER_BY = " ORDER BY ";
+    private static final String CONSTANT_OR = " OR ";
     private static final String SQL_SELECT_ALL_WORKFLOW_JOIN_CLAUSE = " LEFT JOIN  workflow_resource_workflow i ON i.id_resource=a.id_ticket" +
         " LEFT JOIN workflow_state j ON j.id_state=i.id_state";
     private static final String SQL_SELECT_ALL_WORKFLOW_WHERE_CLAUSE = " AND i.resource_type='" + TICKET_RESOURCE_TYPE +
@@ -618,6 +625,32 @@ public final class TicketDAO implements ITicketDAO
         sbSQL.append( filter.containsCloseDate(  ) ? SQL_FILTER_CLOSE_DATE : StringUtils.EMPTY );
         sbSQL.append( filter.containsUrgency(  ) ? SQL_FILTER_URGENCY : StringUtils.EMPTY );
 
+        if ( filter.containsListIdWorkflowState(  ) )
+        {
+            if ( filter.getListIdWorkflowState(  ).size(  ) == 1 )
+            {
+                sbSQL.append( SQL_FILTER_ID_SINGLE_STATE );
+            }
+            else
+            {
+                sbSQL.append( SQL_FILTER_ID_MULTIPLE_STATES_START );
+
+                for ( Iterator<Integer> iterator = filter.getListIdWorkflowState(  ).iterator(  );
+                        iterator.hasNext(  ); )
+                {
+                    iterator.next(  );
+                    sbSQL.append( SQL_FILTER_ID_STATE );
+
+                    if ( iterator.hasNext(  ) )
+                    {
+                        sbSQL.append( CONSTANT_OR );
+                    }
+                }
+
+                sbSQL.append( SQL_FILTER_ID_MULTIPLE_STATES_END );
+            }
+        }
+
         if ( filter.containsOrderBy(  ) )
         {
             sbSQL.append( CONSTANT_ORDER_BY );
@@ -750,6 +783,14 @@ public final class TicketDAO implements ITicketDAO
         {
             daoUtil.setInt( nIndex++, filter.getUrgency(  ) );
             daoUtil.setInt( nIndex++, filter.getUrgency(  ) );
+        }
+
+        if ( filter.containsListIdWorkflowState(  ) )
+        {
+            for ( Integer nId : filter.getListIdWorkflowState(  ) )
+            {
+                daoUtil.setInt( nIndex++, nId );
+            }
         }
     }
 

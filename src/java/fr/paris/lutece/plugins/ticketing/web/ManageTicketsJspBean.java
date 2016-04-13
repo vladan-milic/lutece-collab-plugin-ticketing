@@ -56,6 +56,7 @@ import fr.paris.lutece.plugins.ticketing.business.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
+import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
@@ -66,12 +67,14 @@ import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
@@ -185,6 +188,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @View( value = VIEW_MANAGE_TICKETS, defaultView = true )
     public String getManageTickets( HttpServletRequest request )
     {
+        //Check user rights
+        if ( !RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_VIEW, getUser(  ) ) )
+        {
+            return redirect( request,
+                AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+        }
+
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
         TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
 
@@ -252,7 +262,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_NB_TICKET_DOMAIN, listDomainTickets.size(  ) );
         model.put( MARK_SELECTED_TAB, strSelectedTab );
         model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
-        TicketFilterHelper.setModel( model, filter, request );
+        TicketFilterHelper.setModel( model, filter, request, getUser(  ) );
         ModelUtils.storeTicketRights( model, getUser(  ) );
 
         String messageInfo = TicketUtils.getParameter( request,
@@ -301,6 +311,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @View( VIEW_CREATE_TICKET )
     public String getCreateTicket( HttpServletRequest request )
     {
+        //Check user rights
+        if ( !RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_CREATE, getUser(  ) ) )
+        {
+            return redirect( request,
+                AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+        }
+
         clearUploadFilesIfNeeded( request.getSession(  ) );
 
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
@@ -351,6 +368,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @Action( ACTION_CREATE_TICKET )
     public String doCreateTicket( HttpServletRequest request )
     {
+        //Check user rights
+        if ( !RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_CREATE, getUser(  ) ) )
+        {
+            return redirect( request,
+                AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+        }
+
         try
         {
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
@@ -407,6 +431,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @Action( ACTION_CONFIRM_REMOVE_TICKET )
     public String getConfirmRemoveTicket( HttpServletRequest request )
     {
+        //Check user rights
+        if ( !RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_DELETE, getUser(  ) ) )
+        {
+            return redirect( request,
+                AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+        }
+
         int nId = Integer.parseInt( request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ) );
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_TICKET ) );
         url.addParameter( TicketingConstants.PARAMETER_ID_TICKET, nId );
@@ -426,6 +457,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @Action( ACTION_REMOVE_TICKET )
     public String doRemoveTicket( HttpServletRequest request )
     {
+        //Check user rights
+        if ( !RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_DELETE, getUser(  ) ) )
+        {
+            return redirect( request,
+                AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+        }
+
         int nId = Integer.parseInt( request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ) );
 
         doRemoveWorkFlowResource( nId );
@@ -446,6 +484,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @View( VIEW_TICKET_FORM )
     public String getTicketForm( HttpServletRequest request )
     {
+        //Check user rights
+        if ( !RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_VIEW, getUser(  ) ) )
+        {
+            return redirect( request,
+                AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+        }
+
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
 
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
@@ -473,6 +518,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @View( VIEW_MODIFY_TICKET )
     public String getModifyTicket( HttpServletRequest request )
     {
+        //Check user rights
+        if ( !RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
+        {
+            return redirect( request,
+                AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+        }
+
         clearUploadFilesIfNeeded( request.getSession(  ) );
 
         int nId = Integer.parseInt( request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ) );
@@ -520,6 +572,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @Action( ACTION_MODIFY_TICKET )
     public String doModifyTicket( HttpServletRequest request )
     {
+        //Check user rights
+        if ( !RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_MODIFY, getUser(  ) ) )
+        {
+            return redirect( request,
+                AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+        }
+
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
 
         boolean bIsFormValid = populateAndValidateFormTicket( ticket, request );
@@ -558,6 +617,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @View( VIEW_RECAP_TICKET )
     public String getRecapTicket( HttpServletRequest request )
     {
+        //Check user rights
+        if ( !RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_CREATE, getUser(  ) ) )
+        {
+            return redirect( request,
+                AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+        }
+
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
         List<ResponseRecap> listResponseRecap = _ticketFormService.getListResponseRecap( ticket.getListResponse(  ) );
 
@@ -578,6 +644,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @Action( ACTION_RECAP_TICKET )
     public String doRecapTicket( HttpServletRequest request )
     {
+        //Check user rights
+        if ( !RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_CREATE, getUser(  ) ) )
+        {
+            return redirect( request,
+                AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+        }
+
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
         ticket = ( ticket != null ) ? ticket : new Ticket(  );
 

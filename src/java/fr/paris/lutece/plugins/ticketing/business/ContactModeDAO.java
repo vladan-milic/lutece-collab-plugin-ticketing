@@ -50,12 +50,12 @@ public final class ContactModeDAO implements IContactModeDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_contact_mode ) FROM ticketing_contact_mode";
-    private static final String SQL_QUERY_SELECT = "SELECT id_contact_mode, label, confirmation_msg FROM ticketing_contact_mode WHERE id_contact_mode = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_contact_mode ( id_contact_mode, label, confirmation_msg ) VALUES ( ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_contact_mode WHERE id_contact_mode = ? ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_contact_mode, label, confirmation_msg FROM ticketing_contact_mode WHERE id_contact_mode = ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_contact_mode ( id_contact_mode, label, confirmation_msg, inactive ) VALUES ( ?, ?, ?, 0 ) ";
+    private static final String SQL_QUERY_DELETE = "UPDATE ticketing_contact_mode SET inactive = 1 WHERE id_contact_mode = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_contact_mode SET id_contact_mode = ?, label = ?, confirmation_msg = ? WHERE id_contact_mode = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_contact_mode, label, confirmation_msg FROM ticketing_contact_mode";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_contact_mode FROM ticketing_contact_mode";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_contact_mode, label, confirmation_msg FROM ticketing_contact_mode WHERE inactive <> 1 ";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_contact_mode FROM ticketing_contact_mode WHERE inactive <> 1 ";
 
     /**
      * Generates a new primary key

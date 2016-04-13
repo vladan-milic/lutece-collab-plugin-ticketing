@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.ticketing.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
@@ -81,7 +82,24 @@ public final class TicketTypeHome
      */
     public static void remove( int nKey )
     {
-        _dao.delete( nKey, _plugin );
+        if ( canRemove( nKey ) )
+        {
+            _dao.delete( nKey, _plugin );
+        }
+        else
+        {
+            throw new AppException( "TicketType cannot be removed for ID :" + nKey );
+        }
+    }
+
+    /**
+     * return true if type can be removed false otherwise
+     * @param nKey The ticketType Id
+     * @return true if type can be removed false otherwise
+     */
+    public static boolean canRemove( int nKey )
+    {
+        return _dao.canRemoveType( nKey, _plugin );
     }
 
     ///////////////////////////////////////////////////////////////////////////

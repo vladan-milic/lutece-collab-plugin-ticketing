@@ -36,11 +36,15 @@ package fr.paris.lutece.plugins.ticketing.web;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.TicketTypeHome;
+import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
+import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.util.url.UrlItem;
 
 import java.util.List;
@@ -97,6 +101,9 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     private static final String INFO_TICKETDOMAIN_UPDATED = "ticketing.info.ticketdomain.updated";
     private static final String INFO_TICKETDOMAIN_REMOVED = "ticketing.info.ticketdomain.removed";
     private static final long serialVersionUID = 1L;
+
+    //Messages
+    private static final String MESSAGE_CAN_NOT_REMOVE_DOMAIN_CATEGORIES_ARE_ASSOCIATE = "ticketing.message.canNotRemoveDomainCategoriesAreAssociate";
 
     // Session variable to store working values
     private TicketDomain _ticketdomain;
@@ -170,6 +177,14 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     public String getConfirmRemoveTicketDomain( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETDOMAIN ) );
+
+        if ( !TicketDomainHome.canRemove( nId ) )
+        {
+            return redirect( request,
+                AdminMessageService.getMessageUrl( request, MESSAGE_CAN_NOT_REMOVE_DOMAIN_CATEGORIES_ARE_ASSOCIATE,
+                    AdminMessage.TYPE_STOP ) );
+        }
+
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_TICKETDOMAIN ) );
         url.addParameter( PARAMETER_ID_TICKETDOMAIN, nId );
 
