@@ -61,9 +61,12 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_CONTACTMODES = "/admin/plugins/ticketing/admin/manage_contact_modes.html";
-    private static final String TEMPLATE_CREATE_CONTACTMODE = "/admin/plugins/ticketing/admin/create_contact_mode.html";
-    private static final String TEMPLATE_MODIFY_CONTACTMODE = "/admin/plugins/ticketing/admin/modify_contact_mode.html";
+    private static final String TEMPLATE_MANAGE_CONTACTMODES = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "manage_contact_modes.html";
+    private static final String TEMPLATE_CREATE_CONTACTMODE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "create_contact_mode.html";
+    private static final String TEMPLATE_MODIFY_CONTACTMODE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "modify_contact_mode.html";
 
     // Parameters
     private static final String PARAMETER_ID_CONTACTMODE = "id";
@@ -76,7 +79,8 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     // Markers
     private static final String MARK_CONTACTMODE_LIST = "contactmode_list";
     private static final String MARK_CONTACTMODE = "contactmode";
-    private static final String JSP_MANAGE_CONTACTMODES = "jsp/admin/plugins/ticketing/admin/ManageContactModes.jsp";
+    private static final String JSP_MANAGE_CONTACTMODES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
+        "ManageContactModes.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_CONTACTMODE = "ticketing.message.confirmRemoveContactMode";

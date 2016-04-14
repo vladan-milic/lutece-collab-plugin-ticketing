@@ -47,16 +47,17 @@ public final class TicketFormDAO implements ITicketFormDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_form ) FROM ticketing_ticket_form";
-    private static final String SQL_QUERY_SELECT_COLUMNS = "SELECT form.id_form, form.title, form.description, cat.id_ticket_category, cat.label FROM ticketing_ticket_form AS form " +
-        " LEFT JOIN ticketing_ticket_category AS cat ON cat.id_ticket_form = form.id_form ";
-    private static final String SQL_QUERY_SELECTALL = SQL_QUERY_SELECT_COLUMNS + " ORDER BY title";
-    private static final String SQL_QUERY_SELECT = SQL_QUERY_SELECT_COLUMNS + " WHERE id_form = ?";
+    private static final String SQL_QUERY_SELECT_COLUMNS = "SELECT a.id_form, a.title, a.description, b.id_ticket_category, b.label FROM ticketing_ticket_form AS a " +
+        " LEFT JOIN ticketing_ticket_category AS b ON b.id_ticket_form = a.id_form ";
+    private static final String SQL_QUERY_SELECTALL = SQL_QUERY_SELECT_COLUMNS +
+        "WHERE a.inactive <> 1 ORDER BY title";
+    private static final String SQL_QUERY_SELECT = SQL_QUERY_SELECT_COLUMNS + " WHERE a.id_form = ?";
     private static final String SQL_QUERY_SELECT_WITHOUT_CATEGORY = SQL_QUERY_SELECT_COLUMNS +
-        " WHERE form.id_form NOT IN  (SELECT id_ticket_form from ticketing_ticket_category where id_ticket_form > 0)";
+        " WHERE a.id_form NOT IN  (SELECT c.id_ticket_form FROM ticketing_ticket_category c where c.id_ticket_form > 0)";
     private static final String SQL_QUERY_SELECT_BY_CATEGORY = SQL_QUERY_SELECT_COLUMNS +
-        " WHERE cat.id_ticket_category = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_form ( id_form, title, description) VALUES (?, ?, ?) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_ticket_form WHERE id_form = ? ";
+        " WHERE a.inactive <> 1 AND b.id_ticket_category = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_form ( id_form, title, description, inactive) VALUES (?, ?, ?, 0) ";
+    private static final String SQL_QUERY_DELETE = "UPDATE ticketing_ticket_form SET inactive = 1 WHERE id_form = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_form SET title = ?, description = ? WHERE id_form = ?";
 
     /**

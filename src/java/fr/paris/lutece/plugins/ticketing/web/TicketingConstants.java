@@ -127,6 +127,13 @@ public final class TicketingConstants
     // Other constants
     public static final String ADMIN_CONTROLLLER_PATH = "jsp/admin/plugins/ticketing/";
     public static final String ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH = ADMIN_CONTROLLLER_PATH + "admin/";
+    public static final String TEMPLATE_ADMIN_PATH = "/admin/plugins/ticketing/";
+    public static final String TEMPLATE_ADMIN_TICKET_FEATURE_PATH = TEMPLATE_ADMIN_PATH + "ticket/";
+    public static final String TEMPLATE_ADMIN_INSTANTRESPONSE_FEATURE_PATH = TEMPLATE_ADMIN_PATH + "instantresponse/";
+    public static final String TEMPLATE_ADMIN_ADMIN_FEATURE_PATH = TEMPLATE_ADMIN_PATH + "admin/";
+    public static final String TEMPLATE_ADMIN_TICKETFORM_FEATURE_PATH = TEMPLATE_ADMIN_PATH + "ticketform/";
+    public static final String TEMPLATE_FRONT_PATH = "/skin/plugins/ticketing/";
+    public static final String TEMPLATE_FRONT_TICKET_FEATURE_PATH = TEMPLATE_FRONT_PATH + "ticket/";
     public static final String JSP_MANAGE_TICKETS = "ManageTickets.jsp";
     public static final String JSP_VIEW_TICKET = "TicketView.jsp";
     public static final String ROLE_GRU_ADMIN = "gru_admin";

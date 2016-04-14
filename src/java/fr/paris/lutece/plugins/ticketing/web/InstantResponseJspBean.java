@@ -70,16 +70,19 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * This class provides the user interface to manage InstantResponse features ( manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageInstantResponses.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = "TICKETING_INSTANT_RESPONSE_MANAGEMENT" )
+@Controller( controllerJsp = "ManageInstantResponses.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_INSTANT_RESPONSE_MANAGEMENT" )
 public class InstantResponseJspBean extends MVCAdminJspBean
 {
     ////////////////////////////////////////////////////////////////////////////
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_INSTANT_RESPONSES = "/admin/plugins/ticketing/instantresponse/manage_instant_responses.html";
-    private static final String TEMPLATE_CREATE_INSTANT_RESPONSE = "/admin/plugins/ticketing/instantresponse/create_instant_response.html";
-    private static final String TEMPLATE_MODIFY_INSTANT_RESPONSE = "/admin/plugins/ticketing/instantresponse/modify_instant_response.html";
+    private static final String TEMPLATE_MANAGE_INSTANT_RESPONSES = TicketingConstants.TEMPLATE_ADMIN_INSTANTRESPONSE_FEATURE_PATH +
+        "manage_instant_responses.html";
+    private static final String TEMPLATE_CREATE_INSTANT_RESPONSE = TicketingConstants.TEMPLATE_ADMIN_INSTANTRESPONSE_FEATURE_PATH +
+        "create_instant_response.html";
+    private static final String TEMPLATE_MODIFY_INSTANT_RESPONSE = TicketingConstants.TEMPLATE_ADMIN_INSTANTRESPONSE_FEATURE_PATH +
+        "modify_instant_response.html";
 
     // Parameters
     private static final String PARAMETER_ID_INSTANT_RESPONSE = "id";
@@ -98,7 +101,8 @@ public class InstantResponseJspBean extends MVCAdminJspBean
     private static final String MARK_TYPE_ID = "type_id";
     private static final String MARK_DOMAIN_ID = "domain_id";
     private static final String MARK_ADMIN_AVATAR = "adminAvatar";
-    private static final String JSP_MANAGE_INSTANT_RESPONSES = "jsp/admin/plugins/ticketing/ManageInstantResponses.jsp";
+    private static final String JSP_MANAGE_INSTANT_RESPONSES = TicketingConstants.ADMIN_CONTROLLLER_PATH +
+        "ManageInstantResponses.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_INSTANT_RESPONSE = "ticketing.message.confirmRemoveInstantResponse";

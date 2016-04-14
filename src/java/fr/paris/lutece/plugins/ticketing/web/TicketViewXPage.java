@@ -69,7 +69,8 @@ public class TicketViewXPage extends WorkflowCapableXPage
     private static final long serialVersionUID = -5182134645557350678L;
 
     // Templates
-    private static final String TEMPLATE_VIEW_TICKET_DETAILS = "/skin/plugins/ticketing/ticket/view_ticket_details.html";
+    private static final String TEMPLATE_VIEW_TICKET_DETAILS = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH +
+        "view_ticket_details.html";
 
     // Views
     private static final String VIEW_DETAILS = "ticketDetails";

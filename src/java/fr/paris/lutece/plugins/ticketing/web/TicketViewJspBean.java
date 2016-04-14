@@ -74,7 +74,8 @@ import javax.servlet.http.HttpServletRequest;
 public class TicketViewJspBean extends WorkflowCapableJspBean
 {
     // Templates
-    private static final String TEMPLATE_VIEW_TICKET_DETAILS = "/admin/plugins/ticketing/ticket/view_ticket_details.html";
+    private static final String TEMPLATE_VIEW_TICKET_DETAILS = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH +
+        "view_ticket_details.html";
 
     // Markers
     private static final String MARK_PRIORITY = "priority";

@@ -59,9 +59,12 @@ public class UserTitleJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_USERTITLES = "/admin/plugins/ticketing/admin/manage_user_titles.html";
-    private static final String TEMPLATE_CREATE_USERTITLE = "/admin/plugins/ticketing/admin/create_user_title.html";
-    private static final String TEMPLATE_MODIFY_USERTITLE = "/admin/plugins/ticketing/admin/modify_user_title.html";
+    private static final String TEMPLATE_MANAGE_USERTITLES = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "manage_user_titles.html";
+    private static final String TEMPLATE_CREATE_USERTITLE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "create_user_title.html";
+    private static final String TEMPLATE_MODIFY_USERTITLE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "modify_user_title.html";
 
     // Parameters
     private static final String PARAMETER_ID_USERTITLE = "id";
@@ -74,7 +77,8 @@ public class UserTitleJspBean extends ManageAdminTicketingJspBean
     // Markers
     private static final String MARK_USERTITLE_LIST = "usertitle_list";
     private static final String MARK_USERTITLE = "usertitle";
-    private static final String JSP_MANAGE_USERTITLES = "jsp/admin/plugins/ticketing/admin/ManageUserTitles.jsp";
+    private static final String JSP_MANAGE_USERTITLES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
+        "ManageUserTitles.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_USERTITLE = "ticketing.message.confirmRemoveUserTitle";
