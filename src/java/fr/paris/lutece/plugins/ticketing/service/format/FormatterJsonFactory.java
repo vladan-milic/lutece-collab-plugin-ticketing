@@ -53,8 +53,8 @@ import java.util.Map;
  */
 public class FormatterJsonFactory implements IFormatterFactory
 {
-    private static Map<Class<?>, IFormatter<?>> _formatters;
-    private static IRestFormatter _restFormatter;
+    private Map<Class<?>, IFormatter<?>> _formatters;
+    private IRestFormatter _restFormatter;
 
     /**
      * Default constructor

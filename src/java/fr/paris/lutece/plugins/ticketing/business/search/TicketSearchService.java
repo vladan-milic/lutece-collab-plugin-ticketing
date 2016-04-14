@@ -82,7 +82,7 @@ public final class TicketSearchService
 
     // Constants corresponding to the variables defined in the lutece.properties file
     private static volatile TicketSearchService _singleton;
-    private static int _nSkipedIndexations;
+    private int _nSkipedIndexations;
     private volatile String _strIndex;
     private Analyzer _analyzer;
     private ITicketSearchIndexer _indexer;
@@ -275,8 +275,6 @@ public final class TicketSearchService
                 }
 
                 writer = new IndexWriter( dir, conf );
-
-                start = new Date(  );
 
                 sbLogs.append( "\r\n<strong>Indexer : " );
                 sbLogs.append( _indexer.getName(  ) );

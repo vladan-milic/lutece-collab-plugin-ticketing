@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -65,6 +65,7 @@ public class TicketFilter extends OrderByFilter
      * Default order by
      */
     public static final String CONSTANT_DEFAULT_ORDER_BY = "date_create";
+    public static final String CONSTANT_DEFAULT_ORDER_SORT = OrderSortAllowed.DESC.name(  );
     private int _nIdTicket = CONSTANT_ID_NULL;
     private Date _dateLastUpdateDate;
     private Date _dateLastUpdateStartDate;
@@ -152,7 +153,7 @@ public class TicketFilter extends OrderByFilter
 
         for ( String strId : tabIdWorkflowState )
         {
-            this._listIdWorkflowState.add( new Integer( strId ) );
+            this._listIdWorkflowState.add( Integer.valueOf( strId ) );
         }
     }
 
@@ -712,5 +713,17 @@ public class TicketFilter extends OrderByFilter
         _mapOrderNameToColumnName.put( "ticket_status_text", "ticket_status_text" );
         _mapOrderNameToColumnName.put( "assignee", "h.label, g.last_name" );
         _mapOrderNameToColumnName.put( "state", "j.name" );
+    }
+
+    @Override
+    public String getDefaultOrderBySqlColumn(  )
+    {
+        return _mapOrderNameToColumnName.get( CONSTANT_DEFAULT_ORDER_BY );
+    }
+
+    @Override
+    public String getDefaultOrderSort(  )
+    {
+        return CONSTANT_DEFAULT_ORDER_SORT;
     }
 }

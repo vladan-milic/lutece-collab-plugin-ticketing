@@ -33,15 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.ticket;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.ticketing.business.OrderByFilter.OrderSortAllowed;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
@@ -52,6 +43,16 @@ import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.sql.Date;
+import java.sql.Timestamp;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -668,9 +669,9 @@ public final class TicketDAO implements ITicketDAO
         {
             //always apply default sorting
             sbSQL.append( CONSTANT_ORDER_BY );
-            sbSQL.append( TicketFilter.getDefaultOrderBySqlColumn(  ) );
-            sbSQL.append( TicketFilter.getDefaultOrderSort(  ).equals( OrderSortAllowed.ASC.name(  ) ) ? CONSTANT_ASC
-                                                                                                       : CONSTANT_DESC );
+            sbSQL.append( filter.getDefaultOrderBySqlColumn(  ) );
+            sbSQL.append( filter.getDefaultOrderSort(  ).equals( OrderSortAllowed.ASC.name(  ) ) ? CONSTANT_ASC
+                                                                                                 : CONSTANT_DESC );
         }
     }
 

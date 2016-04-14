@@ -283,15 +283,17 @@ public final class TicketUtils
     public static List<Integer> extractListIdFromString( String strIdList )
     {
         List<Integer> listId = new ArrayList<Integer>(  );
+
         if ( StringUtils.isNotEmpty( strIdList ) )
         {
             StringTokenizer st = new StringTokenizer( strIdList, TicketingConstants.FIELD_ID_SEPARATOR );
-    
+
             while ( st.hasMoreElements(  ) )
             {
                 listId.add( Integer.parseInt( st.nextToken(  ) ) );
             }
         }
+
         return listId;
     }
 

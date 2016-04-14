@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,16 +46,10 @@ import java.util.Map;
 public abstract class OrderByFilter
 {
     /**
-     * Default order by
-     */
-    public static final String CONSTANT_DEFAULT_ORDER_BY = "date_create";
-    public static final String CONSTANT_DEFAULT_ORDER_SORT = OrderSortAllowed.DESC.name(  );
-
-    /**
      * map containing functional field name as key
      * target sql column name as value
      */
-    protected static Map<String, String> _mapOrderNameToColumnName;
+    protected Map<String, String> _mapOrderNameToColumnName;
     private String _strOrderBy;
     private String _strOrderSort;
 
@@ -73,6 +67,17 @@ public abstract class OrderByFilter
      *
      */
     protected abstract void initOrderNameToColumnNameMap(  );
+
+    /**
+     * returns default order by column
+     * @return default order by column
+     */
+    public abstract String getDefaultOrderBySqlColumn(  );
+
+    /**
+     * @return  the strOrderSort to set
+     */
+    public abstract String getDefaultOrderSort(  );
 
     /**
      * Set the order by attribute of this filter.
@@ -101,19 +106,10 @@ public abstract class OrderByFilter
         }
         else
         {
-            strComputedOrderby = _mapOrderNameToColumnName.get( CONSTANT_DEFAULT_ORDER_BY );
+            strComputedOrderby = getDefaultOrderBySqlColumn(  );
         }
 
         return strComputedOrderby;
-    }
-
-    /**
-     * returns default order by column
-     * @return default order by column
-     */
-    public static String getDefaultOrderBySqlColumn(  )
-    {
-        return _mapOrderNameToColumnName.get( CONSTANT_DEFAULT_ORDER_BY );
     }
 
     /**
@@ -182,14 +178,6 @@ public abstract class OrderByFilter
     public String getOrderSort(  )
     {
         return _strOrderSort;
-    }
-
-    /**
-     * @return  the strOrderSort to set
-     */
-    public static String getDefaultOrderSort(  )
-    {
-        return CONSTANT_DEFAULT_ORDER_SORT;
     }
 
     /**
