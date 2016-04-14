@@ -54,7 +54,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * This class provides the user interface to manage TicketType features ( manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageTicketTypes.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
+@Controller( controllerJsp = "ManageTicketTypes.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
 public class TicketTypeJspBean extends ManageAdminTicketingJspBean
 {
     ////////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,7 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     // Markers
     private static final String MARK_TICKETTYPE_LIST = "tickettype_list";
     private static final String MARK_TICKETTYPE = "tickettype";
-    private static final String JSP_MANAGE_TICKETTYPES = "jsp/admin/plugins/ticketing/ManageTicketTypes.jsp";
+    private static final String JSP_MANAGE_TICKETTYPES = "jsp/admin/plugins/ticketing/admin/ManageTicketTypes.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETTYPE = "ticketing.message.confirmRemoveTicketType";

@@ -3,7 +3,7 @@
 		<div class="box-header">
 			<h3 class="box-title">#i18n{ticketing.manage_ticketforms.pageTitle}</h3>
 			<div class="box-tools">
-				<a class="btn btn-primary" href="jsp/admin/plugins/ticketing/ManageTicketForms.jsp?view=createTicketForm&forceReload=true" title="#i18n{ticketing.manage_ticketforms.buttonAdd}">
+				<a class="btn btn-primary" href="jsp/admin/plugins/ticketing/admin/ManageTicketForms.jsp?view=createTicketForm&forceReload=true" title="#i18n{ticketing.manage_ticketforms.buttonAdd}">
 					<i class="fa fa-plus"></i> #i18n{ticketing.manage_ticketforms.buttonAdd}
 				</a>
 			</div>
@@ -21,10 +21,10 @@
 					<td>${ticketform.title}</td>
 					<td>${ticketform.ticketCategory}</td>
 					<td>
-						<a href="jsp/admin/plugins/ticketing/ManageTicketForms.jsp?view=modifyTicketForm&id_form=${ticketform.idForm}&forceReload=true" class="btn btn-primary" title="#i18n{portal.util.labelModify}">
+						<a href="jsp/admin/plugins/ticketing/admin/ManageTicketForms.jsp?view=modifyTicketForm&id_form=${ticketform.idForm}&forceReload=true" class="btn btn-primary" title="#i18n{portal.util.labelModify}">
 							<i class="fa fa-pencil"></i>
 						</a>
-						<a href="jsp/admin/plugins/ticketing/ManageTicketForms.jsp?action=confirmRemoveTicketForm&id_form=${ticketform.idForm}" class="btn btn-danger" title="#i18n{portal.util.labelDelete}" >
+						<a href="jsp/admin/plugins/ticketing/admin/ManageTicketForms.jsp?action=confirmRemoveTicketForm&id_form=${ticketform.idForm}" class="btn btn-danger" title="#i18n{portal.util.labelDelete}" >
 							<i class="fa fa-trash"></i>
 						</a>
 					</td>

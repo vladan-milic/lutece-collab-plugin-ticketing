@@ -2,7 +2,7 @@
 <@tabsWrapper>
   <@tabs tab="supportentity" hasTable=false/>
   <h3>#i18n{ticketing.create_supportentity.pageTitle}</h3>
-  <form class="form-horizontal" method="post" name="create_supportentity" action="jsp/admin/plugins/ticketing/ManageSupportEntities.jsp">
+  <form class="form-horizontal" method="post" name="create_supportentity" action="jsp/admin/plugins/ticketing/admin/ManageSupportEntities.jsp">
   <@messages errors=errors />
   <input type="hidden" id="id" name="id">
   <@fieldInputText i18nLabelKey="ticketing.create_supportentity.labelName" inputName="name" mandatory=true value="${supportentity.name!''}" i18nHelpBlockKey="ticketing.create_supportentity.labelName.help" />

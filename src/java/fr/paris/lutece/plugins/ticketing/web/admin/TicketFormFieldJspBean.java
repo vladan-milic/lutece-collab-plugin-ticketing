@@ -63,7 +63,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * JspBean to manage ticketing form fields
  */
-@Controller( controllerJsp = "ManageTicketFormFields.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = TicketFormJspBean.RIGHT_MANAGETICKETFORM )
+@Controller( controllerJsp = "ManageTicketFormFields.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = TicketFormJspBean.RIGHT_MANAGETICKETFORM )
 public class TicketFormFieldJspBean extends MVCAdminJspBean
 {
     private static final long serialVersionUID = 1L;
@@ -73,7 +73,7 @@ public class TicketFormFieldJspBean extends MVCAdminJspBean
     private static final String PROPERTY_MODIFY_FIELD_TITLE = "ticketing.modifyField.title";
 
     // Urls
-    private static final String JSP_URL_MANAGE_TICKETING_FORM_FIELDS = "jsp/admin/plugins/ticketing/ManageTicketFormFields.jsp";
+    private static final String JSP_URL_MANAGE_TICKETING_FORM_FIELDS = "jsp/admin/plugins/ticketing/admin/ManageTicketFormFields.jsp";
 
     // Marks
     private static final String MARK_FIELD = "field";
@@ -116,9 +116,9 @@ public class TicketFormFieldJspBean extends MVCAdminJspBean
     private static final String FIELD_VALUE_FIELD = "ticketing.createField.labelValue";
 
     // Templates
-    private static final String TEMPLATE_CREATE_FIELD = "admin/plugins/ticketing/create_field.html";
-    private static final String TEMPLATE_MODIFY_FIELD_WITH_CONDITIONAL_QUESTION = "admin/plugins/ticketing/modify_field_with_conditional_question.html";
-    private static final String TEMPLATE_MODIFY_FIELD = "admin/plugins/ticketing/modify_field.html";
+    private static final String TEMPLATE_CREATE_FIELD = "admin/plugins/ticketing/ticketform/create_field.html";
+    private static final String TEMPLATE_MODIFY_FIELD_WITH_CONDITIONAL_QUESTION = "admin/plugins/ticketing/ticketform/modify_field_with_conditional_question.html";
+    private static final String TEMPLATE_MODIFY_FIELD = "admin/plugins/ticketing/ticketform/modify_field.html";
 
     /**
      * Gets the field creation page

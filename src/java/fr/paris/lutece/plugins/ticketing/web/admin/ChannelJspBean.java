@@ -53,7 +53,7 @@ import javax.servlet.http.HttpServletRequest;
  * This class provides the user interface to manage Channel features (
  * manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageChannels.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
+@Controller( controllerJsp = "ManageChannels.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
 public class ChannelJspBean extends ManageAdminTicketingJspBean
 {
     ////////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,7 @@ public class ChannelJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_CHANNEL_LIST = "channel_list";
     private static final String MARK_CHANNEL = "channel";
     private static final String MARK_DEFAULT_CHANNEL = "default_channel";
-    private static final String JSP_MANAGE_CHANNELS = "jsp/admin/plugins/ticketing/ManageChannels.jsp";
+    private static final String JSP_MANAGE_CHANNELS = "jsp/admin/plugins/ticketing/admin/ManageChannels.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_CHANNEL = "ticketing.message.confirmRemoveChannel";

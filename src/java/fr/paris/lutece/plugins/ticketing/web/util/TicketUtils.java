@@ -283,13 +283,15 @@ public final class TicketUtils
     public static List<Integer> extractListIdFromString( String strIdList )
     {
         List<Integer> listId = new ArrayList<Integer>(  );
-        StringTokenizer st = new StringTokenizer( strIdList, TicketingConstants.FIELD_ID_SEPARATOR );
-
-        while ( st.hasMoreElements(  ) )
+        if ( StringUtils.isNotEmpty( strIdList ) )
         {
-            listId.add( Integer.parseInt( st.nextToken(  ) ) );
+            StringTokenizer st = new StringTokenizer( strIdList, TicketingConstants.FIELD_ID_SEPARATOR );
+    
+            while ( st.hasMoreElements(  ) )
+            {
+                listId.add( Integer.parseInt( st.nextToken(  ) ) );
+            }
         }
-
         return listId;
     }
 
@@ -315,7 +317,7 @@ public final class TicketUtils
 
         for ( Integer channelId : idSelectableChannelList )
         {
-            selectableChannelsMap.put( String.valueOf( channelId ), channelsMap.get( channelId ) );
+            selectableChannelsMap.put( String.valueOf( channelId ), channelsMap.get( String.valueOf( channelId ) ) );
         }
 
         return ReferenceList.convert( selectableChannelsMap );

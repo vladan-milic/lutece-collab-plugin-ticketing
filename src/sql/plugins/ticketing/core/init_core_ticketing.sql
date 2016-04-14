@@ -25,11 +25,11 @@ INSERT INTO core_user_role ( role_key , id_user ) VALUES
 --
 DELETE FROM core_admin_right WHERE id_right = 'TICKETING_MANAGEMENT';
 INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is_updatable,plugin_name,id_feature_group,icon_url,documentation_url, id_order ) VALUES 
-('TICKETING_MANAGEMENT','ticketing.adminFeature.ManageAdminTicketing.name',1,'jsp/admin/plugins/ticketing/ManageTicketCategorys.jsp','ticketing.adminFeature.ManageAdminTicketing.description',0,'ticketing',NULL,NULL,NULL,4);
+('TICKETING_MANAGEMENT','ticketing.adminFeature.ManageAdminTicketing.name',1,'jsp/admin/plugins/ticketing/admin/ManageTicketCategorys.jsp','ticketing.adminFeature.ManageAdminTicketing.description',0,'ticketing',NULL,NULL,NULL,4);
 
 DELETE FROM core_admin_right WHERE id_right = 'TICKETING_FORM_MANAGEMENT';          
 INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is_updatable,plugin_name,id_feature_group,icon_url,documentation_url, id_order ) VALUES 
-('TICKETING_FORM_MANAGEMENT','ticketing.adminFeature.ManageTicketForms.name',1,'jsp/admin/plugins/ticketing/ManageTicketForms.jsp','ticketing.adminFeature.ManageTicketForms.description',0,'ticketing',NULL,NULL,NULL,5);
+('TICKETING_FORM_MANAGEMENT','ticketing.adminFeature.ManageTicketForms.name',1,'jsp/admin/plugins/ticketing/admin/ManageTicketForms.jsp','ticketing.adminFeature.ManageTicketForms.description',0,'ticketing',NULL,NULL,NULL,5);
 
 --
 -- Data for table core_user_right

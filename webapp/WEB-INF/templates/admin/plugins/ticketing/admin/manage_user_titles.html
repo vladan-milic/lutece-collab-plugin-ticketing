@@ -1,6 +1,6 @@
 <#include "admin_tabs.html" />
 <@tabsWrapper>
-  <@tabs tab="usertitle" formName="manage_usertitles" formAction="jsp/admin/plugins/ticketing/ManageUserTitles.jsp" btnName="view_createUserTitle" btnValue="ticketing.manage_usertitles.buttonAdd" />
+  <@tabs tab="usertitle" formName="manage_usertitles" formAction="jsp/admin/plugins/ticketing/admin/ManageUserTitles.jsp" btnName="view_createUserTitle" btnValue="ticketing.manage_usertitles.buttonAdd" />
     <@messages infos=infos />
     <table class="table table-striped table-hover">
       <thead>
@@ -16,10 +16,10 @@
           <input type="hidden" id="id" name="id"/>
           <td>${usertitle.label}</td>
           <td>
-            <a href="jsp/admin/plugins/ticketing/ManageUserTitles.jsp?view=modifyUserTitle&id=${usertitle.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
+            <a href="jsp/admin/plugins/ticketing/admin/ManageUserTitles.jsp?view=modifyUserTitle&id=${usertitle.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
               <i class="fa fa-pencil"></i>
             </a>
-              <a href="jsp/admin/plugins/ticketing/ManageUserTitles.jsp?action=confirmRemoveUserTitle&id=${usertitle.id}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
+              <a href="jsp/admin/plugins/ticketing/admin/ManageUserTitles.jsp?action=confirmRemoveUserTitle&id=${usertitle.id}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
                 <i class="fa fa-trash"></i>
               </a>
           </td>

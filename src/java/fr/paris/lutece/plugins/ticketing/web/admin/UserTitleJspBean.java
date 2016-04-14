@@ -52,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * This class provides the user interface to manage UserTitle features ( manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageUserTitles.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
+@Controller( controllerJsp = "ManageUserTitles.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
 public class UserTitleJspBean extends ManageAdminTicketingJspBean
 {
     ////////////////////////////////////////////////////////////////////////////
@@ -74,7 +74,7 @@ public class UserTitleJspBean extends ManageAdminTicketingJspBean
     // Markers
     private static final String MARK_USERTITLE_LIST = "usertitle_list";
     private static final String MARK_USERTITLE = "usertitle";
-    private static final String JSP_MANAGE_USERTITLES = "jsp/admin/plugins/ticketing/ManageUserTitles.jsp";
+    private static final String JSP_MANAGE_USERTITLES = "jsp/admin/plugins/ticketing/admin/ManageUserTitles.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_USERTITLE = "ticketing.message.confirmRemoveUserTitle";

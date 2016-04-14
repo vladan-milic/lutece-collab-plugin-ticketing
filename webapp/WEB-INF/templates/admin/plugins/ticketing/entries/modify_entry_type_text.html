@@ -3,7 +3,7 @@
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		<fieldset>
 		<legend>#i18n{ticketing.modifyEntry.titleQuestion} : '${form.title}'</legend>
-			<form class="form-horizontal" action="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp" method="post" name="" id=""  >
+			<form class="form-horizontal" action="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp" method="post" name="" id=""  >
 				<input name="id_entry" value="${entry.idEntry}" type="hidden" />
 				<input name="action" value="doModifyEntry" type="hidden" />
 				<div class="form-group">
@@ -128,7 +128,7 @@
 			<fieldset> 
 				<legend>#i18n{ticketing.createEntry.manageRegularExpression.title}</legend>
 				<div class="well">
-					<form class="form-horizontal"  method="post"  action="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp">
+					<form class="form-horizontal"  method="post"  action="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp">
 						<input name="id_field" value="${id_field}" type="hidden" />
 						<input name="action" value="doInsertRegularExpression" type="hidden" />
 						<div class="form-group">
@@ -154,7 +154,7 @@
 									<td>${expression.informationMessage}</td>
 									<td>${expression.validExemple}</td>
 									<td>
-										<a class="btn btn-danger btn-sm" href="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp?action=doRemoveRegularExpression&id_expression=${expression.idExpression}&id_field=${id_field}" title="#i18n{ticketing.createEntry.manageField.titleDelete}" >
+										<a class="btn btn-danger btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp?action=doRemoveRegularExpression&id_expression=${expression.idExpression}&id_field=${id_field}" title="#i18n{ticketing.createEntry.manageField.titleDelete}" >
 											<i class="glyphicon glyphicon-trash"></i>
 										</a>
 									</td>

@@ -3,7 +3,7 @@
 <@tabsWrapper>
   <@tabs tab="contactmode" hasTable=false/>
   <h3>#i18n{ticketing.create_contactmode.pageTitle}</h3>
-  <form class="form-horizontal" method="post" name="create_contactmode" action="jsp/admin/plugins/ticketing/ManageContactModes.jsp">
+  <form class="form-horizontal" method="post" name="create_contactmode" action="jsp/admin/plugins/ticketing/admin/ManageContactModes.jsp">
     <@messages errors=errors />
     <input type="hidden" id="id" name="id">
     <@fieldInputText i18nLabelKey="ticketing.create_contactmode.labelLabel" inputName="label" mandatory=true value="${contactmode.label!''}" i18nHelpBlockKey="ticketing.create_contactmode.labelLabel.help" />

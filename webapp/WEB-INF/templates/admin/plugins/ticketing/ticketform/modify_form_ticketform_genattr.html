@@ -2,7 +2,7 @@
 <@tabsWrapper>
 	<@tabs tab="entries" ticketform=ticketform />
 			<h3 class="sr-only">#i18n{ticketing.modify_ticketform.pageTitle}</h3>
-			<form method="get" class="form-inline pull-right" action="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp">
+			<form method="get" class="form-inline pull-right" action="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp">
 				<input type="hidden" value="getCreateEntry" name="view">
 				<input type="hidden" name="id_form" value="${ticketform.idForm}">
 				<label for="id_type">#i18n{ticketing.modify_ticketform.labelInsertEntry} :&#160;&#160;</label>
@@ -15,7 +15,7 @@
 				</span>
 				</div>
 			</form>
-			<form method="post" action="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp">
+			<form method="post" action="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp">
 			<input type="hidden" name="action" value="doChangeOrderEntry">
 			<input type="hidden" name="id_form" value="${ticketform.idForm}">
 			<#if entry_group_list?has_content>
@@ -104,21 +104,21 @@
 								</#if>
 								<td>
 									<#if !entry.entryType.myLuteceUser>
-										<a href="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp?view=getModifyEntry&id_entry=${entry.idEntry}" class="btn btn-primary">
+										<a href="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp?view=getModifyEntry&id_entry=${entry.idEntry}" class="btn btn-primary">
 											<i class="fa fa-pencil"></i>
 										</a>
 									</#if>
 									<#if entry.parent?exists>
-										<a href="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp?action=doMoveOutEntry&id_entry=${entry.idEntry}#list" title="#i18n{ticketing.modifyField.manageConditionalQuestion.titleGoOut}" class="btn btn-primary">
+										<a href="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp?action=doMoveOutEntry&id_entry=${entry.idEntry}#list" title="#i18n{ticketing.modifyField.manageConditionalQuestion.titleGoOut}" class="btn btn-primary">
 											<i class="fa fa-chevron-right"></i>
 										</a>
 									</#if>
 									<#if !entry.entryType.group && !entry.entryType.myLuteceUser>
-										<a href="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp?action=doCopyEntry&id_entry=${entry.idEntry}#list" title="#i18n{ticketing.createEntry.manageField.titleCopy}" class="btn btn-primary">
+										<a href="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp?action=doCopyEntry&id_entry=${entry.idEntry}#list" title="#i18n{ticketing.createEntry.manageField.titleCopy}" class="btn btn-primary">
 											<i class="fa fa-copy"></i>
 										</a>
 									</#if>
-									<a href="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp?view=confirmRemoveEntry&id_entry=${entry.idEntry}#list" title="#i18n{ticketing.modifyField.manageConditionalQuestion.titleDelete}" class="btn btn-danger">
+									<a href="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp?view=confirmRemoveEntry&id_entry=${entry.idEntry}#list" title="#i18n{ticketing.modifyField.manageConditionalQuestion.titleDelete}" class="btn btn-danger">
 										<i class="fa fa-trash"></i>
 									</a>
 								</td>

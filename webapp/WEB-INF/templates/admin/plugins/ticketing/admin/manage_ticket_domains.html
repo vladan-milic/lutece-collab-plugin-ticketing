@@ -1,6 +1,6 @@
 <#include "admin_tabs.html" />
 <@tabsWrapper>
-  <@tabs tab="ticketdomain" formName="manage_ticketdomains" formAction="jsp/admin/plugins/ticketing/ManageTicketDomains.jsp" btnName="view_createTicketDomain" btnValue="ticketing.manage_ticketdomains.buttonAdd" />
+  <@tabs tab="ticketdomain" formName="manage_ticketdomains" formAction="jsp/admin/plugins/ticketing/admin/ManageTicketDomains.jsp" btnName="view_createTicketDomain" btnValue="ticketing.manage_ticketdomains.buttonAdd" />
     <@messages infos=infos />
     <table class="table table-striped table-hover">
       <thead>
@@ -17,10 +17,10 @@
           <td>${ticketdomain.label}</td>
           <td>${ticketdomain.ticketType}</td>
           <td>
-            <a href="jsp/admin/plugins/ticketing/ManageTicketDomains.jsp?view=modifyTicketDomain&id=${ticketdomain.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
+            <a href="jsp/admin/plugins/ticketing/admin/ManageTicketDomains.jsp?view=modifyTicketDomain&id=${ticketdomain.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
               <i class="fa fa-pencil"></i>
             </a>
-            <a href="jsp/admin/plugins/ticketing/ManageTicketDomains.jsp?action=confirmRemoveTicketDomain&id=${ticketdomain.id}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
+            <a href="jsp/admin/plugins/ticketing/admin/ManageTicketDomains.jsp?action=confirmRemoveTicketDomain&id=${ticketdomain.id}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
               <i class="fa fa-trash"></i>
             </a>
           </td>

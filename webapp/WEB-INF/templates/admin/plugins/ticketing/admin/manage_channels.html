@@ -1,6 +1,6 @@
 <#include "admin_tabs.html" />
 <@tabsWrapper>
-  <@tabs tab="channel" formName="manage_channels" formAction="jsp/admin/plugins/ticketing/ManageChannels.jsp" btnName="view_createChannel" btnValue="ticketing.manage_channels.buttonAdd" />
+  <@tabs tab="channel" formName="manage_channels" formAction="jsp/admin/plugins/ticketing/admin/ManageChannels.jsp" btnName="view_createChannel" btnValue="ticketing.manage_channels.buttonAdd" />
     <@messages infos=infos />
     <table class="table table-striped table-hover">
       <thead>
@@ -20,11 +20,11 @@
             <td><span class="${channel.iconFont!''}"></span></td>
             <td>${channel.iconFont!''}</td>
             <td>
-              <a href="jsp/admin/plugins/ticketing/ManageChannels.jsp?view=modifyChannel&id=${channel.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
+              <a href="jsp/admin/plugins/ticketing/admin/ManageChannels.jsp?view=modifyChannel&id=${channel.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
                 <i class="fa fa-pencil"></i>
               </a>
               <#if channel.id?string != "${default_channel}">
-                <a href="jsp/admin/plugins/ticketing/ManageChannels.jsp?action=confirmRemoveChannel&id=${channel.id}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
+                <a href="jsp/admin/plugins/ticketing/admin/ManageChannels.jsp?action=confirmRemoveChannel&id=${channel.id}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
                   <i class="fa fa-trash"></i>
                 </a>
               </#if>

@@ -63,7 +63,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * This class provides the user interface to manage TicketCategory features ( manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageTicketCategorys.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
+@Controller( controllerJsp = "ManageTicketCategorys.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
 public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 {
     ////////////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_LIST_WORKFLOWS = "listWorkflows";
     private static final String MARK_LIST_UNITS = "units_list";
     private static final String MARK_TICKET_FORM_LIST = "ticketform_list";
-    private static final String JSP_MANAGE_TICKETCATEGORYS = "jsp/admin/plugins/ticketing/ManageTicketCategorys.jsp";
+    private static final String JSP_MANAGE_TICKETCATEGORYS = "jsp/admin/plugins/ticketing/admin/ManageTicketCategorys.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETCATEGORY = "ticketing.message.confirmRemoveTicketCategory";

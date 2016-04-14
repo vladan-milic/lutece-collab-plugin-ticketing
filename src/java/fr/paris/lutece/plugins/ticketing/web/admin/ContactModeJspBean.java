@@ -54,7 +54,7 @@ import javax.servlet.http.HttpServletRequest;
  * This class provides the user interface to manage ContactMode features (
  * manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageContactModes.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
+@Controller( controllerJsp = "ManageContactModes.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
 public class ContactModeJspBean extends ManageAdminTicketingJspBean
 {
     ////////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,7 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     // Markers
     private static final String MARK_CONTACTMODE_LIST = "contactmode_list";
     private static final String MARK_CONTACTMODE = "contactmode";
-    private static final String JSP_MANAGE_CONTACTMODES = "jsp/admin/plugins/ticketing/ManageContactModes.jsp";
+    private static final String JSP_MANAGE_CONTACTMODES = "jsp/admin/plugins/ticketing/admin/ManageContactModes.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_CONTACTMODE = "ticketing.message.confirmRemoveContactMode";

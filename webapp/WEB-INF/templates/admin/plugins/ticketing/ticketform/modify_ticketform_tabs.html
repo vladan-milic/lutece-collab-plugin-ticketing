@@ -14,12 +14,12 @@
 <#macro tabs tab ticketform >
   <ul class="nav nav-tabs">
 		<li <#if tab="params">class="active"</#if>>
-			<a href="jsp/admin/plugins/ticketing/ManageTicketForms.jsp?view=modifyTicketForm&id_form=${ticketform.idForm}&forceReload=true">
+			<a href="jsp/admin/plugins/ticketing/admin/ManageTicketForms.jsp?view=modifyTicketForm&id_form=${ticketform.idForm}&forceReload=true">
 				#i18n{ticketing.modify_ticketform.titleAlterablesParameters}
 			</a>
     </li>
     <li <#if tab="entries">class="active"</#if>>
-			<a href="jsp/admin/plugins/ticketing/ManageTicketForms.jsp?view=modifyTicketForm&id_form=${ticketform.idForm}&page=form_genericatt">
+			<a href="jsp/admin/plugins/ticketing/admin/ManageTicketForms.jsp?view=modifyTicketForm&id_form=${ticketform.idForm}&page=form_genericatt">
 				#i18n{ticketing.modify_ticketform.titleGenericAttributtesParameters}
 			</a>
     </li>
@@ -30,7 +30,7 @@
 
 <#macro modifyTicketFormLeftColumn ticketform >
 	<h2> #i18n{ticketing.modify_ticketForm.titleAlterablesParameters}</h2>
-  <form class="form-horizontal" method="post" action="jsp/admin/plugins/ticketing/ManageTicketForms.jsp" enctype="multipart/form-data">
+  <form class="form-horizontal" method="post" action="jsp/admin/plugins/ticketing/admin/ManageTicketForms.jsp" enctype="multipart/form-data">
   <@messages errors=errors />
   <input type="hidden" id="id_form" name="id_form" value="${ticketform.idForm}">
   <@fieldInputText i18nLabelKey='ticketing.create_ticketform.labelTitle' inputName='title' mandatory=true value=ticketform.title!'' maxlength=255 />

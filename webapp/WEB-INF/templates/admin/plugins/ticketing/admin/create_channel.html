@@ -2,7 +2,7 @@
 <@tabsWrapper>
   <@tabs tab="channel" hasTable=false/>
   <h3>#i18n{ticketing.create_channel.pageTitle}</h3>
-  <form class="form-horizontal" method="post" name="create_channel" action="jsp/admin/plugins/ticketing/ManageChannels.jsp">
+  <form class="form-horizontal" method="post" name="create_channel" action="jsp/admin/plugins/ticketing/admin/ManageChannels.jsp">
     <@messages errors=errors />
     <input type="hidden" id="id" name="id">
     <@fieldInputText i18nLabelKey="ticketing.create_channel.labelLabel" inputName="label" mandatory=true value="" i18nHelpBlockKey="ticketing.create_channel.labelLabel.help" />

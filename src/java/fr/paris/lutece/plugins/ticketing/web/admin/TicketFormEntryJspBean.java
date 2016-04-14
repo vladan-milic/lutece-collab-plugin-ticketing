@@ -76,7 +76,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * JspBean to manage ticketing form entries
  */
-@Controller( controllerJsp = "ManageTicketFormEntries.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = TicketFormJspBean.RIGHT_MANAGETICKETFORM )
+@Controller( controllerJsp = "ManageTicketFormEntries.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = TicketFormJspBean.RIGHT_MANAGETICKETFORM )
 public class TicketFormEntryJspBean extends MVCAdminJspBean
 {
     private static final long serialVersionUID = -4951787792196104967L;
@@ -107,7 +107,7 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
     private static final String FIELD_VALUE_FIELD = "ticketing.createField.labelValue";
 
     // Urls
-    private static final String JSP_URL_MANAGE_TICKETING_FORM_ENTRIES = "jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp";
+    private static final String JSP_URL_MANAGE_TICKETING_FORM_ENTRIES = "jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp";
 
     // Messages
     private static final String MESSAGE_CONFIRM_REMOVE_ENTRY = "ticketing.message.confirmRemoveEntry";

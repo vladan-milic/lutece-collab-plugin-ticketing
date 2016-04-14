@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<form class="form-horizontal" action="jsp/admin/plugins/ticketing/ManageTicketFormFields.jsp" method="post" name="" id=""  >
+		<form class="form-horizontal" action="jsp/admin/plugins/ticketing/admin/ManageTicketFormFields.jsp" method="post" name="" id=""  >
     		<fieldset>
 				<legend>#i18n{ticketing.modifyField.title} : '${field.parentEntry.title}'</legend>
 				<input type="hidden" name="action" value="doModifyFieldCC" />
@@ -60,7 +60,7 @@
 		</form>
 	
 		<div class="well">
-			<form class="form-search"  method="post"  action="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp">
+			<form class="form-search"  method="post"  action="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp">
 				<fieldset>
 					<legend>#i18n{ticketing.modifyField.manageConditionalQuestion.title}</legend>
 					<input name="view" value="getCreateEntry" type="hidden">
@@ -91,20 +91,20 @@
 			        <td>${entry.entryType.title}</td>
 					<td><#if entry.numberConditionalQuestion!=0>${entry.numberConditionalQuestion}</#if></td>
 			        <td>
-					<a class="btn btn-primary btn-xs" href="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp?view=getModifyEntry&id_entry=${entry.idEntry}"  title="null" >
+					<a class="btn btn-primary btn-xs" href="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp?view=getModifyEntry&id_entry=${entry.idEntry}"  title="null" >
 							<i class="glyphicon glyphicon-edit"></i>
 						</a>
 			        <#if cpt!=1>
-						<a class="btn btn-xs" href="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp?action=doMoveUpEntryConditional&id_entry=${entry.idEntry}&id_field=${field.idField}"  title="#i18n{ticketing.modifyForm.manageEnter.titleMoveUp}" >
+						<a class="btn btn-xs" href="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp?action=doMoveUpEntryConditional&id_entry=${entry.idEntry}&id_field=${field.idField}"  title="#i18n{ticketing.modifyForm.manageEnter.titleMoveUp}" >
 							<i class="glyphicon glyphicon-chevron-up"></i>
 						</a>
 					</#if>	
 			        <#if entry_has_next>
-						<a class="btn btn-xs" href="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp?action=doMoveDownEntryConditional&id_entry=${entry.idEntry}&id_field=${field.idField}"  title="#i18n{ticketing.modifyForm.manageEnter.titleMoveDown}" >
+						<a class="btn btn-xs" href="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp?action=doMoveDownEntryConditional&id_entry=${entry.idEntry}&id_field=${field.idField}"  title="#i18n{ticketing.modifyForm.manageEnter.titleMoveDown}" >
 							<i class="glyphicon glyphicon-chevron-down"></i>
 						</a>
 					</#if>	
-						<a class="btn btn-danger btn-xs" href="jsp/admin/plugins/ticketing/ManageTicketFormEntries.jsp?view=confirmRemoveEntry&id_entry=${entry.idEntry}&id_field=${field.idField}"  title="#i18n{ticketing.modifyForm.manageEnter.titleDelete}" >
+						<a class="btn btn-danger btn-xs" href="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp?view=confirmRemoveEntry&id_entry=${entry.idEntry}&id_field=${field.idField}"  title="#i18n{ticketing.modifyForm.manageEnter.titleDelete}" >
 							<i class="glyphicon glyphicon-trash"></i>
 						</a>
 					</td>

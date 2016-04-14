@@ -78,7 +78,7 @@ import javax.servlet.http.HttpSession;
  * This class provides the user interface to manage TicketForm features (
  * manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageTicketForms.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = TicketFormJspBean.RIGHT_MANAGETICKETFORM )
+@Controller( controllerJsp = "ManageTicketForms.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = TicketFormJspBean.RIGHT_MANAGETICKETFORM )
 public class TicketFormJspBean extends MVCAdminJspBean
 {
     /**
@@ -125,7 +125,7 @@ public class TicketFormJspBean extends MVCAdminJspBean
     private static final String MARK_PAGE = "page";
 
     // Jsp
-    private static final String JSP_MANAGE_TICKETFORMS = "jsp/admin/plugins/ticketing/ManageTicketForms.jsp";
+    private static final String JSP_MANAGE_TICKETFORMS = "jsp/admin/plugins/ticketing/admin/ManageTicketForms.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETFORM = "ticketing.message.confirmRemoveTicketForm";
