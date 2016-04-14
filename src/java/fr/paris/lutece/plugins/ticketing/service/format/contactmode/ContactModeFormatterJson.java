@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.ticketing.service.format.contactmode;
 
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
 import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
-import fr.paris.lutece.plugins.ticketing.service.format.IFormatter;
+import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -49,7 +49,7 @@ import java.util.List;
  * JSON formatter for contact mode resource
  *
  */
-public class ContactModeFormatterJson implements IFormatter<ContactMode>
+public class ContactModeFormatterJson implements ITicketingFormatter<ContactMode>
 {
     @Override
     public String format( ContactMode contactMode )

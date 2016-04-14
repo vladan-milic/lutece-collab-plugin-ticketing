@@ -74,22 +74,12 @@ public class Ticket implements Serializable, RBACResource
     private static final String SEPARATOR = " ";
     private static final String PHONE_NUMBER_REGEX = "(^$|[0-9]{10})";
     private static final String PROPERTY_CONTACT_MODE_FIXED_PHONE_NUMBER_ID = "ticketing.contactmode.fixedPhoneNumber.id";
-    private static int CONTACT_MODE_FIXED_PHONE_NUMBER_ID = 2;
-
-    static
-    {
-        CONTACT_MODE_FIXED_PHONE_NUMBER_ID = AppPropertiesService.getPropertyInt( PROPERTY_CONTACT_MODE_FIXED_PHONE_NUMBER_ID,
-                CONTACT_MODE_FIXED_PHONE_NUMBER_ID );
-    }
+    private static final int CONTACT_MODE_FIXED_PHONE_NUMBER_ID = AppPropertiesService.getPropertyInt( PROPERTY_CONTACT_MODE_FIXED_PHONE_NUMBER_ID,
+            2 );
 
     private static final String PROPERTY_CONTACT_MODE_MOBILE_PHONE_NUMBER_ID = "ticketing.contactmode.mobilePhoneNumber.id";
-    private static int CONTACT_MODE_MOBILE_PHONE_NUMBER_ID = 3;
-
-    static
-    {
-        CONTACT_MODE_MOBILE_PHONE_NUMBER_ID = AppPropertiesService.getPropertyInt( PROPERTY_CONTACT_MODE_MOBILE_PHONE_NUMBER_ID,
-                CONTACT_MODE_MOBILE_PHONE_NUMBER_ID );
-    }
+    private static final int CONTACT_MODE_MOBILE_PHONE_NUMBER_ID = AppPropertiesService.getPropertyInt( PROPERTY_CONTACT_MODE_MOBILE_PHONE_NUMBER_ID,
+            3 );
 
     // Variables declarations 
     private int _nId;
@@ -132,7 +122,7 @@ public class Ticket implements Serializable, RBACResource
     private int _nTicketStatus;
     @Size( max = 255, message = "#i18n{ticketing.validation.ticket.TicketStatusText.size}" )
     private String _strTicketStatusText;
-    private State _state;
+    private transient State _state;
     private Timestamp _dDateCreate;
     private Timestamp _dDateUpdate;
     private Timestamp _dDateClose;
@@ -141,10 +131,10 @@ public class Ticket implements Serializable, RBACResource
     private int _nCriticality;
     private int _nPriority;
     private String _strCustomerId;
-    private AssigneeUser _user;
-    private AssigneeUnit _unit;
-    private AssigneeUser _assignerUser;
-    private AssigneeUnit _assignerUnit;
+    private transient AssigneeUser _user;
+    private transient AssigneeUnit _unit;
+    private transient AssigneeUser _assignerUser;
+    private transient AssigneeUnit _assignerUnit;
     private String _strUserMessage;
     private String _strUrl;
     private int _nIdChannel;

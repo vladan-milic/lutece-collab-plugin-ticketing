@@ -76,7 +76,7 @@ import javax.servlet.http.HttpServletRequest;
 public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 {
     /** redirection map */
-    protected static Map<String, String> _mapRedirectUrl;
+    protected static final Map<String, String> _mapRedirectUrl;
 
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
@@ -90,7 +90,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     private static final String INFO_WORKFLOW_ACTION_EXECUTED = "ticketing.info.workflow.action.executed";
 
     // Errors
-    public static final String ERROR_WORKFLOW_ACTION_ABORTED = "ticketing.error.workflow.action.aborted.backoffice";
+    private static final String ERROR_WORKFLOW_ACTION_ABORTED = "ticketing.error.workflow.action.aborted.backoffice";
 
     static
     {
@@ -484,7 +484,6 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         String strError = MessageFormat.format( I18nService.getLocalizedString( ERROR_WORKFLOW_ACTION_ABORTED,
                     Locale.FRENCH ), action.getName(  ) );
         addError( strError );
-        ;
     }
 
     /**

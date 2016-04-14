@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.ticketing.service.format.usertitle;
 
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
-import fr.paris.lutece.plugins.ticketing.service.format.IFormatter;
+import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -49,7 +49,7 @@ import java.util.List;
  * JSON formatter for user title resource
  *
  */
-public class UserTitleFormatterJson implements IFormatter<UserTitle>
+public class UserTitleFormatterJson implements ITicketingFormatter<UserTitle>
 {
     @Override
     public String format( UserTitle userTitle )

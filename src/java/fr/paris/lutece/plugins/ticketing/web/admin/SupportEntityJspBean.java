@@ -112,7 +112,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     private static final long serialVersionUID = 1L;
 
     // Session variable to store working values
-    private SupportEntity _supportEntity;
+    private transient SupportEntity _supportEntity;
 
     /**
      * Build the Manage View

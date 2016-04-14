@@ -97,13 +97,8 @@ public final class TicketingConstants
     public static final String PROPERTY_TICKET_WORKFLOW_ID = "ticketing.workflow.id";
     public static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
     private static final String PROPERTY_CHANNEL_ID = "ticketing.channel.webChannel.id";
-    public static int WEB_ID_CHANNEL = 99;
+    public static final int WEB_ID_CHANNEL = AppPropertiesService.getPropertyInt( PROPERTY_CHANNEL_ID, 99 );
     public static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.ticket.attribute.";
-
-    static
-    {
-        WEB_ID_CHANNEL = AppPropertiesService.getPropertyInt( PROPERTY_CHANNEL_ID, WEB_ID_CHANNEL );
-    }
 
     // Session keys
     public static final String SESSION_NOT_VALIDATED_TICKET = "ticketing.ticketFormService.notValidatedTicket";

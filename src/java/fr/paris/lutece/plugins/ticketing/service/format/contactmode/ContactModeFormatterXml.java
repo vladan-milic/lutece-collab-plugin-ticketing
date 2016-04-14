@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.ticketing.service.format.contactmode;
 
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
 import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
-import fr.paris.lutece.plugins.ticketing.service.format.IFormatter;
+import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
 import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.util.List;
@@ -45,7 +45,7 @@ import java.util.List;
  * XML formatter for contact mode resource
  *
  */
-public class ContactModeFormatterXml implements IFormatter<ContactMode>
+public class ContactModeFormatterXml implements ITicketingFormatter<ContactMode>
 {
     @Override
     public String format( ContactMode contactMode )

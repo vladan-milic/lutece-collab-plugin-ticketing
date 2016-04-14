@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.ticketing.service.format.usertitle;
 
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
-import fr.paris.lutece.plugins.ticketing.service.format.IFormatter;
+import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
 import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.util.List;
@@ -45,7 +45,7 @@ import java.util.List;
  * XML formatter for user title resource
  *
  */
-public class UserTitleFormatterXml implements IFormatter<UserTitle>
+public class UserTitleFormatterXml implements ITicketingFormatter<UserTitle>
 {
     @Override
     public String format( UserTitle userTitle )

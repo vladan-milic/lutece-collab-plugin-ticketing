@@ -37,7 +37,7 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
 import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
-import fr.paris.lutece.plugins.ticketing.service.format.IFormatter;
+import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.xml.XmlUtil;
 
@@ -48,7 +48,7 @@ import java.util.List;
  * XML formatter for ticket type resource
  *
  */
-public class TicketTypeFormatterXml implements IFormatter<TicketType>
+public class TicketTypeFormatterXml implements ITicketingFormatter<TicketType>
 {
     @Override
     public String format( TicketType ticketType )

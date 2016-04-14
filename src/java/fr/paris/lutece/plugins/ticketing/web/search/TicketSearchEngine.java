@@ -56,6 +56,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 
+import java.io.IOException;
 import java.text.ParseException;
 
 import java.util.ArrayList;
@@ -82,7 +83,7 @@ public class TicketSearchEngine implements SearchEngine
         ArrayList<TicketSearchItem> listResults = new ArrayList<TicketSearchItem>(  );
         IndexSearcher searcher;
         String strSearchedField = request.getParameter( SearchConstants.PARAMETER_SEARCH_FIELD );
-
+        
         try
         {
             searcher = TicketSearchService.getInstance(  ).getSearcher(  );
@@ -150,7 +151,11 @@ public class TicketSearchEngine implements SearchEngine
                 listResults.add( si );
             }
         }
-        catch ( Exception e )
+        catch( org.apache.lucene.queryparser.classic.ParseException e )
+        {
+            AppLogService.error( e.getMessage(  ), e );
+        }
+        catch( IOException e )
         {
             AppLogService.error( e.getMessage(  ), e );
         }

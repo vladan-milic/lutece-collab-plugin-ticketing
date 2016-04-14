@@ -53,7 +53,7 @@ import java.util.Map;
  */
 public class FormatterJsonFactory implements IFormatterFactory
 {
-    private Map<Class<?>, IFormatter<?>> _formatters;
+    private Map<Class<?>, ITicketingFormatter<?>> _formatters;
     private IRestFormatter _restFormatter;
 
     /**
@@ -61,7 +61,7 @@ public class FormatterJsonFactory implements IFormatterFactory
      */
     public FormatterJsonFactory(  )
     {
-        _formatters = new HashMap<Class<?>, IFormatter<?>>(  );
+        _formatters = new HashMap<Class<?>, ITicketingFormatter<?>>(  );
         _formatters.put( Ticket.class, new TicketFormatterJson(  ) );
         _formatters.put( TicketType.class, new TicketTypeFormatterJson(  ) );
         _formatters.put( Channel.class, new ChannelFormatterJson(  ) );
@@ -72,9 +72,9 @@ public class FormatterJsonFactory implements IFormatterFactory
 
     @SuppressWarnings( "unchecked" )
     @Override
-    public <T> IFormatter<T> createFormatter( Class<T> clazz )
+    public <T> ITicketingFormatter<T> createFormatter( Class<T> clazz )
     {
-        return (IFormatter<T>) _formatters.get( clazz );
+        return (ITicketingFormatter<T>) _formatters.get( clazz );
     }
 
     @Override

@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.ticketing.service.format.ticket;
 
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
-import fr.paris.lutece.plugins.ticketing.service.format.IFormatter;
+import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -49,7 +49,7 @@ import java.util.List;
  * JSON formatter for ticket resource
  *
  */
-public class TicketFormatterJson implements IFormatter<Ticket>
+public class TicketFormatterJson implements ITicketingFormatter<Ticket>
 {
     @Override
     public String format( Ticket ticket )
