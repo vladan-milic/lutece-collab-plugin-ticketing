@@ -15,7 +15,7 @@ UPDATE ticketing_channel SET icon_font='fa fa-facebook'  WHERE id_channel=5;
 UPDATE ticketing_channel SET icon_font='fa fa-desktop'  WHERE id_channel=99;
 
 --
---
+-- add inactive field to avoid physical deletion of records in reference tables
 --
 ALTER TABLE ticketing_contact_mode ADD COLUMN inactive int(1) NOT NULL default '0';
 ALTER TABLE ticketing_ticket_category ADD COLUMN inactive int(1) NOT NULL default '0';
@@ -23,3 +23,4 @@ ALTER TABLE ticketing_ticket_domain ADD COLUMN inactive int(1) NOT NULL default 
 ALTER TABLE ticketing_ticket_type ADD COLUMN inactive int(1) NOT NULL default '0';
 ALTER TABLE ticketing_user_title ADD COLUMN inactive int(1) NOT NULL default '0';
 ALTER TABLE ticketing_channel ADD COLUMN inactive int(1) NOT NULL default '0';
+ALTER TABLE ticketing_ticket_form ADD COLUMN inactive int(1) NOT NULL default '0';

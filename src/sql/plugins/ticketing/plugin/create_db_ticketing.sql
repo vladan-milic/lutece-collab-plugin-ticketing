@@ -100,6 +100,7 @@ CREATE TABLE ticketing_ticket_form (
 	id_form int(6) NOT NULL,
 	title varchar(255) NOT NULL default '',
 	description long varchar NOT NULL,
+	inactive int(1)  NOT NULL default '0',	
 	PRIMARY KEY (id_form)
 );
 
