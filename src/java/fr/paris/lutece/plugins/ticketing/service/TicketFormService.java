@@ -483,7 +483,7 @@ public class TicketFormService implements Serializable
         {
             for ( Response response : listResponse )
             {
-                ResponseRecap responseRecap = mapResponseRecap.get( new Integer( response.getEntry(  ).getIdEntry(  ) ) );
+                ResponseRecap responseRecap = mapResponseRecap.get( Integer.valueOf( response.getEntry(  ).getIdEntry(  ) ) );
 
                 if ( responseRecap == null )
                 {

@@ -668,8 +668,8 @@ public final class TicketDAO implements ITicketDAO
         {
             //always apply default sorting
             sbSQL.append( CONSTANT_ORDER_BY );
-            sbSQL.append( TicketFilter.getDefaultOrderBySqlColumn(  ) );
-            sbSQL.append( TicketFilter.getDefaultOrderSort(  ).equals( OrderSortAllowed.ASC.name(  ) ) ? CONSTANT_ASC
+            sbSQL.append( filter.getDefaultOrderBySqlColumn(  ) );
+            sbSQL.append( filter.getDefaultOrderSort(  ).equals( OrderSortAllowed.ASC.name(  ) ) ? CONSTANT_ASC
                                                                                                        : CONSTANT_DESC );
         }
     }

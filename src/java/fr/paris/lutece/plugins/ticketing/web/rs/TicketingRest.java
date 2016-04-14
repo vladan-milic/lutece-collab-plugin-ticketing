@@ -49,16 +49,19 @@ import javax.ws.rs.core.MediaType;
  */
 public class TicketingRest
 {
-    protected static Map<String, IFormatterFactory> _formatterFactories;
+    protected static final Map<String, IFormatterFactory> _formatterFactories = new HashMap<String, IFormatterFactory>(  );
+    
+    static
+    {
+        _formatterFactories.put( MediaType.APPLICATION_JSON, new FormatterJsonFactory(  ) );
+        _formatterFactories.put( MediaType.APPLICATION_XML, new FormatterXmlFactory(  ) );
+    }
 
     /**
      * Default constructor
      */
     public TicketingRest(  )
-    {
-        _formatterFactories = new HashMap<String, IFormatterFactory>(  );
-        _formatterFactories.put( MediaType.APPLICATION_JSON, new FormatterJsonFactory(  ) );
-        _formatterFactories.put( MediaType.APPLICATION_XML, new FormatterXmlFactory(  ) );
+    {   
     }
 
     /**

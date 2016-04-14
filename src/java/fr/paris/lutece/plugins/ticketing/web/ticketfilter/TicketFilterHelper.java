@@ -84,7 +84,6 @@ public final class TicketFilterHelper
     private static final String PARAMETER_FILTER_ID_CATEGORY = "fltr_id_category";
     private static final String PARAMETER_FILTER_ID_DOMAIN = "fltr_id_domain";
     private static final String PARAMETER_FILTER_ID_TYPE = "fltr_id_type";
-    private static final String PARAMETER_FILTER_STATUS = "fltr_status";
     private static final String PARAMETER_FILTER_ORDER_BY = "fltr_order_by";
     private static final String PARAMETER_FILTER_EMAIL = "fltr_email";
     private static final String PARAMETER_FILTER_LASTNAME = "fltr_lastname";
@@ -317,7 +316,7 @@ public final class TicketFilterHelper
                 //set default value
                 filter = new TicketFilter(  );
                 filter.setOrderBy( TicketFilter.CONSTANT_DEFAULT_ORDER_BY );
-                filter.setOrderSort( TicketFilter.getDefaultOrderSort(  ) );
+                filter.setOrderSort( filter.getDefaultOrderSort(  ) );
                 filter.setListIdWorkflowState( AppPropertiesService.getProperty( 
                         PROPERTY_TICKET_STATE_FILTERED_DEFAULT_IDS ).split( TicketingConstants.FIELD_ID_SEPARATOR ) );
                 request.getSession(  ).setAttribute( TicketingConstants.SESSION_TICKET_FILTER, filter );
@@ -392,7 +391,7 @@ public final class TicketFilterHelper
                 ReferenceItem item = new ReferenceItem(  );
                 item.setCode( String.valueOf( state.getId(  ) ) );
                 item.setName( state.getName(  ) );
-                item.setChecked( listSelectedStates.contains( new Integer( state.getId(  ) ) ) );
+                item.setChecked( listSelectedStates.contains( Integer.valueOf( state.getId(  ) ) ) );
                 refList.add( item );
             }
         }

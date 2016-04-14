@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
-import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchItem;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
@@ -336,7 +335,6 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
     public synchronized void processIndexing( IndexWriter indexWriter, boolean bCreate, StringBuffer sbLogs )
         throws IOException, InterruptedException
     {
-        Plugin plugin = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME );
         List<Integer> listIdTicket = new ArrayList<Integer>(  );
 
         if ( !bCreate )
