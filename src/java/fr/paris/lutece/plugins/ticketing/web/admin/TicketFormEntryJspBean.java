@@ -107,7 +107,8 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
     private static final String FIELD_VALUE_FIELD = "ticketing.createField.labelValue";
 
     // Urls
-    private static final String JSP_URL_MANAGE_TICKETING_FORM_ENTRIES = "jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp";
+    private static final String JSP_URL_MANAGE_TICKETING_FORM_ENTRIES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
+        "ManageTicketFormEntries.jsp";
 
     // Messages
     private static final String MESSAGE_CONFIRM_REMOVE_ENTRY = "ticketing.message.confirmRemoveEntry";

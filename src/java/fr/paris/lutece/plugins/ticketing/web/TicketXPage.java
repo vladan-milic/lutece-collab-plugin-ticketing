@@ -88,11 +88,16 @@ public class TicketXPage extends WorkflowCapableXPage
     private static final long serialVersionUID = 1L;
 
     // Templates
-    private static final String TEMPLATE_CREATE_TICKET = "/skin/plugins/ticketing/create_ticket.html";
-    private static final String TEMPLATE_TICKET_FORM = "/skin/plugins/ticketing/ticket_form.html";
-    private static final String TEMPLATE_RECAP_TICKET = "/skin/plugins/ticketing/recap_ticket.html";
-    private static final String TEMPLATE_CONFIRM_TICKET = "/skin/plugins/ticketing/confirm_ticket.html";
-    private static final String TEMPLATE_MESSAGE_CONFIRM = "/skin/plugins/ticketing/message_confirm_ticket.html";
+    private static final String TEMPLATE_CREATE_TICKET = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH +
+        "create_ticket.html";
+    private static final String TEMPLATE_TICKET_FORM = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH +
+        "ticket_form.html";
+    private static final String TEMPLATE_RECAP_TICKET = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH +
+        "recap_ticket.html";
+    private static final String TEMPLATE_CONFIRM_TICKET = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH +
+        "confirm_ticket.html";
+    private static final String TEMPLATE_MESSAGE_CONFIRM = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH +
+        "message_confirm_ticket.html";
 
     // Marks
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";

@@ -64,9 +64,12 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_TICKETDOMAINS = "/admin/plugins/ticketing/admin/manage_ticket_domains.html";
-    private static final String TEMPLATE_CREATE_TICKETDOMAIN = "/admin/plugins/ticketing/admin/create_ticket_domain.html";
-    private static final String TEMPLATE_MODIFY_TICKETDOMAIN = "/admin/plugins/ticketing/admin/modify_ticket_domain.html";
+    private static final String TEMPLATE_MANAGE_TICKETDOMAINS = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "manage_ticket_domains.html";
+    private static final String TEMPLATE_CREATE_TICKETDOMAIN = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "create_ticket_domain.html";
+    private static final String TEMPLATE_MODIFY_TICKETDOMAIN = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "modify_ticket_domain.html";
 
     // Parameters
     private static final String PARAMETER_ID_TICKETDOMAIN = "id";
@@ -80,7 +83,8 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_TICKETDOMAIN_LIST = "ticketdomain_list";
     private static final String MARK_TICKETDOMAIN = "ticketdomain";
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
-    private static final String JSP_MANAGE_TICKETDOMAINS = "jsp/admin/plugins/ticketing/admin/ManageTicketDomains.jsp";
+    private static final String JSP_MANAGE_TICKETDOMAINS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
+        "ManageTicketDomains.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETDOMAIN = "ticketing.message.confirmRemoveTicketDomain";

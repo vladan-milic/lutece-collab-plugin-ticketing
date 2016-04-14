@@ -70,9 +70,12 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_TICKETCATEGORYS = "/admin/plugins/ticketing/admin/manage_ticket_categories.html";
-    private static final String TEMPLATE_CREATE_TICKETCATEGORY = "/admin/plugins/ticketing/admin/create_ticket_category.html";
-    private static final String TEMPLATE_MODIFY_TICKETCATEGORY = "/admin/plugins/ticketing/admin/modify_ticket_category.html";
+    private static final String TEMPLATE_MANAGE_TICKETCATEGORYS = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "manage_ticket_categories.html";
+    private static final String TEMPLATE_CREATE_TICKETCATEGORY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "create_ticket_category.html";
+    private static final String TEMPLATE_MODIFY_TICKETCATEGORY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "modify_ticket_category.html";
 
     // Parameters
     private static final String PARAMETER_ID_TICKETCATEGORY = "id";
@@ -90,7 +93,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_LIST_WORKFLOWS = "listWorkflows";
     private static final String MARK_LIST_UNITS = "units_list";
     private static final String MARK_TICKET_FORM_LIST = "ticketform_list";
-    private static final String JSP_MANAGE_TICKETCATEGORYS = "jsp/admin/plugins/ticketing/admin/ManageTicketCategorys.jsp";
+    private static final String JSP_MANAGE_TICKETCATEGORYS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
+        "ManageTicketCategorys.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETCATEGORY = "ticketing.message.confirmRemoveTicketCategory";

@@ -61,9 +61,12 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_TICKETTYPES = "/admin/plugins/ticketing/admin/manage_ticket_types.html";
-    private static final String TEMPLATE_CREATE_TICKETTYPE = "/admin/plugins/ticketing/admin/create_ticket_type.html";
-    private static final String TEMPLATE_MODIFY_TICKETTYPE = "/admin/plugins/ticketing/admin/modify_ticket_type.html";
+    private static final String TEMPLATE_MANAGE_TICKETTYPES = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "manage_ticket_types.html";
+    private static final String TEMPLATE_CREATE_TICKETTYPE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "create_ticket_type.html";
+    private static final String TEMPLATE_MODIFY_TICKETTYPE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "modify_ticket_type.html";
 
     // Parameters
     private static final String PARAMETER_ID_TICKETTYPE = "id";
@@ -76,7 +79,8 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     // Markers
     private static final String MARK_TICKETTYPE_LIST = "tickettype_list";
     private static final String MARK_TICKETTYPE = "tickettype";
-    private static final String JSP_MANAGE_TICKETTYPES = "jsp/admin/plugins/ticketing/admin/ManageTicketTypes.jsp";
+    private static final String JSP_MANAGE_TICKETTYPES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
+        "ManageTicketTypes.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETTYPE = "ticketing.message.confirmRemoveTicketType";

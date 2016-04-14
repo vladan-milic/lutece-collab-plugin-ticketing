@@ -60,9 +60,12 @@ public class ChannelJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_CHANNELS = "/admin/plugins/ticketing/admin/manage_channels.html";
-    private static final String TEMPLATE_CREATE_CHANNEL = "/admin/plugins/ticketing/admin/create_channel.html";
-    private static final String TEMPLATE_MODIFY_CHANNEL = "/admin/plugins/ticketing/admin/modify_channel.html";
+    private static final String TEMPLATE_MANAGE_CHANNELS = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "manage_channels.html";
+    private static final String TEMPLATE_CREATE_CHANNEL = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "create_channel.html";
+    private static final String TEMPLATE_MODIFY_CHANNEL = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "modify_channel.html";
 
     // Parameters
     private static final String PARAMETER_ID_CHANNEL = "id";
@@ -76,7 +79,8 @@ public class ChannelJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_CHANNEL_LIST = "channel_list";
     private static final String MARK_CHANNEL = "channel";
     private static final String MARK_DEFAULT_CHANNEL = "default_channel";
-    private static final String JSP_MANAGE_CHANNELS = "jsp/admin/plugins/ticketing/admin/ManageChannels.jsp";
+    private static final String JSP_MANAGE_CHANNELS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
+        "ManageChannels.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_CHANNEL = "ticketing.message.confirmRemoveChannel";

@@ -88,11 +88,16 @@ public class TicketFormJspBean extends MVCAdminJspBean
     private static final long serialVersionUID = 1L;
 
     // templates
-    private static final String TEMPLATE_MANAGE_TICKETFORMS = "/admin/plugins/ticketing/ticketform/manage_ticketforms.html";
-    private static final String TEMPLATE_CREATE_TICKETFORM = "/admin/plugins/ticketing/ticketform/create_ticketform.html";
-    private static final String TEMPLATE_MODIFY_TICKETFORM = "/admin/plugins/ticketing/ticketform/modify_ticketform.html";
-    private static final String TEMPLATE_ADVANCED_MODIFY_TICKETFORM = "/admin/plugins/ticketing/ticketform/modify_advanced_ticketform.html";
-    private static final String TEMPLATE_MODIFY_TICKETFORM_GENATTR = "/admin/plugins/ticketing/ticketform/modify_form_ticketform_genattr.html";
+    private static final String TEMPLATE_MANAGE_TICKETFORMS = TicketingConstants.TEMPLATE_ADMIN_TICKETFORM_FEATURE_PATH +
+        "manage_ticketforms.html";
+    private static final String TEMPLATE_CREATE_TICKETFORM = TicketingConstants.TEMPLATE_ADMIN_TICKETFORM_FEATURE_PATH +
+        "create_ticketform.html";
+    private static final String TEMPLATE_MODIFY_TICKETFORM = TicketingConstants.TEMPLATE_ADMIN_TICKETFORM_FEATURE_PATH +
+        "modify_ticketform.html";
+    private static final String TEMPLATE_ADVANCED_MODIFY_TICKETFORM = TicketingConstants.TEMPLATE_ADMIN_TICKETFORM_FEATURE_PATH +
+        "modify_advanced_ticketform.html";
+    private static final String TEMPLATE_MODIFY_TICKETFORM_GENATTR = TicketingConstants.TEMPLATE_ADMIN_TICKETFORM_FEATURE_PATH +
+        "modify_form_ticketform_genattr.html";
 
     // Parameters
     private static final String PARAMETER_ID_FORM = "id_form";
@@ -125,7 +130,8 @@ public class TicketFormJspBean extends MVCAdminJspBean
     private static final String MARK_PAGE = "page";
 
     // Jsp
-    private static final String JSP_MANAGE_TICKETFORMS = "jsp/admin/plugins/ticketing/admin/ManageTicketForms.jsp";
+    private static final String JSP_MANAGE_TICKETFORMS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
+        "ManageTicketForms.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETFORM = "ticketing.message.confirmRemoveTicketForm";

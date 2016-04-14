@@ -67,9 +67,12 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_SUPPORT_ENTITIES = "/admin/plugins/ticketing/admin/manage_support_entities.html";
-    private static final String TEMPLATE_CREATE_SUPPORT_ENTITY = "/admin/plugins/ticketing/admin/create_support_entity.html";
-    private static final String TEMPLATE_MODIFY_SUPPORT_ENTITY = "/admin/plugins/ticketing/admin/modify_support_entity.html";
+    private static final String TEMPLATE_MANAGE_SUPPORT_ENTITIES = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "manage_support_entities.html";
+    private static final String TEMPLATE_CREATE_SUPPORT_ENTITY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "create_support_entity.html";
+    private static final String TEMPLATE_MODIFY_SUPPORT_ENTITY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
+        "modify_support_entity.html";
 
     // Parameters
     private static final String PARAMETER_ID_SUPPORT_ENTITY = "id";
@@ -88,7 +91,8 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_UNIT_LIST = "unit_list";
     private static final String MARK_LEVEL_LIST = "level_list";
-    private static final String JSP_MANAGE_SUPPORT_ENTITIES = "jsp/admin/plugins/ticketing/admin/ManageSupportEntities.jsp";
+    private static final String JSP_MANAGE_SUPPORT_ENTITIES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
+        "ManageSupportEntities.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_SUPPORT_ENTITY = "ticketing.message.confirmRemoveSupportEntity";
