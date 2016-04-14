@@ -47,7 +47,7 @@ public class InstantResponseFilter extends OrderByFilter
 {
     public static final String CONSTANT_DEFAULT_ORDER_BY = "date_create";
     public static final String CONSTANT_DEFAULT_ORDER_SORT = OrderSortAllowed.DESC.name(  );
-    
+
     /**
      *
      */
@@ -67,13 +67,13 @@ public class InstantResponseFilter extends OrderByFilter
         _mapOrderNameToColumnName.put( "date_create", "a.date_create" );
         _mapOrderNameToColumnName.put( "assignee", "f.label" );
     }
-    
+
     @Override
     public String getDefaultOrderBySqlColumn(  )
     {
         return _mapOrderNameToColumnName.get( CONSTANT_DEFAULT_ORDER_BY );
     }
-    
+
     @Override
     public String getDefaultOrderSort(  )
     {

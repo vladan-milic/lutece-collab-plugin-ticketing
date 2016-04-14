@@ -50,7 +50,7 @@ import javax.ws.rs.core.MediaType;
 public class TicketingRest
 {
     protected static final Map<String, IFormatterFactory> _formatterFactories = new HashMap<String, IFormatterFactory>(  );
-    
+
     static
     {
         _formatterFactories.put( MediaType.APPLICATION_JSON, new FormatterJsonFactory(  ) );
@@ -61,7 +61,7 @@ public class TicketingRest
      * Default constructor
      */
     public TicketingRest(  )
-    {   
+    {
     }
 
     /**

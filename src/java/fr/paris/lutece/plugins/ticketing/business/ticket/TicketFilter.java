@@ -714,13 +714,13 @@ public class TicketFilter extends OrderByFilter
         _mapOrderNameToColumnName.put( "assignee", "h.label, g.last_name" );
         _mapOrderNameToColumnName.put( "state", "j.name" );
     }
-    
+
     @Override
     public String getDefaultOrderBySqlColumn(  )
     {
         return _mapOrderNameToColumnName.get( CONSTANT_DEFAULT_ORDER_BY );
     }
-    
+
     @Override
     public String getDefaultOrderSort(  )
     {

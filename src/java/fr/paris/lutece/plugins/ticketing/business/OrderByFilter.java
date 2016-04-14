@@ -67,13 +67,13 @@ public abstract class OrderByFilter
      *
      */
     protected abstract void initOrderNameToColumnNameMap(  );
-    
+
     /**
      * returns default order by column
      * @return default order by column
      */
     public abstract String getDefaultOrderBySqlColumn(  );
-    
+
     /**
      * @return  the strOrderSort to set
      */
