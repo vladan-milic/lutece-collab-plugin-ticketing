@@ -347,8 +347,7 @@ public final class TicketFilterHelper
                     PROPERTY_TICKET_TYPE_LABEL, request.getLocale(  ) ), StringUtils.EMPTY );
         refListTypes.addAll( TicketTypeHome.getReferenceList(  ) );
 
-        ReferenceList refListDomains = new ReferenceList(  );
-        refListDomains = TicketUtils.getEmptyItemReferenceList( I18nService.getLocalizedString( 
+        ReferenceList refListDomains = TicketUtils.getEmptyItemReferenceList( I18nService.getLocalizedString( 
                     PROPERTY_TICKET_DOMAIN_LABEL, request.getLocale(  ) ), StringUtils.EMPTY );
 
         if ( fltrFilter.getIdType(  ) > 0 )

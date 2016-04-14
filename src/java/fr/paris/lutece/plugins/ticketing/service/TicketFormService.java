@@ -514,7 +514,7 @@ public class TicketFormService implements Serializable
                     }
                 }
 
-                mapResponseRecap.put( new Integer( response.getEntry(  ).getIdEntry(  ) ), responseRecap );
+                mapResponseRecap.put( Integer.valueOf( response.getEntry(  ).getIdEntry(  ) ), responseRecap );
             }
         }
 
