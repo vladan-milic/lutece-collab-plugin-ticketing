@@ -63,8 +63,6 @@ import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.lang.StringUtils;
 
-import java.io.FileNotFoundException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -251,11 +249,10 @@ public class TicketFormJspBean extends MVCAdminJspBean
      * @return The JSP URL of the process result
      * @throws AccessDeniedException If the user is not authorized to create
      *             ticketing forms
-     * @throws FileNotFoundException
      */
     @Action( ACTION_CREATE_TICKETFORM )
     public String doCreateTicketForm( HttpServletRequest request )
-        throws AccessDeniedException, FileNotFoundException
+        throws AccessDeniedException
     {
         TicketForm ticketForm = (TicketForm) request.getSession(  ).getAttribute( SESSION_ATTRIBUTE_TICKETING_FORM );
 

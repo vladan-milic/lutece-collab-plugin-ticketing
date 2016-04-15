@@ -361,61 +361,6 @@ public class TicketFormEntryJspBean extends MVCAdminJspBean
     }
 
     /**
-     * Get the request data and if there is no error insert the data in the
-     * field specified in parameter. return null if there is no error or else
-     * return the error page URL
-     * @param request the request
-     * @param field field
-     * @return null if there is no error or else return the error page URL
-     */
-    private String getFieldData( HttpServletRequest request, Field field )
-    {
-        String strTitle = request.getParameter( PARAMETER_TITLE );
-        String strCode = request.getParameter( PARAMETER_FIELD_CODE );
-        String strValue = request.getParameter( PARAMETER_VALUE );
-        String strDefaultValue = request.getParameter( PARAMETER_DEFAULT_VALUE );
-        String strNoDisplayTitle = request.getParameter( PARAMETER_NO_DISPLAY_TITLE );
-        String strComment = request.getParameter( PARAMETER_COMMENT );
-
-        String strFieldError = null;
-
-        if ( StringUtils.isEmpty( strTitle ) )
-        {
-            strFieldError = FIELD_TITLE_FIELD;
-        }
-        else if ( StringUtils.isEmpty( strCode ) )
-        {
-            strFieldError = FIELD_CODE_FIELD;
-        }
-        else if ( StringUtils.isEmpty( strValue ) )
-        {
-            strFieldError = FIELD_VALUE_FIELD;
-        }
-        else if ( !StringUtil.checkCodeKey( strValue ) )
-        {
-            return AdminMessageService.getMessageUrl( request, MESSAGE_FIELD_VALUE_FIELD, AdminMessage.TYPE_STOP );
-        }
-
-        if ( strFieldError != null )
-        {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale(  ) ) };
-
-            return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields,
-                AdminMessage.TYPE_STOP );
-        }
-
-        field.setTitle( strTitle );
-        field.setValue( strValue );
-        field.setComment( strComment );
-        field.setCode( strCode );
-
-        field.setDefaultValue( strDefaultValue != null );
-        field.setNoDisplayTitle( strNoDisplayTitle != null );
-
-        return null; // No error
-    }
-
-    /**
      * Perform the entry modification
      * @param request The HTTP request
      * @return The URL to go after performing the action

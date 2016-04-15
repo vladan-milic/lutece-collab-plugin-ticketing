@@ -246,7 +246,7 @@ public class TicketingAction extends Action
     }
 
     /**
-     * {@inheritDoc )}
+     * {@inheritDoc }
      */
     public void setOrder( int nOrder )
     {

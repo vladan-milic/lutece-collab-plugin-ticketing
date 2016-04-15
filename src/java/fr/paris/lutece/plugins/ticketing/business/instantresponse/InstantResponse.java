@@ -37,8 +37,6 @@ import java.io.Serializable;
 
 import java.sql.Timestamp;
 
-import java.util.Calendar;
-
 
 /**
  * This is the business class for the object InstantResponse

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -161,7 +161,6 @@ public final class TicketSearchService
      */
     public IndexSearcher getSearcher(  )
     {
-        IndexReader dir = null;
         IndexSearcher searcher = null;
 
         try
@@ -172,18 +171,6 @@ public final class TicketSearchService
         catch ( IOException e )
         {
             AppLogService.error( e.getMessage(  ), e );
-
-            if ( dir != null )
-            {
-                try
-                {
-                    dir.close(  );
-                }
-                catch ( IOException e1 )
-                {
-                    AppLogService.error( e1.getMessage(  ), e );
-                }
-            }
         }
 
         return searcher;

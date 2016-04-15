@@ -36,8 +36,6 @@ package fr.paris.lutece.plugins.ticketing.business.instantresponse;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 

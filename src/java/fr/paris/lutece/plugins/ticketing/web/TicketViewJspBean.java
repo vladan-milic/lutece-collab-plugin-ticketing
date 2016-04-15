@@ -45,10 +45,8 @@ import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
-import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
-import fr.paris.lutece.portal.service.rbac.RBACResource;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -87,8 +85,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
     // Views
     private static final String VIEW_DETAILS = "ticketDetails";
-    private static final String VIEW_HISTORY = "ticketHistory";
-
+    
     // Other constants
     private static final long serialVersionUID = 1L;
 

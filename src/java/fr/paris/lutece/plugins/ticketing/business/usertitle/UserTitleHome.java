@@ -123,6 +123,7 @@ public final class UserTitleHome
 
     /**
      * returns referenceList
+     * @param locale locale
      * @return ReferenceList
      */
     public static ReferenceList getReferenceList( Locale locale )
