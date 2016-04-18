@@ -40,12 +40,6 @@ package fr.paris.lutece.plugins.ticketing.service.format;
  */
 public interface IFormatterFactory
 {
-    /**
-     * create and returns a <T> ITicketingFormatter instance 
-     * @param clazz class to be formatted
-     * @param <T> type of class to be formatted
-     * @return a <T> ITicketingFormatter instance 
-     */
     <T> ITicketingFormatter<T> createFormatter( Class<T> clazz );
 
     /**
