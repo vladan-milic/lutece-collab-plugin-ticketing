@@ -67,6 +67,7 @@ import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.prefs.AdminUserPreferencesService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -268,6 +269,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
         TicketFilterHelper.setModel( model, filter, request, getUser(  ) );
         ModelUtils.storeTicketRights( model, getUser(  ) );
+
+        String strCreationDateDisplay = AdminUserPreferencesService.instance(  )
+                                                                   .get( String.valueOf( getUser(  ).getUserId(  ) ),
+                TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY, StringUtils.EMPTY );
+        model.put( TicketingConstants.MARK_CREATION_DATE_AS_DATE,
+            TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY_DATE.equals( strCreationDateDisplay ) );
 
         String messageInfo = TicketUtils.getParameter( request,
                 TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );

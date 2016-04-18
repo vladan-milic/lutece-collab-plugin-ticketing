@@ -18,7 +18,11 @@
       		<thead>
       		  <tr>
                   <th data-field="reference">#i18n{ticketing.manage_tickets.columnReference} </th>
-        			<th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate}</th>
+        			<#if creation_date_as_date >
+                      <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.date}</th>
+                    <#else>
+                      <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.counter}</th>
+                    </#if>
         			<th data-field="category_label">#i18n{ticketing.manage_tickets.columnTicketType}</th>
         			<th data-field="lastname">#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment}</th>
         			<th data-field="state">#i18n{ticketing.manage_tickets.columnTicketState}</th>
@@ -66,7 +70,11 @@
               </#if>
             </td>
 		          <td>
-    				${ticket.dateCreate?string["dd/MM/yyyy HH:mm"]}
+    				<#if creation_date_as_date >
+                      ${ticket.dateCreate?string["dd/MM/yyyy HH:mm"]}
+                    <#else>
+                      ${displayDateAsCounter( ticket.dateCreate, ticket.ticketStatus ) }
+                    </#if>
     			  </td>
     			  <td>
     				  ${ticket.ticketType} <br>#i18n{ticketing.manage_tickets.columnTicketDomain}: ${ticket.ticketDomain} <br>#i18n{ticketing.manage_tickets.columnTicketCategory}: <strong>${ticket.ticketCategory}</strong>
