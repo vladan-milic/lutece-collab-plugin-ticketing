@@ -62,6 +62,9 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
     protected static final String CONTROLLER_JSP = "UserPreferences.jsp";
     protected static final String CONTROLLER_RIGHT = "TICKETING_USER_PREFERENCES_MANAGEMENT";
 
+    // Parameters
+    private static final String PARAMETER_CREATION_DATE_DISPLAY = "creation_date_display";
+
     /**
      * Generated serial id
      */
@@ -94,19 +97,25 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
     public String getManageUserPreferences( HttpServletRequest request )
     {
         Map<String, Object> model = getModel(  );
+        int nUserId = getUser(  ).getUserId(  );
 
-        String strUserSignature = _userPreferencesService.get( String.valueOf( getUser(  ).getUserId(  ) ),
+        String strCreationDateDisplay = _userPreferencesService.get( String.valueOf( nUserId ),
+                TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY, StringUtils.EMPTY );
+        model.put( TicketingConstants.MARK_CREATION_DATE_AS_DATE,
+            TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY_DATE.equals( strCreationDateDisplay ) );
+
+        String strUserSignature = _userPreferencesService.get( String.valueOf( nUserId ),
                 TicketingConstants.USER_PREFERENCE_SIGNATURE, StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_USER_SIGNATURE, strUserSignature );
 
         model.put( TicketingConstants.MARK_CHANNELS_LIST, ChannelHome.getChannelList(  ) );
 
-        String strIdChannelList = _userPreferencesService.get( String.valueOf( getUser(  ).getUserId(  ) ),
+        String strIdChannelList = _userPreferencesService.get( String.valueOf( nUserId ),
                 TicketingConstants.USER_PREFERENCE_CHANNELS_LIST, StringUtils.EMPTY );
         List<Integer> idChannelList = TicketUtils.extractListIdFromString( strIdChannelList );
         model.put( TicketingConstants.MARK_SELECTABLE_ID_CHANNEL_LIST, idChannelList );
 
-        String strPreferredIdChannel = _userPreferencesService.get( String.valueOf( getUser(  ).getUserId(  ) ),
+        String strPreferredIdChannel = _userPreferencesService.get( String.valueOf( nUserId ),
                 TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_PREFERRED_ID_CHANNEL, strPreferredIdChannel );
 
@@ -123,18 +132,23 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
     @Action( ACTION_MODIFY_USER_PREFERENCES )
     public String doModifyUserPreferences( HttpServletRequest request )
     {
+        int nUserId = getUser(  ).getUserId(  );
+
+        String strCreationDateDisplay = request.getParameter( PARAMETER_CREATION_DATE_DISPLAY );
+        _userPreferencesService.put( String.valueOf( nUserId ),
+            TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY, strCreationDateDisplay );
+
         String strUserSignature = request.getParameter( TicketingConstants.PARAMETER_USER_SIGNATURE );
-        _userPreferencesService.put( String.valueOf( getUser(  ).getUserId(  ) ),
-            TicketingConstants.USER_PREFERENCE_SIGNATURE, strUserSignature );
+        _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_SIGNATURE,
+            strUserSignature );
 
         String[] tabIdChannelList = request.getParameterValues( TicketingConstants.PARAMETER_SELECTABLE_ID_CHANNEL_LIST );
-        _userPreferencesService.put( String.valueOf( getUser(  ).getUserId(  ) ),
-            TicketingConstants.USER_PREFERENCE_CHANNELS_LIST,
+        _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_CHANNELS_LIST,
             StringUtils.join( tabIdChannelList, TicketingConstants.FIELD_ID_SEPARATOR ) );
 
         String strPreferredIdChannel = request.getParameter( TicketingConstants.PARAMETER_SELECTED_ID_CHANNEL );
-        _userPreferencesService.put( String.valueOf( getUser(  ).getUserId(  ) ),
-            TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, strPreferredIdChannel );
+        _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL,
+            strPreferredIdChannel );
 
         addInfo( INFO_USER_PREFERENCES_SAVED, getLocale(  ) );
 

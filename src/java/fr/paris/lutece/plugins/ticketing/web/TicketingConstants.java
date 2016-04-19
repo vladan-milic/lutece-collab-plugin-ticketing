@@ -89,6 +89,7 @@ public final class TicketingConstants
     public static final String MARK_SELECTABLE_ID_CHANNEL_LIST = "selectable_id_channel_list";
     public static final String MARK_USER_SIGNATURE = "user_signature";
     public static final String MARK_AGENT_VIEW = "agent_view";
+    public static final String MARK_CREATION_DATE_AS_DATE = "creation_date_as_date";
 
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
@@ -120,6 +121,8 @@ public final class TicketingConstants
     public static final String ERROR_TICKET_CREATION_ABORTED = "ticketing.error.ticket.creation.aborted.backoffice";
 
     // User preferences
+    public static final String USER_PREFERENCE_CREATION_DATE_DISPLAY = "creationDateDisplay";
+    public static final String USER_PREFERENCE_CREATION_DATE_DISPLAY_DATE = "date";
     public static final String USER_PREFERENCE_SIGNATURE = "ticketingUserSignature";
     public static final String USER_PREFERENCE_CHANNELS_LIST = "ticketingUserChannelsList";
     public static final String USER_PREFERENCE_PREFERRED_CHANNEL = "ticketingUserPreferredChannel";

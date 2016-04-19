@@ -114,6 +114,30 @@
     <#return message?html?replace('\n', '<br>')/>
 </#function>
 
+<#function displayDateAsCounter date status>
+    <#assign time_ms = .now?long - date?long>
+    <#assign days = (time_ms / 86400000)?int>
+    <#assign hours = (time_ms / 3600000)?int>
+    <#assign minutes = (time_ms / 60000)?int>
+
+    <#switch status>
+      <#case 0>
+        <#if days gte 1>
+            <#return "<strong class=\"lead\">" + days + "</strong><br class=\"hidden-xs\"> #i18n{ticketing.commons.unitDay}">
+        <#else>
+            <#if hours gte 1>
+            <#return "<strong class=\"lead\">" + hours + "</strong><br class=\"hidden-xs\"> #i18n{ticketing.commons.unitHour}">
+            <#else>
+            <#return "<strong class=\"lead\">" + minutes + "</strong><br class=\"hidden-xs\"> #i18n{ticketing.commons.unitMinute}">
+            </#if>
+        </#if>
+        <#break>
+    <#case 1>
+        <#return "<i class=\"fa fa-check fa-2x\" style=\"margin-top:20px\"></i>">
+        <#break>
+    </#switch>
+</#function>
+
 <#macro fieldStaticTextTicketDetails i18nLabelKey >
     <div class="ticketing-form-group">
         <p>#i18n{${i18nLabelKey}}</p>

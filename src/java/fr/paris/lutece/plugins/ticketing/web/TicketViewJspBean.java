@@ -85,7 +85,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
     // Views
     private static final String VIEW_DETAILS = "ticketDetails";
-    
+
     // Other constants
     private static final long serialVersionUID = 1L;
 
