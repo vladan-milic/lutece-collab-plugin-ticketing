@@ -44,8 +44,11 @@ import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.beanvalidation.BeanValidationUtil;
 import fr.paris.lutece.util.beanvalidation.ValidationError;
+
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +61,13 @@ import java.util.Locale;
  */
 public class TicketValidator
 {
+    private static final String PROPERTY_CONTACT_MODE_FIXED_PHONE_NUMBER_ID = "ticketing.contactmode.fixedPhoneNumber.id";
+    private static final int CONTACT_MODE_FIXED_PHONE_NUMBER_ID = AppPropertiesService.getPropertyInt( PROPERTY_CONTACT_MODE_FIXED_PHONE_NUMBER_ID,
+            2 );
+    private static final String PROPERTY_CONTACT_MODE_MOBILE_PHONE_NUMBER_ID = "ticketing.contactmode.mobilePhoneNumber.id";
+    private static final int CONTACT_MODE_MOBILE_PHONE_NUMBER_ID = AppPropertiesService.getPropertyInt( PROPERTY_CONTACT_MODE_MOBILE_PHONE_NUMBER_ID,
+            3 );
+
     // Errors
     private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
     private static final String ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED = "ticketing.error.contactmode.inconsistent";
@@ -65,6 +75,8 @@ public class TicketValidator
     private static final String ERROR_TICKET_CATEGORY_UNKNOWN = "ticketing.error.ticketCategory.unknown";
     private static final String ERROR_CONTACT_MODE_UNKNOWN = "ticketing.error.contactMode.unknown";
     private static final String ERROR_CHANNEL_UNKNOWN = "ticketing.error.channel.unknown";
+
+    // Attributes
     private Locale _locale;
 
     /**
@@ -116,12 +128,12 @@ public class TicketValidator
     {
         List<String> listErrors = new ArrayList<String>(  );
 
-        if ( ticket.hasNoPhoneNumberFilled(  ) )
+        if ( !hasPhoneNumber( ticket ) )
         {
             listErrors.add( I18nService.getLocalizedString( ERROR_PHONE_NUMBER_MISSING, _locale ) );
         }
 
-        if ( ticket.isInconsistentContactModeWithPhoneNumberFilled(  ) )
+        if ( !isContactModeConsistentWithPhoneNumber( ticket ) )
         {
             listErrors.add( I18nService.getLocalizedString( ERROR_INCONSISTENT_CONTACT_MODE_WITH_PHONE_NUMBER_FILLED,
                     _locale ) );
@@ -159,5 +171,35 @@ public class TicketValidator
         }
 
         return listErrors;
+    }
+
+    /**
+     * Tests whether the specified ticket has a phone number or not
+     *
+     * @param ticket the ticket to test
+     * @return {@code true} if neither the fixed phone number nor the mobile phone number are
+     * filled, {@code false} otherwise
+     */
+    private boolean hasPhoneNumber( Ticket ticket )
+    {
+        return !StringUtils.isBlank( ticket.getFixedPhoneNumber(  ) ) ||
+        !StringUtils.isBlank( ticket.getMobilePhoneNumber(  ) );
+    }
+
+    /**
+     * Tests if the contact mode is consistent with the phone numbers
+     *
+     * @param ticket the ticket to test
+     * @return {@code true} if the fixed phone number or the mobile phone number is not
+     * filled and if the corresponding contact mode is selected, {@code false} otherwise
+     */
+    private boolean isContactModeConsistentWithPhoneNumber( Ticket ticket )
+    {
+        return ( ( ( ticket.getIdContactMode(  ) != CONTACT_MODE_FIXED_PHONE_NUMBER_ID ) &&
+        ( ticket.getIdContactMode(  ) != CONTACT_MODE_MOBILE_PHONE_NUMBER_ID ) ) ||
+        ( ( ticket.getIdContactMode(  ) == CONTACT_MODE_FIXED_PHONE_NUMBER_ID ) &&
+        !StringUtils.isBlank( ticket.getFixedPhoneNumber(  ) ) ) ||
+        ( ( ticket.getIdContactMode(  ) == CONTACT_MODE_MOBILE_PHONE_NUMBER_ID ) &&
+        !StringUtils.isBlank( ticket.getMobilePhoneNumber(  ) ) ) );
     }
 }
