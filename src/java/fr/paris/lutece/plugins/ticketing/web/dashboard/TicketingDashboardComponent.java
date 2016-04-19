@@ -86,7 +86,7 @@ public class TicketingDashboardComponent extends DashboardComponent
         UrlItem url = new UrlItem( right.getUrl(  ) );
         url.addParameter( PARAMETER_PLUGIN_NAME, right.getPluginName(  ) );
 
-        TicketFilter filter = TicketFilterHelper.getFilterFromRequest( request );
+        TicketFilter filter = TicketFilterHelper.getDefaultFilter(  );
 
         List<Ticket> listAgentTickets = new ArrayList<Ticket>(  );
         List<Ticket> listGroupTickets = new ArrayList<Ticket>(  );
