@@ -314,11 +314,7 @@ public final class TicketFilterHelper
             else
             {
                 //set default value
-                filter = new TicketFilter(  );
-                filter.setOrderBy( TicketFilter.CONSTANT_DEFAULT_ORDER_BY );
-                filter.setOrderSort( filter.getDefaultOrderSort(  ) );
-                filter.setListIdWorkflowState( AppPropertiesService.getProperty( 
-                        PROPERTY_TICKET_STATE_FILTERED_DEFAULT_IDS ).split( TicketingConstants.FIELD_ID_SEPARATOR ) );
+                filter = getDefaultFilter(  );
                 request.getSession(  ).setAttribute( TicketingConstants.SESSION_TICKET_FILTER, filter );
             }
         }
@@ -327,6 +323,21 @@ public final class TicketFilterHelper
             filter = TicketFilterHelper.getFilterFromRequest( request );
             request.getSession(  ).setAttribute( TicketingConstants.SESSION_TICKET_FILTER, filter );
         }
+
+        return filter;
+    }
+
+    /**
+     * returns default filter
+     * @return default filter
+     */
+    public static TicketFilter getDefaultFilter(  )
+    {
+        TicketFilter filter = new TicketFilter(  );
+        filter.setOrderBy( TicketFilter.CONSTANT_DEFAULT_ORDER_BY );
+        filter.setOrderSort( filter.getDefaultOrderSort(  ) );
+        filter.setListIdWorkflowState( AppPropertiesService.getProperty( PROPERTY_TICKET_STATE_FILTERED_DEFAULT_IDS )
+                                                           .split( TicketingConstants.FIELD_ID_SEPARATOR ) );
 
         return filter;
     }
