@@ -25,19 +25,21 @@
             <div class="form-group">
               <label class="col-xs-12 col-sm-3 control-label">#i18n{ticketing.manage_user_preferences.labelCreationDate} :</label>
               <div class="col-xs-12 col-sm-9">
-                <input type="radio" name="creation_date_display" id="check_creation_date_as_counter" value="counter" <#if !creation_date_as_date>checked</#if> />
-                <label for="check_creation_date_as_counter" >
+                <div>
+                  <input type="radio" name="creation_date_display" id="check_creation_date_as_counter" value="counter" <#if !creation_date_as_date>checked</#if> />
+                  <label for="check_creation_date_as_counter" >
                   &nbsp;#i18n{ticketing.manage_user_preferences.labelCreationDate.counter}
-                </label>
-                ( #i18n{ticketing.manage_user_preferences.labelCreationDate.labelExample} <strong class="lead">0</strong> #i18n{ticketing.commons.unitMinute} )
-              </div>
-              <div class="col-xs-12 col-sm-9">
-                <input type="radio" name="creation_date_display" id="check_creation_date_as_date" value="date" <#if creation_date_as_date>checked</#if>/>
-                <label for="check_creation_date_as_date" >
+                  </label>
+                  ( #i18n{ticketing.manage_user_preferences.labelCreationDate.labelExample} <strong class="lead">0</strong> #i18n{ticketing.commons.unitMinute} )
+                </div>
+                <div>
+                  <input type="radio" name="creation_date_display" id="check_creation_date_as_date" value="date" <#if creation_date_as_date>checked</#if>/>
+                  <label for="check_creation_date_as_date" >
                   &nbsp;#i18n{ticketing.manage_user_preferences.labelCreationDate.date}
-                </label>
-                ( #i18n{ticketing.manage_user_preferences.labelCreationDate.labelExample} ${.now?string["dd/MM/yyyy HH:mm"]} )
-                <p class="help-block">#i18n{ticketing.manage_user_preferences.labelCreationDate.help}</p>
+                  </label>
+                  ( #i18n{ticketing.manage_user_preferences.labelCreationDate.labelExample} ${.now?string["dd/MM/yyyy HH:mm"]} )
+                  <p class="help-block">#i18n{ticketing.manage_user_preferences.labelCreationDate.help}</p>
+                </div>
               </div>
             </div>
             <@fieldTextArea i18nLabelKey="ticketing.manage_user_preferences.labelUserSignature" inputName="user_signature" value="${user_signature!''}" i18nHelpBlockKey="ticketing.manage_user_preferences.labelUserSignature.help" cssClass="form-control richtext" />
