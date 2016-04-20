@@ -1012,8 +1012,11 @@ public class Ticket implements Serializable, RBACResource
         return ( _nCriticality >= _nPriority ) ? _nCriticality : _nPriority;
     }
 
-    @Override
-    public String toString(  )
+    /**
+     * returns a string with content fields to be indexed
+     * @return string with content fields to be indexed
+     */
+    public String getContentForIndexer(  )
     {
         StringBuilder sb = new StringBuilder(  );
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
@@ -1242,6 +1245,22 @@ public class Ticket implements Serializable, RBACResource
         if ( StringUtils.isNotEmpty( _strTicketCategory ) )
         {
             sb.append( _strTicketCategory ).append( SEPARATOR );
+        }
+
+        return sb.toString(  );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String toString(  )
+    {
+        StringBuilder sb = new StringBuilder(  );
+        sb.append( _nId );
+
+        if ( StringUtils.isNotEmpty( _strReference ) )
+        {
+            sb.append( SEPARATOR ).append( _strReference );
         }
 
         return sb.toString(  );
