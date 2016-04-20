@@ -16,13 +16,13 @@
           </#if>
         </p>
         </#if>
-        <#if ticket.mobilePhone?has_content>
+        <#if ticket.mobilePhoneNumber?has_content>
         <p>
           <i class="fa fa-mobile" ></i>
-          <#if ticket.mobilePhone?length == 10>
-          ${ticket.mobilePhone[0..1]} ${ticket.mobilePhone[2..3]} ${ticket.mobilePhone[4..5]} ${ticket.mobilePhone[6..7]} ${ticket.mobilePhone[8..9]}
+          <#if ticket.mobilePhoneNumber?length == 10>
+          ${ticket.mobilePhoneNumber[0..1]} ${ticket.mobilePhoneNumber[2..3]} ${ticket.mobilePhoneNumber[4..5]} ${ticket.mobilePhoneNumber[6..7]} ${ticket.mobilePhoneNumber[8..9]}
           <#else>
-          ${ticket.mobilePhone!}
+          ${ticket.mobilePhoneNumber!}
           </#if>
         </p>
         </#if>
@@ -50,13 +50,13 @@
           </#if>
         </p>
       </#if>
-      <#if ticket.mobilePhone?has_content>
+      <#if ticket.mobilePhoneNumber?has_content>
         <p>
           <i class="fa fa-mobile" ></i>
-          <#if ticket.mobilePhone?length == 10>
-            ${ticket.mobilePhone[0..1]} ${ticket.mobilePhone[2..3]} ${ticket.mobilePhone[4..5]} ${ticket.mobilePhone[6..7]} ${ticket.mobilePhone[8..9]}
+          <#if ticket.mobilePhoneNumber?length == 10>
+            ${ticket.mobilePhoneNumber[0..1]} ${ticket.mobilePhoneNumber[2..3]} ${ticket.mobilePhoneNumber[4..5]} ${ticket.mobilePhoneNumber[6..7]} ${ticket.mobilePhoneNumber[8..9]}
           <#else>
-            ${ticket.mobilePhone!}
+            ${ticket.mobilePhoneNumber!}
           </#if>
         </p>
       </#if>
