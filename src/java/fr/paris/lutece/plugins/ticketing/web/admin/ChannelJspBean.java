@@ -197,8 +197,6 @@ public class ChannelJspBean extends ManageAdminTicketingJspBean
     public String doRemoveChannel( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CHANNEL ) );
-
-        //TODO : remove channel id in user preference if present
         ChannelHome.remove( nId );
         addInfo( INFO_CHANNEL_REMOVED, getLocale(  ) );
 
