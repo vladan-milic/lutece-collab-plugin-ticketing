@@ -24,3 +24,9 @@ ALTER TABLE ticketing_ticket_type ADD COLUMN inactive int(1) NOT NULL default '0
 ALTER TABLE ticketing_user_title ADD COLUMN inactive int(1) NOT NULL default '0';
 ALTER TABLE ticketing_channel ADD COLUMN inactive int(1) NOT NULL default '0';
 ALTER TABLE ticketing_ticket_form ADD COLUMN inactive int(1) NOT NULL default '0';
+
+--
+--  Remove nullable constraint on phone numbers
+--
+ALTER TABLE ticketing_ticket MODIFY fixed_phone_number varchar(50) NULL default '';
+ALTER TABLE ticketing_ticket MODIFY mobile_phone_number varchar(50) NULL default '';
