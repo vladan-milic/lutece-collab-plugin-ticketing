@@ -56,8 +56,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.FieldType;
-import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
@@ -216,14 +215,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         throws IOException, InterruptedException
     {
         // make a new, empty document
-        org.apache.lucene.document.Document doc = new org.apache.lucene.document.Document(  );
-
-        FieldType ft = new FieldType( StringField.TYPE_STORED );
-        ft.setOmitNorms( false );
-
-        FieldType ftNotStored = new FieldType( StringField.TYPE_NOT_STORED );
-        ftNotStored.setOmitNorms( false );
-        ftNotStored.setTokenized( false );
+        Document doc = new Document(  );
 
         // Add the uid as a field, so that index can be incrementally
         // maintained.
@@ -231,34 +223,33 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         // is not
         // tokenized prior to indexing.
         String strIdTicket = String.valueOf( ticket.getId(  ) );
-        doc.add( new Field( TicketSearchItem.FIELD_UID, strIdTicket + "_" + SHORT_NAME_TICKET, ftNotStored ) );
+        doc.add( new Field( TicketSearchItem.FIELD_UID, strIdTicket + "_" + SHORT_NAME_TICKET, TextField.TYPE_NOT_STORED ) );
         doc.add( new Field( TicketSearchItem.FIELD_TICKET_ID, strIdTicket, TextField.TYPE_STORED ) );
-        doc.add( new Field( TicketSearchItem.FIELD_CONTENTS, ticket.toString(  ).toLowerCase(  ),
-                TextField.TYPE_NOT_STORED ) );
-
-        doc.add( new Field( TicketSearchItem.FIELD_CATEGORY, ticket.getTicketCategory(  ), TextField.TYPE_STORED ) );
-        doc.add( new Field( TicketSearchItem.FIELD_REFERENCE, ticket.getReference(  ), TextField.TYPE_STORED ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_CONTENTS, ticket.getContentForIndexer(  ), Store.NO ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_CATEGORY, ticket.getTicketCategory(  ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_REFERENCE, ticket.getReference(  ), Store.YES ) );
 
         String strDate = DateTools.dateToString( ticket.getDateCreate(  ), DateTools.Resolution.DAY );
-        doc.add( new Field( TicketSearchItem.FIELD_DATE, strDate, ftNotStored ) );
+        doc.add( new Field( TicketSearchItem.FIELD_DATE, strDate, TextField.TYPE_NOT_STORED ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_COMMENT, ticket.getTicketComment(  ), Store.YES ) );
 
         //add response for closed tickets with response 
         if ( ( getStateId( ticket ) == AppPropertiesService.getPropertyInt( 
                     TicketingConstants.PROPERTY_TICKET_CLOSE_ID, -1 ) ) &&
                 StringUtils.isNotEmpty( ticket.getUserMessage(  ) ) )
         {
-            //escape html from response for indexation, not stored
-            doc.add( new Field( TicketSearchItem.FIELD_TXT_RESPONSE,
-                    Jsoup.parse( ticket.getUserMessage(  ) ).text(  ).toLowerCase(  ), ftNotStored ) );
-            doc.add( new Field( TicketSearchItem.FIELD_RESPONSE, ticket.getUserMessage(  ), ft ) );
-            doc.add( new Field( TicketSearchItem.FIELD_TXT_COMMENT, ticket.getTicketComment(  ).toLowerCase(  ),
-                    ftNotStored ) );
-            doc.add( new Field( TicketSearchItem.FIELD_COMMENT, ticket.getTicketComment(  ), ft ) );
+            doc.add( new TextField( TicketSearchItem.FIELD_RESPONSE, ticket.getUserMessage(  ), Store.YES ) );
+            doc.add( new TextField( TicketSearchItem.FIELD_TXT_RESPONSE,
+                    Jsoup.parse( ticket.getUserMessage(  ) ).text(  ), Store.NO ) );
+        }
+        else
+        {
+            doc.add( new TextField( TicketSearchItem.FIELD_TXT_RESPONSE, StringUtils.EMPTY, Store.NO ) );
         }
 
-        doc.add( new Field( TicketSearchItem.FIELD_SUMMARY, ticket.getDisplaySummary(  ), ft ) );
-        doc.add( new Field( TicketSearchItem.FIELD_TITLE, ticket.getDisplayTitle(  ), ft ) );
-        doc.add( new Field( TicketSearchItem.FIELD_TYPE, getDocumentType(  ), ft ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_SUMMARY, ticket.getDisplaySummary(  ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_TITLE, ticket.getDisplayTitle(  ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_TYPE, getDocumentType(  ), Store.YES ) );
 
         return doc;
     }

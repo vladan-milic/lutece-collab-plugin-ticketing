@@ -35,9 +35,9 @@ package fr.paris.lutece.plugins.ticketing.web.search;
 
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.search.SearchEngine;
 import fr.paris.lutece.portal.service.search.SearchResult;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
@@ -49,6 +49,8 @@ import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.lang.StringUtils;
+
+import org.apache.lucene.queryparser.classic.ParseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -102,8 +104,7 @@ public class TicketSearchJspBean extends MVCAdminJspBean
         {
             UrlItem url = new UrlItem( getActionUrl( ACTION_SEARCH_TICKET ) );
             url.addParameter( SearchConstants.PARAMETER_QUERY, strQuery );
-            url.addParameter( SearchConstants.PARAMETER_SEARCH_FIELD,
-                request.getParameter( SearchConstants.PARAMETER_SEARCH_FIELD ) );
+            url.addParameter( SearchConstants.PARAMETER_SEARCH_FIELD, strSearchField );
 
             _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
             _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_DEFAULT_RESULT_PER_PAGE,
@@ -111,20 +112,44 @@ public class TicketSearchJspBean extends MVCAdminJspBean
             _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
                     _nDefaultItemsPerPage );
 
-            SearchEngine engine = (SearchEngine) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
-            List<SearchResult> listResults = engine.getSearchResults( strQuery, request );
+            TicketSearchEngine engine = (TicketSearchEngine) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
+            List<SearchResult> listResults;
 
-            Paginator paginator = new Paginator( listResults, _nItemsPerPage, url.getUrl(  ),
-                    SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
+            try
+            {
+                if ( strSearchField.equals( TicketSearchItem.FIELD_CATEGORY ) )
+                {
+                    // search query for category field
+                    listResults = engine.searchTicketsFromCategory( strQuery );
+                }
+                else if ( strSearchField.equals( TicketSearchItem.FIELD_REFERENCE ) )
+                {
+                    // search query for reference field
+                    listResults = engine.searchTicketFromReference( strQuery );
+                }
+                else
+                {
+                    // default search query
+                    listResults = engine.searchTickets( strQuery );
+                }
 
-            model.put( SearchConstants.MARK_RESULT, paginator.getPageItems(  ) );
-            model.put( SearchConstants.MARK_QUERY, strQuery );
-            model.put( SearchConstants.MARK_PAGINATOR, paginator );
-            model.put( SearchConstants.MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
+                Paginator paginator = new Paginator( listResults, _nItemsPerPage, url.getUrl(  ),
+                        SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
+
+                model.put( SearchConstants.MARK_RESULT, paginator.getPageItems(  ) );
+                model.put( SearchConstants.MARK_QUERY, strQuery );
+                model.put( SearchConstants.MARK_PAGINATOR, paginator );
+                model.put( SearchConstants.MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
+            }
+            catch ( ParseException pe )
+            {
+                AppLogService.error( "Error while parsing query " + strQuery, pe );
+                addError( model, SearchConstants.MESSAGE_SEARCH_ERROR, getLocale(  ) );
+            }
         }
         else
         {
-            addError( model, SearchConstants.PROPERTY_SEARCH_NO_INPUT, getLocale(  ) );
+            addError( model, SearchConstants.MESSAGE_SEARCH_NO_INPUT, getLocale(  ) );
         }
 
         model.put( SearchConstants.MARK_SEARCH_FIELDS_LIST, getCriteriaReferenceList( request.getLocale(  ) ) );
@@ -158,6 +183,7 @@ public class TicketSearchJspBean extends MVCAdminJspBean
      * @param strMessageKey message key
      * @param locale locale
      */
+    @SuppressWarnings( "unchecked" )
     protected void addError( Map<String, Object> model, String strMessageKey, Locale locale )
     {
         if ( model.get( SearchConstants.MARK_ERRORS ) == null )

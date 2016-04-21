@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
-import fr.paris.lutece.portal.service.search.SearchEngine;
 import fr.paris.lutece.portal.service.search.SearchResult;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
@@ -45,128 +44,31 @@ import org.apache.commons.lang.StringUtils;
 
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 
 import java.io.IOException;
 
-import java.text.ParseException;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
  * TicketSearchEngine
  */
-public class TicketSearchEngine implements SearchEngine
+public class TicketSearchEngine implements ITicketSearchEngine
 {
     /**
-     * Return search results
-     * @param strQuery The search query
-     * @param request The HTTP request
-     * @return Results as a collection of SearchResult
-     */
-
-    //@Override
-    public List<SearchResult> getSearchResults( String strQuery, HttpServletRequest request )
-    {
-        ArrayList<TicketSearchItem> listResults = new ArrayList<TicketSearchItem>(  );
-        IndexSearcher searcher;
-        String strSearchedField = request.getParameter( SearchConstants.PARAMETER_SEARCH_FIELD );
-
-        try
-        {
-            searcher = TicketSearchService.getInstance(  ).getSearcher(  );
-
-            BooleanQuery query = new BooleanQuery(  );
-
-            // Contents
-            if ( StringUtils.isNotEmpty( strQuery ) )
-            {
-                if ( StringUtils.isNotEmpty( strSearchedField ) &&
-                        strSearchedField.equals( TicketSearchItem.FIELD_CONTENTS ) )
-                {
-                    ComplexPhraseQueryParser parser = new ComplexPhraseQueryParser( IndexationService.LUCENE_INDEX_VERSION,
-                            TicketSearchItem.FIELD_CONTENTS, IndexationService.getAnalyser(  ) );
-                    parser.setInOrder( false );
-                    parser.setPhraseSlop( 1 );
-                    query.add( parser.parse( strQuery.toLowerCase(  ) ), BooleanClause.Occur.MUST );
-                }
-                else if ( StringUtils.isNotEmpty( strSearchedField ) &&
-                        strSearchedField.equals( TicketSearchItem.FIELD_CATEGORY ) )
-                {
-                    ComplexPhraseQueryParser parser = new ComplexPhraseQueryParser( IndexationService.LUCENE_INDEX_VERSION,
-                            TicketSearchItem.FIELD_CATEGORY, IndexationService.getAnalyser(  ) );
-                    parser.setInOrder( false );
-                    parser.setPhraseSlop( 1 );
-                    query.add( parser.parse( strQuery.toLowerCase(  ) ), BooleanClause.Occur.MUST );
-                }
-                else if ( StringUtils.isNotEmpty( strSearchedField ) &&
-                        strSearchedField.equals( TicketSearchItem.FIELD_REFERENCE ) )
-                {
-                    ComplexPhraseQueryParser parser = new ComplexPhraseQueryParser( IndexationService.LUCENE_INDEX_VERSION,
-                            TicketSearchItem.FIELD_REFERENCE, IndexationService.getAnalyser(  ) );
-                    parser.setInOrder( false );
-                    parser.setPhraseSlop( 1 );
-                    query.add( parser.parse( strQuery.toLowerCase(  ) ), BooleanClause.Occur.MUST );
-                }
-            }
-
-            if ( StringUtils.isNotEmpty( strSearchedField ) &&
-                    strSearchedField.equals( TicketSearchItem.FIELD_RESPONSE ) )
-            {
-                setSearchResponseQuery( query, strQuery, request );
-            }
-
-            // Type
-            Query queryType = new TermQuery( new Term( TicketSearchItem.FIELD_TYPE, TicketIndexer.getDocumentType(  ) ) );
-            query.add( queryType, BooleanClause.Occur.MUST );
-
-            // Get results documents
-            TopDocs topDocs = searcher.search( query, LuceneSearchEngine.MAX_RESPONSES );
-            ScoreDoc[] hits = topDocs.scoreDocs;
-
-            for ( int i = 0; i < hits.length; i++ )
-            {
-                int docId = hits[i].doc;
-                Document document = searcher.doc( docId );
-                TicketSearchItem si = new TicketSearchItem( document );
-
-                if ( strSearchedField.equals( TicketSearchItem.FIELD_RESPONSE ) &&
-                        StringUtils.isEmpty( si.getResponse(  ) ) )
-                {
-                    continue;
-                }
-
-                listResults.add( si );
-            }
-        }
-        catch ( org.apache.lucene.queryparser.classic.ParseException e )
-        {
-            AppLogService.error( e.getMessage(  ), e );
-        }
-        catch ( IOException e )
-        {
-            AppLogService.error( e.getMessage(  ), e );
-        }
-
-        return convertList( listResults );
-    }
-
-    /**
      * Convert a list of Lucene items into a list of generic search items
-     * @param listSource The list of Lucene items
+     *
+     * @param listSource
+     *            The list of Lucene items
      * @return A list of generic search items
      */
     private List<SearchResult> convertList( List<TicketSearchItem> listSource )
@@ -185,7 +87,7 @@ public class TicketSearchEngine implements SearchEngine
                     result.setDate( DateTools.stringToDate( item.getDate(  ) ) );
                 }
             }
-            catch ( ParseException e )
+            catch ( java.text.ParseException e )
             {
                 AppLogService.error( "Bad Date Format for indexed item \"" + item.getTitle(  ) + "\" : " +
                     e.getMessage(  ) );
@@ -204,28 +106,167 @@ public class TicketSearchEngine implements SearchEngine
     }
 
     /**
+     * process search
      *
-     * @param query Query object to populate
-     * @param strQuery query string
-     * @param request request
-     * @throws org.apache.lucene.queryparser.classic.ParseException when parse exception occurs
+     * @param query
+     *            lucene query
+     * @return list of search results matching query
      */
-    private void setSearchResponseQuery( BooleanQuery query, String strQuery, HttpServletRequest request )
-        throws org.apache.lucene.queryparser.classic.ParseException
+    private List<SearchResult> search( Query query )
     {
-        if ( StringUtils.isNotEmpty( strQuery ) )
+        List<TicketSearchItem> listResults = new ArrayList<TicketSearchItem>(  );
+
+        try
         {
-            ComplexPhraseQueryParser parser = new ComplexPhraseQueryParser( IndexationService.LUCENE_INDEX_VERSION,
-                    TicketSearchItem.FIELD_CONTENTS, IndexationService.getAnalyser(  ) );
-            parser.setInOrder( false );
-            parser.setPhraseSlop( 1 );
-            query.add( parser.parse( strQuery.toLowerCase(  ).replaceAll( "\\p{Punct}|\\d", "" ) ),
-                BooleanClause.Occur.SHOULD );
+            IndexSearcher searcher = TicketSearchService.getInstance(  ).getSearcher(  );
+
+            // Get results documents
+            TopDocs topDocs = searcher.search( query, LuceneSearchEngine.MAX_RESPONSES );
+            ScoreDoc[] hits = topDocs.scoreDocs;
+
+            for ( int i = 0; i < hits.length; i++ )
+            {
+                int docId = hits[i].doc;
+                Document document = searcher.doc( docId );
+                TicketSearchItem si = new TicketSearchItem( document );
+
+                listResults.add( si );
+            }
+        }
+        catch ( IOException e )
+        {
+            AppLogService.error( e.getMessage(  ), e );
         }
 
-        QueryParser parserCategory = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
-                TicketSearchItem.FIELD_CATEGORY, IndexationService.getAnalyser(  ) );
-        query.add( parserCategory.parse( request.getParameter( SearchConstants.PARAMETER_CATEGORY ) ),
-            BooleanClause.Occur.MUST );
+        return convertList( listResults );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<SearchResult> searchTicketFromReference( String strTicketRef )
+        throws ParseException
+    {
+        BooleanQuery mainQuery = new BooleanQuery(  );
+        QueryParser parser = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, TicketSearchItem.FIELD_REFERENCE,
+                TicketSearchService.getInstance(  ).getAnalyzer(  ) );
+        Query queryTicketRef = parser.parse( QueryParser.escape( strTicketRef ) );
+        mainQuery.add( queryTicketRef, BooleanClause.Occur.MUST );
+        addQueryTypeClause( mainQuery );
+
+        return search( mainQuery );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<SearchResult> searchTicketsFromCategory( String strTicketCategory )
+        throws ParseException
+    {
+        BooleanQuery mainQuery = new BooleanQuery(  );
+        QueryParser qp = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, TicketSearchItem.FIELD_CATEGORY,
+                TicketSearchService.getInstance(  ).getAnalyzer(  ) );
+        Query queryTicketCat = qp.parse( QueryParser.escape( strTicketCategory ) );
+        mainQuery.add( queryTicketCat, BooleanClause.Occur.MUST );
+        addQueryTypeClause( mainQuery );
+
+        return search( mainQuery );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<SearchResult> searchTickets( String strQuery )
+        throws ParseException
+    {
+        BooleanQuery mainQuery = new BooleanQuery(  );
+        QueryParser qp = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, TicketSearchItem.FIELD_CONTENTS,
+                TicketSearchService.getInstance(  ).getAnalyzer(  ) );
+        Query queryTicket = qp.parse( QueryParser.escape( strQuery ) );
+        mainQuery.add( queryTicket, BooleanClause.Occur.MUST );
+        addQueryTypeClause( mainQuery );
+
+        return search( mainQuery );
+    }
+
+    /**
+     * add ticket type clause
+     * @param booleanQuery input query
+     * @throws ParseException exception while parsing  document type
+     */
+    private void addQueryTypeClause( BooleanQuery booleanQuery )
+        throws ParseException
+    {
+        QueryParser qpt = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, TicketSearchItem.FIELD_TYPE,
+                TicketSearchService.getInstance(  ).getAnalyzer(  ) );
+        Query queryType = qpt.parse( TicketIndexer.getDocumentType(  ) );
+        booleanQuery.add( queryType, BooleanClause.Occur.MUST );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<SearchResult> searchResponseResults( String strQuery, String strCategory )
+    {
+        ArrayList<TicketSearchItem> listResults = new ArrayList<TicketSearchItem>(  );
+        IndexSearcher searcher;
+
+        try
+        {
+            searcher = TicketSearchService.getInstance(  ).getSearcher(  );
+
+            BooleanQuery mainQuery = new BooleanQuery(  );
+
+            QueryParser qpComment = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
+                    TicketSearchItem.FIELD_TXT_COMMENT, TicketSearchService.getInstance(  ).getAnalyzer(  ) );
+            Query queryTicketComment = qpComment.parse( strQuery );
+
+            mainQuery.add( queryTicketComment, BooleanClause.Occur.SHOULD );
+
+            QueryParser qpResp = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
+                    TicketSearchItem.FIELD_TXT_RESPONSE, TicketSearchService.getInstance(  ).getAnalyzer(  ) );
+            Query queryTicketResponse = qpResp.parse( strQuery );
+
+            mainQuery.add( queryTicketResponse, BooleanClause.Occur.SHOULD );
+
+            QueryParser qpCategory = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
+                    TicketSearchItem.FIELD_CATEGORY, IndexationService.getAnalyser(  ) );
+            mainQuery.add( qpCategory.parse( strCategory ), BooleanClause.Occur.MUST );
+
+            // Type
+            addQueryTypeClause( mainQuery );
+
+            // Get results documents
+            TopDocs topDocs = searcher.search( mainQuery, MAX_RESPONSE_NUMBER );
+            ScoreDoc[] hits = topDocs.scoreDocs;
+
+            for ( int i = 0; i < hits.length; i++ )
+            {
+                int docId = hits[i].doc;
+                Document document = searcher.doc( docId );
+                TicketSearchItem si = new TicketSearchItem( document );
+
+                if ( StringUtils.isEmpty( si.getResponse(  ) ) )
+                {
+                    continue;
+                }
+
+                listResults.add( si );
+            }
+        }
+        catch ( org.apache.lucene.queryparser.classic.ParseException e )
+        {
+            AppLogService.error( e.getMessage(  ), e );
+        }
+        catch ( IOException e )
+        {
+            AppLogService.error( e.getMessage(  ), e );
+        }
+
+        return convertList( listResults );
     }
 }

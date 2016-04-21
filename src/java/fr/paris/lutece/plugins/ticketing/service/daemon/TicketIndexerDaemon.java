@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.ticketing.service.daemon;
 
 import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
 import fr.paris.lutece.portal.service.daemon.Daemon;
-import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 
 /**
@@ -45,6 +45,8 @@ import fr.paris.lutece.portal.service.util.AppLogService;
  */
 public class TicketIndexerDaemon extends Daemon
 {
+    private static final String PROPERTY_INDEXER_PARAM_TOTAL = "ticketing.indexer.total";
+
     /**
      * Constructor
      */
@@ -59,19 +61,7 @@ public class TicketIndexerDaemon extends Daemon
     @Override
     public void run(  )
     {
-        String strIndexationResult;
-
-        try
-        {
-            //launch indexer in incremental mode
-            strIndexationResult = TicketSearchService.getInstance(  ).processIndexing( false );
-        }
-        catch ( Exception e )
-        {
-            strIndexationResult = "Ticketing indexing error : " + e.getMessage(  );
-            AppLogService.error( strIndexationResult, e );
-        }
-
-        setLastRunLogs( strIndexationResult );
+        boolean bTotalIndexing = Boolean.valueOf( AppPropertiesService.getProperty( PROPERTY_INDEXER_PARAM_TOTAL, "true" ) );
+        setLastRunLogs( TicketSearchService.getInstance(  ).processIndexing( bTotalIndexing ) );
     }
 }

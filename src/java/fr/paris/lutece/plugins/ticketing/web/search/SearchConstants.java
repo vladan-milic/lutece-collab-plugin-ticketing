@@ -63,7 +63,8 @@ public final class SearchConstants
     public static final String PROPERTY_SEARCH_REFERENCE_CRITERIA = "ticketing.search_ticket.criteria.reference";
     public static final String PROPERTY_SEARCH_CONTENT_CRITERIA = "ticketing.search_ticket.criteria.content";
     public static final String PROPERTY_SEARCH_CATEGORY_CRITERIA = "ticketing.search_ticket.criteria.category";
-    public static final String PROPERTY_SEARCH_NO_INPUT = "ticketing.search_ticket.noInput";
+    public static final String MESSAGE_SEARCH_NO_INPUT = "ticketing.search_ticket.noInput";
+    public static final String MESSAGE_SEARCH_ERROR = "ticketing.search_ticket.error";
 
     // for search purpose
     public static final String BEAN_SEARCH_ENGINE = "ticketing.ticketSearchEngine";

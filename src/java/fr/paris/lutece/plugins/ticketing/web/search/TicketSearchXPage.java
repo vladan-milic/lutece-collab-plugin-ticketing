@@ -34,9 +34,9 @@
 package fr.paris.lutece.plugins.ticketing.web.search;
 
 import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.search.SearchEngine;
 import fr.paris.lutece.portal.service.search.SearchResult;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.utils.MVCMessage;
@@ -48,6 +48,8 @@ import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.lang.StringUtils;
+
+import org.apache.lucene.queryparser.classic.ParseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -98,29 +100,39 @@ public class TicketSearchXPage extends MVCApplication
 
         if ( StringUtils.isNotEmpty( strQuery ) )
         {
-            UrlItem url = new UrlItem( getDefaultPagePath( request.getLocale(  ) ) );
-            url.addParameter( SearchConstants.PARAMETER_QUERY, strQuery );
+            try
+            {
+                UrlItem url = new UrlItem( getDefaultPagePath( request.getLocale(  ) ) );
+                url.addParameter( SearchConstants.PARAMETER_QUERY, strQuery );
 
-            _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
-            _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_DEFAULT_RESULT_PER_PAGE,
-                    10 );
-            _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
-                    _nDefaultItemsPerPage );
+                _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX,
+                        _strCurrentPageIndex );
+                _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_DEFAULT_RESULT_PER_PAGE,
+                        10 );
+                _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE,
+                        _nItemsPerPage, _nDefaultItemsPerPage );
 
-            SearchEngine engine = (SearchEngine) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
-            List<SearchResult> listResults = engine.getSearchResults( strQuery, request );
+                ITicketSearchEngine engine = (ITicketSearchEngine) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
+                List<SearchResult> listResults = engine.searchResponseResults( strQuery,
+                        request.getParameter( SearchConstants.PARAMETER_CATEGORY ) );
 
-            Paginator paginator = new Paginator( listResults, _nItemsPerPage, url.getUrl(  ),
-                    SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
+                Paginator paginator = new Paginator( listResults, _nItemsPerPage, url.getUrl(  ),
+                        SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
 
-            model.put( SearchConstants.MARK_RESULT, paginator.getPageItems(  ) );
-            model.put( SearchConstants.MARK_QUERY, strQuery );
-            model.put( SearchConstants.MARK_PAGINATOR, paginator );
-            model.put( SearchConstants.MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
+                model.put( SearchConstants.MARK_RESULT, paginator.getPageItems(  ) );
+                model.put( SearchConstants.MARK_QUERY, strQuery );
+                model.put( SearchConstants.MARK_PAGINATOR, paginator );
+                model.put( SearchConstants.MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
+            }
+            catch ( ParseException pe )
+            {
+                AppLogService.error( "Error while parsing query " + strQuery, pe );
+                addError( model, SearchConstants.MESSAGE_SEARCH_ERROR, request.getLocale(  ) );
+            }
         }
         else
         {
-            addError( model, SearchConstants.PROPERTY_SEARCH_NO_INPUT, request.getLocale(  ) );
+            addError( model, SearchConstants.MESSAGE_SEARCH_NO_INPUT, request.getLocale(  ) );
         }
 
         model.put( SearchConstants.MARK_SEARCH_FIELD, strSearchField );

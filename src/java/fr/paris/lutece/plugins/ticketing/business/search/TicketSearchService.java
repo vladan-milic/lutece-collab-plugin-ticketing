@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.ticketing.business.search;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -121,20 +122,26 @@ public final class TicketSearchService
             _analyzer = (Analyzer) Class.forName( strAnalyserClassName ).newInstance(  );
         }
 
-        //        catch ( InstantiationException ie )
-        //        {
-        //            Class classAnalyzer;
-        //            try
-        //            {
-        //                classAnalyzer = Class.forName( strAnalyserClassName );
-        //                java.lang.reflect.Constructor constructeur =  classAnalyzer.getConstructor( Version.class );
-        //                _analyzer = (Analyzer) constructeur.newInstance ( new Object [] {  Version.LUCENE_46} );
-        //                
-        //            } catch ( Exception e )
-        //            {
-        //                throw new AppException( "Failed to load Lucene Analyzer class", e );
-        //            }
-        //        }
+        catch ( InstantiationException ie )
+        {
+            @SuppressWarnings( "rawtypes" )
+            Class classAnalyzer;
+
+            try
+            {
+                classAnalyzer = Class.forName( strAnalyserClassName );
+
+                @SuppressWarnings( {"unchecked",
+                    "rawtypes"
+                } )
+                java.lang.reflect.Constructor constructeur = classAnalyzer.getConstructor( Version.class );
+                _analyzer = (Analyzer) constructeur.newInstance( new Object[] { IndexationService.LUCENE_INDEX_VERSION } );
+            }
+            catch ( Exception e )
+            {
+                throw new AppException( "Failed to load Lucene Analyzer class", e );
+            }
+        }
         catch ( Exception e )
         {
             throw new AppException( "Failed to load Lucene Analyzer class", e );
@@ -275,7 +282,6 @@ public final class TicketSearchService
                 sbLogs.append( "Duration of the treatment : " );
                 sbLogs.append( end.getTime(  ) - start.getTime(  ) );
                 sbLogs.append( " milliseconds\r\n" );
-                AppLogService.info( sbLogs.toString(  ) );
             }
         }
         catch ( Exception e )
