@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.ticketing.service.download;
 
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.ticketing.service.authentication.RequestAuthenticationService;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
@@ -63,13 +64,14 @@ public class TicketingFileServlet extends HttpServlet
     private static final long serialVersionUID = -3589685443968252550L;
 
     // Parameters
-    public static final String PARAMETER_ID_RESPONSE = "idResponse";
+    public static final String PARAMETER_ID_RESPONSE = "id_response";
 
     // Other constants
     public static final String URL_SERVLET = "servlet/plugins/ticketing/file";
     private static final String LOG_UNKNOWN_ID_RESPONSE = "Calling Ticketing file servlet with unknown id response : ";
     private static final String LOG_WRONG_ID_RESPONSE = "Calling Ticketing file servlet with wrong format for parameter " +
         PARAMETER_ID_RESPONSE + " : ";
+    private static final String LOG_UNAUTHENTICATED_REQUEST = "Calling Ticketing file servlet with unauthenticated request";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -93,7 +95,13 @@ public class TicketingFileServlet extends HttpServlet
             if ( response == null )
             {
                 AppLogService.error( LOG_UNKNOWN_ID_RESPONSE + strIdResponse );
-                throw new ServletException(  );
+                throw new ServletException( LOG_UNKNOWN_ID_RESPONSE + strIdResponse );
+            }
+
+            if ( !isRequestAuthenticated( request ) )
+            {
+                AppLogService.error( LOG_UNAUTHENTICATED_REQUEST );
+                throw new ServletException( LOG_UNAUTHENTICATED_REQUEST );
             }
 
             File file = FileHome.findByPrimaryKey( response.getFile(  ).getIdFile(  ) );
@@ -163,5 +171,15 @@ public class TicketingFileServlet extends HttpServlet
     public String getServletInfo(  )
     {
         return "Servlet serving file content";
+    }
+
+    /**
+     * Checks if the request is authenticated or not
+     * @param request the HTTP request
+     * @return {@code true} if the request is authenticated, {@code false} otherwise
+     */
+    private boolean isRequestAuthenticated( HttpServletRequest request )
+    {
+        return RequestAuthenticationService.getRequestAuthenticator(  ).isRequestAuthenticated( request );
     }
 }
