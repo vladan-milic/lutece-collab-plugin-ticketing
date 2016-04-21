@@ -37,8 +37,10 @@ import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeFile;
 import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
+import fr.paris.lutece.plugins.ticketing.service.authentication.RequestAuthenticationService;
 import fr.paris.lutece.plugins.ticketing.service.download.TicketingFileServlet;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.html.HtmlTemplate;
@@ -46,6 +48,9 @@ import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -147,8 +152,17 @@ public class EntryTypeFile extends AbstractEntryTypeFile
     @Override
     public String getUrlDownloadFile( int nResponseId, String strBaseUrl )
     {
+        List<String> listElements = new ArrayList<String>(  );
+        listElements.add( Integer.toString( nResponseId ) );
+
+        String strTimestamp = Long.toString( new Date(  ).getTime(  ) );
+        String strSignature = RequestAuthenticationService.getRequestAuthenticator(  )
+                                                          .buildSignature( listElements, strTimestamp );
+
         UrlItem url = new UrlItem( strBaseUrl + TicketingFileServlet.URL_SERVLET );
         url.addParameter( TicketingFileServlet.PARAMETER_ID_RESPONSE, nResponseId );
+        url.addParameter( TicketingConstants.PARAMETER_SIGNATURE, strSignature );
+        url.addParameter( TicketingConstants.PARAMETER_TIMESTAMP, strTimestamp );
 
         return url.getUrl(  );
     }

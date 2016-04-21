@@ -50,4 +50,20 @@
     <bean id="ticketing.ticketSearchEngine" class="fr.paris.lutece.plugins.ticketing.web.search.TicketSearchEngine" />
     <bean id="ticketing.ticketIndexerActionDAO"  class="fr.paris.lutece.plugins.ticketing.business.search.IndexerActionDAO" />
     <bean id="ticketing.ticketIndexer"  class="fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer" />
+    
+    <!-- SignRequest -->
+    <bean id="ticketing.hashService"
+        class="fr.paris.lutece.util.signrequest.security.Sha1HashService" />
+    <bean id="ticketing.requestAuthentication"
+        class="fr.paris.lutece.util.signrequest.RequestHashAuthenticator">
+        <property name="hashService" ref="ticketing.hashService" />
+        <property name="signatureElements">
+            <list>
+                <value>id_response</value>
+            </list>
+        </property>
+        <property name="privateKey">
+            <value>change me</value>
+        </property>
+    </bean>
 </beans>

@@ -58,6 +58,8 @@ public final class TicketingConstants
     public static final String PARAMETER_USER_SIGNATURE = "user_signature";
     public static final String PARAMETER_SELECTABLE_ID_CHANNEL_LIST = "selectable_channels";
     public static final String PARAMETER_SELECTED_ID_CHANNEL = "selected_channel";
+    public static final String PARAMETER_SIGNATURE = "signature";
+    public static final String PARAMETER_TIMESTAMP = "timestamp";
 
     // Attributes
     public static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON = "hide_next_button";

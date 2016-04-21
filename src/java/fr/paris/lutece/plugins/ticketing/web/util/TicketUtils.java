@@ -320,7 +320,7 @@ public final class TicketUtils
         for ( Integer channelId : idSelectableChannelList )
         {
             // check that channelId has not been removed and exists in channelList
-            if( channelsMap.get( String.valueOf( channelId ) )  != null )
+            if ( channelsMap.get( String.valueOf( channelId ) ) != null )
             {
                 selectableChannelsMap.put( String.valueOf( channelId ), channelsMap.get( String.valueOf( channelId ) ) );
             }

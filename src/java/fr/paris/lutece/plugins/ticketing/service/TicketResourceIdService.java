@@ -63,7 +63,6 @@ public class TicketResourceIdService extends ResourceIdService
 
     /** Permission for deleting a ticket */
     public static final String PERMISSION_VIEW = "VIEW";
-
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "ticketing.ticket.resourceType";
     private static final String PROPERTY_LABEL_CREATE = "ticketing.ticket.permission.label.create";
     private static final String PROPERTY_LABEL_MODIFY = "ticketing.ticket.permission.label.modify";
