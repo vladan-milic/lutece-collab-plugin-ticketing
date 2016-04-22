@@ -161,7 +161,7 @@ public final class TicketDAO implements ITicketDAO
      * {@inheritDoc }
      */
     @Override
-    public void insert( Ticket ticket, Plugin plugin )
+    public synchronized void insert( Ticket ticket, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
 

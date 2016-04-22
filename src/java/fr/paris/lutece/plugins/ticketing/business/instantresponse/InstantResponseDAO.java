@@ -87,7 +87,7 @@ public final class InstantResponseDAO implements IInstantResponseDAO
      * {@inheritDoc }
      */
     @Override
-    public void insert( InstantResponse instantResponse, Plugin plugin )
+    public synchronized void insert( InstantResponse instantResponse, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
 
