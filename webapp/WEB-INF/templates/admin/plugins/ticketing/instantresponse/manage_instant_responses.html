@@ -79,20 +79,13 @@
     </div>
   </div>
 </div>
+<script src="js/plugins/ticketing/ticketing.js"></script>
 <script>
 $( function(){
   $(".content-header").toggle();
 	// Set link on whole tr
 	$("tbody > tr ").on( 'click', function(e){
-		//only for ticket lines not for table header
-		if ( $(this).attr("data-url") != undefined ){
-            var form = $('<form>', 
-                { 'action':$(this).attr("data-url"),
-                'method':'post'}
-           );
-           form.appendTo('body');
-           form.submit().remove();
-        }
+		redirectOnClick(this);
 	});
 });
 function sortList(field, order){

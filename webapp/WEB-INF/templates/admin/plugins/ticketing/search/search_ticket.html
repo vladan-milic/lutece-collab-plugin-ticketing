@@ -86,9 +86,5 @@
   $( function(){
     $(".content-header").toggle();
     $("#search-header h2").append(  $(".content-header small").text() );
-    // Set link on whole tr
-    $("tr").on('click', function (e) {
-      location.replace($(this).attr("data-url"));
-    });
   });
 </script>
