@@ -6,6 +6,11 @@
         <p>
           <strong class="text-gru">${history_information.resource_history.creationDate!'Date missing'}</strong> &nbsp;
           <strong>${history_information.resource_history.action.description}</strong>
+          <#if resource_history_channel[history_information.resource_history.id?string]?has_content>
+            <#assign msgTooltip="#i18n{ticketing.view_ticket_history.channel.used}">
+            <a href="#" data-toggle="tooltip" style="float:right;" title="${msgTooltip} ${resource_history_channel[history_information.resource_history.id?string].label}">
+            <span style="float:right;" class="${resource_history_channel[history_information.resource_history.id?string].iconFont}"></span></a>
+          </#if>
         </p>
         <ul class="timeline">
           <li>
