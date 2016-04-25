@@ -211,7 +211,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             return redirect( request, strRedirectUrl );
         }
 
-        TicketFilter filter = TicketFilterHelper.getFilter( request );
+        TicketFilter filter = TicketFilterHelper.getFilter( request, getUser(  ) );
 
         _strCurrentPageIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );

@@ -39,7 +39,9 @@ import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
+import fr.paris.lutece.portal.business.rbac.AdminRole;
 import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -108,7 +110,8 @@ public final class TicketFilterHelper
     // Properties for page titles
     private static final String PROPERTY_TICKET_TYPE_LABEL = "ticketing.model.entity.ticket.attribute.ticketType";
     private static final String PROPERTY_TICKET_DOMAIN_LABEL = "ticketing.model.entity.ticket.attribute.ticketDomain";
-    private static final String PROPERTY_TICKET_STATE_FILTERED_DEFAULT_IDS = "ticketing.workflow.state.filter.default.selected.ids";
+    private static final String PROPERTY_TICKET_STATE_FILTERED_DEFAULT_IDS = "ticketing.workflow.state.filter.selected.ids.default";
+    private static final String PROPERTY_TICKET_STATE_FILTERED_IDS_PREFIX = "ticketing.workflow.state.filter.selected.ids.";
     private static final String PROPERTY_TICKET_STATE_FILTER_IGNORE_IDS = "ticketing.workflow.state.filter.ignore.ids";
     private static final String NO_SELECTED_FIELD_ID = "-1";
 
@@ -298,9 +301,10 @@ public final class TicketFilterHelper
     /**
      * return filter from request / session
      * @param request http servlet request
+     * @param adminUser admin user
      * @return filter
      */
-    public static TicketFilter getFilter( HttpServletRequest request )
+    public static TicketFilter getFilter( HttpServletRequest request, AdminUser adminUser )
     {
         TicketFilter filter = null;
 
@@ -314,7 +318,7 @@ public final class TicketFilterHelper
             else
             {
                 //set default value
-                filter = getDefaultFilter(  );
+                filter = getDefaultFilter( adminUser );
                 request.getSession(  ).setAttribute( TicketingConstants.SESSION_TICKET_FILTER, filter );
             }
         }
@@ -329,15 +333,35 @@ public final class TicketFilterHelper
 
     /**
      * returns default filter
+     * @param adminUser admin user
      * @return default filter
      */
-    public static TicketFilter getDefaultFilter(  )
+    public static TicketFilter getDefaultFilter( AdminUser adminUser )
     {
         TicketFilter filter = new TicketFilter(  );
+
         filter.setOrderBy( TicketFilter.CONSTANT_DEFAULT_ORDER_BY );
         filter.setOrderSort( filter.getDefaultOrderSort(  ) );
-        filter.setListIdWorkflowState( AppPropertiesService.getProperty( PROPERTY_TICKET_STATE_FILTERED_DEFAULT_IDS )
-                                                           .split( TicketingConstants.FIELD_ID_SEPARATOR ) );
+
+        Map<String, AdminRole> listUserRole = AdminUserHome.getRolesListForUser( adminUser.getUserId(  ) );
+
+        // set default filtering for user from config file
+        String[] lstIdWorkflowState = AppPropertiesService.getProperty( PROPERTY_TICKET_STATE_FILTERED_DEFAULT_IDS )
+                                                          .split( TicketingConstants.FIELD_ID_SEPARATOR );
+
+        for ( String strRole : listUserRole.keySet(  ) )
+        {
+            if ( StringUtils.isNotBlank( AppPropertiesService.getProperty( PROPERTY_TICKET_STATE_FILTERED_IDS_PREFIX +
+                            strRole ) ) )
+            {
+                lstIdWorkflowState = AppPropertiesService.getProperty( PROPERTY_TICKET_STATE_FILTERED_IDS_PREFIX +
+                        strRole ).split( TicketingConstants.FIELD_ID_SEPARATOR );
+
+                break;
+            }
+        }
+
+        filter.setListIdWorkflowState( lstIdWorkflowState );
 
         return filter;
     }
