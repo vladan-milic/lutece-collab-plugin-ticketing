@@ -38,10 +38,12 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServ
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketCriticality;
+import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketPriority;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
+import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
@@ -144,7 +146,10 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
             url.addParameter( TicketingConstants.PARAMETER_GRU_CUSTOMER_ID, ticket.getCustomerId(  ) );
             model.put( TicketingConstants.MARK_POCGRU_URL_360, url.getUrl(  ) );
         }
-
+//navigation in authorized tickets : next <-> previous
+        List<Ticket> listTickets = (List<Ticket>) request.getSession( ).getAttribute("LISTE_TICKETS_PARSING");
+//navigation in authorized tickets : next <-> previous
+        
         model.put( TicketingConstants.MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
         ModelUtils.storeTicketRights( model, getUser(  ) );
 

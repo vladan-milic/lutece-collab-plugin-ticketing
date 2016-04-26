@@ -64,6 +64,27 @@
       <!--
         <p id="info">Pour me contacter privil&eacute;gier le mail</p>
       -->
+      
+      
+      <!-- NAVIGATION -->
+          <nav id="item-navigator">
+  <ul class="pager">
+		<li class="previous">
+		<a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id-1}" title="Précédent">
+	        <span aria-hidden="true">←</span> Précédent
+	    </a>
+		</li>
+		<li class="next">
+			<a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id+1}" title="Suivant">
+				Suivant <span aria-hidden="true">→</span>
+			</a>
+	    </li>
+  </ul>
+</nav>
+      <!-- END NAVIGATION -->
+      
+      
+      
     </div>
     <div class="col-xs-4 col-sm-4" id="info-head-right">
       <#assign textColor="green"/>

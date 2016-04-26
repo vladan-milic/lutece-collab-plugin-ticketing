@@ -253,6 +253,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             listTickets = listDomainTickets;
         }
 
+        request.getSession(  ).setAttribute("LISTE_TICKETS_PARSING", listTickets);
         // PAGINATORS
         LocalizedPaginator<Ticket> paginatorTickets = new LocalizedPaginator<Ticket>( listTickets, _nItemsPerPage,
                 strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
