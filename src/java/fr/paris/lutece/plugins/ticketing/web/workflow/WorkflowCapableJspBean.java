@@ -35,6 +35,8 @@ package fr.paris.lutece.plugins.ticketing.web.workflow;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
+import fr.paris.lutece.plugins.ticketing.business.resourcehistory.IResourceHistoryInformationService;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
@@ -78,10 +80,16 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     /** redirection map */
     protected static final Map<String, String> _mapRedirectUrl;
 
+    // MARKS
+    private static final String MARK_RESOURCE_HISTORY_CHANNEL = "resource_history_channel";
+
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
     private static final String PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ME = "ticketing.workflow.action.id.assignMe";
     private static final String PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ENTITY = "ticketing.workflow.action.id.assignEntity";
+
+    // Bean
+    private static final String BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE = "workflow-ticketing.resourceHistoryService";
 
     // Templates
     private static final String TEMPLATE_RESOURCE_HISTORY = "admin/plugins/ticketing/workflow/ticket_history.html";
@@ -112,6 +120,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     // Services
     private static WorkflowService _workflowService = WorkflowService.getInstance(  );
+    private static IResourceHistoryInformationService _resourceHistoryTicketingInformationService = SpringContextService.getBean( BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE );
 
     /**
      * Generated serial id
@@ -439,6 +448,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     {
         if ( _workflowService.isAvailable(  ) )
         {
+            _resourceHistoryTicketingInformationService.removeByResource( nTicketId, Ticket.TICKET_RESOURCE_TYPE );
+
             _workflowService.doRemoveWorkFlowResource( nTicketId, Ticket.TICKET_RESOURCE_TYPE );
         }
     }
@@ -454,8 +465,15 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         TicketCategory category = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
         int nWorkflowId = category.getIdWorkflow(  );
 
+        Map<String, Channel> mapHistoryChannel = _resourceHistoryTicketingInformationService.getChannelHistoryMap( ticket.getId(  ),
+                Ticket.TICKET_RESOURCE_TYPE, nWorkflowId );
+
+        Map<String, Object> modelToAdd = new HashMap<String, Object>(  );
+
+        modelToAdd.put( MARK_RESOURCE_HISTORY_CHANNEL, mapHistoryChannel );
+
         return _workflowService.getDisplayDocumentHistory( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nWorkflowId,
-            request, getLocale(  ), TEMPLATE_RESOURCE_HISTORY );
+            request, getLocale(  ), modelToAdd, TEMPLATE_RESOURCE_HISTORY );
     }
 
     /**
