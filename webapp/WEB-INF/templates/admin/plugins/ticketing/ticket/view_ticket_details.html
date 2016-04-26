@@ -1,7 +1,7 @@
 <#include "/admin/plugins/ticketing/commons.html" />
 <#include "/admin/plugins/ticketing/include/popins.html" />
 <#include "view_ticket_header.html" />
-<@ticketHeader tab='details' ticket=ticket />
+<@ticketHeader tab='details' ticket=ticket navigation_next=navigation_next navigation_previous=navigation_previous/>
 <div id="demand-panel" class="row ticket-content">
   <@notification infos=infos />
   <@messages errors=errors />

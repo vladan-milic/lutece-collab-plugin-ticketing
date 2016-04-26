@@ -42,6 +42,8 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
  */
 public final class TicketingConstants
 {
+	
+	
     // Templates
     public static final String TEMPLATE_TASKS_FORM_WORKFLOW = "admin/plugins/ticketing/workflow/tasks_form_workflow.html";
 
@@ -92,6 +94,8 @@ public final class TicketingConstants
     public static final String MARK_USER_SIGNATURE = "user_signature";
     public static final String MARK_AGENT_VIEW = "agent_view";
     public static final String MARK_CREATION_DATE_AS_DATE = "creation_date_as_date";
+    public static final String MARK_TICKET_NAVIGATION_NEXT = "navigation_next";
+    public static final String MARK_TICKET_NAVIGATION_PREVIOUS = "navigation_previous";
 
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
@@ -99,8 +103,7 @@ public final class TicketingConstants
     public static final String PROPERTY_TICKET_CLOSE_ID = "ticketing.workflow.state.id.closed";
     public static final String PROPERTY_TICKET_WORKFLOW_ID = "ticketing.workflow.id";
     public static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
-    private static final String PROPERTY_CHANNEL_ID = "ticketing.channel.webChannel.id";
-    public static final int WEB_ID_CHANNEL = AppPropertiesService.getPropertyInt( PROPERTY_CHANNEL_ID, 99 );
+    
     public static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.ticket.attribute.";
 
     // Session keys
@@ -109,6 +112,7 @@ public final class TicketingConstants
     public static final String SESSION_TICKET_FORM_ERRORS = "ticketing.session.formErrors";
     public static final String SESSION_TICKET_FILTER = "ticketing.ticket_filter";
     public static final String SESSION_INSTANTRESPONSE_FILTER = "ticketing.instantresponse_filter";
+    public static final String SESSION_LIST_TICKETS_NAVIGATION = "ticketing.list.navigation.detail";
 
     // Views
     public static final String VIEW_WORKFLOW_ACTION_FORM = "viewWorkflowActionForm";
@@ -143,10 +147,14 @@ public final class TicketingConstants
     public static final String JSP_VIEW_TICKET = "TicketView.jsp";
     public static final String ROLE_GRU_ADMIN = "gru_admin";
     public static final String ROLE_LEVEL_3 = "gru_level_3";
+    public static final String FIELD_ID_SEPARATOR = ",";
     public static final int NO_ID_CHANNEL = 0;
     public static final int TICKET_STATUS_IN_PROGRESS = 0;
     public static final int TICKET_STATUS_CLOSED = 1;
-    public static final String FIELD_ID_SEPARATOR = ",";
+    public static final int TICKET_NO_NAVIGATION = -1;  
+    private static final String PROPERTY_CHANNEL_ID = "ticketing.channel.webChannel.id"; 
+    public static final int WEB_ID_CHANNEL = AppPropertiesService.getPropertyInt( PROPERTY_CHANNEL_ID, 99 );
+    
 
     /**
      * Default constructor

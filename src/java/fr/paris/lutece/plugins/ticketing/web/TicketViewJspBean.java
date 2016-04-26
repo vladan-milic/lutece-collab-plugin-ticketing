@@ -38,12 +38,10 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServ
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketCriticality;
-import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketPriority;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
-import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
@@ -59,8 +57,10 @@ import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.lang.StringUtils;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -147,8 +147,15 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
             model.put( TicketingConstants.MARK_POCGRU_URL_360, url.getUrl(  ) );
         }
 //navigation in authorized tickets : next <-> previous
-        List<Ticket> listTickets = (List<Ticket>) request.getSession( ).getAttribute("LISTE_TICKETS_PARSING");
+        @SuppressWarnings( "unchecked" )
+		List<Ticket> listTickets = ( List<Ticket> ) request.getSession( ).getAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION );
+    	
+    	setNavigationBetweenTickets( nIdTicket, listTickets, model );
+       
+     
 //navigation in authorized tickets : next <-> previous
+        
+        
         
         model.put( TicketingConstants.MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
         ModelUtils.storeTicketRights( model, getUser(  ) );
@@ -173,6 +180,38 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS, TEMPLATE_VIEW_TICKET_DETAILS, model );
     }
 
+    
+    /**
+     * Sets the navigation between tickets.
+     *
+     * @param nIdTicket the n id ticket
+     * @param listTickets the list tickets
+     * @param model the model
+     */
+    private void setNavigationBetweenTickets ( int nIdTicket, List<Ticket> listTickets, Map<String, Object> model )
+    {    	
+    	Ticket tNext = null, tPrevious = null, tcurrent = null;    	
+    	if( listTickets !=null )
+    	{
+    		Iterator<Ticket> crunchifyIterator = listTickets.iterator();   	
+    		while ( crunchifyIterator.hasNext ( ) ) 
+    		{		
+    			tcurrent = crunchifyIterator.next( );
+    		
+    			if( nIdTicket == tcurrent.getId( ) && crunchifyIterator.hasNext( ) )
+    			{
+    				tNext = crunchifyIterator.next( );
+    				break;
+    			}
+    			else if( nIdTicket != tcurrent.getId( ) )
+    			{
+    				tPrevious = tcurrent;
+    			}
+    		}	
+    	}    		
+		 model.put( TicketingConstants.MARK_TICKET_NAVIGATION_NEXT,  ( tNext == null )? TicketingConstants.TICKET_NO_NAVIGATION : tNext.getId( ) );
+	     model.put( TicketingConstants.MARK_TICKET_NAVIGATION_PREVIOUS,  ( tPrevious == null )? TicketingConstants.TICKET_NO_NAVIGATION : tPrevious.getId( ) );
+    }
     /**
      * {@inheritDoc }
      */

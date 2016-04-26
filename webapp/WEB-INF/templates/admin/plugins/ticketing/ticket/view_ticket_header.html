@@ -1,111 +1,114 @@
-<#macro ticketHeader tab ticket >
+<#macro ticketHeader tab ticket navigation_next=-1 navigation_previous=-1>
 <div class="gru-wrapper">
-  <div id="customer-panel" class="row ticket-head bg-gru-light">
-    <div class="col-xs-8 col-sm-offset-1 col-sm-3">
+<div id="customer-panel" class="row ticket-head bg-gru-light">
+   <div class="col-xs-8 col-sm-offset-1 col-sm-3">
       <h2>${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}</h2>
       <h2 class="hidden-xs">&nbsp;</h2>
       <div class="visible-xs">
-        <p><i class="fa fa-envelope"></i> ${ticket.email!""}</p>
-        <#if ticket.fixedPhoneNumber?has_content>
-        <p>
-          <i class="fa fa-phone" ></i>
-          <#if ticket.fixedPhoneNumber?length == 10>
-          ${ticket.fixedPhoneNumber[0..1]} ${ticket.fixedPhoneNumber[2..3]} ${ticket.fixedPhoneNumber[4..5]} ${ticket.fixedPhoneNumber[6..7]} ${ticket.fixedPhoneNumber[8..9]}
-          <#else>
-          ${ticket.fixedPhoneNumber!}
-          </#if>
-        </p>
-        </#if>
-        <#if ticket.mobilePhoneNumber?has_content>
-        <p>
-          <i class="fa fa-mobile" ></i>
-          <#if ticket.mobilePhoneNumber?length == 10>
-          ${ticket.mobilePhoneNumber[0..1]} ${ticket.mobilePhoneNumber[2..3]} ${ticket.mobilePhoneNumber[4..5]} ${ticket.mobilePhoneNumber[6..7]} ${ticket.mobilePhoneNumber[8..9]}
-          <#else>
-          ${ticket.mobilePhoneNumber!}
-          </#if>
-        </p>
-        </#if>
+         <p><i class="fa fa-envelope"></i> ${ticket.email!""}</p>
+         <#if ticket.fixedPhoneNumber?has_content>
+         <p>
+            <i class="fa fa-phone" ></i>
+            <#if ticket.fixedPhoneNumber?length == 10>
+            ${ticket.fixedPhoneNumber[0..1]} ${ticket.fixedPhoneNumber[2..3]} ${ticket.fixedPhoneNumber[4..5]} ${ticket.fixedPhoneNumber[6..7]} ${ticket.fixedPhoneNumber[8..9]}
+            <#else>
+            ${ticket.fixedPhoneNumber!}
+            </#if>
+         </p>
+         </#if>
+         <#if ticket.mobilePhoneNumber?has_content>
+         <p>
+            <i class="fa fa-mobile" ></i>
+            <#if ticket.mobilePhoneNumber?length == 10>
+            ${ticket.mobilePhoneNumber[0..1]} ${ticket.mobilePhoneNumber[2..3]} ${ticket.mobilePhoneNumber[4..5]} ${ticket.mobilePhoneNumber[6..7]} ${ticket.mobilePhoneNumber[8..9]}
+            <#else>
+            ${ticket.mobilePhoneNumber!}
+            </#if>
+         </p>
+         </#if>
       </div>
       <h2>
-        <a class="btn btn-border" href="jsp/admin/plugins/ticketing/ManageTickets.jsp?plugin_name=ticketing" >
-          <i class="fa fa-arrow-left"></i> #i18n{ticketing.view_ticket_header.labelReturn}
-        </a>
-        <#if url_poc_gru?? && url_poc_gru?has_content>
-          <a class="btn btn-border" href="${url_poc_gru!}" >
-            <i class="fa fa-compass"></i> #i18n{ticketing.gru.button.360View}
-          </a>
-        </#if>
+         <a class="btn btn-border" href="jsp/admin/plugins/ticketing/ManageTickets.jsp?plugin_name=ticketing" >
+         <i class="fa fa-arrow-left"></i> #i18n{ticketing.view_ticket_header.labelReturn}
+         </a>
+         <#if url_poc_gru?? && url_poc_gru?has_content>
+         <a class="btn btn-border" href="${url_poc_gru!}" >
+         <i class="fa fa-compass"></i> #i18n{ticketing.gru.button.360View}
+         </a>
+         </#if>
       </h2>
-    </div>
-    <div class="hidden-xs col-sm-4">
+   </div>
+   <div class="hidden-xs col-sm-4">
       <p><i class="fa fa-envelope"></i> ${ticket.email!""}</p>
       <#if ticket.fixedPhoneNumber?has_content>
-        <p>
-          <i class="fa fa-phone" ></i>
-          <#if ticket.fixedPhoneNumber?length == 10>
-            ${ticket.fixedPhoneNumber[0..1]} ${ticket.fixedPhoneNumber[2..3]} ${ticket.fixedPhoneNumber[4..5]} ${ticket.fixedPhoneNumber[6..7]} ${ticket.fixedPhoneNumber[8..9]}
-          <#else>
-            ${ticket.fixedPhoneNumber!}
-          </#if>
-        </p>
+      <p>
+         <i class="fa fa-phone" ></i>
+         <#if ticket.fixedPhoneNumber?length == 10>
+         ${ticket.fixedPhoneNumber[0..1]} ${ticket.fixedPhoneNumber[2..3]} ${ticket.fixedPhoneNumber[4..5]} ${ticket.fixedPhoneNumber[6..7]} ${ticket.fixedPhoneNumber[8..9]}
+         <#else>
+         ${ticket.fixedPhoneNumber!}
+         </#if>
+      </p>
       </#if>
       <#if ticket.mobilePhoneNumber?has_content>
-        <p>
-          <i class="fa fa-mobile" ></i>
-          <#if ticket.mobilePhoneNumber?length == 10>
-            ${ticket.mobilePhoneNumber[0..1]} ${ticket.mobilePhoneNumber[2..3]} ${ticket.mobilePhoneNumber[4..5]} ${ticket.mobilePhoneNumber[6..7]} ${ticket.mobilePhoneNumber[8..9]}
-          <#else>
-            ${ticket.mobilePhoneNumber!}
-          </#if>
-        </p>
+      <p>
+         <i class="fa fa-mobile" ></i>
+         <#if ticket.mobilePhoneNumber?length == 10>
+         ${ticket.mobilePhoneNumber[0..1]} ${ticket.mobilePhoneNumber[2..3]} ${ticket.mobilePhoneNumber[4..5]} ${ticket.mobilePhoneNumber[6..7]} ${ticket.mobilePhoneNumber[8..9]}
+         <#else>
+         ${ticket.mobilePhoneNumber!}
+         </#if>
+      </p>
       </#if>
       <!-- FIXME -->
       <!--
-        <p id="info">Pour me contacter privil&eacute;gier le mail</p>
-      -->
-      
-      
+         <p id="info">Pour me contacter privil&eacute;gier le mail</p>
+         -->
+    <p>
       <!-- NAVIGATION -->
-          <nav id="item-navigator">
-  <ul class="pager">
-		<li class="previous">
-		<a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id-1}" title="Précédent">
-	        <span aria-hidden="true">←</span> Précédent
-	    </a>
-		</li>
-		<li class="next">
-			<a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id+1}" title="Suivant">
-				Suivant <span aria-hidden="true">→</span>
-			</a>
-	    </li>
-  </ul>
-</nav>
+      <#if navigation_next !=-1 || navigation_previous !=-1 >
+      <nav id="item-navigator">
+         <ul class="pager">
+            <#if navigation_previous !=-1  >
+            <li class="previous">
+               <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${navigation_previous}" title="#i18n{ticketing.navigation.ticket.view.details.previous.title}">
+               <span aria-hidden="true">←</span> #i18n{ticketing.navigation.ticket.view.details.previous}
+               </a>
+            </li>
+            </#if>
+            <#if navigation_next !=-1  >
+            <li class="next">
+               <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${navigation_next}" title="#i18n{ticketing.navigation.ticket.view.details.next.title}">
+               #i18n{ticketing.navigation.ticket.view.details.next} <span aria-hidden="true">→</span>
+               </a>
+            </li>
+            </#if>
+         </ul>
+      </nav>
+      </#if>    
       <!-- END NAVIGATION -->
-      
-      
-      
-    </div>
-    <div class="col-xs-4 col-sm-4" id="info-head-right">
+</p>
+   </div>
+   <div class="col-xs-4 col-sm-4" id="info-head-right">
       <#assign textColor="green"/>
       <#if ticket.urgency==1 >
-        <#assign textColor="orange"/>
+      <#assign textColor="orange"/>
       <#elseif ticket.urgency==2 >
-        <#assign textColor="red"/>
+      <#assign textColor="red"/>
       </#if>
       <p data-toggle="tooltip" data-placement="bottom" title="Priorit&eacute; : ${priority!''} / Criticit&eacute; : ${criticality!''}">
-        <i class="fa fa-circle text-${textColor}"></i> ${ticket.reference!}
+         <i class="fa fa-circle text-${textColor}"></i> ${ticket.reference!}
       </p>
       <p>
-        <#switch ticket.ticketStatus>
-          <#case 0>
-            <i class="fa fa-hourglass-half fa-fw"></i> ${ticket.state.name}
-          <#break>
-          <#case 1>
-            <i class="fa fa-check fa-fw"></i> ${ticket.state.name}
-          <#break>
-        </#switch>
+         <#switch ticket.ticketStatus>
+         <#case 0>
+         <i class="fa fa-hourglass-half fa-fw"></i> ${ticket.state.name}
+         <#break>
+         <#case 1>
+         <i class="fa fa-check fa-fw"></i> ${ticket.state.name}
+         <#break>
+         </#switch>
       </p>
-    </div>
-  </div>
+   </div>
+</div>
 </#macro>
