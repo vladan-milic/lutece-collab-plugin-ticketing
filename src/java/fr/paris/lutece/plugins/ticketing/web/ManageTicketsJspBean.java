@@ -219,7 +219,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 _nDefaultItemsPerPage );
 
         UrlItem url = new UrlItem( JSP_MANAGE_TICKETS );
-        String strUrl = url.getUrl(  );
+        String strUrl = url.getUrl(  ); 
 
         List<Ticket> listAgentTickets = new ArrayList<Ticket>(  );
         List<Ticket> listGroupTickets = new ArrayList<Ticket>(  );

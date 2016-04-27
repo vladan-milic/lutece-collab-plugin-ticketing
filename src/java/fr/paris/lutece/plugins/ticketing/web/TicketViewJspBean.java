@@ -191,6 +191,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     private void setNavigationBetweenTickets ( int nIdTicket, List<Ticket> listTickets, Map<String, Object> model )
     {    	
     	Ticket tNext = null, tPrevious = null, tcurrent = null;    	
+    	Boolean bexistIdTicket = false;
     	if( listTickets !=null )
     	{
     		Iterator<Ticket> crunchifyIterator = listTickets.iterator();   	
@@ -200,6 +201,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     		
     			if( nIdTicket == tcurrent.getId( ) && crunchifyIterator.hasNext( ) )
     			{
+    				bexistIdTicket=true;
     				tNext = crunchifyIterator.next( );
     				break;
     			}
@@ -208,6 +210,8 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     				tPrevious = tcurrent;
     			}
     		}	
+    		
+    		if( !bexistIdTicket ) tPrevious = null;
     	}    		
 		 model.put( TicketingConstants.MARK_TICKET_NAVIGATION_NEXT,  ( tNext == null )? TicketingConstants.TICKET_NO_NAVIGATION : tNext.getId( ) );
 	     model.put( TicketingConstants.MARK_TICKET_NAVIGATION_PREVIOUS,  ( tPrevious == null )? TicketingConstants.TICKET_NO_NAVIGATION : tPrevious.getId( ) );
