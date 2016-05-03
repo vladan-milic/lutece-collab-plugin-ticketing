@@ -42,8 +42,6 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
  */
 public final class TicketingConstants
 {
-	
-	
     // Templates
     public static final String TEMPLATE_TASKS_FORM_WORKFLOW = "admin/plugins/ticketing/workflow/tasks_form_workflow.html";
 
@@ -100,10 +98,9 @@ public final class TicketingConstants
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
     public static final String PROPERTY_REDIRECT_PREFIX = "ticketing.workflow.redirect.";
-    public static final String PROPERTY_TICKET_CLOSE_ID = "ticketing.workflow.state.id.closed";
+    public static final String PROPERTY_STATE_CLOSED_ID = "ticketing.workflow.state.id.closed";
     public static final String PROPERTY_TICKET_WORKFLOW_ID = "ticketing.workflow.id";
     public static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
-    
     public static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.ticket.attribute.";
 
     // Session keys
@@ -151,10 +148,10 @@ public final class TicketingConstants
     public static final int NO_ID_CHANNEL = 0;
     public static final int TICKET_STATUS_IN_PROGRESS = 0;
     public static final int TICKET_STATUS_CLOSED = 1;
-    public static final int TICKET_NO_NAVIGATION = -1;  
-    private static final String PROPERTY_CHANNEL_ID = "ticketing.channel.webChannel.id"; 
+    public static final int TICKET_NO_NAVIGATION = -1;
+    private static final String PROPERTY_CHANNEL_ID = "ticketing.channel.webChannel.id";
     public static final int WEB_ID_CHANNEL = AppPropertiesService.getPropertyInt( PROPERTY_CHANNEL_ID, 99 );
-    
+    public static final int PROPERTY_UNSET_INT = -1;
 
     /**
      * Default constructor

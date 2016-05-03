@@ -37,6 +37,7 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchItem;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
@@ -234,9 +235,8 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new TextField( TicketSearchItem.FIELD_COMMENT, ticket.getTicketComment(  ), Store.YES ) );
 
         //add response for closed tickets with response 
-        if ( ( getStateId( ticket ) == AppPropertiesService.getPropertyInt( 
-                    TicketingConstants.PROPERTY_TICKET_CLOSE_ID, -1 ) ) &&
-                StringUtils.isNotEmpty( ticket.getUserMessage(  ) ) )
+        if ( ( getStateId( ticket ) == PluginConfigurationService.getInt( TicketingConstants.PROPERTY_STATE_CLOSED_ID,
+                    TicketingConstants.PROPERTY_UNSET_INT ) ) && StringUtils.isNotEmpty( ticket.getUserMessage(  ) ) )
         {
             doc.add( new TextField( TicketSearchItem.FIELD_RESPONSE, ticket.getUserMessage(  ), Store.YES ) );
             doc.add( new TextField( TicketSearchItem.FIELD_TXT_RESPONSE,

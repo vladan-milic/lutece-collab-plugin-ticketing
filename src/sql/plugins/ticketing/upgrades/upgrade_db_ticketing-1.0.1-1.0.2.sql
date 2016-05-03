@@ -30,3 +30,25 @@ ALTER TABLE ticketing_ticket_form ADD COLUMN inactive int(1) NOT NULL default '0
 --
 ALTER TABLE ticketing_ticket MODIFY fixed_phone_number varchar(50) NULL default '';
 ALTER TABLE ticketing_ticket MODIFY mobile_phone_number varchar(50) NULL default '';
+
+--
+-- Data for table core_admin_right
+--
+DELETE FROM core_admin_right WHERE id_right = 'TICKETING_PLUGIN_CONFIGURATION';
+INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is_updatable,plugin_name,id_feature_group,icon_url,documentation_url, id_order ) VALUES 
+('TICKETING_PLUGIN_CONFIGURATION','ticketing.adminFeature.ConfigurePlugin.name',1,'jsp/admin/plugins/ticketing/config/ConfigurePlugin.jsp','ticketing.adminFeature.ConfigurePlugin.description',0,'ticketing',NULL,NULL,NULL,4);
+
+--
+-- Data for table core_user_right
+--
+DELETE FROM core_user_right WHERE id_right = 'TICKETING_PLUGIN_CONFIGURATION';
+INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_PLUGIN_CONFIGURATION',1);
+
+--
+-- Structure for table ticketing_configuration
+--
+DROP TABLE IF EXISTS ticketing_configuration;
+CREATE TABLE ticketing_configuration (
+  ticketing_key VARCHAR(255) NOT NULL,
+  ticketing_value VARCHAR(255) NOT NULL
+);

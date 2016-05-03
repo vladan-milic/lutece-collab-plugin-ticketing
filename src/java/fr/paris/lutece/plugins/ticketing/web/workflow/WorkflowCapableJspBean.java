@@ -86,7 +86,6 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
     private static final String PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ME = "ticketing.workflow.action.id.assignMe";
-    private static final String PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ENTITY = "ticketing.workflow.action.id.assignEntity";
 
     // Bean
     private static final String BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE = "workflow-ticketing.resourceHistoryService";
@@ -178,14 +177,6 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                                 ( getUser(  ).getUserId(  ) == ticket.getAssigneeUser(  ).getAdminUserId(  ) ) )
                         {
                             //self assign action for a ticket already assign to the agent => removing action from list
-                            filteredListWorkflowActions.remove( action );
-                        }
-
-                        if ( ( action.getId(  ) == AppPropertiesService.getPropertyInt( 
-                                    PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ENTITY, -1 ) ) &&
-                                RBACService.isUserInRole( getUser(  ), TicketingConstants.ROLE_LEVEL_3 ) )
-                        {
-                            // action assign to another entity is not allowed for level3 agent
                             filteredListWorkflowActions.remove( action );
                         }
                     }

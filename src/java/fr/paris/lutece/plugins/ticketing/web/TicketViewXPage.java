@@ -60,9 +60,6 @@ public class TicketViewXPage extends WorkflowCapableXPage
     protected static final String MESSAGE_PAGE_TITLE = "ticketing.xpage.ticket.view.pageTitle";
     protected static final String MESSAGE_PATH = "ticketing.xpage.ticket.view.pagePathLabel";
 
-    // Marks
-    private static final String MARK_IS_REPLY_RENDERED = "is_reply_rendered";
-
     /**
      * Generated serial id
      */
@@ -93,9 +90,6 @@ public class TicketViewXPage extends WorkflowCapableXPage
         model.put( TicketingConstants.MARK_TICKET, ticket );
 
         ModelUtils.storeReadOnlyHtmlResponses( request, model, ticket );
-
-        model.put( MARK_IS_REPLY_RENDERED,
-            isInState( ticket, WorkflowCapableXPage.PROPERTIES_WORKFLOW_STATE_WAITING_USER_REPLY ) );
 
         return getXPage( TEMPLATE_VIEW_TICKET_DETAILS, request.getLocale(  ), model );
     }

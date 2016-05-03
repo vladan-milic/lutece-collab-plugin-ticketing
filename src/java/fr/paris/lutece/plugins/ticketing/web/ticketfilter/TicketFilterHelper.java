@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.ticketing.web.ticketfilter;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
+import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
@@ -409,8 +410,8 @@ public final class TicketFilterHelper
     {
         ReferenceList refList = new ReferenceList(  );
         Collection<State> collState = WorkflowService.getInstance(  )
-                                                     .getAllStateByWorkflow( AppPropertiesService.getPropertyInt( 
-                    TicketingConstants.PROPERTY_TICKET_WORKFLOW_ID, -1 ), user );
+                                                     .getAllStateByWorkflow( PluginConfigurationService.getInt( 
+                    TicketingConstants.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT ), user );
 
         //id of states to ignore 
         List<String> listIdStatesIgnored = Arrays.asList( AppPropertiesService.getProperty( 

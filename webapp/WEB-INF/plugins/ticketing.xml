@@ -60,6 +60,14 @@
             <feature-url>jsp/admin/plugins/ticketing/ManageInstantResponses.jsp</feature-url>
             <feature-icon-url/>
         </admin-feature>
+        <admin-feature>
+            <feature-id>TICKETING_PLUGIN_CONFIGURATION</feature-id>
+            <feature-title>ticketing.adminFeature.ConfigurePlugin.name</feature-title>
+            <feature-description>ticketing.adminFeature.ConfigurePlugin.description</feature-description>
+            <feature-level>2</feature-level>
+            <feature-url>jsp/admin/plugins/ticketing/config/ConfigurePlugin.jsp</feature-url>
+            <feature-icon-url/>
+        </admin-feature>
       
       
     </admin-features>    

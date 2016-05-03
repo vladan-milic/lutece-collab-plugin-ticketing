@@ -185,4 +185,13 @@ CREATE TABLE ticketing_indexer_action (
   );
 CREATE INDEX ticketing_id_indexer_task ON ticketing_indexer_action (id_task);
 
+--
+-- Structure for table ticketing_configuration
+--
+DROP TABLE IF EXISTS ticketing_configuration;
+CREATE TABLE ticketing_configuration (
+  ticketing_key VARCHAR(255) NOT NULL,
+  ticketing_value VARCHAR(255) NOT NULL
+);
+
       

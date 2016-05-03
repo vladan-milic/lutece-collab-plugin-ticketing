@@ -75,9 +75,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class WorkflowCapableXPage extends MVCApplication
 {
-    // Properties
-    public static final String PROPERTIES_WORKFLOW_STATE_WAITING_USER_REPLY = "ticketing.workflow.state.id.waitingUserReply";
-
     // Errors
     public static final String ERROR_WORKFLOW_ACTION_ABORTED = "ticketing.error.workflow.action.aborted.frontoffice";
 
