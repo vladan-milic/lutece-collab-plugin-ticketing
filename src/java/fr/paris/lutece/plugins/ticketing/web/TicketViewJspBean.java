@@ -57,7 +57,6 @@ import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.lang.StringUtils;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -146,17 +145,15 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
             url.addParameter( TicketingConstants.PARAMETER_GRU_CUSTOMER_ID, ticket.getCustomerId(  ) );
             model.put( TicketingConstants.MARK_POCGRU_URL_360, url.getUrl(  ) );
         }
-//navigation in authorized tickets : next <-> previous
+
+        //navigation in authorized tickets : next <-> previous
         @SuppressWarnings( "unchecked" )
-		List<Ticket> listTickets = ( List<Ticket> ) request.getSession( ).getAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION );
-    	
-    	setNavigationBetweenTickets( nIdTicket, listTickets, model );
-       
-     
-//navigation in authorized tickets : next <-> previous
-        
-        
-        
+        List<Ticket> listTickets = (List<Ticket>) request.getSession(  )
+                                                         .getAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION );
+
+        setNavigationBetweenTickets( nIdTicket, listTickets, model );
+
+        //navigation in authorized tickets : next <-> previous
         model.put( TicketingConstants.MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
         ModelUtils.storeTicketRights( model, getUser(  ) );
 
@@ -180,7 +177,6 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS, TEMPLATE_VIEW_TICKET_DETAILS, model );
     }
 
-    
     /**
      * Sets the navigation between tickets.
      *
@@ -188,34 +184,46 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
      * @param listTickets the list tickets
      * @param model the model
      */
-    private void setNavigationBetweenTickets ( int nIdTicket, List<Ticket> listTickets, Map<String, Object> model )
-    {    	
-    	Ticket tNext = null, tPrevious = null, tcurrent = null;    	
-    	Boolean bexistIdTicket = false;
-    	if( listTickets !=null )
-    	{
-    		Iterator<Ticket> crunchifyIterator = listTickets.iterator();   	
-    		while ( crunchifyIterator.hasNext ( ) ) 
-    		{		
-    			tcurrent = crunchifyIterator.next( );
-    		
-    			if( nIdTicket == tcurrent.getId( ) && crunchifyIterator.hasNext( ) )
-    			{
-    				bexistIdTicket=true;
-    				tNext = crunchifyIterator.next( );
-    				break;
-    			}
-    			else if( nIdTicket != tcurrent.getId( ) )
-    			{
-    				tPrevious = tcurrent;
-    			}
-    		}	
-    		
-    		if( !bexistIdTicket ) tPrevious = null;
-    	}    		
-		 model.put( TicketingConstants.MARK_TICKET_NAVIGATION_NEXT,  ( tNext == null )? TicketingConstants.TICKET_NO_NAVIGATION : tNext.getId( ) );
-	     model.put( TicketingConstants.MARK_TICKET_NAVIGATION_PREVIOUS,  ( tPrevious == null )? TicketingConstants.TICKET_NO_NAVIGATION : tPrevious.getId( ) );
+    private void setNavigationBetweenTickets( int nIdTicket, List<Ticket> listTickets, Map<String, Object> model )
+    {
+        Ticket tNext = null;
+        Ticket tPrevious = null;
+        Ticket tcurrent = null;
+        Boolean bexistIdTicket = false;
+
+        if ( listTickets != null )
+        {
+            Iterator<Ticket> crunchifyIterator = listTickets.iterator(  );
+
+            while ( crunchifyIterator.hasNext(  ) )
+            {
+                tcurrent = crunchifyIterator.next(  );
+
+                if ( ( nIdTicket == tcurrent.getId(  ) ) && crunchifyIterator.hasNext(  ) )
+                {
+                    bexistIdTicket = true;
+                    tNext = crunchifyIterator.next(  );
+
+                    break;
+                }
+                else if ( nIdTicket != tcurrent.getId(  ) )
+                {
+                    tPrevious = tcurrent;
+                }
+            }
+
+            if ( !bexistIdTicket )
+            {
+                tPrevious = null;
+            }
+        }
+
+        model.put( TicketingConstants.MARK_TICKET_NAVIGATION_NEXT,
+            ( tNext == null ) ? TicketingConstants.TICKET_NO_NAVIGATION : tNext.getId(  ) );
+        model.put( TicketingConstants.MARK_TICKET_NAVIGATION_PREVIOUS,
+            ( tPrevious == null ) ? TicketingConstants.TICKET_NO_NAVIGATION : tPrevious.getId(  ) );
     }
+
     /**
      * {@inheritDoc }
      */

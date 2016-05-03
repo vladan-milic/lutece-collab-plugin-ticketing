@@ -219,7 +219,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 _nDefaultItemsPerPage );
 
         UrlItem url = new UrlItem( JSP_MANAGE_TICKETS );
-        String strUrl = url.getUrl(  ); 
+        String strUrl = url.getUrl(  );
 
         List<Ticket> listAgentTickets = new ArrayList<Ticket>(  );
         List<Ticket> listGroupTickets = new ArrayList<Ticket>(  );
@@ -252,9 +252,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             listTickets = listDomainTickets;
         }
-         
+
         //store list tickets for navigation in view details
         request.getSession(  ).setAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION, listTickets );
+
         // PAGINATORS
         LocalizedPaginator<Ticket> paginatorTickets = new LocalizedPaginator<Ticket>( listTickets, _nItemsPerPage,
                 strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
