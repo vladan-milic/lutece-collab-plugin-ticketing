@@ -37,15 +37,17 @@
     
     <div class="form-group">
         <label class="col-sm-3 control-label" for="user_message">#i18n{ticketing.xpage.view_ticket_details.labelUserMessage}</label>
-        <div class="col-sm9">
-            <textarea name="user_message" id="user_message" rows="5" cols="90" ></textarea>
+        <div class="col-sm-9">
+            <textarea class="ticketing" name="user_message" id="user_message" ></textarea>
         </div>
     </div>
     
     <div class="form-actions">
-        <button type="submit" class="btn btn-primary btn-small" name="save">
-            <i class="icon-ok icon-white"></i>&nbsp;#i18n{ticketing.xpage.view_ticket_details.labelButtonSave}
-        </button>
+        <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" class="btn btn-primary btn-small" name="save">
+                <i class="icon-ok icon-white"></i>&nbsp;#i18n{ticketing.xpage.view_ticket_details.labelButtonSave}
+            </button>
+        </div>
     </div>
 </form>
 <@addRequiredJsFiles />

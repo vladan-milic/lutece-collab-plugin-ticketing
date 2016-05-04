@@ -42,7 +42,13 @@
                 </div>
               </div>
             </div>
-            <@fieldTextArea i18nLabelKey="ticketing.manage_user_preferences.labelUserSignature" inputName="user_signature" value="${user_signature!''}" i18nHelpBlockKey="ticketing.manage_user_preferences.labelUserSignature.help" cssClass="form-control richtext" />
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 control-label" for="user_signature">#i18n{ticketing.manage_user_preferences.labelUserSignature}&nbsp;:</label>
+                <div class="col-xs-12 col-sm-9">
+                    <textarea class="ticketing form-control richtext" id="user_signature" name="user_signature" >${user_signature!''}</textarea>
+                    <p class="help-block">#i18n{ticketing.manage_user_preferences.labelUserSignature.help}</p>
+                </div>
+            </div>
             <div class="form-group">
               <label class="col-xs-12 col-sm-3 control-label">#i18n{ticketing.manage_user_preferences.labelChannels} :</label>
               <div class="col-xs-12 col-sm-9">
