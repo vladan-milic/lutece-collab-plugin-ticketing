@@ -24,6 +24,11 @@
 #demand-panel.tickets .tab-content table td{ padding: 15px 15px }
 #demand-panel.tickets .tab-content table td .ticket-comments{ margin-top:20px }
 
+#demand-panel.tickets .tab-content table td:first-of-type{ width: 170px }
+#demand-panel.tickets .tab-content table td:nth-of-type(2){ width: 130px }
+#demand-panel.tickets .tab-content table td:nth-of-type(3){ width: 200px }
+#demand-panel.tickets .tab-content table td:nth-of-type(6){ width: 180px }
+
 #demand-panel .tab-content table th.th-sort-desc:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; right:5px }
 #demand-panel .tab-content table th.th-sort-asc:after{ content:'\f106'; color:#606059; font-family: 'FontAwesome'; right:5px }
 
