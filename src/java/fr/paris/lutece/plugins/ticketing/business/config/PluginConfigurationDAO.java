@@ -83,6 +83,8 @@ public class PluginConfigurationDAO implements IPluginConfigurationDAO
         {
             strResult = daoUtil.getString( 1 );
         }
+        
+        daoUtil.free(  );
 
         return strResult;
     }
