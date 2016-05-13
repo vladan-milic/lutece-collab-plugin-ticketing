@@ -8,6 +8,7 @@
 .border-red{border:1px solid red !important;}
 
 #info-head-right{ border-left: 1px solid #fff; height:215px; margin-top:0; padding-top:0 }
+#info-head-right .fa { width: 40px; }
 .nav-ticket{ padding-left: 140px }
 
 .ticket-head{ height: 200px !important }
@@ -151,7 +152,7 @@ textarea.ticketing.richtext {
   #head-ticketing{ height: auto; padding:0 5%; margin-bottom: 15px }
 
   #demand-panel.tickets .tab-content td:nth-of-type(1):before { content: "Reference"; }
-  #demand-panel.tickets .tab-content td:nth-of-type(2):before { content: "Créée le"; }
+  #demand-panel.tickets .tab-content td:nth-of-type(2):before { content: "Crï¿½ï¿½e le"; }
   #demand-panel.tickets .tab-content td:nth-of-type(3):before { content: "Nature"; }
   #demand-panel.tickets .tab-content td:nth-of-type(4):before { content: "Usager / Objet"; }
   #demand-panel.tickets .tab-content td:nth-of-type(5):before { content: "Etat"; }
@@ -167,10 +168,10 @@ textarea.ticketing.richtext {
   #instant-response td .detail{ width: auto !important }
   #instant-response td:before { /* Now like a table header */	position: absolute;	/* Top/left values mimic padding */	top: 6px;	left: 6px;	width: 45%; padding-right: 10px; 	white-space: nowrap	}
   /*	Label the data*/
-  #instant-response td:nth-of-type(1):before { content: "Créée le"; }
-  #instant-response td:nth-of-type(2):before { content: "Problématique"; }
-  #instant-response td:nth-of-type(3):before { content: "Détail"; }
-  #instant-response td:nth-of-type(4):before { content: "Entité/Agent"; }
+  #instant-response td:nth-of-type(1):before { content: "Crï¿½ï¿½e le"; }
+  #instant-response td:nth-of-type(2):before { content: "Problï¿½matique"; }
+  #instant-response td:nth-of-type(3):before { content: "Dï¿½tail"; }
+  #instant-response td:nth-of-type(4):before { content: "Entitï¿½/Agent"; }
 
 
 }

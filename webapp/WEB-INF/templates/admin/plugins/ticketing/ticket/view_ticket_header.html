@@ -97,7 +97,7 @@
       <#assign textColor="red"/>
       </#if>
       <p data-toggle="tooltip" data-placement="bottom" title="Priorit&eacute; : ${priority!''} / Criticit&eacute; : ${criticality!''}">
-         <i class="fa fa-circle text-${textColor}"></i> ${ticket.reference!}
+         <i class="fa fa-circle text-${textColor} fa-fw"></i> ${ticket.reference!}
       </p>
       <p>
          <#switch ticket.ticketStatus>
@@ -109,6 +109,19 @@
          <#break>
          </#switch>
       </p>
+      <#if ticket.assigneeUnit??>
+        <p>
+          <i class="fa fa-sitemap fa-fw"></i> ${ticket.assigneeUnit.name}
+        </p>
+      </#if>
+      <#if ticket.assigneeUser??>
+        <p>
+        <#if avatar_available>
+          <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}" alt="" title="Avatar">
+        </#if>
+        <span class="avatar-label">${ticket.assigneeUser.firstname} ${ticket.assigneeUser.lastname}</span>
+        </p>
+      </#if>
    </div>
 </div>
 </#macro>

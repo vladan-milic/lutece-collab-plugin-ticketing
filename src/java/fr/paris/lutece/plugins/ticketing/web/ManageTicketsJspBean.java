@@ -146,7 +146,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String MARK_NB_TICKET_GROUP = "nb_ticket_group";
     private static final String MARK_NB_TICKET_DOMAIN = "nb_ticket_domain";
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
-    private static final String MARK_ADMIN_AVATAR = "adminAvatar";
     private static final String MARK_GUID = "guid";
     private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
     private static final String MARK_PAGINATOR = "paginator";
@@ -176,8 +175,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String INFO_TICKET_UPDATED = "ticketing.info.ticket.updated";
     private static final String INFO_TICKET_REMOVED = "ticketing.info.ticket.removed";
 
-    // Session keys
-    private static boolean _bAdminAvatar = ( PluginService.getPlugin( "adminavatar" ) != null );
+    // Other constants
+    private static boolean _bAvatarAvailable = ( PluginService.getPlugin( TicketingConstants.PLUGIN_AVATAR ) != null );
 
     //Variables
     private int _nDefaultItemsPerPage;
@@ -269,7 +268,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_NB_TICKET_GROUP, listGroupTickets.size(  ) );
         model.put( MARK_NB_TICKET_DOMAIN, listDomainTickets.size(  ) );
         model.put( MARK_SELECTED_TAB, strSelectedTab );
-        model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
+        model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
         TicketFilterHelper.setModel( model, filter, request, getUser(  ) );
         ModelUtils.storeTicketRights( model, getUser(  ) );
 

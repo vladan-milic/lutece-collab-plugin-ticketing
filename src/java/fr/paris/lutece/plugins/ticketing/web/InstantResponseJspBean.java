@@ -100,7 +100,6 @@ public class InstantResponseJspBean extends MVCAdminJspBean
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
     private static final String MARK_TYPE_ID = "type_id";
     private static final String MARK_DOMAIN_ID = "domain_id";
-    private static final String MARK_ADMIN_AVATAR = "adminAvatar";
     private static final String JSP_MANAGE_INSTANT_RESPONSES = TicketingConstants.ADMIN_CONTROLLLER_PATH +
         "ManageInstantResponses.jsp";
 
@@ -131,7 +130,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
-    private static boolean _bAdminAvatar = PluginService.isPluginEnable( "adminavatar" );
+    private static boolean _bAvatarAvailable = PluginService.isPluginEnable( TicketingConstants.PLUGIN_AVATAR );
 
     // Session variable to store working values
     private InstantResponse _instantresponse;
@@ -196,7 +195,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         Map<String, Object> model = getPaginatedListModel( request, MARK_INSTANT_RESPONSE_LIST, listInstantResponses,
                 JSP_MANAGE_INSTANT_RESPONSES );
 
-        model.put( MARK_ADMIN_AVATAR, _bAdminAvatar );
+        model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
         InstantResponseFilterHelper.setModel( model, filter, request );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_INSTANT_RESPONSES, TEMPLATE_MANAGE_INSTANT_RESPONSES, model );

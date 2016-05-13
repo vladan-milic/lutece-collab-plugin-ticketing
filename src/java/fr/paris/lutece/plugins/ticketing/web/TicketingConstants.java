@@ -94,6 +94,7 @@ public final class TicketingConstants
     public static final String MARK_CREATION_DATE_AS_DATE = "creation_date_as_date";
     public static final String MARK_TICKET_NAVIGATION_NEXT = "navigation_next";
     public static final String MARK_TICKET_NAVIGATION_PREVIOUS = "navigation_previous";
+    public static final String MARK_AVATAR_AVAILABLE = "avatar_available";
 
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
@@ -129,6 +130,9 @@ public final class TicketingConstants
     public static final String USER_PREFERENCE_SIGNATURE = "ticketingUserSignature";
     public static final String USER_PREFERENCE_CHANNELS_LIST = "ticketingUserChannelsList";
     public static final String USER_PREFERENCE_PREFERRED_CHANNEL = "ticketingUserPreferredChannel";
+
+    // Plugins
+    public static final String PLUGIN_AVATAR = "avatar";
 
     // Other constants
     public static final String ADMIN_CONTROLLLER_PATH = "jsp/admin/plugins/ticketing/";

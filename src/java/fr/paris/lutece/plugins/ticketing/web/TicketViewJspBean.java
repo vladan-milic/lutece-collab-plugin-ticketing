@@ -47,6 +47,7 @@ import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -89,6 +90,9 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
     // Other constants
     private static final long serialVersionUID = 1L;
+
+    // Session keys
+    private static boolean _bAvatarAvailable = ( PluginService.getPlugin( TicketingConstants.PLUGIN_AVATAR ) != null );
 
     // Variable
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
@@ -162,6 +166,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         String strHistory = getDisplayDocumentHistory( request, ticket );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_HISTORY, strHistory );
+        model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
 
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
 
