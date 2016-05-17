@@ -108,11 +108,13 @@ textarea.ticketing.richtext {
 	padding-bottom: 3px;
 }
 
-
-#instant-response tr td strong.lead{ font-size: 4rem; font-weight: bold  }
-#instant-response tr td:first-of-type{ width: 15rem }
-#instant-response tr td:nth-of-type(2){ width: 30rem }
-#instant-response tr td .detail{ width: 50rem; max-height: 100px; overflow: auto; background: #EEE; padding: 10px; margin:10px;  border-radius: 8px }
+#demand-panel.instant-response .tab-content{ padding-left: 0 }
+#demand-panel.instant-response .tab-content table td{ padding: 15px 15px }
+#demand-panel.instant-response tr td strong.lead{ font-size: 4rem; font-weight: bold  }
+#demand-panel.instant-response tr td:first-of-type{ width: 130px; }
+#demand-panel.instant-response tr td:nth-of-type(2){ width: 200px; }
+#demand-panel.instant-response tr td:nth-of-type(4){ width: 180px; }
+#demand-panel.instant-response tr td .detail{ max-height: 100px; overflow: auto; background: #EEE; padding: 10px; margin:10px;  border-radius: 8px }
 
 /* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
 @media screen and (-webkit-min-device-pixel-ratio:0) { #filter-ticket select {padding-right: 18px} }

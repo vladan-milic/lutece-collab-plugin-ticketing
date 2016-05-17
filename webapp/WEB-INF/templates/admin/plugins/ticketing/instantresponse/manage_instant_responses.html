@@ -20,62 +20,69 @@
         </form>
     </div>
   </div>
-  <div id="content-ticketing" class="row">
+  <div id="demand-panel" class="row bg-gru-light instant-response">
     <div class="col-xs-12 col-sm-12">
+      <div class="tab-content">
+        <div id="filter-ticket" class="row">
           <form id="filter_form" class="form-inline" action="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp">
               <input type="hidden" name="submitted_form" value="1">
               <input type="hidden" name="fltr_order_sort" value="${orderSort!}">
               <input type="hidden" name="fltr_order_by" value="${orderBy!}">
-           </form>
-      <@notification infos=infos />
-      <table id="instant-response" class="table table-hover">
-        <thead>
-          <tr>
-              <th class="text-center">#i18n{ticketing.manage_instantresponses.columnDateCreate}</th>
-              <th>#i18n{ticketing.manage_instantresponses.columnIdTicketCategory}</th>
-              <th>#i18n{ticketing.manage_instantresponses.columnSubject}</th>
-              <th>#i18n{ticketing.manage_instantresponses.columnAdminUser}</th>
-			  <!-- <th>#i18n{portal.util.labelActions}</th> -->
-          </tr>
-        </thead>
-        <tbody>
-          <#list instantresponse_list as instantresponse >
-              <tr data-url="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp?view=modifyInstantResponse&id=${instantresponse.id}">
-              <td>
-                  ${instantresponse.dateCreate?string["dd/MM/yyyy HH:mm"]}
-              </td>
-              <td>
-                  ${instantresponse.type} / ${instantresponse.domain} / ${instantresponse.category}
-              </td>
-              <td>
-                <div class="detail">
-                  ${instantresponse.subject}
-                </div>
-              </td>
-              <td>
-                  <p><i class="fa fa-sitemap"></i>  ${instantresponse.unit}</p>
-                  <p>
-        		        <#if avatar_available>
-                      <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${instantresponse.idAdminUser}" alt="" title="Avatar">
-                    </#if>
-        		        <span class="avatar-label">${instantresponse.userFirstname} ${instantresponse.userLastname}</span>
-                  </p>
-              </td>
-              <!--
-              <td>
-                  <a href="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp?view=modifyInstantResponse&id=${instantresponse.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
-                      <i class="fa fa-pencil"></i>
-                  </a>
-                  <a href="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp?action=confirmRemoveInstantResponse&id=${instantresponse.id}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
-                      <i class="fa fa-trash"></i>
-                  </a>
-              </td>
-            -->
-          </tr>
-          </#list>
-        </tbody>
-      </table>
-      <@paginationAdmin paginator=paginator combo=1 />
+          </form>
+        </div>
+        <@notification infos=infos />
+        <div class="row">
+          <div class="col-xs-12 col-sm-offset-1 col-sm-10 table-responsive">
+          <#if instantresponse_list?? && instantresponse_list?has_content>
+            <table class="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th class="text-center">#i18n{ticketing.manage_instantresponses.columnDateCreate}</th>
+                  <th>#i18n{ticketing.manage_instantresponses.columnType}</th>
+                  <th>#i18n{ticketing.manage_instantresponses.columnSubject}</th>
+                  <th>#i18n{ticketing.manage_instantresponses.columnAdminUser}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <#list instantresponse_list as instantresponse >
+                  <tr data-url="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp?view=modifyInstantResponse&id=${instantresponse.id}">
+                    <td class="text-center">
+                      ${instantresponse.dateCreate?string["dd/MM/yyyy HH:mm"]}
+                    </td>
+                    <td>
+                      ${instantresponse.type} <br>#i18n{ticketing.manage_instantresponses.columnDomain}: ${instantresponse.domain} <br>#i18n{ticketing.manage_instantresponses.columnCategory}: <strong>${instantresponse.category}</strong>
+                    </td>
+                    <td>
+                      <div class="detail">
+                        ${instantresponse.subject}
+                      </div>
+                    </td>
+                    <td>
+                      <p><strong><i class="fa fa-sitemap"></i>  ${instantresponse.unit}</strong></p>
+                      <p>
+        	            <#if avatar_available>
+                          <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${instantresponse.idAdminUser}" alt="" title="Avatar">
+                        </#if>
+        	            <span class="avatar-label">${instantresponse.userFirstname} ${instantresponse.userLastname}</span>
+                      </p>
+                    </td>
+                  </tr>
+                </#list>
+              </tbody>
+            </table>
+            <div class="row">
+              <div class="col-xs-12 col-sm-offset-8 col-sm-4">
+                <@paginationAdmin paginator=paginator combo=1 />
+              </div>
+            </div>
+          <#else>
+            <div id="no-content">
+              <h2 class="text-muted">#i18n{ticketing.manage_tickets.labelNoInstantResponse}</h2>
+              <img class="img-responsive" src="images/admin/skin/plugins/ticketing/no_content.jpg" alt="" title="">
+            </div>
+          </#if>
+        </div>
+      </div>
     </div>
   </div>
 </div>
