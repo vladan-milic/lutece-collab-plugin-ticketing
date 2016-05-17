@@ -124,7 +124,7 @@
               <p>
     				  <#if avatar_available>
                 <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}" alt="" title="Avatar"></#if>
-    				    <span class="avatar-label">${ticket.assigneeUser.firstname} ${ticket.assigneeUser.lastname}</span>
+    				    <span>${ticket.assigneeUser.firstname} <br/> ${ticket.assigneeUser.lastname}</span>
             </p>
             </#if>
     			  </td>
