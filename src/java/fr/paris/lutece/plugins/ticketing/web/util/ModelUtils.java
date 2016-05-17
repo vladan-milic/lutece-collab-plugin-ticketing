@@ -154,4 +154,44 @@ public final class ModelUtils
 
         model.put( TicketingConstants.MARK_USER_SIGNATURE, strUserSignature );
     }
+
+    /**
+     * Completes the specified model with the navigation between tickets.
+     *
+     * @param nIdCurrentTicket the id of the current ticket
+     * @param listTickets the tickets list
+     * @param model the model
+     */
+    public static void storeNavigationBetweenTickets( int nIdCurrentTicket, List<Ticket> listTickets,
+        Map<String, Object> model )
+    {
+        Ticket ticketNext = null;
+        Ticket ticketPrevious = null;
+
+        if ( listTickets != null )
+        {
+            for ( int i = 0; i < listTickets.size(  ); i++ )
+            {
+                Ticket ticket = listTickets.get( i );
+
+                if ( nIdCurrentTicket == ticket.getId(  ) )
+                {
+                    if ( i > 0 )
+                    {
+                        ticketPrevious = listTickets.get( i - 1 );
+                    }
+
+                    if ( i < ( listTickets.size(  ) - 1 ) )
+                    {
+                        ticketNext = listTickets.get( i + 1 );
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        model.put( TicketingConstants.MARK_NEXT_TICKET, ticketNext );
+        model.put( TicketingConstants.MARK_PREVIOUS_TICKET, ticketPrevious );
+    }
 }

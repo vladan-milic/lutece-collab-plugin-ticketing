@@ -92,8 +92,8 @@ public final class TicketingConstants
     public static final String MARK_USER_SIGNATURE = "user_signature";
     public static final String MARK_AGENT_VIEW = "agent_view";
     public static final String MARK_CREATION_DATE_AS_DATE = "creation_date_as_date";
-    public static final String MARK_TICKET_NAVIGATION_NEXT = "navigation_next";
-    public static final String MARK_TICKET_NAVIGATION_PREVIOUS = "navigation_previous";
+    public static final String MARK_NEXT_TICKET = "next_ticket";
+    public static final String MARK_PREVIOUS_TICKET = "previous_ticket";
     public static final String MARK_AVATAR_AVAILABLE = "avatar_available";
 
     // Properties
@@ -152,7 +152,6 @@ public final class TicketingConstants
     public static final int NO_ID_CHANNEL = 0;
     public static final int TICKET_STATUS_IN_PROGRESS = 0;
     public static final int TICKET_STATUS_CLOSED = 1;
-    public static final int TICKET_NO_NAVIGATION = -1;
     private static final String PROPERTY_CHANNEL_ID = "ticketing.channel.webChannel.id";
     public static final int WEB_ID_CHANNEL = AppPropertiesService.getPropertyInt( PROPERTY_CHANNEL_ID, 99 );
     public static final int PROPERTY_UNSET_INT = -1;

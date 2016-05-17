@@ -64,22 +64,22 @@
       <!--
          <p id="info">Pour me contacter privil&eacute;gier le mail</p>
          -->
-    <p>
+
       <!-- NAVIGATION -->
-      <#if navigation_next !=-1 || navigation_previous !=-1 >
+      <#if next_ticket ?? || previous_ticket ?? >
       <nav id="item-navigator">
          <ul class="pager">
-            <#if navigation_previous !=-1  >
+            <#if previous_ticket ??   >
             <li class="previous">
-               <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${navigation_previous}" title="#i18n{ticketing.navigation.ticket.view.details.previous.title}">
-               <span aria-hidden="true">←</span> #i18n{ticketing.navigation.ticket.view.details.previous}
+               <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${previous_ticket.id}" title="#i18n{ticketing.navigation.ticket.view.details.previous.title}">
+               <i class="fa fa-arrow-left"></i> #i18n{ticketing.navigation.ticket.view.details.previous}
                </a>
             </li>
             </#if>
-            <#if navigation_next !=-1  >
+            <#if next_ticket ??  >
             <li class="next">
-               <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${navigation_next}" title="#i18n{ticketing.navigation.ticket.view.details.next.title}">
-               #i18n{ticketing.navigation.ticket.view.details.next} <span aria-hidden="true">→</span>
+               <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${next_ticket.id}" title="#i18n{ticketing.navigation.ticket.view.details.next.title}">
+               #i18n{ticketing.navigation.ticket.view.details.next} <i class="fa fa-arrow-right"></i>
                </a>
             </li>
             </#if>
@@ -87,7 +87,7 @@
       </nav>
       </#if>    
       <!-- END NAVIGATION -->
-</p>
+
    </div>
    <div class="col-xs-4 col-sm-4" id="info-head-right">
       <#assign textColor="green"/>
