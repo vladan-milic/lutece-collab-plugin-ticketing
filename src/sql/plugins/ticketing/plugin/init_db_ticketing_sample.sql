@@ -4,12 +4,13 @@ INSERT INTO ticketing_ticket_form (id_form, title, description) VALUES
 (2, "Facil'Familles - Problèmes tarifaires périscolaire", "Formulaire du domaine Facil'Familles - Formulaire de la problématique  'Problèmes tarifaires périscolaire'"), 
 (3, "Facil'Familles - Autre", "Formulaire du domaine Facil'Familles - problématique 'Autre'");
 
+DELETE FROM ticketing_ticket_category ;
+DELETE FROM ticketing_ticket_domain ;
 DELETE FROM ticketing_ticket_type ;
 INSERT INTO ticketing_ticket_type (id_ticket_type, label, reference_prefix) VALUES
 (1, "Demande d'information", "INF"),
 (2, "Réclamation", "RCL");
 
-DELETE FROM ticketing_ticket_domain ;
 INSERT INTO ticketing_ticket_domain (id_ticket_domain, id_ticket_type, label) VALUES
 (100, 1, "Autre" ),
 (110, 1, "Mairie" ),
@@ -17,7 +18,6 @@ INSERT INTO ticketing_ticket_domain (id_ticket_domain, id_ticket_type, label) VA
 (200, 2, "Autre" ),
 (210, 2, "Facil'familles" );
 
-DELETE FROM ticketing_ticket_category ;
 INSERT INTO ticketing_ticket_category (id_ticket_category, id_ticket_domain, label, category_code, id_ticket_form, id_workflow, id_unit ) VALUES
 (1, 100, "Autre" , NULL, 0, 301, 0 ),
 (2, 110, "Réservation de salle" , NULL, 0, 301, 0 ),
