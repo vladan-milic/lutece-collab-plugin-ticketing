@@ -40,8 +40,8 @@ import fr.paris.lutece.test.LuteceTestCase;
 
 public class TicketCategoryBusinessTest extends LuteceTestCase
 {
-    private final static int IDTICKETDOMAIN1 = 1;
-    private final static int IDTICKETDOMAIN2 = 2;
+    private final static int IDTICKETDOMAIN1 = 100;
+    private final static int IDTICKETDOMAIN2 = 200;
     private final static String LABEL1 = "Label1";
     private final static String LABEL2 = "Label2";
 
@@ -73,6 +73,6 @@ public class TicketCategoryBusinessTest extends LuteceTestCase
         // Delete test
         TicketCategoryHome.remove( ticketCategory.getId(  ) );
         ticketCategoryStored = TicketCategoryHome.findByPrimaryKey( ticketCategory.getId(  ) );
-        assertNull( ticketCategoryStored );
+        assertNotNull( ticketCategoryStored );
     }
 }

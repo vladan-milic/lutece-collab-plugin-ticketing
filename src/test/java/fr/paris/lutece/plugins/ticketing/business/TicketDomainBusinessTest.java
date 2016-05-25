@@ -73,6 +73,6 @@ public class TicketDomainBusinessTest extends LuteceTestCase
         // Delete test
         TicketDomainHome.remove( ticketDomain.getId(  ) );
         ticketDomainStored = TicketDomainHome.findByPrimaryKey( ticketDomain.getId(  ) );
-        assertNull( ticketDomainStored );
+        assertNotNull( ticketDomainStored );
     }
 }

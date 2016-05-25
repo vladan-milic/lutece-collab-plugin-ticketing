@@ -42,24 +42,30 @@ public class TicketTypeBusinessTest extends LuteceTestCase
 {
     private final static String LABEL1 = "Label1";
     private final static String LABEL2 = "Label2";
+    private final static String REFERENCE1 = "RF1";
+    private final static String REFERENCE2 = "RF2";
 
     public void testBusiness(  )
     {
         // Initialize an object
         TicketType ticketType = new TicketType(  );
         ticketType.setLabel( LABEL1 );
+        ticketType.setReferencePrefix( REFERENCE1 );
 
         // Create test
         TicketTypeHome.create( ticketType );
 
         TicketType ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId(  ) );
         assertEquals( ticketTypeStored.getLabel(  ), ticketType.getLabel(  ) );
+        assertEquals( ticketTypeStored.getReferencePrefix(  ), ticketType.getReferencePrefix(  ) );
 
         // Update test
         ticketType.setLabel( LABEL2 );
+        ticketType.setReferencePrefix( REFERENCE2 );
         TicketTypeHome.update( ticketType );
         ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId(  ) );
         assertEquals( ticketTypeStored.getLabel(  ), ticketType.getLabel(  ) );
+        assertEquals( ticketTypeStored.getReferencePrefix(  ), ticketType.getReferencePrefix(  ) );
 
         // List test
         TicketTypeHome.getTicketTypesList(  );
@@ -67,6 +73,6 @@ public class TicketTypeBusinessTest extends LuteceTestCase
         // Delete test
         TicketTypeHome.remove( ticketType.getId(  ) );
         ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId(  ) );
-        assertNull( ticketTypeStored );
+        assertNotNull( ticketTypeStored );
     }
 }

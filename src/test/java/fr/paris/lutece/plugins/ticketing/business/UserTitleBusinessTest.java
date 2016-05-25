@@ -67,6 +67,6 @@ public class UserTitleBusinessTest extends LuteceTestCase
         // Delete test
         UserTitleHome.remove( userTitle.getId(  ) );
         userTitleStored = UserTitleHome.findByPrimaryKey( userTitle.getId(  ) );
-        assertNull( userTitleStored );
+        assertNotNull( userTitleStored );
     }
 }
