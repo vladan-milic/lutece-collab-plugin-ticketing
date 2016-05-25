@@ -22,27 +22,27 @@ id_ticket int(6) NOT NULL,
 ticket_reference varchar(20) NULL, 
 guid varchar(255) NULL,
 id_customer varchar(20) NULL, 
-id_user_title int(11) NOT NULL default '0',
-firstname varchar(50) NOT NULL default '',
-lastname varchar(50) NOT NULL default '',
-email varchar(255) NOT NULL default '',
+id_user_title int(11) NOT NULL,
+firstname varchar(50) NOT NULL,
+lastname varchar(50) NOT NULL,
+email varchar(255) NOT NULL,
 fixed_phone_number varchar(50) NULL default '',
 mobile_phone_number varchar(50) NULL default '',
-id_ticket_category int(11) NOT NULL default '0',
-id_contact_mode int(11) NOT NULL default '0',
+id_ticket_category int(11) NOT NULL,
+id_contact_mode int(11) NOT NULL,
 ticket_comment long varchar NULL ,
 ticket_status int(11) NOT NULL default '0',
 ticket_status_text varchar(255) NULL default '',
 priority int(6) NOT NULL default '0',
 criticality int(6) NOT NULL default '0',
 date_update timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-date_create timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+date_create timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 date_close timestamp NULL,
 id_admin_user int(11) NOT NULL default '-1',
 id_unit int(11) NOT NULL default '0', 
 user_message long varchar NULL,
 url varchar(4096) NULL,
-id_channel int(11) NOT NULL default '0',
+id_channel int(11) NOT NULL,
 id_assigner_user int(11) NOT NULL default '-1',
 id_assigner_unit int(11) NOT NULL default '0', 
 PRIMARY KEY (id_ticket)
@@ -55,12 +55,12 @@ PRIMARY KEY (id_ticket)
 DROP TABLE IF EXISTS ticketing_instant_response;
 CREATE TABLE ticketing_instant_response (
 id_instant_response int(6) NOT NULL,
-id_ticket_category int(11) NOT NULL default '0',
+id_ticket_category int(11) NOT NULL,
 subject long varchar NULL ,
-date_create timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+date_create timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 id_unit int(11) NOT NULL default '0', 
 id_admin_user int(11) NOT NULL default '0',
-id_channel int(11) NOT NULL default '0',
+id_channel int(11) NOT NULL,
 PRIMARY KEY (id_instant_response)
 );
 
@@ -71,7 +71,7 @@ PRIMARY KEY (id_instant_response)
 DROP TABLE IF EXISTS ticketing_ticket_category;
 CREATE TABLE ticketing_ticket_category (
 id_ticket_category int(6) NOT NULL,
-id_ticket_domain int(11) NOT NULL default '0',
+id_ticket_domain int(11) NOT NULL,
 label varchar(50) NOT NULL default '',
 id_workflow INT NOT NULL default '0',
 id_ticket_form int(6) NOT NULL default '0',
@@ -88,7 +88,7 @@ PRIMARY KEY (id_ticket_category)
 DROP TABLE IF EXISTS ticketing_ticket_domain;
 CREATE TABLE ticketing_ticket_domain (
 id_ticket_domain int(6) NOT NULL,
-id_ticket_type int(11) NOT NULL default '0',
+id_ticket_type int(11) NOT NULL,
 label varchar(50) NOT NULL default '',
 inactive int(1)  NOT NULL default '0',
 PRIMARY KEY (id_ticket_domain)

@@ -32,6 +32,27 @@ ALTER TABLE ticketing_ticket MODIFY fixed_phone_number varchar(50) NULL default 
 ALTER TABLE ticketing_ticket MODIFY mobile_phone_number varchar(50) NULL default '';
 
 --
+--  Remove default value
+--
+ALTER TABLE ticketing_ticket MODIFY id_user_title int(11) NOT NULL;
+ALTER TABLE ticketing_ticket MODIFY firstname varchar(50) NOT NULL;
+ALTER TABLE ticketing_ticket MODIFY lastname varchar(50) NOT NULL;
+ALTER TABLE ticketing_ticket MODIFY email varchar(255) NOT NULL;
+ALTER TABLE ticketing_ticket MODIFY id_ticket_category int(11) NOT NULL;
+ALTER TABLE ticketing_ticket MODIFY id_contact_mode int(11) NOT NULL;
+ALTER TABLE ticketing_ticket MODIFY id_channel int(11) NOT NULL;
+ALTER TABLE ticketing_instant_response MODIFY id_ticket_category int(11) NOT NULL;
+ALTER TABLE ticketing_instant_response MODIFY id_channel int(11) NOT NULL;
+ALTER TABLE ticketing_ticket_category MODIFY id_ticket_domain int(11) NOT NULL;
+ALTER TABLE ticketing_ticket_domain MODIFY id_ticket_type int(11) NOT NULL;
+
+--
+--  Change default value
+--
+ALTER TABLE ticketing_ticket MODIFY date_create timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE ticketing_instant_response MODIFY date_create timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+--
 -- Data for table core_admin_right
 --
 DELETE FROM core_admin_right WHERE id_right = 'TICKETING_PLUGIN_CONFIGURATION';
