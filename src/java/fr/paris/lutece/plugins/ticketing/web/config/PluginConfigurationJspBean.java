@@ -118,7 +118,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     public String getManageConfiguration( HttpServletRequest request )
     {
         Map<String, Object> model = getModel(  );
-        int nIdWorkflow = PluginConfigurationService.getInt( TicketingConstants.PROPERTY_TICKET_WORKFLOW_ID,
+        int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID,
                 TicketingConstants.PROPERTY_UNSET_INT );
 
         model.put( MARK_WORKFLOW_ID, nIdWorkflow );
@@ -142,7 +142,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         try
         {
             int nIdWorkflow = Integer.parseInt( strIdWorkflow );
-            PluginConfigurationService.set( TicketingConstants.PROPERTY_TICKET_WORKFLOW_ID, nIdWorkflow );
+            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, nIdWorkflow );
 
             int nIdStateClosed = TicketingConstants.PROPERTY_UNSET_INT;
 
@@ -151,7 +151,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
                 nIdStateClosed = Integer.parseInt( strIdStateClosed );
             }
 
-            PluginConfigurationService.set( TicketingConstants.PROPERTY_STATE_CLOSED_ID, nIdStateClosed );
+            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATE_CLOSED_ID, nIdStateClosed );
         }
         catch ( NumberFormatException e )
         {
@@ -203,7 +203,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
             model.put( MARK_LIST_STATES, referenceListStates );
             model.put( MARK_STATE_CLOSED_ID,
-                PluginConfigurationService.getString( TicketingConstants.PROPERTY_STATE_CLOSED_ID, null ) );
+                PluginConfigurationService.getString( PluginConfigurationService.PROPERTY_STATE_CLOSED_ID, null ) );
 
             HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_WORKFLOW_RELATED_PROPERTIES, locale, model );
 

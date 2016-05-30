@@ -99,8 +99,6 @@ public final class TicketingConstants
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
     public static final String PROPERTY_REDIRECT_PREFIX = "ticketing.workflow.redirect.";
-    public static final String PROPERTY_STATE_CLOSED_ID = "ticketing.workflow.state.id.closed";
-    public static final String PROPERTY_TICKET_WORKFLOW_ID = "ticketing.workflow.id";
     public static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
     public static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.ticket.attribute.";
 

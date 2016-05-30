@@ -411,7 +411,8 @@ public final class TicketFilterHelper
         ReferenceList refList = new ReferenceList(  );
         Collection<State> collState = WorkflowService.getInstance(  )
                                                      .getAllStateByWorkflow( PluginConfigurationService.getInt( 
-                    TicketingConstants.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT ), user );
+                    PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT ),
+                user );
 
         //id of states to ignore 
         List<String> listIdStatesIgnored = Arrays.asList( AppPropertiesService.getProperty( 
