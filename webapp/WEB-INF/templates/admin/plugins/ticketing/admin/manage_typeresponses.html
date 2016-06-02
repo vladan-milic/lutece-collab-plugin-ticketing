@@ -1,0 +1,70 @@
+<#include "manageticketingreponsestypes_tabs.html" />
+
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+		<div class="box box-primary">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{ticketing.manage_typeresponses.title}</h3>
+				<div class="box-tools pull-right">
+					 <form class="form-inline pull-right" method="post" name="manage_typeresponses" action="jsp/admin/plugins/ticketing/ManageTypeResponses.jsp">
+            <!-- Add pull-right to class1 -->
+            <@actionButtons button1Name="view_createTypeResponse" icon1="icon-plus icon-white" i18nValue1Key="ticketing.manage_typeresponses.buttonAdd" />
+        </form>
+				</div>
+			</div>
+<div class="box-body table-responsive">
+    <@paginationAdmin paginator=paginator combo=1 />
+    
+    <@table>
+        <tr>
+            <input type="hidden" id="id" name="id"/>
+            <th>#i18n{ticketing.manage_typeresponses.columnNature}</th>
+            <th>#i18n{ticketing.manage_typeresponses.columnDomain}</th>
+            <th>#i18n{ticketing.manage_typeresponses.columnCategory}</th>
+            <th>#i18n{ticketing.manage_typeresponses.columnTitle}</th>
+            <th>#i18n{ticketing.manage_typeresponses.columnReponse}</th>
+            <th>#i18n{portal.util.labelActions}</th>
+        </tr>
+        <@tableHeadBodySeparator />
+            <#list typeresponse_list as typeresponse >
+        <tr>
+            <input type="hidden" id=" ${typeresponse.idTicketCategory}" name="id"/>
+             <td>
+                ${typeresponse.ticketType}
+            </td>         
+            <td>
+                ${typeresponse.domain}
+            </td>
+            <td>
+                ${typeresponse.category}
+            </td>
+            <td>
+                ${typeresponse.title}
+            </td>
+            <td>
+                ${typeresponse.reponse}
+            </td>
+            
+            
+        <td>
+            <a href="jsp/admin/plugins/ticketing/ManageTypeResponses.jsp?view=modifyTypeResponse&id=${typeresponse.id}"
+               class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
+                <i class="fa fa-pencil"></i>
+            </a>
+
+            <a href="jsp/admin/plugins/ticketing/ManageTypeResponses.jsp?action=confirmRemoveTypeResponse&id=${typeresponse.id}"
+               class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
+                <i class="fa fa-trash"></i>
+            </a>
+        </td>
+        </tr>
+        </#list>
+    </@table>
+
+    <@paginationAdmin paginator=paginator />
+
+  
+
+</div>
+	</div>
+</div>

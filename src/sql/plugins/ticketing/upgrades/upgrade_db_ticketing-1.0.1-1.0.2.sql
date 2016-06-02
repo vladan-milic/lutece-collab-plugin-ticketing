@@ -73,3 +73,18 @@ CREATE TABLE ticketing_configuration (
   ticketing_key VARCHAR(255) NOT NULL,
   ticketing_value VARCHAR(255) NOT NULL
 );
+
+--
+-- Structure for table ticketing_types_reponses
+--
+DROP TABLE IF EXISTS ticketing_types_reponses;
+CREATE TABLE ticketing_types_reponses (
+id_type_response int(6) NOT NULL,
+id_ticket_category int(11) default '0' NOT NULL,
+title varchar(255) default '' NOT NULL,
+reponse varchar(255) default '' NOT NULL,
+PRIMARY KEY (id_type_response)
+);
+DELETE FROM core_admin_right WHERE id_right = 'TICKETING_MANAGEMENT_REPONSES_TYPE';
+INSERT INTO `db_site_guichet_gru`.`core_admin_right` (`id_right`, `name`, `level_right`, `admin_url`, `description`, `is_updatable`, `plugin_name`, `id_feature_group`, `icon_url`, `documentation_url`, `id_order`) VALUES
+('TICKETING_MANAGEMENT_REPONSES_TYPE', 'ticketing.adminFeature.ManageTicketingReponsesTypes.name', '2', 'jsp/admin/plugins/ticketing/ManageTypeResponses.jsp', 'ticketing.adminFeature.ManageTicketingReponsesTypes.description', '0', 'ticketing', "GRU", NULL, NULL, '23');

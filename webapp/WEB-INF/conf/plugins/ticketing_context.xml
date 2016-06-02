@@ -23,7 +23,7 @@
     <bean id="ticketing.ticketFormDAO"  class="fr.paris.lutece.plugins.ticketing.business.ticketform.TicketFormDAO" />  
     <bean id="ticketing.instantResponseDAO"  class="fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponseDAO" />
     <bean id="ticketing.pluginConfigurationDAO"  class="fr.paris.lutece.plugins.ticketing.business.config.PluginConfigurationDAO" />  
-
+    <bean id="ticketing.typeResponseDAO" class=" fr.paris.lutece.plugins.ticketing.business.typeResponse.TypeResponseDAO" />
     
     
     
