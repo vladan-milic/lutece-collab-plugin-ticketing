@@ -1,3 +1,27 @@
+<#macro fieldInputListBox i18nLabelKey inputName items values="" mandatory=false i18nHelpBlockKey='' cssClass='form-control' >
+  <div class="form-group">
+    <label class="col-xs-12 col-sm-3 control-label" for="${inputName}">#i18n{${i18nLabelKey}}&nbsp;<#if mandatory>*&nbsp;</#if>:</label>
+    <div class="col-xs-12 col-sm-9">
+      <#assign params = "class='" + cssClass + "'" >
+      <@listBoxWithParams name=inputName items=items default_values=values additionalParameters=params />
+      <#if i18nHelpBlockKey != ''><p class="help-block">#i18n{${i18nHelpBlockKey}}</p></#if>
+    </div>
+  </div>
+</#macro>
+
+<#macro listBoxWithParams name default_values additionalParameters items >
+  <select multiple size="6" id="${name}" name="${name}" ${additionalParameters} >
+    <#list items as item>
+      <#if default_values?seq_contains("${item.code}")>
+        <option selected="selected" value="${item.code}" >${item.name}</option>
+      <#else>
+        <option value="${item.code}" >${item.name}</option>
+      </#if>
+    </#list>
+  </select>
+</#macro>
+
+
 <#--
 -- Check if the checkbox must be checked or not
 -- @param code the checkbox code

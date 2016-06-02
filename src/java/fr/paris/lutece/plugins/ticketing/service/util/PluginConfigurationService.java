@@ -35,6 +35,16 @@ package fr.paris.lutece.plugins.ticketing.service.util;
 
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.datastore.DatastoreService;
+import fr.paris.lutece.util.ReferenceItem;
+import fr.paris.lutece.util.ReferenceList;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class PluginConfigurationService
@@ -42,6 +52,10 @@ public class PluginConfigurationService
     private static final String PROPERTY_PREFIX = "ticketing.configuration.";
     public static final String PROPERTY_TICKET_WORKFLOW_ID = PROPERTY_PREFIX + "workflow.id";
     public static final String PROPERTY_STATE_CLOSED_ID = PROPERTY_PREFIX + "state.id.closed";
+    public static final String PROPERTY_STATES_SELECTED = PROPERTY_PREFIX + "workflow.states.selected";
+    public static final String PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX = PROPERTY_PREFIX +
+        "workflow.states.selected.for.role.";
+    private static final String LIST_SEPARATOR = ";";
 
     public static void set( String strProperty, String strValue )
     {
@@ -55,6 +69,13 @@ public class PluginConfigurationService
         DatastoreService.setDataValue( strProperty, strValue );
     }
 
+    public static void set( String strProperty, List<Integer> listValues )
+    {
+        String strValue = listToString( listValues );
+
+        DatastoreService.setDataValue( strProperty, strValue );
+    }
+
     public static String getString( String strProperty, String strDefaultValue )
     {
         String strValue = DatastoreService.getDataValue( strProperty, null );
@@ -62,10 +83,142 @@ public class PluginConfigurationService
         return ( strValue == null ) ? strDefaultValue : strValue;
     }
 
+    public static List<String> getStringList( String strProperty, List<String> listDefaultValues )
+    {
+        String strValue = DatastoreService.getDataValue( strProperty, null );
+
+        List<String> result = stringToStringList( strValue );
+
+        return ( result == null ) ? listDefaultValues : result;
+    }
+
+    public static Map<String, List<String>> getStringListByPrefix( String strProperty,
+        Map<String, List<String>> mapDefaultValues )
+    {
+        Map<String, List<String>> result = mapDefaultValues;
+        ReferenceList referenceListValues = DatastoreService.getDataByPrefix( strProperty );
+
+        if ( referenceListValues != null )
+        {
+            result = new HashMap<String, List<String>>(  );
+
+            for ( ReferenceItem item : referenceListValues )
+            {
+                List<String> listValues = stringToStringList( item.getName(  ) );
+
+                if ( listValues != null )
+                {
+                    result.put( item.getCode(  )
+                                    .replace( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX,
+                            StringUtils.EMPTY ), listValues );
+                }
+            }
+        }
+
+        return result;
+    }
+
     public static int getInt( String strProperty, int nDefaultValue )
     {
         String strValue = DatastoreService.getDataValue( strProperty, null );
 
         return ( strValue == null ) ? nDefaultValue : Integer.parseInt( strValue );
+    }
+
+    public static List<Integer> getIntegerList( String strProperty, List<Integer> listDefaultValues )
+    {
+        String strValue = DatastoreService.getDataValue( strProperty, null );
+
+        List<Integer> result = stringToIntegerList( strValue );
+
+        return ( result == null ) ? listDefaultValues : result;
+    }
+
+    public static Map<String, List<Integer>> getIntegerListByPrefix( String strProperty,
+        Map<String, List<Integer>> mapDefaultValues )
+    {
+        Map<String, List<Integer>> result = mapDefaultValues;
+        ReferenceList referenceListValues = DatastoreService.getDataByPrefix( strProperty );
+
+        if ( referenceListValues != null )
+        {
+            result = new HashMap<String, List<Integer>>(  );
+
+            for ( ReferenceItem item : referenceListValues )
+            {
+                List<Integer> listValues = stringToIntegerList( item.getName(  ) );
+
+                if ( listValues != null )
+                {
+                    result.put( item.getCode(  )
+                                    .replace( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX,
+                            StringUtils.EMPTY ), listValues );
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public static void removeByPrefix( String strPropertyPrefix )
+    {
+        DatastoreService.removeDataByPrefix( strPropertyPrefix );
+    }
+
+    private static final String listToString( List<?extends Object> listValues )
+    {
+        if ( ( listValues == null ) || listValues.isEmpty(  ) )
+        {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder(  );
+
+        for ( Object objValue : listValues )
+        {
+            if ( ( objValue != null ) && !StringUtils.isEmpty( objValue.toString(  ) ) )
+            {
+                sb.append( objValue.toString(  ) ).append( LIST_SEPARATOR );
+            }
+        }
+
+        if ( sb.length(  ) != 0 )
+        {
+            sb.deleteCharAt( sb.length(  ) - 1 );
+        }
+
+        return ( sb.length(  ) == 0 ) ? null : sb.toString(  );
+    }
+
+    private static List<String> stringToStringList( String strValue )
+    {
+        List<String> result = null;
+
+        if ( strValue != null )
+        {
+            String[] listValues = strValue.split( LIST_SEPARATOR );
+
+            result = Arrays.asList( listValues );
+        }
+
+        return result;
+    }
+
+    private static List<Integer> stringToIntegerList( String strValue )
+    {
+        List<Integer> result = null;
+
+        if ( strValue != null )
+        {
+            String[] listValues = strValue.split( LIST_SEPARATOR );
+            result = new ArrayList<Integer>( listValues.length );
+
+            for ( String strValueItem : listValues )
+            {
+                result.add( Integer.parseInt( strValueItem ) );
+            }
+        }
+
+        return result;
     }
 }

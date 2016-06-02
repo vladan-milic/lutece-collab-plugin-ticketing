@@ -45,7 +45,6 @@ import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
@@ -55,7 +54,7 @@ import org.apache.commons.lang.StringUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -111,9 +110,6 @@ public final class TicketFilterHelper
     // Properties for page titles
     private static final String PROPERTY_TICKET_TYPE_LABEL = "ticketing.model.entity.ticket.attribute.ticketType";
     private static final String PROPERTY_TICKET_DOMAIN_LABEL = "ticketing.model.entity.ticket.attribute.ticketDomain";
-    private static final String PROPERTY_TICKET_STATE_FILTERED_DEFAULT_IDS = "ticketing.workflow.state.filter.selected.ids.default";
-    private static final String PROPERTY_TICKET_STATE_FILTERED_IDS_PREFIX = "ticketing.workflow.state.filter.selected.ids.";
-    private static final String PROPERTY_TICKET_STATE_FILTER_IGNORE_IDS = "ticketing.workflow.state.filter.ignore.ids";
     private static final String NO_SELECTED_FIELD_ID = "-1";
 
     /**
@@ -347,19 +343,24 @@ public final class TicketFilterHelper
         Map<String, AdminRole> listUserRole = AdminUserHome.getRolesListForUser( adminUser.getUserId(  ) );
 
         // set default filtering for user from config file
-        String[] lstIdWorkflowState = AppPropertiesService.getProperty( PROPERTY_TICKET_STATE_FILTERED_DEFAULT_IDS )
-                                                          .split( TicketingConstants.FIELD_ID_SEPARATOR );
+        List<Integer> lstIdWorkflowState = PluginConfigurationService.getIntegerList( PluginConfigurationService.PROPERTY_STATES_SELECTED,
+                null );
+        Map<String, List<Integer>> mapStatesForRoles = PluginConfigurationService.getIntegerListByPrefix( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX,
+                null );
 
         for ( String strRole : listUserRole.keySet(  ) )
         {
-            if ( StringUtils.isNotBlank( AppPropertiesService.getProperty( PROPERTY_TICKET_STATE_FILTERED_IDS_PREFIX +
-                            strRole ) ) )
+            if ( mapStatesForRoles.containsKey( strRole ) )
             {
-                lstIdWorkflowState = AppPropertiesService.getProperty( PROPERTY_TICKET_STATE_FILTERED_IDS_PREFIX +
-                        strRole ).split( TicketingConstants.FIELD_ID_SEPARATOR );
+                lstIdWorkflowState = mapStatesForRoles.get( strRole );
 
                 break;
             }
+        }
+
+        if ( lstIdWorkflowState == null )
+        {
+            lstIdWorkflowState = new ArrayList<Integer>(  );
         }
 
         filter.setListIdWorkflowState( lstIdWorkflowState );
@@ -414,22 +415,13 @@ public final class TicketFilterHelper
                     PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT ),
                 user );
 
-        //id of states to ignore 
-        List<String> listIdStatesIgnored = Arrays.asList( AppPropertiesService.getProperty( 
-                    PROPERTY_TICKET_STATE_FILTER_IGNORE_IDS )
-                                                                              .split( "\\s*" +
-                    TicketingConstants.FIELD_ID_SEPARATOR + "\\s*" ) );
-
         for ( State state : collState )
         {
-            if ( !listIdStatesIgnored.contains( String.valueOf( state.getId(  ) ) ) )
-            {
-                ReferenceItem item = new ReferenceItem(  );
-                item.setCode( String.valueOf( state.getId(  ) ) );
-                item.setName( state.getName(  ) );
-                item.setChecked( listSelectedStates.contains( Integer.valueOf( state.getId(  ) ) ) );
-                refList.add( item );
-            }
+            ReferenceItem item = new ReferenceItem(  );
+            item.setCode( String.valueOf( state.getId(  ) ) );
+            item.setName( state.getName(  ) );
+            item.setChecked( listSelectedStates.contains( Integer.valueOf( state.getId(  ) ) ) );
+            refList.add( item );
         }
 
         return refList;
