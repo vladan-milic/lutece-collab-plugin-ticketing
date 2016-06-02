@@ -68,6 +68,15 @@
             <feature-url>jsp/admin/plugins/ticketing/config/ConfigurePlugin.jsp</feature-url>
             <feature-icon-url/>
         </admin-feature>
+        
+          <admin-feature>
+            <feature-id>TICKETING_MANAGEMENT_REPONSES_TYPE</feature-id>
+            <feature-title>ticketing.adminFeature.ManageTicketingReponsesTypes.name</feature-title>
+            <feature-description>ticketing.adminFeature.ManageTicketingReponsesTypes.description</feature-description>
+            <feature-level>2</feature-level>
+            <feature-url>jsp/admin/plugins/ticketing/ManageTypeResponses.jsp</feature-url>
+            <feature-icon-url></feature-icon-url>
+      </admin-feature>
       
       
     </admin-features>    
