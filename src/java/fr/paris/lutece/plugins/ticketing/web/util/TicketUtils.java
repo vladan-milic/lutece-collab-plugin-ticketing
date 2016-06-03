@@ -108,27 +108,27 @@ public final class TicketUtils
     }
 
     /**
-     * returns ReferenceList initialized with an Empty Item
-     * @param strEmptyLabel the label for empty value
-     * @param nEmptyCode the int used as a code for empty value
-     * @return listRefEmpty referenceList initialized with an Empty Item
+     * Creates a ReferenceList object initialized with one item
+     * @param strLabel the label for the item
+     * @param nCode the int used as a code for the item
+     * @return a ReferenceList object initialized with one item
      */
-    public static ReferenceList createReferenceList( String strEmptyLabel, int nEmptyCode )
+    public static ReferenceList createReferenceList( String strLabel, int nCode )
     {
-        return getEmptyItemReferenceList( strEmptyLabel, String.valueOf( nEmptyCode ) );
+        return createReferenceList( strLabel, String.valueOf( nCode ) );
     }
 
     /**
-     * returns ReferenceList initialized with an Empty Item
-     * @param strEmptyLabel label for empty value
-     * @param strEmptyCode code for empty value
-     * @return   listRefEmpty referenceList initialized with an Empty Item
+     * Creates a ReferenceList object initialized with one item
+     * @param strLabel the label for the item
+     * @param strCode the code for the item
+     * @return a ReferenceList object initialized with one item
      */
-    public static ReferenceList getEmptyItemReferenceList( String strEmptyLabel, String strEmptyCode )
+    public static ReferenceList createReferenceList( String strLabel, String strCode )
     {
         ReferenceItem refItemEmpty = new ReferenceItem(  );
-        refItemEmpty.setCode( strEmptyCode );
-        refItemEmpty.setName( strEmptyLabel );
+        refItemEmpty.setCode( strCode );
+        refItemEmpty.setName( strLabel );
 
         ReferenceList listRefEmpty = new ReferenceList(  );
         listRefEmpty.add( refItemEmpty );

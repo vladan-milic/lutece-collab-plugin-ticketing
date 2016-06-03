@@ -380,11 +380,11 @@ public final class TicketFilterHelper
     {
         mapModel.put( MARK_FILTER_PERIOD_LIST, TicketFilterPeriod.getReferenceList( request.getLocale(  ) ) );
 
-        ReferenceList refListTypes = TicketUtils.getEmptyItemReferenceList( I18nService.getLocalizedString( 
+        ReferenceList refListTypes = TicketUtils.createReferenceList( I18nService.getLocalizedString( 
                     PROPERTY_TICKET_TYPE_LABEL, request.getLocale(  ) ), StringUtils.EMPTY );
         refListTypes.addAll( TicketTypeHome.getReferenceList(  ) );
 
-        ReferenceList refListDomains = TicketUtils.getEmptyItemReferenceList( I18nService.getLocalizedString( 
+        ReferenceList refListDomains = TicketUtils.createReferenceList( I18nService.getLocalizedString( 
                     PROPERTY_TICKET_DOMAIN_LABEL, request.getLocale(  ) ), StringUtils.EMPTY );
 
         if ( fltrFilter.getIdType(  ) > 0 )
