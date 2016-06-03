@@ -271,6 +271,7 @@ public class TypicalResponseJspBean extends MVCAdminJspBean
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_TYPERESPONSE, _typeresponse );
+        
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );

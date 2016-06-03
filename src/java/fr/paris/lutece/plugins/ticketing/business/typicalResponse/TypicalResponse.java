@@ -50,6 +50,8 @@ public class TypicalResponse implements Serializable
     // Variables declarations 
     private int _nId;
     private int _nIdTicketCategory;
+    private int _nIdTicketType;
+    private int _nIdDomain;
     @NotEmpty( message = "#i18n{ticketing.validation.typeresponse.Title.notEmpty}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.typeresponse.Title.size}" )
     private String _strTitle;
@@ -185,4 +187,41 @@ public class TypicalResponse implements Serializable
     {
         _strDomain = strDomain;
     }
+    
+    
+    /**
+     * Returns the IdTicketType
+     * @return The IdTicketType
+     */ 
+ public int getIdTicketType()
+ {
+     return _nIdTicketType;
+ }
+ 
+    /**
+     * Sets the IdTicketType
+     * @param nIdTicketType The IdTicketType
+     */ 
+ public void setIdTicketType( int nIdTicketType )
+ {
+     _nIdTicketType = nIdTicketType;
+ }
+ 
+    /**
+     * Returns the IdDomain
+     * @return The IdDomain
+     */ 
+ public int getIdDomain()
+ {
+     return _nIdDomain;
+ }
+ 
+    /**
+     * Sets the IdDomain
+     * @param nIdDomain The IdDomain
+     */ 
+ public void setIdDomain( int nIdDomain )
+ {
+     _nIdDomain = nIdDomain;
+ }
 }

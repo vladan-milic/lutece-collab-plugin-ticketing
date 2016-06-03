@@ -115,6 +115,9 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
 
         TypicalResponse typeResponse = null;
 
+        TicketCategory ticketCategory;
+        TicketDomain ticketDomain;
+        TicketType ticketType;
         if ( daoUtil.next(  ) )
         {
             typeResponse = new TypicalResponse(  );
@@ -125,6 +128,14 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
             typeResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
             typeResponse.setTitle( daoUtil.getString( nIndex++ ) );
             typeResponse.setReponse( daoUtil.getString( nIndex++ ) );
+            
+            //populate label category, domain and type
+            ticketCategory = TicketCategoryHome.findByPrimaryKey( typeResponse.getIdTicketCategory(  ) );
+            typeResponse.setIdDomain( ticketCategory.getIdTicketDomain( ) );
+
+            ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
+            typeResponse.setIdTicketType(ticketDomain.getIdTicketType(  ) );
+
         }
 
         daoUtil.free(  );
