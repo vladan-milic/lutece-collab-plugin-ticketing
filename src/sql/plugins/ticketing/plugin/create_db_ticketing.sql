@@ -185,15 +185,6 @@ inactive int(1)  NOT NULL default '0',
 PRIMARY KEY (id_channel)
 );
 
---
--- Structure for table ticketing_configuration
---
-DROP TABLE IF EXISTS ticketing_configuration;
-CREATE TABLE ticketing_configuration (
-  ticketing_key VARCHAR(255) NOT NULL,
-  ticketing_value VARCHAR(255) NOT NULL
-);
-
 ALTER TABLE ticketing_ticket ADD CONSTRAINT fk_ticketing_ticket_user_title FOREIGN KEY (id_user_title)
       REFERENCES ticketing_user_title (id_user_title) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE ticketing_ticket ADD CONSTRAINT fk_ticketing_ticket_category FOREIGN KEY (id_ticket_category)

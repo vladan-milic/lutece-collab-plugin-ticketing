@@ -235,8 +235,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new TextField( TicketSearchItem.FIELD_COMMENT, ticket.getTicketComment(  ), Store.YES ) );
 
         //add response for closed tickets with response 
-        if ( ( getStateId( ticket ) == PluginConfigurationService.getInt( TicketingConstants.PROPERTY_STATE_CLOSED_ID,
-                    TicketingConstants.PROPERTY_UNSET_INT ) ) && StringUtils.isNotEmpty( ticket.getUserMessage(  ) ) )
+        if ( ( getStateId( ticket ) == PluginConfigurationService.getInt( 
+                    PluginConfigurationService.PROPERTY_STATE_CLOSED_ID, TicketingConstants.PROPERTY_UNSET_INT ) ) &&
+                StringUtils.isNotEmpty( ticket.getUserMessage(  ) ) )
         {
             doc.add( new TextField( TicketSearchItem.FIELD_RESPONSE, ticket.getUserMessage(  ), Store.YES ) );
             doc.add( new TextField( TicketSearchItem.FIELD_TXT_RESPONSE,

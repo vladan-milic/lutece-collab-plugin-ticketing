@@ -21,10 +21,10 @@
     <bean id="ticketing.channelDAO"  class="fr.paris.lutece.plugins.ticketing.business.channel.ChannelDAO" /> 
     <bean id="ticketing.supportEntityDAO"  class="fr.paris.lutece.plugins.ticketing.business.supportentity.SupportEntityDAO" />  
     <bean id="ticketing.ticketFormDAO"  class="fr.paris.lutece.plugins.ticketing.business.ticketform.TicketFormDAO" />  
-    <bean id="ticketing.instantResponseDAO"  class="fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponseDAO" />
+    <bean id="ticketing.instantResponseDAO"  class="fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponseDAO" />    
     <bean id="ticketing.pluginConfigurationDAO"  class="fr.paris.lutece.plugins.ticketing.business.config.PluginConfigurationDAO" />  
     <bean id="ticketing.typicalResponseDAO" class=" fr.paris.lutece.plugins.ticketing.business.typicalResponse.TypicalResponseDAO" />
-    
+
     
     
     <bean id="ticketing.ticketFormService" class="fr.paris.lutece.plugins.ticketing.service.TicketFormService" />         

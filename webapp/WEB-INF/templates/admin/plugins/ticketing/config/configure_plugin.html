@@ -1,4 +1,4 @@
-<@messages infos=infos />
+<@messages infos=infos errors=errors />
 
 <form class="form-horizontal" method="post" name="create_channel" action="jsp/admin/plugins/ticketing/config/ConfigurePlugin.jsp">
     <@fieldInputCombo i18nLabelKey="ticketing.configure_plugin.labelWorkflowId" inputName="id_workflow" mandatory=false  items=list_workflows value=id_workflow?string!'' i18nHelpBlockKey="ticketing.configure_plugin.labelWorkflowId.help" cssClass='' />

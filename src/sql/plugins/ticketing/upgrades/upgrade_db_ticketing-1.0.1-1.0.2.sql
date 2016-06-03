@@ -66,15 +66,6 @@ DELETE FROM core_user_right WHERE id_right = 'TICKETING_PLUGIN_CONFIGURATION';
 INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_PLUGIN_CONFIGURATION',1);
 
 --
--- Structure for table ticketing_configuration
---
-DROP TABLE IF EXISTS ticketing_configuration;
-CREATE TABLE ticketing_configuration (
-  ticketing_key VARCHAR(255) NOT NULL,
-  ticketing_value VARCHAR(255) NOT NULL
-);
-
---
 -- Structure for table ticketing_types_reponses
 --
 DROP TABLE IF EXISTS ticketing_types_reponses;

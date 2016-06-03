@@ -1,1 +1,81 @@
-<@fieldInputCombo i18nLabelKey="ticketing.configure_plugin.labelStateClosedId" inputName="id_state_closed" mandatory=false  items=list_states value=id_state_closed!'' i18nHelpBlockKey="ticketing.configure_plugin.labelStateClosedId.help" cssClass='' />
+<#include "/admin/plugins/ticketing/commons.html" />
+
+<hr/>
+
+<@fieldInputListBox i18nLabelKey="ticketing.configure_plugin.labelStatesSelected" inputName="states_selected" mandatory=false  items=states values=states_selected![] i18nHelpBlockKey="ticketing.configure_plugin.labelStatesSelected.help" cssClass='' />
+
+<hr/>
+
+<div id="states_selected_for_roles" class="form-group">
+  <label class="col-xs-12 col-sm-3 control-label" >#i18n{ticketing.configure_plugin.labelStatesSelectedForRole}&nbsp;:</label>
+  <div class="col-xs-12 col-sm-9">
+    <div class='place-holder'>
+      <div>
+        <#if states_selected_for_roles??>
+          <#list states_selected_for_roles as states_selected_for_role>
+            <div>
+              <label class="col-xs-1 control-label" for="states_selected_for_role_role" >#i18n{ticketing.configure_plugin.labelStatesSelectedForRoleRole}&nbsp;:</label>
+              <input class="col-xs-2" name="states_selected_for_role_role" type="text" value="${states_selected_for_role.role}" onchange="roleChanged(this)"/>
+              <label class="col-xs-1 control-label" >#i18n{ticketing.configure_plugin.labelStatesSelectedForRoleStates}&nbsp;:</label>
+              <div class="col-xs-8">
+                <select multiple name="states_selected_for_role_states_${states_selected_for_role.role}" class='states_selected_for_role' >
+                  <#list states as state>
+                    <#if states_selected_for_role.states?seq_contains("${state.code}")>
+                      <option selected="selected" value="${state.code}" >${state.name}</option>
+                    <#else>
+                      <option value="${state.code}" >${state.name}</option>
+                    </#if>
+                  </#list>
+                </select>
+              </div>
+              <p class="help-block">#i18n{ticketing.configure_plugin.labelStatesSelectedForRole.help}</p>
+            </div>
+          </#list>
+        </#if>
+      </div>
+    </div>
+        
+    <div class="col-xs-12">
+      <button class="btn btn-primary btn-xs btn-flat btn-add" type="button">
+        <i class="fa fa-plus"></i> #i18n{ticketing.configure_plugin.buttonAddRule}
+      </button>
+    </div>
+  </div>
+    
+  <div id="template_states_selected_for_role" style="display:none;">
+    <label class="col-xs-1 control-label" for="states_selected_for_role_role" >#i18n{ticketing.configure_plugin.labelStatesSelectedForRoleRole}&nbsp;:</label>
+    <input class="col-xs-2" name="states_selected_for_role_role" type="text" value="" onchange="roleChanged(this)"/>
+    <label class="col-xs-1 control-label" >#i18n{ticketing.configure_plugin.labelStatesSelectedForRoleStates}&nbsp;:</label>
+    <div class="col-xs-8">
+      <select multiple size="6" name="states_selected_for_role_states" class='states_selected_for_role' >
+        <#list states as state>
+          <option value="${state.code}" >${state.name}</option>
+        </#list>
+      </select>
+    </div>
+    <p class="help-block">#i18n{ticketing.configure_plugin.labelStatesSelectedForRole.help}</p>
+  </div>
+</div>
+
+<hr/>
+
+<@fieldInputCombo i18nLabelKey="ticketing.configure_plugin.labelStateClosedId" inputName="id_state_closed" mandatory=false  items=states value=id_state_closed!'' i18nHelpBlockKey="ticketing.configure_plugin.labelStateClosedId.help" cssClass='' />
+
+<script type="text/javascript" >
+  $('.btn-add').on('click', function(e) {
+    e.preventDefault();
+
+    var placeholderStatesSelectedForRoles = $('#states_selected_for_roles .place-holder');
+    var templateStatesSelectedForRole = $('#template_states_selected_for_role');
+    var newItem = $(templateStatesSelectedForRole.clone());
+    newItem.attr('id', '');
+    newItem.appendTo(placeholderStatesSelectedForRoles);
+    $(newItem).show();
+  });
+    
+  function roleChanged(element) {
+    var listBox = $(element).parent().find('select.states_selected_for_role');
+    listBox.attr('name', 'states_selected_for_role_states_' + element.value);
+    return true;
+  }
+</script>

@@ -49,7 +49,9 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -75,15 +77,20 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     // Parameters
     private static final String PARAMETER_WORKFLOW_ID = "id_workflow";
     private static final String PARAMETER_STATE_CLOSED_ID = "id_state_closed";
+    private static final String PARAMETER_STATES_SELECTED = "states_selected";
+    private static final String PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE = "states_selected_for_role_role";
+    private static final String PARAMETER_STATES_SELECTED_FOR_ROLE_STATES_PREFIX = "states_selected_for_role_states_";
 
     // Properties for page titles
 
     // Marks
-    private static final String MARK_WORKFLOW_ID = "id_workflow";
+    private static final String MARK_WORKFLOW_ID = PARAMETER_WORKFLOW_ID;
     private static final String MARK_LIST_WORKFLOWS = "list_workflows";
     private static final String MARK_WORKFLOW_RELATED_PROPERTIES = "workflow_related_properties";
-    private static final String MARK_STATE_CLOSED_ID = "id_state_closed";
-    private static final String MARK_LIST_STATES = "list_states";
+    private static final String MARK_STATE_CLOSED_ID = PARAMETER_STATE_CLOSED_ID;
+    private static final String MARK_STATES = "states";
+    private static final String MARK_STATES_SELECTED = PARAMETER_STATES_SELECTED;
+    private static final String MARK_STATES_SELECTED_FOR_ROLES = "states_selected_for_roles";
 
     // Properties
     private static final String PROPERTY_PAGE_TITLE_CONFIGURE_PLUGIN = "ticketing.configure_plugin.pageTitle";
@@ -100,6 +107,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     // Errors
     private static final String ERROR_CONFIGURATION_SAVE_ABORTED = "ticketing.error.configuration.save.aborted";
+    private static final String ERROR_CONFIGURATION_STATES_SELECTED_FOR_ROLES_DOUBLE = "ticketing.error.configuration.states.selected.fro.roles.double";
 
     /**
      * Generated serial id
@@ -118,7 +126,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     public String getManageConfiguration( HttpServletRequest request )
     {
         Map<String, Object> model = getModel(  );
-        int nIdWorkflow = PluginConfigurationService.getInt( TicketingConstants.PROPERTY_TICKET_WORKFLOW_ID,
+        int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID,
                 TicketingConstants.PROPERTY_UNSET_INT );
 
         model.put( MARK_WORKFLOW_ID, nIdWorkflow );
@@ -136,22 +144,70 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     @Action( ACTION_MODIFIY_CONFIGURATION )
     public String doModifyConfiguration( HttpServletRequest request )
     {
+        if ( !validate( request ) )
+        {
+            return redirectView( request, VIEW_MANAGE_CONFIGURATION );
+        }
+
         String strIdWorkflow = request.getParameter( PARAMETER_WORKFLOW_ID );
-        String strIdStateClosed = request.getParameter( PARAMETER_STATE_CLOSED_ID );
 
         try
         {
             int nIdWorkflow = Integer.parseInt( strIdWorkflow );
-            PluginConfigurationService.set( TicketingConstants.PROPERTY_TICKET_WORKFLOW_ID, nIdWorkflow );
+            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, nIdWorkflow );
 
             int nIdStateClosed = TicketingConstants.PROPERTY_UNSET_INT;
+            List<Integer> listStateSelectedIds = new ArrayList<Integer>(  );
 
             if ( TicketingConstants.PROPERTY_UNSET_INT != nIdWorkflow )
             {
+                // Manage selected states
+                String[] listStateSelected = request.getParameterValues( PARAMETER_STATES_SELECTED );
+
+                if ( listStateSelected != null )
+                {
+                    for ( String strStateSelected : listStateSelected )
+                    {
+                        listStateSelectedIds.add( Integer.parseInt( strStateSelected ) );
+                    }
+                }
+
+                // Manage selected states for roles
+                PluginConfigurationService.removeByPrefix( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX );
+
+                String[] listStateSelectedForRoleRoles = request.getParameterValues( PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE );
+
+                if ( listStateSelectedForRoleRoles != null )
+                {
+                    for ( String strRole : listStateSelectedForRoleRoles )
+                    {
+                        if ( !StringUtils.isEmpty( strRole ) )
+                        {
+                            String[] listStateSelectedForRoleStates = request.getParameterValues( PARAMETER_STATES_SELECTED_FOR_ROLE_STATES_PREFIX +
+                                    strRole );
+                            List<Integer> listStateSelectedForRoleIds = new ArrayList<Integer>(  );
+
+                            if ( listStateSelectedForRoleStates != null )
+                            {
+                                for ( String strStateSelected : listStateSelectedForRoleStates )
+                                {
+                                    listStateSelectedForRoleIds.add( Integer.parseInt( strStateSelected ) );
+                                }
+                            }
+
+                            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX +
+                                strRole, listStateSelectedForRoleIds );
+                        }
+                    }
+                }
+
+                // Manage closed state
+                String strIdStateClosed = request.getParameter( PARAMETER_STATE_CLOSED_ID );
                 nIdStateClosed = Integer.parseInt( strIdStateClosed );
             }
 
-            PluginConfigurationService.set( TicketingConstants.PROPERTY_STATE_CLOSED_ID, nIdStateClosed );
+            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATE_CLOSED_ID, nIdStateClosed );
+            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATES_SELECTED, listStateSelectedIds );
         }
         catch ( NumberFormatException e )
         {
@@ -201,9 +257,34 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
             referenceListStates.add( 0, referenceItemDefault );
 
-            model.put( MARK_LIST_STATES, referenceListStates );
+            model.put( MARK_STATES, referenceListStates );
+
+            // Selected states
+            model.put( MARK_STATES_SELECTED,
+                PluginConfigurationService.getStringList( PluginConfigurationService.PROPERTY_STATES_SELECTED, null ) );
+
+            // Selected states for roles
+            Map<String, List<String>> mapStatesForRoles = PluginConfigurationService.getStringListByPrefix( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX,
+                    null );
+
+            if ( mapStatesForRoles != null )
+            {
+                List<SelectedStatesForRole> listStatesSelectedForRole = new ArrayList<SelectedStatesForRole>(  );
+
+                for ( Map.Entry<String, List<String>> entry : mapStatesForRoles.entrySet(  ) )
+                {
+                    SelectedStatesForRole selectedStatesFroRole = new SelectedStatesForRole( entry.getKey(  ),
+                            entry.getValue(  ) );
+
+                    listStatesSelectedForRole.add( selectedStatesFroRole );
+                }
+
+                model.put( MARK_STATES_SELECTED_FOR_ROLES, listStatesSelectedForRole );
+            }
+
+            // Closed state
             model.put( MARK_STATE_CLOSED_ID,
-                PluginConfigurationService.getString( TicketingConstants.PROPERTY_STATE_CLOSED_ID, null ) );
+                PluginConfigurationService.getString( PluginConfigurationService.PROPERTY_STATE_CLOSED_ID, null ) );
 
             HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_WORKFLOW_RELATED_PROPERTIES, locale, model );
 
@@ -211,5 +292,59 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         }
 
         return strResult;
+    }
+
+    private boolean validate( HttpServletRequest request )
+    {
+        boolean bIsValidated = true;
+
+        String[] listStateSelectedForRoleRoles = request.getParameterValues( PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE );
+
+        if ( listStateSelectedForRoleRoles != null )
+        {
+            List<String> setRoles = new ArrayList<String>(  );
+
+            for ( String strRole : listStateSelectedForRoleRoles )
+            {
+                if ( !StringUtils.isEmpty( strRole ) )
+                {
+                    if ( setRoles.contains( strRole ) )
+                    {
+                        addError( ERROR_CONFIGURATION_STATES_SELECTED_FOR_ROLES_DOUBLE, getLocale(  ) );
+                        bIsValidated = false;
+
+                        break;
+                    }
+                    else
+                    {
+                        setRoles.add( strRole );
+                    }
+                }
+            }
+        }
+
+        return bIsValidated;
+    }
+
+    public static final class SelectedStatesForRole
+    {
+        private final String _strRole;
+        private final List<String> _listState;
+
+        public SelectedStatesForRole( String strRole, List<String> listState )
+        {
+            _strRole = strRole;
+            _listState = listState;
+        }
+
+        public String getRole(  )
+        {
+            return _strRole;
+        }
+
+        public List<String> getStates(  )
+        {
+            return _listState;
+        }
     }
 }
