@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
- package fr.paris.lutece.plugins.ticketing.business.typeResponse;
+package fr.paris.lutece.plugins.ticketing.business.typicalResponse;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -40,19 +40,20 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
 
+
 /**
  * This class provides instances management methods (create, find, ...) for TypeResponse objects
  */
-public final class TypeResponseHome
+public final class TypicalResponseHome
 {
     // Static variable pointed at the DAO instance
-    private static ITypeResponseDAO _dao = SpringContextService.getBean( "ticketing.typeResponseDAO" );
+    private static ITypicalResponseDAO _dao = SpringContextService.getBean( "ticketing.typicalResponseDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private TypeResponseHome(  )
+    private TypicalResponseHome(  )
     {
     }
 
@@ -61,7 +62,7 @@ public final class TypeResponseHome
      * @param typeResponse The instance of the TypeResponse which contains the informations to store
      * @return The  instance of typeResponse which has been created with its primary key.
      */
-    public static TypeResponse create( TypeResponse typeResponse )
+    public static TypicalResponse create( TypicalResponse typeResponse )
     {
         _dao.insert( typeResponse, _plugin );
 
@@ -73,7 +74,7 @@ public final class TypeResponseHome
      * @param typeResponse The instance of the TypeResponse which contains the data to store
      * @return The instance of the  typeResponse which has been updated
      */
-    public static TypeResponse update( TypeResponse typeResponse )
+    public static TypicalResponse update( TypicalResponse typeResponse )
     {
         _dao.store( typeResponse, _plugin );
 
@@ -94,36 +95,35 @@ public final class TypeResponseHome
      * @param nKey The typeResponse primary key
      * @return an instance of TypeResponse
      */
-    public static TypeResponse findByPrimaryKey( int nKey )
+    public static TypicalResponse findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, _plugin);
+        return _dao.load( nKey, _plugin );
     }
 
     /**
      * Load the data of all the typeResponse objects and returns them as a list
      * @return the list which contains the data of all the typeResponse objects
      */
-    public static List<TypeResponse> getTypeResponsesList( )
+    public static List<TypicalResponse> getTypeResponsesList(  )
     {
         return _dao.selectTypeResponsesList( _plugin );
     }
-    
+
     /**
      * Load the id of all the typeResponse objects and returns them as a list
      * @return the list which contains the id of all the typeResponse objects
      */
-    public static List<Integer> getIdTypeResponsesList( )
+    public static List<Integer> getIdTypeResponsesList(  )
     {
         return _dao.selectIdTypeResponsesList( _plugin );
     }
-    
+
     /**
      * Load the data of all the typeResponse objects and returns them as a referenceList
      * @return the referenceList which contains the data of all the typeResponse objects
      */
-    public static ReferenceList getTypeResponsesReferenceList( )
+    public static ReferenceList getTypeResponsesReferenceList(  )
     {
-        return _dao.selectTypeResponsesReferenceList(_plugin );
+        return _dao.selectTypeResponsesReferenceList( _plugin );
     }
 }
-

@@ -31,14 +31,13 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.web;
-
+package fr.paris.lutece.plugins.ticketing.web.admin;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
-import fr.paris.lutece.plugins.ticketing.business.typeResponse.TypeResponse;
-import fr.paris.lutece.plugins.ticketing.business.typeResponse.TypeResponseHome;
+import fr.paris.lutece.plugins.ticketing.business.typicalResponse.TypicalResponse;
+import fr.paris.lutece.plugins.ticketing.business.typicalResponse.TypicalResponseHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -55,45 +54,46 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 /**
  * This class provides the user interface to manage TypeResponse features ( manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageTypeResponses.jsp", controllerPath = "jsp/admin/plugins/ticketing/", right = "TICKETING_MANAGEMENT_REPONSES_TYPE" )
-public class TypeResponseJspBean extends  MVCAdminJspBean
+@Controller( controllerJsp = "ManageTypicalResponses.jsp", controllerPath = "jsp/admin/plugins/ticketing/admin/", right = "TICKETING_MANAGEMENT_REPONSES_TYPE" )
+public class TypicalResponseJspBean extends MVCAdminJspBean
 {
-	
-	 // Rights
+    // Rights
     public static final String RIGHT_MANAGETICKETINGREPONSESTYPES = "TICKETING_MANAGEMENT_REPONSES_TYPE";
-    
+
     // Templates
-    private static final String TEMPLATE_MANAGE_TYPERESPONSES = "/admin/plugins/ticketing/admin/manage_typeresponses.html";
-    private static final String TEMPLATE_CREATE_TYPERESPONSE = "/admin/plugins/ticketing/admin/create_typeresponse.html";
-    private static final String TEMPLATE_MODIFY_TYPERESPONSE = "/admin/plugins/ticketing/admin/modify_typeresponse.html";
+    private static final String TEMPLATE_MANAGE_TYPICALRESPONSES = "/admin/plugins/ticketing/admin/manage_typicalresponses.html";
+    private static final String TEMPLATE_CREATE_TYPERESPONSE = "/admin/plugins/ticketing/admin/create_typicalresponse.html";
+    private static final String TEMPLATE_MODIFY_TYPERESPONSE = "/admin/plugins/ticketing/admin/modify_typicalresponse.html";
 
     // Parameters
     private static final String PARAMETER_ID_TYPERESPONSE = "id";
+
     // Parameters
     private static final String PARAMETER_PAGE_INDEX = "page_index";
 
     // Properties for page titles
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_TYPERESPONSES = "ticketing.manage_typeresponses.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MANAGE_TYPICALRESPONSES = "ticketing.manage_typeresponses.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_TYPERESPONSE = "ticketing.modify_typeresponse.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_CREATE_TYPERESPONSE = "ticketing.create_typeresponse.pageTitle";
-    
+
     // Properties
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
 
     // Markers
     private static final String MARK_TYPERESPONSE_LIST = "typeresponse_list";
     private static final String MARK_TYPERESPONSE = "typeresponse";
+
     // Markers
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
-
-    private static final String JSP_MANAGE_TYPERESPONSES = "jsp/admin/plugins/ticketing/ManageTypeResponses.jsp";
+    private static final String JSP_MANAGE_TYPICALRESPONSES = "jsp/admin/plugins/ticketing/admin/ManageTypicalResponses.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TYPERESPONSE = "ticketing.message.confirmRemoveTypeResponse";
@@ -102,7 +102,7 @@ public class TypeResponseJspBean extends  MVCAdminJspBean
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.typeresponse.attribute.";
 
     // Views
-    private static final String VIEW_MANAGE_TYPERESPONSES = "manageTypeResponses";
+    private static final String VIEW_MANAGE_TYPICALRESPONSES = "manageTypicalResponses";
     private static final String VIEW_CREATE_TYPERESPONSE = "createTypeResponse";
     private static final String VIEW_MODIFY_TYPERESPONSE = "modifyTypeResponse";
 
@@ -116,18 +116,15 @@ public class TypeResponseJspBean extends  MVCAdminJspBean
     private static final String INFO_TYPERESPONSE_CREATED = "ticketing.info.typeresponse.created";
     private static final String INFO_TYPERESPONSE_UPDATED = "ticketing.info.typeresponse.updated";
     private static final String INFO_TYPERESPONSE_REMOVED = "ticketing.info.typeresponse.removed";
-    
 
     //Variables
     private int _nDefaultItemsPerPage;
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
-    
+
     // Session variable to store working values
-    private TypeResponse _typeresponse;
-    
-    
-    
+    private TypicalResponse _typeresponse;
+
     /**
      * Return a model that contains the list and paginator infos
      * @param request The HTTP request
@@ -141,13 +138,15 @@ public class TypeResponseJspBean extends  MVCAdminJspBean
     {
         _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
-        _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, _nDefaultItemsPerPage );
+        _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
+                _nDefaultItemsPerPage );
 
         UrlItem url = new UrlItem( strManageJsp );
         String strUrl = url.getUrl(  );
 
         // PAGINATOR
-        LocalizedPaginator paginator = new LocalizedPaginator( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
+        LocalizedPaginator paginator = new LocalizedPaginator( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
+                _strCurrentPageIndex, getLocale(  ) );
 
         Map<String, Object> model = getModel(  );
 
@@ -157,22 +156,22 @@ public class TypeResponseJspBean extends  MVCAdminJspBean
 
         return model;
     }
-    
-    
+
     /**
      * Build the Manage View
      * @param request The HTTP request
      * @return The page
      */
-    @View( value = VIEW_MANAGE_TYPERESPONSES, defaultView = true )
-    public String getManageTypeResponses( HttpServletRequest request )
+    @View( value = VIEW_MANAGE_TYPICALRESPONSES, defaultView = true )
+    public String getManageTypicalResponses( HttpServletRequest request )
     {
         _typeresponse = null;
-        List<TypeResponse> listTypeResponses = TypeResponseHome.getTypeResponsesList(  );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_TYPERESPONSE_LIST, listTypeResponses, JSP_MANAGE_TYPERESPONSES );
-    
 
-        return getPage( PROPERTY_PAGE_TITLE_MANAGE_TYPERESPONSES, TEMPLATE_MANAGE_TYPERESPONSES, model );
+        List<TypicalResponse> listTypicalResponses = TypicalResponseHome.getTypeResponsesList(  );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_TYPERESPONSE_LIST, listTypicalResponses,
+                JSP_MANAGE_TYPICALRESPONSES );
+
+        return getPage( PROPERTY_PAGE_TITLE_MANAGE_TYPICALRESPONSES, TEMPLATE_MANAGE_TYPICALRESPONSES, model );
     }
 
     /**
@@ -184,7 +183,7 @@ public class TypeResponseJspBean extends  MVCAdminJspBean
     @View( VIEW_CREATE_TYPERESPONSE )
     public String getCreateTypeResponse( HttpServletRequest request )
     {
-        _typeresponse = ( _typeresponse != null ) ? _typeresponse : new TypeResponse(  );
+        _typeresponse = ( _typeresponse != null ) ? _typeresponse : new TypicalResponse(  );
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_TYPERESPONSE, _typeresponse );
@@ -212,10 +211,10 @@ public class TypeResponseJspBean extends  MVCAdminJspBean
             return redirectView( request, VIEW_CREATE_TYPERESPONSE );
         }
 
-        TypeResponseHome.create( _typeresponse );
+        TypicalResponseHome.create( _typeresponse );
         addInfo( INFO_TYPERESPONSE_CREATED, getLocale(  ) );
 
-        return redirectView( request, VIEW_MANAGE_TYPERESPONSES );
+        return redirectView( request, VIEW_MANAGE_TYPICALRESPONSES );
     }
 
     /**
@@ -232,7 +231,8 @@ public class TypeResponseJspBean extends  MVCAdminJspBean
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_TYPERESPONSE ) );
         url.addParameter( PARAMETER_ID_TYPERESPONSE, nId );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TYPERESPONSE, url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
+        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TYPERESPONSE,
+                url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
     }
@@ -247,10 +247,10 @@ public class TypeResponseJspBean extends  MVCAdminJspBean
     public String doRemoveTypeResponse( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TYPERESPONSE ) );
-        TypeResponseHome.remove( nId );
+        TypicalResponseHome.remove( nId );
         addInfo( INFO_TYPERESPONSE_REMOVED, getLocale(  ) );
 
-        return redirectView( request, VIEW_MANAGE_TYPERESPONSES );
+        return redirectView( request, VIEW_MANAGE_TYPICALRESPONSES );
     }
 
     /**
@@ -264,9 +264,9 @@ public class TypeResponseJspBean extends  MVCAdminJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TYPERESPONSE ) );
 
-        if ( _typeresponse == null || ( _typeresponse.getId(  ) != nId ))
+        if ( ( _typeresponse == null ) || ( _typeresponse.getId(  ) != nId ) )
         {
-            _typeresponse = TypeResponseHome.findByPrimaryKey( nId );
+            _typeresponse = TypicalResponseHome.findByPrimaryKey( nId );
         }
 
         Map<String, Object> model = getModel(  );
@@ -292,12 +292,12 @@ public class TypeResponseJspBean extends  MVCAdminJspBean
         // Check constraints
         if ( !validateBean( _typeresponse, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect( request, VIEW_MODIFY_TYPERESPONSE, PARAMETER_ID_TYPERESPONSE, _typeresponse.getId( ) );
+            return redirect( request, VIEW_MODIFY_TYPERESPONSE, PARAMETER_ID_TYPERESPONSE, _typeresponse.getId(  ) );
         }
 
-        TypeResponseHome.update( _typeresponse );
+        TypicalResponseHome.update( _typeresponse );
         addInfo( INFO_TYPERESPONSE_UPDATED, getLocale(  ) );
 
-        return redirectView( request, VIEW_MANAGE_TYPERESPONSES );
+        return redirectView( request, VIEW_MANAGE_TYPICALRESPONSES );
     }
 }
