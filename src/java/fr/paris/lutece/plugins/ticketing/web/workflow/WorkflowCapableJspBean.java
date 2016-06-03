@@ -40,6 +40,7 @@ import fr.paris.lutece.plugins.ticketing.business.resourcehistory.IResourceHisto
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
+import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
@@ -65,6 +66,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -85,7 +87,6 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
-    private static final String PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ME = "ticketing.workflow.action.id.assignMe";
 
     // Bean
     private static final String BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE = "workflow-ticketing.resourceHistoryService";
@@ -171,13 +172,17 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                     //if ticket is assign to agent or to its group 
                     for ( Action action : fullListWorkflowActions )
                     {
-                        if ( ( action.getId(  ) == AppPropertiesService.getPropertyInt( 
-                                    PROPERTY_WORKFLOW_ACTION_ID_ASSIGN_ME, -1 ) ) &&
-                                ( ticket.getAssigneeUser(  ) != null ) &&
-                                ( getUser(  ).getUserId(  ) == ticket.getAssigneeUser(  ).getAdminUserId(  ) ) )
+                        List<Integer> listActionFiltered = PluginConfigurationService.getIntegerList( PluginConfigurationService.PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME,
+                                new ArrayList<Integer>(  ) );
+
+                        for ( Integer nActionId : listActionFiltered )
                         {
-                            //self assign action for a ticket already assign to the agent => removing action from list
-                            filteredListWorkflowActions.remove( action );
+                            if ( ( action.getId(  ) == nActionId ) && ( ticket.getAssigneeUser(  ) != null ) &&
+                                    ( getUser(  ).getUserId(  ) == ticket.getAssigneeUser(  ).getAdminUserId(  ) ) )
+                            {
+                                // ticket already assign to the agent => removing action from list
+                                filteredListWorkflowActions.remove( action );
+                            }
                         }
                     }
                 }

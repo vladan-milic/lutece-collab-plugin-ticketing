@@ -18,7 +18,7 @@
               <input class="col-xs-2" name="states_selected_for_role_role" type="text" value="${states_selected_for_role.role}" onchange="roleChanged(this)"/>
               <label class="col-xs-1 control-label" >#i18n{ticketing.configure_plugin.labelStatesSelectedForRoleStates}&nbsp;:</label>
               <div class="col-xs-8">
-                <select multiple name="states_selected_for_role_states_${states_selected_for_role.role}" class='states_selected_for_role' >
+                <select multiple size="6" name="states_selected_for_role_states_${states_selected_for_role.role}" class='states_selected_for_role' >
                   <#list states as state>
                     <#if states_selected_for_role.states?seq_contains("${state.code}")>
                       <option selected="selected" value="${state.code}" >${state.name}</option>
@@ -60,6 +60,10 @@
 <hr/>
 
 <@fieldInputCombo i18nLabelKey="ticketing.configure_plugin.labelStateClosedId" inputName="id_state_closed" mandatory=false  items=states value=id_state_closed!'' i18nHelpBlockKey="ticketing.configure_plugin.labelStateClosedId.help" cssClass='' />
+
+<hr/>
+
+<@fieldInputListBox i18nLabelKey="ticketing.configure_plugin.labelActionsFilteredWhenAssignedToMe" inputName="actions_filtered_when_assigned_to_me" mandatory=false  items=actions values=actions_filtered_when_assigned_to_me![] i18nHelpBlockKey="ticketing.configure_plugin.labelActionsFilteredWhenAssignedToMe.help" cssClass='' />
 
 <script type="text/javascript" >
   $('.btn-add').on('click', function(e) {

@@ -109,6 +109,17 @@ public final class TicketUtils
 
     /**
      * returns ReferenceList initialized with an Empty Item
+     * @param strEmptyLabel the label for empty value
+     * @param nEmptyCode the int used as a code for empty value
+     * @return listRefEmpty referenceList initialized with an Empty Item
+     */
+    public static ReferenceList createReferenceList( String strEmptyLabel, int nEmptyCode )
+    {
+        return getEmptyItemReferenceList( strEmptyLabel, String.valueOf( nEmptyCode ) );
+    }
+
+    /**
+     * returns ReferenceList initialized with an Empty Item
      * @param strEmptyLabel label for empty value
      * @param strEmptyCode code for empty value
      * @return   listRefEmpty referenceList initialized with an Empty Item

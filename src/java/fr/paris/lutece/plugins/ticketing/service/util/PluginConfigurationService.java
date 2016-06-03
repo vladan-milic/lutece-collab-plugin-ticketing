@@ -52,9 +52,11 @@ public class PluginConfigurationService
     private static final String PROPERTY_PREFIX = "ticketing.configuration.";
     public static final String PROPERTY_TICKET_WORKFLOW_ID = PROPERTY_PREFIX + "workflow.id";
     public static final String PROPERTY_STATE_CLOSED_ID = PROPERTY_PREFIX + "state.id.closed";
-    public static final String PROPERTY_STATES_SELECTED = PROPERTY_PREFIX + "workflow.states.selected";
+    public static final String PROPERTY_STATES_SELECTED = PROPERTY_PREFIX + "states.selected";
     public static final String PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX = PROPERTY_PREFIX +
-        "workflow.states.selected.for.role.";
+        "states.selected.for.role.";
+    public static final String PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME = PROPERTY_PREFIX +
+        "actions.filtered.when.assigned.to.me";
     private static final String LIST_SEPARATOR = ";";
 
     public static void set( String strProperty, String strValue )
