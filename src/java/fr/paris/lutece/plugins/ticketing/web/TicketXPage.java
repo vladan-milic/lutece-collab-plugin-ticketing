@@ -53,6 +53,7 @@ import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
+import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
@@ -388,7 +389,8 @@ public class TicketXPage extends WorkflowCapableXPage
     @View( value = VIEW_REDIRECT_AFTER_CREATE_ACTION )
     public XPage redirectAfterCreateAction( HttpServletRequest request )
     {
-        String strRedirectUrl = TicketUtils.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION,
+                TicketingConstants.ATTRIBUTE_RETURN_URL );
 
         if ( StringUtils.isNotEmpty( strRedirectUrl ) )
         {

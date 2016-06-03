@@ -45,11 +45,86 @@ import javax.servlet.http.HttpServletRequest;
  */
 public final class RequestUtils
 {
+    public static final int SCOPE_SESSION = 1;
+    public static final int SCOPE_REQUEST = 2;
+
     /**
      * Default constructor
      */
     private RequestUtils(  )
     {
+    }
+
+    /**
+     * Sets the parameter with the specified value
+     * @param request the request
+     * @param nScope either the request scope or the session scope
+     * @param strParameter the parameter
+     * @param strValue the value
+     */
+    public static void setParameter( HttpServletRequest request, int nScope, String strParameter, String strValue )
+    {
+        switch ( nScope )
+        {
+            case SCOPE_REQUEST:
+                request.setAttribute( strParameter, strValue );
+
+                break;
+
+            default:
+                request.getSession(  ).setAttribute( strParameter, strValue );
+        }
+    }
+
+    /**
+     * Gets the value of the specified parameter
+     * @param request the request
+     * @param nScope either the request scope or the session scope
+     * @param strParameter the parameter
+     * @return the parameter value
+     */
+    public static String getParameter( HttpServletRequest request, int nScope, String strParameter )
+    {
+        String strValue = null;
+
+        switch ( nScope )
+        {
+            case SCOPE_REQUEST:
+                strValue = (String) request.getAttribute( strParameter );
+
+                break;
+
+            default:
+                strValue = (String) request.getSession(  ).getAttribute( strParameter );
+        }
+
+        return strValue;
+    }
+
+    /**
+     * Gets the value of the specified parameter and removes it
+     * @param request the request
+     * @param nScope either the request scope or the session scope
+     * @param strParameter the parameter
+     * @return the parameter value
+     */
+    public static String popParameter( HttpServletRequest request, int nScope, String strParameter )
+    {
+        String strValue = getParameter( request, nScope, strParameter );
+
+        // we remove attribute after consuming it
+        switch ( nScope )
+        {
+            case SCOPE_REQUEST:
+                request.removeAttribute( strParameter );
+
+                break;
+
+            default:
+                request.getSession(  ).removeAttribute( strParameter );
+        }
+
+        return strValue;
     }
 
     /**

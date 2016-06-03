@@ -60,6 +60,7 @@ import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
@@ -202,7 +203,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
         TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
 
-        String strRedirectUrl = TicketUtils.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION,
+                TicketingConstants.ATTRIBUTE_RETURN_URL );
 
         if ( ( request.getParameter( TicketingConstants.PARAMETER_BACK ) != null ) &&
                 StringUtils.isNotEmpty( strRedirectUrl ) )
@@ -278,7 +280,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( TicketingConstants.MARK_CREATION_DATE_AS_DATE,
             TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY_DATE.equals( strCreationDateDisplay ) );
 
-        String messageInfo = TicketUtils.getParameter( request,
+        String messageInfo = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION,
                 TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
 
         if ( StringUtils.isNotEmpty( messageInfo ) )
@@ -422,7 +424,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      */
     public String redirectAfterCreateAction( HttpServletRequest request )
     {
-        String strRedirectUrl = TicketUtils.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION,
+                TicketingConstants.ATTRIBUTE_RETURN_URL );
 
         if ( StringUtils.isNotEmpty( strRedirectUrl ) )
         {

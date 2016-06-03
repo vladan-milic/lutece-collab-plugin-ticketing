@@ -42,6 +42,7 @@ import fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantRespons
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.InstantResponseFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -182,7 +183,8 @@ public class InstantResponseJspBean extends MVCAdminJspBean
     {
         _instantresponse = null;
 
-        String strRedirectUrl = TicketUtils.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION,
+                TicketingConstants.ATTRIBUTE_RETURN_URL );
 
         if ( ( request.getParameter( TicketingConstants.PARAMETER_BACK ) != null ) &&
                 StringUtils.isNotEmpty( strRedirectUrl ) )
@@ -345,7 +347,8 @@ public class InstantResponseJspBean extends MVCAdminJspBean
      */
     private String redirectAfterCreateAction( HttpServletRequest request )
     {
-        String strRedirectUrl = TicketUtils.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION,
+                TicketingConstants.ATTRIBUTE_RETURN_URL );
 
         if ( StringUtils.isNotEmpty( strRedirectUrl ) )
         {

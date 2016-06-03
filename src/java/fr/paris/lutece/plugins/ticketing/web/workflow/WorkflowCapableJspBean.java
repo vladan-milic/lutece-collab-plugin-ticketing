@@ -42,6 +42,7 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
@@ -483,7 +484,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         Action action = actionService.findByPrimaryKey( nIdAction );
         String strMessage = MessageFormat.format( I18nService.getLocalizedString( INFO_WORKFLOW_ACTION_EXECUTED,
                     Locale.FRENCH ), action.getName(  ) );
-        TicketUtils.setParameter( request, TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO, strMessage );
+        RequestUtils.setParameter( request, RequestUtils.SCOPE_SESSION,
+            TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO, strMessage );
     }
 
     /**

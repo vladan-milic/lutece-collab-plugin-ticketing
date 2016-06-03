@@ -43,7 +43,7 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.TicketPriority;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
-import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -169,7 +169,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
 
-        String messageInfo = TicketUtils.getParameter( request,
+        String messageInfo = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION,
                 TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
 
         if ( StringUtils.isNotEmpty( messageInfo ) )
@@ -191,7 +191,8 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
             ? (String) request.getAttribute( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION )
             : request.getParameter( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION );
 
-        String strRedirectUrl = TicketUtils.getParameter( request, TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION,
+                TicketingConstants.ATTRIBUTE_RETURN_URL );
 
         if ( StringUtils.isNotEmpty( strRedirect ) && StringUtils.isNotEmpty( strRedirectUrl ) )
         {
