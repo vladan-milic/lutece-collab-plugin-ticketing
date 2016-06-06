@@ -31,31 +31,32 @@
  *
  * License 1.0
  */
- 
-package fr.paris.lutece.plugins.ticketing.business.typeResponse;
+package fr.paris.lutece.plugins.ticketing.business.typicalResponse;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
+
 import java.util.List;
+
 
 /**
  * ITypeResponseDAO Interface
  */
-public interface ITypeResponseDAO
+public interface ITypicalResponseDAO
 {
     /**
      * Insert a new record in the table.
      * @param typeResponse instance of the TypeResponse object to insert
      * @param plugin the Plugin
      */
-    void insert( TypeResponse typeResponse, Plugin plugin );
+    void insert( TypicalResponse typeResponse, Plugin plugin );
 
     /**
      * Update the record in the table
      * @param typeResponse the reference of the TypeResponse
      * @param plugin the Plugin
      */
-    void store( TypeResponse typeResponse, Plugin plugin );
+    void store( TypicalResponse typeResponse, Plugin plugin );
 
     /**
      * Delete a record from the table
@@ -73,22 +74,22 @@ public interface ITypeResponseDAO
      * @param plugin the Plugin
      * @return The instance of the typeResponse
      */
-    TypeResponse load( int nKey, Plugin plugin );
+    TypicalResponse load( int nKey, Plugin plugin );
 
     /**
      * Load the data of all the typeResponse objects and returns them as a list
      * @param plugin the Plugin
      * @return The list which contains the data of all the typeResponse objects
      */
-    List<TypeResponse> selectTypeResponsesList( Plugin plugin );
-    
+    List<TypicalResponse> selectTypeResponsesList( Plugin plugin );
+
     /**
      * Load the id of all the typeResponse objects and returns them as a list
      * @param plugin the Plugin
      * @return The list which contains the id of all the typeResponse objects
      */
     List<Integer> selectIdTypeResponsesList( Plugin plugin );
-    
+
     /**
      * Load the data of all the typeResponse objects and returns them as a referenceList
      * @param plugin the Plugin

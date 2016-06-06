@@ -30,33 +30,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * License 1.0
- */ 
-package fr.paris.lutece.plugins.ticketing.business.typeResponse;
+ */
+package fr.paris.lutece.plugins.ticketing.business.typicalResponse;
+
+import org.hibernate.validator.constraints.*;
+
+import java.io.Serializable;
 
 import javax.validation.constraints.*;
-import org.hibernate.validator.constraints.*;
-import java.io.Serializable;
+
 
 /**
  * This is the business class for the object TypeResponse
- */ 
-public class TypeResponse implements Serializable
+ */
+public class TypicalResponse implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
     // Variables declarations 
     private int _nId;
-    
     private int _nIdTicketCategory;
-    
+    private int _nIdTicketType;
+    private int _nIdDomain;
     @NotEmpty( message = "#i18n{ticketing.validation.typeresponse.Title.notEmpty}" )
-    @Size( max = 255 , message = "#i18n{ticketing.validation.typeresponse.Title.size}" ) 
+    @Size( max = 255, message = "#i18n{ticketing.validation.typeresponse.Title.size}" )
     private String _strTitle;
-    
     @NotEmpty( message = "#i18n{ticketing.validation.typeresponse.Reponse.notEmpty}" )
-    @Size( max = 255 , message = "#i18n{ticketing.validation.typeresponse.Reponse.size}" ) 
+    @Size( max = 255, message = "#i18n{ticketing.validation.typeresponse.Reponse.size}" )
     private String _strReponse;
-    
     private String _strCategory;
     private String _strTicketType;
     private String _strDomain;
@@ -65,7 +66,7 @@ public class TypeResponse implements Serializable
      * Returns the Id
      * @return The Id
      */
-    public int getId( )
+    public int getId(  )
     {
         return _nId;
     }
@@ -73,17 +74,17 @@ public class TypeResponse implements Serializable
     /**
      * Sets the Id
      * @param nId The Id
-     */ 
+     */
     public void setId( int nId )
     {
         _nId = nId;
     }
-    
+
     /**
      * Returns the IdTicketCategory
      * @return The IdTicketCategory
      */
-    public int getIdTicketCategory( )
+    public int getIdTicketCategory(  )
     {
         return _nIdTicketCategory;
     }
@@ -91,17 +92,17 @@ public class TypeResponse implements Serializable
     /**
      * Sets the IdTicketCategory
      * @param nIdTicketCategory The IdTicketCategory
-     */ 
+     */
     public void setIdTicketCategory( int nIdTicketCategory )
     {
         _nIdTicketCategory = nIdTicketCategory;
     }
-    
+
     /**
      * Returns the Title
      * @return The Title
      */
-    public String getTitle( )
+    public String getTitle(  )
     {
         return _strTitle;
     }
@@ -109,17 +110,17 @@ public class TypeResponse implements Serializable
     /**
      * Sets the Title
      * @param strTitle The Title
-     */ 
+     */
     public void setTitle( String strTitle )
     {
         _strTitle = strTitle;
     }
-    
+
     /**
      * Returns the Reponse
      * @return The Reponse
      */
-    public String getReponse( )
+    public String getReponse(  )
     {
         return _strReponse;
     }
@@ -127,63 +128,100 @@ public class TypeResponse implements Serializable
     /**
      * Sets the Reponse
      * @param strReponse The Reponse
-     */ 
+     */
     public void setReponse( String strReponse )
     {
         _strReponse = strReponse;
     }
-    
+
     /**
      * Returns the Category
      * @return The Category
-     */ 
- public String getCategory()
- {
-     return _strCategory;
- }
- 
+     */
+    public String getCategory(  )
+    {
+        return _strCategory;
+    }
+
     /**
      * Sets the Category
      * @param strCategory The Category
-     */ 
- public void setCategory( String strCategory )
- {
-     _strCategory = strCategory;
- }
- 
+     */
+    public void setCategory( String strCategory )
+    {
+        _strCategory = strCategory;
+    }
+
     /**
      * Returns the TicketType
      * @return The TicketType
-     */ 
- public String getTicketType()
- {
-     return _strTicketType;
- }
- 
+     */
+    public String getTicketType(  )
+    {
+        return _strTicketType;
+    }
+
     /**
      * Sets the TicketType
      * @param strTicketType The TicketType
-     */ 
- public void setTicketType( String strTicketType )
- {
-     _strTicketType = strTicketType;
- }
- 
+     */
+    public void setTicketType( String strTicketType )
+    {
+        _strTicketType = strTicketType;
+    }
+
     /**
      * Returns the Domain
      * @return The Domain
-     */ 
- public String getDomain()
- {
-     return _strDomain;
- }
- 
+     */
+    public String getDomain(  )
+    {
+        return _strDomain;
+    }
+
     /**
      * Sets the Domain
      * @param strDomain The Domain
+     */
+    public void setDomain( String strDomain )
+    {
+        _strDomain = strDomain;
+    }
+    
+    
+    /**
+     * Returns the IdTicketType
+     * @return The IdTicketType
      */ 
- public void setDomain( String strDomain )
+ public int getIdTicketType()
  {
-     _strDomain = strDomain;
+     return _nIdTicketType;
+ }
+ 
+    /**
+     * Sets the IdTicketType
+     * @param nIdTicketType The IdTicketType
+     */ 
+ public void setIdTicketType( int nIdTicketType )
+ {
+     _nIdTicketType = nIdTicketType;
+ }
+ 
+    /**
+     * Returns the IdDomain
+     * @return The IdDomain
+     */ 
+ public int getIdDomain()
+ {
+     return _nIdDomain;
+ }
+ 
+    /**
+     * Sets the IdDomain
+     * @param nIdDomain The IdDomain
+     */ 
+ public void setIdDomain( int nIdDomain )
+ {
+     _nIdDomain = nIdDomain;
  }
 }
