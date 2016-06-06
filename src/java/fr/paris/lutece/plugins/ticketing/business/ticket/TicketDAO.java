@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.ticketing.business.ticket;
 import fr.paris.lutece.plugins.ticketing.business.OrderByFilter.OrderSortAllowed;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -201,7 +202,17 @@ public final class TicketDAO implements ITicketDAO
             ( ticket.getAssignerUnit(  ) != null ) ? ticket.getAssignerUnit(  ).getUnitId(  ) : ( -1 ) );
         daoUtil.setString( nIndex++, ticket.getUserMessage(  ) );
         daoUtil.setString( nIndex++, ticket.getUrl(  ) );
-        daoUtil.setInt( nIndex++, ticket.getIdChannel(  ) );
+
+        int nIdChannel = ticket.getIdChannel(  );
+
+        if ( TicketUtils.isIdSet( nIdChannel ) )
+        {
+            daoUtil.setInt( nIndex++, nIdChannel );
+        }
+        else
+        {
+            daoUtil.setIntNull( nIndex++ );
+        }
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -361,7 +372,17 @@ public final class TicketDAO implements ITicketDAO
             ( ticket.getAssignerUnit(  ) != null ) ? ticket.getAssignerUnit(  ).getUnitId(  ) : ( -1 ) );
         daoUtil.setString( nIndex++, ticket.getUserMessage(  ) );
         daoUtil.setString( nIndex++, ticket.getUrl(  ) );
-        daoUtil.setInt( nIndex++, ticket.getIdChannel(  ) );
+
+        int nIdChannel = ticket.getIdChannel(  );
+
+        if ( TicketUtils.isIdSet( nIdChannel ) )
+        {
+            daoUtil.setInt( nIndex++, nIdChannel );
+        }
+        else
+        {
+            daoUtil.setIntNull( nIndex++ );
+        }
 
         daoUtil.setInt( nIndex++, ticket.getId(  ) );
 

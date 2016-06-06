@@ -40,7 +40,7 @@ ALTER TABLE ticketing_ticket MODIFY lastname varchar(50) NOT NULL;
 ALTER TABLE ticketing_ticket MODIFY email varchar(255) NOT NULL;
 ALTER TABLE ticketing_ticket MODIFY id_ticket_category int(11) NOT NULL;
 ALTER TABLE ticketing_ticket MODIFY id_contact_mode int(11) NOT NULL;
-ALTER TABLE ticketing_ticket MODIFY id_channel int(11) NOT NULL;
+ALTER TABLE ticketing_ticket MODIFY id_channel int(11) NULL;
 ALTER TABLE ticketing_instant_response MODIFY id_ticket_category int(11) NOT NULL;
 ALTER TABLE ticketing_instant_response MODIFY id_channel int(11) NOT NULL;
 ALTER TABLE ticketing_ticket_category MODIFY id_ticket_domain int(11) NOT NULL;

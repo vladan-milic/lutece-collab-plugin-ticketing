@@ -1,4 +1,4 @@
-<#if list_workflows?size != 0>
+<#if list_workflows?size gt 1>
   <@fieldInputCombo i18nLabelKey="ticketing.configure_plugin.labelWorkflowId" inputName="id_workflow" mandatory=false  items=list_workflows value=id_workflow?string!'' i18nHelpBlockKey="ticketing.configure_plugin.labelWorkflowId.help" cssClass='' />
       
   <div id="related_workflow_properties">

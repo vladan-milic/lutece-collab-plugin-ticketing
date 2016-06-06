@@ -323,4 +323,14 @@ public final class TicketUtils
 
         return ReferenceList.convert( selectableChannelsMap );
     }
+
+    /**
+     * Tests whether the id is set or not
+     * @param nId the id to test
+     * @return {@code true} if the id is set, {@code false} otherwise
+     */
+    public static boolean isIdSet( int nId )
+    {
+        return ( nId != TicketingConstants.PROPERTY_UNSET_INT ) && ( nId != 0 );
+    }
 }
