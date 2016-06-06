@@ -1,0 +1,9 @@
+<#if admin_users?size != 0>
+  <@fieldInputCombo i18nLabelKey="ticketing.configure_plugin.labelFrontOfficeAdminUserId" inputName="admin_user_id_front" mandatory=false  items=admin_users value=admin_user_id_front?string!'' i18nHelpBlockKey="ticketing.configure_plugin.labelFrontOfficeAdminUserId.help" cssClass='' />
+</#if>
+
+<hr/>
+
+<#if channels?size != 0>
+  <@fieldInputCombo i18nLabelKey="ticketing.configure_plugin.labelFrontOfficeChannelId" inputName="channel_id_front" mandatory=false  items=channels value=channel_id_front?string!'' i18nHelpBlockKey="ticketing.configure_plugin.labelFrontOfficeChannelId.help" cssClass='' />
+</#if>

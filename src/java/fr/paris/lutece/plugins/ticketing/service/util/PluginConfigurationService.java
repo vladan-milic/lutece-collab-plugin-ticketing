@@ -57,6 +57,8 @@ public class PluginConfigurationService
         "states.selected.for.role.";
     public static final String PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME = PROPERTY_PREFIX +
         "actions.filtered.when.assigned.to.me";
+    public static final String PROPERTY_ADMINUSER_ID_FRONT = PROPERTY_PREFIX + "adminUser.id.front";
+    public static final String PROPERTY_CHANNEL_ID_FRONT = PROPERTY_PREFIX + "channel.id.front";
     private static final String LIST_SEPARATOR = ";";
 
     public static void set( String strProperty, String strValue )

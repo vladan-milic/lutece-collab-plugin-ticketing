@@ -1,0 +1,24 @@
+<#if list_workflows?size != 0>
+  <@fieldInputCombo i18nLabelKey="ticketing.configure_plugin.labelWorkflowId" inputName="id_workflow" mandatory=false  items=list_workflows value=id_workflow?string!'' i18nHelpBlockKey="ticketing.configure_plugin.labelWorkflowId.help" cssClass='' />
+      
+  <div id="related_workflow_properties">
+      <#if id_workflow?int != -1 >
+          ${workflow_related_properties}
+      </#if>
+  </div>
+  
+  <script type="text/javascript">
+  $("#id_workflow").change(function(event){
+      var idWorkflow = $("#id_workflow option:selected").val();
+      
+      $.ajax({
+          url: "jsp/admin/plugins/ticketing/config/ConfigurePluginStandalone.jsp",
+          data: "action=buildWorkflowRelatedProperties&id_workflow=" + idWorkflow,
+          success: function(data, statut) {
+              $("#related_workflow_properties").html(data);
+          }
+      }); 
+  });
+  
+  </script>
+</#if>

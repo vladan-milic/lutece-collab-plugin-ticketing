@@ -41,6 +41,7 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
+import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
@@ -53,7 +54,6 @@ import fr.paris.lutece.portal.service.prefs.AdminUserPreferencesService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
@@ -74,9 +74,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public final class TicketUtils
 {
-    // Properties
-    private static final String PROPERTY_ADMINUSER_FRONT_ID = "ticketing.adminUser.front.id";
-
     /**
      * Default constructor
      */
@@ -88,14 +85,17 @@ public final class TicketUtils
      * Registers the admin user for front office
      * @param request the request
      */
-    public static void registerDefaultAdminUser( HttpServletRequest request )
+    public static AdminUser registerAdminUserFront( HttpServletRequest request )
     {
-        AdminUser defaultUser = AdminUserHome.findByPrimaryKey( AppPropertiesService.getPropertyInt( 
-                    PROPERTY_ADMINUSER_FRONT_ID, -1 ) );
+        AdminUser userFront = AdminUserHome.findByPrimaryKey( PluginConfigurationService.getInt( 
+                    PluginConfigurationService.PROPERTY_ADMINUSER_ID_FRONT, TicketingConstants.PROPERTY_UNSET_INT ) );
 
         try
         {
-            AdminAuthenticationService.getInstance(  ).registerUser( request, defaultUser );
+            AdminAuthenticationService.getInstance(  ).registerUser( request, userFront );
+
+            // Gets the user from request because registerUser initializes roles, etc.
+            userFront = AdminAuthenticationService.getInstance(  ).getRegisteredUser( request );
         }
         catch ( AccessDeniedException e )
         {
@@ -105,6 +105,17 @@ public final class TicketUtils
         {
             AppLogService.error( e.getMessage(  ), e );
         }
+
+        return userFront;
+    }
+
+    /**
+     * Unregisters the admin user for front office
+     * @param request the request
+     */
+    public static void unregisterAdminUserFront( HttpServletRequest request )
+    {
+        AdminAuthenticationService.getInstance(  ).unregisterUser( request );
     }
 
     /**

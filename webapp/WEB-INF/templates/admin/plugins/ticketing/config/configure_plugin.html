@@ -1,28 +1,23 @@
 <@messages infos=infos errors=errors />
 
 <form class="form-horizontal" method="post" name="create_channel" action="jsp/admin/plugins/ticketing/config/ConfigurePlugin.jsp">
-    <@fieldInputCombo i18nLabelKey="ticketing.configure_plugin.labelWorkflowId" inputName="id_workflow" mandatory=false  items=list_workflows value=id_workflow?string!'' i18nHelpBlockKey="ticketing.configure_plugin.labelWorkflowId.help" cssClass='' />
-    
-    <div id="related_workflow_properties">
-        <#if id_workflow?int != -1 >
-            ${workflow_related_properties}
-        </#if>
+
+  <ul id="tabs" class="nav nav-tabs">
+    <li class="active">
+      <a href="#tab-workflow" data-toggle="tab">&nbsp;#i18n{ticketing.configure_plugin.tab.workflow.title}</a>
+    </li>
+    <li>
+      <a href="#tab-frontoffice" data-toggle="tab">&nbsp;#i18n{ticketing.configure_plugin.tab.frontoffice.title}</a>
+    </li>
+  </ul>
+  <div class="tab-content"> 
+    <div class='tab-pane active' id="tab-workflow">
+      <#include "configure_workflow.html" />
     </div>
-    
-    <@actionButtons button1Name="action_modifyConfiguration" />
+    <div class='tab-pane' id="tab-frontoffice">
+      <#include "configure_frontoffice.html" />
+    </div>
+  </div>
+
+  <@actionButtons button1Name="action_modifyConfiguration" i18nValue1Key="ticketing.configure_plugin.button.save" />
 </form>
-
-<script type="text/javascript">
-$("#id_workflow").change(function(event){
-    var idWorkflow = $("#id_workflow option:selected").val();
-	
-	$.ajax({
-    	url: "jsp/admin/plugins/ticketing/config/ConfigurePluginStandalone.jsp",
-    	data: "action=buildWorkflowRelatedProperties&id_workflow=" + idWorkflow,
-    	success: function(data, statut) {
-    		$("#related_workflow_properties").html(data);
-    	}
-    });	
-});
-
-</script>

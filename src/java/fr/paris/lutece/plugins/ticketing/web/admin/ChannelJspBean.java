@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.ticketing.web.admin;
 
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
+import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -78,7 +79,6 @@ public class ChannelJspBean extends ManageAdminTicketingJspBean
     // Markers
     private static final String MARK_CHANNEL_LIST = "channel_list";
     private static final String MARK_CHANNEL = "channel";
-    private static final String MARK_DEFAULT_CHANNEL = "default_channel";
     private static final String JSP_MANAGE_CHANNELS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
         "ManageChannels.jsp";
 
@@ -118,7 +118,6 @@ public class ChannelJspBean extends ManageAdminTicketingJspBean
 
         List<Channel> listChannels = (List<Channel>) ChannelHome.getChannelList(  );
         Map<String, Object> model = getPaginatedListModel( request, MARK_CHANNEL_LIST, listChannels, JSP_MANAGE_CHANNELS );
-        model.put( MARK_DEFAULT_CHANNEL, TicketingConstants.WEB_ID_CHANNEL );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_CHANNELS, TEMPLATE_MANAGE_CHANNELS, model );
     }
@@ -198,6 +197,16 @@ public class ChannelJspBean extends ManageAdminTicketingJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CHANNEL ) );
         ChannelHome.remove( nId );
+
+        int nIdChannelFront = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT,
+                TicketingConstants.PROPERTY_UNSET_INT );
+
+        if ( nId == nIdChannelFront )
+        {
+            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT,
+                TicketingConstants.PROPERTY_UNSET_INT );
+        }
+
         addInfo( INFO_CHANNEL_REMOVED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_CHANNELS );

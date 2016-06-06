@@ -33,12 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.config;
 
+import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.workflowcore.business.action.ActionFilter;
 import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
+import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -84,6 +87,8 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     private static final String PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE = "states_selected_for_role_role";
     private static final String PARAMETER_STATES_SELECTED_FOR_ROLE_STATES_PREFIX = "states_selected_for_role_states_";
     private static final String PARAMETER_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME = "actions_filtered_when_assigned_to_me";
+    private static final String PARAMETER_ADMIN_USER_ID_FRONT = "admin_user_id_front";
+    private static final String PARAMETER_CHANNEL_ID_FRONT = "channel_id_front";
 
     // Properties for page titles
 
@@ -97,6 +102,10 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     private static final String MARK_STATES_SELECTED_FOR_ROLES = "states_selected_for_roles";
     private static final String MARK_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME = PARAMETER_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME;
     private static final String MARK_ACTIONS = "actions";
+    private static final String MARK_ADMIN_USERS = "admin_users";
+    private static final String MARK_ADMIN_USER_ID_FRONT = PARAMETER_ADMIN_USER_ID_FRONT;
+    private static final String MARK_CHANNELS = "channels";
+    private static final String MARK_CHANNEL_ID_FRONT = PARAMETER_CHANNEL_ID_FRONT;
 
     // Properties
     private static final String PROPERTY_PAGE_TITLE_CONFIGURE_PLUGIN = "ticketing.configure_plugin.pageTitle";
@@ -121,8 +130,8 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     private static final long serialVersionUID = -1920398324341843326L;
 
     // Services
-    private WorkflowService _workflowService = WorkflowService.getInstance(  );
-    private IActionService _actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
+    private static WorkflowService _workflowService = WorkflowService.getInstance(  );
+    private static IActionService _actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
 
     /**
      * Build the Manage View
@@ -133,17 +142,9 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     public String getManageConfiguration( HttpServletRequest request )
     {
         Map<String, Object> model = getModel(  );
-        int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID,
-                TicketingConstants.PROPERTY_UNSET_INT );
 
-        model.put( MARK_WORKFLOW_ID, nIdWorkflow );
-
-        if ( WorkflowService.getInstance(  ).isAvailable(  ) )
-        {
-            ReferenceList listWorkflows = _workflowService.getWorkflowsEnabled( getUser(  ), getLocale(  ) );
-            model.put( MARK_LIST_WORKFLOWS, listWorkflows );
-            model.put( MARK_WORKFLOW_RELATED_PROPERTIES, buildWorkflowRelatedProperties( nIdWorkflow, getLocale(  ) ) );
-        }
+        manageWorkflowProperties( model );
+        manageFrontOfficeProperties( model );
 
         return getPage( PROPERTY_PAGE_TITLE_CONFIGURE_PLUGIN, TEMPLATE_CONFIGURE_PLUGIN, model );
     }
@@ -156,56 +157,12 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
             return redirectView( request, VIEW_MANAGE_CONFIGURATION );
         }
 
-        String strIdWorkflow = request.getParameter( PARAMETER_WORKFLOW_ID );
-
         try
         {
-            int nIdWorkflow = Integer.parseInt( strIdWorkflow );
-            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, nIdWorkflow );
-
-            int nIdStateClosed = TicketingConstants.PROPERTY_UNSET_INT;
-            List<Integer> listStateSelected = new ArrayList<Integer>(  );
-            List<Integer> listFilteredActionsWhenAssignedToMe = new ArrayList<Integer>(  );
-
-            if ( TicketingConstants.PROPERTY_UNSET_INT != nIdWorkflow )
-            {
-                // Manage selected states
-                listStateSelected = RequestUtils.extractIdList( request, PARAMETER_STATES_SELECTED );
-
-                // Manage selected states for roles
-                PluginConfigurationService.removeByPrefix( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX );
-
-                String[] listStateSelectedForRoleRoles = request.getParameterValues( PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE );
-
-                if ( listStateSelectedForRoleRoles != null )
-                {
-                    for ( String strRole : listStateSelectedForRoleRoles )
-                    {
-                        if ( !StringUtils.isEmpty( strRole ) )
-                        {
-                            List<Integer> listStateSelectedForRoleIds = RequestUtils.extractIdList( request,
-                                    PARAMETER_STATES_SELECTED_FOR_ROLE_STATES_PREFIX + strRole );
-
-                            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX +
-                                strRole, listStateSelectedForRoleIds );
-                        }
-                    }
-                }
-
-                // Manage closed state
-                nIdStateClosed = RequestUtils.extractId( request, PARAMETER_STATE_CLOSED_ID );
-
-                // Manage filtered actions when assigned to me
-                listFilteredActionsWhenAssignedToMe = RequestUtils.extractIdList( request,
-                        PARAMETER_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME );
-            }
-
-            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATE_CLOSED_ID, nIdStateClosed );
-            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATES_SELECTED, listStateSelected );
-            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME,
-                listFilteredActionsWhenAssignedToMe );
+            saveWorkflowProperties( request );
+            saveFrontOfficeProperties( request );
         }
-        catch ( NumberFormatException e )
+        catch ( Exception e )
         {
             AppLogService.error( e );
             addError( ERROR_CONFIGURATION_SAVE_ABORTED, getLocale(  ) );
@@ -236,6 +193,43 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         return strResult;
     }
 
+    private void manageWorkflowProperties( Map<String, Object> model )
+    {
+        int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID,
+                TicketingConstants.PROPERTY_UNSET_INT );
+
+        model.put( MARK_WORKFLOW_ID, nIdWorkflow );
+
+        if ( WorkflowService.getInstance(  ).isAvailable(  ) )
+        {
+            ReferenceList listWorkflows = _workflowService.getWorkflowsEnabled( getUser(  ), getLocale(  ) );
+            model.put( MARK_LIST_WORKFLOWS, listWorkflows );
+            model.put( MARK_WORKFLOW_RELATED_PROPERTIES, buildWorkflowRelatedProperties( nIdWorkflow, getLocale(  ) ) );
+        }
+    }
+
+    private void manageFrontOfficeProperties( Map<String, Object> model )
+    {
+        // Admin user for front office
+        int nIdAdminUser = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_ADMINUSER_ID_FRONT,
+                TicketingConstants.PROPERTY_UNSET_INT );
+        model.put( MARK_ADMIN_USER_ID_FRONT, nIdAdminUser );
+
+        // All admin users
+        Collection<AdminUser> adminUsers = AdminUserHome.findUserList(  );
+        ReferenceList referenceListAdminUser = buildReferenceList( adminUsers, "userId", "accessCode" );
+        model.put( MARK_ADMIN_USERS, referenceListAdminUser );
+
+        // Channel for front office
+        int nIdChannel = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT,
+                TicketingConstants.PROPERTY_UNSET_INT );
+        model.put( MARK_CHANNEL_ID_FRONT, nIdChannel );
+
+        // All channels
+        ReferenceList referenceListChannel = buildReferenceList( ChannelHome.getReferenceList(  ) );
+        model.put( MARK_CHANNELS, referenceListChannel );
+    }
+
     private String buildWorkflowRelatedProperties( int nIdWorkflow, Locale locale )
     {
         String strResult = StringUtils.EMPTY;
@@ -246,7 +240,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
             // All states
             ReferenceList referenceListStates = buildReferenceList( _workflowService.getAllStateByWorkflow( 
-                        nIdWorkflow, getUser(  ) ) );
+                        nIdWorkflow, getUser(  ) ), "id", "name" );
             model.put( MARK_STATES, referenceListStates );
 
             // Selected states
@@ -280,7 +274,8 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
             ActionFilter actionFilter = new ActionFilter(  );
             actionFilter.setIdWorkflow( nIdWorkflow );
 
-            ReferenceList referenceListActions = buildReferenceList( _actionService.getListActionByFilter( actionFilter ) );
+            ReferenceList referenceListActions = buildReferenceList( _actionService.getListActionByFilter( actionFilter ),
+                    "id", "name" );
             model.put( MARK_ACTIONS, referenceListActions );
 
             // Filtered actions when assigned to me
@@ -296,15 +291,102 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         return strResult;
     }
 
+    private static void saveWorkflowProperties( HttpServletRequest request )
+    {
+        int nIdWorkflow = TicketingConstants.PROPERTY_UNSET_INT;
+        int nIdStateClosed = TicketingConstants.PROPERTY_UNSET_INT;
+        List<Integer> listStateSelected = new ArrayList<Integer>(  );
+        List<Integer> listFilteredActionsWhenAssignedToMe = new ArrayList<Integer>(  );
+
+        PluginConfigurationService.removeByPrefix( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX );
+
+        String strIdWorkflow = request.getParameter( PARAMETER_WORKFLOW_ID );
+
+        if ( strIdWorkflow != null )
+        {
+            nIdWorkflow = Integer.parseInt( strIdWorkflow );
+
+            if ( TicketingConstants.PROPERTY_UNSET_INT != nIdWorkflow )
+            {
+                // Manage selected states
+                listStateSelected = RequestUtils.extractIdList( request, PARAMETER_STATES_SELECTED );
+
+                // Manage selected states for roles
+                String[] listStateSelectedForRoleRoles = request.getParameterValues( PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE );
+
+                if ( listStateSelectedForRoleRoles != null )
+                {
+                    for ( String strRole : listStateSelectedForRoleRoles )
+                    {
+                        if ( !StringUtils.isEmpty( strRole ) )
+                        {
+                            List<Integer> listStateSelectedForRoleIds = RequestUtils.extractIdList( request,
+                                    PARAMETER_STATES_SELECTED_FOR_ROLE_STATES_PREFIX + strRole );
+
+                            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX +
+                                strRole, listStateSelectedForRoleIds );
+                        }
+                    }
+                }
+
+                // Manage closed state
+                nIdStateClosed = RequestUtils.extractId( request, PARAMETER_STATE_CLOSED_ID );
+
+                // Manage filtered actions when assigned to me
+                listFilteredActionsWhenAssignedToMe = RequestUtils.extractIdList( request,
+                        PARAMETER_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME );
+            }
+        }
+
+        PluginConfigurationService.set( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, nIdWorkflow );
+        PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATE_CLOSED_ID, nIdStateClosed );
+        PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATES_SELECTED, listStateSelected );
+        PluginConfigurationService.set( PluginConfigurationService.PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME,
+            listFilteredActionsWhenAssignedToMe );
+    }
+
+    private static void saveFrontOfficeProperties( HttpServletRequest request )
+    {
+        int nIdAdminUser = TicketingConstants.PROPERTY_UNSET_INT;
+        String strIdAdminUser = request.getParameter( PARAMETER_ADMIN_USER_ID_FRONT );
+
+        if ( strIdAdminUser != null )
+        {
+            nIdAdminUser = Integer.parseInt( strIdAdminUser );
+        }
+
+        PluginConfigurationService.set( PluginConfigurationService.PROPERTY_ADMINUSER_ID_FRONT, nIdAdminUser );
+
+        int nIdChannel = TicketingConstants.PROPERTY_UNSET_INT;
+        String strIdChannel = request.getParameter( PARAMETER_CHANNEL_ID_FRONT );
+
+        if ( strIdChannel != null )
+        {
+            nIdChannel = Integer.parseInt( strIdChannel );
+        }
+
+        PluginConfigurationService.set( PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT, nIdChannel );
+    }
+
     @SuppressWarnings( "rawtypes" )
-    private static ReferenceList buildReferenceList( Collection collection )
+    private static ReferenceList buildReferenceList( Collection collection, String strCode, String strName )
     {
         ReferenceList referenceList = TicketUtils.createReferenceList( StringUtils.EMPTY,
                 TicketingConstants.PROPERTY_UNSET_INT );
 
-        referenceList.addAll( ReferenceList.convert( collection, "id", "name", true ) );
+        referenceList.addAll( ReferenceList.convert( collection, strCode, strName, true ) );
 
         return referenceList;
+    }
+
+    private static ReferenceList buildReferenceList( ReferenceList referenceList )
+    {
+        ReferenceList referenceListOneItem = TicketUtils.createReferenceList( StringUtils.EMPTY,
+                TicketingConstants.PROPERTY_UNSET_INT );
+
+        referenceListOneItem.addAll( referenceList );
+
+        return referenceListOneItem;
     }
 
     private boolean validate( HttpServletRequest request )

@@ -45,7 +45,6 @@ import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
 import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
 import fr.paris.lutece.portal.business.user.AdminUser;
-import fr.paris.lutece.portal.service.admin.AdminAuthenticationService;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -108,31 +107,38 @@ public abstract class WorkflowCapableXPage extends MVCApplication
      */
     protected void setWorkflowAttributes( HttpServletRequest request, Ticket ticket )
     {
-        TicketUtils.registerDefaultAdminUser( request );
+        TicketUtils.registerAdminUserFront( request );
 
-        if ( _workflowService.isAvailable(  ) )
+        try
         {
-            TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-            int nIdWorkflow = ticketCategory.getIdWorkflow(  );
-
-            StateFilter stateFilter = new StateFilter(  );
-            stateFilter.setIdWorkflow( nIdWorkflow );
-
-            State state = _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticketCategory.getId(  ) );
-
-            if ( state != null )
+            if ( _workflowService.isAvailable(  ) )
             {
-                ticket.setState( state );
-            }
+                TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+                int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
-            if ( nIdWorkflow > 0 )
-            {
-                Collection<Action> listWorkflowActions = _workflowService.getActions( ticket.getId(  ),
-                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, AdminUserService.getAdminUser( request ) );
+                StateFilter stateFilter = new StateFilter(  );
+                stateFilter.setIdWorkflow( nIdWorkflow );
 
-                ticket.setListWorkflowActions( listWorkflowActions );
+                State state = _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+                        ticketCategory.getId(  ) );
+
+                if ( state != null )
+                {
+                    ticket.setState( state );
+                }
+
+                if ( nIdWorkflow > 0 )
+                {
+                    Collection<Action> listWorkflowActions = _workflowService.getActions( ticket.getId(  ),
+                            Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, AdminUserService.getAdminUser( request ) );
+
+                    ticket.setListWorkflowActions( listWorkflowActions );
+                }
             }
+        }
+        finally
+        {
+            TicketUtils.unregisterAdminUserFront( request );
         }
     }
 
@@ -170,47 +176,54 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
 
-        TicketUtils.registerDefaultAdminUser( request );
+        TicketUtils.registerAdminUserFront( request );
 
-        if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
-                StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
+        try
         {
-            int nIdAction = Integer.parseInt( strIdAction );
-            int nIdTicket = Integer.parseInt( strIdTicket );
-
-            if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( request ) ) )
+            if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
+                    StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
             {
-                String strHtmlTasksForm = _workflowService.getDisplayTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE,
-                        nIdAction, request, getLocale( request ) );
+                int nIdAction = Integer.parseInt( strIdAction );
+                int nIdTicket = Integer.parseInt( strIdTicket );
 
-                Map<String, Object> model = new HashMap<String, Object>(  );
-
-                model.put( TicketingConstants.MARK_TASKS_FORM, strHtmlTasksForm );
-                model.put( TicketingConstants.MARK_WORKFLOW_ID_ACTION, nIdAction );
-                model.put( TicketingConstants.MARK_ID_TICKET, nIdTicket );
-
-                //used to hide next button (if an error occured in html tasks form generation)
-                if ( request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) != null )
+                if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( request ) ) )
                 {
-                    model.put( TicketingConstants.MARK_HIDE_NEXT_STEP_BUTTON,
-                        request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) );
+                    String strHtmlTasksForm = _workflowService.getDisplayTasksForm( nIdTicket,
+                            Ticket.TICKET_RESOURCE_TYPE, nIdAction, request, getLocale( request ) );
+
+                    Map<String, Object> model = new HashMap<String, Object>(  );
+
+                    model.put( TicketingConstants.MARK_TASKS_FORM, strHtmlTasksForm );
+                    model.put( TicketingConstants.MARK_WORKFLOW_ID_ACTION, nIdAction );
+                    model.put( TicketingConstants.MARK_ID_TICKET, nIdTicket );
+
+                    //used to hide next button (if an error occured in html tasks form generation)
+                    if ( request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) != null )
+                    {
+                        model.put( TicketingConstants.MARK_HIDE_NEXT_STEP_BUTTON,
+                            request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) );
+                    }
+
+                    model.put( TicketingConstants.MARK_FORM_ACTION,
+                        getActionFullUrl( TicketingConstants.ACTION_DO_PROCESS_WORKFLOW_ACTION ) );
+                    model.put( TicketingConstants.MARK_PAGE, getXPageName(  ) );
+
+                    IActionService actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
+                    Action action = actionService.findByPrimaryKey( nIdAction );
+                    model.put( TicketingConstants.MARK_WORKFLOW_ACTION, action );
+
+                    return getXPage( TicketingConstants.TEMPLATE_TASKS_FORM_WORKFLOW, getLocale( request ), model );
                 }
 
-                model.put( TicketingConstants.MARK_FORM_ACTION,
-                    getActionFullUrl( TicketingConstants.ACTION_DO_PROCESS_WORKFLOW_ACTION ) );
-                model.put( TicketingConstants.MARK_PAGE, getXPageName(  ) );
-
-                IActionService actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
-                Action action = actionService.findByPrimaryKey( nIdAction );
-                model.put( TicketingConstants.MARK_WORKFLOW_ACTION, action );
-
-                return getXPage( TicketingConstants.TEMPLATE_TASKS_FORM_WORKFLOW, getLocale( request ), model );
+                return doProcessWorkflowAction( request );
             }
 
-            return doProcessWorkflowAction( request );
+            return defaultRedirectWorkflowAction( request );
         }
-
-        return defaultRedirectWorkflowAction( request );
+        finally
+        {
+            TicketUtils.unregisterAdminUserFront( request );
+        }
     }
 
     /**
@@ -227,52 +240,59 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
 
-        TicketUtils.registerDefaultAdminUser( request );
+        TicketUtils.registerAdminUserFront( request );
 
-        if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
-                StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
+        try
         {
-            int nIdAction = Integer.parseInt( strIdAction );
-            int nIdTicket = Integer.parseInt( strIdTicket );
-
-            if ( request.getParameter( TicketingConstants.PARAMETER_BACK ) == null )
+            if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
+                    StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
             {
-                try
+                int nIdAction = Integer.parseInt( strIdAction );
+                int nIdTicket = Integer.parseInt( strIdTicket );
+
+                if ( request.getParameter( TicketingConstants.PARAMETER_BACK ) == null )
                 {
-                    Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-                    TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-
-                    if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( request ) ) )
+                    try
                     {
-                        strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
-                                ticketCategory.getId(  ), request, getLocale( request ) );
+                        Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
+                        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
 
-                        if ( strError != null )
+                        if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( request ) ) )
                         {
-                            return redirect( request, strError );
+                            strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE,
+                                    nIdAction, ticketCategory.getId(  ), request, getLocale( request ) );
+
+                            if ( strError != null )
+                            {
+                                return redirect( request, strError );
+                            }
+                        }
+                        else
+                        {
+                            _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
+                                ticketCategory.getId(  ), request, getLocale( request ), false );
                         }
                     }
-                    else
+                    catch ( Exception e )
                     {
-                        _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
-                            ticketCategory.getId(  ), request, getLocale( request ), false );
+                        addErrorWorkflowAction( request, nIdAction );
+                        AppLogService.error( e );
+
+                        return redirectWorkflowActionCancelled( request );
                     }
                 }
-                catch ( Exception e )
+                else
                 {
-                    addErrorWorkflowAction( request, nIdAction );
-                    AppLogService.error( e );
-
                     return redirectWorkflowActionCancelled( request );
                 }
             }
-            else
-            {
-                return redirectWorkflowActionCancelled( request );
-            }
-        }
 
-        return redirectAfterWorkflowAction( request );
+            return redirectAfterWorkflowAction( request );
+        }
+        finally
+        {
+            TicketUtils.unregisterAdminUserFront( request );
+        }
     }
 
     /**
@@ -320,39 +340,45 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
         // TODO After POC GRU, set this variable with
         // ticketCategory.getIdWorkflow( );
-        TicketUtils.registerDefaultAdminUser( request );
+        AdminUser userFront = TicketUtils.registerAdminUserFront( request );
 
-        AdminUser userFront = AdminAuthenticationService.getInstance(  ).getRegisteredUser( request );
-        int nIdWorkflow = TicketingPocGruService.getWorkflowId( ticket );
-
-        if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable(  ) )
+        try
         {
-            try
+            int nIdWorkflow = TicketingPocGruService.getWorkflowId( ticket );
+
+            if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable(  ) )
             {
-                _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticketCategory.getId(  ) );
-
-                Collection<Action> actions = _workflowService.getActions( ticket.getId(  ),
-                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, userFront );
-
-                if ( actions.size(  ) == 1 )
+                try
                 {
-                    Action action = actions.iterator(  ).next(  );
-                    _workflowService.doProcessAction( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, action.getId(  ),
-                        ticketCategory.getId(  ), request, request.getLocale(  ), false );
+                    _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+                        ticketCategory.getId(  ) );
+
+                    Collection<Action> actions = _workflowService.getActions( ticket.getId(  ),
+                            Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, userFront );
+
+                    if ( actions.size(  ) == 1 )
+                    {
+                        Action action = actions.iterator(  ).next(  );
+                        _workflowService.doProcessAction( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE,
+                            action.getId(  ), ticketCategory.getId(  ), request, request.getLocale(  ), false );
+                    }
+                    else
+                    {
+                        //multiple actions or no action => ambiguous case 
+                        //TODO throw an exception
+                    }
                 }
-                else
+                catch ( Exception e )
                 {
-                    //multiple actions or no action => ambiguous case 
-                    //TODO throw an exception
+                    doRemoveWorkFlowResource( ticket.getId(  ) );
+                    TicketHome.remove( ticket.getId(  ) );
+                    throw e;
                 }
             }
-            catch ( Exception e )
-            {
-                doRemoveWorkFlowResource( ticket.getId(  ) );
-                TicketHome.remove( ticket.getId(  ) );
-                throw e;
-            }
+        }
+        finally
+        {
+            TicketUtils.unregisterAdminUserFront( request );
         }
     }
 

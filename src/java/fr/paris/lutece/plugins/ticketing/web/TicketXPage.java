@@ -53,8 +53,8 @@ import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
+import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
-import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableXPage;
@@ -224,7 +224,8 @@ public class TicketXPage extends WorkflowCapableXPage
         try
         {
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
-            ticket.setIdChannel( TicketingConstants.WEB_ID_CHANNEL );
+            ticket.setIdChannel( PluginConfigurationService.getInt( 
+                    PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT, TicketingConstants.PROPERTY_UNSET_INT ) );
             TicketHome.create( ticket );
 
             doProcessNextWorkflowAction( ticket, request );
