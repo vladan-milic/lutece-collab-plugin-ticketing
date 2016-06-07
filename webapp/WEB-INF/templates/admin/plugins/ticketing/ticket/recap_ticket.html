@@ -65,7 +65,7 @@
           </div>
           <div class="form-group">
             <label for="id_contact_mode">#i18n{ticketing.create_ticket.labelContactMode}</label>
-            <p class="form-control-static">${ticket.contactMode!''}</p>
+            <p class="form-control-static">${getContactModeLabel(ticket.contactMode!'')}</p>
           </div>
           <div class="form-group">
             <label for="id_channel">#i18n{ticketing.create_ticket.labelChannel}</label>

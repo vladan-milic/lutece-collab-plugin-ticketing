@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -100,7 +100,7 @@ public class ContactModeFormatterXml implements ITicketingFormatter<ContactMode>
         XmlUtil.beginElement( sbXML, FormatConstants.KEY_CONTACT_MODE );
 
         XmlUtil.addElement( sbXML, FormatConstants.KEY_ID, contactMode.getId(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, contactMode.getLabel(  ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, contactMode.getCode(  ) );
 
         XmlUtil.endElement( sbXML, FormatConstants.KEY_CONTACT_MODE );
     }

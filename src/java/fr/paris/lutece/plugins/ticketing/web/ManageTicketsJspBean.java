@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,6 +59,7 @@ import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
+import fr.paris.lutece.plugins.ticketing.web.util.FormValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
@@ -368,7 +369,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
-        model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList(  ) );
+        model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale(  ) ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_GUID, strGuid );
         ModelUtils.storeChannels( request, model );
@@ -686,7 +687,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             ticket.setTicketDomain( ticketDomain.getLabel(  ) );
 
             ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) ).getLabel(  ) );
-            ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode(  ) ).getLabel(  ) );
+            ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode(  ) ).getCode(  ) );
             ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle(  ) ).getLabel(  ) );
 
             if ( ticket.getIdChannel(  ) > TicketingConstants.NO_ID_CHANNEL )
@@ -747,13 +748,19 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // Check constraints
         bIsFormValid = validateBean( ticket, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
 
-        TicketValidator validator = TicketValidatorFactory.getInstance(  ).create( request.getLocale(  ) );
-        List<String> listValidationErrors = validator.validate( ticket, false );
+        TicketValidator ticketValidator = TicketValidatorFactory.getInstance(  ).create( request.getLocale(  ) );
+        List<String> listValidationErrors = ticketValidator.validate( ticket, false );
+
+        FormValidator formValidator = new FormValidator( request );
+        listValidationErrors.add( formValidator.isContactModeFilled(  ) );
 
         for ( String error : listValidationErrors )
         {
-            addError( error );
-            bIsFormValid = false;
+            if ( !StringUtils.isEmpty( error ) )
+            {
+                addError( error );
+                bIsFormValid = false;
+            }
         }
 
         if ( listFormErrors.size(  ) > 0 )

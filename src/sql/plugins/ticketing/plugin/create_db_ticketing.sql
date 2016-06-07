@@ -152,7 +152,7 @@ CREATE TABLE ticketing_ticket_response (
 DROP TABLE IF EXISTS ticketing_contact_mode;
 CREATE TABLE ticketing_contact_mode (
 id_contact_mode int(6) NOT NULL,
-label varchar(50) NOT NULL default '',
+code varchar(50) NOT NULL default '',
 confirmation_msg long varchar NULL,
 inactive int(1)  NOT NULL default '0',
 PRIMARY KEY (id_contact_mode)

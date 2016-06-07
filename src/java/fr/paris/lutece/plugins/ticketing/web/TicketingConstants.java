@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,8 +32,6 @@
  * License 1.0
  */
 package fr.paris.lutece.plugins.ticketing.web;
-
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 
 /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,9 +54,9 @@ public class ContactMode implements Serializable
 
     // Variables declarations 
     private int _nId;
-    @NotEmpty( message = "#i18n{ticketing.validation.contactmode.Label.notEmpty}" )
-    @Size( max = 50, message = "#i18n{ticketing.validation.contactmode.Label.size}" )
-    private String _strLabel;
+    @NotEmpty( message = "#i18n{ticketing.validation.contactmode.code.notEmpty}" )
+    @Size( max = 50, message = "#i18n{ticketing.validation.contactmode.code.size}" )
+    private String _strCode;
     private String _strConfirmationMsg;
 
     /**
@@ -78,21 +78,21 @@ public class ContactMode implements Serializable
     }
 
     /**
-     * Returns the Label
-     * @return The Label
+     * Returns the code
+     * @return The code
      */
-    public String getLabel(  )
+    public String getCode(  )
     {
-        return _strLabel;
+        return _strCode;
     }
 
     /**
-     * Sets the Label
-     * @param strLabel The Label
+     * Sets the code
+     * @param strCode The code
      */
-    public void setLabel( String strLabel )
+    public void setCode( String strCode )
     {
-        _strLabel = strLabel;
+        _strCode = strCode;
     }
 
     /**

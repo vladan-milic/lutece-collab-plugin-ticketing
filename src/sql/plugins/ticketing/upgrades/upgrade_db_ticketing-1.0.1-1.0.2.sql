@@ -82,3 +82,5 @@ INSERT INTO core_admin_right (`id_right`, `name`, `level_right`, `admin_url`, `d
 
 DELETE FROM core_user_right WHERE id_right = 'TICKETING_MANAGEMENT_REPONSES_TYPE';
 INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_MANAGEMENT_REPONSES_TYPE',1);
+
+ALTER TABLE ticketing_contact_mode CHANGE COLUMN label code varchar(50) NOT NULL default '';

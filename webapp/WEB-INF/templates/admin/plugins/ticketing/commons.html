@@ -162,6 +162,16 @@
     </#switch>
 </#function>
 
+<#function getContactModeLabel contactModeCode >
+  <#assign label = i18n("ticketing.contactmodes.label." + contactModeCode)>
+  <#if label?? && label?has_content>
+    <#return label>
+  <#else>
+    <#return contactModeCode>
+  </#if>
+</#function>
+         
+
 <#macro fieldStaticTextTicketDetails i18nLabelKey >
     <div class="ticketing-form-group">
         <p>#i18n{${i18nLabelKey}}</p>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,12 +33,17 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.contactmode;
 
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -47,6 +52,8 @@ import java.util.List;
  */
 public final class ContactModeHome
 {
+    private static final String MESSAGE_PREFIX = "ticketing.contactmodes.label.";
+
     // Static variable pointed at the DAO instance
     private static IContactModeDAO _dao = SpringContextService.getBean( "ticketing.contactModeDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
@@ -142,5 +149,28 @@ public final class ContactModeHome
     public static ReferenceList getReferenceList(  )
     {
         return _dao.selectReferenceList( _plugin );
+    }
+
+    /**
+     * Load the data of all the contactMode objects and returns them as a
+     * localized reference list
+     *
+     * @return The reference list
+     */
+    public static ReferenceList getReferenceList( Locale locale )
+    {
+        ReferenceList referenceList = _dao.selectReferenceList( _plugin );
+
+        for ( ReferenceItem item : referenceList )
+        {
+            String strLocalizedName = I18nService.getLocalizedString( MESSAGE_PREFIX + item.getName(  ), locale );
+
+            if ( !StringUtils.isEmpty( strLocalizedName ) )
+            {
+                item.setName( strLocalizedName );
+            }
+        }
+
+        return referenceList;
     }
 }

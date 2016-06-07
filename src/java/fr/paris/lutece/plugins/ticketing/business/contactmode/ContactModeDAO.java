@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,11 +50,11 @@ public final class ContactModeDAO implements IContactModeDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_contact_mode ) FROM ticketing_contact_mode";
-    private static final String SQL_QUERY_SELECT = "SELECT id_contact_mode, label, confirmation_msg FROM ticketing_contact_mode WHERE id_contact_mode = ? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_contact_mode ( id_contact_mode, label, confirmation_msg, inactive ) VALUES ( ?, ?, ?, 0 ) ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_contact_mode, code, confirmation_msg FROM ticketing_contact_mode WHERE id_contact_mode = ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_contact_mode ( id_contact_mode, code, confirmation_msg, inactive ) VALUES ( ?, ?, ?, 0 ) ";
     private static final String SQL_QUERY_DELETE = "UPDATE ticketing_contact_mode SET inactive = 1 WHERE id_contact_mode = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_contact_mode SET id_contact_mode = ?, label = ?, confirmation_msg = ? WHERE id_contact_mode = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_contact_mode, label, confirmation_msg FROM ticketing_contact_mode WHERE inactive <> 1 ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_contact_mode SET id_contact_mode = ?, code = ?, confirmation_msg = ? WHERE id_contact_mode = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_contact_mode, code, confirmation_msg FROM ticketing_contact_mode WHERE inactive <> 1 ";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_contact_mode FROM ticketing_contact_mode WHERE inactive <> 1 ";
 
     /**
@@ -90,7 +90,7 @@ public final class ContactModeDAO implements IContactModeDAO
         contactMode.setId( newPrimaryKey( plugin ) );
 
         daoUtil.setInt( 1, contactMode.getId(  ) );
-        daoUtil.setString( 2, contactMode.getLabel(  ) );
+        daoUtil.setString( 2, contactMode.getCode(  ) );
         daoUtil.setString( 3, contactMode.getConfirmationMsg(  ) );
 
         daoUtil.executeUpdate(  );
@@ -113,7 +113,7 @@ public final class ContactModeDAO implements IContactModeDAO
         {
             contactMode = new ContactMode(  );
             contactMode.setId( daoUtil.getInt( 1 ) );
-            contactMode.setLabel( daoUtil.getString( 2 ) );
+            contactMode.setCode( daoUtil.getString( 2 ) );
             contactMode.setConfirmationMsg( ( daoUtil.getString( 3 ) == null ) ? StringUtils.EMPTY
                                                                                : daoUtil.getString( 3 ) );
         }
@@ -144,7 +144,7 @@ public final class ContactModeDAO implements IContactModeDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
         daoUtil.setInt( 1, contactMode.getId(  ) );
-        daoUtil.setString( 2, contactMode.getLabel(  ) );
+        daoUtil.setString( 2, contactMode.getCode(  ) );
         daoUtil.setString( 3, contactMode.getConfirmationMsg(  ) );
         daoUtil.setInt( 4, contactMode.getId(  ) );
 
@@ -167,7 +167,7 @@ public final class ContactModeDAO implements IContactModeDAO
             ContactMode contactMode = new ContactMode(  );
 
             contactMode.setId( daoUtil.getInt( 1 ) );
-            contactMode.setLabel( daoUtil.getString( 2 ) );
+            contactMode.setCode( daoUtil.getString( 2 ) );
             contactMode.setConfirmationMsg( ( daoUtil.getString( 3 ) == null ) ? StringUtils.EMPTY
                                                                                : daoUtil.getString( 3 ) );
 

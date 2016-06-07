@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -104,6 +104,6 @@ public class ContactModeFormatterJson implements ITicketingFormatter<ContactMode
     private void add( JSONObject json, ContactMode contactMode )
     {
         json.accumulate( FormatConstants.KEY_ID, contactMode.getId(  ) );
-        json.accumulate( FormatConstants.KEY_LABEL, contactMode.getLabel(  ) );
+        json.accumulate( FormatConstants.KEY_LABEL, contactMode.getCode(  ) );
     }
 }

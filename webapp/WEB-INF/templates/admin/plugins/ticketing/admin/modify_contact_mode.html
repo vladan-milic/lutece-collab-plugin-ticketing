@@ -6,7 +6,7 @@
   <form class="form-horizontal" method="post" name="modify_contactmode" action="jsp/admin/plugins/ticketing/admin/ManageContactModes.jsp">
     <@messages errors=errors />
     <input type="hidden" id="id" name="id" value="${contactmode.id}">
-    <@fieldInputText i18nLabelKey="ticketing.modify_contactmode.labelLabel" inputName="label" mandatory=true value="${contactmode.label}" i18nHelpBlockKey="ticketing.modify_contactmode.labelLabel.help" />
+    <@fieldInputText i18nLabelKey="ticketing.modify_contactmode.labelCode" inputName="code" mandatory=true value="${contactmode.code}" i18nHelpBlockKey="ticketing.modify_contactmode.labelCode.help" />
     <div class="form-group">
       <label class="control-label col-xs-12 col-sm-3" for="confirmation_msg">#i18n{ticketing.modify_contactmode.labelConfirmationMsg} : </label>
         <div class="ol-xs-12 col-sm-9">

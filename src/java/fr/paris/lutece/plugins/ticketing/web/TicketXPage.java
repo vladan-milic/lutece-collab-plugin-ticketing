@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,6 +54,7 @@ import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
+import fr.paris.lutece.plugins.ticketing.web.util.FormValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
@@ -171,7 +172,7 @@ public class TicketXPage extends WorkflowCapableXPage
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
 
-        model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList(  ) );
+        model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale(  ) ) );
 
         saveActionTypeInSession( request.getSession(  ), ACTION_CREATE_TICKET );
 
@@ -321,13 +322,19 @@ public class TicketXPage extends WorkflowCapableXPage
         // Check constraints
         bIsFormValid = validateBean( ticket );
 
-        TicketValidator validator = TicketValidatorFactory.getInstance(  ).create( request.getLocale(  ) );
-        List<String> listValidationErrors = validator.validate( ticket, false );
+        TicketValidator ticketValidator = TicketValidatorFactory.getInstance(  ).create( request.getLocale(  ) );
+        List<String> listValidationErrors = ticketValidator.validate( ticket, false );
+
+        FormValidator formValidator = new FormValidator( request );
+        listValidationErrors.add( formValidator.isContactModeFilled(  ) );
 
         for ( String error : listValidationErrors )
         {
-            addError( error );
-            bIsFormValid = false;
+            if ( !StringUtils.isEmpty( error ) )
+            {
+                addError( error );
+                bIsFormValid = false;
+            }
         }
 
         if ( listFormErrors.size(  ) > 0 )
@@ -341,7 +348,7 @@ public class TicketXPage extends WorkflowCapableXPage
         ticket.setTicketDomain( ticketDomain.getLabel(  ) );
 
         ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) ).getLabel(  ) );
-        ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode(  ) ).getLabel(  ) );
+        ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode(  ) ).getCode(  ) );
         ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle(  ) ).getLabel(  ) );
         ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode(  ) ).getConfirmationMsg(  ) );
 
