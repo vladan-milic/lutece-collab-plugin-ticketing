@@ -216,15 +216,17 @@
     				</label>
                     
                     <!-- multi select state list -->
-                    <select name="fltr_state_ids" id="fltr_state_ids" multiple="multiple">
-						<#list state_list as state>
-							<#if state.checked ?? && state.checked == true>
-								<option value="${state.code!}" selected> ${state.name!}</option>
-							<#else>
-								<option value="${state.code!}">${state.name!}</option>
-							</#if>
-						</#list>
-                    </select>
+                    <#if state_list?? && state_list?size != 0>
+                      <select name="fltr_state_ids" id="fltr_state_ids" multiple="multiple">
+                        <#list state_list as state>
+                          <#if state.checked ?? && state.checked == true>
+                            <option value="${state.code!}" selected> ${state.name!}</option>
+                          <#else>
+                            <option value="${state.code!}">${state.name!}</option>
+                          </#if>
+                        </#list>
+                      </select>
+                    </#if>
     			</div>
     	</form>
           <div class="col-xs-8 col-sm-4">

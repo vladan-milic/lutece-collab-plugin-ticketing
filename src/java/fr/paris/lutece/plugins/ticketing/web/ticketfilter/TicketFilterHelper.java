@@ -139,8 +139,16 @@ public final class TicketFilterHelper
         }
         else
         {
-            //no state selected => we put a dummy one
-            fltrFiltre.setListIdWorkflowState( new String[] { NO_SELECTED_FIELD_ID } );
+            if ( PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID,
+                        TicketingConstants.PROPERTY_UNSET_INT ) != TicketingConstants.PROPERTY_UNSET_INT )
+            {
+                //no state selected => we put a dummy one
+                fltrFiltre.setListIdWorkflowState( new String[] { NO_SELECTED_FIELD_ID } );
+            }
+            else
+            {
+                fltrFiltre.setListIdWorkflowState( new String[] {  } );
+            }
         }
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_DOMAIN ) ) &&
@@ -342,7 +350,7 @@ public final class TicketFilterHelper
 
         Map<String, AdminRole> listUserRole = AdminUserHome.getRolesListForUser( adminUser.getUserId(  ) );
 
-        // set default filtering for user from config file
+        // set default filtering for user from configuration
         List<Integer> lstIdWorkflowState = PluginConfigurationService.getIntegerList( PluginConfigurationService.PROPERTY_STATES_SELECTED,
                 null );
         Map<String, List<Integer>> mapStatesForRoles = PluginConfigurationService.getIntegerListByPrefix( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX,
@@ -361,6 +369,12 @@ public final class TicketFilterHelper
         if ( lstIdWorkflowState == null )
         {
             lstIdWorkflowState = new ArrayList<Integer>(  );
+
+            if ( PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID,
+                        TicketingConstants.PROPERTY_UNSET_INT ) != TicketingConstants.PROPERTY_UNSET_INT )
+            {
+                lstIdWorkflowState.add( Integer.valueOf( NO_SELECTED_FIELD_ID ) );
+            }
         }
 
         filter.setListIdWorkflowState( lstIdWorkflowState );

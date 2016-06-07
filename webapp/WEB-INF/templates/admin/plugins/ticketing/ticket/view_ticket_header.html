@@ -100,14 +100,17 @@
          <i class="fa fa-circle text-${textColor} fa-fw"></i> ${ticket.reference!}
       </p>
       <p>
-         <#switch ticket.ticketStatus>
-         <#case 0>
-         <i class="fa fa-hourglass-half fa-fw"></i> ${ticket.state.name}
-         <#break>
-         <#case 1>
-         <i class="fa fa-check fa-fw"></i> ${ticket.state.name}
-         <#break>
-         </#switch>
+         <#if ticket.state?? >
+           <#switch ticket.ticketStatus>
+             <#case 0>
+               <i class="fa fa-hourglass-half fa-fw"></i>
+               <#break>
+             <#case 1>
+               <i class="fa fa-check fa-fw"></i>
+               <#break>
+           </#switch>
+           ${ticket.state.name}
+         </#if>
       </p>
       <#if ticket.assigneeUnit??>
         <p>

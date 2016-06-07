@@ -119,8 +119,8 @@ public final class TicketDAO implements ITicketDAO
     private static final String CONSTANT_OR = " OR ";
     private static final String SQL_SELECT_ALL_WORKFLOW_JOIN_CLAUSE = " LEFT JOIN  workflow_resource_workflow i ON i.id_resource=a.id_ticket" +
         " LEFT JOIN workflow_state j ON j.id_state=i.id_state";
-    private static final String SQL_SELECT_ALL_WORKFLOW_WHERE_CLAUSE = " AND i.resource_type='" + TICKET_RESOURCE_TYPE +
-        "'";
+    private static final String SQL_SELECT_ALL_WORKFLOW_WHERE_CLAUSE = " AND (i.id_resource IS NULL OR i.resource_type='" +
+        TICKET_RESOURCE_TYPE + "')";
 
     // SQL commands to manage ticket's generic attributes responses
     private static final String SQL_QUERY_INSERT_TICKET_RESPONSE = "INSERT INTO ticketing_ticket_response (id_ticket, id_response) VALUES (?,?)";
