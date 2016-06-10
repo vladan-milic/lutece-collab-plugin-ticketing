@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
-import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
@@ -305,9 +304,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
     {
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
 
-        // TODO After POC GRU, set this variable with
-        // ticketCategory.getIdWorkflow( );
-        int nIdWorkflow = TicketingPocGruService.getWorkflowId( ticket );
+        int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
         if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable(  ) )
         {
@@ -338,13 +335,11 @@ public abstract class WorkflowCapableXPage extends MVCApplication
     {
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
 
-        // TODO After POC GRU, set this variable with
-        // ticketCategory.getIdWorkflow( );
         AdminUser userFront = TicketUtils.registerAdminUserFront( request );
 
         try
         {
-            int nIdWorkflow = TicketingPocGruService.getWorkflowId( ticket );
+            int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
             if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable(  ) )
             {

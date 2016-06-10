@@ -39,7 +39,6 @@ import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.resourcehistory.IResourceHistoryInformationService;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
-import fr.paris.lutece.plugins.ticketing.service.TicketingPocGruService;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
@@ -369,9 +368,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     {
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
 
-        // TODO After POC GRU, set this variable with
-        // ticketCategory.getIdWorkflow( );
-        int nIdWorkflow = TicketingPocGruService.getWorkflowId( ticket );
+        int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
         if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable(  ) )
         {
@@ -402,9 +399,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     {
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
 
-        // TODO After POC GRU, set this variable with
-        // ticketCategory.getIdWorkflow( );
-        int nIdWorkflow = TicketingPocGruService.getWorkflowId( ticket );
+        int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
         if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable(  ) )
         {
