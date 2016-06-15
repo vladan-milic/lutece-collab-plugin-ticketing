@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -232,22 +232,22 @@ public final class TicketSearchService
                 /*  writer = new IndexWriter( dir, _analyzer, bCreateIndex, IndexWriter.MaxFieldLength.UNLIMITED );
                   writer.setMergeFactor( _nWriterMergeFactor );
                   writer.setMaxFieldLength( _nWriterMaxSectorLength );
-
+                
                   Date start = new Date(  );
-
+                
                   sbLogs.append( "\r\n<strong>Indexer : " );
                   sbLogs.append( _indexer.getName(  ) );
                   sbLogs.append( " - " );
                   sbLogs.append( _indexer.getDescription(  ) );
                   sbLogs.append( "</strong>\r\n" );
                   _indexer.processIndexing( writer, bCreateIndex, sbLogs );
-
+                
                   Date end = new Date(  );
-
+                
                   sbLogs.append( "Duration of the treatment : " );
                   sbLogs.append( end.getTime(  ) - start.getTime(  ) );
                   sbLogs.append( " milliseconds\r\n" );
-
+                
                   writer.optimize(  );*/
                 Date start = new Date(  );
 
