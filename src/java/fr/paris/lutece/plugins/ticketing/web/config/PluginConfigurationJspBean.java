@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -149,6 +149,11 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         return getPage( PROPERTY_PAGE_TITLE_CONFIGURE_PLUGIN, TEMPLATE_CONFIGURE_PLUGIN, model );
     }
 
+    /**
+     * Saves the modified configuration
+     * @param request the request
+     * @return the page to redirect when the modification is done
+     */
     @Action( ACTION_MODIFIY_CONFIGURATION )
     public String doModifyConfiguration( HttpServletRequest request )
     {
@@ -175,6 +180,11 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         return redirectView( request, VIEW_MANAGE_CONFIGURATION );
     }
 
+    /**
+     * Builds the properties related to the workflow
+     * @param request the request
+     * @return the HTML for the properties
+     */
     @Action( ACTION_BUILD_WORKFLOW_RELATED_PROPERTIES )
     public String doBuildWorkflowRelatedProperties( HttpServletRequest request )
     {
@@ -193,6 +203,10 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         return strResult;
     }
 
+    /**
+     * Inserts the properties related to the workflow in the specified model
+     * @param model the model
+     */
     private void manageWorkflowProperties( Map<String, Object> model )
     {
         int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID,
@@ -208,6 +222,10 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         }
     }
 
+    /**
+     * Inserts the properties related to the front office in the specified model
+     * @param model the model
+     */
     private void manageFrontOfficeProperties( Map<String, Object> model )
     {
         // Admin user for front office
@@ -230,6 +248,12 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         model.put( MARK_CHANNELS, referenceListChannel );
     }
 
+    /**
+     * Builds the properties related to the workflow
+     * @param nIdWorkflow the workflow id
+     * @param locale the locale
+     * @return the HTML for the properties
+     */
     private String buildWorkflowRelatedProperties( int nIdWorkflow, Locale locale )
     {
         String strResult = StringUtils.EMPTY;
@@ -291,6 +315,10 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         return strResult;
     }
 
+    /**
+     * Saves the properties related to the workflow
+     * @param request the request
+     */
     private static void saveWorkflowProperties( HttpServletRequest request )
     {
         int nIdWorkflow = TicketingConstants.PROPERTY_UNSET_INT;
@@ -345,6 +373,10 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
             listFilteredActionsWhenAssignedToMe );
     }
 
+    /**
+     * Saves the properties related to the front office
+     * @param request the request
+     */
     private static void saveFrontOfficeProperties( HttpServletRequest request )
     {
         int nIdAdminUser = TicketingConstants.PROPERTY_UNSET_INT;
@@ -368,6 +400,13 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         PluginConfigurationService.set( PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT, nIdChannel );
     }
 
+    /**
+     * Builds a ReferenceList from the specified Collection. The ReferenceList is built with an empty value in the first position.
+     * @param collection the Collection used to build the ReferenceList
+     * @param strCode the code of the ReferenceItem
+     * @param strName the name of the ReferenceItem
+     * @return the ReferenceList
+     */
     @SuppressWarnings( "rawtypes" )
     private static ReferenceList buildReferenceList( Collection collection, String strCode, String strName )
     {
@@ -379,6 +418,11 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         return referenceList;
     }
 
+    /**
+     * Builds a ReferenceList from the specified ReferenceList. The ReferenceList is built with an empty value in the first position.
+     * @param referenceList the ReferenceList used to build the ReferenceList
+     * @return the ReferenceList
+     */
     private static ReferenceList buildReferenceList( ReferenceList referenceList )
     {
         ReferenceList referenceListOneItem = TicketUtils.createReferenceList( StringUtils.EMPTY,
@@ -389,6 +433,11 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         return referenceListOneItem;
     }
 
+    /**
+     * Tests whether the form is valid or not.
+     * @param request the request
+     * @return {@code true} if the form is valid, {@code false} otherwise
+     */
     private boolean validate( HttpServletRequest request )
     {
         boolean bIsValidated = true;
@@ -421,22 +470,39 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         return bIsValidated;
     }
 
+    /**
+     * This class represents a list of states for a role
+     *
+     */
     public static final class SelectedStatesForRole
     {
         private final String _strRole;
         private final List<String> _listState;
 
+        /**
+         * Constructor
+         * @param strRole the role
+         * @param listState the list of states
+         */
         public SelectedStatesForRole( String strRole, List<String> listState )
         {
             _strRole = strRole;
             _listState = listState;
         }
 
+        /**
+         * Gets the role
+         * @return the role
+         */
         public String getRole(  )
         {
             return _strRole;
         }
 
+        /**
+         * Gets the states
+         * @return the states
+         */
         public List<String> getStates(  )
         {
             return _listState;
