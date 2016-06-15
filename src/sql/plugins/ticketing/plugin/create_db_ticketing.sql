@@ -173,6 +173,18 @@ PRIMARY KEY (id_support_entity)
 );
 
 --
+-- Structure for table ticketing_types_reponses
+--
+DROP TABLE IF EXISTS ticketing_types_reponses;
+CREATE TABLE ticketing_types_reponses (
+id_type_response int(6) NOT NULL,
+id_ticket_category int(11) NOT NULL,
+title varchar(255) default '' NOT NULL,
+reponse varchar(255) default '' NOT NULL,
+PRIMARY KEY (id_type_response)
+);
+
+--
 -- Structure for table ticketing_channel
 --
 
@@ -201,5 +213,7 @@ ALTER TABLE ticketing_instant_response ADD CONSTRAINT fk_ticketing_instant_respo
       REFERENCES ticketing_ticket_category (id_ticket_category) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE ticketing_indexer_action ADD CONSTRAINT fk_ticketing_indexer_action_ticket FOREIGN KEY (id_ticket)
       REFERENCES ticketing_ticket (id_ticket) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE ticketing_types_reponses ADD CONSTRAINT fk_ticketing_types_responses_category FOREIGN KEY (id_ticket_category)
+      REFERENCES ticketing_ticket_category (id_ticket_category) ON DELETE RESTRICT ON UPDATE RESTRICT;    
 
       
