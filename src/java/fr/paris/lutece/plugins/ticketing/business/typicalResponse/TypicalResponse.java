@@ -187,41 +187,40 @@ public class TypicalResponse implements Serializable
     {
         _strDomain = strDomain;
     }
-    
-    
+
     /**
      * Returns the IdTicketType
      * @return The IdTicketType
-     */ 
- public int getIdTicketType()
- {
-     return _nIdTicketType;
- }
- 
+     */
+    public int getIdTicketType(  )
+    {
+        return _nIdTicketType;
+    }
+
     /**
      * Sets the IdTicketType
      * @param nIdTicketType The IdTicketType
-     */ 
- public void setIdTicketType( int nIdTicketType )
- {
-     _nIdTicketType = nIdTicketType;
- }
- 
+     */
+    public void setIdTicketType( int nIdTicketType )
+    {
+        _nIdTicketType = nIdTicketType;
+    }
+
     /**
      * Returns the IdDomain
      * @return The IdDomain
-     */ 
- public int getIdDomain()
- {
-     return _nIdDomain;
- }
- 
+     */
+    public int getIdDomain(  )
+    {
+        return _nIdDomain;
+    }
+
     /**
      * Sets the IdDomain
      * @param nIdDomain The IdDomain
-     */ 
- public void setIdDomain( int nIdDomain )
- {
-     _nIdDomain = nIdDomain;
- }
+     */
+    public void setIdDomain( int nIdDomain )
+    {
+        _nIdDomain = nIdDomain;
+    }
 }

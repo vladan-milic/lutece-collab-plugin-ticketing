@@ -36,7 +36,7 @@ INSERT INTO ticketing_user_title (id_user_title, label) VALUES
 (3, "Mme");
 
 DELETE FROM ticketing_contact_mode ;
-INSERT INTO ticketing_contact_mode (id_contact_mode, label, confirmation_msg) VALUES
+INSERT INTO ticketing_contact_mode (id_contact_mode, code, confirmation_msg) VALUES
 (1, "email", "<p>Bonjour&nbsp;${userTitle} ${lastName},</p>
  <p>Nous avons bien re&ccedil;u votre demande et nous vous remercions de votre confiance.</p>
  <p>Un e-mail de confirmation vous a &eacute;t&eacute; envoy&eacute; &agrave; l'adresse suivante&nbsp;${email}. Il contient un num&eacute;ro de suivi qui vous sera demand&eacute; au 3975 pour suivre son &eacute;tat d'avancement. Il est &eacute;galement disponible dans votre espace Compte Parisien.</p>
