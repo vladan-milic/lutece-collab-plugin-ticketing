@@ -52,12 +52,14 @@ public class TypicalResponse implements Serializable
     private int _nIdTicketCategory;
     private int _nIdTicketType;
     private int _nIdDomain;
-    @NotEmpty( message = "#i18n{ticketing.validation.typeresponse.Title.notEmpty}" )
+    @NotEmpty( message = "#i18n{ticketing.validation.typeresponse.Title.notEmpty}" )    
     @Size( max = 255, message = "#i18n{ticketing.validation.typeresponse.Title.size}" )
     private String _strTitle;
     @NotEmpty( message = "#i18n{ticketing.validation.typeresponse.Reponse.notEmpty}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.typeresponse.Reponse.size}" )
     private String _strReponse;
+    @NotEmpty( message = "#i18n{ticketing.validation.typeresponse.Keyword.notEmpty}" )
+    private String _strKeyword;
     private String _strCategory;
     private String _strTicketType;
     private String _strDomain;
@@ -223,4 +225,23 @@ public class TypicalResponse implements Serializable
     {
         _nIdDomain = nIdDomain;
     }
+ 
+        /**
+        * Returns the Keyword
+        * @return The Keyword
+        */ 
+    public String getKeyword()
+    {
+        return _strKeyword;
+    }
+    
+       /**
+        * Sets the Keyword
+        * @param strKeyword The Keyword
+        */ 
+    public void setKeyword( String strKeyword )
+    {
+        _strKeyword = strKeyword;
+    }
+    
 }

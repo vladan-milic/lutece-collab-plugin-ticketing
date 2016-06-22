@@ -1,3 +1,5 @@
+<#assign webapp_url = "">
+<#include "/admin/util/editor/editor.html" />
 
 
 <div class="row">
@@ -36,7 +38,12 @@
         
         
         <@fieldInputText i18nLabelKey="ticketing.modify_typeresponse.labelTitle" inputName="title" mandatory=true value="${typeresponse.title}" i18nHelpBlockKey="ticketing.modify_typeresponse.labelTitle.help" />
-        <@fieldInputText i18nLabelKey="ticketing.modify_typeresponse.labelReponse" inputName="reponse" mandatory=true value="${typeresponse.reponse}" i18nHelpBlockKey="ticketing.modify_typeresponse.labelReponse.help" />
+       
+         <@fieldTextArea i18nLabelKey="ticketing.modify_typeresponse.labelReponse" cssClass="richtext" inputName="reponse" mandatory=true value="${typeresponse.reponse!''}" i18nHelpBlockKey="ticketing.modify_typeresponse.labelReponse.help" />
+
+
+         <@fieldTextArea i18nLabelKey="ticketing.modify_typeresponse.labelKeyword"  inputName="keyword" mandatory=true value="${typeresponse.keyword!''}" i18nHelpBlockKey="ticketing.modify_typeresponse.labelKeyword.help" />
+          
         <@actionButtons button1Name="action_modifyTypeResponse" button2Name="view_manageTypeResponses"/>
     </form>
 
@@ -67,3 +74,5 @@
       });
   });
 </script>
+
+<@initEditor />

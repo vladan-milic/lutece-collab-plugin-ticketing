@@ -68,14 +68,19 @@ INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_PLUGIN_CONFIGU
 --
 -- Structure for table ticketing_types_reponses
 --
+
 DROP TABLE IF EXISTS ticketing_types_reponses;
-CREATE TABLE ticketing_types_reponses (
-id_type_response int(6) NOT NULL,
-id_ticket_category int(11) default '0' NOT NULL,
-title varchar(255) default '' NOT NULL,
-reponse varchar(255) default '' NOT NULL,
-PRIMARY KEY (id_type_response)
-);
+CREATE TABLE `ticketing_types_reponses` (
+  `id_type_response` int(6) NOT NULL,
+  `id_ticket_category` int(11) NOT NULL DEFAULT '0',
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `reponse` text,
+  `keyword` text
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `ticketing_types_reponses` ADD PRIMARY KEY (`id_type_response`);
+
+
 DELETE FROM core_admin_right WHERE id_right = 'TICKETING_MANAGEMENT_REPONSES_TYPE';
 INSERT INTO core_admin_right (`id_right`, `name`, `level_right`, `admin_url`, `description`, `is_updatable`, `plugin_name`, `id_feature_group`, `icon_url`, `documentation_url`, `id_order`) VALUES
 ('TICKETING_MANAGEMENT_REPONSES_TYPE', 'ticketing.adminFeature.ManageTicketingReponsesTypes.name', '2', 'jsp/admin/plugins/ticketing/admin/ManageTypicalResponses.jsp', 'ticketing.adminFeature.ManageTicketingReponsesTypes.description', '0', 'ticketing', "GRU_ADMIN", NULL, NULL, '23');

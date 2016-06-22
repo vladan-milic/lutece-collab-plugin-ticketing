@@ -165,7 +165,11 @@ textarea.ticketing.richtext {
   /* Hide table headers (but not display: none;, for accessibility) */
   #instant-response thead tr { position: absolute; top: -9999px; left: -9999px }
   #instant-response tr {  border: 1px solid #ccc	}
-  #instant-response td { font-size: 1.2rem !important; vertical-align: middle; width: auto !important; padding: 0; margin: 0 /* Behave  like a "row" */	border: none;	border-bottom: 1px solid #eee; position: relative;	padding-left: 50%; min-height: 40px	}
+  #instant-response td { font-size: 1.2rem !important; vertical-align: middle; width: auto !important;
+       padding: 0; margin: 0 ;
+       /* Behave  like a "row" */
+       border: none;	border-bottom: 1px solid #eee; position: relative;
+       padding-left: 50%; min-height: 40px	}
   #instant-response td strong.lead{ font-size: 1.2rem !important }
   #instant-response td .detail{ width: auto !important }
   #instant-response td:before { /* Now like a table header */	position: absolute;	/* Top/left values mimic padding */	top: 6px;	left: 6px;	width: 45%; padding-right: 10px; 	white-space: nowrap	}

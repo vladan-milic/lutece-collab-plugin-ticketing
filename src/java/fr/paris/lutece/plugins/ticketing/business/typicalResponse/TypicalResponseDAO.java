@@ -54,11 +54,11 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_type_response ) FROM ticketing_types_reponses";
-    private static final String SQL_QUERY_SELECT = "SELECT id_type_response, id_ticket_category, title, reponse FROM ticketing_types_reponses WHERE id_type_response = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_types_reponses ( id_type_response, id_ticket_category, title, reponse ) VALUES ( ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_type_response, id_ticket_category, title, reponse,keyword FROM ticketing_types_reponses WHERE id_type_response = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_types_reponses ( id_type_response, id_ticket_category, title, reponse, keyword ) VALUES ( ?, ?, ?, ?,? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_types_reponses WHERE id_type_response = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_types_reponses SET id_type_response = ?, id_ticket_category = ?, title = ?, reponse = ? WHERE id_type_response = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_type_response, id_ticket_category, title, reponse FROM ticketing_types_reponses";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_types_reponses SET id_type_response = ?, id_ticket_category = ?, title = ?, reponse = ?, keyword =? WHERE id_type_response = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_type_response, id_ticket_category, title, reponse,keyword FROM ticketing_types_reponses";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_type_response FROM ticketing_types_reponses";
 
     /**
@@ -98,6 +98,7 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
         daoUtil.setInt( nIndex++, typeResponse.getIdTicketCategory(  ) );
         daoUtil.setString( nIndex++, typeResponse.getTitle(  ) );
         daoUtil.setString( nIndex++, typeResponse.getReponse(  ) );
+        daoUtil.setString( nIndex++, typeResponse.getKeyword( ));
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -129,6 +130,7 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
             typeResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
             typeResponse.setTitle( daoUtil.getString( nIndex++ ) );
             typeResponse.setReponse( daoUtil.getString( nIndex++ ) );
+            typeResponse.setKeyword(daoUtil.getString( nIndex++ ) );
 
             //populate label category, domain and type
             ticketCategory = TicketCategoryHome.findByPrimaryKey( typeResponse.getIdTicketCategory(  ) );
@@ -168,8 +170,9 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
         daoUtil.setInt( nIndex++, typeResponse.getIdTicketCategory(  ) );
         daoUtil.setString( nIndex++, typeResponse.getTitle(  ) );
         daoUtil.setString( nIndex++, typeResponse.getReponse(  ) );
-        daoUtil.setInt( nIndex, typeResponse.getId(  ) );
-
+         daoUtil.setString(nIndex++, typeResponse.getKeyword( ));
+        daoUtil.setInt( nIndex, typeResponse.getId(  ) );  
+      
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
@@ -197,6 +200,7 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
             typeResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
             typeResponse.setTitle( daoUtil.getString( nIndex++ ) );
             typeResponse.setReponse( daoUtil.getString( nIndex++ ) );
+            typeResponse.setKeyword(daoUtil.getString( nIndex++ ) );
 
             //populate label category, domain and type
             ticketCategory = TicketCategoryHome.findByPrimaryKey( typeResponse.getIdTicketCategory(  ) );
