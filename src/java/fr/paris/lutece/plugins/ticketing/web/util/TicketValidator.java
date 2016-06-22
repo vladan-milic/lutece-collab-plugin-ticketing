@@ -147,7 +147,7 @@ public class TicketValidator
                 listErrors.add( I18nService.getLocalizedString( ERROR_CONTACT_MODE_UNKNOWN, _locale ) );
             }
 
-            Channel channel = ChannelHome.findByPrimaryKey( ticket.getIdChannel(  ) );
+            Channel channel = ChannelHome.findByPrimaryKey( ticket.getChannel(  ).getId(  ) );
 
             if ( channel == null )
             {

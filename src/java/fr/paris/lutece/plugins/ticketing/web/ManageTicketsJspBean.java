@@ -43,6 +43,7 @@ import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
@@ -361,7 +362,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         String strMobilePhoneNumber = request.getParameter( PARAMETER_PHONE );
         String strEmail = request.getParameter( PARAMETER_EMAIL );
         String strCategoryCode = request.getParameter( PARAMETER_CATEGORY );
-
         ticket.enrich( strIdUserTitle, strFirstname, strLastname, null, strMobilePhoneNumber, strEmail,
             strCategoryCode, null, null, null, strGuid, strIdCustomer );
 
@@ -689,15 +689,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) ).getLabel(  ) );
             ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode(  ) ).getCode(  ) );
             ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle(  ) ).getLabel(  ) );
-
-            if ( ticket.getIdChannel(  ) > TicketingConstants.NO_ID_CHANNEL )
-            {
-                ticket.setChannel( ChannelHome.findByPrimaryKey( ticket.getIdChannel(  ) ).getLabel(  ) );
-            }
-            else
-            {
-                ticket.setChannel( StringUtils.EMPTY );
-            }
+            ticket.setChannel( ChannelHome.findByPrimaryKey( ticket.getChannel(  ).getId(  ) ) );
 
             _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );
 

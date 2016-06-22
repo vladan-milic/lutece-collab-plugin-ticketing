@@ -70,12 +70,12 @@
             <label for="id_channel">#i18n{ticketing.create_ticket.labelChannel}</label>
             <#if selectable_channels_list?? && selectable_channels_list?has_content>
               <#if preferred_id_channel?? && preferred_id_channel?has_content>
-                <@comboWithParams name="id_channel" default_value="${preferred_id_channel}" additionalParameters=" id=\"id_channel\" class=\"form-control input-lg\" " items=selectable_channels_list />
+                <@comboWithParams name="channel.id" default_value="${preferred_id_channel}" additionalParameters=" id=\"channel.id\" class=\"form-control input-lg\" " items=selectable_channels_list />
               <#else>
-                <@comboWithParams name="id_channel" default_value="" additionalParameters=" id=\"id_channel\" class=\"form-control input-lg\" " items=selectable_channels_list />
+                <@comboWithParams name="channel.id" default_value="" additionalParameters=" id=\"channel.id\" class=\"form-control input-lg\" " items=selectable_channels_list />
               </#if>
             <#else>
-              <@comboWithParams name="id_channel" default_value="" additionalParameters=" id=\"id_channel\" class=\"form-control input-lg\" " items=channels_list />
+              <@comboWithParams name="channel.id" default_value="" additionalParameters=" id=\"channel.id\" class=\"form-control input-lg\" " items=channels_list />
             </#if>
           </div>
           <div class="form-group">
