@@ -67,10 +67,15 @@
             <label for="id_contact_mode">#i18n{ticketing.create_ticket.labelContactMode}</label>
             <p class="form-control-static">${getContactModeLabel(ticket.contactMode!'')}</p>
           </div>
-          <div class="form-group">
-            <label for="id_channel">#i18n{ticketing.create_ticket.labelChannel}</label>
-            <p class="form-control-static">${ticket.channel!''}</p>
-          </div>
+          <#if ticket.channel??>
+	          <div class="form-group">
+	            <label for="id_channel">#i18n{ticketing.create_ticket.labelChannel}</label>
+	            <p class="form-control-static">
+	               <#if ticket.channel.iconFont??><i class="${ticket.channel.iconFont}"></i>&nbsp;</#if>${ticket.channel.label!''}
+	            </p>
+	          </div>
+          </#if>
+          
           <div class="form-group">
             <label for="ticket_comment">#i18n{ticketing.create_ticket.labelTicketComment}</label>
             <p class="form-control-static">${convertNewLineToHtml(ticket.ticketComment!'')}</p>

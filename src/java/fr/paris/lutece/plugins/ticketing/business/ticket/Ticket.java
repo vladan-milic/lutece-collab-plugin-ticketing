@@ -38,6 +38,8 @@ import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
+import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
@@ -129,8 +131,8 @@ public class Ticket implements Serializable, RBACResource
     private transient AssigneeUnit _assignerUnit;
     private String _strUserMessage;
     private String _strUrl;
-    private int _nIdChannel;
-    private String _strChannel;
+    private Channel _channel = new Channel(  );
+
 
     /**
      * Enriches empty ticket attributes with specified values
@@ -200,7 +202,13 @@ public class Ticket implements Serializable, RBACResource
 
         if ( !StringUtils.isEmpty( strIdChannel ) )
         {
-            setIdChannel( Integer.parseInt( strIdChannel ) );
+            try
+            {
+                setChannel( ChannelHome.findByPrimaryKey( Integer.parseInt( strIdChannel ) ) );
+            }
+            catch ( NumberFormatException e )
+            {
+            }
         }
 
         if ( !StringUtils.isEmpty( strComment ) && StringUtils.isEmpty( getTicketComment(  ) ) )
@@ -932,42 +940,21 @@ public class Ticket implements Serializable, RBACResource
     }
 
     /**
-     * Returns the IdChannel
-     * @return The IdChannel
+     * Sets the channel
+     * @param channel The channel
      */
-    public int getIdChannel(  )
+    public void setChannel( Channel channel )
     {
-        return _nIdChannel;
+        _channel = channel;
     }
 
     /**
-     * Sets the IdChannel
-     * @param nIdChannel The IdChannel
+     * Returns the channel
+     * @return The channel
      */
-    public void setIdChannel( int nIdChannel )
+    public Channel getChannel(  )
     {
-        _nIdChannel = nIdChannel;
-    }
-
-    /**
-     * Returns the Channel
-     *
-     * @return The Channel
-     */
-    public String getChannel(  )
-    {
-        return _strChannel;
-    }
-
-    /**
-     * Sets the Channel
-     *
-     * @param strChannel
-     *            The Channel
-     */
-    public void setChannel( String strChannel )
-    {
-        _strChannel = strChannel;
+        return _channel;
     }
 
     /**

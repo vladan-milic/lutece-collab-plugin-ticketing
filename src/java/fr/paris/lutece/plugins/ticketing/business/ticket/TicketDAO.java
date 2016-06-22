@@ -36,6 +36,8 @@ package fr.paris.lutece.plugins.ticketing.business.ticket;
 import fr.paris.lutece.plugins.ticketing.business.OrderByFilter.OrderSortAllowed;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
+import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
+import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
@@ -203,17 +205,16 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setString( nIndex++, ticket.getUserMessage(  ) );
         daoUtil.setString( nIndex++, ticket.getUrl(  ) );
 
-        int nIdChannel = ticket.getIdChannel(  );
-
-        if ( TicketUtils.isIdSet( nIdChannel ) )
+        if ( ticket.getChannel(  ) != null && TicketUtils.isIdSet( ticket.getChannel(  ).getId(  ) ) )
         {
-            daoUtil.setInt( nIndex++, nIdChannel );
+            daoUtil.setInt( nIndex++, ticket.getChannel(  ).getId(  ) );
         }
         else
         {
             daoUtil.setIntNull( nIndex++ );
         }
 
+        
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
@@ -312,7 +313,15 @@ public final class TicketDAO implements ITicketDAO
 
             ticket.setUserMessage( daoUtil.getString( nIndex++ ) );
             ticket.setUrl( daoUtil.getString( nIndex++ ) );
-            ticket.setIdChannel( daoUtil.getInt( nIndex++ ) );
+
+            // channel
+            nId = daoUtil.getInt( nIndex++ );
+            
+            if ( TicketUtils.isIdSet( nId ) )
+            {
+                Channel channel = ChannelHome.findByPrimaryKey( nId );
+                ticket.setChannel( channel );
+            }
         }
 
         daoUtil.free(  );
@@ -373,11 +382,9 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setString( nIndex++, ticket.getUserMessage(  ) );
         daoUtil.setString( nIndex++, ticket.getUrl(  ) );
 
-        int nIdChannel = ticket.getIdChannel(  );
-
-        if ( TicketUtils.isIdSet( nIdChannel ) )
+        if ( ticket.getChannel(  ) != null && TicketUtils.isIdSet( ticket.getChannel(  ).getId(  ) ) )
         {
-            daoUtil.setInt( nIndex++, nIdChannel );
+            daoUtil.setInt( nIndex++, ticket.getChannel(  ).getId(  ) );
         }
         else
         {
@@ -502,7 +509,15 @@ public final class TicketDAO implements ITicketDAO
 
             ticket.setUserMessage( daoUtil.getString( nIndex++ ) );
             ticket.setUrl( daoUtil.getString( nIndex++ ) );
-            ticket.setIdChannel( daoUtil.getInt( nIndex++ ) );
+
+            // channel
+            nId = daoUtil.getInt( nIndex++ );
+
+            if ( TicketUtils.isIdSet( nId ) )
+            {
+                Channel channel = ChannelHome.findByPrimaryKey( nId );
+                ticket.setChannel( channel );
+            }
 
             ticketList.add( ticket );
         }
@@ -922,7 +937,15 @@ public final class TicketDAO implements ITicketDAO
 
             ticket.setUserMessage( daoUtil.getString( nIndex++ ) );
             ticket.setUrl( daoUtil.getString( nIndex++ ) );
-            ticket.setIdChannel( daoUtil.getInt( nIndex++ ) );
+
+            // channel
+            nId = daoUtil.getInt( nIndex++ );
+
+            if ( TicketUtils.isIdSet( nId ) )
+            {
+                Channel channel = ChannelHome.findByPrimaryKey( nId );
+                ticket.setChannel( channel );
+            }
 
             ticketList.add( ticket );
         }
