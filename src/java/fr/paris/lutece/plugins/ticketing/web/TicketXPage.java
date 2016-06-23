@@ -234,8 +234,6 @@ public class TicketXPage extends WorkflowCapableXPage
             ticket.setChannel( channelFront );
             TicketHome.create( ticket );
 
-            doProcessNextWorkflowAction( ticket, request );
-
             if ( ( ticket.getListResponse(  ) != null ) && !ticket.getListResponse(  ).isEmpty(  ) )
             {
                 for ( Response response : ticket.getListResponse(  ) )
@@ -244,6 +242,8 @@ public class TicketXPage extends WorkflowCapableXPage
                     TicketHome.insertTicketResponse( ticket.getId(  ), response.getIdResponse(  ) );
                 }
             }
+
+            doProcessNextWorkflowAction( ticket, request );
 
             TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
 
