@@ -1,4 +1,3 @@
-<#assign webapp_url = "">
 <#include "/admin/util/editor/editor.html" />
 
 
@@ -7,11 +6,11 @@
 	<div class="col-xs-12 col-sm-12 col-md-12">
 		<div class="box box-solid box-primary">
 			<div class="box-header">
-				<h3 class="box-title">#i18n{ticketing.create_typeresponse.title}</h3>
+				<h3 class="box-title">#i18n{ticketing.create_typicalresponse.title}</h3>
 			</div>
             <div class="box-body">
             
-    <form class="form-horizontal" method="post" name="create_typeresponse" action="jsp/admin/plugins/ticketing/admin/ManageTypicalResponses.jsp">
+    <form class="form-horizontal" method="post" name="create_typicalresponse" action="jsp/admin/plugins/ticketing/admin/ManageTypicalResponses.jsp">
         <@messages errors=errors />
         <input type="hidden" id="id" name="id"/>
                  
@@ -42,16 +41,16 @@
         
           
         
-        <@fieldInputText i18nLabelKey="ticketing.create_typeresponse.labelTitle" inputName="title" mandatory=true value="${typeresponse.title!''}" i18nHelpBlockKey="ticketing.create_typeresponse.labelTitle.help" />
+        <@fieldInputText i18nLabelKey="ticketing.create_typicalresponse.labelTitle" inputName="title" mandatory=true value="${typicalresponse.title!''}" i18nHelpBlockKey="ticketing.create_typicalresponse.labelTitle.help" />
 
 
-        <@fieldTextArea i18nLabelKey="ticketing.create_typeresponse.labelReponse" cssClass="richtext" inputName="reponse" mandatory=true value="${typeresponse.reponse!''}" i18nHelpBlockKey="ticketing.create_typeresponse.labelReponse.help" />
+        <@fieldTextArea i18nLabelKey="ticketing.create_typicalresponse.labelReponse" cssClass="richtext" inputName="reponse" mandatory=true value="${typicalresponse.reponse!''}" i18nHelpBlockKey="ticketing.create_typicalresponse.labelReponse.help" />
 
 
-         <@fieldTextArea i18nLabelKey="ticketing.create_typeresponse.labelKeyword"  inputName="keyword" mandatory=true value="${typeresponse.keyword!''}" i18nHelpBlockKey="ticketing.create_typeresponse.labelKeyword.help" />
+         <@fieldTextArea i18nLabelKey="ticketing.create_typicalresponse.labelKeyword"  inputName="keyword" mandatory=true value="${typicalresponse.keyword!''}" i18nHelpBlockKey="ticketing.create_typicalresponse.labelKeyword.help" />
          
          
-        <@actionButtons button1Name="action_createTypeResponse" button2Name="view_manageTypeResponses"/>
+        <@actionButtons button1Name="action_createTypicalResponse" button2Name="view_manageTypicalResponses"/>
     </form>
 
 

@@ -36,8 +36,9 @@ package fr.paris.lutece.plugins.ticketing.web.admin;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
-import fr.paris.lutece.plugins.ticketing.business.typicalResponse.TypicalResponse;
-import fr.paris.lutece.plugins.ticketing.business.typicalResponse.TypicalResponseHome;
+import fr.paris.lutece.plugins.ticketing.business.typicalresponse.TypicalResponse;
+import fr.paris.lutece.plugins.ticketing.business.typicalresponse.TypicalResponseHome;
+import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -56,36 +57,36 @@ import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * This class provides the user interface to manage TypeResponse features ( manage, create, modify, remove )
+ * This class provides the user interface to manage TypicalResponse features ( manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageTypicalResponses.jsp", controllerPath = "jsp/admin/plugins/ticketing/admin/", right = "TICKETING_MANAGEMENT_REPONSES_TYPE" )
+@Controller( controllerJsp = "ManageTypicalResponses.jsp", controllerPath = "jsp/admin/plugins/ticketing/admin/", right = "TICKETING_MANAGEMENT_TYPICAL_RESPONSE" )
 public class TypicalResponseJspBean extends MVCAdminJspBean
 {
     // Rights
-    public static final String RIGHT_MANAGETICKETINGREPONSESTYPES = "TICKETING_MANAGEMENT_REPONSES_TYPE";
+    public static final String RIGHT_MANAGETICKETINGREPONSESTYPES = "TICKETING_MANAGEMENT_TYPICAL_RESPONSE";
 
     // Templates
     private static final String TEMPLATE_MANAGE_TYPICALRESPONSES = "/admin/plugins/ticketing/admin/manage_typicalresponses.html";
-    private static final String TEMPLATE_CREATE_TYPERESPONSE = "/admin/plugins/ticketing/admin/create_typicalresponse.html";
-    private static final String TEMPLATE_MODIFY_TYPERESPONSE = "/admin/plugins/ticketing/admin/modify_typicalresponse.html";
+    private static final String TEMPLATE_CREATE_TYPICALRESPONSE = "/admin/plugins/ticketing/admin/create_typicalresponse.html";
+    private static final String TEMPLATE_MODIFY_TYPICALRESPONSE = "/admin/plugins/ticketing/admin/modify_typicalresponse.html";
 
     // Parameters
-    private static final String PARAMETER_ID_TYPERESPONSE = "id";
+    private static final String PARAMETER_ID_TYPICALRESPONSE = "id";
 
     // Parameters
     private static final String PARAMETER_PAGE_INDEX = "page_index";
 
     // Properties for page titles
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_TYPICALRESPONSES = "ticketing.manage_typeresponses.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_TYPERESPONSE = "ticketing.modify_typeresponse.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_TYPERESPONSE = "ticketing.create_typeresponse.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MANAGE_TYPICALRESPONSES = "ticketing.manage_typicalresponse.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MODIFY_TYPICALRESPONSE = "ticketing.modify_typicalresponse.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_CREATE_TYPICALRESPONSE = "ticketing.create_typicalresponse.pageTitle";
 
     // Properties
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
 
     // Markers
-    private static final String MARK_TYPERESPONSE_LIST = "typeresponse_list";
-    private static final String MARK_TYPERESPONSE = "typeresponse";
+    private static final String MARK_TYPICALRESPONSE_LIST = "typicalresponse_list";
+    private static final String MARK_TYPICALRESPONSE = "typicalresponse";
 
     // Markers
     private static final String MARK_PAGINATOR = "paginator";
@@ -96,26 +97,26 @@ public class TypicalResponseJspBean extends MVCAdminJspBean
     private static final String JSP_MANAGE_TYPICALRESPONSES = "jsp/admin/plugins/ticketing/admin/ManageTypicalResponses.jsp";
 
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_TYPERESPONSE = "ticketing.message.confirmRemoveTypeResponse";
+    private static final String MESSAGE_CONFIRM_REMOVE_TYPICALRESPONSE = "ticketing.message.confirmRemoveTypicalResponse";
 
     // Validations
-    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.typeresponse.attribute.";
+    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.typicalresponse.attribute.";
 
     // Views
     private static final String VIEW_MANAGE_TYPICALRESPONSES = "manageTypicalResponses";
-    private static final String VIEW_CREATE_TYPERESPONSE = "createTypeResponse";
-    private static final String VIEW_MODIFY_TYPERESPONSE = "modifyTypeResponse";
+    private static final String VIEW_CREATE_TYPICALRESPONSE = "createTypicalResponse";
+    private static final String VIEW_MODIFY_TYPICALRESPONSE = "modifyTypicalResponse";
 
     // Actions
-    private static final String ACTION_CREATE_TYPERESPONSE = "createTypeResponse";
-    private static final String ACTION_MODIFY_TYPERESPONSE = "modifyTypeResponse";
-    private static final String ACTION_REMOVE_TYPERESPONSE = "removeTypeResponse";
-    private static final String ACTION_CONFIRM_REMOVE_TYPERESPONSE = "confirmRemoveTypeResponse";
+    private static final String ACTION_CREATE_TYPICALRESPONSE = "createTypicalResponse";
+    private static final String ACTION_MODIFY_TYPICALRESPONSE = "modifyTypicalResponse";
+    private static final String ACTION_REMOVE_TYPICALRESPONSE = "removeTypicalResponse";
+    private static final String ACTION_CONFIRM_REMOVE_TYPICALRESPONSE = "confirmRemoveTypicalResponse";
 
     // Infos
-    private static final String INFO_TYPERESPONSE_CREATED = "ticketing.info.typeresponse.created";
-    private static final String INFO_TYPERESPONSE_UPDATED = "ticketing.info.typeresponse.updated";
-    private static final String INFO_TYPERESPONSE_REMOVED = "ticketing.info.typeresponse.removed";
+    private static final String INFO_TYPICALRESPONSE_CREATED = "ticketing.info.typicalresponse.created";
+    private static final String INFO_TYPICALRESPONSE_UPDATED = "ticketing.info.typicalresponse.updated";
+    private static final String INFO_TYPICALRESPONSE_REMOVED = "ticketing.info.typicalresponse.removed";
 
     //Variables
     private int _nDefaultItemsPerPage;
@@ -123,7 +124,7 @@ public class TypicalResponseJspBean extends MVCAdminJspBean
     private int _nItemsPerPage;
 
     // Session variable to store working values
-    private TypicalResponse _typeresponse;
+    private TypicalResponse _typicalResponse;
 
     /**
      * Return a model that contains the list and paginator infos
@@ -165,139 +166,144 @@ public class TypicalResponseJspBean extends MVCAdminJspBean
     @View( value = VIEW_MANAGE_TYPICALRESPONSES, defaultView = true )
     public String getManageTypicalResponses( HttpServletRequest request )
     {
-        _typeresponse = null;
+        _typicalResponse = null;
 
-        List<TypicalResponse> listTypicalResponses = TypicalResponseHome.getTypeResponsesList(  );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_TYPERESPONSE_LIST, listTypicalResponses,
+        List<TypicalResponse> listTypicalResponses = TypicalResponseHome.getTypicalResponsesList(  );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_TYPICALRESPONSE_LIST, listTypicalResponses,
                 JSP_MANAGE_TYPICALRESPONSES );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TYPICALRESPONSES, TEMPLATE_MANAGE_TYPICALRESPONSES, model );
     }
 
     /**
-     * Returns the form to create a typeresponse
+     * Returns the form to create a typicalresponse
      *
      * @param request The Http request
-     * @return the html code of the typeresponse form
+     * @return the html code of the typicalresponse form
      */
-    @View( VIEW_CREATE_TYPERESPONSE )
-    public String getCreateTypeResponse( HttpServletRequest request )
+    @View( VIEW_CREATE_TYPICALRESPONSE )
+    public String getCreateTypicalResponse( HttpServletRequest request )
     {
-        _typeresponse = ( _typeresponse != null ) ? _typeresponse : new TypicalResponse(  );
+        _typicalResponse = ( _typicalResponse != null ) ? _typicalResponse : new TypicalResponse(  );
 
         Map<String, Object> model = getModel(  );
-        model.put( MARK_TYPERESPONSE, _typeresponse );
+        model.put( MARK_TYPICALRESPONSE, _typicalResponse );
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
+        
+        ModelUtils.storeRichText(request, model);
+        
 
-        return getPage( PROPERTY_PAGE_TITLE_CREATE_TYPERESPONSE, TEMPLATE_CREATE_TYPERESPONSE, model );
+        return getPage( PROPERTY_PAGE_TITLE_CREATE_TYPICALRESPONSE, TEMPLATE_CREATE_TYPICALRESPONSE, model );
     }
 
     /**
-     * Process the data capture form of a new typeresponse
+     * Process the data capture form of a new typicalresponse
      *
      * @param request The Http Request
      * @return The Jsp URL of the process result
      */
-    @Action( ACTION_CREATE_TYPERESPONSE )
-    public String doCreateTypeResponse( HttpServletRequest request )
+    @Action( ACTION_CREATE_TYPICALRESPONSE )
+    public String doCreateTypicalResponse( HttpServletRequest request )
     {
-        populate( _typeresponse, request );
+        populate( _typicalResponse, request );
 
         // Check constraints
-        if ( !validateBean( _typeresponse, VALIDATION_ATTRIBUTES_PREFIX ) )
+        if ( !validateBean( _typicalResponse, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirectView( request, VIEW_CREATE_TYPERESPONSE );
+            return redirectView( request, VIEW_CREATE_TYPICALRESPONSE );
         }
 
-        TypicalResponseHome.create( _typeresponse );
-        addInfo( INFO_TYPERESPONSE_CREATED, getLocale(  ) );
+        TypicalResponseHome.create( _typicalResponse );
+        addInfo( INFO_TYPICALRESPONSE_CREATED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_TYPICALRESPONSES );
     }
 
     /**
-     * Manages the removal form of a typeresponse whose identifier is in the http
+     * Manages the removal form of a typicalresponse whose identifier is in the http
      * request
      *
      * @param request The Http request
      * @return the html code to confirm
      */
-    @Action( ACTION_CONFIRM_REMOVE_TYPERESPONSE )
-    public String getConfirmRemoveTypeResponse( HttpServletRequest request )
+    @Action( ACTION_CONFIRM_REMOVE_TYPICALRESPONSE )
+    public String getConfirmRemoveTypicalResponse( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TYPERESPONSE ) );
-        UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_TYPERESPONSE ) );
-        url.addParameter( PARAMETER_ID_TYPERESPONSE, nId );
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TYPICALRESPONSE ) );
+        UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_TYPICALRESPONSE ) );
+        url.addParameter( PARAMETER_ID_TYPICALRESPONSE, nId );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TYPERESPONSE,
+        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TYPICALRESPONSE,
                 url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
     }
 
     /**
-     * Handles the removal form of a typeresponse
+     * Handles the removal form of a typicalresponse
      *
      * @param request The Http request
-     * @return the jsp URL to display the form to manage typeresponses
+     * @return the jsp URL to display the form to manage typicalresponses
      */
-    @Action( ACTION_REMOVE_TYPERESPONSE )
-    public String doRemoveTypeResponse( HttpServletRequest request )
+    @Action( ACTION_REMOVE_TYPICALRESPONSE )
+    public String doRemoveTypicalResponse( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TYPERESPONSE ) );
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TYPICALRESPONSE ) );
         TypicalResponseHome.remove( nId );
-        addInfo( INFO_TYPERESPONSE_REMOVED, getLocale(  ) );
+        addInfo( INFO_TYPICALRESPONSE_REMOVED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_TYPICALRESPONSES );
     }
 
     /**
-     * Returns the form to update info about a typeresponse
+     * Returns the form to update info about a typicalresponse
      *
      * @param request The Http request
      * @return The HTML form to update info
      */
-    @View( VIEW_MODIFY_TYPERESPONSE )
-    public String getModifyTypeResponse( HttpServletRequest request )
+    @View( VIEW_MODIFY_TYPICALRESPONSE )
+    public String getModifyTypicalResponse( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TYPERESPONSE ) );
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TYPICALRESPONSE ) );
 
-        if ( ( _typeresponse == null ) || ( _typeresponse.getId(  ) != nId ) )
+        if ( ( _typicalResponse == null ) || ( _typicalResponse.getId(  ) != nId ) )
         {
-            _typeresponse = TypicalResponseHome.findByPrimaryKey( nId );
+            _typicalResponse = TypicalResponseHome.findByPrimaryKey( nId );
         }
 
         Map<String, Object> model = getModel(  );
-        model.put( MARK_TYPERESPONSE, _typeresponse );
+        model.put( MARK_TYPICALRESPONSE, _typicalResponse );
 
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
+        
+        ModelUtils.storeRichText(request, model);
 
-        return getPage( PROPERTY_PAGE_TITLE_MODIFY_TYPERESPONSE, TEMPLATE_MODIFY_TYPERESPONSE, model );
+        return getPage( PROPERTY_PAGE_TITLE_MODIFY_TYPICALRESPONSE, TEMPLATE_MODIFY_TYPICALRESPONSE, model );
     }
 
     /**
-     * Process the change form of a typeresponse
+     * Process the change form of a typicalresponse
      *
      * @param request The Http request
      * @return The Jsp URL of the process result
      */
-    @Action( ACTION_MODIFY_TYPERESPONSE )
-    public String doModifyTypeResponse( HttpServletRequest request )
+    @Action( ACTION_MODIFY_TYPICALRESPONSE )
+    public String doModifyTypicalResponse( HttpServletRequest request )
     {
-        populate( _typeresponse, request );
+        populate( _typicalResponse, request );
 
         // Check constraints
-        if ( !validateBean( _typeresponse, VALIDATION_ATTRIBUTES_PREFIX ) )
+        if ( !validateBean( _typicalResponse, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect( request, VIEW_MODIFY_TYPERESPONSE, PARAMETER_ID_TYPERESPONSE, _typeresponse.getId(  ) );
+            return redirect( request, VIEW_MODIFY_TYPICALRESPONSE, PARAMETER_ID_TYPICALRESPONSE, _typicalResponse.getId(  ) );
         }
 
-        TypicalResponseHome.update( _typeresponse );
-        addInfo( INFO_TYPERESPONSE_UPDATED, getLocale(  ) );
+        TypicalResponseHome.update( _typicalResponse );
+        addInfo( INFO_TYPICALRESPONSE_UPDATED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_TYPICALRESPONSES );
     }

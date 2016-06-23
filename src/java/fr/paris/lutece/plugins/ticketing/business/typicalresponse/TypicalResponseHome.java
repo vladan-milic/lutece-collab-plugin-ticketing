@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business.typicalResponse;
+package fr.paris.lutece.plugins.ticketing.business.typicalresponse;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -104,7 +104,7 @@ public final class TypicalResponseHome
      * Load the data of all the typeResponse objects and returns them as a list
      * @return the list which contains the data of all the typeResponse objects
      */
-    public static List<TypicalResponse> getTypeResponsesList(  )
+    public static List<TypicalResponse> getTypicalResponsesList(  )
     {
         return _dao.selectTypeResponsesList( _plugin );
     }

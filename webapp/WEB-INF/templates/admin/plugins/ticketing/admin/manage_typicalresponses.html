@@ -4,11 +4,11 @@
 	<div class="col-xs-12 col-sm-12 col-md-12">
 		<div class="box box-primary">
 			<div class="box-header">
-				<h3 class="box-title">#i18n{ticketing.manage_typeresponses.title}</h3>
+				<h3 class="box-title">#i18n{ticketing.manage_typicalresponse.title}</h3>
 				<div class="box-tools pull-right">
-					 <form class="form-inline pull-right" method="post" name="manage_typeresponses" action="jsp/admin/plugins/ticketing/admin/ManageTypicalResponses.jsp">
+					 <form class="form-inline pull-right" method="post" name="manage_typicalresponse" action="jsp/admin/plugins/ticketing/admin/ManageTypicalResponses.jsp">
             <!-- Add pull-right to class1 -->
-            <@actionButtons button1Name="view_createTypeResponse" icon1="icon-plus icon-white" i18nValue1Key="ticketing.manage_typeresponses.buttonAdd" />
+            <@actionButtons button1Name="view_createTypicalResponse" icon1="icon-plus icon-white" i18nValue1Key="ticketing.manage_typicalresponse.buttonAdd" />
         </form>
 				</div>
 			</div>
@@ -18,41 +18,41 @@
     <@table>
         <tr>
             <input type="hidden" id="id" name="id"/>
-            <th>#i18n{ticketing.manage_typeresponses.columnNature}</th>
-            <th>#i18n{ticketing.manage_typeresponses.columnDomain}</th>
-            <th>#i18n{ticketing.manage_typeresponses.columnCategory}</th>
-            <th>#i18n{ticketing.manage_typeresponses.columnTitle}</th>
-            <th>#i18n{ticketing.manage_typeresponses.columnReponse}</th>
+            <th>#i18n{ticketing.manage_typicalresponse.columnNature}</th>
+            <th>#i18n{ticketing.manage_typicalresponse.columnDomain}</th>
+            <th>#i18n{ticketing.manage_typicalresponse.columnCategory}</th>
+            <th>#i18n{ticketing.manage_typicalresponse.columnTitle}</th>
+            <th>#i18n{ticketing.manage_typicalresponse.columnReponse}</th>
             <th>#i18n{portal.util.labelActions}</th>
         </tr>
         <@tableHeadBodySeparator />
-            <#list typeresponse_list as typeresponse >
+            <#list typicalresponse_list as typicalresponse >
         <tr>
-            <input type="hidden" id=" ${typeresponse.idTicketCategory}" name="id"/>
+            <input type="hidden" id=" ${typicalresponse.idTicketCategory}" name="id"/>
              <td>
-                ${typeresponse.ticketType}
+                ${typicalresponse.ticketType}
             </td>         
             <td>
-                ${typeresponse.domain}
+                ${typicalresponse.domain}
             </td>
             <td>
-                ${typeresponse.category}
+                ${typicalresponse.category}
             </td>
             <td>
-                ${typeresponse.title}
+                ${typicalresponse.title}
             </td>
             <td>
-                ${typeresponse.reponse}
+                ${typicalresponse.reponse}
             </td>
             
             
         <td>
-            <a href="jsp/admin/plugins/ticketing/admin/ManageTypicalResponses.jsp?view=modifyTypeResponse&id=${typeresponse.id}"
+            <a href="jsp/admin/plugins/ticketing/admin/ManageTypicalResponses.jsp?view=modifyTypicalResponse&id=${typicalresponse.id}"
                class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
                 <i class="fa fa-pencil"></i>
             </a>
 
-            <a href="jsp/admin/plugins/ticketing/admin/ManageTypicalResponses.jsp?action=confirmRemoveTypeResponse&id=${typeresponse.id}"
+            <a href="jsp/admin/plugins/ticketing/admin/ManageTypicalResponses.jsp?action=confirmRemoveTypicalResponse&id=${typicalresponse.id}"
                class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
                 <i class="fa fa-trash"></i>
             </a>
