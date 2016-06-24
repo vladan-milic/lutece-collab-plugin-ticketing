@@ -70,11 +70,11 @@
         </admin-feature>
         
           <admin-feature>
-            <feature-id>TICKETING_MANAGEMENT_REPONSES_TYPE</feature-id>
-            <feature-title>ticketing.adminFeature.ManageTicketingReponsesTypes.name</feature-title>
-            <feature-description>ticketing.adminFeature.ManageTicketingReponsesTypes.description</feature-description>
+            <feature-id>TICKETING_MANAGEMENT_TYPICAL_RESPONSE</feature-id>
+            <feature-title>ticketing.adminFeature.ManageTicketingTypicalResponse.name</feature-title>
+            <feature-description>ticketing.adminFeature.ManageTicketingTypicalResponse.description</feature-description>
             <feature-level>2</feature-level>
-            <feature-url>jsp/admin/plugins/ticketing/ManageTypeResponses.jsp</feature-url>
+            <feature-url>jsp/admin/plugins/ticketing/admin/ManageTypicalResponses.jsp</feature-url>
             <feature-icon-url></feature-icon-url>
       </admin-feature>
       

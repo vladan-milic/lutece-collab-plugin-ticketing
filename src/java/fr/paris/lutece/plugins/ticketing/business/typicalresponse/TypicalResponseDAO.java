@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business.typicalResponse;
+package fr.paris.lutece.plugins.ticketing.business.typicalresponse;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
@@ -53,13 +53,13 @@ import java.util.List;
 public final class TypicalResponseDAO implements ITypicalResponseDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_type_response ) FROM ticketing_types_reponses";
-    private static final String SQL_QUERY_SELECT = "SELECT id_type_response, id_ticket_category, title, reponse,keyword FROM ticketing_types_reponses WHERE id_type_response = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_types_reponses ( id_type_response, id_ticket_category, title, reponse, keyword ) VALUES ( ?, ?, ?, ?,? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_types_reponses WHERE id_type_response = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_types_reponses SET id_type_response = ?, id_ticket_category = ?, title = ?, reponse = ?, keyword =? WHERE id_type_response = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_type_response, id_ticket_category, title, reponse,keyword FROM ticketing_types_reponses";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_type_response FROM ticketing_types_reponses";
+    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_typical_response ) FROM ticketing_typical_reponses";
+    private static final String SQL_QUERY_SELECT = "SELECT id_typical_response, id_ticket_category, title, reponse,keyword FROM ticketing_typical_reponses WHERE id_typical_response = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_typical_reponses ( id_typical_response, id_ticket_category, title, reponse, keyword ) VALUES ( ?, ?, ?, ?,? ) ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_typical_reponses WHERE id_typical_response = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_typical_reponses SET id_typical_response = ?, id_ticket_category = ?, title = ?, reponse = ?, keyword =? WHERE id_typical_response = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_typical_response, id_ticket_category, title, reponse,keyword FROM ticketing_typical_reponses";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_typical_response FROM ticketing_typical_reponses";
 
     /**
      * Generates a new primary key
