@@ -16,19 +16,19 @@ import java.util.List;
  */
 interface IModelResponseIndexer {
     
-     final String PATH_INDEX = "/WEB-INF/plugins/ticketing/typical-responses/indexes";
-     final String FIELD_TYPICAL_RESPONSE_INFOS = "typical_responses";
+     final String PATH_INDEX = "/WEB-INF/plugins/ticketing/model-responses/indexes";
+     final String FIELD_MODEL_RESPONSE_INFOS = "model_responses";
      final String FIELD_ID = "id";
      final String FIELD_TITLE = "title";
      final String FIELD_RESPONSE = "response";
      final String FIELD_KEYWORD = "keyword";
      final String FIELD_SEARCH_CONTENT = "content";
     
-     void update(ModelResponse typicalReponse) throws IOException; 
+     void update(ModelResponse modelReponse) throws IOException; 
      
-     void delete(ModelResponse typicalReponse) throws IOException;
+     void delete(ModelResponse modelReponse) throws IOException;
      
-     void add(ModelResponse typicalReponse) throws IOException;
+     void add(ModelResponse modelReponse) throws IOException;
      
      String addAll();
      
