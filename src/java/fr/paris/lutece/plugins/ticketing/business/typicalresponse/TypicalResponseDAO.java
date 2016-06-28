@@ -98,7 +98,7 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
         daoUtil.setInt( nIndex++, typeResponse.getIdTicketCategory(  ) );
         daoUtil.setString( nIndex++, typeResponse.getTitle(  ) );
         daoUtil.setString( nIndex++, typeResponse.getReponse(  ) );
-        daoUtil.setString( nIndex++, typeResponse.getKeyword( ));
+        daoUtil.setString( nIndex++, typeResponse.getKeyword(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -130,7 +130,7 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
             typeResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
             typeResponse.setTitle( daoUtil.getString( nIndex++ ) );
             typeResponse.setReponse( daoUtil.getString( nIndex++ ) );
-            typeResponse.setKeyword(daoUtil.getString( nIndex++ ) );
+            typeResponse.setKeyword( daoUtil.getString( nIndex++ ) );
 
             //populate label category, domain and type
             ticketCategory = TicketCategoryHome.findByPrimaryKey( typeResponse.getIdTicketCategory(  ) );
@@ -170,9 +170,9 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
         daoUtil.setInt( nIndex++, typeResponse.getIdTicketCategory(  ) );
         daoUtil.setString( nIndex++, typeResponse.getTitle(  ) );
         daoUtil.setString( nIndex++, typeResponse.getReponse(  ) );
-         daoUtil.setString(nIndex++, typeResponse.getKeyword( ));
-        daoUtil.setInt( nIndex, typeResponse.getId(  ) );  
-      
+        daoUtil.setString( nIndex++, typeResponse.getKeyword(  ) );
+        daoUtil.setInt( nIndex, typeResponse.getId(  ) );
+
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
@@ -200,7 +200,7 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
             typeResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
             typeResponse.setTitle( daoUtil.getString( nIndex++ ) );
             typeResponse.setReponse( daoUtil.getString( nIndex++ ) );
-            typeResponse.setKeyword(daoUtil.getString( nIndex++ ) );
+            typeResponse.setKeyword( daoUtil.getString( nIndex++ ) );
 
             //populate label category, domain and type
             ticketCategory = TicketCategoryHome.findByPrimaryKey( typeResponse.getIdTicketCategory(  ) );

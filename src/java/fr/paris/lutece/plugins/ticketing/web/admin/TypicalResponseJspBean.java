@@ -38,9 +38,11 @@ import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.typicalresponse.TypicalResponse;
 import fr.paris.lutece.plugins.ticketing.business.typicalresponse.TypicalResponseHome;
+import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
@@ -49,9 +51,12 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
+import java.io.IOException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -122,6 +127,8 @@ public class TypicalResponseJspBean extends MVCAdminJspBean
     private int _nDefaultItemsPerPage;
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
+    
+   
 
     // Session variable to store working values
     private TypicalResponse _typicalResponse;
@@ -191,9 +198,8 @@ public class TypicalResponseJspBean extends MVCAdminJspBean
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
-        
-        ModelUtils.storeRichText(request, model);
-        
+
+        ModelUtils.storeRichText( request, model );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TYPICALRESPONSE, TEMPLATE_CREATE_TYPICALRESPONSE, model );
     }
@@ -216,6 +222,18 @@ public class TypicalResponseJspBean extends MVCAdminJspBean
         }
 
         TypicalResponseHome.create( _typicalResponse );
+        
+       
+        try
+        {
+            LuceneModelResponseIndexerServices.instance().add(_typicalResponse);
+        } 
+        catch (IOException ex) 
+        {
+            AppLogService.error("\n Ticketing - TypicalResponseJspBean : can't add index odel response",ex );
+        }
+      
+        
         addInfo( INFO_TYPICALRESPONSE_CREATED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_TYPICALRESPONSES );
@@ -251,8 +269,21 @@ public class TypicalResponseJspBean extends MVCAdminJspBean
     public String doRemoveTypicalResponse( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TYPICALRESPONSE ) );
+        
+        try {
+            LuceneModelResponseIndexerServices.instance().delete(TypicalResponseHome.findByPrimaryKey(nId));
+        }
+        catch (IOException ex) 
+        {
+            AppLogService.error("\n Ticketing - TypicalResponseJspBean : can't remove index odel response",ex );
+        }
+        
         TypicalResponseHome.remove( nId );
         addInfo( INFO_TYPICALRESPONSE_REMOVED, getLocale(  ) );
+        
+        
+       
+        
 
         return redirectView( request, VIEW_MANAGE_TYPICALRESPONSES );
     }
@@ -279,8 +310,8 @@ public class TypicalResponseJspBean extends MVCAdminJspBean
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
-        
-        ModelUtils.storeRichText(request, model);
+
+        ModelUtils.storeRichText( request, model );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TYPICALRESPONSE, TEMPLATE_MODIFY_TYPICALRESPONSE, model );
     }
@@ -299,10 +330,21 @@ public class TypicalResponseJspBean extends MVCAdminJspBean
         // Check constraints
         if ( !validateBean( _typicalResponse, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect( request, VIEW_MODIFY_TYPICALRESPONSE, PARAMETER_ID_TYPICALRESPONSE, _typicalResponse.getId(  ) );
+            return redirect( request, VIEW_MODIFY_TYPICALRESPONSE, PARAMETER_ID_TYPICALRESPONSE,
+                _typicalResponse.getId(  ) );
         }
 
         TypicalResponseHome.update( _typicalResponse );
+        
+          try
+        {
+            LuceneModelResponseIndexerServices.instance().update(_typicalResponse);
+        }
+          catch (IOException ex) 
+        {
+            AppLogService.error("\n Ticketing - TypicalResponseJspBean : can't update index model response",ex );
+        }
+         
         addInfo( INFO_TYPICALRESPONSE_UPDATED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_TYPICALRESPONSES );

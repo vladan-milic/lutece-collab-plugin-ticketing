@@ -89,3 +89,10 @@ DELETE FROM core_user_right WHERE id_right = 'TICKETING_MANAGEMENT_TYPICAL_RESPO
 INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_MANAGEMENT_TYPICAL_RESPONSE',1);
 
 ALTER TABLE ticketing_contact_mode CHANGE COLUMN label code varchar(50) NOT NULL default '';
+
+
+DELETE FROM core_datastore WHERE core_datastore.entity_key = "core.daemon.modelResponsesIndexerDaemon.interval";
+DELETE FROM core_datastore WHERE core_datastore.entity_key = "core.daemon.modelResponsesIndexerDaemon.onStartUp";
+INSERT INTO core_datastore (`entity_key`, `entity_value`) VALUES
+('core.daemon.modelResponsesIndexerDaemon.interval', '6000'),
+('core.daemon.modelResponsesIndexerDaemon.onStartUp', 'true');

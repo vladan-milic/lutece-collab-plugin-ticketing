@@ -52,11 +52,11 @@ public class TypicalResponse implements Serializable
     private int _nIdTicketCategory;
     private int _nIdTicketType;
     private int _nIdDomain;
-    @NotEmpty( message = "#i18n{ticketing.validation.typicalresponse.Title.notEmpty}" )    
-    @Size( max = 255, message = "#i18n{ticketing.validation.typicalresponse.Title.size}" )
+    @NotEmpty( message = "#i18n{ticketing.validation.typicalresponse.Title.notEmpty}" )
+    @Size( max = 500, message = "#i18n{ticketing.validation.typicalresponse.Title.size}" )
     private String _strTitle;
     @NotEmpty( message = "#i18n{ticketing.validation.typicalresponse.Reponse.notEmpty}" )
-    @Size( max = 255, message = "#i18n{ticketing.validation.typicalresponse.Reponse.size}" )
+    @Size( max = 1000, message = "#i18n{ticketing.validation.typicalresponse.Reponse.size}" )
     private String _strReponse;
     @NotEmpty( message = "#i18n{ticketing.validation.typicalresponse.Keyword.notEmpty}" )
     private String _strKeyword;
@@ -225,23 +225,29 @@ public class TypicalResponse implements Serializable
     {
         _nIdDomain = nIdDomain;
     }
- 
-        /**
-        * Returns the Keyword
-        * @return The Keyword
-        */ 
-    public String getKeyword()
+
+    /**
+    * Returns the Keyword
+    * @return The Keyword
+    */
+    public String getKeyword(  )
     {
         return _strKeyword;
     }
-    
-       /**
-        * Sets the Keyword
-        * @param strKeyword The Keyword
-        */ 
+
+    /**
+     * Sets the Keyword
+     * @param strKeyword The Keyword
+     */
     public void setKeyword( String strKeyword )
     {
         _strKeyword = strKeyword;
     }
+
+    @Override
+    public String toString() {
+        return "TypicalResponse{" + "_nId=" + _nId + '}';
+    }
+    
     
 }

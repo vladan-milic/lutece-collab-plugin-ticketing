@@ -1,24 +1,45 @@
 <label class="col-xs-12 col-sm-3 control-label" for="user_message">#i18n{ticketing.search_ticket.results} :</label>
 <div class="col-xs-12 col-sm-9">
-
-	<@messages errors=errors />
-	<div id="search-content">
-		<#if result?? && result?has_content>
-			<ul class="list-group">
-			  <#list result as ticket>
-				<li class="list-group-item" id="content_response_${ticket.id!}">
-					${ticket.response!}
-				</li>
-				<a id="response_${ticket.id}" name="response_${ticket.id}" class="btn btn-link">ins&eacute;rer cette r&eacute;ponse</a>
-				<br/>
-			  </#list>
-			</ul>
-		<#else>
-			<#if !errors?? && !errors?has_content >
-				<div class="callout callout-warning">
-					<h4>#i18n{ticketing.search_ticket.noResult}</h4>
-				</div>
-			</#if>
-		</#if>
-	</div>
+   <@messages errors=errors />
+   <div id="search-content">
+      <div class="panel-group" id="accordion">
+         <#if result?? && result?has_content>
+         <#list result as typicalreponse>
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <h4 class="panel-title">
+                
+                  <a class="accordion-toggle" data-toggle="collapse" style="margin-left:5px" data-parent="#accordion" href="#typicalResponse${typicalreponse.id}">
+  <i class="indicator text-left glyphicon glyphicon-plus  pull-left" style="color:#000000" ></i>
+                  ${typicalreponse.title!} 
+                  </a>
+               </h4>
+            </div>
+            <div id="typicalResponse${typicalreponse.id}" class="panel-collapse collapse">
+               <div class="panel-body" id="content_response_${typicalreponse.id!}">
+                  ${typicalreponse.reponse!}
+               </div>
+               <a id="response_${typicalreponse.id}" name="response_${typicalreponse.id}" class="btn btn-link" style="text-decoration: none;">ins&eacute;rer cette r&eacute;ponse</a>
+            </div>
+         </div>
+         </#list>
+         <#else>
+         <#if !errors?? && !errors?has_content >
+         <div class="callout callout-warning">
+            <h4>#i18n{ticketing.search_ticket.noResult}</h4>
+         </div>
+         </#if>
+         </#if>
+      </div>
+   </div>
 </div>
+<script>
+   function toggleChevron(e) {
+       $(e.target)
+           .prev('.panel-heading')
+           .find("i.indicator")
+           .toggleClass('glyphicon-plus glyphicon-minus');
+   }
+   $('#accordion').on('hidden.bs.collapse', toggleChevron);
+   $('#accordion').on('shown.bs.collapse', toggleChevron);
+</script>

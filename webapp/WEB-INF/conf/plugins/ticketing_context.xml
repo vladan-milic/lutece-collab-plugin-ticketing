@@ -45,11 +45,16 @@
     <bean id="ticketing.entryTypeImage" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeImage" />
     <bean id="ticketing.entryTypeFile" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeFile" />
     <bean id="ticketing.entryTypePhone" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypePhone" />
-
+    
+    
+    
     <!-- Search Engine -->
     <bean id="ticketing.ticketSearchEngine" class="fr.paris.lutece.plugins.ticketing.web.search.TicketSearchEngine" />
     <bean id="ticketing.ticketIndexerActionDAO"  class="fr.paris.lutece.plugins.ticketing.business.search.IndexerActionDAO" />
     <bean id="ticketing.ticketIndexer"  class="fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer" />
+    
+    <bean id="ticketing.modelResponsesServices" class="fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices" />
+
     
     <!-- SignRequest -->
     <bean id="ticketing.hashService"

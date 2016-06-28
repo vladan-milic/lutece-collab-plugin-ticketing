@@ -133,7 +133,6 @@ public class Ticket implements Serializable, RBACResource
     private String _strUrl;
     private Channel _channel = new Channel(  );
 
-
     /**
      * Enriches empty ticket attributes with specified values
      * @param strIdUserTitle the user title id as String

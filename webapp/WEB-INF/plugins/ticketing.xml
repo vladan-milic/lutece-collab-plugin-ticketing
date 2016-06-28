@@ -190,6 +190,12 @@
 			<daemon-description>ticketing.daemon.indexerDameon.description</daemon-description>
 			<daemon-class>fr.paris.lutece.plugins.ticketing.service.daemon.TicketIndexerDaemon</daemon-class>
 		</daemon>
+                <daemon>
+			<daemon-id>modelResponsesIndexerDaemon</daemon-id>
+			<daemon-name>ticketing.daemon.modelResponsesIndexerDaemon.name</daemon-name>
+			<daemon-description>ticketing.daemon.modelResponsesIndexerDaemon.description</daemon-description>
+			<daemon-class>fr.paris.lutece.plugins.ticketing.business.modelresponse.search.ModelResponsesIndexerDaemon</daemon-class>
+		</daemon>
 	</daemons>
     
 </plug-in>

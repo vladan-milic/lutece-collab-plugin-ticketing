@@ -65,6 +65,7 @@ public final class SearchConstants
     public static final String PROPERTY_SEARCH_CATEGORY_CRITERIA = "ticketing.search_ticket.criteria.category";
     public static final String MESSAGE_SEARCH_NO_INPUT = "ticketing.search_ticket.noInput";
     public static final String MESSAGE_SEARCH_ERROR = "ticketing.search_ticket.error";
+    public static final String PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY = "ticketing.modelResponsesIndexerDaemon.limitResponse";
 
     // for search purpose
     public static final String BEAN_SEARCH_ENGINE = "ticketing.ticketSearchEngine";
