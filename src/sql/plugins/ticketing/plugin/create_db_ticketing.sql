@@ -176,19 +176,19 @@ PRIMARY KEY (id_support_entity)
 -- Structure for table ticketing_types_reponses
 --
 --
--- Structure for table ticketing_typical_reponses
+-- Structure for table ticketing_Model_reponses
 --
 
-DROP TABLE IF EXISTS ticketing_typical_reponses;
-CREATE TABLE `ticketing_typical_reponses` (
-  `id_typical_response` int(6) NOT NULL,
+DROP TABLE IF EXISTS ticketing_model_reponses;
+CREATE TABLE `ticketing_model_reponses` (
+  `id_model_response` int(6) NOT NULL,
   `id_ticket_category` int(11) NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `reponse` text,
   `keyword` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-ALTER TABLE `ticketing_typical_reponses` ADD PRIMARY KEY (`id_typical_response`);
+ALTER TABLE `ticketing_model_reponses` ADD PRIMARY KEY (`id_model_response`);
 
 --
 -- Structure for table ticketing_channel

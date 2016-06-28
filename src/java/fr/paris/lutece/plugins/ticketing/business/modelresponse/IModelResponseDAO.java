@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business.typicalresponse;
+package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
@@ -42,25 +42,25 @@ import java.util.List;
 /**
  * ITypeResponseDAO Interface
  */
-public interface ITypicalResponseDAO
+public interface IModelResponseDAO
 {
     /**
      * Insert a new record in the table.
-     * @param typeResponse instance of the TypeResponse object to insert
+     * @param typeResponse instance of the ModelResponse object to insert
      * @param plugin the Plugin
      */
-    void insert( TypicalResponse typeResponse, Plugin plugin );
+    void insert( ModelResponse modelResponse, Plugin plugin );
 
     /**
      * Update the record in the table
-     * @param typeResponse the reference of the TypeResponse
+     * @param typeResponse the reference of the ModelResponse
      * @param plugin the Plugin
      */
-    void store( TypicalResponse typeResponse, Plugin plugin );
+    void store( ModelResponse modelResponse, Plugin plugin );
 
     /**
      * Delete a record from the table
-     * @param nKey The identifier of the TypeResponse to delete
+     * @param nKey The identifier of the modelResponse to delete
      * @param plugin the Plugin
      */
     void delete( int nKey, Plugin plugin );
@@ -70,30 +70,30 @@ public interface ITypicalResponseDAO
 
     /**
      * Load the data from the table
-     * @param nKey The identifier of the typeResponse
+     * @param nKey The identifier of the modelResponse
      * @param plugin the Plugin
-     * @return The instance of the typeResponse
+     * @return The instance of the modelResponse
      */
-    TypicalResponse load( int nKey, Plugin plugin );
+    ModelResponse load( int nKey, Plugin plugin );
 
     /**
-     * Load the data of all the typeResponse objects and returns them as a list
+     * Load the data of all the modelResponse objects and returns them as a list
      * @param plugin the Plugin
-     * @return The list which contains the data of all the typeResponse objects
+     * @return The list which contains the data of all the modelResponse objects
      */
-    List<TypicalResponse> selectTypeResponsesList( Plugin plugin );
+    List<ModelResponse> selectModelResponsesList( Plugin plugin );
 
     /**
-     * Load the id of all the typeResponse objects and returns them as a list
+     * Load the id of all the modelResponse objects and returns them as a list
      * @param plugin the Plugin
-     * @return The list which contains the id of all the typeResponse objects
+     * @return The list which contains the id of all the modelResponse objects
      */
-    List<Integer> selectIdTypeResponsesList( Plugin plugin );
+    List<Integer> selectIdModelResponsesList( Plugin plugin );
 
     /**
-     * Load the data of all the typeResponse objects and returns them as a referenceList
+     * Load the data of all the modelResponse objects and returns them as a referenceList
      * @param plugin the Plugin
-     * @return The referenceList which contains the data of all the typeResponse objects
+     * @return The referenceList which contains the data of all the modelResponse objects
      */
-    ReferenceList selectTypeResponsesReferenceList( Plugin plugin );
+    ReferenceList selectModelResponsesReferenceList( Plugin plugin );
 }

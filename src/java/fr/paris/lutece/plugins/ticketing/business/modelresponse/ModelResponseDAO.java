@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business.typicalresponse;
+package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
@@ -50,16 +50,16 @@ import java.util.List;
 /**
  * This class provides Data Access methods for TypeResponse objects
  */
-public final class TypicalResponseDAO implements ITypicalResponseDAO
+public final class ModelResponseDAO implements IModelResponseDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_typical_response ) FROM ticketing_typical_reponses";
-    private static final String SQL_QUERY_SELECT = "SELECT id_typical_response, id_ticket_category, title, reponse,keyword FROM ticketing_typical_reponses WHERE id_typical_response = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_typical_reponses ( id_typical_response, id_ticket_category, title, reponse, keyword ) VALUES ( ?, ?, ?, ?,? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_typical_reponses WHERE id_typical_response = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_typical_reponses SET id_typical_response = ?, id_ticket_category = ?, title = ?, reponse = ?, keyword =? WHERE id_typical_response = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_typical_response, id_ticket_category, title, reponse,keyword FROM ticketing_typical_reponses";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_typical_response FROM ticketing_typical_reponses";
+    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_model_response ) FROM ticketing_model_reponses";
+    private static final String SQL_QUERY_SELECT = "SELECT id_model_response, id_ticket_category, title, reponse,keyword FROM ticketing_model_reponses WHERE id_model_response = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_model_reponses ( id_model_response, id_ticket_category, title, reponse, keyword ) VALUES ( ?, ?, ?, ?,? ) ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_model_reponses WHERE id_model_response = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_model_reponses SET id_model_response = ?, id_ticket_category = ?, title = ?, reponse = ?, keyword =? WHERE id_model_response = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_model_response, id_ticket_category, title, reponse,keyword FROM ticketing_model_reponses";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_model_response FROM ticketing_model_reponses";
 
     /**
      * Generates a new primary key
@@ -87,18 +87,18 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
      * {@inheritDoc }
      */
     @Override
-    public void insert( TypicalResponse typeResponse, Plugin plugin )
+    public void insert( ModelResponse modelResponse, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-        typeResponse.setId( newPrimaryKey( plugin ) );
+        modelResponse.setId( newPrimaryKey( plugin ) );
 
         int nIndex = 1;
 
-        daoUtil.setInt( nIndex++, typeResponse.getId(  ) );
-        daoUtil.setInt( nIndex++, typeResponse.getIdTicketCategory(  ) );
-        daoUtil.setString( nIndex++, typeResponse.getTitle(  ) );
-        daoUtil.setString( nIndex++, typeResponse.getReponse(  ) );
-        daoUtil.setString( nIndex++, typeResponse.getKeyword( ));
+        daoUtil.setInt( nIndex++, modelResponse.getId(  ) );
+        daoUtil.setInt( nIndex++, modelResponse.getIdTicketCategory(  ) );
+        daoUtil.setString( nIndex++, modelResponse.getTitle(  ) );
+        daoUtil.setString( nIndex++, modelResponse.getReponse(  ) );
+        daoUtil.setString( nIndex++, modelResponse.getKeyword( ));
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -108,13 +108,13 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
      * {@inheritDoc }
      */
     @Override
-    public TypicalResponse load( int nKey, Plugin plugin )
+    public ModelResponse load( int nKey, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setInt( 1, nKey );
         daoUtil.executeQuery(  );
 
-        TypicalResponse typeResponse = null;
+        ModelResponse modelResponse = null;
 
         TicketCategory ticketCategory;
         TicketDomain ticketDomain;
@@ -122,27 +122,27 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
 
         if ( daoUtil.next(  ) )
         {
-            typeResponse = new TypicalResponse(  );
+            modelResponse = new ModelResponse(  );
 
             int nIndex = 1;
 
-            typeResponse.setId( daoUtil.getInt( nIndex++ ) );
-            typeResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
-            typeResponse.setTitle( daoUtil.getString( nIndex++ ) );
-            typeResponse.setReponse( daoUtil.getString( nIndex++ ) );
-            typeResponse.setKeyword(daoUtil.getString( nIndex++ ) );
+            modelResponse.setId( daoUtil.getInt( nIndex++ ) );
+            modelResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
+            modelResponse.setTitle( daoUtil.getString( nIndex++ ) );
+            modelResponse.setReponse( daoUtil.getString( nIndex++ ) );
+            modelResponse.setKeyword(daoUtil.getString( nIndex++ ) );
 
             //populate label category, domain and type
-            ticketCategory = TicketCategoryHome.findByPrimaryKey( typeResponse.getIdTicketCategory(  ) );
-            typeResponse.setIdDomain( ticketCategory.getIdTicketDomain(  ) );
+            ticketCategory = TicketCategoryHome.findByPrimaryKey( modelResponse.getIdTicketCategory(  ) );
+            modelResponse.setIdDomain( ticketCategory.getIdTicketDomain(  ) );
 
             ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
-            typeResponse.setIdTicketType( ticketDomain.getIdTicketType(  ) );
+            modelResponse.setIdTicketType( ticketDomain.getIdTicketType(  ) );
         }
 
         daoUtil.free(  );
 
-        return typeResponse;
+        return modelResponse;
     }
 
     /**
@@ -161,17 +161,17 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
      * {@inheritDoc }
      */
     @Override
-    public void store( TypicalResponse typeResponse, Plugin plugin )
+    public void store( ModelResponse modelResponse, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
         int nIndex = 1;
 
-        daoUtil.setInt( nIndex++, typeResponse.getId(  ) );
-        daoUtil.setInt( nIndex++, typeResponse.getIdTicketCategory(  ) );
-        daoUtil.setString( nIndex++, typeResponse.getTitle(  ) );
-        daoUtil.setString( nIndex++, typeResponse.getReponse(  ) );
-         daoUtil.setString(nIndex++, typeResponse.getKeyword( ));
-        daoUtil.setInt( nIndex, typeResponse.getId(  ) );  
+        daoUtil.setInt( nIndex++, modelResponse.getId(  ) );
+        daoUtil.setInt( nIndex++, modelResponse.getIdTicketCategory(  ) );
+        daoUtil.setString( nIndex++, modelResponse.getTitle(  ) );
+        daoUtil.setString( nIndex++, modelResponse.getReponse(  ) );
+         daoUtil.setString(nIndex++, modelResponse.getKeyword( ));
+        daoUtil.setInt( nIndex, modelResponse.getId(  ) );  
       
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -181,9 +181,9 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
      * {@inheritDoc }
      */
     @Override
-    public List<TypicalResponse> selectTypeResponsesList( Plugin plugin )
+    public List<ModelResponse> selectModelResponsesList( Plugin plugin )
     {
-        List<TypicalResponse> typeResponseList = new ArrayList<TypicalResponse>(  );
+        List<ModelResponse> typeResponseList = new ArrayList<ModelResponse>(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
         daoUtil.executeQuery(  );
 
@@ -193,26 +193,26 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
 
         while ( daoUtil.next(  ) )
         {
-            TypicalResponse typeResponse = new TypicalResponse(  );
+            ModelResponse modelResponse = new ModelResponse(  );
             int nIndex = 1;
 
-            typeResponse.setId( daoUtil.getInt( nIndex++ ) );
-            typeResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
-            typeResponse.setTitle( daoUtil.getString( nIndex++ ) );
-            typeResponse.setReponse( daoUtil.getString( nIndex++ ) );
-            typeResponse.setKeyword(daoUtil.getString( nIndex++ ) );
+            modelResponse.setId( daoUtil.getInt( nIndex++ ) );
+            modelResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
+            modelResponse.setTitle( daoUtil.getString( nIndex++ ) );
+            modelResponse.setReponse( daoUtil.getString( nIndex++ ) );
+            modelResponse.setKeyword(daoUtil.getString( nIndex++ ) );
 
             //populate label category, domain and type
-            ticketCategory = TicketCategoryHome.findByPrimaryKey( typeResponse.getIdTicketCategory(  ) );
-            typeResponse.setCategory( ( ticketCategory != null ) ? ticketCategory.getLabel(  ) : "" );
+            ticketCategory = TicketCategoryHome.findByPrimaryKey( modelResponse.getIdTicketCategory(  ) );
+            modelResponse.setCategory( ( ticketCategory != null ) ? ticketCategory.getLabel(  ) : "" );
 
             ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
-            typeResponse.setDomain( ( ticketDomain != null ) ? ticketDomain.getLabel(  ) : "" );
+            modelResponse.setDomain( ( ticketDomain != null ) ? ticketDomain.getLabel(  ) : "" );
 
             ticketType = TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) );
-            typeResponse.setTicketType( ( ticketType != null ) ? ticketType.getLabel(  ) : "" );
+            modelResponse.setTicketType( ( ticketType != null ) ? ticketType.getLabel(  ) : "" );
 
-            typeResponseList.add( typeResponse );
+            typeResponseList.add( modelResponse );
         }
 
         daoUtil.free(  );
@@ -224,39 +224,39 @@ public final class TypicalResponseDAO implements ITypicalResponseDAO
      * {@inheritDoc }
      */
     @Override
-    public List<Integer> selectIdTypeResponsesList( Plugin plugin )
+    public List<Integer> selectIdModelResponsesList( Plugin plugin )
     {
-        List<Integer> typeResponseList = new ArrayList<Integer>(  );
+        List<Integer> modelResponseList = new ArrayList<Integer>(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
         daoUtil.executeQuery(  );
 
         while ( daoUtil.next(  ) )
         {
-            typeResponseList.add( daoUtil.getInt( 1 ) );
+           modelResponseList.add( daoUtil.getInt( 1 ) );
         }
 
         daoUtil.free(  );
 
-        return typeResponseList;
+        return modelResponseList;
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public ReferenceList selectTypeResponsesReferenceList( Plugin plugin )
+    public ReferenceList selectModelResponsesReferenceList( Plugin plugin )
     {
-        ReferenceList typeResponseList = new ReferenceList(  );
+        ReferenceList modelResponseList = new ReferenceList(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
         daoUtil.executeQuery(  );
 
         while ( daoUtil.next(  ) )
         {
-            typeResponseList.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
+            modelResponseList.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
         }
 
         daoUtil.free(  );
 
-        return typeResponseList;
+        return modelResponseList;
     }
 }

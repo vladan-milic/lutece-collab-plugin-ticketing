@@ -93,9 +93,9 @@ DELETE FROM core_user_right WHERE id_right = 'TICKETING_PLUGIN_CONFIGURATION';
 INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_PLUGIN_CONFIGURATION',1);
 
 
-DELETE FROM core_admin_right WHERE id_right = 'TICKETING_MANAGEMENT_TYPICAL_RESPONSE';
+DELETE FROM core_admin_right WHERE id_right = 'TICKETING_MANAGEMENT_MODEL_RESPONSE';
 INSERT INTO core_admin_right (`id_right`, `name`, `level_right`, `admin_url`, `description`, `is_updatable`, `plugin_name`, `id_feature_group`, `icon_url`, `documentation_url`, `id_order`) VALUES
-('TICKETING_MANAGEMENT_TYPICAL_RESPONSE', 'ticketing.adminFeature.ManageTicketingTypicalResponse.name', '2', 'jsp/admin/plugins/ticketing/admin/ManageTypicalResponses.jsp', 'ticketing.adminFeature.ManageTicketingTypicalResponse.description', '0', 'ticketing', "GRU_ADMIN", NULL, NULL, '23');
+('TICKETING_MANAGEMENT_MODEL_RESPONSE', 'ticketing.adminFeature.ManageTicketingModelResponse.name', '2', 'jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp', 'ticketing.adminFeature.ManageTicketingModelResponse.description', '0', 'ticketing', "GRU_ADMIN", NULL, NULL, '23');
 
-DELETE FROM core_user_right WHERE id_right = 'TICKETING_MANAGEMENT_TYPICAL_RESPONSE';
-INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_MANAGEMENT_TYPICAL_RESPONSE',1);
+DELETE FROM core_user_right WHERE id_right = 'TICKETING_MANAGEMENT_MODEL_RESPONSE';
+INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_MANAGEMENT_MODEL_RESPONSE',1);
