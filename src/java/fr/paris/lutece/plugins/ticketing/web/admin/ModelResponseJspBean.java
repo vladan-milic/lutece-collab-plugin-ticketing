@@ -35,10 +35,12 @@ package fr.paris.lutece.plugins.ticketing.web.admin;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
+import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
-import fr.paris.lutece.plugins.ticketing.business.typicalresponse.TypicalResponse;
-import fr.paris.lutece.plugins.ticketing.business.typicalresponse.TypicalResponseHome;
+
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices;
+
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -62,36 +64,36 @@ import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * This class provides the user interface to manage TypicalResponse features ( manage, create, modify, remove )
+ * This class provides the user interface to manage ModelResponse features ( manage, create, modify, remove )
  */
-@Controller( controllerJsp = "ManageTypicalResponses.jsp", controllerPath = "jsp/admin/plugins/ticketing/admin/", right = "TICKETING_MANAGEMENT_TYPICAL_RESPONSE" )
-public class TypicalResponseJspBean extends MVCAdminJspBean
+@Controller( controllerJsp = "ManageModelResponses.jsp", controllerPath = "jsp/admin/plugins/ticketing/admin/", right = "TICKETING_MANAGEMENT_MODEL_RESPONSE" )
+public class ModelResponseJspBean extends MVCAdminJspBean
 {
     // Rights
-    public static final String RIGHT_MANAGETICKETINGREPONSESTYPES = "TICKETING_MANAGEMENT_TYPICAL_RESPONSE";
+    public static final String RIGHT_MANAGETICKETINGREPONSESTYPES = "TICKETING_MANAGEMENT_MODEL_RESPONSE";
 
     // Templates
-    private static final String TEMPLATE_MANAGE_TYPICALRESPONSES = "/admin/plugins/ticketing/admin/manage_typicalresponses.html";
-    private static final String TEMPLATE_CREATE_TYPICALRESPONSE = "/admin/plugins/ticketing/admin/create_typicalresponse.html";
-    private static final String TEMPLATE_MODIFY_TYPICALRESPONSE = "/admin/plugins/ticketing/admin/modify_typicalresponse.html";
+    private static final String TEMPLATE_MANAGE_MODELRESPONSES = "/admin/plugins/ticketing/admin/manage_modelresponses.html";
+    private static final String TEMPLATE_CREATE_MODELRESPONSE = "/admin/plugins/ticketing/admin/create_modelresponse.html";
+    private static final String TEMPLATE_MODIFY_MODELRESPONSE = "/admin/plugins/ticketing/admin/modify_modelresponse.html";
 
     // Parameters
-    private static final String PARAMETER_ID_TYPICALRESPONSE = "id";
+    private static final String PARAMETER_ID_MODELRESPONSE = "id";
 
     // Parameters
     private static final String PARAMETER_PAGE_INDEX = "page_index";
 
     // Properties for page titles
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_TYPICALRESPONSES = "ticketing.manage_typicalresponse.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_TYPICALRESPONSE = "ticketing.modify_typicalresponse.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_TYPICALRESPONSE = "ticketing.create_typicalresponse.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MANAGE_MODELRESPONSES = "ticketing.manage_modelresponse.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MODIFY_MODELRESPONSE = "ticketing.modify_modelresponse.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_CREATE_MODELRESPONSE = "ticketing.create_modelresponse.pageTitle";
 
     // Properties
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
 
     // Markers
-    private static final String MARK_TYPICALRESPONSE_LIST = "typicalresponse_list";
-    private static final String MARK_TYPICALRESPONSE = "typicalresponse";
+    private static final String MARK_MODELRESPONSE_LIST = "modelresponse_list";
+    private static final String MARK_MODELRESPONSE = "modelresponse";
 
     // Markers
     private static final String MARK_PAGINATOR = "paginator";
@@ -99,29 +101,29 @@ public class TypicalResponseJspBean extends MVCAdminJspBean
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
-    private static final String JSP_MANAGE_TYPICALRESPONSES = "jsp/admin/plugins/ticketing/admin/ManageTypicalResponses.jsp";
+    private static final String JSP_MANAGE_MODELRESPONSES = "jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp";
 
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_TYPICALRESPONSE = "ticketing.message.confirmRemoveTypicalResponse";
+    private static final String MESSAGE_CONFIRM_REMOVE_MODELRESPONSE = "ticketing.message.confirmRemoveModelResponse";
 
     // Validations
-    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.typicalresponse.attribute.";
+    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.modelresponse.attribute.";
 
     // Views
-    private static final String VIEW_MANAGE_TYPICALRESPONSES = "manageTypicalResponses";
-    private static final String VIEW_CREATE_TYPICALRESPONSE = "createTypicalResponse";
-    private static final String VIEW_MODIFY_TYPICALRESPONSE = "modifyTypicalResponse";
+    private static final String VIEW_MANAGE_MODELRESPONSES = "manageModelResponses";
+    private static final String VIEW_CREATE_MODELRESPONSE = "createModelResponse";
+    private static final String VIEW_MODIFY_MODELRESPONSE = "modifyModelResponse";
 
     // Actions
-    private static final String ACTION_CREATE_TYPICALRESPONSE = "createTypicalResponse";
-    private static final String ACTION_MODIFY_TYPICALRESPONSE = "modifyTypicalResponse";
-    private static final String ACTION_REMOVE_TYPICALRESPONSE = "removeTypicalResponse";
-    private static final String ACTION_CONFIRM_REMOVE_TYPICALRESPONSE = "confirmRemoveTypicalResponse";
+    private static final String ACTION_CREATE_MODELRESPONSE = "createModelResponse";
+    private static final String ACTION_MODIFY_MODELRESPONSE = "modifyModelResponse";
+    private static final String ACTION_REMOVE_MODELRESPONSE = "removeModelResponse";
+    private static final String ACTION_CONFIRM_REMOVE_MODELRESPONSE = "confirmRemoveModelResponse";
 
     // Infos
-    private static final String INFO_TYPICALRESPONSE_CREATED = "ticketing.info.typicalresponse.created";
-    private static final String INFO_TYPICALRESPONSE_UPDATED = "ticketing.info.typicalresponse.updated";
-    private static final String INFO_TYPICALRESPONSE_REMOVED = "ticketing.info.typicalresponse.removed";
+    private static final String INFO_MODELRESPONSE_CREATED = "ticketing.info.modelresponse.created";
+    private static final String INFO_MODELRESPONSE_UPDATED = "ticketing.info.modelresponse.updated";
+    private static final String INFO_MODELRESPONSE_REMOVED = "ticketing.info.modelresponse.removed";
 
     //Variables
     private int _nDefaultItemsPerPage;
@@ -131,7 +133,7 @@ public class TypicalResponseJspBean extends MVCAdminJspBean
    
 
     // Session variable to store working values
-    private TypicalResponse _typicalResponse;
+    private ModelResponse _modelResponse;
 
     /**
      * Return a model that contains the list and paginator infos
@@ -170,142 +172,142 @@ public class TypicalResponseJspBean extends MVCAdminJspBean
      * @param request The HTTP request
      * @return The page
      */
-    @View( value = VIEW_MANAGE_TYPICALRESPONSES, defaultView = true )
-    public String getManageTypicalResponses( HttpServletRequest request )
+    @View( value = VIEW_MANAGE_MODELRESPONSES, defaultView = true )
+    public String getManageModelResponses( HttpServletRequest request )
     {
-        _typicalResponse = null;
+        _modelResponse = null;
 
-        List<TypicalResponse> listTypicalResponses = TypicalResponseHome.getTypicalResponsesList(  );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_TYPICALRESPONSE_LIST, listTypicalResponses,
-                JSP_MANAGE_TYPICALRESPONSES );
+        List<ModelResponse> listModelResponses = ModelResponseHome.getModelResponsesList(  );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_MODELRESPONSE_LIST, listModelResponses,
+                JSP_MANAGE_MODELRESPONSES );
 
-        return getPage( PROPERTY_PAGE_TITLE_MANAGE_TYPICALRESPONSES, TEMPLATE_MANAGE_TYPICALRESPONSES, model );
+        return getPage( PROPERTY_PAGE_TITLE_MANAGE_MODELRESPONSES, TEMPLATE_MANAGE_MODELRESPONSES, model );
     }
 
     /**
-     * Returns the form to create a typicalresponse
+     * Returns the form to create a modelresponse
      *
      * @param request The Http request
-     * @return the html code of the typicalresponse form
+     * @return the html code of the modelresponse form
      */
-    @View( VIEW_CREATE_TYPICALRESPONSE )
-    public String getCreateTypicalResponse( HttpServletRequest request )
+    @View( VIEW_CREATE_MODELRESPONSE )
+    public String getCreateModelResponse( HttpServletRequest request )
     {
-        _typicalResponse = ( _typicalResponse != null ) ? _typicalResponse : new TypicalResponse(  );
+        _modelResponse = ( _modelResponse != null ) ? _modelResponse : new ModelResponse(  );
 
         Map<String, Object> model = getModel(  );
-        model.put( MARK_TYPICALRESPONSE, _typicalResponse );
+        model.put( MARK_MODELRESPONSE, _modelResponse );
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
 
         ModelUtils.storeRichText( request, model );
 
-        return getPage( PROPERTY_PAGE_TITLE_CREATE_TYPICALRESPONSE, TEMPLATE_CREATE_TYPICALRESPONSE, model );
+        return getPage( PROPERTY_PAGE_TITLE_CREATE_MODELRESPONSE, TEMPLATE_CREATE_MODELRESPONSE, model );
     }
 
     /**
-     * Process the data capture form of a new typicalresponse
+     * Process the data capture form of a new modelresponse
      *
      * @param request The Http Request
      * @return The Jsp URL of the process result
      */
-    @Action( ACTION_CREATE_TYPICALRESPONSE )
-    public String doCreateTypicalResponse( HttpServletRequest request )
+    @Action( ACTION_CREATE_MODELRESPONSE )
+    public String doCreateModelResponse( HttpServletRequest request )
     {
-        populate( _typicalResponse, request );
+        populate( _modelResponse, request );
 
         // Check constraints
-        if ( !validateBean( _typicalResponse, VALIDATION_ATTRIBUTES_PREFIX ) )
+        if ( !validateBean( _modelResponse, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirectView( request, VIEW_CREATE_TYPICALRESPONSE );
+            return redirectView( request, VIEW_CREATE_MODELRESPONSE );
         }
 
-        TypicalResponseHome.create( _typicalResponse );
-        
        
         try
         {
-            LuceneModelResponseIndexerServices.instance().add(_typicalResponse);
+            LuceneModelResponseIndexerServices.instance().add(_modelResponse);
         } 
         catch (IOException ex) 
         {
             AppLogService.error("\n Ticketing - TypicalResponseJspBean : can't add index odel response",ex );
         }
       
-        
-        addInfo( INFO_TYPICALRESPONSE_CREATED, getLocale(  ) );
+       
+        ModelResponseHome.create( _modelResponse );
+        addInfo( INFO_MODELRESPONSE_CREATED, getLocale(  ) );
 
-        return redirectView( request, VIEW_MANAGE_TYPICALRESPONSES );
+
+        return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
     }
 
     /**
-     * Manages the removal form of a typicalresponse whose identifier is in the http
+     * Manages the removal form of a modelresponse whose identifier is in the http
      * request
      *
      * @param request The Http request
      * @return the html code to confirm
      */
-    @Action( ACTION_CONFIRM_REMOVE_TYPICALRESPONSE )
-    public String getConfirmRemoveTypicalResponse( HttpServletRequest request )
+    @Action( ACTION_CONFIRM_REMOVE_MODELRESPONSE )
+    public String getConfirmRemoveModelResponse( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TYPICALRESPONSE ) );
-        UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_TYPICALRESPONSE ) );
-        url.addParameter( PARAMETER_ID_TYPICALRESPONSE, nId );
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_MODELRESPONSE ) );
+        UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_MODELRESPONSE ) );
+        url.addParameter( PARAMETER_ID_MODELRESPONSE, nId );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TYPICALRESPONSE,
+        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_MODELRESPONSE,
                 url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
     }
 
     /**
-     * Handles the removal form of a typicalresponse
+     * Handles the removal form of a modelresponse
      *
      * @param request The Http request
-     * @return the jsp URL to display the form to manage typicalresponses
+     * @return the jsp URL to display the form to manage modelresponses
      */
-    @Action( ACTION_REMOVE_TYPICALRESPONSE )
-    public String doRemoveTypicalResponse( HttpServletRequest request )
+    @Action( ACTION_REMOVE_MODELRESPONSE )
+    public String doRemoveModelResponse( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TYPICALRESPONSE ) );
+
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_MODELRESPONSE ) );
         
-        try {
-            LuceneModelResponseIndexerServices.instance().delete(TypicalResponseHome.findByPrimaryKey(nId));
-        }
+        
+        try 
+        {
+            LuceneModelResponseIndexerServices.instance().delete(ModelResponseHome.findByPrimaryKey(nId));
+        }   
         catch (IOException ex) 
         {
-            AppLogService.error("\n Ticketing - TypicalResponseJspBean : can't remove index odel response",ex );
+            AppLogService.error("\n Ticketing - TypicalResponseJspBean : can't delete index model response",ex );
         }
-        
-        TypicalResponseHome.remove( nId );
-        addInfo( INFO_TYPICALRESPONSE_REMOVED, getLocale(  ) );
-        
-        
-       
-        
+             
+        ModelResponseHome.remove( nId );
+        addInfo( INFO_MODELRESPONSE_REMOVED, getLocale(  ) );
 
-        return redirectView( request, VIEW_MANAGE_TYPICALRESPONSES );
+
+        return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
     }
 
     /**
-     * Returns the form to update info about a typicalresponse
+     * Returns the form to update info about a modelresponse
      *
      * @param request The Http request
      * @return The HTML form to update info
      */
-    @View( VIEW_MODIFY_TYPICALRESPONSE )
-    public String getModifyTypicalResponse( HttpServletRequest request )
+    @View( VIEW_MODIFY_MODELRESPONSE )
+    public String getModifyModelResponse( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TYPICALRESPONSE ) );
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_MODELRESPONSE ) );
 
-        if ( ( _typicalResponse == null ) || ( _typicalResponse.getId(  ) != nId ) )
+        if ( ( _modelResponse == null ) || ( _modelResponse.getId(  ) != nId ) )
         {
-            _typicalResponse = TypicalResponseHome.findByPrimaryKey( nId );
+            _modelResponse = ModelResponseHome.findByPrimaryKey( nId );
         }
 
         Map<String, Object> model = getModel(  );
-        model.put( MARK_TYPICALRESPONSE, _typicalResponse );
+        model.put( MARK_MODELRESPONSE, _modelResponse );
 
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
@@ -313,40 +315,40 @@ public class TypicalResponseJspBean extends MVCAdminJspBean
 
         ModelUtils.storeRichText( request, model );
 
-        return getPage( PROPERTY_PAGE_TITLE_MODIFY_TYPICALRESPONSE, TEMPLATE_MODIFY_TYPICALRESPONSE, model );
+        return getPage( PROPERTY_PAGE_TITLE_MODIFY_MODELRESPONSE, TEMPLATE_MODIFY_MODELRESPONSE, model );
     }
 
     /**
-     * Process the change form of a typicalresponse
+     * Process the change form of a modelresponse
      *
      * @param request The Http request
      * @return The Jsp URL of the process result
      */
-    @Action( ACTION_MODIFY_TYPICALRESPONSE )
-    public String doModifyTypicalResponse( HttpServletRequest request )
+    @Action( ACTION_MODIFY_MODELRESPONSE )
+    public String doModifyModelResponse( HttpServletRequest request )
     {
-        populate( _typicalResponse, request );
+        populate( _modelResponse, request );
 
         // Check constraints
-        if ( !validateBean( _typicalResponse, VALIDATION_ATTRIBUTES_PREFIX ) )
+        if ( !validateBean( _modelResponse, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect( request, VIEW_MODIFY_TYPICALRESPONSE, PARAMETER_ID_TYPICALRESPONSE,
-                _typicalResponse.getId(  ) );
+
+            return redirect( request, VIEW_MODIFY_MODELRESPONSE, PARAMETER_ID_MODELRESPONSE, _modelResponse.getId(  ) );
         }
 
-        TypicalResponseHome.update( _typicalResponse );
+        ModelResponseHome.update( _modelResponse );
+        addInfo( INFO_MODELRESPONSE_UPDATED, getLocale(  ) );
         
           try
         {
-            LuceneModelResponseIndexerServices.instance().update(_typicalResponse);
+            LuceneModelResponseIndexerServices.instance().update(_modelResponse);
         }
           catch (IOException ex) 
         {
             AppLogService.error("\n Ticketing - TypicalResponseJspBean : can't update index model response",ex );
         }
-         
-        addInfo( INFO_TYPICALRESPONSE_UPDATED, getLocale(  ) );
 
-        return redirectView( request, VIEW_MANAGE_TYPICALRESPONSES );
+
+        return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
     }
 }

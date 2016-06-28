@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business.typicalresponse;
+package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
 import org.hibernate.validator.constraints.*;
 
@@ -43,7 +43,7 @@ import javax.validation.constraints.*;
 /**
  * This is the business class for the object TypeResponse
  */
-public class TypicalResponse implements Serializable
+public class ModelResponse implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
@@ -52,13 +52,15 @@ public class TypicalResponse implements Serializable
     private int _nIdTicketCategory;
     private int _nIdTicketType;
     private int _nIdDomain;
-    @NotEmpty( message = "#i18n{ticketing.validation.typicalresponse.Title.notEmpty}" )
-    @Size( max = 500, message = "#i18n{ticketing.validation.typicalresponse.Title.size}" )
+
+    @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Title.notEmpty}" )    
+    @Size( max = 255, message = "#i18n{ticketing.validation.modelresponse.Title.size}" )
     private String _strTitle;
-    @NotEmpty( message = "#i18n{ticketing.validation.typicalresponse.Reponse.notEmpty}" )
-    @Size( max = 1000, message = "#i18n{ticketing.validation.typicalresponse.Reponse.size}" )
+    @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Reponse.notEmpty}" )
+    @Size( max = 255, message = "#i18n{ticketing.validation.modelresponse.Reponse.size}" )
+
     private String _strReponse;
-    @NotEmpty( message = "#i18n{ticketing.validation.typicalresponse.Keyword.notEmpty}" )
+    @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Keyword.notEmpty}" )
     private String _strKeyword;
     private String _strCategory;
     private String _strTicketType;

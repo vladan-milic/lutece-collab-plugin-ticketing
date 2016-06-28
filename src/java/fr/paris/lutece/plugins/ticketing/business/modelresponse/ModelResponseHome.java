@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business.typicalresponse;
+package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -44,46 +44,46 @@ import java.util.List;
 /**
  * This class provides instances management methods (create, find, ...) for TypeResponse objects
  */
-public final class TypicalResponseHome
+public final class ModelResponseHome
 {
     // Static variable pointed at the DAO instance
-    private static ITypicalResponseDAO _dao = SpringContextService.getBean( "ticketing.typicalResponseDAO" );
+    private static IModelResponseDAO _dao = SpringContextService.getBean( "ticketing.modelResponseDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private TypicalResponseHome(  )
+    private ModelResponseHome(  )
     {
     }
 
     /**
-     * Create an instance of the typeResponse class
-     * @param typeResponse The instance of the TypeResponse which contains the informations to store
-     * @return The  instance of typeResponse which has been created with its primary key.
+     * Create an instance of the modelResponse class
+     * @param typeResponse The instance of the ModelResponse which contains the informations to store
+     * @return The  instance of modelResponse which has been created with its primary key.
      */
-    public static TypicalResponse create( TypicalResponse typeResponse )
+    public static ModelResponse create( ModelResponse modelResponse )
     {
-        _dao.insert( typeResponse, _plugin );
+        _dao.insert( modelResponse, _plugin );
 
-        return typeResponse;
+        return modelResponse;
     }
 
     /**
-     * Update of the typeResponse which is specified in parameter
-     * @param typeResponse The instance of the TypeResponse which contains the data to store
-     * @return The instance of the  typeResponse which has been updated
+     * Update of the modelResponse which is specified in parameter
+     * @param modelResponse The instance of the ModelResponse which contains the data to store
+     * @return The instance of the  modelResponse which has been updated
      */
-    public static TypicalResponse update( TypicalResponse typeResponse )
+    public static ModelResponse update( ModelResponse modelResponse )
     {
-        _dao.store( typeResponse, _plugin );
+        _dao.store( modelResponse, _plugin );
 
-        return typeResponse;
+        return modelResponse;
     }
 
     /**
-     * Remove the typeResponse whose identifier is specified in parameter
-     * @param nKey The typeResponse Id
+     * Remove the modelResponse whose identifier is specified in parameter
+     * @param nKey The modelResponse Id
      */
     public static void remove( int nKey )
     {
@@ -91,39 +91,39 @@ public final class TypicalResponseHome
     }
 
     /**
-     * Returns an instance of a typeResponse whose identifier is specified in parameter
-     * @param nKey The typeResponse primary key
-     * @return an instance of TypeResponse
+     * Returns an instance of a modelResponse whose identifier is specified in parameter
+     * @param nKey The modelResponse primary key
+     * @return an instance of ModelResponse
      */
-    public static TypicalResponse findByPrimaryKey( int nKey )
+    public static ModelResponse findByPrimaryKey( int nKey )
     {
         return _dao.load( nKey, _plugin );
     }
 
     /**
-     * Load the data of all the typeResponse objects and returns them as a list
-     * @return the list which contains the data of all the typeResponse objects
+     * Load the data of all the modelResponse objects and returns them as a list
+     * @return the list which contains the data of all the modelResponse objects
      */
-    public static List<TypicalResponse> getTypicalResponsesList(  )
+    public static List<ModelResponse> getModelResponsesList(  )
     {
-        return _dao.selectTypeResponsesList( _plugin );
+        return _dao.selectModelResponsesList( _plugin );
     }
 
     /**
-     * Load the id of all the typeResponse objects and returns them as a list
-     * @return the list which contains the id of all the typeResponse objects
+     * Load the id of all the modelResponse objects and returns them as a list
+     * @return the list which contains the id of all the modelResponse objects
      */
     public static List<Integer> getIdTypeResponsesList(  )
     {
-        return _dao.selectIdTypeResponsesList( _plugin );
+        return _dao.selectIdModelResponsesList( _plugin );
     }
 
     /**
-     * Load the data of all the typeResponse objects and returns them as a referenceList
-     * @return the referenceList which contains the data of all the typeResponse objects
+     * Load the data of all the modelResponse objects and returns them as a referenceList
+     * @return the referenceList which contains the data of all the modelResponse objects
      */
     public static ReferenceList getTypeResponsesReferenceList(  )
     {
-        return _dao.selectTypeResponsesReferenceList( _plugin );
+        return _dao.selectModelResponsesReferenceList( _plugin );
     }
 }

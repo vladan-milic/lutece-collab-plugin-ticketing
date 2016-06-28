@@ -1,8 +1,8 @@
 
 package fr.paris.lutece.plugins.ticketing.business.modelresponse.search;
 
-import fr.paris.lutece.plugins.ticketing.business.typicalresponse.TypicalResponse;
-import fr.paris.lutece.plugins.ticketing.business.typicalresponse.TypicalResponseHome;
+import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
+import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
 import fr.paris.lutece.plugins.ticketing.web.search.SearchConstants;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -59,7 +59,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     }
 
     @Override
-    public void update(TypicalResponse typicalReponse) throws IOException
+    public void update(ModelResponse typicalReponse) throws IOException
     {
         AppLogService.info("\n Ticketing - Model Response : " + typicalReponse);
         try (IndexWriter writer = getIndexWriter())
@@ -69,7 +69,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         }
     }
 
-    private Document getDocument(TypicalResponse typicalReponse)
+    private Document getDocument(ModelResponse typicalReponse)
     {
         Document doc = new Document();
         doc.add(new IntField(FIELD_ID, typicalReponse.getId(), Field.Store.YES));
@@ -83,7 +83,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     }
 
     @Override
-    public void delete(TypicalResponse typicalReponse) throws IOException 
+    public void delete(ModelResponse typicalReponse) throws IOException 
     {
         AppLogService.info("\n Ticketing - Model Response  : " + typicalReponse);
         try (IndexWriter writer = getIndexWriter()) 
@@ -93,7 +93,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     }
 
     @Override
-    public void add(TypicalResponse typicalReponse) throws IOException
+    public void add(ModelResponse typicalReponse) throws IOException
     {
         AppLogService.info("\n Ticketing - Model Response  : " + typicalReponse);
         try (IndexWriter writer = getIndexWriter())
@@ -110,8 +110,8 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         StringBuilder sbLogs = new StringBuilder();        
         try 
         {
-            List<TypicalResponse> typicalResponses = TypicalResponseHome.getTypicalResponsesList();
-            for (TypicalResponse typicalResponse : typicalResponses)
+            List<ModelResponse> typicalResponses = ModelResponseHome.getModelResponsesList();
+            for (ModelResponse typicalResponse : typicalResponses)
             {
                 add(typicalResponse);
             }
@@ -128,9 +128,9 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     }
 
     @Override
-    public List<TypicalResponse> searchResponses(String strQuery) 
+    public List<ModelResponse> searchResponses(String strQuery) 
     {
-        List<TypicalResponse> list = new ArrayList<>();
+        List<ModelResponse> list = new ArrayList<>();
         int nMaxResponsePerQuery = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY, 5 );
         try {
             try (IndexReader reader = DirectoryReader.open(FSDirectory.open(getIndexPath()))) 
@@ -148,7 +148,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
                 for (ScoreDoc hit : hits) 
                 {
                     Document doc = searcher.doc(hit.doc);
-                    TypicalResponse typicalResponse = new TypicalResponse();
+                    ModelResponse typicalResponse = new ModelResponse();
                     //typicalResponse.setId(doc.get( "id" ) );
                     typicalResponse.setId(Integer.parseInt(doc.get(FIELD_ID)));
                     typicalResponse.setTitle(doc.get(FIELD_TITLE));

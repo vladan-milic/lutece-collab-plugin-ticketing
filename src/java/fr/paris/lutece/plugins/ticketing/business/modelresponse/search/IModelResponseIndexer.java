@@ -5,7 +5,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.modelresponse.search;
 
-import fr.paris.lutece.plugins.ticketing.business.typicalresponse.TypicalResponse;
+
+import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -23,13 +24,13 @@ interface IModelResponseIndexer {
      final String FIELD_KEYWORD = "keyword";
      final String FIELD_SEARCH_CONTENT = "content";
     
-     void update(TypicalResponse typicalReponse) throws IOException; 
+     void update(ModelResponse typicalReponse) throws IOException; 
      
-     void delete(TypicalResponse typicalReponse) throws IOException;
+     void delete(ModelResponse typicalReponse) throws IOException;
      
-     void add(TypicalResponse typicalReponse) throws IOException;
+     void add(ModelResponse typicalReponse) throws IOException;
      
      String addAll();
      
-     List<TypicalResponse> searchResponses( String strQuery );
+     List<ModelResponse> searchResponses( String strQuery );
 }

@@ -1,7 +1,8 @@
 
 package fr.paris.lutece.plugins.ticketing.web.search;
 
-import fr.paris.lutece.plugins.ticketing.business.typicalresponse.TypicalResponse;
+
+import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 
@@ -66,7 +67,7 @@ public class TicketSearchXPage extends MVCApplication
         {
        
             
-            List<TypicalResponse> listResults = LuceneModelResponseIndexerServices.instance().searchResponses(strQuery);
+            List<ModelResponse> listResults = LuceneModelResponseIndexerServices.instance().searchResponses(strQuery);
             
            
             model.put( SearchConstants.MARK_RESULT, listResults );
