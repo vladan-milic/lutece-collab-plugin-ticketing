@@ -54,14 +54,17 @@ public class ModelResponse implements Serializable
     private int _nIdDomain;
 
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Title.notEmpty}" )    
-    @Size( max = 255, message = "#i18n{ticketing.validation.modelresponse.Title.size}" )
+    @Size( max = 500, message = "#i18n{ticketing.validation.modelresponse.Title.size}" )
     private String _strTitle;
+    
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Reponse.notEmpty}" )
-    @Size( max = 255, message = "#i18n{ticketing.validation.modelresponse.Reponse.size}" )
-
+    @Size( max = 1000, message = "#i18n{ticketing.validation.modelresponse.Reponse.size}" )
     private String _strReponse;
+    
+     @Size( max = 1000, message = "#i18n{ticketing.validation.modelresponse.Keyword.size}" )
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Keyword.notEmpty}" )
     private String _strKeyword;
+     
     private String _strCategory;
     private String _strTicketType;
     private String _strDomain;
@@ -248,7 +251,7 @@ public class ModelResponse implements Serializable
 
     @Override
     public String toString() {
-        return "TypicalResponse{" + "_nId=" + _nId + '}';
+        return "ModelResponse{" + "_nId=" + _nId + '}';
     }
     
     

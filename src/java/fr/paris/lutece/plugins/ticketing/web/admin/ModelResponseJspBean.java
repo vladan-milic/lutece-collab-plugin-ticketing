@@ -221,9 +221,10 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         if ( !validateBean( _modelResponse, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
             return redirectView( request, VIEW_CREATE_MODELRESPONSE );
-        }
-
+        }     
        
+        ModelResponseHome.create( _modelResponse );        
+        
         try
         {
             LuceneModelResponseIndexerServices.instance().add(_modelResponse);
@@ -232,9 +233,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         {
             AppLogService.error("\n Ticketing - TypicalResponseJspBean : can't add index odel response",ex );
         }
-      
-       
-        ModelResponseHome.create( _modelResponse );
+        
         addInfo( INFO_MODELRESPONSE_CREATED, getLocale(  ) );
 
 

@@ -63,7 +63,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     public void update(ModelResponse modelReponse) throws IOException
     {
         AppLogService.info("\n Ticketing - Model Response : " + modelReponse);
-        try (IndexWriter writer = getIndexWriter())
+        try (IndexWriter writer = getIndexWriter(false))
         {
             Document doc = getDocument(modelReponse);
             writer.updateDocument(new Term(FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString()), doc);
@@ -87,7 +87,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     public void delete(ModelResponse modelReponse) throws IOException 
     {
         AppLogService.info("\n Ticketing - Model Response  : " + modelReponse);
-        try (IndexWriter writer = getIndexWriter()) 
+        try (IndexWriter writer = getIndexWriter(false)) 
         {
             writer.deleteDocuments(new Term(FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString()));
         }
@@ -97,7 +97,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     public void add(ModelResponse modelReponse) throws IOException
     {
         AppLogService.info("\n Ticketing - Model Response  : " + modelReponse);
-        try (IndexWriter writer = getIndexWriter())
+        try (IndexWriter writer = getIndexWriter(false))
         {
             Document doc = getDocument(modelReponse);
             writer.addDocument(doc);
@@ -109,19 +109,22 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     {
         AppLogService.info("\n Ticketing - Model Response : Indexing All model response : \n");
         StringBuilder sbLogs = new StringBuilder();        
-        try 
+          
+        try (IndexWriter writer = getIndexWriter(true))
         {
+        
             List<ModelResponse> modelResponses = ModelResponseHome.getModelResponsesList();
             for (ModelResponse modelResponse : modelResponses)
             {
-                add(modelResponse);
+               Document doc = getDocument(modelResponse);
+               writer.addDocument(doc);
             }
             sbLogs.append("\n Ticketing - Model Response : Indexed Model Responses : ").append(modelResponses.size());
            
         }
         catch (IOException ex)
         {
-            AppLogService.error("\n Ticketing - Model Response : Error indexing customer : " + ex.getMessage(), ex);
+            AppLogService.error("\n Ticketing - Model Response : Error indexing model response : " + ex.getMessage(), ex);
         }
 
         AppLogService.info("\n Ticketing - Model Response : end Indexing All model response : \n");
@@ -175,13 +178,13 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
                 return list;
     }
 
-    private IndexWriter getIndexWriter() throws IOException
+    private IndexWriter getIndexWriter(Boolean bcreate) throws IOException
     {
 
         Directory indexDir = FSDirectory.open(getIndexPath());
         IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_4_9, getAnalyzer());
 
-        if (!DirectoryReader.indexExists(indexDir))
+        if (!DirectoryReader.indexExists(indexDir) || bcreate)
         {
             config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
         } 

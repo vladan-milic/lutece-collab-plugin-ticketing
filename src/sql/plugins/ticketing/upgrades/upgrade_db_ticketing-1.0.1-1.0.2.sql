@@ -73,10 +73,11 @@ DROP TABLE IF EXISTS ticketing_model_reponses;
 CREATE TABLE `ticketing_model_reponses` (
   `id_model_response` int(6) NOT NULL,
   `id_ticket_category` int(11) NOT NULL DEFAULT '0',
-  `title` varchar(255) NOT NULL DEFAULT '',
+  `title` varchar(500) NOT NULL DEFAULT '',
   `reponse` text,
   `keyword` text
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+);
+
 
 ALTER TABLE `ticketing_model_reponses` ADD PRIMARY KEY (`id_model_response`);
 
