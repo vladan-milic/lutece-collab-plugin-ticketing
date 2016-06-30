@@ -161,4 +161,25 @@ public final class RequestUtils
 
         return result;
     }
+
+    /**
+     * Extracts an value list from a request parameter
+     * @param request the request
+     * @param strParameterName the parameter name
+     * @return the value list
+     */
+    public static List<String> extractValueList( HttpServletRequest request, String strParameterName )
+    {
+        List<String> result = new ArrayList<String>(  );
+        String[] listParameterValues = request.getParameterValues( strParameterName );
+
+        if ( listParameterValues != null )
+        {
+            for ( String strParameterValue : listParameterValues )
+            {
+                result.add( strParameterValue  );
+            }
+        }
+        return result;
+    }
 }
