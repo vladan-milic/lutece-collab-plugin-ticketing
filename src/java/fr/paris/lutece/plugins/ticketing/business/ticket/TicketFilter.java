@@ -620,7 +620,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _nIdChannel
      */
-    public int get_nIdChannel(  )
+    public int getIdChannel(  )
     {
         return _nIdChannel;
     }
@@ -629,7 +629,7 @@ public class TicketFilter extends OrderByFilter
      * @param nIdChannel
      *            the nIdChannel to set
      */
-    public void set_nIdChannel( int nIdChannel )
+    public void setIdChannel( int nIdChannel )
     {
         this._nIdChannel = nIdChannel;
     }

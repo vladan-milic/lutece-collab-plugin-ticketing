@@ -35,4 +35,5 @@ interface IModelResponseIndexer
     String addAll(  );
 
     List<ModelResponse> searchResponses( String strQuery, String strDomain );
+
 }
