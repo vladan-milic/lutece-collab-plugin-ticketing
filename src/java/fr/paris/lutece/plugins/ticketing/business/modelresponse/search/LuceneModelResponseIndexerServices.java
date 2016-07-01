@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -84,7 +85,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         tKeywords.add(modelReponse.getDomain());
         tKeywords.addAll( Arrays.asList(modelReponse.getKeyword().split(",")) );
      
-       String strIndexWords = String.join(" ", tKeywords); 
+       String strIndexWords = StringUtils.join(tKeywords, " "); 
        // String [] tKeywords = (modelReponse.getKeyword()+",").split(",");
 
      AppLogService.info("\n Ticketing - Model Response Full Text to index \n"+strIndexWords+" \n");
@@ -156,7 +157,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
          List<String> tKeywords = new ArrayList<>();       
          tKeywords.addAll( Arrays.asList(strQuery.split(",")) );
      
-       String strQueryText = String.join(" ", tKeywords); 
+       String strQueryText = StringUtils.join(tKeywords, " "); 
       
        
         List<ModelResponse> list = new ArrayList<>();
