@@ -98,7 +98,7 @@ public final class ModelResponseDAO implements IModelResponseDAO
         daoUtil.setInt( nIndex++, modelResponse.getIdTicketCategory(  ) );
         daoUtil.setString( nIndex++, modelResponse.getTitle(  ) );
         daoUtil.setString( nIndex++, modelResponse.getReponse(  ) );
-        daoUtil.setString( nIndex++, modelResponse.getKeyword( ));
+        daoUtil.setString( nIndex++, modelResponse.getKeyword(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -126,27 +126,24 @@ public final class ModelResponseDAO implements IModelResponseDAO
 
             int nIndex = 1;
 
-
             modelResponse.setId( daoUtil.getInt( nIndex++ ) );
             modelResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
             modelResponse.setTitle( daoUtil.getString( nIndex++ ) );
             modelResponse.setReponse( daoUtil.getString( nIndex++ ) );
-            modelResponse.setKeyword(daoUtil.getString( nIndex++ ) );
-
+            modelResponse.setKeyword( daoUtil.getString( nIndex++ ) );
 
             //populate id category, domain and type
             ticketCategory = TicketCategoryHome.findByPrimaryKey( modelResponse.getIdTicketCategory(  ) );
             modelResponse.setIdDomain( ticketCategory.getIdTicketDomain(  ) );
-            modelResponse.setCategory(ticketCategory.getLabel(  ) );
+            modelResponse.setCategory( ticketCategory.getLabel(  ) );
 
             ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
             modelResponse.setIdTicketType( ticketDomain.getIdTicketType(  ) );
-            modelResponse.setDomain( ticketDomain.getLabel(  ) );           
-           
+            modelResponse.setDomain( ticketDomain.getLabel(  ) );
 
             ticketType = TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) );
             modelResponse.setTicketType( ticketType.getLabel(  ) );
-            modelResponse.setIdTicketType(ticketType.getId());
+            modelResponse.setIdTicketType( ticketType.getId(  ) );
         }
 
         daoUtil.free(  );
@@ -175,14 +172,12 @@ public final class ModelResponseDAO implements IModelResponseDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
         int nIndex = 1;
 
-
         daoUtil.setInt( nIndex++, modelResponse.getId(  ) );
         daoUtil.setInt( nIndex++, modelResponse.getIdTicketCategory(  ) );
         daoUtil.setString( nIndex++, modelResponse.getTitle(  ) );
         daoUtil.setString( nIndex++, modelResponse.getReponse(  ) );
-         daoUtil.setString(nIndex++, modelResponse.getKeyword( ));
-        daoUtil.setInt( nIndex, modelResponse.getId(  ) );  
-      
+        daoUtil.setString( nIndex++, modelResponse.getKeyword(  ) );
+        daoUtil.setInt( nIndex, modelResponse.getId(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -207,13 +202,11 @@ public final class ModelResponseDAO implements IModelResponseDAO
             ModelResponse modelResponse = new ModelResponse(  );
             int nIndex = 1;
 
-
             modelResponse.setId( daoUtil.getInt( nIndex++ ) );
             modelResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
             modelResponse.setTitle( daoUtil.getString( nIndex++ ) );
             modelResponse.setReponse( daoUtil.getString( nIndex++ ) );
-            modelResponse.setKeyword(daoUtil.getString( nIndex++ ) );
-
+            modelResponse.setKeyword( daoUtil.getString( nIndex++ ) );
 
             //populate label category, domain and type
             ticketCategory = TicketCategoryHome.findByPrimaryKey( modelResponse.getIdTicketCategory(  ) );
@@ -245,7 +238,7 @@ public final class ModelResponseDAO implements IModelResponseDAO
 
         while ( daoUtil.next(  ) )
         {
-           modelResponseList.add( daoUtil.getInt( 1 ) );
+            modelResponseList.add( daoUtil.getInt( 1 ) );
         }
 
         daoUtil.free(  );

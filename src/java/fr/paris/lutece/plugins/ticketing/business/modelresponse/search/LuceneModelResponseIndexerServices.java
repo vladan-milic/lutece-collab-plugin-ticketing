@@ -1,4 +1,36 @@
-
+/*
+ * Copyright (c) 2002-2016, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.ticketing.business.modelresponse.search;
 
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
@@ -10,19 +42,15 @@ import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import java.io.IOException;
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.IntField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
-import org.apache.lucene.document.IntField;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -39,235 +67,254 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
+import java.io.File;
+import java.io.IOException;
 
-public class LuceneModelResponseIndexerServices implements IModelResponseIndexer {
+import java.nio.file.Paths;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+
+public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
+{
     private static LuceneModelResponseIndexerServices _singleton;
     private static final String BEAN_SERVICE = "ticketing.modelResponsesServices";
-     private static final String PROPERTY_ANALYSER_CLASS_NAME = "ticketing.internalIndexer.lucene.analyser.className";
-
+    private static final String PROPERTY_ANALYSER_CLASS_NAME = "ticketing.internalIndexer.lucene.analyser.className";
     private static Analyzer _analyzer;
 
-     private LuceneModelResponseIndexerServices()
-     {
-                  
-     }
-   
-    public static LuceneModelResponseIndexerServices instance() 
+    private LuceneModelResponseIndexerServices(  )
     {
-        if (_singleton == null) {
-            _singleton = SpringContextService.getBean(BEAN_SERVICE);
+    }
+
+    public static LuceneModelResponseIndexerServices instance(  )
+    {
+        if ( _singleton == null )
+        {
+            _singleton = SpringContextService.getBean( BEAN_SERVICE );
         }
+
         return _singleton;
     }
 
     @Override
-    public void update(ModelResponse modelReponse) throws IOException
+    public void update( ModelResponse modelReponse ) throws IOException
     {
-        AppLogService.info("\n Ticketing - Model Response : " + modelReponse);
-        try (IndexWriter writer = getIndexWriter(false))
-        {
-            Document doc = getDocument(modelReponse);
-            writer.updateDocument(new Term(FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString()), doc);
-        }
+        AppLogService.info( "\n Ticketing - Model Response : " + modelReponse );
+
+        IndexWriter writer = getIndexWriter( false );
+        Document doc = getDocument( modelReponse );
+        writer.updateDocument( new Term( FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString(  ) ), doc );
+        writer.close();
     }
 
-    private Document getDocument(ModelResponse modelReponse)
+    private Document getDocument( ModelResponse modelReponse )
     {
-        Document doc = new Document();
-        doc.add(new IntField(FIELD_ID, modelReponse.getId(), Field.Store.YES));
-        doc.add(new StringField(FIELD_TITLE, modelReponse.getTitle(), Field.Store.YES));
-        doc.add(new StringField(FIELD_KEYWORD, modelReponse.getKeyword(), Field.Store.YES));
-        doc.add(new StringField(FIELD_RESPONSE, modelReponse.getReponse(), Field.Store.YES));
-        doc.add(new StringField(FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString(), Field.Store.YES));
-        
-       List<String> tKeywords = new ArrayList<>();
-        tKeywords.add(modelReponse.getDomain());
-        tKeywords.addAll( Arrays.asList(modelReponse.getKeyword().split(",")) );
-     
-       String strIndexWords = StringUtils.join(tKeywords, " "); 
-       // String [] tKeywords = (modelReponse.getKeyword()+",").split(",");
+        Document doc = new Document(  );
+        doc.add( new IntField( FIELD_ID, modelReponse.getId(  ), Field.Store.YES ) );
+        doc.add( new StringField( FIELD_TITLE, modelReponse.getTitle(  ), Field.Store.YES ) );
+        doc.add( new StringField( FIELD_KEYWORD, modelReponse.getKeyword(  ), Field.Store.YES ) );
+        doc.add( new StringField( FIELD_RESPONSE, modelReponse.getReponse(  ), Field.Store.YES ) );
+        doc.add( new StringField( FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString(  ), Field.Store.YES ) );
 
-     AppLogService.info("\n Ticketing - Model Response Full Text to index \n"+strIndexWords+" \n");
-          
-        doc.add(new TextField(FIELD_SEARCH_CONTENT, strIndexWords, Field.Store.NO));
+        List<String> tKeywords = new ArrayList<String>(  );
+        tKeywords.add( modelReponse.getDomain(  ) );
+        tKeywords.addAll( Arrays.asList( modelReponse.getKeyword(  ).split( "," ) ) );
+
+        String strIndexWords = StringUtils.join( tKeywords, " " );
+        // String [] tKeywords = (modelReponse.getKeyword()+",").split(",");
+        AppLogService.info( "\n Ticketing - Model Response Full Text to index \n" + strIndexWords + " \n" );
+
+        doc.add( new TextField( FIELD_SEARCH_CONTENT, strIndexWords, Field.Store.NO ) );
+
         return doc;
     }
 
     @Override
-    public void delete(ModelResponse modelReponse) throws IOException 
+    public void delete( ModelResponse modelReponse ) throws IOException
     {
-        AppLogService.info("\n Ticketing - Model Response  : " + modelReponse);
-        try (IndexWriter writer = getIndexWriter(false)) 
-        {
-            writer.deleteDocuments(new Term(FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString()));
-        }
+        AppLogService.info( "\n Ticketing - Model Response  : " + modelReponse );
+
+        IndexWriter writer = getIndexWriter( false );
+        writer.deleteDocuments( new Term( FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString(  ) ) );
+        writer.close();
     }
 
     @Override
-    public void add(ModelResponse modelReponse) throws IOException
+    public void add( ModelResponse modelReponse ) throws IOException
     {
-        AppLogService.info("\n Ticketing - Model Response  : " + modelReponse);
-        try (IndexWriter writer = getIndexWriter(false))
-        {
-            Document doc = getDocument(modelReponse);
-            writer.addDocument(doc);
-        }
+        AppLogService.info( "\n Ticketing - Model Response  : " + modelReponse );
+
+        IndexWriter writer = getIndexWriter( false );
+        Document doc = getDocument( modelReponse );
+        writer.addDocument( doc );
+        writer.close();
     }
 
     @Override
-    public String addAll() 
+    public String addAll(  )
     {
-        AppLogService.info("\n Ticketing - Model Response : Indexing All model response : \n");
-        StringBuilder sbLogs = new StringBuilder();        
-          
-        try (IndexWriter writer = getIndexWriter(true))
+        AppLogService.info( "\n Ticketing - Model Response : Indexing All model response : \n" );
+
+        StringBuilder sbLogs = new StringBuilder(  );
+
+        try
         {
-        
-            List<ModelResponse> modelResponses = ModelResponseHome.getModelResponsesList();
-            for (ModelResponse modelResponse : modelResponses)
+            IndexWriter writer = getIndexWriter( true );
+            List<ModelResponse> modelResponses = ModelResponseHome.getModelResponsesList(  );
+
+            for ( ModelResponse modelResponse : modelResponses )
             {
-               Document doc = getDocument(modelResponse);
-               writer.addDocument(doc);
+                Document doc = getDocument( modelResponse );
+                writer.addDocument( doc );
             }
-            sbLogs.append("\n Ticketing - Model Response : Indexed Model Responses : ").append(modelResponses.size());
-           
+           writer.close();
+            sbLogs.append( "\n Ticketing - Model Response : Indexed Model Responses : " ).append( modelResponses.size(  ) );
         }
-        catch (IOException ex)
+        catch ( IOException ex )
         {
-            AppLogService.error("\n Ticketing - Model Response : Error indexing model response : " + ex.getMessage(), ex);
+            AppLogService.error( "\n Ticketing - Model Response : Error indexing model response : " +
+                ex.getMessage(  ), ex );
         }
 
-        AppLogService.info("\n Ticketing - Model Response : end Indexing All model response : \n");
-        return sbLogs.toString();
+        AppLogService.info( "\n Ticketing - Model Response : end Indexing All model response : \n" );
+
+        return sbLogs.toString(  );
     }
-    
-    private String customerParser(String strQuery)
-    {    
-        String strResult = QueryParser.escape(strQuery);
-        
-        strResult= strResult.replaceAll("@", "\\@");
+
+    private String customerParser( String strQuery )
+    {
+        String strResult = QueryParser.escape( strQuery );
+
+        strResult = strResult.replaceAll( "@", "\\@" );
+
         return strResult;
     }
 
     @Override
-    public List<ModelResponse> searchResponses(String strQuery) 
+    public List<ModelResponse> searchResponses( String strQuery, String strDomain )
     {
-        
-         List<String> tKeywords = new ArrayList<>();       
-         tKeywords.addAll( Arrays.asList(strQuery.split(",")) );
-     
-       String strQueryText = StringUtils.join(tKeywords, " "); 
-      
-       
-        List<ModelResponse> list = new ArrayList<>();
-        int nMaxResponsePerQuery = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY, 5 );
-        try {
-            try (IndexReader reader = DirectoryReader.open(FSDirectory.open(getIndexPath()))) 
-            {
-                IndexSearcher searcher = new IndexSearcher(reader);
-                AnalyzingQueryParser parser = new AnalyzingQueryParser(Version.LUCENE_4_9, FIELD_SEARCH_CONTENT, getAnalyzer());
-                parser.setDefaultOperator(AnalyzingQueryParser.Operator.OR);   
-                
-               
-               Query query = parser.parse( customerParser(strQueryText));
-                TopDocs results = searcher.search(query, nMaxResponsePerQuery );
-                ScoreDoc[] hits = results.scoreDocs;
+        List<String> tKeywords = new ArrayList<String>(  );
+        tKeywords.addAll( Arrays.asList( strQuery.split( "," ) ) );
 
-                AppLogService.info("\n Ticketing - Model Response  : query lucene " + hits.length + " \n");
+        String strQueryText = strDomain+" AND \\("+StringUtils.join( tKeywords, " OR " )+" \\)";
 
-                for (ScoreDoc hit : hits) 
-                {
-                    Document doc = searcher.doc(hit.doc);
-                    ModelResponse modelResponse = new ModelResponse();                   
-                    modelResponse.setId(Integer.parseInt(doc.get(FIELD_ID)));
-                    modelResponse.setTitle(doc.get(FIELD_TITLE));
-                    modelResponse.setReponse(doc.get(FIELD_RESPONSE));
-                    modelResponse.setKeyword(doc.get(FIELD_KEYWORD));                    
-                    list.add(modelResponse);
+        List<ModelResponse> list = new ArrayList<ModelResponse>(  );
+        int nMaxResponsePerQuery = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY,
+                5 );
 
-                }
-            }
-        } 
-        catch (IOException | ParseException ex)
+        try
         {
-            AppLogService.error("\n Ticketing - Model Response : Error searching model response : " + ex.getMessage(), ex);
+            IndexReader reader = DirectoryReader.open( FSDirectory.open( getIndexPath(  ) ) );
+
+            IndexSearcher searcher = new IndexSearcher( reader );
+            AnalyzingQueryParser parser = new AnalyzingQueryParser( Version.LUCENE_4_9, FIELD_SEARCH_CONTENT,
+                    getAnalyzer(  ) );
+           // parser.setDefaultOperator( AnalyzingQueryParser.Operator.OR );
+
+            Query query = parser.parse( customerParser( strQueryText ) );
+           String  dddd=  query.toString();
+           TopDocs results = searcher.search( query, nMaxResponsePerQuery );
+            ScoreDoc[] hits = results.scoreDocs;
+
+            AppLogService.info( "\n Ticketing - Model Response  : query lucene " + hits.length + " \n" );
+
+            for ( ScoreDoc hit : hits )
+            {
+                Document doc = searcher.doc( hit.doc );
+                ModelResponse modelResponse = new ModelResponse(  );
+                modelResponse.setId( Integer.parseInt( doc.get( FIELD_ID ) ) );
+                modelResponse.setTitle( doc.get( FIELD_TITLE ) );
+                modelResponse.setReponse( doc.get( FIELD_RESPONSE ) );
+                modelResponse.setKeyword( doc.get( FIELD_KEYWORD ) );
+                list.add( modelResponse );
+            }
+            reader.close();
         }
-                return list;
+        catch ( IOException ex )
+        {
+            AppLogService.error( "\n Ticketing - Model Response : Error searching model response : " +
+                ex.getMessage(  ), ex );
+        }
+        catch ( ParseException ex )
+        {
+            AppLogService.error( "\n Ticketing - Model Response : Error searching model response : " +
+                ex.getMessage(  ), ex );
+        }
+
+        return list;
     }
 
-    private IndexWriter getIndexWriter(Boolean bcreate) throws IOException
+    private IndexWriter getIndexWriter( Boolean bcreate )
+        throws IOException
     {
+        Directory indexDir = FSDirectory.open( getIndexPath(  ) );
+        IndexWriterConfig config = new IndexWriterConfig( Version.LUCENE_4_9, getAnalyzer(  ) );
 
-        Directory indexDir = FSDirectory.open(getIndexPath());
-        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_4_9, getAnalyzer());
-
-        if (!DirectoryReader.indexExists(indexDir) || bcreate)
+        if ( !DirectoryReader.indexExists( indexDir ) || bcreate )
         {
-            config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
-        } 
+            config.setOpenMode( IndexWriterConfig.OpenMode.CREATE );
+        }
         else
         {
-            config.setOpenMode(IndexWriterConfig.OpenMode.APPEND);
+            config.setOpenMode( IndexWriterConfig.OpenMode.APPEND );
         }
 
-        IndexWriter indexWriter = new IndexWriter(indexDir, config);
+        IndexWriter indexWriter = new IndexWriter( indexDir, config );
+
         return indexWriter;
     }
 
-    private Analyzer getAnalyzer() 
+    private Analyzer getAnalyzer(  )
     {
-        
-        if( _analyzer == null )
+        if ( _analyzer == null )
         {
-         String strAnalyserClassName = AppPropertiesService.getProperty( PROPERTY_ANALYSER_CLASS_NAME );
-          
-       
-        if ( ( strAnalyserClassName == null ) || ( strAnalyserClassName.equals( "" ) ) )
-        {
-            throw new AppException( "Analyser class name not found in ticketing.properties", null );
-        }
-        
-          try
-        {
-            _analyzer = (Analyzer) Class.forName( strAnalyserClassName ).newInstance(  );
-        }
+            String strAnalyserClassName = AppPropertiesService.getProperty( PROPERTY_ANALYSER_CLASS_NAME );
 
-        catch ( InstantiationException ie )
-        {
-            @SuppressWarnings( "rawtypes" )
-            Class classAnalyzer;
+            if ( ( strAnalyserClassName == null ) || ( strAnalyserClassName.equals( "" ) ) )
+            {
+                throw new AppException( "Analyser class name not found in ticketing.properties", null );
+            }
 
             try
             {
-                classAnalyzer = Class.forName( strAnalyserClassName );
+                _analyzer = (Analyzer) Class.forName( strAnalyserClassName ).newInstance(  );
+            }
 
-                @SuppressWarnings( {"unchecked",
-                    "rawtypes"
-                } )
-                java.lang.reflect.Constructor constructeur = classAnalyzer.getConstructor( Version.class );
-                _analyzer = (Analyzer) constructeur.newInstance( new Object[] { IndexationService.LUCENE_INDEX_VERSION } );
+            catch ( InstantiationException ie )
+            {
+                @SuppressWarnings( "rawtypes" )
+                Class classAnalyzer;
+
+                try
+                {
+                    classAnalyzer = Class.forName( strAnalyserClassName );
+
+                    @SuppressWarnings( {"unchecked",
+                        "rawtypes"
+                    } )
+                    java.lang.reflect.Constructor constructeur = classAnalyzer.getConstructor( Version.class );
+                    _analyzer = (Analyzer) constructeur.newInstance( new Object[] { IndexationService.LUCENE_INDEX_VERSION } );
+                }
+                catch ( Exception e )
+                {
+                    throw new AppException( "Failed to load Lucene Analyzer class", e );
+                }
             }
             catch ( Exception e )
             {
                 throw new AppException( "Failed to load Lucene Analyzer class", e );
             }
         }
-           catch ( Exception e )
-        {
-            throw new AppException( "Failed to load Lucene Analyzer class", e );
-        }  
-        }
-        
-               
-  
+
         return _analyzer;
     }
 
-    private File getIndexPath() 
+    private File getIndexPath(  )
     {
-        String strIndexPath = AppPathService.getAbsolutePathFromRelativePath(PATH_INDEX);
-        return Paths.get(strIndexPath).toFile();
-    }
+        String strIndexPath = AppPathService.getAbsolutePathFromRelativePath( PATH_INDEX );
 
+        return Paths.get( strIndexPath ).toFile(  );
+    }
 }

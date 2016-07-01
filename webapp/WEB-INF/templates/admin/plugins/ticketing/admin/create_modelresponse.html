@@ -10,19 +10,19 @@
                <@messages errors=errors />
                <input type="hidden" id="id" name="id"/>
                <div class="form-group">
-                  <label class="control-label col-xs-12 col-sm-3 col-md-3" for="id_ticket_type">#i18n{ticketing.create_ticket.labelTicketType} *</label>
+                  <label class="control-label col-xs-12 col-sm-3 col-md-3" for="id_ticket_type">#i18n{ticketing.create_ticket.labelTicketType} * :</label>
                   <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
                      <@comboWithParams name="id_ticket_type" default_value="0" additionalParameters=" id=\"id_ticket_type\" class=\"form-control input-lg\" " items=ticket_types_list />
                   </div>
                </div>
                <div class="form-group">
-                  <label class="control-label col-xs-12 col-sm-3 col-md-3" for="id_ticket_domain">#i18n{ticketing.create_ticket.labelTicketDomain} *</label>
+                  <label class="control-label col-xs-12 col-sm-3 col-md-3" for="id_ticket_domain">#i18n{ticketing.create_ticket.labelTicketDomain} * :</label>
                   <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
                      <@comboWithParams name="id_ticket_domain" default_value="0" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=ticket_domains_list />
                   </div>
                </div>
                <div class="form-group">
-                  <label class="control-label col-xs-12 col-sm-3 col-md-3" for="id_ticket_category">#i18n{ticketing.create_ticket.labelTicketCategory} *</label>
+                  <label class="control-label col-xs-12 col-sm-3 col-md-3" for="id_ticket_category">#i18n{ticketing.create_ticket.labelTicketCategory} * :</label>
                   <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
                      <@comboWithParams name="id_ticket_category" default_value="0" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=ticket_categories_list />
                   </div>

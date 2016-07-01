@@ -46,6 +46,7 @@ public final class SearchConstants
     public static final String PARAMETER_PAGE_INDEX = "page_index";
     public static final String PARAMETER_SEARCH_FIELD = "searched_field";
     public static final String PARAMETER_CATEGORY = "category";
+    public static final String PARAMETER_DOMAIN = "domain";
 
     // Markers
     public static final String MARK_QUERY = "query";

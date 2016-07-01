@@ -17,7 +17,7 @@
   $( function(){
 	  $("#search_button").click(function(){
 		  var targetUrl="jsp/site/Portal.jsp";
-		  var dataToSend="page=ticketSearch&action=search_response&searched_field=ticket_response&query="+$("#query").val()+"&category=${ticket.ticketCategory!}";
+		  var dataToSend="page=ticketSearch&action=search_response&searched_field=ticket_response&query="+$("#query").val()+"&category=${ticket.ticketCategory!}"+"&domain=${ticket.ticketDomain!}";
 		  $.ajax({
 			  url: targetUrl,
 			  type: "POST",
