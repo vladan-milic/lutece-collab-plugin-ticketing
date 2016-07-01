@@ -134,12 +134,19 @@ public final class ModelResponseDAO implements IModelResponseDAO
             modelResponse.setKeyword(daoUtil.getString( nIndex++ ) );
 
 
-            //populate label category, domain and type
+            //populate id category, domain and type
             ticketCategory = TicketCategoryHome.findByPrimaryKey( modelResponse.getIdTicketCategory(  ) );
             modelResponse.setIdDomain( ticketCategory.getIdTicketDomain(  ) );
+            modelResponse.setCategory(ticketCategory.getLabel(  ) );
 
             ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
             modelResponse.setIdTicketType( ticketDomain.getIdTicketType(  ) );
+            modelResponse.setDomain( ticketDomain.getLabel(  ) );           
+           
+
+            ticketType = TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) );
+            modelResponse.setTicketType( ticketType.getLabel(  ) );
+            modelResponse.setIdTicketType(ticketType.getId());
         }
 
         daoUtil.free(  );

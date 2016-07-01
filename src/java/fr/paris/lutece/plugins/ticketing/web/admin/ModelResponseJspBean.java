@@ -33,13 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
 
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -215,7 +218,8 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     @Action( ACTION_CREATE_MODELRESPONSE )
     public String doCreateModelResponse( HttpServletRequest request )
     {
-        populate( _modelResponse, request );
+        populate( _modelResponse, request );        
+        populateLabel(_modelResponse);
 
         // Check constraints
         if ( !validateBean( _modelResponse, VALIDATION_ATTRIBUTES_PREFIX ) )
@@ -240,6 +244,21 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
     }
 
+    private void populateLabel( ModelResponse  modelResponse)
+    {        
+          TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( modelResponse.getIdTicketCategory(  ) );
+            modelResponse.setIdDomain( ticketCategory.getIdTicketDomain(  ) );
+            modelResponse.setCategory(ticketCategory.getLabel(  ) );
+
+           TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
+            modelResponse.setIdTicketType( ticketDomain.getIdTicketType(  ) );
+            modelResponse.setDomain( ticketDomain.getLabel(  ) );           
+           
+
+          TicketType  ticketType = TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) );
+            modelResponse.setTicketType( ticketType.getLabel(  ) );
+            modelResponse.setIdTicketType(ticketType.getId());
+    }
     /**
      * Manages the removal form of a modelresponse whose identifier is in the http
      * request
