@@ -58,7 +58,7 @@ public class ModelResponse implements Serializable
     private String _strTitle;
     
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Reponse.notEmpty}" )
-    @Size( max = 1000, message = "#i18n{ticketing.validation.modelresponse.Reponse.size}" )
+    @Size( max = 60000, message = "#i18n{ticketing.validation.modelresponse.Reponse.size}" )
     private String _strReponse;
     
      @Size( max = 1000, message = "#i18n{ticketing.validation.modelresponse.Keyword.size}" )

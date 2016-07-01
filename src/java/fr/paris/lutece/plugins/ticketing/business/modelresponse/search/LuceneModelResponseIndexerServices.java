@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -78,8 +80,17 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         doc.add(new StringField(FIELD_KEYWORD, modelReponse.getKeyword(), Field.Store.YES));
         doc.add(new StringField(FIELD_RESPONSE, modelReponse.getReponse(), Field.Store.YES));
         doc.add(new StringField(FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString(), Field.Store.YES));
+        
+       List<String> tKeywords = new ArrayList<>();
+        tKeywords.add(modelReponse.getDomain());
+        tKeywords.addAll( Arrays.asList(modelReponse.getKeyword().split(",")) );
      
-        doc.add(new TextField(FIELD_SEARCH_CONTENT, modelReponse.getKeyword(), Field.Store.NO));
+       String strIndexWords = StringUtils.join(tKeywords, " "); 
+       // String [] tKeywords = (modelReponse.getKeyword()+",").split(",");
+
+     AppLogService.info("\n Ticketing - Model Response Full Text to index \n"+strIndexWords+" \n");
+          
+        doc.add(new TextField(FIELD_SEARCH_CONTENT, strIndexWords, Field.Store.NO));
         return doc;
     }
 
@@ -142,6 +153,13 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     @Override
     public List<ModelResponse> searchResponses(String strQuery) 
     {
+        
+         List<String> tKeywords = new ArrayList<>();       
+         tKeywords.addAll( Arrays.asList(strQuery.split(",")) );
+     
+       String strQueryText = StringUtils.join(tKeywords, " "); 
+      
+       
         List<ModelResponse> list = new ArrayList<>();
         int nMaxResponsePerQuery = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY, 5 );
         try {
@@ -152,7 +170,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
                 parser.setDefaultOperator(AnalyzingQueryParser.Operator.OR);   
                 
                
-               Query query = parser.parse( customerParser(strQuery));
+               Query query = parser.parse( customerParser(strQueryText));
                 TopDocs results = searcher.search(query, nMaxResponsePerQuery );
                 ScoreDoc[] hits = results.scoreDocs;
 

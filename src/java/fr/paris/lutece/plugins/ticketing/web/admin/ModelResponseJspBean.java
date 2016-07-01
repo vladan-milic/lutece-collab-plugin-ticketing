@@ -33,14 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
-
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices;
-
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -53,6 +54,7 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
+
 import java.io.IOException;
 
 import java.util.List;
@@ -129,8 +131,6 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     private int _nDefaultItemsPerPage;
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
-    
-   
 
     // Session variable to store working values
     private ModelResponse _modelResponse;
@@ -216,28 +216,43 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     public String doCreateModelResponse( HttpServletRequest request )
     {
         populate( _modelResponse, request );
+        populateLabel( _modelResponse );
 
         // Check constraints
         if ( !validateBean( _modelResponse, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
             return redirectView( request, VIEW_CREATE_MODELRESPONSE );
-        }     
-       
-        ModelResponseHome.create( _modelResponse );        
-        
+        }
+
+        ModelResponseHome.create( _modelResponse );
+
         try
         {
-            LuceneModelResponseIndexerServices.instance().add(_modelResponse);
-        } 
-        catch (IOException ex) 
-        {
-            AppLogService.error("\n Ticketing - TypicalResponseJspBean : can't add index odel response",ex );
+            LuceneModelResponseIndexerServices.instance(  ).add( _modelResponse );
         }
-        
+        catch ( IOException ex )
+        {
+            AppLogService.error( "\n Ticketing - TypicalResponseJspBean : can't add index odel response", ex );
+        }
+
         addInfo( INFO_MODELRESPONSE_CREATED, getLocale(  ) );
 
-
         return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
+    }
+
+    private void populateLabel( ModelResponse modelResponse )
+    {
+        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( modelResponse.getIdTicketCategory(  ) );
+        modelResponse.setIdDomain( ticketCategory.getIdTicketDomain(  ) );
+        modelResponse.setCategory( ticketCategory.getLabel(  ) );
+
+        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
+        modelResponse.setIdTicketType( ticketDomain.getIdTicketType(  ) );
+        modelResponse.setDomain( ticketDomain.getLabel(  ) );
+
+        TicketType ticketType = TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) );
+        modelResponse.setTicketType( ticketType.getLabel(  ) );
+        modelResponse.setIdTicketType( ticketType.getId(  ) );
     }
 
     /**
@@ -269,22 +284,19 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     @Action( ACTION_REMOVE_MODELRESPONSE )
     public String doRemoveModelResponse( HttpServletRequest request )
     {
-
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_MODELRESPONSE ) );
-        
-        
-        try 
+
+        try
         {
-            LuceneModelResponseIndexerServices.instance().delete(ModelResponseHome.findByPrimaryKey(nId));
-        }   
-        catch (IOException ex) 
-        {
-            AppLogService.error("\n Ticketing - TypicalResponseJspBean : can't delete index model response",ex );
+            LuceneModelResponseIndexerServices.instance(  ).delete( ModelResponseHome.findByPrimaryKey( nId ) );
         }
-             
+        catch ( IOException ex )
+        {
+            AppLogService.error( "\n Ticketing - TypicalResponseJspBean : can't delete index model response", ex );
+        }
+
         ModelResponseHome.remove( nId );
         addInfo( INFO_MODELRESPONSE_REMOVED, getLocale(  ) );
-
 
         return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
     }
@@ -331,22 +343,20 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         // Check constraints
         if ( !validateBean( _modelResponse, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-
             return redirect( request, VIEW_MODIFY_MODELRESPONSE, PARAMETER_ID_MODELRESPONSE, _modelResponse.getId(  ) );
         }
 
         ModelResponseHome.update( _modelResponse );
         addInfo( INFO_MODELRESPONSE_UPDATED, getLocale(  ) );
-        
-          try
-        {
-            LuceneModelResponseIndexerServices.instance().update(_modelResponse);
-        }
-          catch (IOException ex) 
-        {
-            AppLogService.error("\n Ticketing - TypicalResponseJspBean : can't update index model response",ex );
-        }
 
+        try
+        {
+            LuceneModelResponseIndexerServices.instance(  ).update( _modelResponse );
+        }
+        catch ( IOException ex )
+        {
+            AppLogService.error( "\n Ticketing - TypicalResponseJspBean : can't update index model response", ex );
+        }
 
         return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
     }
