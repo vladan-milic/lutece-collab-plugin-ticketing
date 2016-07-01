@@ -54,8 +54,10 @@ public class TicketDomainResourceIdService extends ResourceIdService
 {
     /** Permission for viewing a ticket domain */
     public static final String PERMISSION_VIEW = "VIEW";
+    public static final String PERMISSION_BELONG_TO = "BELONG_TO";
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "ticketing.ticketdomain.resourceType";
     private static final String PROPERTY_LABEL_VIEW = "ticketing.ticketdomain.permission.label.view";
+    private static final String PROPERTY_LABEL_BELONG_TO = "ticketing.ticketdomain.permission.label.belongTo";
 
     /**
      * Constructor
@@ -81,6 +83,12 @@ public class TicketDomainResourceIdService extends ResourceIdService
         p.setPermissionTitleKey( PROPERTY_LABEL_VIEW );
         rt.registerPermission( p );
 
+        p = new Permission(  );
+        p.setPermissionKey( PERMISSION_BELONG_TO );
+        p.setPermissionTitleKey( PROPERTY_LABEL_BELONG_TO );
+        rt.registerPermission( p );
+
+        
         ResourceTypeManager.registerResourceType( rt );
     }
 
