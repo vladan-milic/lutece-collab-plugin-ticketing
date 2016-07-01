@@ -1091,6 +1091,11 @@ public class Ticket implements Serializable, RBACResource
         {
             sb.append( _user.getFirstname(  ) ).append( SEPARATOR ).append( _user.getLastname(  ) ).append( SEPARATOR );
         }
+        
+        if ( _channel != null )
+        {
+            sb.append( _channel.getLabel() ).append( SEPARATOR );
+        }
 
         if ( _unit != null )
         {

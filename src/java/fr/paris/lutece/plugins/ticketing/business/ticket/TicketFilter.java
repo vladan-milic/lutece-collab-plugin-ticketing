@@ -77,6 +77,7 @@ public class TicketFilter extends OrderByFilter
     private int _nIdUser = CONSTANT_ID_NULL;
     private int _nIdCategory = CONSTANT_ID_NULL;
     private int _nIdDomain = CONSTANT_ID_NULL;
+    private int _nIdChannel = CONSTANT_ID_NULL;
     private int _nIdType = CONSTANT_ID_NULL;
     private int _nOpenSincePeriod = CONSTANT_ID_NULL;
     private String _strStatus;
@@ -115,7 +116,7 @@ public class TicketFilter extends OrderByFilter
     {
         this._nIdUser = nIdUser;
     }
-
+    
     /**
      * Check if this filter contains a idUser
      *
@@ -133,7 +134,7 @@ public class TicketFilter extends OrderByFilter
     {
         return _listIdWorkflowState;
     }
-
+    
     /**
      * @param lstIdWorkflowState
      *            the lstIdWorkflowState to set
@@ -605,7 +606,7 @@ public class TicketFilter extends OrderByFilter
     {
         this._strMobilePhoneNumber = strMobilePhoneNumber;
     }
-
+    
     /**
      * Check if this filter contains a MobilePhoneNumber
      *
@@ -614,6 +615,31 @@ public class TicketFilter extends OrderByFilter
     public boolean containsMobilePhoneNumber(  )
     {
         return StringUtils.isNotEmpty( _strMobilePhoneNumber );
+    }
+    
+    /**
+     * @return the _nIdChannel
+     */
+    public int get_nIdChannel() {
+		return _nIdChannel;
+	}
+    
+    /**
+     * @param nIdChannel
+     *            the nIdChannel to set
+     */
+	public void set_nIdChannel(int nIdChannel) {
+		this._nIdChannel = nIdChannel;
+	}
+	
+	/**
+     * Check if this filter contains a ChannelID
+     *
+     * @return true if the filter contain an id of Channel
+     */
+	public boolean containChannel(  )
+    {
+        return  ( _nIdChannel != CONSTANT_ID_NULL );
     }
 
     /**
@@ -707,6 +733,7 @@ public class TicketFilter extends OrderByFilter
         _mapOrderNameToColumnName.put( "date_create", "date_create" );
         _mapOrderNameToColumnName.put( "date_update", "date_update" );
         _mapOrderNameToColumnName.put( "id_user", "id_user" );
+        _mapOrderNameToColumnName.put( "channel", "x.label" );
         _mapOrderNameToColumnName.put( "email", "email" );
         _mapOrderNameToColumnName.put( "lastname", "lastname" );
         _mapOrderNameToColumnName.put( "date_close", "date_close" );

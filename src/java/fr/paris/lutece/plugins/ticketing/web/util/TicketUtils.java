@@ -209,11 +209,12 @@ public final class TicketUtils
         List<Ticket> listTickets = (List<Ticket>) TicketHome.getTicketsList( filter );
 
         List<Unit> lstUserUnits = UnitHome.findByIdUser( user.getUserId(  ) );
-
         //Filtering results
         for ( Ticket ticket : listTickets )
         {
-            if ( RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, user ) )
+            TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain(  ) );
+            if ( RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, user ) 
+                    && RBACService.isAuthorized( ticketDomain, TicketDomainResourceIdService.PERMISSION_VIEW, user ) )
             {
                 if ( ( ( ticket.getAssigneeUser(  ) != null ) &&
                         ( ticket.getAssigneeUser(  ).getAdminUserId(  ) == user.getUserId(  ) ) ) ||
@@ -231,13 +232,8 @@ public final class TicketUtils
                 }
                 else
                 {
-                    TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain(  ) );
-
-                    if ( RBACService.isAuthorized( ticketDomain, TicketDomainResourceIdService.PERMISSION_VIEW, user ) )
-                    {
-                        //ticket assign to domain
-                        listDomainTickets.add( ticket );
-                    }
+                    //ticket assign to domain
+                    listDomainTickets.add( ticket );
                 }
             }
         }
