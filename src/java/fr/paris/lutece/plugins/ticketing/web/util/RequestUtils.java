@@ -177,9 +177,10 @@ public final class RequestUtils
         {
             for ( String strParameterValue : listParameterValues )
             {
-                result.add( strParameterValue  );
+                result.add( strParameterValue );
             }
         }
+
         return result;
     }
 }

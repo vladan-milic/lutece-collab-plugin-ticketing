@@ -116,7 +116,7 @@ public class TicketFilter extends OrderByFilter
     {
         this._nIdUser = nIdUser;
     }
-    
+
     /**
      * Check if this filter contains a idUser
      *
@@ -134,7 +134,7 @@ public class TicketFilter extends OrderByFilter
     {
         return _listIdWorkflowState;
     }
-    
+
     /**
      * @param lstIdWorkflowState
      *            the lstIdWorkflowState to set
@@ -606,7 +606,7 @@ public class TicketFilter extends OrderByFilter
     {
         this._strMobilePhoneNumber = strMobilePhoneNumber;
     }
-    
+
     /**
      * Check if this filter contains a MobilePhoneNumber
      *
@@ -616,30 +616,32 @@ public class TicketFilter extends OrderByFilter
     {
         return StringUtils.isNotEmpty( _strMobilePhoneNumber );
     }
-    
+
     /**
      * @return the _nIdChannel
      */
-    public int get_nIdChannel() {
-		return _nIdChannel;
-	}
-    
+    public int get_nIdChannel(  )
+    {
+        return _nIdChannel;
+    }
+
     /**
      * @param nIdChannel
      *            the nIdChannel to set
      */
-	public void set_nIdChannel(int nIdChannel) {
-		this._nIdChannel = nIdChannel;
-	}
-	
-	/**
-     * Check if this filter contains a ChannelID
-     *
-     * @return true if the filter contain an id of Channel
-     */
-	public boolean containChannel(  )
+    public void set_nIdChannel( int nIdChannel )
     {
-        return  ( _nIdChannel != CONSTANT_ID_NULL );
+        this._nIdChannel = nIdChannel;
+    }
+
+    /**
+    * Check if this filter contains a ChannelID
+    *
+    * @return true if the filter contain an id of Channel
+    */
+    public boolean containChannel(  )
+    {
+        return ( _nIdChannel != CONSTANT_ID_NULL );
     }
 
     /**

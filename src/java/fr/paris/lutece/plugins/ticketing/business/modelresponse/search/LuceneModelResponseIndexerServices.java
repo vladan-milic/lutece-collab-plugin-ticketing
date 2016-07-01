@@ -80,13 +80,13 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         doc.add(new StringField(FIELD_RESPONSE, modelReponse.getReponse(), Field.Store.YES));
         doc.add(new StringField(FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString(), Field.Store.YES));
         
-        ArrayList<String> tKeywords = new ArrayList<>();
+       List<String> tKeywords = new ArrayList<>();
         tKeywords.add(modelReponse.getDomain());
         tKeywords.addAll( Arrays.asList(modelReponse.getKeyword().split(",")) );
      
-       String strIndexWords = String.join(" ", tKeywords);
+       String strIndexWords = String.join(" ", tKeywords); 
        // String [] tKeywords = (modelReponse.getKeyword()+",").split(",");
-     
+
      AppLogService.info("\n Ticketing - Model Response Full Text to index \n"+strIndexWords+" \n");
           
         doc.add(new TextField(FIELD_SEARCH_CONTENT, strIndexWords, Field.Store.NO));
@@ -153,10 +153,11 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     public List<ModelResponse> searchResponses(String strQuery) 
     {
         
-         ArrayList<String> tKeywords = new ArrayList<>();       
+         List<String> tKeywords = new ArrayList<>();       
          tKeywords.addAll( Arrays.asList(strQuery.split(",")) );
      
-       String strQueryText = String.join(" ", tKeywords);
+       String strQueryText = String.join(" ", tKeywords); 
+      
        
         List<ModelResponse> list = new ArrayList<>();
         int nMaxResponsePerQuery = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY, 5 );

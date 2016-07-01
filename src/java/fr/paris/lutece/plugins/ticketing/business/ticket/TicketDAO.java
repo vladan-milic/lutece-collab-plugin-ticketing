@@ -662,6 +662,7 @@ public final class TicketDAO implements ITicketDAO
         sbSQL.append( filter.containsCloseDate(  ) ? SQL_FILTER_CLOSE_DATE : StringUtils.EMPTY );
         sbSQL.append( filter.containsUrgency(  ) ? SQL_FILTER_URGENCY : StringUtils.EMPTY );
         sbSQL.append( filter.containChannel(  ) ? SQL_FILTER_ID_CHANNEL : StringUtils.EMPTY );
+
         if ( filter.containsListIdWorkflowState(  ) )
         {
             if ( filter.getListIdWorkflowState(  ).size(  ) == 1 )
