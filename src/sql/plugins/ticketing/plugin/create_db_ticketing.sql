@@ -220,5 +220,4 @@ ALTER TABLE ticketing_instant_response ADD CONSTRAINT fk_ticketing_instant_respo
 ALTER TABLE ticketing_indexer_action ADD CONSTRAINT fk_ticketing_indexer_action_ticket FOREIGN KEY (id_ticket)
       REFERENCES ticketing_ticket (id_ticket) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-
       
