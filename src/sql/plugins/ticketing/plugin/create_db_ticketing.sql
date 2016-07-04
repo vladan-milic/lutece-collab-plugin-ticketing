@@ -219,7 +219,7 @@ ALTER TABLE ticketing_instant_response ADD CONSTRAINT fk_ticketing_instant_respo
       REFERENCES ticketing_ticket_category (id_ticket_category) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE ticketing_indexer_action ADD CONSTRAINT fk_ticketing_indexer_action_ticket FOREIGN KEY (id_ticket)
       REFERENCES ticketing_ticket (id_ticket) ON DELETE RESTRICT ON UPDATE RESTRICT;
-ALTER TABLE ticketing_types_reponses ADD CONSTRAINT fk_ticketing_types_responses_category FOREIGN KEY (id_ticket_category)
+ALTER TABLE ticketing_model_reponses ADD CONSTRAINT fk_ticketing_model_reponses_category FOREIGN KEY (id_ticket_category)
       REFERENCES ticketing_ticket_category (id_ticket_category) ON DELETE RESTRICT ON UPDATE RESTRICT;    
 
       

@@ -81,6 +81,8 @@ CREATE TABLE `ticketing_model_reponses` (
 
 ALTER TABLE `ticketing_model_reponses` ADD PRIMARY KEY (`id_model_response`);
 
+ALTER TABLE ticketing_model_reponses ADD CONSTRAINT fk_ticketing_model_reponses_category FOREIGN KEY (id_ticket_category)
+      REFERENCES ticketing_ticket_category (id_ticket_category) ON DELETE RESTRICT ON UPDATE RESTRICT;    
 
 DELETE FROM core_admin_right WHERE id_right = 'TICKETING_MANAGEMENT_MODEL_RESPONSE';
 INSERT INTO core_admin_right (`id_right`, `name`, `level_right`, `admin_url`, `description`, `is_updatable`, `plugin_name`, `id_feature_group`, `icon_url`, `documentation_url`, `id_order`) VALUES
