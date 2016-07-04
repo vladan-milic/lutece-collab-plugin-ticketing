@@ -197,9 +197,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_MODELRESPONSE, _modelResponse );
-        model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
-        model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceListSimple(  ) );
 
         ModelUtils.storeRichText( request, model );
 
@@ -242,17 +240,8 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
     private void populateLabel( ModelResponse modelResponse )
     {
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( modelResponse.getIdTicketCategory(  ) );
-        modelResponse.setIdDomain( ticketCategory.getIdTicketDomain(  ) );
-        modelResponse.setCategory( ticketCategory.getLabel(  ) );
-
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
-        modelResponse.setIdTicketType( ticketDomain.getIdTicketType(  ) );
+        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain(  ) );
         modelResponse.setDomain( ticketDomain.getLabel(  ) );
-
-        TicketType ticketType = TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) );
-        modelResponse.setTicketType( ticketType.getLabel(  ) );
-        modelResponse.setIdTicketType( ticketType.getId(  ) );
     }
 
     /**
@@ -320,9 +309,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         Map<String, Object> model = getModel(  );
         model.put( MARK_MODELRESPONSE, _modelResponse );
 
-        model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
-        model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceListSimple(  ) );
 
         ModelUtils.storeRichText( request, model );
 
@@ -339,6 +326,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     public String doModifyModelResponse( HttpServletRequest request )
     {
         populate( _modelResponse, request );
+        populateLabel( _modelResponse );
 
         // Check constraints
         if ( !validateBean( _modelResponse, VALIDATION_ATTRIBUTES_PREFIX ) )

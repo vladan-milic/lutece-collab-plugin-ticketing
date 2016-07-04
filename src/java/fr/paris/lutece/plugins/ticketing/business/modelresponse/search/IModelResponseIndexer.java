@@ -24,6 +24,8 @@ interface IModelResponseIndexer
     final String FIELD_TITLE = "title";
     final String FIELD_RESPONSE = "response";
     final String FIELD_KEYWORD = "keyword";
+    final String FIELD_DOMAIN_ID = "id_domain";
+    final String FIELD_DOMAIN_LABEL = "domain";
     final String FIELD_SEARCH_CONTENT = "content";
 
     void update( ModelResponse modelReponse ) throws IOException;
@@ -35,5 +37,4 @@ interface IModelResponseIndexer
     String addAll(  );
 
     List<ModelResponse> searchResponses( String strQuery, String strDomain );
-
 }

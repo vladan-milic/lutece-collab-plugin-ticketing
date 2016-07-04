@@ -59,9 +59,12 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.analyzing.AnalyzingQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -106,7 +109,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         IndexWriter writer = getIndexWriter( false );
         Document doc = getDocument( modelReponse );
         writer.updateDocument( new Term( FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString(  ) ), doc );
-        writer.close();
+        writer.close(  );
     }
 
     private Document getDocument( ModelResponse modelReponse )
@@ -116,11 +119,15 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         doc.add( new StringField( FIELD_TITLE, modelReponse.getTitle(  ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_KEYWORD, modelReponse.getKeyword(  ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_RESPONSE, modelReponse.getReponse(  ), Field.Store.YES ) );
+        doc.add( new IntField( FIELD_DOMAIN_ID, modelReponse.getIdDomain(  ), Field.Store.YES ) );
+        doc.add( new TextField( FIELD_DOMAIN_LABEL, modelReponse.getDomain(  ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString(  ), Field.Store.YES ) );
 
         List<String> tKeywords = new ArrayList<String>(  );
-        tKeywords.add( modelReponse.getDomain(  ) );
         tKeywords.addAll( Arrays.asList( modelReponse.getKeyword(  ).split( "," ) ) );
+
+        //add title to index
+        tKeywords.addAll( Arrays.asList( modelReponse.getTitle(  ).split( " " ) ) );
 
         String strIndexWords = StringUtils.join( tKeywords, " " );
         // String [] tKeywords = (modelReponse.getKeyword()+",").split(",");
@@ -138,7 +145,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 
         IndexWriter writer = getIndexWriter( false );
         writer.deleteDocuments( new Term( FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString(  ) ) );
-        writer.close();
+        writer.close(  );
     }
 
     @Override
@@ -149,7 +156,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         IndexWriter writer = getIndexWriter( false );
         Document doc = getDocument( modelReponse );
         writer.addDocument( doc );
-        writer.close();
+        writer.close(  );
     }
 
     @Override
@@ -169,7 +176,8 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
                 Document doc = getDocument( modelResponse );
                 writer.addDocument( doc );
             }
-           writer.close();
+
+            writer.close(  );
             sbLogs.append( "\n Ticketing - Model Response : Indexed Model Responses : " ).append( modelResponses.size(  ) );
         }
         catch ( IOException ex )
@@ -197,8 +205,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     {
         List<String> tKeywords = new ArrayList<String>(  );
         tKeywords.addAll( Arrays.asList( strQuery.split( "," ) ) );
-
-        String strQueryText = strDomain+" AND \\("+StringUtils.join( tKeywords, " OR " )+" \\)";
+      
 
         List<ModelResponse> list = new ArrayList<ModelResponse>(  );
         int nMaxResponsePerQuery = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY,
@@ -211,11 +218,19 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
             IndexSearcher searcher = new IndexSearcher( reader );
             AnalyzingQueryParser parser = new AnalyzingQueryParser( Version.LUCENE_4_9, FIELD_SEARCH_CONTENT,
                     getAnalyzer(  ) );
-           // parser.setDefaultOperator( AnalyzingQueryParser.Operator.OR );
 
-            Query query = parser.parse( customerParser( strQueryText ) );
-           String  dddd=  query.toString();
-           TopDocs results = searcher.search( query, nMaxResponsePerQuery );
+            BooleanQuery booleanQuery = new BooleanQuery(  );
+            Query queryContent = new TermQuery( new Term( FIELD_SEARCH_CONTENT, StringUtils.join(tKeywords, " ") ) );
+            Query queryDomain = new TermQuery( new Term( FIELD_DOMAIN_LABEL, strDomain ) );
+           
+            booleanQuery.add( queryDomain, BooleanClause.Occur.MUST );           
+             booleanQuery.add( queryContent, BooleanClause.Occur.MUST );
+             
+          // AppLogService.info("\n\n  Query search 2 : " + booleanQuery.toString() + "\n");
+            Query query = new QueryParser( Version.LUCENE_4_9, FIELD_SEARCH_CONTENT, getAnalyzer(  ) ).parse( booleanQuery.toString(  ) );
+
+           // AppLogService.info("\n\n  Query search 2 : " + query.toString() + "\n");
+            TopDocs results = searcher.search( query, nMaxResponsePerQuery );
             ScoreDoc[] hits = results.scoreDocs;
 
             AppLogService.info( "\n Ticketing - Model Response  : query lucene " + hits.length + " \n" );
@@ -225,12 +240,15 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
                 Document doc = searcher.doc( hit.doc );
                 ModelResponse modelResponse = new ModelResponse(  );
                 modelResponse.setId( Integer.parseInt( doc.get( FIELD_ID ) ) );
-                modelResponse.setTitle( doc.get( FIELD_TITLE ) );
+                modelResponse.setTitle( doc.get( FIELD_TITLE )+"("+doc.get( FIELD_KEYWORD )+")" );
                 modelResponse.setReponse( doc.get( FIELD_RESPONSE ) );
-                modelResponse.setKeyword( doc.get( FIELD_KEYWORD ) );
+                modelResponse.setDomain( doc.get( FIELD_DOMAIN_LABEL ) );
+                modelResponse.setIdDomain( Integer.parseInt( doc.get( FIELD_DOMAIN_ID ) ) );
+                modelResponse.setKeyword( doc.get( FIELD_KEYWORD ) );                
                 list.add( modelResponse );
             }
-            reader.close();
+
+            reader.close(  );
         }
         catch ( IOException ex )
         {
@@ -281,7 +299,6 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
             {
                 _analyzer = (Analyzer) Class.forName( strAnalyserClassName ).newInstance(  );
             }
-
             catch ( InstantiationException ie )
             {
                 @SuppressWarnings( "rawtypes" )

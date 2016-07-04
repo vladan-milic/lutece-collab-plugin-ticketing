@@ -106,6 +106,13 @@ public interface ITicketDomainDAO
     ReferenceList selectReferenceList( Plugin plugin );
 
     /**
+    * Get a simple reference list of domains
+    * @param plugin The plugin
+    * @return The reference list
+    */
+    ReferenceList selectReferenceListSimple( Plugin plugin );
+
+    /**
      * check if domain can be removed
      * @param nKey The identifier of the ticketDomain
      * @param plugin the Plugin

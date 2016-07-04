@@ -88,7 +88,6 @@ public class TicketDomainResourceIdService extends ResourceIdService
         p.setPermissionTitleKey( PROPERTY_LABEL_BELONG_TO );
         rt.registerPermission( p );
 
-        
         ResourceTypeManager.registerResourceType( rt );
     }
 
