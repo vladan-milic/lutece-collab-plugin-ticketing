@@ -22,7 +22,7 @@ INSERT INTO ticketing_ticket_category (id_ticket_category, id_ticket_domain, lab
 (1, 100, "Autre" , NULL, 0, 301, 0 ),
 (2, 110, "Réservation de salle" , NULL, 0, 301, 0 ),
 (3, 110, "Autre" , NULL, 0, 301, 0 ),
-(4, 120, "Horaires de stationnement" , NULL, 0, 301, 0 ),
+(4, 120, "Horaires de stationnement" , "DVDSSVP", 0, 301, 0 ),
 (5, 120, "Autre" , NULL, 0, 301, 0 ),
 (6, 200, "Autre" , NULL, 0, 301, 0 ),
 (7, 210, "Problème tarifaire périscolaire" , "FFTARIFPERISCO", 2, 301, 0 ),
