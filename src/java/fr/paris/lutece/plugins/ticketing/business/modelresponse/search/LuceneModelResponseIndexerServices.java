@@ -220,8 +220,8 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
                     getAnalyzer(  ) );
 
             BooleanQuery booleanQuery = new BooleanQuery(  );
-            Query queryContent = new TermQuery( new Term( FIELD_SEARCH_CONTENT, StringUtils.join(tKeywords, " ") ) );
-            Query queryDomain = new TermQuery( new Term( FIELD_DOMAIN_LABEL, strDomain ) );
+            Query queryContent = new TermQuery( new Term( FIELD_SEARCH_CONTENT, customerParser( StringUtils.join(tKeywords, " ")) ) );
+            Query queryDomain = new TermQuery( new Term( FIELD_DOMAIN_LABEL, customerParser(strDomain) ) );
            
             booleanQuery.add( queryDomain, BooleanClause.Occur.MUST );           
              booleanQuery.add( queryContent, BooleanClause.Occur.MUST );
