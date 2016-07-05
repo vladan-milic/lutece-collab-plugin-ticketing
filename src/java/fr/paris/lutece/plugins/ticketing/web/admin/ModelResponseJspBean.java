@@ -33,15 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
+
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -59,8 +57,7 @@ import java.io.IOException;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -238,6 +235,11 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
     }
 
+    /**
+     * Populate label.
+     *
+     * @param modelResponse the model response
+     */
     private void populateLabel( ModelResponse modelResponse )
     {
         TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain(  ) );
