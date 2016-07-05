@@ -36,6 +36,10 @@ package fr.paris.lutece.plugins.ticketing.business.modelresponse.search;
 import fr.paris.lutece.portal.service.daemon.Daemon;
 
 
+/**
+ * modelResponse indexation  daemon
+ *
+ */
 public class ModelResponsesIndexerDaemon extends Daemon
 {
     /**

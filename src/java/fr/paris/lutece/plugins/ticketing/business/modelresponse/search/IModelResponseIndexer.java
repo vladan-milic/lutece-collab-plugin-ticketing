@@ -1,7 +1,35 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (c) 2002-2016, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
  */
 package fr.paris.lutece.plugins.ticketing.business.modelresponse.search;
 
@@ -18,23 +46,48 @@ import java.util.List;
  */
 interface IModelResponseIndexer
 {
-    final String PATH_INDEX = "/WEB-INF/plugins/ticketing/model-responses/indexes";
-    final String FIELD_MODEL_RESPONSE_INFOS = "model_responses";
-    final String FIELD_ID = "id";
-    final String FIELD_TITLE = "title";
-    final String FIELD_RESPONSE = "response";
-    final String FIELD_KEYWORD = "keyword";
-    final String FIELD_DOMAIN_ID = "id_domain";
-    final String FIELD_DOMAIN_LABEL = "domain";
-    final String FIELD_SEARCH_CONTENT = "content";
+    String PATH_INDEX = "/WEB-INF/plugins/ticketing/model-responses/indexes";
+    String FIELD_MODEL_RESPONSE_INFOS = "model_responses";
+    String FIELD_ID = "id";
+    String FIELD_TITLE = "title";
+    String FIELD_RESPONSE = "response";
+    String FIELD_KEYWORD = "keyword";
+    String FIELD_DOMAIN_ID = "id_domain";
+    String FIELD_DOMAIN_LABEL = "domain";
+    String FIELD_SEARCH_CONTENT = "content";
 
+    /**
+     * update index with modelResponse
+     * @param modelReponse modelResponse
+     * @throws IOException ioexception
+     */
     void update( ModelResponse modelReponse ) throws IOException;
 
+    /**
+     * delete index with modelResponse
+     * @param modelReponse modelResponse
+     * @throws IOException ioexception
+     */
     void delete( ModelResponse modelReponse ) throws IOException;
 
+    /**
+     * add modelResponse to index
+     * @param modelReponse modelResponse
+     * @throws IOException ioexception
+     */
     void add( ModelResponse modelReponse ) throws IOException;
 
+    /**
+     * add all modelResponse to index
+     * @return indexation log string
+     */
     String addAll(  );
 
+    /**
+     * search modelResponse matching query
+     * @param strQuery lucene query
+     * @param strDomain domain label
+     * @return list of modelResponse matching query
+     */
     List<ModelResponse> searchResponses( String strQuery, String strDomain );
 }

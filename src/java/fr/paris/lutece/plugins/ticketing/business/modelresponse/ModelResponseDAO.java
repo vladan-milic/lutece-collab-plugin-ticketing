@@ -33,12 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -116,9 +112,7 @@ public final class ModelResponseDAO implements IModelResponseDAO
 
         ModelResponse modelResponse = null;
 
-        TicketCategory ticketCategory;
         TicketDomain ticketDomain;
-        TicketType ticketType;
 
         if ( daoUtil.next(  ) )
         {
@@ -184,9 +178,7 @@ public final class ModelResponseDAO implements IModelResponseDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
         daoUtil.executeQuery(  );
 
-        TicketCategory ticketCategory;
         TicketDomain ticketDomain;
-        TicketType ticketType;
 
         while ( daoUtil.next(  ) )
         {

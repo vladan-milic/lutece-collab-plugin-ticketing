@@ -46,14 +46,14 @@ public interface IModelResponseDAO
 {
     /**
      * Insert a new record in the table.
-     * @param typeResponse instance of the ModelResponse object to insert
+     * @param modelResponse instance of the ModelResponse object to insert
      * @param plugin the Plugin
      */
     void insert( ModelResponse modelResponse, Plugin plugin );
 
     /**
      * Update the record in the table
-     * @param typeResponse the reference of the ModelResponse
+     * @param modelResponse the reference of the ModelResponse
      * @param plugin the Plugin
      */
     void store( ModelResponse modelResponse, Plugin plugin );

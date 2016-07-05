@@ -193,7 +193,8 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     @View( VIEW_CREATE_MODELRESPONSE )
     public String getCreateModelResponse( HttpServletRequest request )
     {
-        _modelResponse = new ModelResponse(  ) ;
+        _modelResponse = new ModelResponse(  );
+
         Map<String, Object> model = getModel(  );
         model.put( MARK_MODELRESPONSE, _modelResponse );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceListSimple(  ) );
