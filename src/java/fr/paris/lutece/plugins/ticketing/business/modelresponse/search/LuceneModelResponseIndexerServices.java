@@ -71,7 +71,6 @@ import java.util.Arrays;
 import java.util.List;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class LuceneModelResponseIndexerServices.
  */
@@ -118,7 +117,7 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
     @Override
     public void update( ModelResponse modelReponse ) throws IOException
     {
-        AppLogService.info( "\n Ticketing - Model Response : " + modelReponse );
+        AppLogService.debug( "\n Ticketing - Model Response : " + modelReponse );
 
         IndexWriter writer = getIndexWriter( false );
         Document doc = getDocument( modelReponse );
@@ -151,7 +150,7 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
 
         String strIndexWords = StringUtils.join( tKeywords, " " );
         // String [] tKeywords = (modelReponse.getKeyword()+",").split(",");
-        AppLogService.info( "\n Ticketing - Model Response Full Text to index \n" + strIndexWords + " \n" );
+        AppLogService.debug( "\n Ticketing - Model Response Full Text to index \n" + strIndexWords + " \n" );
 
         doc.add( new TextField( FIELD_SEARCH_CONTENT, strIndexWords, Field.Store.NO ) );
 
@@ -164,7 +163,7 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
     @Override
     public void delete( ModelResponse modelReponse ) throws IOException
     {
-        AppLogService.info( "\n Ticketing - Model Response  : " + modelReponse );
+        AppLogService.debug( "\n Ticketing - Model Response  : " + modelReponse );
 
         IndexWriter writer = getIndexWriter( false );
         writer.deleteDocuments( new Term( FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString(  ) ) );
@@ -177,7 +176,7 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
     @Override
     public void add( ModelResponse modelReponse ) throws IOException
     {
-        AppLogService.info( "\n Ticketing - Model Response  : " + modelReponse );
+        AppLogService.debug( "\n Ticketing - Model Response  : " + modelReponse );
 
         IndexWriter writer = getIndexWriter( false );
         Document doc = getDocument( modelReponse );
@@ -191,7 +190,7 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
     @Override
     public String addAll(  )
     {
-        AppLogService.info( "\n Ticketing - Model Response : Indexing All model response : \n" );
+        AppLogService.debug( "\n Ticketing - Model Response : Indexing All model response : \n" );
 
         StringBuilder sbLogs = new StringBuilder(  );
 
@@ -215,18 +214,18 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
                 ex.getMessage(  ), ex );
         }
 
-        AppLogService.info( "\n Ticketing - Model Response : end Indexing All model response : \n" );
+        AppLogService.debug( "\n Ticketing - Model Response : end Indexing All model response : \n" );
 
         return sbLogs.toString(  );
     }
 
     /**
-     * Customer parser.
+     * custom parser escaper
      *
      * @param strQuery the str query
      * @return the string
      */
-    private String customerParser( String strQuery )
+    private String customParserEscaper( String strQuery )
     {
         String strResult = QueryParser.escape( strQuery );
 
@@ -242,9 +241,9 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
     public List<ModelResponse> searchResponses( String strQuery, String strDomain )
     {
         List<String> tKeywords = new ArrayList<String>(  );
-        tKeywords.addAll( Arrays.asList( customerParser( strQuery ).split( "," ) ) );
+        tKeywords.addAll( Arrays.asList( customParserEscaper( strQuery ).split( "," ) ) );
 
-        String strQueryText = "+" + FIELD_DOMAIN_LABEL + ":" + customerParser( strDomain ) + "  +(" +
+        String strQueryText = "+" + FIELD_DOMAIN_LABEL + ":" + customParserEscaper( strDomain ) + "  +(" +
             FIELD_SEARCH_CONTENT + ":" + StringUtils.join( tKeywords, " " + FIELD_SEARCH_CONTENT + ":" ) + " )";
 
         List<ModelResponse> list = new ArrayList<ModelResponse>(  );
@@ -257,16 +256,16 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
 
             IndexSearcher searcher = new IndexSearcher( reader );
 
-            AppLogService.info( "\n\n  Query search 2 : " + strQueryText + "\n" );
+            AppLogService.debug( "\n\n  Query search 2 : " + strQueryText + "\n" );
 
             Query query = new QueryParser( Version.LUCENE_4_9, FIELD_SEARCH_CONTENT, getAnalyzer(  ) ).parse( strQueryText );
 
-            AppLogService.info( "\n\n  Query search 2 : " + query.toString(  ) + "\n" );
+            AppLogService.debug( "\n\n  Query search 2 : " + query.toString(  ) + "\n" );
 
             TopDocs results = searcher.search( query, nMaxResponsePerQuery );
             ScoreDoc[] hits = results.scoreDocs;
 
-            AppLogService.info( "\n Ticketing - Model Response  : query lucene " + hits.length + " \n" );
+            AppLogService.debug( "\n Ticketing - Model Response  : query lucene " + hits.length + " \n" );
 
             for ( ScoreDoc hit : hits )
             {
