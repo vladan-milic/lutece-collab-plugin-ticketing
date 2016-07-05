@@ -205,7 +205,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     {
         List<String> tKeywords = new ArrayList<String>(  );
         tKeywords.addAll( Arrays.asList( strQuery.split( "," ) ) );
-      
+       
 
         List<ModelResponse> list = new ArrayList<ModelResponse>(  );
         int nMaxResponsePerQuery = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY,
@@ -220,16 +220,21 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
                     getAnalyzer(  ) );
 
             BooleanQuery booleanQuery = new BooleanQuery(  );
-            Query queryContent = new TermQuery( new Term( FIELD_SEARCH_CONTENT, customerParser( StringUtils.join(tKeywords, " ")) ) );
-            Query queryDomain = new TermQuery( new Term( FIELD_DOMAIN_LABEL, customerParser(strDomain) ) );
-           
+          
+            Query queryDomain = new TermQuery( new Term( FIELD_DOMAIN_LABEL, customerParser(strDomain) ) );           
             booleanQuery.add( queryDomain, BooleanClause.Occur.MUST );           
-             booleanQuery.add( queryContent, BooleanClause.Occur.MUST );
+            
+             for (String tKeyword : tKeywords) {
+            Query queryContent = new TermQuery( new Term( FIELD_SEARCH_CONTENT, customerParser( tKeyword) ) );
+             booleanQuery.add( queryContent, BooleanClause.Occur.SHOULD );
+        }
+             // Query queryContent = new TermQuery( new Term( FIELD_SEARCH_CONTENT, customerParser( StringUtils.join(tKeywords, " ")) ) );
+            // booleanQuery.add( queryContent, BooleanClause.Occur.MUST );
              
-          // AppLogService.info("\n\n  Query search 2 : " + booleanQuery.toString() + "\n");
+           AppLogService.info("\n\n  Query search 2 : " + booleanQuery.toString() + "\n");
             Query query = new QueryParser( Version.LUCENE_4_9, FIELD_SEARCH_CONTENT, getAnalyzer(  ) ).parse( booleanQuery.toString(  ) );
 
-           // AppLogService.info("\n\n  Query search 2 : " + query.toString() + "\n");
+           AppLogService.info("\n\n  Query search 2 : " + query.toString() + "\n");
             TopDocs results = searcher.search( query, nMaxResponsePerQuery );
             ScoreDoc[] hits = results.scoreDocs;
 
