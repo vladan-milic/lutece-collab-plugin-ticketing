@@ -90,7 +90,8 @@ public class TicketSearchXPage extends MVCApplication
 
         if ( StringUtils.isNotEmpty( strQuery ) )
         {
-            List<ModelResponse> listResults = LuceneModelResponseIndexerServices.instance(  ).searchResponses( strQuery,strDomain );
+            List<ModelResponse> listResults = LuceneModelResponseIndexerServices.instance(  )
+                                                                                .searchResponses( strQuery, strDomain );
 
             model.put( SearchConstants.MARK_RESULT, listResults );
             model.put( SearchConstants.MARK_QUERY, strQuery );

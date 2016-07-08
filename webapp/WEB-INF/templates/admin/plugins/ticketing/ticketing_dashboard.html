@@ -1,21 +1,23 @@
-<#macro displayTicketsInfo tickets_label='' tickets_counter='' selected_tab='' awesome_icon=''>
-  <#assign urlManageTickets="jsp/admin/plugins/ticketing/ManageTickets.jsp" />
-  <tr>
-    <td>
-      <a href="${urlManageTickets}?selected_tab=${selected_tab}">
-        <span class="label label-primary"><i class="fa ${awesome_icon}""></i></span>&nbsp;
-        <strong>${tickets_label}</strong>
-      </a>
-    </td>
-    <td>
-      <span class="info-box-number">
-        <a href="${urlManageTickets}?selected_tab=${selected_tab}">
-          ${tickets_counter}
-        </a>
-      </span>
-    </td>
-  </tr>
-</#macro>
+<#if workflow_service_unavailable = false>    
+    <#macro displayTicketsInfo tickets_label='' tickets_counter='' selected_tab='' awesome_icon=''>
+      <#assign urlManageTickets="jsp/admin/plugins/ticketing/ManageTickets.jsp" />
+      <tr>
+        <td>
+          <span class="label label-primary"><i class="fa ${awesome_icon}""></i></span>&nbsp;
+          <a href="${urlManageTickets}?selected_tab=${selected_tab}">
+            <strong>${tickets_label}</strong>
+          </a>
+        </td>
+        <td>
+          <span class="info-box-number">
+            <a href="${urlManageTickets}?selected_tab=${selected_tab}">
+              ${tickets_counter}
+            </a>
+          </span>
+        </td>
+      </tr>
+    </#macro>
+</#if>
 
 <div class="box box-primary box-solid">
   <div class="box-header">
@@ -25,17 +27,25 @@
       <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
     </div>
   </div>
-  <div class="box-body table-responsive no-padding">
-    <table class="table table-striped table-condensed">
-      <#assign urlManageTickets="jsp/admin/plugins/ticketing/ManageTickets.jsp" />
-      <tr>
-        <th>#i18n{ticketing.dashboard.row_name}</th>
-        <th>#i18n{ticketing.dashboard.row_tickets_counter}</th>
-      </tr>
-      <@displayTicketsInfo tickets_label='#i18n{ticketing.dashboard.agentTicketsLabel}' tickets_counter='${ticket_assigned_to_me_counter}' selected_tab='agent' awesome_icon='fa-inbox' />
-      <@displayTicketsInfo tickets_label='#i18n{ticketing.dashboard.groupTicketsLabel}' tickets_counter='${ticket_assigned_to_my_group_counter}' selected_tab='group' awesome_icon='fa-users' />
-      <@displayTicketsInfo tickets_label='#i18n{ticketing.dashboard.domainTicketsLabel}' tickets_counter='${ticket_assigned_to_my_domain_counter}' selected_tab='domain' awesome_icon='fa-tags' />
-    </table>
-  </div>
+  <#if workflow_service_unavailable=false>
+    <div class="box-body table-responsive no-padding">
+      <table class="table table-striped table-condensed">
+        <#assign urlManageTickets="jsp/admin/plugins/ticketing/ManageTickets.jsp" />
+        <tr>
+          <th>#i18n{ticketing.dashboard.row_name}</th>
+          <th>#i18n{ticketing.dashboard.row_tickets_counter}</th>
+        </tr>
+        <@displayTicketsInfo tickets_label='#i18n{ticketing.dashboard.agentTicketsLabel}' tickets_counter='${ticket_assigned_to_me_counter}' selected_tab='agent' awesome_icon='fa-inbox' />
+        <@displayTicketsInfo tickets_label='#i18n{ticketing.dashboard.groupTicketsLabel}' tickets_counter='${ticket_assigned_to_my_group_counter}' selected_tab='group' awesome_icon='fa-users' />
+        <@displayTicketsInfo tickets_label='#i18n{ticketing.dashboard.domainTicketsLabel}' tickets_counter='${ticket_assigned_to_my_domain_counter}' selected_tab='domain' awesome_icon='fa-tags' />
+      </table>
+    </div>
+  <#else>
+    <div class="alert alert-danger" role="alert">
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      <span class="sr-only">Error:</span>
+      #i18n{ticketing.dashboard.workflowService.unavailable}
+    </div>
+  </#if>
   <!-- /.box-body -->
 </div>

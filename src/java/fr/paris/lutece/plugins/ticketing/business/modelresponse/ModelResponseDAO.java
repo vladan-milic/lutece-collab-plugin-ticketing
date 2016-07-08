@@ -33,12 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -54,11 +50,11 @@ public final class ModelResponseDAO implements IModelResponseDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_model_response ) FROM ticketing_model_reponses";
-    private static final String SQL_QUERY_SELECT = "SELECT id_model_response, id_ticket_category, title, reponse,keyword FROM ticketing_model_reponses WHERE id_model_response = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_model_reponses ( id_model_response, id_ticket_category, title, reponse, keyword ) VALUES ( ?, ?, ?, ?,? ) ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_model_response, id_ticket_domain, title, reponse,keyword FROM ticketing_model_reponses WHERE id_model_response = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_model_reponses ( id_model_response, id_ticket_domain, title, reponse, keyword ) VALUES ( ?, ?, ?, ?,? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_model_reponses WHERE id_model_response = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_model_reponses SET id_model_response = ?, id_ticket_category = ?, title = ?, reponse = ?, keyword =? WHERE id_model_response = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_model_response, id_ticket_category, title, reponse,keyword FROM ticketing_model_reponses";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_model_reponses SET id_model_response = ?, id_ticket_domain = ?, title = ?, reponse = ?, keyword =? WHERE id_model_response = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_model_response, id_ticket_domain, title, reponse,keyword FROM ticketing_model_reponses";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_model_response FROM ticketing_model_reponses";
 
     /**
@@ -95,7 +91,7 @@ public final class ModelResponseDAO implements IModelResponseDAO
         int nIndex = 1;
 
         daoUtil.setInt( nIndex++, modelResponse.getId(  ) );
-        daoUtil.setInt( nIndex++, modelResponse.getIdTicketCategory(  ) );
+        daoUtil.setInt( nIndex++, modelResponse.getIdDomain(  ) );
         daoUtil.setString( nIndex++, modelResponse.getTitle(  ) );
         daoUtil.setString( nIndex++, modelResponse.getReponse(  ) );
         daoUtil.setString( nIndex++, modelResponse.getKeyword(  ) );
@@ -116,9 +112,7 @@ public final class ModelResponseDAO implements IModelResponseDAO
 
         ModelResponse modelResponse = null;
 
-        TicketCategory ticketCategory;
         TicketDomain ticketDomain;
-        TicketType ticketType;
 
         if ( daoUtil.next(  ) )
         {
@@ -127,23 +121,14 @@ public final class ModelResponseDAO implements IModelResponseDAO
             int nIndex = 1;
 
             modelResponse.setId( daoUtil.getInt( nIndex++ ) );
-            modelResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
+            modelResponse.setIdDomain( daoUtil.getInt( nIndex++ ) );
             modelResponse.setTitle( daoUtil.getString( nIndex++ ) );
             modelResponse.setReponse( daoUtil.getString( nIndex++ ) );
             modelResponse.setKeyword( daoUtil.getString( nIndex++ ) );
 
             //populate id category, domain and type
-            ticketCategory = TicketCategoryHome.findByPrimaryKey( modelResponse.getIdTicketCategory(  ) );
-            modelResponse.setIdDomain( ticketCategory.getIdTicketDomain(  ) );
-            modelResponse.setCategory( ticketCategory.getLabel(  ) );
-
-            ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
-            modelResponse.setIdTicketType( ticketDomain.getIdTicketType(  ) );
+            ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain(  ) );
             modelResponse.setDomain( ticketDomain.getLabel(  ) );
-
-            ticketType = TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) );
-            modelResponse.setTicketType( ticketType.getLabel(  ) );
-            modelResponse.setIdTicketType( ticketType.getId(  ) );
         }
 
         daoUtil.free(  );
@@ -173,7 +158,7 @@ public final class ModelResponseDAO implements IModelResponseDAO
         int nIndex = 1;
 
         daoUtil.setInt( nIndex++, modelResponse.getId(  ) );
-        daoUtil.setInt( nIndex++, modelResponse.getIdTicketCategory(  ) );
+        daoUtil.setInt( nIndex++, modelResponse.getIdDomain(  ) );
         daoUtil.setString( nIndex++, modelResponse.getTitle(  ) );
         daoUtil.setString( nIndex++, modelResponse.getReponse(  ) );
         daoUtil.setString( nIndex++, modelResponse.getKeyword(  ) );
@@ -193,9 +178,7 @@ public final class ModelResponseDAO implements IModelResponseDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
         daoUtil.executeQuery(  );
 
-        TicketCategory ticketCategory;
         TicketDomain ticketDomain;
-        TicketType ticketType;
 
         while ( daoUtil.next(  ) )
         {
@@ -203,20 +186,14 @@ public final class ModelResponseDAO implements IModelResponseDAO
             int nIndex = 1;
 
             modelResponse.setId( daoUtil.getInt( nIndex++ ) );
-            modelResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
+            modelResponse.setIdDomain( daoUtil.getInt( nIndex++ ) );
             modelResponse.setTitle( daoUtil.getString( nIndex++ ) );
             modelResponse.setReponse( daoUtil.getString( nIndex++ ) );
             modelResponse.setKeyword( daoUtil.getString( nIndex++ ) );
 
             //populate label category, domain and type
-            ticketCategory = TicketCategoryHome.findByPrimaryKey( modelResponse.getIdTicketCategory(  ) );
-            modelResponse.setCategory( ( ticketCategory != null ) ? ticketCategory.getLabel(  ) : "" );
-
-            ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
+            ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain(  ) );
             modelResponse.setDomain( ( ticketDomain != null ) ? ticketDomain.getLabel(  ) : "" );
-
-            ticketType = TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) );
-            modelResponse.setTicketType( ( ticketType != null ) ? ticketType.getLabel(  ) : "" );
 
             typeResponseList.add( modelResponse );
         }

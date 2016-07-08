@@ -42,9 +42,7 @@ import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -56,7 +54,6 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.analyzing.AnalyzingQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -66,28 +63,44 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
-
 import java.io.File;
 import java.io.IOException;
-
 import java.nio.file.Paths;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 
-public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
+/**
+ * The Class LuceneModelResponseIndexerServices.
+ */
+public final class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 {
+    
+    /** The _singleton. */
     private static LuceneModelResponseIndexerServices _singleton;
+    
+    /** The Constant BEAN_SERVICE. */
     private static final String BEAN_SERVICE = "ticketing.modelResponsesServices";
+    
+    /** The Constant PROPERTY_ANALYSER_CLASS_NAME. */
     private static final String PROPERTY_ANALYSER_CLASS_NAME = "ticketing.internalIndexer.lucene.analyser.className";
+    
+    /** The _analyzer. */
     private static Analyzer _analyzer;
 
+    /**
+     * Instantiates a new lucene model response indexer services.
+     */
     private LuceneModelResponseIndexerServices(  )
     {
     }
 
+    /**
+     * Instance.
+     *
+     * @return the lucene model response indexer services
+     */
     public static LuceneModelResponseIndexerServices instance(  )
     {
         if ( _singleton == null )
@@ -98,17 +111,26 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         return _singleton;
     }
 
+    /* (non-Javadoc)
+     * @see fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer#update(fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse)
+     */
     @Override
     public void update( ModelResponse modelReponse ) throws IOException
     {
-        AppLogService.info( "\n Ticketing - Model Response : " + modelReponse );
+        AppLogService.debug( "\n Ticketing - Model Response : " + modelReponse );
 
         IndexWriter writer = getIndexWriter( false );
         Document doc = getDocument( modelReponse );
         writer.updateDocument( new Term( FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString(  ) ), doc );
-        writer.close();
+        writer.close(  );
     }
 
+    /**
+     * Gets the document.
+     *
+     * @param modelReponse the model reponse
+     * @return the document
+     */
     private Document getDocument( ModelResponse modelReponse )
     {
         Document doc = new Document(  );
@@ -116,46 +138,59 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         doc.add( new StringField( FIELD_TITLE, modelReponse.getTitle(  ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_KEYWORD, modelReponse.getKeyword(  ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_RESPONSE, modelReponse.getReponse(  ), Field.Store.YES ) );
+        doc.add( new IntField( FIELD_DOMAIN_ID, modelReponse.getIdDomain(  ), Field.Store.YES ) );
+        doc.add( new TextField( FIELD_DOMAIN_LABEL, modelReponse.getDomain(  ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString(  ), Field.Store.YES ) );
 
         List<String> tKeywords = new ArrayList<String>(  );
-        tKeywords.add( modelReponse.getDomain(  ) );
         tKeywords.addAll( Arrays.asList( modelReponse.getKeyword(  ).split( "," ) ) );
+
+        //add title to index
+        tKeywords.addAll( Arrays.asList( modelReponse.getTitle(  ).split( " " ) ) );
 
         String strIndexWords = StringUtils.join( tKeywords, " " );
         // String [] tKeywords = (modelReponse.getKeyword()+",").split(",");
-        AppLogService.info( "\n Ticketing - Model Response Full Text to index \n" + strIndexWords + " \n" );
+        AppLogService.debug( "\n Ticketing - Model Response Full Text to index \n" + strIndexWords + " \n" );
 
         doc.add( new TextField( FIELD_SEARCH_CONTENT, strIndexWords, Field.Store.NO ) );
 
         return doc;
     }
 
+    /* (non-Javadoc)
+     * @see fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer#delete(fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse)
+     */
     @Override
     public void delete( ModelResponse modelReponse ) throws IOException
     {
-        AppLogService.info( "\n Ticketing - Model Response  : " + modelReponse );
+        AppLogService.debug( "\n Ticketing - Model Response  : " + modelReponse );
 
         IndexWriter writer = getIndexWriter( false );
         writer.deleteDocuments( new Term( FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString(  ) ) );
-        writer.close();
+        writer.close(  );
     }
 
+    /* (non-Javadoc)
+     * @see fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer#add(fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse)
+     */
     @Override
     public void add( ModelResponse modelReponse ) throws IOException
     {
-        AppLogService.info( "\n Ticketing - Model Response  : " + modelReponse );
+        AppLogService.debug( "\n Ticketing - Model Response  : " + modelReponse );
 
         IndexWriter writer = getIndexWriter( false );
         Document doc = getDocument( modelReponse );
         writer.addDocument( doc );
-        writer.close();
+        writer.close(  );
     }
 
+    /* (non-Javadoc)
+     * @see fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer#addAll()
+     */
     @Override
     public String addAll(  )
     {
-        AppLogService.info( "\n Ticketing - Model Response : Indexing All model response : \n" );
+        AppLogService.debug( "\n Ticketing - Model Response : Indexing All model response : \n" );
 
         StringBuilder sbLogs = new StringBuilder(  );
 
@@ -169,7 +204,8 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
                 Document doc = getDocument( modelResponse );
                 writer.addDocument( doc );
             }
-           writer.close();
+
+            writer.close(  );
             sbLogs.append( "\n Ticketing - Model Response : Indexed Model Responses : " ).append( modelResponses.size(  ) );
         }
         catch ( IOException ex )
@@ -178,12 +214,18 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
                 ex.getMessage(  ), ex );
         }
 
-        AppLogService.info( "\n Ticketing - Model Response : end Indexing All model response : \n" );
+        AppLogService.debug( "\n Ticketing - Model Response : end Indexing All model response : \n" );
 
         return sbLogs.toString(  );
     }
 
-    private String customerParser( String strQuery )
+    /**
+     * custom parser escaper
+     *
+     * @param strQuery the str query
+     * @return the string
+     */
+    private String customParserEscaper( String strQuery )
     {
         String strResult = QueryParser.escape( strQuery );
 
@@ -192,13 +234,17 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         return strResult;
     }
 
+    /* (non-Javadoc)
+     * @see fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer#searchResponses(java.lang.String, java.lang.String)
+     */
     @Override
     public List<ModelResponse> searchResponses( String strQuery, String strDomain )
     {
         List<String> tKeywords = new ArrayList<String>(  );
-        tKeywords.addAll( Arrays.asList( strQuery.split( "," ) ) );
+        tKeywords.addAll( Arrays.asList( customParserEscaper( strQuery ).split( "," ) ) );
 
-        String strQueryText = strDomain+" AND \\("+StringUtils.join( tKeywords, " OR " )+" \\)";
+        String strQueryText = "+" + FIELD_DOMAIN_LABEL + ":" + customParserEscaper( strDomain ) + "  +(" +
+            FIELD_SEARCH_CONTENT + ":" + StringUtils.join( tKeywords, " " + FIELD_SEARCH_CONTENT + ":" ) + " )";
 
         List<ModelResponse> list = new ArrayList<ModelResponse>(  );
         int nMaxResponsePerQuery = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY,
@@ -209,28 +255,32 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
             IndexReader reader = DirectoryReader.open( FSDirectory.open( getIndexPath(  ) ) );
 
             IndexSearcher searcher = new IndexSearcher( reader );
-            AnalyzingQueryParser parser = new AnalyzingQueryParser( Version.LUCENE_4_9, FIELD_SEARCH_CONTENT,
-                    getAnalyzer(  ) );
-           // parser.setDefaultOperator( AnalyzingQueryParser.Operator.OR );
 
-            Query query = parser.parse( customerParser( strQueryText ) );
-           String  dddd=  query.toString();
-           TopDocs results = searcher.search( query, nMaxResponsePerQuery );
+            AppLogService.debug( "\n\n  Query search 2 : " + strQueryText + "\n" );
+
+            Query query = new QueryParser( Version.LUCENE_4_9, FIELD_SEARCH_CONTENT, getAnalyzer(  ) ).parse( strQueryText );
+
+            AppLogService.debug( "\n\n  Query search 2 : " + query.toString(  ) + "\n" );
+
+            TopDocs results = searcher.search( query, nMaxResponsePerQuery );
             ScoreDoc[] hits = results.scoreDocs;
 
-            AppLogService.info( "\n Ticketing - Model Response  : query lucene " + hits.length + " \n" );
+            AppLogService.debug( "\n Ticketing - Model Response  : query lucene " + hits.length + " \n" );
 
             for ( ScoreDoc hit : hits )
             {
                 Document doc = searcher.doc( hit.doc );
                 ModelResponse modelResponse = new ModelResponse(  );
                 modelResponse.setId( Integer.parseInt( doc.get( FIELD_ID ) ) );
-                modelResponse.setTitle( doc.get( FIELD_TITLE ) );
+                modelResponse.setTitle( doc.get( FIELD_TITLE ) + "(" + doc.get( FIELD_KEYWORD ) + ")" );
                 modelResponse.setReponse( doc.get( FIELD_RESPONSE ) );
+                modelResponse.setDomain( doc.get( FIELD_DOMAIN_LABEL ) );
+                modelResponse.setIdDomain( Integer.parseInt( doc.get( FIELD_DOMAIN_ID ) ) );
                 modelResponse.setKeyword( doc.get( FIELD_KEYWORD ) );
                 list.add( modelResponse );
             }
-            reader.close();
+
+            reader.close(  );
         }
         catch ( IOException ex )
         {
@@ -246,6 +296,13 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         return list;
     }
 
+    /**
+     * Gets the index writer.
+     *
+     * @param bcreate the bcreate
+     * @return the index writer
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private IndexWriter getIndexWriter( Boolean bcreate )
         throws IOException
     {
@@ -266,6 +323,11 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         return indexWriter;
     }
 
+    /**
+     * Gets the analyzer.
+     *
+     * @return the analyzer
+     */
     private Analyzer getAnalyzer(  )
     {
         if ( _analyzer == null )
@@ -281,7 +343,6 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
             {
                 _analyzer = (Analyzer) Class.forName( strAnalyserClassName ).newInstance(  );
             }
-
             catch ( InstantiationException ie )
             {
                 @SuppressWarnings( "rawtypes" )
@@ -311,6 +372,11 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         return _analyzer;
     }
 
+    /**
+     * Gets the index path.
+     *
+     * @return the index path
+     */
     private File getIndexPath(  )
     {
         String strIndexPath = AppPathService.getAbsolutePathFromRelativePath( PATH_INDEX );

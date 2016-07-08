@@ -59,7 +59,7 @@ public final class ModelResponseHome
 
     /**
      * Create an instance of the modelResponse class
-     * @param typeResponse The instance of the ModelResponse which contains the informations to store
+     * @param modelResponse The instance of the ModelResponse which contains the informations to store
      * @return The  instance of modelResponse which has been created with its primary key.
      */
     public static ModelResponse create( ModelResponse modelResponse )

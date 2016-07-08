@@ -151,4 +151,13 @@ public final class TicketDomainHome
     {
         return _dao.selectReferenceList( _plugin );
     }
+
+    /**
+    * returns referenceList
+    * @return ReferenceList
+    */
+    public static ReferenceList getReferenceListSimple(  )
+    {
+        return _dao.selectReferenceListSimple( _plugin );
+    }
 }

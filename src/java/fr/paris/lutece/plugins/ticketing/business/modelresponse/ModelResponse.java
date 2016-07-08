@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
-import org.hibernate.validator.constraints.*;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Size;
 
 
 /**
@@ -49,8 +49,6 @@ public class ModelResponse implements Serializable
 
     // Variables declarations 
     private int _nId;
-    private int _nIdTicketCategory;
-    private int _nIdTicketType;
     private int _nIdDomain;
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Title.notEmpty}" )
     @Size( max = 500, message = "#i18n{ticketing.validation.modelresponse.Title.size}" )
@@ -61,8 +59,6 @@ public class ModelResponse implements Serializable
     @Size( max = 1000, message = "#i18n{ticketing.validation.modelresponse.Keyword.size}" )
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Keyword.notEmpty}" )
     private String _strKeyword;
-    private String _strCategory;
-    private String _strTicketType;
     private String _strDomain;
 
     /**
@@ -81,24 +77,6 @@ public class ModelResponse implements Serializable
     public void setId( int nId )
     {
         _nId = nId;
-    }
-
-    /**
-     * Returns the IdTicketCategory
-     * @return The IdTicketCategory
-     */
-    public int getIdTicketCategory(  )
-    {
-        return _nIdTicketCategory;
-    }
-
-    /**
-     * Sets the IdTicketCategory
-     * @param nIdTicketCategory The IdTicketCategory
-     */
-    public void setIdTicketCategory( int nIdTicketCategory )
-    {
-        _nIdTicketCategory = nIdTicketCategory;
     }
 
     /**
@@ -138,42 +116,6 @@ public class ModelResponse implements Serializable
     }
 
     /**
-     * Returns the Category
-     * @return The Category
-     */
-    public String getCategory(  )
-    {
-        return _strCategory;
-    }
-
-    /**
-     * Sets the Category
-     * @param strCategory The Category
-     */
-    public void setCategory( String strCategory )
-    {
-        _strCategory = strCategory;
-    }
-
-    /**
-     * Returns the TicketType
-     * @return The TicketType
-     */
-    public String getTicketType(  )
-    {
-        return _strTicketType;
-    }
-
-    /**
-     * Sets the TicketType
-     * @param strTicketType The TicketType
-     */
-    public void setTicketType( String strTicketType )
-    {
-        _strTicketType = strTicketType;
-    }
-
-    /**
      * Returns the Domain
      * @return The Domain
      */
@@ -189,24 +131,6 @@ public class ModelResponse implements Serializable
     public void setDomain( String strDomain )
     {
         _strDomain = strDomain;
-    }
-
-    /**
-     * Returns the IdTicketType
-     * @return The IdTicketType
-     */
-    public int getIdTicketType(  )
-    {
-        return _nIdTicketType;
-    }
-
-    /**
-     * Sets the IdTicketType
-     * @param nIdTicketType The IdTicketType
-     */
-    public void setIdTicketType( int nIdTicketType )
-    {
-        _nIdTicketType = nIdTicketType;
     }
 
     /**

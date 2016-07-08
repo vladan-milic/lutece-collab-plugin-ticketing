@@ -72,7 +72,7 @@ INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_PLUGIN_CONFIGU
 DROP TABLE IF EXISTS ticketing_model_reponses;
 CREATE TABLE `ticketing_model_reponses` (
   `id_model_response` int(6) NOT NULL,
-  `id_ticket_category` int(11) NOT NULL DEFAULT '0',
+  `id_ticket_domain` int(11) NOT NULL DEFAULT '0',
   `title` varchar(500) NOT NULL DEFAULT '',
   `reponse` text,
   `keyword` text
@@ -80,6 +80,9 @@ CREATE TABLE `ticketing_model_reponses` (
 
 
 ALTER TABLE `ticketing_model_reponses` ADD PRIMARY KEY (`id_model_response`);
+
+ALTER TABLE ticketing_model_reponses ADD CONSTRAINT fk_ticketing_model_reponses_category FOREIGN KEY (id_ticket_category)
+      REFERENCES ticketing_ticket_category (id_ticket_category) ON DELETE RESTRICT ON UPDATE RESTRICT;    
 
 
 DELETE FROM core_admin_right WHERE id_right = 'TICKETING_MANAGEMENT_MODEL_RESPONSE';

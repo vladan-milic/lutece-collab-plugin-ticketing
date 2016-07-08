@@ -33,15 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
+
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -59,8 +57,7 @@ import java.io.IOException;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -193,13 +190,11 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     @View( VIEW_CREATE_MODELRESPONSE )
     public String getCreateModelResponse( HttpServletRequest request )
     {
-        _modelResponse = ( _modelResponse != null ) ? _modelResponse : new ModelResponse(  );
+        _modelResponse = new ModelResponse(  );
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_MODELRESPONSE, _modelResponse );
-        model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
-        model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceListSimple(  ) );
 
         ModelUtils.storeRichText( request, model );
 
@@ -240,19 +235,15 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
     }
 
+    /**
+     * Populate label.
+     *
+     * @param modelResponse the model response
+     */
     private void populateLabel( ModelResponse modelResponse )
     {
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( modelResponse.getIdTicketCategory(  ) );
-        modelResponse.setIdDomain( ticketCategory.getIdTicketDomain(  ) );
-        modelResponse.setCategory( ticketCategory.getLabel(  ) );
-
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
-        modelResponse.setIdTicketType( ticketDomain.getIdTicketType(  ) );
+        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain(  ) );
         modelResponse.setDomain( ticketDomain.getLabel(  ) );
-
-        TicketType ticketType = TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) );
-        modelResponse.setTicketType( ticketType.getLabel(  ) );
-        modelResponse.setIdTicketType( ticketType.getId(  ) );
     }
 
     /**
@@ -320,9 +311,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         Map<String, Object> model = getModel(  );
         model.put( MARK_MODELRESPONSE, _modelResponse );
 
-        model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
-        model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceListSimple(  ) );
 
         ModelUtils.storeRichText( request, model );
 
@@ -339,6 +328,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     public String doModifyModelResponse( HttpServletRequest request )
     {
         populate( _modelResponse, request );
+        populateLabel( _modelResponse );
 
         // Check constraints
         if ( !validateBean( _modelResponse, VALIDATION_ATTRIBUTES_PREFIX ) )
