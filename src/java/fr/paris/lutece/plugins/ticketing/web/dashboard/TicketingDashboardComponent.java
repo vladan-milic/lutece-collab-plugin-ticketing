@@ -44,6 +44,7 @@ import fr.paris.lutece.portal.service.dashboard.DashboardComponent;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
@@ -67,6 +68,7 @@ public class TicketingDashboardComponent extends DashboardComponent
     private static final String MARK_TICKET_ASSIGNED_TO_ME_COUNTER = "ticket_assigned_to_me_counter";
     private static final String MARK_TICKET_ASSIGNED_TO_MY_GROUP_COUNTER = "ticket_assigned_to_my_group_counter";
     private static final String MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER = "ticket_assigned_to_my_domain_counter";
+    private static final String MARK_WORFLOWSERVICE_UNAVAILABLE = "workflow_service_unavailable";
 
     // PARAMETERS
     private static final String PARAMETER_PLUGIN_NAME = "plugin_name";
@@ -85,25 +87,36 @@ public class TicketingDashboardComponent extends DashboardComponent
 
         UrlItem url = new UrlItem( right.getUrl(  ) );
         url.addParameter( PARAMETER_PLUGIN_NAME, right.getPluginName(  ) );
-
-        TicketFilter filter = TicketFilterHelper.getDefaultFilter( user );
-
-        List<Ticket> listAgentTickets = new ArrayList<Ticket>(  );
-        List<Ticket> listGroupTickets = new ArrayList<Ticket>(  );
-        List<Ticket> listDomainTickets = new ArrayList<Ticket>(  );
-
-        TicketUtils.setTicketsListByPerimeter( user, filter, request, listAgentTickets, listGroupTickets,
-            listDomainTickets );
-
+        
         Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( MARK_TICKET_ASSIGNED_TO_ME_COUNTER, listAgentTickets.size(  ) );
-        model.put( MARK_TICKET_ASSIGNED_TO_MY_GROUP_COUNTER, listGroupTickets.size(  ) );
-        model.put( MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER, listDomainTickets.size(  ) );
         model.put( MARK_URL, url.getUrl(  ) );
         model.put( MARK_ICON, plugin.getIconUrl(  ) );
+        
+        if ( WorkflowService.getInstance(  ).isAvailable(  ) ){
+            TicketFilter filter = TicketFilterHelper.getFilterFromRequest( request );
 
+            List<Ticket> listAgentTickets = new ArrayList<Ticket>(  );
+            List<Ticket> listGroupTickets = new ArrayList<Ticket>(  );
+            List<Ticket> listDomainTickets = new ArrayList<Ticket>(  );
+
+            TicketUtils.setTicketsListByPerimeter( user, filter, request, listAgentTickets, listGroupTickets,
+            listDomainTickets );
+
+            
+            model.put( MARK_TICKET_ASSIGNED_TO_ME_COUNTER, listAgentTickets.size(  ) );
+            model.put( MARK_TICKET_ASSIGNED_TO_MY_GROUP_COUNTER, listGroupTickets.size(  ) );
+            model.put( MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER, listDomainTickets.size(  ) );
+            model.put( MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER, listDomainTickets.size(  ) );
+            model.put( MARK_WORFLOWSERVICE_UNAVAILABLE, false );
+        }
+        else{
+            model.put( MARK_WORFLOWSERVICE_UNAVAILABLE, true );
+        }
+        
         HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_DASHBOARD, user.getLocale(  ), model );
-
         return t.getHtml(  );
     }
 }
+
+
+
