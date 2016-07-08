@@ -97,3 +97,5 @@ DELETE FROM core_datastore WHERE core_datastore.entity_key = "core.daemon.modelR
 INSERT INTO core_datastore (`entity_key`, `entity_value`) VALUES
 ('core.daemon.modelResponsesIndexerDaemon.interval', '6000'),
 ('core.daemon.modelResponsesIndexerDaemon.onStartUp', 'true');
+
+ALTER TABLE ticketing_ticket ADD COLUMN is_read int(1) NOT NULL default '0';

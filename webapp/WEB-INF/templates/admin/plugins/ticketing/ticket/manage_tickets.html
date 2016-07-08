@@ -32,7 +32,15 @@
       	  </thead>
       		<tbody>
     			<#list panel_list as ticket >
-    			<tr data-url="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}">
+    			<tr data-url="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" 
+                  <#if id == "agent">
+                    <#if ticket.isRead() >
+                      class="read"
+                    <#else>
+                      class="unread"
+                    </#if>
+                  </#if>"
+                >
     			  <td>
               <#assign textColor="aqua"/>
               <#if ticket.urgency==1 >

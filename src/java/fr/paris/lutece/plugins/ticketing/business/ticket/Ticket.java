@@ -132,6 +132,7 @@ public class Ticket implements Serializable, RBACResource
     private String _strUserMessage;
     private String _strUrl;
     private Channel _channel = new Channel(  );
+    private boolean _bRead;
 
     /**
      * Enriches empty ticket attributes with specified values
@@ -954,6 +955,24 @@ public class Ticket implements Serializable, RBACResource
     public Channel getChannel(  )
     {
         return _channel;
+    }
+    
+    /**
+     * Sets the flag to know if the ticket has been read (by the assignee user)
+     * @param bRead {@code true} if the ticket has been read, {@code false} otherwise 
+     */
+    public void setRead( boolean bRead )
+    {
+        _bRead = bRead;
+    }
+
+    /**
+     * Returns the flag to know if the ticket has been read (by the assignee user)
+     * @return {@code true} if the ticket has been read, {@code false} otherwise
+     */
+    public boolean isRead(  )
+    {
+        return _bRead;
     }
 
     /**
