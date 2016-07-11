@@ -956,10 +956,10 @@ public class Ticket implements Serializable, RBACResource
     {
         return _channel;
     }
-    
+
     /**
      * Sets the flag to know if the ticket has been read (by the assignee user)
-     * @param bRead {@code true} if the ticket has been read, {@code false} otherwise 
+     * @param bRead {@code true} if the ticket has been read, {@code false} otherwise
      */
     public void setRead( boolean bRead )
     {

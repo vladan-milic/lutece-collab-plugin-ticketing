@@ -42,7 +42,9 @@ import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+
 import org.apache.commons.lang.StringUtils;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -63,9 +65,12 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+
 import java.io.File;
 import java.io.IOException;
+
 import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -76,16 +81,15 @@ import java.util.List;
  */
 public final class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 {
-    
     /** The _singleton. */
     private static LuceneModelResponseIndexerServices _singleton;
-    
+
     /** The Constant BEAN_SERVICE. */
     private static final String BEAN_SERVICE = "ticketing.modelResponsesServices";
-    
+
     /** The Constant PROPERTY_ANALYSER_CLASS_NAME. */
     private static final String PROPERTY_ANALYSER_CLASS_NAME = "ticketing.internalIndexer.lucene.analyser.className";
-    
+
     /** The _analyzer. */
     private static Analyzer _analyzer;
 
