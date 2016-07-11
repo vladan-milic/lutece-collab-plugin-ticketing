@@ -93,7 +93,7 @@ public class TicketingDashboardComponent extends DashboardComponent
         model.put( MARK_ICON, plugin.getIconUrl(  ) );
         
         if ( WorkflowService.getInstance(  ).isAvailable(  ) ){
-            TicketFilter filter = TicketFilterHelper.getFilterFromRequest( request );
+            TicketFilter filter = TicketFilterHelper.getFilter( request, user );
 
             List<Ticket> listAgentTickets = new ArrayList<Ticket>(  );
             List<Ticket> listGroupTickets = new ArrayList<Ticket>(  );
