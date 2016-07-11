@@ -33,7 +33,7 @@
       		<tbody>
     			<#list panel_list as ticket >
     			<tr data-url="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" 
-                  <#if id == "agent">
+                  <#if id == "agent" || id == "group">
                     <#if ticket.isRead() >
                       class="read"
                     <#else>
