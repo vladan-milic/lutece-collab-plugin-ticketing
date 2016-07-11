@@ -103,6 +103,14 @@ public interface ITicketDAO
      */
     List<Integer> selectIdTicketsList( Plugin plugin );
 
+    /**
+     * Stores the flag to know if the ticket has been read (by the assignee user)
+     * @param nIdTicket the ticket id
+     * @param bIsRead {@code true} if the ticket has been read, {@code false} otherwise
+     * @param plugin the plugin
+     */
+    void storeIsRead( int nIdTicket, boolean bIsRead, Plugin plugin );
+
     // ----------------------------------------
     // Ticket response management
     // ----------------------------------------

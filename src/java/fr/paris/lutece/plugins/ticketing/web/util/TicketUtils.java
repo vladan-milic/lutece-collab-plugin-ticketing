@@ -218,10 +218,7 @@ public final class TicketUtils
             if ( RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, user ) &&
                     RBACService.isAuthorized( ticketDomain, TicketDomainResourceIdService.PERMISSION_VIEW, user ) )
             {
-                if ( ( ( ticket.getAssigneeUser(  ) != null ) &&
-                        ( ticket.getAssigneeUser(  ).getAdminUserId(  ) == user.getUserId(  ) ) ) ||
-                        ( ( ticket.getAssignerUser(  ) != null ) &&
-                        ( ticket.getAssignerUser(  ).getAdminUserId(  ) == user.getUserId(  ) ) ) )
+                if ( ( isAssignee( ticket, user ) ) || ( isAssigner( ticket, user ) ) )
                 {
                     //ticket assign to agent
                     listAgentTickets.add( ticket );
@@ -330,5 +327,29 @@ public final class TicketUtils
     public static boolean isIdSet( int nId )
     {
         return ( nId != TicketingConstants.PROPERTY_UNSET_INT ) && ( nId != 0 );
+    }
+
+    /**
+     * Tests if the specified ticket is assigned to the specified user
+     * @param ticket the ticket
+     * @param user the user
+     * @return {@code true} if the ticket is assigned to the user, {@code false} otherwise
+     */
+    public static boolean isAssignee( Ticket ticket, AdminUser user )
+    {
+        return ( ticket.getAssigneeUser(  ) != null ) &&
+        ( ticket.getAssigneeUser(  ).getAdminUserId(  ) == user.getUserId(  ) );
+    }
+
+    /**
+     * Tests if the specified user is the assigner of the specified ticket
+     * @param ticket the ticket
+     * @param user the user
+     * @return {@code true} if the user is the assigner of the ticket, {@code false} otherwise
+     */
+    public static boolean isAssigner( Ticket ticket, AdminUser user )
+    {
+        return ( ticket.getAssignerUser(  ) != null ) &&
+        ( ticket.getAssignerUser(  ).getAdminUserId(  ) == user.getUserId(  ) );
     }
 }

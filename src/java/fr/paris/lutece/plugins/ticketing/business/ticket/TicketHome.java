@@ -156,6 +156,42 @@ public final class TicketHome
     }
 
     /**
+     * Marks the specified ticket as read
+     * @param ticket the ticket
+     */
+    public static void markAsRead( Ticket ticket )
+    {
+        markAsRead( ticket.getId(  ) );
+    }
+
+    /**
+     * Marks the specified ticket as read
+     * @param nIdTicket the ticket
+     */
+    public static void markAsRead( int nIdTicket )
+    {
+        _dao.storeIsRead( nIdTicket, true, _plugin );
+    }
+
+    /**
+     * Marks the specified ticket as unread
+     * @param ticket the ticket
+     */
+    public static void markAsUnread( Ticket ticket )
+    {
+        markAsUnread( ticket.getId(  ) );
+    }
+
+    /**
+     * Marks the specified ticket as unread
+     * @param nIdTicket the ticket
+     */
+    public static void markAsUnread( int nIdTicket )
+    {
+        _dao.storeIsRead( nIdTicket, false, _plugin );
+    }
+
+    /**
      * Load the data of all the ticket objects and returns them in form of a collection
      * @return the collection which contains the data of all the ticket objects
      */

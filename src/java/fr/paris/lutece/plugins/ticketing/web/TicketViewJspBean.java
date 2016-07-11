@@ -47,6 +47,7 @@ import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -173,6 +174,11 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
 
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
+
+        if ( TicketUtils.isAssignee( ticket, getUser(  ) ) )
+        {
+            TicketHome.markAsRead( ticket );
+        }
 
         String messageInfo = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION,
                 TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
