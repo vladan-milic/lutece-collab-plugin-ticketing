@@ -130,7 +130,13 @@
             </#if>
     				<#if ticket.assigneeUser??>
               <!-- <p class="text-left"> -->
-              <p>
+              <p class="id-coord" data-template-firstname="${ticket.assigneeUser.firstname}" 
+            								data-template-lastname="${ticket.assigneeUser.lastname}" 
+            								data-template-domain="${ticket.ticketDomain}" 
+            								data-template-service="${ticket.assigneeUnit.name}"
+            								data-template-email="${ticket.assigneeUser.email}" 
+            								data-template-telephone="..."  
+            								data-container="body" data-toggle="popover" data-placement="left">
     				  <#if avatar_available>
                 <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}" alt="" title="Avatar"></#if>
     				    <span>${ticket.assigneeUser.firstname} <br/> ${ticket.assigneeUser.lastname}</span>
@@ -372,4 +378,39 @@ function setSelectedTab(tab){
 			return text;
 		}
     });
+</script>
+<script type="text/javascript">
+$(function(){ $(".id-coord").popover(
+		{ 
+			trigger: "manual",
+			html: true, 
+			animation:false,
+			content: function() {
+				var firstname = "<p> Prénom : <span>" + $(this).attr('data-template-firstname') + "</span></p>";
+				var lastname = "<p> Nom : <span>" + $(this).attr("data-template-lastname") + "</span></p>";
+				var domain =  "<p> Domaine : <span>" + $(this).attr("data-template-domain") + "</span></p>";
+				var service = "<p> Service : <span> " + $(this).attr("data-template-service") + "</span></p>";
+				var telephone = " <p> <span class='fa fa-phone'/> : " + $(this).attr("data-template-telephone") + "</span></p>";
+				var email = "<p> <span class='fa fa-envelope'/> " + $(this).attr("data-template-email") + "</span></p>";
+				var popup = "<div>" +firstname+lastname+domain+service+telephone+email+ "</div>";
+          		return $(popup).html();
+        	}
+		}
+	)
+	.on("mouseenter", function () {
+        var _this = this;
+        $(_this).popover("show");
+        $(".popover").on("mouseleave", function () {
+            $(_this).popover('hide');
+        });
+    }).on("mouseleave", function () {
+        var _this = this;
+        setTimeout(function () {
+            if (!$(".popover:hover").length) {
+                $(_this).popover("hide");
+            }
+        }, 300);
+	});
+	
+});
 </script>
