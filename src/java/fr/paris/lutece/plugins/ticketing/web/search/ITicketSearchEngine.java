@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.search;
 
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.portal.service.search.SearchResult;
 
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -50,39 +51,12 @@ public interface ITicketSearchEngine
     int MAX_RESPONSE_NUMBER = 10;
 
     /**
-     * search tickets which contains strQuery in lucene reference field
-     * @param strTicketRef query to search
-     * @return Results as a collection of SearchResult
-     * @throws ParseException exception occurs while parsing input query
-     */
-    List<SearchResult> searchTicketFromReference( String strTicketRef )
-        throws ParseException;
-
-    /**
-     * search tickets which contains strQuery in lucene category field
-     * @param strTicketCategory query to search
-     * @return Results as a collection of SearchResult
-     * @throws ParseException exception occurs while parsing input query
-     */
-    List<SearchResult> searchTicketsFromCategory( String strTicketCategory )
-        throws ParseException;
-
-    /**
      * search tickets which contains strQuery in lucene contents field
      * @param strQuery query to search
+     * @param listTicketDomain list domains authorized for admin user
      * @return Results as a collection of SearchResult
      * @throws ParseException exception occurs while parsing input query
      */
-    List<SearchResult> searchTickets( String strQuery )
-        throws ParseException;
-
-    /**
-     * Return response results matching input query
-     * @param strQuery The search query
-     * @param strCategory category of ticket
-     * @return Results as a collection of SearchResult
-     * @throws ParseException exception occurs while parsing input query
-     */
-    List<SearchResult> searchResponseResults( String strQuery, String strCategory )
+    List<SearchResult> searchTickets( String strQuery, List<TicketDomain> listTicketDomain )
         throws ParseException;
 }

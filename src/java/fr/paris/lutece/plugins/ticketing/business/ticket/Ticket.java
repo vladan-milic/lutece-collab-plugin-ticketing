@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,13 +49,9 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import org.jsoup.Jsoup;
-
 import java.io.Serializable;
 
 import java.sql.Timestamp;
-
-import java.text.SimpleDateFormat;
 
 import java.util.Collection;
 import java.util.List;
@@ -860,7 +856,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the user from assign up
-     * @param userFromAssignUp The user from assign up
+     * @param assignerUser The user from assign up
      */
     public void setAssignerUser( AssigneeUser assignerUser )
     {
@@ -956,10 +952,10 @@ public class Ticket implements Serializable, RBACResource
     {
         return _channel;
     }
-    
+
     /**
      * Sets the flag to know if the ticket has been read (by the assignee user)
-     * @param bRead {@code true} if the ticket has been read, {@code false} otherwise 
+     * @param bRead {@code true} if the ticket has been read, {@code false} otherwise
      */
     public void setRead( boolean bRead )
     {
@@ -982,249 +978,6 @@ public class Ticket implements Serializable, RBACResource
     public int getUrgency(  )
     {
         return ( _nCriticality >= _nPriority ) ? _nCriticality : _nPriority;
-    }
-
-    /**
-     * returns a string with content fields to be indexed
-     * @return string with content fields to be indexed
-     */
-    public String getContentForIndexer(  )
-    {
-        StringBuilder sb = new StringBuilder(  );
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
-        sb.append( _nId ).append( SEPARATOR );
-
-        if ( StringUtils.isNotEmpty( _strReference ) )
-        {
-            sb.append( _strReference ).append( SEPARATOR );
-        }
-
-        if ( _nIdUserTitle > 0 )
-        {
-            sb.append( _nIdUserTitle ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strUserTitle ) )
-        {
-            sb.append( _strUserTitle ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strFirstname ) )
-        {
-            sb.append( _strFirstname ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strLastname ) )
-        {
-            sb.append( _strLastname ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strEmail ) )
-        {
-            sb.append( _strEmail ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strFixedPhoneNumber ) )
-        {
-            sb.append( _strFixedPhoneNumber ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strMobilePhoneNumber ) )
-        {
-            sb.append( _strMobilePhoneNumber ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strTicketType ) )
-        {
-            sb.append( _strTicketType ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strTicketDomain ) )
-        {
-            sb.append( _strTicketDomain ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strTicketCategory ) )
-        {
-            sb.append( _strTicketCategory ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strContactMode ) )
-        {
-            sb.append( _strContactMode ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strTicketComment ) )
-        {
-            sb.append( _strTicketComment ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strConfirmationMsg ) )
-        {
-            sb.append( _strConfirmationMsg ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strGuid ) )
-        {
-            sb.append( _strGuid ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strTicketStatusText ) )
-        {
-            sb.append( _strTicketStatusText ).append( SEPARATOR );
-        }
-
-        if ( _state != null )
-        {
-            sb.append( _state.getDescription(  ) ).append( SEPARATOR );
-        }
-
-        if ( _dDateCreate != null )
-        {
-            sb.append( simpleDateFormat.format( _dDateCreate.getTime(  ) ) ).append( SEPARATOR );
-        }
-
-        if ( _dDateUpdate != null )
-        {
-            sb.append( simpleDateFormat.format( _dDateUpdate.getTime(  ) ) ).append( SEPARATOR );
-        }
-
-        if ( _dDateClose != null )
-        {
-            sb.append( simpleDateFormat.format( _dDateClose.getTime(  ) ) ).append( SEPARATOR );
-        }
-
-        if ( _listResponse != null )
-        {
-            for ( Response response : _listResponse )
-            { //TODO
-
-                if ( response.getResponseValue(  ) != null )
-                {
-                    sb.append( response.getResponseValue(  ) ).append( SEPARATOR );
-                }
-            }
-        }
-
-        if ( _user != null )
-        {
-            sb.append( _user.getFirstname(  ) ).append( SEPARATOR ).append( _user.getLastname(  ) ).append( SEPARATOR );
-        }
-
-        if ( _channel != null )
-        {
-            sb.append( _channel.getLabel(  ) ).append( SEPARATOR );
-        }
-
-        if ( _unit != null )
-        {
-            sb.append( _unit.getName(  ) ).append( SEPARATOR );
-        }
-
-        if ( _strUserMessage != null )
-        {
-            sb.append( Jsoup.parse( _strUserMessage ).text(  ) ).append( SEPARATOR );
-        }
-
-        if ( _nCriticality > 0 )
-        {
-            sb.append( TicketCriticality.valueOf( _nCriticality ).toString(  ) ).append( SEPARATOR );
-        }
-
-        if ( _nPriority > 0 )
-        {
-            sb.append( TicketCriticality.valueOf( _nPriority ).toString(  ) ).append( SEPARATOR );
-        }
-
-        return sb.toString(  );
-    }
-
-    /**
-     * @return summary of ticket
-     * returns summary of ticket to be displayed
-     */
-    public String getDisplaySummary(  )
-    {
-        StringBuilder sb = new StringBuilder(  );
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
-
-        if ( _dDateCreate != null )
-        {
-            sb.append( simpleDateFormat.format( _dDateCreate.getTime(  ) ) ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strReference ) )
-        {
-            sb.append( _strReference ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strUserTitle ) )
-        {
-            sb.append( _strUserTitle ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strFirstname ) )
-        {
-            sb.append( _strFirstname ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strLastname ) )
-        {
-            sb.append( _strLastname ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strTicketType ) )
-        {
-            sb.append( _strTicketType ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strTicketDomain ) )
-        {
-            sb.append( _strTicketDomain ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strTicketCategory ) )
-        {
-            sb.append( _strTicketCategory ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strTicketComment ) )
-        {
-            sb.append( _strTicketComment ).append( SEPARATOR );
-        }
-
-        return sb.toString(  );
-    }
-
-    /**
-     * @return title of ticket
-     * returns title of ticket to be displayed
-     */
-    public String getDisplayTitle(  )
-    {
-        StringBuilder sb = new StringBuilder(  );
-
-        if ( StringUtils.isNotEmpty( _strReference ) )
-        {
-            sb.append( _strReference ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strFirstname ) )
-        {
-            sb.append( _strFirstname ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strLastname ) )
-        {
-            sb.append( _strLastname ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotEmpty( _strTicketCategory ) )
-        {
-            sb.append( _strTicketCategory ).append( SEPARATOR );
-        }
-
-        return sb.toString(  );
     }
 
     /**

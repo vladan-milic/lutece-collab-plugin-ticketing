@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,6 +44,7 @@ import org.apache.lucene.document.Document;
 public class TicketSearchItem extends SearchItem
 {
     public static final String FIELD_CATEGORY = "category";
+    public static final String FIELD_DOMAIN = "domain";
     public static final String FIELD_REFERENCE = "reference";
     public static final String FIELD_TICKET_ID = "ticket_id";
     public static final String FIELD_RESPONSE = "ticket_response";
@@ -57,6 +58,7 @@ public class TicketSearchItem extends SearchItem
     private String _strCategory;
     private String _strResponse;
     private String _strComment;
+    private String _strDomain;
 
     /**
      * Constructor
@@ -70,6 +72,7 @@ public class TicketSearchItem extends SearchItem
         _strCategory = document.get( FIELD_CATEGORY );
         _strResponse = document.get( FIELD_RESPONSE );
         _strComment = document.get( FIELD_COMMENT );
+        _strDomain = document.get( FIELD_DOMAIN );
     }
 
     /**
@@ -118,6 +121,22 @@ public class TicketSearchItem extends SearchItem
     public void setCategory( String strCategory )
     {
         this._strCategory = strCategory;
+    }
+
+    /**
+     * @return the _strDomain
+     */
+    public String getDomain(  )
+    {
+        return _strDomain;
+    }
+
+    /**
+     * @param strDomain the strDomain to set
+     */
+    public void setDomain( String strDomain )
+    {
+        this._strDomain = strDomain;
     }
 
     /**

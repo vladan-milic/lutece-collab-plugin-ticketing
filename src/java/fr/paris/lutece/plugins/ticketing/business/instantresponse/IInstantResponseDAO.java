@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -81,14 +81,6 @@ public interface IInstantResponseDAO
      * @return The collection which contains the data of all the instantResponse objects
      */
     List<InstantResponse> selectInstantResponsesList( Plugin plugin );
-
-    /**
-     * Load the data of all the instantResponse objects and returns them as a collection
-     * @param filter filter to apply to select
-     * @param plugin the Plugin
-     * @return The collection which contains the data of all the instantResponse objects
-     */
-    List<InstantResponse> selectInstantResponsesList( InstantResponseFilter filter, Plugin plugin );
 
     /**
      * Load the id of all the instantResponse objects and returns them as a collection

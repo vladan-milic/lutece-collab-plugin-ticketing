@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.search;
 
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.search.SearchResult;
@@ -44,7 +46,6 @@ import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.utils.MVCMessage;
 import fr.paris.lutece.util.ErrorMessage;
-import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
@@ -93,18 +94,10 @@ public class TicketSearchJspBean extends MVCAdminJspBean
         String strQuery = request.getParameter( SearchConstants.PARAMETER_QUERY );
         Map<String, Object> model = new HashMap<String, Object>(  );
 
-        String strSearchField = request.getParameter( SearchConstants.PARAMETER_SEARCH_FIELD );
-
-        if ( StringUtils.isEmpty( strSearchField ) )
-        {
-            strSearchField = TicketSearchItem.FIELD_CONTENTS;
-        }
-
         if ( StringUtils.isNotEmpty( strQuery ) )
         {
             UrlItem url = new UrlItem( getActionUrl( ACTION_SEARCH_TICKET ) );
             url.addParameter( SearchConstants.PARAMETER_QUERY, strQuery );
-            url.addParameter( SearchConstants.PARAMETER_SEARCH_FIELD, strSearchField );
 
             _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
             _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_DEFAULT_RESULT_PER_PAGE,
@@ -117,21 +110,9 @@ public class TicketSearchJspBean extends MVCAdminJspBean
 
             try
             {
-                if ( strSearchField.equals( TicketSearchItem.FIELD_CATEGORY ) )
-                {
-                    // search query for category field
-                    listResults = engine.searchTicketsFromCategory( strQuery );
-                }
-                else if ( strSearchField.equals( TicketSearchItem.FIELD_REFERENCE ) )
-                {
-                    // search query for reference field
-                    listResults = engine.searchTicketFromReference( strQuery );
-                }
-                else
-                {
-                    // default search query
-                    listResults = engine.searchTickets( strQuery );
-                }
+                listResults = engine.searchTickets( strQuery,
+                        TicketDomainHome.getTicketDomainsList( getUser(  ),
+                            TicketDomainResourceIdService.PERMISSION_VIEW ) );
 
                 Paginator paginator = new Paginator( listResults, _nItemsPerPage, url.getUrl(  ),
                         SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
@@ -152,29 +133,7 @@ public class TicketSearchJspBean extends MVCAdminJspBean
             addError( model, SearchConstants.MESSAGE_SEARCH_NO_INPUT, getLocale(  ) );
         }
 
-        model.put( SearchConstants.MARK_SEARCH_FIELDS_LIST, getCriteriaReferenceList( request.getLocale(  ) ) );
-        model.put( SearchConstants.MARK_SEARCH_FIELD, strSearchField );
-
         return getPage( SearchConstants.PROPERTY_PAGE_TITLE_TICKET_SEARCH, TEMPLATE_SEARCH_TICKET, model );
-    }
-
-    /**
-     * returns criteria reference list
-     * @param locale the locale used to retrieve the localized messages
-     * @return the ReferenceList object
-     */
-    private static ReferenceList getCriteriaReferenceList( Locale locale )
-    {
-        ReferenceList listCriterias = new ReferenceList(  );
-
-        listCriterias.addItem( TicketSearchItem.FIELD_CONTENTS,
-            I18nService.getLocalizedString( SearchConstants.PROPERTY_SEARCH_CONTENT_CRITERIA, locale ) );
-        listCriterias.addItem( TicketSearchItem.FIELD_REFERENCE,
-            I18nService.getLocalizedString( SearchConstants.PROPERTY_SEARCH_REFERENCE_CRITERIA, locale ) );
-        listCriterias.addItem( TicketSearchItem.FIELD_CATEGORY,
-            I18nService.getLocalizedString( SearchConstants.PROPERTY_SEARCH_CATEGORY_CRITERIA, locale ) );
-
-        return listCriterias;
     }
 
     /**

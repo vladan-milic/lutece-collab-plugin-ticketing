@@ -61,9 +61,6 @@ public final class SearchConstants
     public static final String PROPERTY_PAGE_TITLE_TICKET_SEARCH = "ticketing.search_ticket.pageTitle";
     public static final String PROPERTY_PAGE_TITLE_RESPONSE_RESULTS = "ticketing.search_response_results.pageTitle";
     public static final String PROPERTY_DEFAULT_RESULT_PER_PAGE = "ticketing.search_ticket.labelItemsPerPag";
-    public static final String PROPERTY_SEARCH_REFERENCE_CRITERIA = "ticketing.search_ticket.criteria.reference";
-    public static final String PROPERTY_SEARCH_CONTENT_CRITERIA = "ticketing.search_ticket.criteria.content";
-    public static final String PROPERTY_SEARCH_CATEGORY_CRITERIA = "ticketing.search_ticket.criteria.category";
     public static final String MESSAGE_SEARCH_NO_INPUT = "ticketing.search_ticket.noInput";
     public static final String MESSAGE_SEARCH_ERROR = "ticketing.search_ticket.error";
     public static final String PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY = "ticketing.modelResponsesIndexerDaemon.limitResponse";

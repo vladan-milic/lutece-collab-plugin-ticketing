@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.ticket;
 
-import fr.paris.lutece.plugins.ticketing.business.OrderByFilter.OrderSortAllowed;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
@@ -116,9 +115,6 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_FILTER_ID_MULTIPLE_STATES_START = " AND ( ";
     private static final String SQL_FILTER_ID_STATE = " j.id_state = ? ";
     private static final String SQL_FILTER_ID_MULTIPLE_STATES_END = " ) ";
-    private static final String CONSTANT_ASC = " ASC";
-    private static final String CONSTANT_DESC = " DESC";
-    private static final String CONSTANT_ORDER_BY = " ORDER BY ";
     private static final String CONSTANT_OR = " OR ";
     private static final String SQL_SELECT_ALL_WORKFLOW_JOIN_CLAUSE = " LEFT JOIN  workflow_resource_workflow i ON i.id_resource=a.id_ticket" +
         " LEFT JOIN workflow_state j ON j.id_state=i.id_state";
@@ -214,7 +210,7 @@ public final class TicketDAO implements ITicketDAO
         {
             daoUtil.setIntNull( nIndex++ );
         }
-        
+
         daoUtil.setBoolean( nIndex++, ticket.isRead(  ) );
 
         daoUtil.executeUpdate(  );
@@ -304,7 +300,7 @@ public final class TicketDAO implements ITicketDAO
         {
             daoUtil.setIntNull( nIndex++ );
         }
-        
+
         daoUtil.setBoolean( nIndex++, ticket.isRead(  ) );
 
         daoUtil.setInt( nIndex++, ticket.getId(  ) );
@@ -464,7 +460,7 @@ public final class TicketDAO implements ITicketDAO
 
         return nIdTicket;
     }
-    
+
     /**
      * Creates a Ticket object from data
      * @param daoUtil the data
@@ -473,9 +469,9 @@ public final class TicketDAO implements ITicketDAO
     private static Ticket dataToTicket( DAOUtil daoUtil )
     {
         Ticket ticket = new Ticket(  );
-        
+
         int nIndex = 1;
-        
+
         ticket.setId( daoUtil.getInt( nIndex++ ) );
         ticket.setReference( daoUtil.getString( nIndex++ ) );
         ticket.setGuid( daoUtil.getString( nIndex++ ) );
@@ -563,9 +559,9 @@ public final class TicketDAO implements ITicketDAO
             Channel channel = ChannelHome.findByPrimaryKey( nId );
             ticket.setChannel( channel );
         }
-        
+
         ticket.setRead( daoUtil.getBoolean( nIndex++ ) );
-        
+
         return ticket;
     }
 
@@ -628,24 +624,12 @@ public final class TicketDAO implements ITicketDAO
 
         if ( filter.containsOrderBy(  ) )
         {
-            sbSQL.append( CONSTANT_ORDER_BY );
-            // sbSQL.append( filter.getOrderBy( ).replaceAll( ",", strOrderType
-            // + "," ) );
-            sbSQL.append( filter.getOrderBySqlColumn(  ) );
-
-            if ( filter.containsOrderSort(  ) )
-            {
-                String strOrderType = filter.isOrderASC(  ) ? CONSTANT_ASC : CONSTANT_DESC;
-                sbSQL.append( strOrderType );
-            }
+            sbSQL.append( filter.getOrderBySqlClause( filter.isOrderASC(  ) ) );
         }
         else
         {
             //always apply default sorting
-            sbSQL.append( CONSTANT_ORDER_BY );
-            sbSQL.append( filter.getDefaultOrderBySqlColumn(  ) );
-            sbSQL.append( filter.getDefaultOrderSort(  ).equals( OrderSortAllowed.ASC.name(  ) ) ? CONSTANT_ASC
-                                                                                                 : CONSTANT_DESC );
+            sbSQL.append( filter.getDefaultOrderBySqlClause( filter.isOrderASC(  ) ) );
         }
     }
 

@@ -33,12 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.domain;
 
+import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.util.ReferenceList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -159,5 +162,26 @@ public final class TicketDomainHome
     public static ReferenceList getReferenceListSimple(  )
     {
         return _dao.selectReferenceListSimple( _plugin );
+    }
+
+    /**
+     * returns ticketDomains allowed for an admin user according to RBAC provided permission
+     * @param adminUser admin user
+     * @param strPermission TicketDomainResourceIdService permission
+     * @return domains list filtered by RBAC permission
+     */
+    public static List<TicketDomain> getTicketDomainsList( AdminUser adminUser, String strPermission )
+    {
+        List<TicketDomain> listDomains = new ArrayList<TicketDomain>(  );
+
+        for ( TicketDomain domain : getTicketDomainsList(  ) )
+        {
+            if ( RBACService.isAuthorized( domain, strPermission, adminUser ) )
+            {
+                listDomains.add( domain );
+            }
+        }
+
+        return listDomains;
     }
 }

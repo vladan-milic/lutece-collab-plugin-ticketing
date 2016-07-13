@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -157,6 +157,8 @@ public final class TicketHome
 
     /**
      * Load the data of all the ticket objects and returns them in form of a collection
+     * be carefull generic attribute response are not loaded in this method
+     * @see findByPrimaryKey for loading all attribute responses
      * @return the collection which contains the data of all the ticket objects
      */
     public static List<Ticket> getTicketsList(  )

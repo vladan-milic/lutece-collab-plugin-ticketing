@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.search;
 
+import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
@@ -66,6 +67,8 @@ import org.jsoup.Jsoup;
 
 import java.io.IOException;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,6 +92,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
     private static final String JSP_VIEW_TICKET = "jsp/admin/plugins/ticketing/TicketView.jsp";
     private static final String JSP_SEARCH_TICKET = "jsp/admin/plugins/ticketing/TicketSearch.jsp?action=search";
     private static final int CONSTANT_ID_NULL = -1;
+    private static final String SEPARATOR = " ";
 
     /**
      * {@inheritDoc }
@@ -226,8 +230,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         String strIdTicket = String.valueOf( ticket.getId(  ) );
         doc.add( new Field( TicketSearchItem.FIELD_UID, strIdTicket + "_" + SHORT_NAME_TICKET, TextField.TYPE_NOT_STORED ) );
         doc.add( new Field( TicketSearchItem.FIELD_TICKET_ID, strIdTicket, TextField.TYPE_STORED ) );
-        doc.add( new TextField( TicketSearchItem.FIELD_CONTENTS, ticket.getContentForIndexer(  ), Store.NO ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_CONTENTS, getContentForIndexer( ticket ), Store.NO ) );
         doc.add( new TextField( TicketSearchItem.FIELD_CATEGORY, ticket.getTicketCategory(  ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_DOMAIN, ticket.getTicketDomain(  ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_REFERENCE, ticket.getReference(  ), Store.YES ) );
 
         String strDate = DateTools.dateToString( ticket.getDateCreate(  ), DateTools.Resolution.DAY );
@@ -248,8 +253,8 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             doc.add( new TextField( TicketSearchItem.FIELD_TXT_RESPONSE, StringUtils.EMPTY, Store.NO ) );
         }
 
-        doc.add( new TextField( TicketSearchItem.FIELD_SUMMARY, ticket.getDisplaySummary(  ), Store.YES ) );
-        doc.add( new TextField( TicketSearchItem.FIELD_TITLE, ticket.getDisplayTitle(  ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_SUMMARY, getDisplaySummary( ticket ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_TITLE, getDisplayTitle( ticket ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_TYPE, getDocumentType(  ), Store.YES ) );
 
         return doc;
@@ -376,8 +381,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         }
         else
         {
-            for ( Ticket ticket : TicketHome.getTicketsList(  ) )
+            for ( Integer nIdticket : TicketHome.getIdTicketsList(  ) )
             {
+                Ticket ticket = TicketHome.findByPrimaryKey( nIdticket.intValue(  ) );
                 sbLogs.append( "Indexing Ticket" );
                 sbLogs.append( "\r\n" );
                 sbLogTicket( sbLogs, ticket.getId(  ), IndexerAction.TASK_CREATE );
@@ -426,5 +432,200 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         }
 
         sbLogs.append( "\r\n" );
+    }
+
+    /**
+     * @param ticket ticket
+     * returns a string with content fields to be indexed
+     * @return string with content fields to be indexed
+     */
+    private static String getContentForIndexer( Ticket ticket )
+    {
+        StringBuilder sb = new StringBuilder(  );
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
+        sb.append( ticket.getId(  ) ).append( SEPARATOR );
+
+        if ( StringUtils.isNotEmpty( ticket.getReference(  ) ) )
+        {
+            sb.append( ticket.getReference(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getFirstname(  ) ) )
+        {
+            sb.append( ticket.getFirstname(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getLastname(  ) ) )
+        {
+            sb.append( ticket.getLastname(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getEmail(  ) ) )
+        {
+            sb.append( ticket.getEmail(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getFixedPhoneNumber(  ) ) )
+        {
+            sb.append( ticket.getFixedPhoneNumber(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getMobilePhoneNumber(  ) ) )
+        {
+            sb.append( ticket.getMobilePhoneNumber(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getTicketType(  ) ) )
+        {
+            sb.append( ticket.getTicketType(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getTicketDomain(  ) ) )
+        {
+            sb.append( ticket.getTicketDomain(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ) ) )
+        {
+            sb.append( ticket.getTicketCategory(  ) ).append( SEPARATOR );
+        }
+
+        if ( ticket.getDateCreate(  ) != null )
+        {
+            sb.append( simpleDateFormat.format( ticket.getDateCreate(  ).getTime(  ) ) ).append( SEPARATOR );
+        }
+
+        if ( ticket.getDateUpdate(  ) != null )
+        {
+            sb.append( simpleDateFormat.format( ticket.getDateUpdate(  ).getTime(  ) ) ).append( SEPARATOR );
+        }
+
+        if ( ticket.getDateClose(  ) != null )
+        {
+            sb.append( simpleDateFormat.format( ticket.getDateClose(  ).getTime(  ) ) ).append( SEPARATOR );
+        }
+
+        if ( ticket.getListResponse(  ) != null )
+        {
+            for ( Response response : ticket.getListResponse(  ) )
+            {
+                if ( response.getResponseValue(  ) != null )
+                {
+                    sb.append( response.getResponseValue(  ) ).append( SEPARATOR );
+                }
+            }
+        }
+
+        if ( WorkflowService.getInstance(  ).isAvailable(  ) )
+        {
+            TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+            int nIdWorkflow = ticketCategory.getIdWorkflow(  );
+
+            StateFilter stateFilter = new StateFilter(  );
+            stateFilter.setIdWorkflow( nIdWorkflow );
+
+            State state = WorkflowService.getInstance(  )
+                                         .getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+                    ticket.getIdTicketCategory(  ) );
+            sb.append( state.getName(  ) ).append( SEPARATOR );
+        }
+
+        if ( ticket.getAssigneeUser(  ) != null )
+        {
+            sb.append( ticket.getAssigneeUser(  ).getFirstname(  ) ).append( SEPARATOR )
+              .append( ticket.getAssigneeUser(  ).getLastname(  ) ).append( SEPARATOR );
+        }
+
+        if ( ticket.getChannel(  ) != null )
+        {
+            sb.append( ticket.getChannel(  ).getLabel(  ) ).append( SEPARATOR );
+        }
+
+        return sb.toString(  );
+    }
+
+    /**
+     * @param ticket ticket
+     * @return summary of ticket
+     * returns summary of ticket to be displayed
+     */
+    private static String getDisplaySummary( Ticket ticket )
+    {
+        StringBuilder sb = new StringBuilder(  );
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
+
+        if ( ticket.getDateCreate(  ) != null )
+        {
+            sb.append( simpleDateFormat.format( ticket.getDateCreate(  ).getTime(  ) ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getReference(  ) ) )
+        {
+            sb.append( ticket.getReference(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getFirstname(  ) ) )
+        {
+            sb.append( ticket.getFirstname(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getLastname(  ) ) )
+        {
+            sb.append( ticket.getLastname(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getTicketType(  ) ) )
+        {
+            sb.append( ticket.getTicketType(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getTicketDomain(  ) ) )
+        {
+            sb.append( ticket.getTicketDomain(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ) ) )
+        {
+            sb.append( ticket.getTicketCategory(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getTicketComment(  ) ) )
+        {
+            sb.append( ticket.getTicketComment(  ) ).append( SEPARATOR );
+        }
+
+        return sb.toString(  );
+    }
+
+    /**
+     * @param ticket ticket
+     * @return title of ticket
+     * returns title of ticket to be displayed
+     */
+    private static String getDisplayTitle( Ticket ticket )
+    {
+        StringBuilder sb = new StringBuilder(  );
+
+        if ( StringUtils.isNotEmpty( ticket.getReference(  ) ) )
+        {
+            sb.append( ticket.getReference(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getFirstname(  ) ) )
+        {
+            sb.append( ticket.getFirstname(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getLastname(  ) ) )
+        {
+            sb.append( ticket.getLastname(  ) ).append( SEPARATOR );
+        }
+
+        if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ) ) )
+        {
+            sb.append( ticket.getTicketCategory(  ) ).append( SEPARATOR );
+        }
+
+        return sb.toString(  );
     }
 }

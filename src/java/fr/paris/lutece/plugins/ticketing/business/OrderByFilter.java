@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,6 +35,8 @@ package fr.paris.lutece.plugins.ticketing.business;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 
@@ -45,11 +47,16 @@ import java.util.Map;
  */
 public abstract class OrderByFilter
 {
+    private static final String CONSTANT_ASC = " ASC";
+    private static final String CONSTANT_DESC = " DESC";
+    private static final String CONSTANT_ORDER_BY = " ORDER BY ";
+    private static final String CONSTANT_SQL_SEPARATOR = " , ";
+
     /**
      * map containing functional field name as key
-     * target sql column name as value
+     * target sql column list name as value
      */
-    protected Map<String, String> _mapOrderNameToColumnName;
+    protected Map<String, List<String>> _mapOrderNameToColumnName;
     private String _strOrderBy;
     private String _strOrderSort;
 
@@ -69,10 +76,10 @@ public abstract class OrderByFilter
     protected abstract void initOrderNameToColumnNameMap(  );
 
     /**
-     * returns default order by column
-     * @return default order by column
+     * returns default order by columns
+     * @return default order by columns
      */
-    public abstract String getDefaultOrderBySqlColumn(  );
+    public abstract List<String> getDefaultOrderBySqlColumns(  );
 
     /**
      * @return  the strOrderSort to set
@@ -94,19 +101,68 @@ public abstract class OrderByFilter
 
     /**
      * return order by column matching order by filter name
+     * @param isOrderAsc true if order ascending false otherwise
      * @return the _strOrderBy
      */
-    public String getOrderBySqlColumn(  )
+    public String getOrderBySqlClause( boolean isOrderAsc )
     {
-        String strComputedOrderby;
+        String strComputedOrderby = new String(  );
 
         if ( _mapOrderNameToColumnName.containsKey( _strOrderBy ) )
         {
-            strComputedOrderby = _mapOrderNameToColumnName.get( _strOrderBy );
+            Iterator<String> iterator = _mapOrderNameToColumnName.get( _strOrderBy ).iterator(  );
+            strComputedOrderby += CONSTANT_ORDER_BY;
+
+            while ( iterator.hasNext(  ) )
+            {
+                String strColumnName = iterator.next(  );
+
+                if ( iterator.hasNext(  ) )
+                {
+                    strComputedOrderby += ( strColumnName + ( isOrderAsc ? CONSTANT_ASC : CONSTANT_DESC ) +
+                    CONSTANT_SQL_SEPARATOR );
+                }
+                else
+                {
+                    // last item => no CONSTANT_SQL_SEPARATOR
+                    strComputedOrderby += ( strColumnName + ( isOrderAsc ? CONSTANT_ASC : CONSTANT_DESC ) );
+                }
+            }
         }
         else
         {
-            strComputedOrderby = getDefaultOrderBySqlColumn(  );
+            strComputedOrderby = getDefaultOrderBySqlClause( isOrderAsc );
+        }
+
+        return strComputedOrderby;
+    }
+
+    /**
+     * return order by column matching order by filter name
+     * @param isOrderAsc true if order ascending false otherwise
+     * @return the _strOrderBy
+     */
+    public String getDefaultOrderBySqlClause( boolean isOrderAsc )
+    {
+        String strComputedOrderby = new String(  );
+
+        Iterator<String> iterator = getDefaultOrderBySqlColumns(  ).iterator(  );
+        strComputedOrderby += CONSTANT_ORDER_BY;
+
+        while ( iterator.hasNext(  ) )
+        {
+            String strColumnName = iterator.next(  );
+
+            if ( iterator.hasNext(  ) )
+            {
+                strComputedOrderby += ( strColumnName + ( isOrderAsc ? CONSTANT_ASC : CONSTANT_DESC ) +
+                CONSTANT_SQL_SEPARATOR );
+            }
+            else
+            {
+                // last item => no CONSTANT_SQL_SEPARATOR
+                strComputedOrderby += ( strColumnName + ( isOrderAsc ? CONSTANT_ASC : CONSTANT_DESC ) );
+            }
         }
 
         return strComputedOrderby;

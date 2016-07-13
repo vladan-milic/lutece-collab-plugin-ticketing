@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,13 +37,10 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponse;
-import fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponseFilter;
 import fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
-import fr.paris.lutece.plugins.ticketing.web.ticketfilter.InstantResponseFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
-import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -192,13 +189,11 @@ public class InstantResponseJspBean extends MVCAdminJspBean
             return redirect( request, strRedirectUrl );
         }
 
-        InstantResponseFilter filter = InstantResponseFilterHelper.getFilter( request );
-        List<InstantResponse> listInstantResponses = InstantResponseHome.getInstantResponsesList( filter );
+        List<InstantResponse> listInstantResponses = InstantResponseHome.getInstantResponsesList(  );
         Map<String, Object> model = getPaginatedListModel( request, MARK_INSTANT_RESPONSE_LIST, listInstantResponses,
                 JSP_MANAGE_INSTANT_RESPONSES );
 
         model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
-        InstantResponseFilterHelper.setModel( model, filter, request );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_INSTANT_RESPONSES, TEMPLATE_MANAGE_INSTANT_RESPONSES, model );
     }

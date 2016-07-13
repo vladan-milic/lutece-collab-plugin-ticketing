@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,11 +55,6 @@ public final class InstantResponseDAO implements IInstantResponseDAO
         " FROM ticketing_instant_response a, ticketing_ticket_category b, ticketing_ticket_domain c , ticketing_ticket_type d, core_admin_user e, unittree_unit f " +
         " WHERE a.id_ticket_category = b.id_ticket_category AND b.id_ticket_domain = c.id_ticket_domain AND c.id_ticket_type = d.id_ticket_type AND a.id_admin_user = e.id_user AND a.id_unit = f.id_unit";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_instant_response FROM ticketing_instant_response";
-
-    // for sorting 
-    private static final String CONSTANT_ASC = " ASC";
-    private static final String CONSTANT_DESC = " DESC";
-    private static final String CONSTANT_ORDER_BY = " ORDER BY ";
 
     /**
      * Generates a new primary key
@@ -203,26 +198,6 @@ public final class InstantResponseDAO implements IInstantResponseDAO
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<InstantResponse> selectInstantResponsesList( InstantResponseFilter filter, Plugin plugin )
-    {
-        StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECTALL );
-        addFilterCriteriaClauses( sbSQL, filter );
-
-        DAOUtil daoUtil = new DAOUtil( sbSQL.toString(  ), plugin );
-
-        daoUtil.executeQuery(  );
-
-        List<InstantResponse> instantResponseList = getInstantResponsesFromQuery( daoUtil );
-
-        daoUtil.free(  );
-
-        return instantResponseList;
-    }
-
-    /**
      * returns instantResponseList
      * @param daoUtil daoUtil which has executed query and still contain element
      * @return list of instant responses
@@ -255,28 +230,5 @@ public final class InstantResponseDAO implements IInstantResponseDAO
         }
 
         return instantResponseList;
-    }
-
-    /**
-     * add criteria to request
-     *
-     * @param sbSQL
-     *            request
-     * @param filter
-     *            filter
-     */
-    private void addFilterCriteriaClauses( StringBuilder sbSQL, InstantResponseFilter filter )
-    {
-        if ( filter.containsOrderBy(  ) )
-        {
-            sbSQL.append( CONSTANT_ORDER_BY );
-            sbSQL.append( filter.getOrderBySqlColumn(  ) );
-
-            if ( filter.containsOrderSort(  ) )
-            {
-                String strOrderType = filter.isOrderASC(  ) ? CONSTANT_ASC : CONSTANT_DESC;
-                sbSQL.append( strOrderType );
-            }
-        }
     }
 }

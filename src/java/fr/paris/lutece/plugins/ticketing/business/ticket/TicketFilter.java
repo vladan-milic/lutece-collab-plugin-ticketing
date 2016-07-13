@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,6 +38,7 @@ import fr.paris.lutece.plugins.ticketing.business.OrderByFilter;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -728,24 +729,24 @@ public class TicketFilter extends OrderByFilter
     @Override
     protected void initOrderNameToColumnNameMap(  )
     {
-        _mapOrderNameToColumnName = new HashMap<String, String>(  );
-        _mapOrderNameToColumnName.put( "category_label", "e.label" );
-        _mapOrderNameToColumnName.put( "ticket_reference", "ticket_reference" );
-        _mapOrderNameToColumnName.put( "ticket_status", "ticket_status" );
-        _mapOrderNameToColumnName.put( "date_create", "date_create" );
-        _mapOrderNameToColumnName.put( "date_update", "date_update" );
-        _mapOrderNameToColumnName.put( "id_user", "id_user" );
-        _mapOrderNameToColumnName.put( "channel", "x.label" );
-        _mapOrderNameToColumnName.put( "email", "email" );
-        _mapOrderNameToColumnName.put( "lastname", "lastname" );
-        _mapOrderNameToColumnName.put( "date_close", "date_close" );
-        _mapOrderNameToColumnName.put( "ticket_status_text", "ticket_status_text" );
-        _mapOrderNameToColumnName.put( "assignee", "h.label, g.last_name" );
-        _mapOrderNameToColumnName.put( "state", "j.name" );
+        _mapOrderNameToColumnName = new HashMap<String, List<String>>(  );
+        _mapOrderNameToColumnName.put( "category_label", Arrays.asList( "e.label" ) );
+        _mapOrderNameToColumnName.put( "ticket_reference", Arrays.asList( "ticket_reference" ) );
+        _mapOrderNameToColumnName.put( "ticket_status", Arrays.asList( "ticket_status" ) );
+        _mapOrderNameToColumnName.put( "date_create", Arrays.asList( "date_create" ) );
+        _mapOrderNameToColumnName.put( "date_update", Arrays.asList( "date_update" ) );
+        _mapOrderNameToColumnName.put( "id_user", Arrays.asList( "id_user" ) );
+        _mapOrderNameToColumnName.put( "channel", Arrays.asList( "x.label" ) );
+        _mapOrderNameToColumnName.put( "email", Arrays.asList( "email" ) );
+        _mapOrderNameToColumnName.put( "lastname", Arrays.asList( "lastname", "firstname", "email" ) );
+        _mapOrderNameToColumnName.put( "date_close", Arrays.asList( "date_close" ) );
+        _mapOrderNameToColumnName.put( "ticket_status_text", Arrays.asList( "ticket_status_text" ) );
+        _mapOrderNameToColumnName.put( "assignee", Arrays.asList( "h.label", "g.last_name" ) );
+        _mapOrderNameToColumnName.put( "state", Arrays.asList( "j.name" ) );
     }
 
     @Override
-    public String getDefaultOrderBySqlColumn(  )
+    public List<String> getDefaultOrderBySqlColumns(  )
     {
         return _mapOrderNameToColumnName.get( CONSTANT_DEFAULT_ORDER_BY );
     }

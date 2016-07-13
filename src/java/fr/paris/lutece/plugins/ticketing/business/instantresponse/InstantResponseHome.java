@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -109,16 +109,6 @@ public final class InstantResponseHome
     public static List<InstantResponse> getInstantResponsesList(  )
     {
         return _dao.selectInstantResponsesList( _plugin );
-    }
-
-    /**
-     * Load the data of all the instantResponse objects and returns them in form of a collection
-     * @param filter filter used to filter response list
-     * @return the collection which contains the data of all the instantResponse objects
-     */
-    public static List<InstantResponse> getInstantResponsesList( InstantResponseFilter filter )
-    {
-        return _dao.selectInstantResponsesList( filter, _plugin );
     }
 
     /**
