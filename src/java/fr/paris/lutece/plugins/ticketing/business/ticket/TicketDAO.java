@@ -132,6 +132,7 @@ public final class TicketDAO implements ITicketDAO
         " LEFT JOIN core_file c ON c.id_file = b.id_file" +
         " LEFT JOIN core_physical_file d ON d.id_physical_file = c.id_physical_file  WHERE a.id_response = ? ";
     private static final String SQL_QUERY_FIND_ID_TICKET_FROM_ID_RESPONSE = " SELECT id_ticket FROM ticketing_ticket_response WHERE id_response = ? ";
+    private static final String SQL_QUERY_UPDATE_IS_READ = "UPDATE ticketing_ticket SET is_read = ? WHERE id_ticket = ?";
 
     /**
      * Generates a new primary key
@@ -374,6 +375,22 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.free(  );
 
         return ticketList;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void storeIsRead( int nIdTicket, boolean bIsRead, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_IS_READ, plugin );
+        int nIndex = 1;
+
+        daoUtil.setBoolean( nIndex++, bIsRead );
+        daoUtil.setInt( nIndex++, nIdTicket );
+
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
     }
 
     // ----------------------------------------

@@ -87,36 +87,35 @@ public class TicketingDashboardComponent extends DashboardComponent
 
         UrlItem url = new UrlItem( right.getUrl(  ) );
         url.addParameter( PARAMETER_PLUGIN_NAME, right.getPluginName(  ) );
-        
+
         Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_URL, url.getUrl(  ) );
         model.put( MARK_ICON, plugin.getIconUrl(  ) );
-        
-        if ( WorkflowService.getInstance(  ).isAvailable(  ) ){
-            TicketFilter filter = TicketFilterHelper.getFilterFromRequest( request );
+
+        if ( WorkflowService.getInstance(  ).isAvailable(  ) )
+        {
+            TicketFilter filter = TicketFilterHelper.getFilter( request, user );
 
             List<Ticket> listAgentTickets = new ArrayList<Ticket>(  );
             List<Ticket> listGroupTickets = new ArrayList<Ticket>(  );
             List<Ticket> listDomainTickets = new ArrayList<Ticket>(  );
 
             TicketUtils.setTicketsListByPerimeter( user, filter, request, listAgentTickets, listGroupTickets,
-            listDomainTickets );
+                listDomainTickets );
 
-            
             model.put( MARK_TICKET_ASSIGNED_TO_ME_COUNTER, listAgentTickets.size(  ) );
             model.put( MARK_TICKET_ASSIGNED_TO_MY_GROUP_COUNTER, listGroupTickets.size(  ) );
             model.put( MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER, listDomainTickets.size(  ) );
             model.put( MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER, listDomainTickets.size(  ) );
             model.put( MARK_WORFLOWSERVICE_UNAVAILABLE, false );
         }
-        else{
+        else
+        {
             model.put( MARK_WORFLOWSERVICE_UNAVAILABLE, true );
         }
-        
+
         HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_DASHBOARD, user.getLocale(  ), model );
+
         return t.getHtml(  );
     }
 }
-
-
-

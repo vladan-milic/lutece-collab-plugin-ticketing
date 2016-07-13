@@ -177,8 +177,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
                         for ( Integer nActionId : listActionFiltered )
                         {
-                            if ( ( action.getId(  ) == nActionId ) && ( ticket.getAssigneeUser(  ) != null ) &&
-                                    ( getUser(  ).getUserId(  ) == ticket.getAssigneeUser(  ).getAdminUserId(  ) ) )
+                            if ( ( action.getId(  ) == nActionId ) && TicketUtils.isAssignee( ticket, getUser(  ) ) )
                             {
                                 // ticket already assign to the agent => removing action from list
                                 filteredListWorkflowActions.remove( action );

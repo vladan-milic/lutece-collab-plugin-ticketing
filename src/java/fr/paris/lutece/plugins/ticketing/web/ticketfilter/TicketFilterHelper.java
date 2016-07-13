@@ -128,7 +128,7 @@ public final class TicketFilterHelper
      * @throws ParseException
      *             if date is not well formated
      */
-    public static TicketFilter getFilterFromRequest( HttpServletRequest request )
+    private static TicketFilter getFilterFromRequest( HttpServletRequest request )
     {
         TicketFilter fltrFiltre = new TicketFilter(  );
 
