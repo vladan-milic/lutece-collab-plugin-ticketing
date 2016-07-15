@@ -33,7 +33,7 @@
 #demand-panel .tab-content table th.th-sort-desc:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; right:5px }
 #demand-panel .tab-content table th.th-sort-asc:after{ content:'\f106'; color:#606059; font-family: 'FontAwesome'; right:5px }
 
-#demand-panel .tab-content table tr.unread{ font-weight: bold; }
+#demand-panel .tab-content table td .unread{ font-size: 13px; text-transform: uppercase; }
 
 #info-right{ border-left: 1px solid #DDD;min-height:600px;margin-top: -15px; padding:20px 20px  }
 #info-right h5{ color:#808179 }

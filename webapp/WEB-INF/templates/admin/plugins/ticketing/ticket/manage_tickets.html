@@ -32,15 +32,7 @@
       	  </thead>
       		<tbody>
     			<#list panel_list as ticket >
-    			<tr data-url="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" 
-                  <#if id == "agent" || id == "group">
-                    <#if ticket.isRead() >
-                      class="read"
-                    <#else>
-                      class="unread"
-                    </#if>
-                  </#if>"
-                >
+    			<tr data-url="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" >
     			  <td>
               <#assign textColor="aqua"/>
               <#if ticket.urgency==1 >
@@ -77,6 +69,11 @@
                   <i class="fa fa-circle text-${textColor}" ></i> ${ticket.id}
                 </a>
               </#if>
+              <#if id == "agent" || id == "group">
+                <#if !ticket.isRead() >
+                  <span class="label label-info unread">#i18n{ticketing.manage_tickets.ticket.unread}</span>
+                </#if>
+              </#if>  
             </td>
 		          <td>
     				<#if creation_date_as_date >
