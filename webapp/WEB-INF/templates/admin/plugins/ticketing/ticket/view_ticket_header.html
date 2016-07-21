@@ -1,4 +1,6 @@
+<#include "/admin/plugins/ticketing/include/user_info.html"/>
 <#macro ticketHeader tab ticket navigation_next=-1 navigation_previous=-1>
+<script src="js/plugins/ticketing/user_info.js"></script>
 <div class="gru-wrapper">
 <div id="customer-panel" class="row ticket-head bg-gru-light">
    <div class="col-xs-8 col-sm-offset-1 col-sm-3">
@@ -89,7 +91,7 @@
       <!-- END NAVIGATION -->
 
    </div>
-   <div class="col-xs-4 col-sm-4" id="info-head-right">
+   <div class="col-xs-4 col-sm-2" id="info-head-right">
       <#assign textColor="green"/>
       <#if ticket.urgency==1 >
       <#assign textColor="orange"/>
@@ -119,50 +121,17 @@
       </#if>
       <#if ticket.assigneeUser??>
       	<!-- <p class="text-left"> -->
-          <p class="popup-coord" data-container="body" data-toggle="popover" data-placement="left">
+          <#if user_list.create(ticket.assigneeUser.adminUserId)?has_content>
+          <#assign user1=user_list.create(ticket.assigneeUser.adminUserId)>
+          <p class="info_user" data-key-id="${user1.idUser}" data-container="body" data-toggle="popover" data-placement="left">
             <#if avatar_available>
             <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}" alt="" title="Avatar">
             </#if>
             <span class="avatar-label">${ticket.assigneeUser.firstname} ${ticket.assigneeUser.lastname}</span>
+            <@info_user user1/>
           </p>
-          <!-- popup -->
-          <div class="pop modal" data-container="body" data-toggle="popover" data-placement="left">
-            <p> Nom : <span>${ticket.assigneeUser.firstname}</span></p>
-            <p> Prénom : <span>${ticket.assigneeUser.lastname}</span></p>
-            <p> Domaine : <span>${ticket.ticketDomain}</span></p>
-            <p> Service : <span>${ticket.assigneeUnit.name}</span></p>
-            <p> <span class="fa fa-phone"/> : <span> </span></p>
-            <p> <span class="fa fa-envelope"/> : <span>${ticket.assigneeUser.email}</span></p>
-          </div>
-        <!-- fin popup -->
+         </#if>
       </#if>
    </div>
 </div>
 </#macro>
-<script type="text/javascript">
-$(function(){ $(".popup-coord").popover(
-    { 
-      trigger: "manual",
-      html: true, 
-      animation:false,
-      content: function() {
-              return $(".pop").html();
-        }
-    }
-  )
-  .on("mouseenter", function () {
-        var _this = this;
-        $(this).popover("show");
-        $(".popover").on("mouseleave", function () {
-            $(_this).popover('hide');
-        });
-    }).on("mouseleave", function () {
-        var _this = this;
-        setTimeout(function () {
-            if (!$(".popover:hover").length) {
-                $(_this).popover("hide");
-            }
-        }, 300);
-  });
-});
-</script>

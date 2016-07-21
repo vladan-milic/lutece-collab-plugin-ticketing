@@ -1,0 +1,24 @@
+<script src="js/plugins/ticketing/user_info.js"></script>
+<#macro info_user user>
+  <div class="modal" id="template-${user.idUser}">
+    <p> #i18n{ticketing.info.label.firstname} : <span> ${user.firstName}</span></p>
+    <p> #i18n{ticketing.info.label.lastname} : <span> ${user.lastName} </span></p>
+    <#if (user.domain)??>
+    <p> #i18n{ticketing.info.label.domain} :
+    <span>  
+    <#list user.domain as domain> 
+    ${domain.label}
+    </#list>
+    </span></p>
+    </#if>
+    <#if (user.unit)??>
+    <p> #i18n{ticketing.info.label.unit} : 
+    <span>
+    <#list user.unit as unit>
+     ${unit.label} 
+    </#list>
+    </span></p>
+    </#if>
+    <p> <span class='fa fa-envelope'> <a href='mailto:"email"'><em> ${user.email} </em></a></span></p>
+  </div> 
+</#macro>

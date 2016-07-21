@@ -43,7 +43,6 @@ import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
-import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
@@ -60,6 +59,7 @@ import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
+import fr.paris.lutece.plugins.ticketing.web.user.UserFactory;
 import fr.paris.lutece.plugins.ticketing.web.util.FormValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
@@ -141,6 +141,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
     // Markers
     private static final String MARK_TICKET_LIST = "ticket_list";
+    private static final String MARK_RESOURCE_USER = "user_list";
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
@@ -272,6 +273,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_NB_TICKET_GROUP, listGroupTickets.size(  ) );
         model.put( MARK_NB_TICKET_DOMAIN, listDomainTickets.size(  ) );
         model.put( MARK_SELECTED_TAB, strSelectedTab );
+        model.put( MARK_RESOURCE_USER,  UserFactory.getInstance() );
         model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
         TicketFilterHelper.setModel( model, filter, request, getUser(  ) );
         ModelUtils.storeTicketRights( model, getUser(  ) );

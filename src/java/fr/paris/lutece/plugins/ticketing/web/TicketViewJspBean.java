@@ -45,6 +45,7 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.TicketPriority;
 import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
+import fr.paris.lutece.plugins.ticketing.web.user.UserFactory;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
@@ -84,6 +85,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     private static final String MARK_PRIORITY = "priority";
     private static final String MARK_CRITICALITY = "criticality";
     private static final String MARK_HISTORY = "history";
+    private static final String MARK_USER = "user_list";
 
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TICKET_DETAILS = "ticketing.view_ticket.pageTitle";
@@ -172,7 +174,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_HISTORY, strHistory );
         model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
-
+        model.put( MARK_USER, UserFactory.getInstance( ) );
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
 
         if ( TicketUtils.isAssignee( ticket, getUser(  ) ) )

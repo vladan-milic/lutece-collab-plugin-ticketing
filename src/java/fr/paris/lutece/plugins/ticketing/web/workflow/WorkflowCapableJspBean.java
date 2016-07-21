@@ -41,6 +41,8 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.ticketing.web.user.User;
+import fr.paris.lutece.plugins.ticketing.web.user.UserFactory;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
@@ -84,6 +86,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     // MARKS
     private static final String MARK_RESOURCE_HISTORY_CHANNEL = "resource_history_channel";
+    private static final String MARK_RESOURCE_HISTORY_USER = "resource_history_user";
 
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
@@ -459,9 +462,13 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         Map<String, Channel> mapHistoryChannel = _resourceHistoryTicketingInformationService.getChannelHistoryMap( ticket.getId(  ),
                 Ticket.TICKET_RESOURCE_TYPE, nWorkflowId );
 
+       /* Map<String, User> mapHistoryUser = _resourceHistoryTicketingInformationService.getUserHistoryMap( ticket.getId(  ),
+                Ticket.TICKET_RESOURCE_TYPE, nWorkflowId );*/
+
         Map<String, Object> modelToAdd = new HashMap<String, Object>(  );
 
         modelToAdd.put( MARK_RESOURCE_HISTORY_CHANNEL, mapHistoryChannel );
+        modelToAdd.put( MARK_RESOURCE_HISTORY_USER,  UserFactory.getInstance() );
 
         return _workflowService.getDisplayDocumentHistory( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nWorkflowId,
             request, getLocale(  ), modelToAdd, TEMPLATE_RESOURCE_HISTORY );

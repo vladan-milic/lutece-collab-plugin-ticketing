@@ -1,3 +1,5 @@
+<#include "/admin/plugins/ticketing/include/user_info.html"/>
+<script src="js/plugins/ticketing/user_info.js"></script>
 <#if history_information_list?has_content>
   <div id="ticketing-history-panel">
     <div class="panel">
@@ -16,11 +18,18 @@
             <#if history_information.admin_user_history?exists>
               <#if adminAvatar>
                 <#if history_information.admin_user_history.userId?string != "${defaultUserFrontId}">
+                 <#if resource_history_user.create(history_information.admin_user_history.userId)?has_content>
                   <a href="sip:${history_information.admin_user_history.email}">
-                    <img class="fa direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}" alt="Avatar" title="Avatar">
-                    </a>
+                  	<#assign user1=resource_history_user.create(history_information.admin_user_history.userId)>
+                    <em>
+                    <img class="info_user fa direct-chat-img" data-key-id="${user1.idUser}" data-container="body" data-toggle="popover" data-placement="right"
+                    	src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}">
+                    </em>
+                  </a>
+                  <@info_user user1/>
+                  </#if>
                 <#else>
-                  <img class="fa direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}" alt="Avatar" title="Avatar">
+                  <img class="fa direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}" alt="Avatar" title="Avtar">
                 </#if>
               <#else>
                 <i class="fa fa-user bg-gru-cat2"></i>
@@ -32,9 +41,14 @@
               <h4 class="timeline-header">
                 <#if history_information.admin_user_history?exists>
                   <#if history_information.admin_user_history.userId?string != "${defaultUserFrontId}">
+                  <#if resource_history_user.create(history_information.admin_user_history.userId)?has_content>
                     <a href="sip:${history_information.admin_user_history.email}">
-	                  <em>&nbsp; ${history_information.admin_user_history.firstName} ${history_information.admin_user_history.lastName}</em>
-	                </a>
+                    <#assign user2=resource_history_user.create(history_information.admin_user_history.userId)>
+                      <em  class="info_user" data-key-id="${user2.idUser}" data-container="body" data-toggle="popover" data-placement="left">
+	                    &nbsp; ${history_information.admin_user_history.firstName} ${history_information.admin_user_history.lastName}</em>
+	                    </a>
+	                    <@info_user user2/>
+	                </#if>
                   <#else>
                       <em>&nbsp; ${history_information.admin_user_history.firstName} ${history_information.admin_user_history.lastName}</em>
                   </#if>
