@@ -43,6 +43,7 @@ import fr.paris.lutece.portal.business.user.AdminUserHome;
 
 import java.util.List;
 
+
 /**
  * Factory of User.
  * Designed as a singleton
@@ -51,29 +52,29 @@ import java.util.List;
 public class UserFactory
 {
     private static UserFactory _instance;
-    
+
     /**
      * Default constructor
      */
     private UserFactory(  )
     {
     }
-    
+
     /**
      * Creates a User
-     * @param IdAdminUser
+     * @param IdAdminUser the idUser used to select the correct AdminUser
      * @return the User
      */
-    public User create( int idUser )
+    public User create( int nIdUser )
     {
         User user = new User(  );
 
-        AdminUser adminUser = AdminUserHome.findByPrimaryKey( idUser );
+        AdminUser adminUser = AdminUserHome.findByPrimaryKey( nIdUser );
 
-        List<TicketDomain> domainList = TicketDomainHome.getTicketDomainsList( adminUser,
+        List<TicketDomain> listDomains = TicketDomainHome.getTicketDomainsList( adminUser,
                 TicketDomainResourceIdService.PERMISSION_BELONG_TO );
 
-        List<Unit> unitList = UnitHome.findByIdUser( idUser );
+        List<Unit> listUnits = UnitHome.findByIdUser( nIdUser );
 
         user.setIdUser( adminUser.getUserId(  ) );
 
@@ -83,17 +84,17 @@ public class UserFactory
 
         user.setEmail( adminUser.getEmail(  ) );
 
-        user.setUnit(unitList);
+        user.setUnit( listUnits );
 
-        user.setDomain(domainList);
+        user.setDomain( listDomains );
 
         return user;
     }
-    
+
     /**
-     * Creates a TicketValidator
-     * @param locale the locale used to select the correct validation error messages
-     * @return the TicketValidator
+     * Creates a User
+     * @param id of user
+     * @return The User
      */
     public static UserFactory getInstance(  )
     {

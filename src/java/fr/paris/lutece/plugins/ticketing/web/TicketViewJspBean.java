@@ -85,7 +85,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     private static final String MARK_PRIORITY = "priority";
     private static final String MARK_CRITICALITY = "criticality";
     private static final String MARK_HISTORY = "history";
-    private static final String MARK_USER = "user_list";
+    private static final String MARK_USER_FACTORY = "user_factory";
 
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TICKET_DETAILS = "ticketing.view_ticket.pageTitle";
@@ -174,7 +174,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_HISTORY, strHistory );
         model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
-        model.put( MARK_USER, UserFactory.getInstance( ) );
+        model.put( MARK_USER_FACTORY, UserFactory.getInstance(  ) );
         _ticketFormService.removeTicketFromSession( request.getSession(  ) );
 
         if ( TicketUtils.isAssignee( ticket, getUser(  ) ) )

@@ -141,7 +141,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
     // Markers
     private static final String MARK_TICKET_LIST = "ticket_list";
-    private static final String MARK_RESOURCE_USER = "user_list";
+    private static final String MARK_USER_FACTORY = "user_factory";
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
@@ -273,7 +273,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_NB_TICKET_GROUP, listGroupTickets.size(  ) );
         model.put( MARK_NB_TICKET_DOMAIN, listDomainTickets.size(  ) );
         model.put( MARK_SELECTED_TAB, strSelectedTab );
-        model.put( MARK_RESOURCE_USER,  UserFactory.getInstance() );
+        model.put( MARK_USER_FACTORY, UserFactory.getInstance(  ) );
         model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
         TicketFilterHelper.setModel( model, filter, request, getUser(  ) );
         ModelUtils.storeTicketRights( model, getUser(  ) );

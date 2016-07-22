@@ -2,7 +2,6 @@
 <#include "/admin/plugins/ticketing/include/user_info.html"/>
 <!-- Include the plugin's CSS and JS for multiselect bootstrap -->
 <script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
-<script src="js/plugins/ticketing/user_info.js"></script>
 <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css"/>
 
 <#macro sortColumn field=''>
@@ -127,14 +126,13 @@
             </p>
             </#if>
     		 <#if ticket.assigneeUser??>
-              <!-- <p class="text-left"> user_list-->
-              <#if user_list.create(ticket.assigneeUser.adminUserId)?has_content>
-              <#assign user1=user_list.create(ticket.assigneeUser.adminUserId)>
-              <p class="info_user" data-key-id="${user1.idUser}" data-container="body" data-toggle="popover" data-placement="left">
+              <#if user_factory.create(ticket.assigneeUser.adminUserId)?has_content>
+              <#assign user=user_factory.create(ticket.assigneeUser.adminUserId)>
+              <p class="info_user" data-key-id="${user.idUser}" data-container="body" data-toggle="popover" data-placement="left">
     			<#if avatar_available>
                 <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}" alt="" title="Avatar"></#if>
     		    <span>${ticket.assigneeUser.firstname} <br/> ${ticket.assigneeUser.lastname}</span>
-    		    <@info_user user1/>
+    		    <@info_user user/>
               </p>
              </#if>
             </#if>

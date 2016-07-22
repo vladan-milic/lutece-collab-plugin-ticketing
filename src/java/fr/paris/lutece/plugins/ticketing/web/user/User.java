@@ -33,22 +33,25 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.user;
 
-import java.util.List;
-
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 
+import java.util.List;
+
+/**
+ * This class provide a user for the FactoryUser
+ *
+ */
 public class User
 {
-	// Variables declarations
+    // Variables declarations
     private int _nIdUser;
     private String _strFirstName;
     private String _strLastName;
     private String _strEmail;
-    private List<TicketDomain> domain;
-    private List<Unit> unit;
-    
-    
+    private List<TicketDomain> _listDomains;
+    private List<Unit> _listUnits;
+
     /**
      * Returns the AdminUserId
      * @return The AdminUserId
@@ -57,7 +60,7 @@ public class User
     {
         return _nIdUser;
     }
-    
+
     /**
      * Sets the AdminUserId
      * @param nAdminUserId The AdminUserId
@@ -66,7 +69,7 @@ public class User
     {
         this._nIdUser = _niduser;
     }
-    
+
     /**
      * Returns the Firstname
      * @return The Firstname
@@ -75,7 +78,7 @@ public class User
     {
         return _strFirstName;
     }
-    
+
     /**
      * Sets the Firstname
      * @param strFirstname The Firstname
@@ -84,7 +87,7 @@ public class User
     {
         this._strFirstName = _strFistname;
     }
-    
+
     /**
      * Returns the Lastname
      * @return The Lastname
@@ -93,7 +96,7 @@ public class User
     {
         return _strLastName;
     }
-    
+
     /**
      * Sets the Lastname
      * @param strLastname The Lastname
@@ -102,7 +105,7 @@ public class User
     {
         this._strLastName = _strLastname;
     }
-    
+
     /**
      * Returns the Email
      * @return The Email
@@ -111,7 +114,7 @@ public class User
     {
         return _strEmail;
     }
-    
+
     /**
      * Sets the Email
      * @param strEmail The Email
@@ -120,32 +123,40 @@ public class User
     {
         this._strEmail = _strEmail;
     }
-
-    public List<TicketDomain> getDomain(  )
+    
+    /**
+     * Returns the TicketDomains
+     * @return list of TicketDomain
+     */
+    public List<TicketDomain> getDomains(  )
     {
-        return domain;
+        return _listDomains;
+    }
+
+    /**
+     * Sets the list of TicketDomain
+     * @param list of TicketDomain
+     */
+    public void setDomain( List<TicketDomain> _listDomains )
+    {
+        this._listDomains = _listDomains;
     }
     
     /**
-     * Sets the Domain
-     * @param list of Domain
+     * Returns the Units
+     * @return list of The Unit
      */
-    public void setDomain( List<TicketDomain> domain )
+    public List<Unit> getUnits(  )
     {
-        this.domain = domain;
+        return _listUnits;
     }
 
-    public List<Unit> getUnit(  )
-    {
-        return unit;
-    }
-    
     /**
      * Sets the Unit
      * @param list of Unit
      */
-    public void setUnit( List<Unit> unit )
+    public void setUnit( List<Unit> _listUnit )
     {
-        this.unit = unit;
+        this._listUnits = _listUnit;
     }
 }
