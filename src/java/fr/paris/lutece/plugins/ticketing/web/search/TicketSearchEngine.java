@@ -123,22 +123,25 @@ public class TicketSearchEngine implements ITicketSearchEngine
         {
             IndexSearcher searcher = TicketSearchService.getInstance(  ).getSearcher(  );
 
-            //hook because of strange behaviour with native query (using toString seems to fix issue)
-            String strQuery = query.toString(  );
-            Query queryToLaunch = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
-                    TicketSearchItem.FIELD_CONTENTS, TicketSearchService.getInstance(  ).getAnalyzer(  ) ).parse( strQuery );
-
-            // Get results documents
-            TopDocs topDocs = searcher.search( queryToLaunch, LuceneSearchEngine.MAX_RESPONSES );
-            ScoreDoc[] hits = topDocs.scoreDocs;
-
-            for ( int i = 0; i < hits.length; i++ )
+            if ( searcher != null )
             {
-                int docId = hits[i].doc;
-                Document document = searcher.doc( docId );
-                TicketSearchItem si = new TicketSearchItem( document );
+                //hook because of strange behaviour with native query (using toString seems to fix issue)
+                String strQuery = query.toString(  );
+                Query queryToLaunch = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
+                        TicketSearchItem.FIELD_CONTENTS, TicketSearchService.getInstance(  ).getAnalyzer(  ) ).parse( strQuery );
 
-                listResults.add( si );
+                // Get results documents
+                TopDocs topDocs = searcher.search( queryToLaunch, LuceneSearchEngine.MAX_RESPONSES );
+                ScoreDoc[] hits = topDocs.scoreDocs;
+
+                for ( int i = 0; i < hits.length; i++ )
+                {
+                    int docId = hits[i].doc;
+                    Document document = searcher.doc( docId );
+                    TicketSearchItem si = new TicketSearchItem( document );
+
+                    listResults.add( si );
+                }
             }
         }
         catch ( IOException e )
