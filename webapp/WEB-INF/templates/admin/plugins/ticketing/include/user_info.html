@@ -1,7 +1,7 @@
 <script src="js/plugins/ticketing/user_info.js"></script>
 <#macro info_user user>
   <div class="modal" id="template-${user.idUser}">
-    <p><span> ${user.firstName}  ${user.lastName}</span></p>
+    <p><span><b> ${user.firstName}  ${user.lastName}</b></span></p>
 	<p> <span class='fa fa-envelope'> <a href='mailto:"${user.email}"'><em> ${user.email} </em></a></span></p>
 	<p> #i18n{ticketing.user.info.label.unit} : <span>
 	<#if (user.units)??>   
