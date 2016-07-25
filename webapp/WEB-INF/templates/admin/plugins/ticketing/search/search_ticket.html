@@ -58,11 +58,8 @@
             <li class="list-group-item">
               <a class="btn btn-link" href="jsp/admin/plugins/ticketing/TicketView.jsp?page=ticketView&view=ticketDetails&id=${ticket.id!}">
                 ${ticket.title!}
-              </a>
-    					${ticket.summary!}
-              <a class="btn btn-default pull-right" href="jsp/admin/plugins/ticketing/TicketView.jsp?page=ticketView&view=ticketDetails&id=${ticket.id!}">
-                <i class="fa fa-search-plus"></i>
-              </a>
+              </a>  
+              ${ticket.summary!}
             </li>
           </#list>
         </ul>
