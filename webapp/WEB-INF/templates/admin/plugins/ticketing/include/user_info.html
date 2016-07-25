@@ -5,14 +5,22 @@
     <p> #i18n{ticketing.user.info.label.lastname} : <span> ${user.lastName} </span></p>
 	<p> #i18n{ticketing.user.info.label.domain} :<span> 
 	<#if (user.domains)??> 
-	   <#list user.domains as domain> 
-		   ${domain.label}
+	   <#list user.domains as domains> 
+		   <#if domains_has_next>
+		   	${domains.label},
+		   	<#else>
+		   	${domains.label}
+		   	</#if>
 	   </#list></span>
 	</#if></p>
 	<p> #i18n{ticketing.user.info.label.unit} : <span>
 	<#if (user.units)??>   
-	   <#list user.units as unit>
-		    ${unit.label} 
+	   <#list user.units as units>
+		    <#if units_has_next>
+		   	 ${units.label},
+		   	<#else>
+		   	 ${units.label}
+		   	</#if>
 		</#list></span>
 	</#if></p>
     <p> <span class='fa fa-envelope'> <a href='mailto:"${user.email}"'><em> ${user.email} </em></a></span></p>
