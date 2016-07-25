@@ -731,7 +731,7 @@ public class TicketFilter extends OrderByFilter
     {
         _mapOrderNameToColumnName = new HashMap<String, List<String>>(  );
         _mapOrderNameToColumnName.put( "category_label", Arrays.asList( "e.label" ) );
-        _mapOrderNameToColumnName.put( "ticket_reference", Arrays.asList( "ticket_reference" ) );
+        _mapOrderNameToColumnName.put( "reference", Arrays.asList( "ticket_reference", "id_ticket" ) );
         _mapOrderNameToColumnName.put( "ticket_status", Arrays.asList( "ticket_status" ) );
         _mapOrderNameToColumnName.put( "date_create", Arrays.asList( "date_create" ) );
         _mapOrderNameToColumnName.put( "date_update", Arrays.asList( "date_update" ) );
