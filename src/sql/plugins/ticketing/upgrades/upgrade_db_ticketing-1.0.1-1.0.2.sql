@@ -102,3 +102,4 @@ INSERT INTO core_datastore (`entity_key`, `entity_value`) VALUES
 ('core.daemon.modelResponsesIndexerDaemon.onStartUp', 'true');
 
 ALTER TABLE ticketing_ticket ADD COLUMN is_read int(1) NOT NULL default '0';
+ALTER TABLE ticketing_ticket ADD COLUMN nomenclature varchar(3) NULL;

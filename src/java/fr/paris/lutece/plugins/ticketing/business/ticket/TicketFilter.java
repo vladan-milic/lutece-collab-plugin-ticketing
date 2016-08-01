@@ -88,6 +88,7 @@ public class TicketFilter extends OrderByFilter
     private String _strReference;
     private String _strFixedPhoneNumber;
     private String _strMobilePhoneNumber;
+    private String _strNomenclature;
     private int _nUrgency = CONSTANT_ID_NULL;
     private List<Integer> _listIdWorkflowState = new ArrayList<Integer>(  );
 
@@ -640,7 +641,7 @@ public class TicketFilter extends OrderByFilter
     *
     * @return true if the filter contain an id of Channel
     */
-    public boolean containChannel(  )
+    public boolean containsChannel(  )
     {
         return ( _nIdChannel != CONSTANT_ID_NULL );
     }
@@ -670,6 +671,33 @@ public class TicketFilter extends OrderByFilter
     public boolean containsReference(  )
     {
         return StringUtils.isNotEmpty( _strReference );
+    }
+
+    /**
+     * @return the _strNomenclature
+     */
+    public String getNomenclature(  )
+    {
+        return _strNomenclature;
+    }
+
+    /**
+     * @param strNomenclature
+     *            the Nomenclature to set
+     */
+    public void setNomenclature( String strNomenclature )
+    {
+        this._strNomenclature = strNomenclature;
+    }
+
+    /**
+     * Check if this filter contains a Nomenclature
+     *
+     * @return true if the filter contains a Nomenclature
+     */
+    public boolean containsNomenclature(  )
+    {
+        return StringUtils.isNotEmpty( _strNomenclature );
     }
 
     /**
@@ -743,6 +771,7 @@ public class TicketFilter extends OrderByFilter
         _mapOrderNameToColumnName.put( "ticket_status_text", Arrays.asList( "ticket_status_text" ) );
         _mapOrderNameToColumnName.put( "assignee", Arrays.asList( "h.label", "g.last_name" ) );
         _mapOrderNameToColumnName.put( "state", Arrays.asList( "j.name" ) );
+        _mapOrderNameToColumnName.put( "nomenclature", Arrays.asList( "a.nomenclature" ) );
     }
 
     @Override

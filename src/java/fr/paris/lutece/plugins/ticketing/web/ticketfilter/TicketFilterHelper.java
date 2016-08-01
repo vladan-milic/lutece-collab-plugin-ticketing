@@ -90,6 +90,7 @@ public final class TicketFilterHelper
     private static final String PARAMETER_FILTER_EMAIL = "fltr_email";
     private static final String PARAMETER_FILTER_LASTNAME = "fltr_lastname";
     private static final String PARAMETER_FILTER_FIRSTNAME = "fltr_firstname";
+    private static final String PARAMETER_FILTER_NOMENCLATURE = "fltr_nomenclature";
     private static final String PARAMETER_FILTER_FIXED_PHONE_NUMBER = "fltr_fixed_phone_number";
     private static final String PARAMETER_FILTER_MOBILE_PHONE_NUMBER = "fltr_mobile_phone_number";
     private static final String PARAMETER_FILTER_URGENCY = "fltr_urgency";
@@ -237,6 +238,11 @@ public final class TicketFilterHelper
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_LASTNAME ) ) )
         {
             fltrFiltre.setLastName( request.getParameter( PARAMETER_FILTER_LASTNAME ) );
+        }
+
+        if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_NOMENCLATURE ) ) )
+        {
+            fltrFiltre.setNomenclature( request.getParameter( PARAMETER_FILTER_NOMENCLATURE ) );
         }
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_FIRSTNAME ) ) )

@@ -120,5 +120,6 @@ public class TicketFormatterJson implements ITicketingFormatter<Ticket>
         json.accumulate( FormatConstants.KEY_TICKET_CONTACT_MODE_ID, ticket.getIdContactMode(  ) );
         json.accumulate( FormatConstants.KEY_TICKET_CHANNEL_ID, ticket.getChannel(  ).getId(  ) );
         json.accumulate( FormatConstants.KEY_TICKET_COMMENT, ticket.getTicketComment(  ) );
+        json.accumulate( FormatConstants.KEY_TICKET_NOMENCLATURE, ticket.getNomenclature(  ) );
     }
 }

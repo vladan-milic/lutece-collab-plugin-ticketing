@@ -128,6 +128,7 @@ public class Ticket implements Serializable, RBACResource
     private String _strUserMessage;
     private String _strUrl;
     private Channel _channel = new Channel(  );
+    private String _strNomenclature;
     private boolean _bRead;
 
     /**
@@ -147,7 +148,7 @@ public class Ticket implements Serializable, RBACResource
      */
     public void enrich( String strIdUserTitle, String strFirstname, String strLastname, String strFixedPhoneNumber,
         String strMobilePhoneNumber, String strEmail, String strCategoryCode, String strIdContactMode,
-        String strIdChannel, String strComment, String strGuid, String strCustomerId )
+        String strIdChannel, String strComment, String strGuid, String strCustomerId, String strNomenclature )
     {
         if ( !StringUtils.isEmpty( strIdUserTitle ) )
         {
@@ -207,6 +208,11 @@ public class Ticket implements Serializable, RBACResource
             }
         }
 
+        if ( !StringUtils.isEmpty( strNomenclature ) )
+        {
+            setNomenclature( strNomenclature );
+        }
+
         if ( !StringUtils.isEmpty( strComment ) && StringUtils.isEmpty( getTicketComment(  ) ) )
         {
             setTicketComment( strComment );
@@ -224,9 +230,9 @@ public class Ticket implements Serializable, RBACResource
     }
 
     /**
-     * Returns the Id
-     * @return The Id
-     */
+    * Returns the Id
+    * @return The Id
+    */
     public int getId(  )
     {
         return _nId;
@@ -951,6 +957,24 @@ public class Ticket implements Serializable, RBACResource
     public Channel getChannel(  )
     {
         return _channel;
+    }
+
+    /**
+    * Returns the nomenclature
+    * @return The string of the nomenclature
+    */
+    public String getNomenclature(  )
+    {
+        return _strNomenclature;
+    }
+
+    /**
+     * Sets the Nomenclature
+     * @param String
+     */
+    public void setNomenclature( String _strNomenclature )
+    {
+        this._strNomenclature = _strNomenclature;
     }
 
     /**

@@ -26,10 +26,11 @@
         			<th data-field="category_label">#i18n{ticketing.manage_tickets.columnTicketType}</th>
         			<th data-field="lastname">#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment}</th>
         			<th data-field="state">#i18n{ticketing.manage_tickets.columnTicketState}</th>
+        			<th data-field="nomenclature">#i18n{ticketing.manage_tickets.columnTicketNomenclature}</th>
         			<th data-field="assignee">#i18n{ticketing.manage_tickets.columnTicketAssignee}</th>
-              <th data-field="channel">#i18n{ticketing.manage_tickets.columnTicketChannel}</th>
+              		<th data-field="channel">#i18n{ticketing.manage_tickets.columnTicketChannel}</th>
       		  </tr>
-      	  </thead>
+      	  </thead>	
       		<tbody>
     			<#list panel_list as ticket >
     			<tr data-url="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" >
@@ -116,6 +117,10 @@
     			  </td>
     			  <td><#if ticket.state?? && ticket.state.name??>
     				${ticket.state.name!''}
+    				</#if>
+    			  </td>
+    			  <td><#if ticket.nomenclature??>
+    				${ticket.nomenclature}
     				</#if>
     			  </td>
     			  <td>

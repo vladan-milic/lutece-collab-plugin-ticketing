@@ -131,6 +131,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String PARAMETER_CATEGORY = "cat";
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String PARAMETER_SELECTED_TAB = "selected_tab";
+    private static final String PARAMETER_NOMENCLATURE = "nom";
 
     // Properties for page titles
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
@@ -364,8 +365,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         String strMobilePhoneNumber = request.getParameter( PARAMETER_PHONE );
         String strEmail = request.getParameter( PARAMETER_EMAIL );
         String strCategoryCode = request.getParameter( PARAMETER_CATEGORY );
+        String strNomenclature = request.getParameter( PARAMETER_NOMENCLATURE );
         ticket.enrich( strIdUserTitle, strFirstname, strLastname, null, strMobilePhoneNumber, strEmail,
-            strCategoryCode, null, null, null, strGuid, strIdCustomer );
+            strCategoryCode, null, null, null, strGuid, strIdCustomer, strNomenclature );
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale(  ) ) );
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );

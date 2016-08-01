@@ -56,6 +56,7 @@ public final class FormatConstants
     public static final String KEY_USER_FIXED_PHONE_NUMBER = "fixed_phone_number";
     public static final String KEY_USER_MOBILE_PHONE_NUMBER = "mobile_phone_number";
     public static final String KEY_TICKET_CHANNEL_ID = "channel_id";
+    public static final String KEY_TICKET_NOMENCLATURE = "nomenclature";
     public static final String KEY_ID = "id";
     public static final String KEY_LABEL = "label";
     public static final String KEY_TICKET_CATEGORY = "category";

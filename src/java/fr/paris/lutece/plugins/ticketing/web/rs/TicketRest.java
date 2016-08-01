@@ -85,6 +85,7 @@ public class TicketRest extends TicketingRest
     private static final String PARAMETER_USER_FIXED_PHONE_NUMBER = "user_fixed_phone_number";
     private static final String PARAMETER_USER_MOBILE_PHONE_NUMBER = "user_mobile_phone_number";
     private static final String PARAMETER_TICKET_CHANNEL_ID = "ticket_channel_id";
+    private static final String PARAMETER_TICKET_NOMENCLATURE = "ticket_nomenclature";
 
     // Services
     private static WorkflowService _workflowService;
@@ -127,6 +128,7 @@ public class TicketRest extends TicketingRest
     String strCategoryCode, @FormParam( PARAMETER_TICKET_CONTACT_MODE_ID )
     String strIdContactMode, @FormParam( PARAMETER_TICKET_CHANNEL_ID )
     String strIdChannel, @FormParam( PARAMETER_TICKET_COMMENT )
+    String strNomenclature, @FormParam( PARAMETER_TICKET_NOMENCLATURE )
     String strComment, @FormParam( TicketingConstants.PARAMETER_GUID )
     String strGuid, @FormParam( TicketingConstants.PARAMETER_CUSTOMER_ID )
     String strIdCustomer, @HeaderParam( HttpHeaders.ACCEPT )
@@ -179,7 +181,7 @@ public class TicketRest extends TicketingRest
 
         ticket.enrich( strModifiedIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber,
             strEmail, strCategoryCode, strModifiedIdContactMode, strModifiedIdChannel, strComment, strGuid,
-            strIdCustomer );
+            strIdCustomer, strNomenclature );
 
         IFormatterFactory formatterFactory = _formatterFactories.get( strMediaType );
 
