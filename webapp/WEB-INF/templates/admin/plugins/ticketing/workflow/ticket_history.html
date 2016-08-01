@@ -19,12 +19,10 @@
                 <#if history_information.admin_user_history.userId?string != "${defaultUserFrontId}">
                 <#assign user=user_factory.create(history_information.admin_user_history.userId)>
                  <#if user?has_content>
-                  <a href="sip:${history_information.admin_user_history.email}">
                     <em>
                     <img class="info_user fa direct-chat-img" data-key-id="${user.idUser}" data-container="body" data-toggle="popover" data-placement="top"
                     	src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}">
                     </em>
-                  </a>
                   <@info_user user/>
                   </#if>
                 <#else>
@@ -42,10 +40,8 @@
                   <#if history_information.admin_user_history.userId?string != "${defaultUserFrontId}">
                   <#assign user=user_factory.create(history_information.admin_user_history.userId)>
                     <#if user?has_content>
-                    <a href="sip:${history_information.admin_user_history.email}">
                       <em  class="info_user" data-key-id="${user.idUser}" data-container="body" data-toggle="popover" data-placement="top">
 	                    &nbsp; ${history_information.admin_user_history.firstName} ${history_information.admin_user_history.lastName}</em>
-	                    </a>
 	                    <@info_user user/>
 	                </#if>
                   <#else>
