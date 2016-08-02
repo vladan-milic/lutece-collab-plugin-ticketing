@@ -3,7 +3,7 @@
   <div class="modal" id="template-${user.idUser}">
     <p><span><b> ${user.firstName}  ${user.lastName}</b></span></p>
 	<p> <span class='fa fa-envelope'> <a href='mailto:${user.email}'><em> ${user.email} </em></a></span></p>
-	<p> <span class='fa fa-weixin'> <a href='sip:${user.email}'><em> ${ticketing.user.info.label.lynk} </em></a></span></p>
+	<p> <span class='fa fa-weixin'> <a href='sip:${user.email}'><em> #i18n{ticketing.user.info.label.lynk} </em></a></span></p>
 	<p> #i18n{ticketing.user.info.label.unit} : <span>
 	<#if (user.units)??>   
 	   <#list user.units as units>
