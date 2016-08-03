@@ -91,6 +91,13 @@ textarea.ticketing.richtext {
 	border-radius: 0px;
 }
 
+.typical_response_field_keywords {
+    font-style: italic;
+}
+
+.typical_response_field_title {
+    font-weight: bold;
+}
 
 #filter-ticket .caret {
 	color: #000 ;
