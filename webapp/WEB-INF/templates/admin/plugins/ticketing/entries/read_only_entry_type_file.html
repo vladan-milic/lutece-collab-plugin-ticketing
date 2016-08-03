@@ -5,7 +5,7 @@
             <a href="${file_url}" title="${response.file.title}" >
                 <span class="glyphicon glyphicon-paperclip"></span>
                 ${response.file.title}
-            </a>
+            </a><#if response.file.dateCreation??>, #i18n{ticketing.xpage.view_ticket_details.files.uploadDate} ${response.file.dateCreation?date} #i18n{ticketing.xpage.view_ticket_details.files.uploadDateAt} ${response.file.dateCreation?time}</#if>
         </p>
     </div>
 </#if>
