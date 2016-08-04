@@ -276,7 +276,7 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
                 Document doc = searcher.doc( hit.doc );
                 ModelResponse modelResponse = new ModelResponse(  );
                 modelResponse.setId( Integer.parseInt( doc.get( FIELD_ID ) ) );
-                modelResponse.setTitle("<span class=\"typical_response_field_title\">" + doc.get( FIELD_TITLE ) + "</span> ( <span class=\"typical_response_field_keywords\">" + doc.get( FIELD_KEYWORD ) + "</span> )" );
+                modelResponse.setTitle( doc.get( FIELD_TITLE ) );
                 modelResponse.setReponse( doc.get( FIELD_RESPONSE ) );
                 modelResponse.setDomain( doc.get( FIELD_DOMAIN_LABEL ) );
                 modelResponse.setIdDomain( Integer.parseInt( doc.get( FIELD_DOMAIN_ID ) ) );
