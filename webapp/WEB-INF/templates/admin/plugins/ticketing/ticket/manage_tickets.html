@@ -27,8 +27,8 @@
         			<th data-field="lastname">#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment}</th>
         			<th data-field="state">#i18n{ticketing.manage_tickets.columnTicketState}</th>
         			<th data-field="nomenclature">#i18n{ticketing.manage_tickets.columnTicketNomenclature}</th>
+        			<th data-field="channel">#i18n{ticketing.manage_tickets.columnTicketChannel}</th>
         			<th data-field="assignee">#i18n{ticketing.manage_tickets.columnTicketAssignee}</th>
-              		<th data-field="channel">#i18n{ticketing.manage_tickets.columnTicketChannel}</th>
       		  </tr>
       	  </thead>	
       		<tbody>
@@ -123,6 +123,11 @@
     				${ticket.nomenclature}
     				</#if>
     			  </td>
+    			   <td>
+		              <#if ticket.channel??>
+		                <#if ticket.channel.iconFont??><i class="${ticket.channel.iconFont}"></i>&nbsp;</#if>${ticket.channel.label!''}
+		              </#if>
+            	  </td>
     			  <td>
     				<#if ticket.assigneeUnit??>
             <!-- <p class="text-left"> -->
@@ -142,11 +147,6 @@
              </#if>
             </#if>
     			  </td>
-            <td>
-              <#if ticket.channel??>
-                <#if ticket.channel.iconFont??><i class="${ticket.channel.iconFont}"></i>&nbsp;</#if>${ticket.channel.label!''}
-              </#if>
-            </td>
     			</tr>
     			</#list>
     	  </tbody>
