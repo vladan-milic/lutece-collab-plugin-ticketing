@@ -287,7 +287,6 @@
 <script>
 $( function(){
 
-    
   $(".content-header").toggle();
 	// Set link on whole tr
 	$("tbody > tr ").on( 'click', function(e){
@@ -301,12 +300,19 @@ $( function(){
   // Init Order
   var sort_order = $("input[name=fltr_order_sort]").val();
   var sort_field = $("input[name=fltr_order_by]").val()=="" ? 'th[data-field="date_create"]' : 'th[data-field="' + $("input[name=fltr_order_by]").val() + '"]';
-  $(sort_field).addClass( "th-sort-" + sort_order )
+  $(sort_field).addClass( "th-sort-" + sort_order );
 
   // Column order
   $("th").on( 'click', function( e ){
     var field = $(this).attr('data-field');
-    var order = sort_order=="asc" ? "desc" : "asc";
+    var oldField = $("input[name=fltr_order_by]").val();
+    var order;
+    if( field === oldField ){
+      order = sort_order=="asc" ? "desc" : "asc";
+    }
+    else{
+      order = "asc";
+    }
     sortList( field, order);
   });
 
