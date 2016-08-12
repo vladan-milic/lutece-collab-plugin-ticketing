@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><plug-in>
     <name>ticketing</name>
     <class>fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation</class>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.0</version>
     <documentation/>
     <installation/>
     <changes/>
@@ -75,7 +75,7 @@
             <feature-description>ticketing.adminFeature.ManageTicketingModelResponse.description</feature-description>
             <feature-level>2</feature-level>
             <feature-url>jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp</feature-url>
-            <feature-icon-url></feature-icon-url>
+            <feature-icon-url/>
       </admin-feature>
       
       
