@@ -77,7 +77,7 @@
     <properties>
         <componentName>ticketing</componentName>
         <jiraProjectName>TICKETING</jiraProjectName>
-        <jiraComponentId />
+        <jiraComponentId>12915</jiraComponentId>
     </properties>
         
     <scm>
