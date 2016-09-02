@@ -1,4 +1,4 @@
-<div class="control-group">
+<div class="form-group">
 <label class="control-label col-sm-3" for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> :</label>	
 <#list entry.fields as field>
 	<div class="controls col-sm-9">
@@ -32,4 +32,4 @@
 </div>
 <script src="js/jquery/plugins/ui/jquery-ui-1.9.2.custom.min.js"></script>
 <script src="js/jquery/plugins/ui/ui.datepicker-fr.js"></script>
-<@getDatePickerBootstrap idField="attribute${entry.idEntry}" language=locale />
+<@getDatePicker idField="attribute${entry.idEntry}" language=locale />

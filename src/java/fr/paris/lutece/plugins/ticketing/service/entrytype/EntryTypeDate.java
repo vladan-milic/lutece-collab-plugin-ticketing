@@ -34,7 +34,15 @@
 package fr.paris.lutece.plugins.ticketing.service.entrytype;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeDate;
+import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.util.html.HtmlTemplate;
+
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -48,6 +56,7 @@ public class EntryTypeDate extends AbstractEntryTypeDate
     private static final String TEMPLATE_MODIFY = "admin/plugins/ticketing/entries/modify_entry_type_date.html";
     private static final String TEMPLATE_HTML_CODE = "skin/plugins/ticketing/entries/html_code_entry_type_date.html";
     private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/ticketing/entries/html_code_entry_type_date.html";
+    private static final String TEMPLATE_READ_ONLY_HTML = "admin/plugins/ticketing/entries/read_only_entry_type_date.html";
 
     /**
      * {@inheritDoc}
@@ -74,5 +83,15 @@ public class EntryTypeDate extends AbstractEntryTypeDate
     public String getTemplateModify( Entry entry, boolean bDisplayFront )
     {
         return TEMPLATE_MODIFY;
+    }
+
+    @Override
+    public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
+    {
+        Map<String, Object> model = EntryTypeUtils.initModel( entry, response );
+
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_READ_ONLY_HTML, locale, model );
+
+        return template.getHtml(  );
     }
 }

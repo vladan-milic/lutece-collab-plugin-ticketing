@@ -61,9 +61,10 @@ public class EntryTypeImage extends EntryTypeFile
     public static final String BEAN_NAME = "ticketing.entryTypeImage";
     private static final String TEMPLATE_HTML_CODE = "skin/plugins/ticketing/entries/html_code_entry_type_image.html";
     private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/ticketing/entries/html_code_entry_type_image.html";
-    private static final String TEMPLATE_FILE_IMAGE = "skin/plugins/ticketing/entries/recap_entry_type_image.html";
+    private static final String TEMPLATE_FILE_IMAGE = "admin/plugins/ticketing/entries/read_only_entry_type_image.html";
     private static final String MARK_FILE_NAME = "file_name";
     private static final String MARK_IMG_URL = "img_url";
+    private static final String MARK_ENTRY = "entry";
 
     /**
      * {@inheritDoc}
@@ -106,6 +107,7 @@ public class EntryTypeImage extends EntryTypeFile
                 model.put( MARK_FILE_NAME, response.getFile(  ).getTitle(  ) );
                 model.put( MARK_IMG_URL,
                     getUrlDownloadFile( response.getIdResponse(  ), AppPathService.getBaseUrl( request ) ) );
+                model.put( MARK_ENTRY, entry );
 
                 HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_FILE_IMAGE, locale, model );
 

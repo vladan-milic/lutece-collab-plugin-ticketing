@@ -27,15 +27,15 @@ ${entry.CSSClass!}
 			 	${field.title}
 			 </#if>
 			</label>
-		   <#if !entry.fieldInLine && entry.helpMessage?exists && entry.helpMessage != ''>
-				<p class="help-block">${entry.helpMessage}</p>
-			</#if>
-		</#list>
+	</#list>
 	</div>
- </div>	
-<#if entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
-<p class="help-block">${entry.helpMessage}</p>
-</#if>
+	<#if entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
+		<label class="control-label col-sm-3"></label>
+      	<div class="col-sm-9">
+        	<p class="form-control-static">${entry.helpMessage}</p>
+      </div>
+	</#if>
+</div>	
 <#if list_responses??>
 	<#list list_responses as response>
 		<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && response.entry.error.isDisplayableError>
@@ -51,7 +51,6 @@ ${entry.CSSClass!}
 	</#list>
 </#if>
 <#if str_list_entry_children?exists>${str_list_entry_children}</#if>
-
 <#if list_responses??>
 	<script type="text/javascript">
 		<#list list_responses as response>

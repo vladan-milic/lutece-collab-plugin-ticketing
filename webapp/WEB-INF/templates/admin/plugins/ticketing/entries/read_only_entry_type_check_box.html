@@ -1,0 +1,6 @@
+<#if response.responseValue?has_content>
+    <div class="form-group">
+        <label>${entry.title}</label>
+        <p class="form-control-static">${response.responseValue!''}</p>
+    </div>
+</#if>
