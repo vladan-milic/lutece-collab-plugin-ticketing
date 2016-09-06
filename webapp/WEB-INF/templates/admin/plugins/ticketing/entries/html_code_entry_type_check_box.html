@@ -30,9 +30,10 @@ ${entry.CSSClass!}
 				<p class="help-block">${entry.helpMessage}</p>
 			</#if>	
 		</#list>
+		<p class="help-block">
 		<#if entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
-			<p class="help-block">${entry.helpMessage}</p>
-		</#if>	
+			${entry.helpMessage}
+		</#if></p>	
 		<#if list_responses??>
 			<#list list_responses as response>
 				<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && response.entry.error.isDisplayableError>

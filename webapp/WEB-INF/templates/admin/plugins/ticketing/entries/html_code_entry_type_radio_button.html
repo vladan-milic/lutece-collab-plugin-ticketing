@@ -28,17 +28,18 @@ ${entry.CSSClass!}
 			 	${field.title}
 			 </#if>
 			</label>
-		   <#if !entry.fieldInLine && entry.helpMessage?exists && entry.helpMessage != ''>
+		  	<#if !entry.fieldInLine && entry.helpMessage?exists && entry.helpMessage != ''>
 				<p class="help-block">${entry.helpMessage}</p>
 			</#if>
 		<#if !entry.fieldInLine></div></#if>
 		</#list>
-		
+		<p class="help-block">
+			<#if entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
+			${entry.helpMessage}
+		</#if></p>
 	</div>
  </div>	
-<#if entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
-<p class="help-block">${entry.helpMessage}</p>
-</#if>
+
 <#if list_responses??>
 	<#list list_responses as response>
 		<#if response.entry.idEntry == entry.idEntry && response.entry.error??  && response.entry.error.isDisplayableError>
