@@ -34,11 +34,14 @@
     <h4>${ticket.ticketDomain}</h4>
     <h5>#i18n{ticketing.view_ticket_details.labelTicketCategory}</h5>
     <h4>${ticket.ticketCategory}</h4>
+    <#if ticket.nomenclature??>
+      <h5>#i18n{ticketing.view_ticket_details.labelNomenclature}</h5>
+      <h4>${ticket.nomenclature}</h4>
+    </#if>
     <#if ticket.channel??>
       <h5>#i18n{ticketing.view_ticket_details.labelChannel}</h5>
       <h4><#if ticket.channel.iconFont??><i class="${ticket.channel.iconFont}"></i>&nbsp;</#if>${ticket.channel.label!''}</h4>
     </#if>
-    
     <hr>
     <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
       <#list ticket.listWorkflowActions as action>
