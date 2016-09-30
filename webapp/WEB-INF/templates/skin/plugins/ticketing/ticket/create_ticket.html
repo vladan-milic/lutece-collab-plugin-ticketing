@@ -14,7 +14,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="id_user_title" >#i18n{ticketing.xpage.create_ticket.labelIdUserTitle}&#8239;*&#8239;:</label>
                 <div class="col-sm-9">
-                    <@comboWithParams name="id_user_title" default_value="${civilityName!''}"  additionalParameters="class=\"form-control\""  items=user_titles_list />
+                    <@comboWithParams name="id_user_title" default_value="${ticket.idUserTitle!''}"  additionalParameters="class=\"form-control\""  items=user_titles_list />
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdUserTitle.help}</span>
                 </div>
             </div>
