@@ -39,6 +39,10 @@ import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.identitystore.web.exception.IdentityNotFoundException;
+import fr.paris.lutece.plugins.identitystore.web.rs.dto.AttributeDto;
+import fr.paris.lutece.plugins.identitystore.web.rs.dto.IdentityDto;
+import fr.paris.lutece.plugins.identitystore.web.service.IdentityService;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
@@ -52,6 +56,7 @@ import fr.paris.lutece.plugins.ticketing.business.ticketform.ResponseRecap;
 import fr.paris.lutece.plugins.ticketing.business.ticketform.TicketForm;
 import fr.paris.lutece.plugins.ticketing.business.ticketform.TicketFormHome;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
@@ -66,6 +71,7 @@ import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
@@ -145,9 +151,15 @@ public class TicketXPage extends WorkflowCapableXPage
     // Session keys
     private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
 
+    // Services keys
+    private static final String BEAN_IDENTITYSTORE_SERVICE = "ticketing.identitystore.service";
+
     // Session variable to store working values
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
 
+    //Service identityStore
+    private final IdentityService _identityService = SpringContextService.getBean( BEAN_IDENTITYSTORE_SERVICE );
+    
     /**
      * Returns the form to create a ticket
      *
@@ -192,26 +204,71 @@ public class TicketXPage extends WorkflowCapableXPage
 
         if ( user != null )
         {
-            ticket.setGuid( user.getName(  ) );
 
-            String strFirstname = user.getUserInfo( LuteceUser.NAME_GIVEN );
-            String strLastname = user.getUserInfo( LuteceUser.NAME_FAMILY );
-            String strEmail = user.getEmail(  );
-
-            if ( !StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty( ticket.getFirstname(  ) ) )
+            try
             {
-                ticket.setFirstname( strFirstname );
+                ticket.setGuid( user.getName(  ) );
+                // FIXME : the hash must be provided
+                IdentityDto identityDto = _identityService.getIdentity( user.getName(  ), TicketingConstants.APPLICATION_CODE, StringUtils.EMPTY );
+
+                String strIdUserTitle = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_GENDER );
+                String strFirstname = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_NAME_GIVEN );
+                String strLastname = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_NAME_PREFERRED_NAME );
+                String strEmail = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_ONLINE_EMAIL );
+                String strFixedPhoneNumber = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_TELEPHONE_NUMBER );
+                String strMobilePhoneNumber = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_MOBILE_NUMBER );
+
+                ticket.setCustomerId( Integer.toString( identityDto.getCustomerId(  ) ) );
+
+                if ( !StringUtils.isEmpty( strIdUserTitle ) && StringUtils.isEmpty( ticket.getUserTitle(  ) ) )
+                {
+                    try
+                    {
+                        UserTitle userTitle = UserTitleHome.findByPrimaryKey( Integer.valueOf( strIdUserTitle ) );
+                        if ( userTitle != null )
+                        {
+                            ticket.setIdUserTitle( userTitle.getId(  ) );
+                            ticket.setUserTitle( userTitle.getLabel(  ) );
+                        }
+                    }
+                    catch ( NumberFormatException e )
+                    {
+                        // The ticket keep the default value 0 for the user title id (undefined)
+                    }
+                }
+
+                if ( !StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty( ticket.getFirstname(  ) ) )
+                {
+                    ticket.setFirstname( strFirstname );
+                }
+
+                if ( !StringUtils.isEmpty( strLastname ) && StringUtils.isEmpty( ticket.getLastname(  ) ) )
+                {
+                    ticket.setLastname( strLastname );
+                }
+
+                if ( !StringUtils.isEmpty( strEmail ) && StringUtils.isEmpty( ticket.getEmail(  ) ) )
+                {
+                    ticket.setEmail( strEmail );
+                }
+
+                if ( !StringUtils.isEmpty( strFixedPhoneNumber ) && StringUtils.isEmpty( ticket.getFixedPhoneNumber(  ) ) )
+                {
+                    ticket.setFixedPhoneNumber( strFixedPhoneNumber );
+                }
+                
+                if ( !StringUtils.isEmpty( strMobilePhoneNumber ) && StringUtils.isEmpty( ticket.getMobilePhoneNumber(  ) ) )
+                {
+                    ticket.setMobilePhoneNumber( strMobilePhoneNumber );
+                }
+                
+            }
+            catch ( IdentityNotFoundException e )
+            {
+                // The customer is not in the identity store yet : nothing to do
             }
 
-            if ( !StringUtils.isEmpty( strLastname ) && StringUtils.isEmpty( ticket.getLastname(  ) ) )
-            {
-                ticket.setLastname( strLastname );
-            }
-
-            if ( !StringUtils.isEmpty( strEmail ) && StringUtils.isEmpty( ticket.getEmail(  ) ) )
-            {
-                ticket.setEmail( strEmail );
-            }
+            
         }
     }
 
@@ -551,4 +608,18 @@ public class TicketXPage extends WorkflowCapableXPage
     {
         return redirectView( request, VIEW_CREATE_TICKET );
     }
+
+    /**
+     * Gets the attribute value from the specified identity
+     * @param identityDto the identity
+     * @param strCode the attribute code
+     * @return {@code null} if the attribute does not exist, the attribute value otherwise
+     */
+    private String getAttribute( IdentityDto identityDto, String strCode )
+    {
+        AttributeDto attribute = identityDto.getAttributes(  ).get( strCode );
+
+        return ( attribute == null ) ? null : attribute.getValue(  );
+    }
+    
 }

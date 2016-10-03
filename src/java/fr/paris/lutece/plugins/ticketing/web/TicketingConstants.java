@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
+
 
 /**
  * Class providing constants for Ticketing
@@ -98,7 +100,14 @@ public final class TicketingConstants
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
     public static final String PROPERTY_REDIRECT_PREFIX = "ticketing.workflow.redirect.";
     public static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.ticket.attribute.";
-
+    public static final String PROPERTIES_APPLICATION_CODE = "ticketing.application.code";
+    public static final String PROPERTIES_ATTRIBUTE_USER_GENDER = "ticketing.identity.attribute.user.gender";
+    public static final String PROPERTIES_ATTRIBUTE_USER_NAME_GIVEN = "ticketing.identity.attribute.user.name.given";
+    public static final String PROPERTIES_ATTRIBUTE_USER_PREFERRED_NAME = "ticketing.identity.attribute.user.name.family";
+    public static final String PROPERTIES_ATTRIBUTE_USER_HOMEINFO_ONLINE_EMAIL = "ticketing.identity.attribute.user.home-info.online.email";
+    public static final String PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_TELEPHONE_NUMBER = "ticketing.identity.attribute.user.home-info.telecom.telephone.number";
+    public static final String PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_MOBILE_NUMBER = "ticketing.identity.attribute.user.home-info.telecom.mobile.number";
+    
     // Session keys
     public static final String SESSION_NOT_VALIDATED_TICKET = "ticketing.ticketFormService.notValidatedTicket";
     public static final String SESSION_VALIDATED_TICKET_FORM = "ticketing.ticketFormService.validatedTicket";
@@ -128,7 +137,18 @@ public final class TicketingConstants
 
     // Plugins
     public static final String PLUGIN_AVATAR = "avatar";
-
+    
+    // Identity attributes
+    public static final String ATTRIBUTE_IDENTITY_GENDER = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_GENDER );
+    public static final String ATTRIBUTE_IDENTITY_NAME_GIVEN = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_NAME_GIVEN );
+    public static final String ATTRIBUTE_IDENTITY_NAME_PREFERRED_NAME = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_PREFERRED_NAME );
+    public static final String ATTRIBUTE_IDENTITY_HOMEINFO_ONLINE_EMAIL = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_ONLINE_EMAIL );
+    public static final String ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_TELEPHONE_NUMBER = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_TELEPHONE_NUMBER );
+    public static final String ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_MOBILE_NUMBER = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_MOBILE_NUMBER );
+    
+    // FIXME : the application code must be provided by the caller
+    public static final String APPLICATION_CODE = AppPropertiesService.getProperty( PROPERTIES_APPLICATION_CODE );
+    
     // Other constants
     public static final String ADMIN_CONTROLLLER_PATH = "jsp/admin/plugins/ticketing/";
     public static final String ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH = ADMIN_CONTROLLLER_PATH + "admin/";
