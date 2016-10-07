@@ -71,7 +71,6 @@ import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
@@ -209,7 +208,7 @@ public class TicketXPage extends WorkflowCapableXPage
             {
                 ticket.setGuid( user.getName(  ) );
                 // FIXME : the hash must be provided
-                IdentityDto identityDto = _identityService.getIdentity( user.getName(  ), TicketingConstants.APPLICATION_CODE, StringUtils.EMPTY );
+                IdentityDto identityDto = _identityService.getIdentity( user.getName(  ), TicketingConstants.APPLICATION_CODE );
 
                 String strIdUserTitle = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_GENDER );
                 String strFirstname = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_NAME_GIVEN );
