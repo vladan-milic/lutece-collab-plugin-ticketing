@@ -53,7 +53,7 @@ public final class TicketFormDAO implements ITicketFormDAO
         "WHERE a.inactive <> 1 ORDER BY title";
     private static final String SQL_QUERY_SELECT = SQL_QUERY_SELECT_COLUMNS + " WHERE a.id_form = ?";
     private static final String SQL_QUERY_SELECT_WITHOUT_CATEGORY = SQL_QUERY_SELECT_COLUMNS +
-        " WHERE a.id_form NOT IN  (SELECT c.id_ticket_form FROM ticketing_ticket_category c where c.id_ticket_form > 0)";
+        " WHERE a.inactive <> 1 AND a.id_form NOT IN  (SELECT c.id_ticket_form FROM ticketing_ticket_category c where c.id_ticket_form > 0)";
     private static final String SQL_QUERY_SELECT_BY_CATEGORY = SQL_QUERY_SELECT_COLUMNS +
         " WHERE a.inactive <> 1 AND b.id_ticket_category = ?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_form ( id_form, title, description, inactive) VALUES (?, ?, ?, 0) ";
