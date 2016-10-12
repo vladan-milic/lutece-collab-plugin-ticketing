@@ -42,7 +42,6 @@ import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.identitystore.web.exception.IdentityNotFoundException;
 import fr.paris.lutece.plugins.identitystore.web.rs.dto.AttributeDto;
 import fr.paris.lutece.plugins.identitystore.web.rs.dto.IdentityDto;
-import fr.paris.lutece.plugins.identitystore.web.service.IdentityService;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
@@ -59,6 +58,7 @@ import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
+import fr.paris.lutece.plugins.ticketing.service.identity.TicketingIdentityService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.util.FormValidator;
@@ -150,15 +150,9 @@ public class TicketXPage extends WorkflowCapableXPage
     // Session keys
     private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
 
-    // Services keys
-    private static final String BEAN_IDENTITYSTORE_SERVICE = "ticketing.identitystore.service";
-
     // Session variable to store working values
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
 
-    //Service identityStore
-    private final IdentityService _identityService = SpringContextService.getBean( BEAN_IDENTITYSTORE_SERVICE );
-    
     /**
      * Returns the form to create a ticket
      *
@@ -207,8 +201,10 @@ public class TicketXPage extends WorkflowCapableXPage
             try
             {
                 ticket.setGuid( user.getName(  ) );
-                // FIXME : the hash must be provided
-                IdentityDto identityDto = _identityService.getIdentity( user.getName(  ), TicketingConstants.APPLICATION_CODE );
+
+                IdentityDto identityDto = TicketingIdentityService.getInstance(  ).getIdentityService(  )
+                                                                  .getIdentity( user.getName(  ),
+                        TicketingConstants.APPLICATION_CODE );
 
                 String strIdUserTitle = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_GENDER );
                 String strFirstname = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_NAME_GIVEN );
