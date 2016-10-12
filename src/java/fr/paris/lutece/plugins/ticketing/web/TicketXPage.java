@@ -197,7 +197,6 @@ public class TicketXPage extends WorkflowCapableXPage
 
         if ( user != null )
         {
-
             try
             {
                 ticket.setGuid( user.getName(  ) );
@@ -208,10 +207,13 @@ public class TicketXPage extends WorkflowCapableXPage
 
                 String strIdUserTitle = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_GENDER );
                 String strFirstname = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_NAME_GIVEN );
-                String strLastname = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_NAME_PREFERRED_NAME );
+                String strLastname = getAttribute( identityDto,
+                        TicketingConstants.ATTRIBUTE_IDENTITY_NAME_PREFERRED_NAME );
                 String strEmail = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_ONLINE_EMAIL );
-                String strFixedPhoneNumber = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_TELEPHONE_NUMBER );
-                String strMobilePhoneNumber = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_MOBILE_NUMBER );
+                String strFixedPhoneNumber = getAttribute( identityDto,
+                        TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_TELEPHONE_NUMBER );
+                String strMobilePhoneNumber = getAttribute( identityDto,
+                        TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_MOBILE_NUMBER );
 
                 ticket.setCustomerId( Integer.toString( identityDto.getCustomerId(  ) ) );
 
@@ -220,6 +222,7 @@ public class TicketXPage extends WorkflowCapableXPage
                     try
                     {
                         UserTitle userTitle = UserTitleHome.findByPrimaryKey( Integer.valueOf( strIdUserTitle ) );
+
                         if ( userTitle != null )
                         {
                             ticket.setIdUserTitle( userTitle.getId(  ) );
@@ -247,23 +250,22 @@ public class TicketXPage extends WorkflowCapableXPage
                     ticket.setEmail( strEmail );
                 }
 
-                if ( !StringUtils.isEmpty( strFixedPhoneNumber ) && StringUtils.isEmpty( ticket.getFixedPhoneNumber(  ) ) )
+                if ( !StringUtils.isEmpty( strFixedPhoneNumber ) &&
+                        StringUtils.isEmpty( ticket.getFixedPhoneNumber(  ) ) )
                 {
                     ticket.setFixedPhoneNumber( strFixedPhoneNumber );
                 }
-                
-                if ( !StringUtils.isEmpty( strMobilePhoneNumber ) && StringUtils.isEmpty( ticket.getMobilePhoneNumber(  ) ) )
+
+                if ( !StringUtils.isEmpty( strMobilePhoneNumber ) &&
+                        StringUtils.isEmpty( ticket.getMobilePhoneNumber(  ) ) )
                 {
                     ticket.setMobilePhoneNumber( strMobilePhoneNumber );
                 }
-                
             }
             catch ( IdentityNotFoundException e )
             {
                 // The customer is not in the identity store yet : nothing to do
             }
-
-            
         }
     }
 
@@ -616,5 +618,4 @@ public class TicketXPage extends WorkflowCapableXPage
 
         return ( attribute == null ) ? null : attribute.getValue(  );
     }
-    
 }

@@ -107,7 +107,7 @@ public final class TicketingConstants
     public static final String PROPERTIES_ATTRIBUTE_USER_HOMEINFO_ONLINE_EMAIL = "ticketing.identity.attribute.user.home-info.online.email";
     public static final String PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_TELEPHONE_NUMBER = "ticketing.identity.attribute.user.home-info.telecom.telephone.number";
     public static final String PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_MOBILE_NUMBER = "ticketing.identity.attribute.user.home-info.telecom.mobile.number";
-    
+
     // Session keys
     public static final String SESSION_NOT_VALIDATED_TICKET = "ticketing.ticketFormService.notValidatedTicket";
     public static final String SESSION_VALIDATED_TICKET_FORM = "ticketing.ticketFormService.validatedTicket";
@@ -137,7 +137,7 @@ public final class TicketingConstants
 
     // Plugins
     public static final String PLUGIN_AVATAR = "avatar";
-    
+
     // Identity attributes
     public static final String ATTRIBUTE_IDENTITY_GENDER = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_GENDER );
     public static final String ATTRIBUTE_IDENTITY_NAME_GIVEN = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_NAME_GIVEN );
@@ -145,10 +145,10 @@ public final class TicketingConstants
     public static final String ATTRIBUTE_IDENTITY_HOMEINFO_ONLINE_EMAIL = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_ONLINE_EMAIL );
     public static final String ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_TELEPHONE_NUMBER = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_TELEPHONE_NUMBER );
     public static final String ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_MOBILE_NUMBER = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_MOBILE_NUMBER );
-    
+
     // FIXME : the application code must be provided by the caller
     public static final String APPLICATION_CODE = AppPropertiesService.getProperty( PROPERTIES_APPLICATION_CODE );
-    
+
     // Other constants
     public static final String ADMIN_CONTROLLLER_PATH = "jsp/admin/plugins/ticketing/";
     public static final String ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH = ADMIN_CONTROLLLER_PATH + "admin/";

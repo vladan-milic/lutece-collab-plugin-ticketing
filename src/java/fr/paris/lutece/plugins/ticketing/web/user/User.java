@@ -38,6 +38,7 @@ import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 
 import java.util.List;
 
+
 /**
  * This class provide a user for the FactoryUser
  *
@@ -123,7 +124,7 @@ public class User
     {
         this._strEmail = _strEmail;
     }
-    
+
     /**
      * Returns the TicketDomains
      * @return list of TicketDomain
@@ -141,7 +142,7 @@ public class User
     {
         this._listDomains = _listDomains;
     }
-    
+
     /**
      * Returns the Units
      * @return list of The Unit
