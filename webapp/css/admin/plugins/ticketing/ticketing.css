@@ -1,6 +1,55 @@
-/*     /\                                                                                    */
-/*   / ! \ WARNING Add styles from plugins GRU if is used without plugin-gru !! */
-/*  ------                                                                                   */
+.text-gru{color: #0082D8 !important}
+.bg-gru-light{ background-color: #0082D8 }
+.bg-gru-dark{ background-color: #0C3B59; color: #fff }
+.btn-back{ color:#fff; border-radius: 0 }
+.btn-back:hover{ color:#fff; border-radius: 0 }
+.btn-border{ border: 1px solid #fff; border-radius: 5px; color:#fff; text-transform: uppercase; font-size: 1.2rem; vertical-align: center; padding:6px 12px}
+.btn-border:hover, .btn-border:active, .btn-border:focus, .btn-border:visited, .btn.bg-gru-dark:hover, .btn.bg-gru-light:hover{ color:#fff }
+
+#customer-panel{ padding: 0; margin-left: 0; min-height: 150px; color:#fff }
+#customer-panel p{ font-size: 1.8rem }
+#customer-panel p:first-of-type{ margin-top:20px }
+#customer-panel p#info{ font-size: 1.4rem; font-style: italic }
+#customer-panel .dropdown-menu { min-width: 260px }
+
+#demand-panel{ padding: 0; min-height: 800px }
+
+#demand-panel .nav-tabs{ margin-bottom: 0 }
+#demand-panel .nav-tabs.nav-gru { padding-left: 25px }
+#demand-panel .nav-tabs > li > a{ background-color: #DDD; border: 1px solid #DDD; padding:15px 30px; margin-left:15px; text-transform: uppercase; font-size: 1.5rem }
+#demand-panel .nav-tabs > li.active > a{ border-bottom:1px solid #fff; background-color: #FFF }
+#demand-panel .nav-tabs .dropdown-menu{ padding: 0px 26px; border: 0; min-width: 300px }
+#demand-panel .nav-tabs .dropdown-menu li{ width:281px }
+
+#demand-panel .tab-content{ padding:10px 0 0 90px; background-color: #fff; min-height: 800px }
+
+
+#demand-panel .tab-content table{ color: #BEBEBE }
+#demand-panel .tab-content table thead{ background-color: #fff; color: #000  }
+
+#demand-panel .tab-content table th{ border-top: 0; text-transform: uppercase; font-size: 1rem; vertical-align: top; text-align: center }
+#demand-panel .tab-content table th i.fa{ font-size: 10px; vertical-align: 2px }
+
+#demand-panel .tab-content table td{ color: #656565; font-size: 1.3rem; text-align: center  }
+
+#demand-panel .tab-content table td strong.lead{ font-size: 4rem; font-weight: bold  }
+#demand-panel .tab-content table td .ticket-comments{ max-height: 100px; overflow: auto; background: #EEE; padding: 10px; border-radius: 8px }
+
+#demand-panel .tab-content>.tab-pane ul{ padding-left: 0 }
+#demand-panel .tab-content>.tab-pane h3{ font-family: "Montserrat-Regular"; font-size: 2rem  }
+#demand-panel .tab-content>.tab-pane>ul>li{ padding-left: 0; padding-bottom: 30px }
+#demand-panel .tab-content>.tab-pane ul li ul li a{ font-family: "Montserrat-Regular";font-size: 1.25rem; text-transform: uppercase; padding:10px; border-radius: 7px }
+#demand-panel #selectable_channels{ height:120px }
+
+/* CUSTOMER */
+.gru-wrapper{ margin: -15px; background: #fff }
+
+.gru-wrapper #no-content{ min-height:620px; margin:0 auto; width:100%; text-align: center  }
+.gru-wrapper #no-content img{ position: absolute; top: 60%;left: 60%; margin-top: -250px; margin-left: -250px }
+
+
+table.table-hover tr:hover{ cursor: pointer }
+
 /* TICKETING */
 .border-gru{border:1px solid #0082D8 !important;}
 .border-info{border:1px solid  #00acd6 !important;}
@@ -30,10 +79,12 @@
 #demand-panel.tickets .tab-content table td:nth-of-type(3){ width: 200px }
 #demand-panel.tickets .tab-content table td:nth-of-type(6){ width: 180px }
 
-#demand-panel .tab-content table th.th-sort-desc:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; right:5px }
-#demand-panel .tab-content table th.th-sort-asc:after{ content:'\f106'; color:#606059; font-family: 'FontAwesome'; right:5px }
+#demand-panel .tab-content table th.th-sort-desc:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; right:5px; margin-left: 3px }
+#demand-panel .tab-content table th.th-sort-asc:after{ content:'\f106'; color:#606059; font-family: 'FontAwesome'; right:5px; margin-left: 3px }
 
 #demand-panel .tab-content table td .unread{ font-size: 13px; text-transform: uppercase; }
+
+#demand-panel .tab-content table td strong.lead{ font-size: 4rem; font-weight: bold  }
 
 #info-right{ border-left: 1px solid #DDD;min-height:600px;margin-top: -15px; padding:20px 20px  }
 #info-right h5{ color:#808179 }
@@ -58,7 +109,6 @@ textarea.ticketing.richtext {
 
 /* FILTERS */
 #filter-ticket{ font-size: 1rem; color:#000; margin: 5px 0 }
-#filter-ticket #filter_form div{ padding-bottom: 4px }
 #filter-ticket .form-control{ border-color: #000 }
 #filter-ticket .input-group-btn > .btn { border: 1px solid #3c8dbc}
 #filter-ticket span{ text-transform: uppercase }
@@ -115,6 +165,8 @@ textarea.ticketing.richtext {
     border-width: 1px;
 	border-radius: 3px;
 	padding-bottom: 3px;
+	height: 22px;
+	padding: 1px 3px 0px 2px;
 }
 
 #demand-panel.instant-response .tab-content{ padding-left: 0 }

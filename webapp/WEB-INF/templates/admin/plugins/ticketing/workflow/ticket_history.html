@@ -19,10 +19,8 @@
                 <#if history_information.admin_user_history.userId?string != "${defaultUserFrontId}">
                 <#assign user=user_factory.create(history_information.admin_user_history.userId)>
                  <#if user?has_content>
-                    <em>
                     <img class="info_user fa direct-chat-img" data-key-id="${user.idUser}" data-container="body" data-toggle="popover" data-placement="top"
                     	src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}">
-                    </em>
                   <@info_user user/>
                   </#if>
                 <#else>

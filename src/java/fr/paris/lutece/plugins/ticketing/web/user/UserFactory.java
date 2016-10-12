@@ -70,9 +70,9 @@ public class UserFactory
         User user = new User(  );
 
         AdminUser adminUser = AdminUserHome.findByPrimaryKey( nIdUser );
-        
-        adminUser.setRoles(AdminUserHome.getRolesListForUser(adminUser.getUserId()));
-        
+
+        adminUser.setRoles( AdminUserHome.getRolesListForUser( adminUser.getUserId(  ) ) );
+
         List<TicketDomain> listDomains = TicketDomainHome.getTicketDomainsList( adminUser,
                 TicketDomainResourceIdService.PERMISSION_BELONG_TO );
 

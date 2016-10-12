@@ -39,6 +39,9 @@ import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.identitystore.web.exception.IdentityNotFoundException;
+import fr.paris.lutece.plugins.identitystore.web.rs.dto.AttributeDto;
+import fr.paris.lutece.plugins.identitystore.web.rs.dto.IdentityDto;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
@@ -52,8 +55,10 @@ import fr.paris.lutece.plugins.ticketing.business.ticketform.ResponseRecap;
 import fr.paris.lutece.plugins.ticketing.business.ticketform.TicketForm;
 import fr.paris.lutece.plugins.ticketing.business.ticketform.TicketFormHome;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
+import fr.paris.lutece.plugins.ticketing.service.identity.TicketingIdentityService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.util.FormValidator;
@@ -192,25 +197,74 @@ public class TicketXPage extends WorkflowCapableXPage
 
         if ( user != null )
         {
-            ticket.setGuid( user.getName(  ) );
-
-            String strFirstname = user.getUserInfo( LuteceUser.NAME_GIVEN );
-            String strLastname = user.getUserInfo( LuteceUser.NAME_FAMILY );
-            String strEmail = user.getEmail(  );
-
-            if ( !StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty( ticket.getFirstname(  ) ) )
+            try
             {
-                ticket.setFirstname( strFirstname );
+                ticket.setGuid( user.getName(  ) );
+
+                IdentityDto identityDto = TicketingIdentityService.getInstance(  ).getIdentityService(  )
+                                                                  .getIdentity( user.getName(  ),
+                        TicketingConstants.APPLICATION_CODE );
+
+                String strIdUserTitle = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_GENDER );
+                String strFirstname = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_NAME_GIVEN );
+                String strLastname = getAttribute( identityDto,
+                        TicketingConstants.ATTRIBUTE_IDENTITY_NAME_PREFERRED_NAME );
+                String strEmail = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_ONLINE_EMAIL );
+                String strFixedPhoneNumber = getAttribute( identityDto,
+                        TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_TELEPHONE_NUMBER );
+                String strMobilePhoneNumber = getAttribute( identityDto,
+                        TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_MOBILE_NUMBER );
+
+                ticket.setCustomerId( Integer.toString( identityDto.getCustomerId(  ) ) );
+
+                if ( !StringUtils.isEmpty( strIdUserTitle ) && StringUtils.isEmpty( ticket.getUserTitle(  ) ) )
+                {
+                    try
+                    {
+                        UserTitle userTitle = UserTitleHome.findByPrimaryKey( Integer.valueOf( strIdUserTitle ) );
+
+                        if ( userTitle != null )
+                        {
+                            ticket.setIdUserTitle( userTitle.getId(  ) );
+                            ticket.setUserTitle( userTitle.getLabel(  ) );
+                        }
+                    }
+                    catch ( NumberFormatException e )
+                    {
+                        // The ticket keep the default value 0 for the user title id (undefined)
+                    }
+                }
+
+                if ( !StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty( ticket.getFirstname(  ) ) )
+                {
+                    ticket.setFirstname( strFirstname );
+                }
+
+                if ( !StringUtils.isEmpty( strLastname ) && StringUtils.isEmpty( ticket.getLastname(  ) ) )
+                {
+                    ticket.setLastname( strLastname );
+                }
+
+                if ( !StringUtils.isEmpty( strEmail ) && StringUtils.isEmpty( ticket.getEmail(  ) ) )
+                {
+                    ticket.setEmail( strEmail );
+                }
+
+                if ( !StringUtils.isEmpty( strFixedPhoneNumber ) &&
+                        StringUtils.isEmpty( ticket.getFixedPhoneNumber(  ) ) )
+                {
+                    ticket.setFixedPhoneNumber( strFixedPhoneNumber );
+                }
+
+                if ( !StringUtils.isEmpty( strMobilePhoneNumber ) &&
+                        StringUtils.isEmpty( ticket.getMobilePhoneNumber(  ) ) )
+                {
+                    ticket.setMobilePhoneNumber( strMobilePhoneNumber );
+                }
             }
-
-            if ( !StringUtils.isEmpty( strLastname ) && StringUtils.isEmpty( ticket.getLastname(  ) ) )
+            catch ( IdentityNotFoundException e )
             {
-                ticket.setLastname( strLastname );
-            }
-
-            if ( !StringUtils.isEmpty( strEmail ) && StringUtils.isEmpty( ticket.getEmail(  ) ) )
-            {
-                ticket.setEmail( strEmail );
+                // The customer is not in the identity store yet : nothing to do
             }
         }
     }
@@ -550,5 +604,18 @@ public class TicketXPage extends WorkflowCapableXPage
     protected XPage defaultRedirectWorkflowAction( HttpServletRequest request )
     {
         return redirectView( request, VIEW_CREATE_TICKET );
+    }
+
+    /**
+     * Gets the attribute value from the specified identity
+     * @param identityDto the identity
+     * @param strCode the attribute code
+     * @return {@code null} if the attribute does not exist, the attribute value otherwise
+     */
+    private String getAttribute( IdentityDto identityDto, String strCode )
+    {
+        AttributeDto attribute = identityDto.getAttributes(  ).get( strCode );
+
+        return ( attribute == null ) ? null : attribute.getValue(  );
     }
 }

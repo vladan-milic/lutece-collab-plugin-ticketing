@@ -71,4 +71,18 @@
             <value>change me</value>
         </property>
     </bean>
+
+   <!-- IDENTITYSTORE BEAN -->
+    <bean id="ticketing.identitystore.simpleRestTransport" class="fr.paris.lutece.plugins.identitystore.web.service.SimpleRestTransport" />
+    <bean id="ticketing.identitystore.httpTransport" class="fr.paris.lutece.plugins.identitystore.web.rs.service.IdentityTransportRest">
+        <property name="IdentityStoreEndPoint">
+            <value>http://server-identitystore:8080/site-identitystore/rest/identitystore/</value>
+        </property>
+        <property name="httpTransport">
+            <ref bean="ticketing.identitystore.simpleRestTransport"/>
+        </property>
+    </bean>       
+    <bean id="ticketing.identitystore.service" class="fr.paris.lutece.plugins.identitystore.web.service.IdentityService">
+        <constructor-arg ref="ticketing.identitystore.httpTransport"/>
+    </bean>
 </beans>
