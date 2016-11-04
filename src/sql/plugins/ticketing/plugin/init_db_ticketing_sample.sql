@@ -7,9 +7,9 @@ INSERT INTO ticketing_ticket_form (id_form, title, description) VALUES
 DELETE FROM ticketing_ticket_category ;
 DELETE FROM ticketing_ticket_domain ;
 DELETE FROM ticketing_ticket_type ;
-INSERT INTO ticketing_ticket_type (id_ticket_type, label, reference_prefix) VALUES
-(1, "Demande d'information", "INF"),
-(2, "Réclamation", "RCL");
+INSERT INTO ticketing_ticket_type (id_ticket_type, label, reference_prefix, demand_type_id) VALUES
+(1, "Demande d'information", "INF", 101),
+(2, "Réclamation", "RCL", 102);
 
 INSERT INTO ticketing_ticket_domain (id_ticket_domain, id_ticket_type, label) VALUES
 (100, 1, "Autre" ),

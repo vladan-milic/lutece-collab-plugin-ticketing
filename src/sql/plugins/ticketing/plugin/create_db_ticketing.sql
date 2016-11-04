@@ -106,6 +106,7 @@ id_ticket_type int(6) NOT NULL,
 label varchar(50) NOT NULL default '',
 reference_prefix varchar(3) NOT NULL,
 inactive int(1)  NOT NULL default '0',
+demand_type_id int(6) NOT NULL default '0',
 PRIMARY KEY (id_ticket_type)
 );
 

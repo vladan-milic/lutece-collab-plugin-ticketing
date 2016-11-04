@@ -7,6 +7,7 @@
         <tr>
           <input type="hidden" id="id" name="id"/>
           <th>#i18n{ticketing.manage_tickettypes.columnLabel}</th>
+          <th>#i18n{ticketing.manage_tickettypes.columnDemandTypeId}</th>
           <th>#i18n{portal.util.labelActions}</th>
         </tr>
       </thead>
@@ -16,6 +17,9 @@
             <input type="hidden" id="id" name="id"/>
             <td>
                 ${tickettype.label}
+            </td>
+            <td>
+                ${tickettype.demandTypeId}
             </td>
             <td>
               <a href="jsp/admin/plugins/ticketing/admin/ManageTicketTypes.jsp?view=modifyTicketType&id=${tickettype.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">

@@ -48,11 +48,11 @@ public final class TicketTypeDAO implements ITicketTypeDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket_type ) FROM ticketing_ticket_type";
-    private static final String SQL_QUERY_SELECT = "SELECT id_ticket_type, label, reference_prefix FROM ticketing_ticket_type WHERE id_ticket_type = ? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_type ( id_ticket_type, label, reference_prefix, inactive ) VALUES ( ?, ?, ?, 0 ) ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_ticket_type, label, reference_prefix, demand_type_id FROM ticketing_ticket_type WHERE id_ticket_type = ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_type ( id_ticket_type, label, reference_prefix, demand_type_id, inactive ) VALUES ( ?, ?, ?, ?, 0 ) ";
     private static final String SQL_QUERY_DELETE = "UPDATE ticketing_ticket_type SET inactive = 1 WHERE id_ticket_type = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_type SET id_ticket_type = ?, label = ?, reference_prefix = ? WHERE id_ticket_type = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_ticket_type, label, reference_prefix FROM ticketing_ticket_type WHERE inactive <> 1 ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_type SET id_ticket_type = ?, label = ?, reference_prefix = ?, demand_type_id = ? WHERE id_ticket_type = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_ticket_type, label, reference_prefix, demand_type_id FROM ticketing_ticket_type WHERE inactive <> 1 ";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_type FROM ticketing_ticket_type WHERE inactive <> 1 ";
     private static final String SQL_QUERY_COUNT_DOMAIN_BY_TYPE = "SELECT COUNT(1) FROM ticketing_ticket_domain WHERE id_ticket_type = ? AND inactive <> 1 ";
 
@@ -91,6 +91,7 @@ public final class TicketTypeDAO implements ITicketTypeDAO
         daoUtil.setInt( 1, ticketType.getId(  ) );
         daoUtil.setString( 2, ticketType.getLabel(  ) );
         daoUtil.setString( 3, ticketType.getReferencePrefix(  ) );
+        daoUtil.setInt( 4, ticketType.getDemandTypeId(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -114,6 +115,7 @@ public final class TicketTypeDAO implements ITicketTypeDAO
             ticketType.setId( daoUtil.getInt( 1 ) );
             ticketType.setLabel( daoUtil.getString( 2 ) );
             ticketType.setReferencePrefix( daoUtil.getString( 3 ) );
+            ticketType.setDemandTypeId( daoUtil.getInt( 4 ) );
         }
 
         daoUtil.free(  );
@@ -144,7 +146,8 @@ public final class TicketTypeDAO implements ITicketTypeDAO
         daoUtil.setInt( 1, ticketType.getId(  ) );
         daoUtil.setString( 2, ticketType.getLabel(  ) );
         daoUtil.setString( 3, ticketType.getReferencePrefix(  ) );
-        daoUtil.setInt( 4, ticketType.getId(  ) );
+        daoUtil.setInt( 4, ticketType.getDemandTypeId(  ) );
+        daoUtil.setInt( 5, ticketType.getId(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -167,6 +170,7 @@ public final class TicketTypeDAO implements ITicketTypeDAO
             ticketType.setId( daoUtil.getInt( 1 ) );
             ticketType.setLabel( daoUtil.getString( 2 ) );
             ticketType.setReferencePrefix( daoUtil.getString( 3 ) );
+            ticketType.setDemandTypeId( daoUtil.getInt( 4 ) );
 
             ticketTypeList.add( ticketType );
         }

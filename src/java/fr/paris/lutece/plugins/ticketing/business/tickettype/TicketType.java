@@ -53,6 +53,7 @@ public class TicketType implements Serializable
     @Size( max = 50, message = "#i18n{ticketing.validation.tickettype.Label.size}" )
     private String _strLabel;
     private String _strReferencePrefix;
+    private int _nDemandTypeId;
 
     /**
      * Returns the Id
@@ -106,5 +107,23 @@ public class TicketType implements Serializable
     public void setReferencePrefix( String strReferencePrefix )
     {
         _strReferencePrefix = strReferencePrefix;
+    }
+    
+    /**
+     * Returns the DemandTypeId
+     * @return The DemandTypeId
+     */
+    public int getDemandTypeId(  )
+    {
+        return _nDemandTypeId;
+    }
+
+    /**
+     * Sets the DemandTypeId
+     * @param nDemandTypeId The DemandTypeId
+     */
+    public void setDemandTypeId( int nDemandTypeId )
+    {
+        _nDemandTypeId = nDemandTypeId;
     }
 }

@@ -8,6 +8,7 @@
   <input type="hidden" id="guid" name="guid" value="">
   <@fieldInputText i18nLabelKey="ticketing.modify_tickettype.labelLabel" inputName="label" mandatory=true value="${tickettype.label}" i18nHelpBlockKey="ticketing.modify_tickettype.labelLabel.help" />
   <@fieldInputText i18nLabelKey="ticketing.modify_tickettype.labelReferencePrefix" inputName="referencePrefix" mandatory=true value="${tickettype.referencePrefix!''}" i18nHelpBlockKey="ticketing.modify_tickettype.labelReferencePrefix.help" />
+  <@fieldInputText i18nLabelKey="ticketing.modify_tickettype.labelDemandTypeId" inputName="demandTypeId" mandatory=true value="${tickettype.demandTypeId}" i18nHelpBlockKey="ticketing.modify_tickettype.labelDemandTypeId.help" />
   <@actionButtons button1Name="action_modifyTicketType" button2Name="view_manageTicketTypes"/>
   </form>
 </@tabsWrapper>
