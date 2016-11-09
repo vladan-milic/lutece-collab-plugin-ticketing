@@ -202,7 +202,7 @@ public class TicketXPage extends WorkflowCapableXPage
                 ticket.setGuid( user.getName(  ) );
 
                 IdentityDto identityDto = TicketingIdentityService.getInstance(  ).getIdentityService(  )
-                                                                  .getIdentity( user.getName(  ),
+                                                                  .getIdentityByConnectionId( user.getName(  ),
                         TicketingConstants.APPLICATION_CODE );
 
                 String strIdUserTitle = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_GENDER );
@@ -215,7 +215,7 @@ public class TicketXPage extends WorkflowCapableXPage
                 String strMobilePhoneNumber = getAttribute( identityDto,
                         TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_MOBILE_NUMBER );
 
-                ticket.setCustomerId( Integer.toString( identityDto.getCustomerId(  ) ) );
+                ticket.setCustomerId( identityDto.getCustomerId(  ) );
 
                 if ( !StringUtils.isEmpty( strIdUserTitle ) && StringUtils.isEmpty( ticket.getUserTitle(  ) ) )
                 {
