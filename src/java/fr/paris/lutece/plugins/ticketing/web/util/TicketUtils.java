@@ -183,12 +183,16 @@ public final class TicketUtils
         
         for ( Unit unit : lstUserUnits )
         {
-            Unit currentUnit = UnitHome.findByPrimaryKey( ticket.getAssigneeUnit(  ).getUnitId(  ) );
-            
-            result = isParentUnit(unit, currentUnit );
-            if ( result ) 
+            if ( ticket.getAssigneeUnit(  ) != null )
             {
-                break;
+                Unit currentUnit = UnitHome
+                        .findByPrimaryKey( ticket.getAssigneeUnit(  ).getUnitId(  ) );
+
+                result = isParentUnit( unit, currentUnit );
+                if ( result )
+                {
+                    break;
+                }
             }
         }
 
@@ -205,16 +209,23 @@ public final class TicketUtils
     {
         boolean result = false;
         
-        if ( parentUnit.getIdUnit(  ) == currentUnit.getIdParent(  ) )
+        if ( parentUnit == null || currentUnit == null )
         {
-            result = true;
+            result = false;
         }
         else
         {
-            if ( TicketingConstants.NO_PARENT_ID != currentUnit.getIdParent(  ) )
+            if ( parentUnit.getIdUnit(  ) == currentUnit.getIdParent(  ) )
             {
-                Unit currentParentUnit = UnitHome.findByPrimaryKey( currentUnit.getIdParent(  ) );
-                result = isParentUnit( parentUnit, currentParentUnit );
+                result = true;
+            }
+            else
+            {
+                if ( TicketingConstants.NO_PARENT_ID != currentUnit.getIdParent(  ) )
+                {
+                    Unit currentParentUnit = UnitHome.findByPrimaryKey( currentUnit.getIdParent(  ) );
+                    result = isParentUnit( parentUnit, currentParentUnit );
+                }
             }
         }
 
