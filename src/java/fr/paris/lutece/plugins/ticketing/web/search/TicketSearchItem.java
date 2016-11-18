@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.search.SearchItem;
 
 import org.apache.lucene.document.Document;
 
-
 /**
  * Ticket Search Item
  */
@@ -51,6 +50,7 @@ public class TicketSearchItem extends SearchItem
     public static final String FIELD_TXT_RESPONSE = "ticket_txt_response";
     public static final String FIELD_COMMENT = "ticket_comment";
     public static final String FIELD_TXT_COMMENT = "ticket_txt_comment";
+    public static final String FIELD_TICKET_NOMENCLATURE = "ticket_nomenclature";
 
     // Variables declarations
     private String _strReference;
@@ -59,10 +59,13 @@ public class TicketSearchItem extends SearchItem
     private String _strResponse;
     private String _strComment;
     private String _strDomain;
+    private String _strNomenclature;
 
     /**
      * Constructor
-     * @param document The document retrieved by the search
+     *
+     * @param document
+     *            The document retrieved by the search
      */
     public TicketSearchItem( Document document )
     {
@@ -73,18 +76,20 @@ public class TicketSearchItem extends SearchItem
         _strResponse = document.get( FIELD_RESPONSE );
         _strComment = document.get( FIELD_COMMENT );
         _strDomain = document.get( FIELD_DOMAIN );
+        _strNomenclature = document.get( FIELD_TICKET_NOMENCLATURE );
     }
 
     /**
      * @return the _strReference
      */
-    public String getReference(  )
+    public String getReference( )
     {
         return _strReference;
     }
 
     /**
-     * @param strReference the strReference to set
+     * @param strReference
+     *            the strReference to set
      */
     public void setReference( String strReference )
     {
@@ -94,13 +99,14 @@ public class TicketSearchItem extends SearchItem
     /**
      * @return the _strTicketId
      */
-    public String getTicketId(  )
+    public String getTicketId( )
     {
         return _strTicketId;
     }
 
     /**
-     * @param strTicketId the strTicketId to set
+     * @param strTicketId
+     *            the strTicketId to set
      */
     public void setTicketId( String strTicketId )
     {
@@ -110,13 +116,14 @@ public class TicketSearchItem extends SearchItem
     /**
      * @return the _strCategory
      */
-    public String getCategory(  )
+    public String getCategory( )
     {
         return _strCategory;
     }
 
     /**
-     * @param strCategory the strCategory to set
+     * @param strCategory
+     *            the strCategory to set
      */
     public void setCategory( String strCategory )
     {
@@ -126,13 +133,14 @@ public class TicketSearchItem extends SearchItem
     /**
      * @return the _strDomain
      */
-    public String getDomain(  )
+    public String getDomain( )
     {
         return _strDomain;
     }
 
     /**
-     * @param strDomain the strDomain to set
+     * @param strDomain
+     *            the strDomain to set
      */
     public void setDomain( String strDomain )
     {
@@ -142,13 +150,14 @@ public class TicketSearchItem extends SearchItem
     /**
      * @return the _strResponse
      */
-    public String getResponse(  )
+    public String getResponse( )
     {
         return _strResponse;
     }
 
     /**
-     * @param strResponse the strResponse to set
+     * @param strResponse
+     *            the strResponse to set
      */
     public void setResponse( String strResponse )
     {
@@ -158,16 +167,34 @@ public class TicketSearchItem extends SearchItem
     /**
      * @return the _strComment
      */
-    public String getComment(  )
+    public String getComment( )
     {
         return _strComment;
     }
 
     /**
-     * @param strComment the strComment to set
+     * @param strComment
+     *            the strComment to set
      */
     public void setComment( String strComment )
     {
         this._strComment = strComment;
+    }
+
+    /**
+     * @return the _strNomenclature
+     */
+    public String getNomenclature( )
+    {
+        return _strNomenclature;
+    }
+
+    /**
+     * @param strNomenclature
+     *            the _strNomenclature to set
+     */
+    public void setNomenclature( String strNomenclature )
+    {
+        this._strNomenclature = strNomenclature;
     }
 }

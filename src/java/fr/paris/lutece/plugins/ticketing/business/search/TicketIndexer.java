@@ -256,6 +256,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new TextField( TicketSearchItem.FIELD_SUMMARY, getDisplaySummary( ticket ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_TITLE, getDisplayTitle( ticket ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_TYPE, getDocumentType(  ), Store.YES ) );
+        doc.add( new TextField (TicketSearchItem.FIELD_TICKET_NOMENCLATURE, ticket.getNomenclature(), Store.YES) );
 
         return doc;
     }
@@ -490,6 +491,11 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             sb.append( ticket.getTicketCategory(  ) ).append( SEPARATOR );
         }
 
+        if ( StringUtils.isNotEmpty( ticket.getNomenclature(  ) ) )
+        {
+            sb.append( ticket.getNomenclature(  ) ).append( SEPARATOR );
+        }
+        
         if ( ticket.getDateCreate(  ) != null )
         {
             sb.append( simpleDateFormat.format( ticket.getDateCreate(  ).getTime(  ) ) ).append( SEPARATOR );
@@ -540,6 +546,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             sb.append( ticket.getChannel(  ).getLabel(  ) ).append( SEPARATOR );
         }
+        
 
         return sb.toString(  );
     }
