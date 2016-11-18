@@ -172,6 +172,67 @@ public final class TicketUtils
     }
 
     /**
+     * returns true if ticket is assigned to a child unit of user's group
+     * @param ticket ticket
+     * @param lstUserUnits user's units
+     * @return true if ticket is assigned to a child unit of user's group
+     */
+    public static boolean isTicketAssignedToChildUnitUserGroup( Ticket ticket, List<Unit> lstUserUnits )
+    {
+        boolean result = false;
+        
+        for ( Unit unit : lstUserUnits )
+        {
+            if ( ticket.getAssigneeUnit(  ) != null )
+            {
+                Unit currentUnit = UnitHome
+                        .findByPrimaryKey( ticket.getAssigneeUnit(  ).getUnitId(  ) );
+
+                result = isParentUnit( unit, currentUnit );
+                if ( result )
+                {
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * returns true if the current unit is the parent unit
+     * @param parentUnit parent unit 
+     * @param currentUnit current unit 
+     * @return true if the current unit is the parent unit
+     */
+    public static boolean isParentUnit( Unit parentUnit, Unit currentUnit )
+    {
+        boolean result = false;
+        
+        if ( parentUnit == null || currentUnit == null )
+        {
+            result = false;
+        }
+        else
+        {
+            if ( parentUnit.getIdUnit(  ) == currentUnit.getIdParent(  ) )
+            {
+                result = true;
+            }
+            else
+            {
+                if ( TicketingConstants.NO_PARENT_ID != currentUnit.getIdParent(  ) )
+                {
+                    Unit currentParentUnit = UnitHome.findByPrimaryKey( currentUnit.getIdParent(  ) );
+                    result = isParentUnit( parentUnit, currentParentUnit );
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * returns true if ticket is assign up from user's group
      * @param ticket ticket
      * @param lstUserUnits user's units
@@ -224,6 +285,7 @@ public final class TicketUtils
                     listAgentTickets.add( ticket );
                 }
                 else if ( isTicketAssignedToUserGroup( ticket, lstUserUnits ) ||
+                        isTicketAssignedToChildUnitUserGroup( ticket, lstUserUnits ) ||
                         isTicketAssignedUpFromUserGroup( ticket, lstUserUnits ) )
                 {
                     //ticket assign to agent group
@@ -257,6 +319,11 @@ public final class TicketUtils
         else if ( isTicketAssignedToUserGroup( ticket, UnitHome.findByIdUser( user.getUserId(  ) ) ) )
         {
             //ticket assign to agent group
+            bAssignToUserOrGroup = true;
+        }
+        else if ( isTicketAssignedToChildUnitUserGroup( ticket, UnitHome.findByIdUser( user.getUserId(  ) ) ) )
+        {
+            //ticket assign to child unit of agent group
             bAssignToUserOrGroup = true;
         }
 

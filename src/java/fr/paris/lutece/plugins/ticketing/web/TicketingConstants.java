@@ -168,6 +168,7 @@ public final class TicketingConstants
     public static final int TICKET_STATUS_IN_PROGRESS = 0;
     public static final int TICKET_STATUS_CLOSED = 1;
     public static final int PROPERTY_UNSET_INT = -1;
+    public static final int NO_PARENT_ID = -1;
 
     /**
      * Default constructor
