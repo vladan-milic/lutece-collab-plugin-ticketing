@@ -170,12 +170,12 @@
 
 <!-- TEMPLATE -->
 <div class="gru-wrapper">
-  <div id="customer-panel" class="row bg-gru-light">
-    <div class="col-xs-12 col-sm-offset-1 col-sm-6">
-      <h2>#i18n{ticketing.create_ticket.pageTitle}</h2>
-      <h3>Les sollicitations</h3>
-    </div>
-    <div class="col-xs-12 col-sm-1">
+  <div id="customer-panel" class="bg-gru-light">
+    <div class="row">
+      <div class="col-xs-12 col-sm-offset-1 col-sm-8">
+        <h2>#i18n{ticketing.manage_tickets.pageTitle}</h2>
+      </div>
+      <div class="col-xs-12 col-sm-3">
       <#if ticket_creation_right?? && ticket_creation_right>
         <form method="post" class="form" name="manage_tickets" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
           <h2>
@@ -185,8 +185,70 @@
         </h2>
         </form>
       </#if>
+      </div>
     </div>
+	<div id="filter-ticket" class="row">
+	  <div class="col-xs-12 col-sm-offset-1 col-sm-3">
+	    <h3 style="margin-top:0px;">#i18n{ticketing.manage_tickets.title}</h3>
+	  </div>
+	  <div class="col-xs-12 col-sm-5">
+	    <form id="filter_form" class="form-inline" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+		<input type="hidden" name="submitted_form" value="1">
+		<input type="hidden" name="fltr_urgency" value="${ticket_filter.urgency!}">
+		<input type="hidden" name="selected_tab" value="<#if selected_tab?? && selected_tab?has_content>${selected_tab}<#else>agent</#if>">
+		<input type="hidden" name="fltr_order_sort" value="${ticket_filter.orderSort!}">
+		<input type="hidden" name="fltr_order_by" value="${ticket_filter.orderBy!}">
+		<div class="row">
+			<div class="col-xs-12">
+				<button type="submit" name="fltr_new_urgency" value="-1" class="btn btn-link btn-xs <#if ticket_filter.urgency==-1>btn-primary border-gru<#else>border-gru text-gru btn-default</#if>">#i18n{ticketing.manage_tickets.urgency.all}</button>
+				<button type="submit" name="fltr_new_urgency" value="2" class="btn btn-link btn-xs <#if ticket_filter.urgency==2>btn-danger<#else>border-red text-red btn-default</#if>">#i18n{ticketing.manage_tickets.urgency.high}</button>
+				<button type="submit" name="fltr_new_urgency" value="1" class="btn btn-link btn-xs <#if ticket_filter.urgency==1>btn-warning<#else>border-orange text-orange btn-default</#if>">#i18n{ticketing.manage_tickets.urgency.medium}</button>
+				<button type="submit" name="fltr_new_urgency" value="0" class="btn btn-link btn-xs <#if ticket_filter.urgency==0>btn-info<#else>border-info text-aqua btn-default</#if>">#i18n{ticketing.manage_tickets.urgency.low}</button>
+			</div>
+		</div>
+		<br/>
+	    <div class="row">
+			<div class="col-xs-12">
+				<label class="select" for="nature">
+					<@comboWithParams name="fltr_id_type" default_value="${ticket_filter.idType}" additionalParameters=" id=\"fltr_id_type\" class=\"form-control input-xs\" " items=type_list />
+				</label>
+				<label class="select" for="since">
+					<@comboWithParams name="fltr_open_since" default_value="${ticket_filter.openSincePeriod}" additionalParameters=" id=\"fltr_open_since\" class=\"form-control input-xs\" " items=period_list/>
+				</label>
+		
+				<!-- multi select state list -->
+				<#if state_list?? && state_list?size != 0>
+					<select name="fltr_state_ids" id="fltr_state_ids" multiple="multiple">
+						<#list state_list as state>
+							<#if state.checked ?? && state.checked == true>
+								<option value="${state.code!}" selected> ${state.name!}</option>
+							<#else>
+								<option value="${state.code!}">${state.name!}</option>
+							</#if>
+						</#list>
+					</select>
+				</#if>
+			</div>
+	    </div>
+	    </form>
+	  </div>
+	  <div class="col-xs-12 col-sm-3">
+	<form class="form-inline" method="post" action="jsp/admin/plugins/ticketing/TicketSearch.jsp?action=search&page_index=1">
+		<input type="hidden" id="searched_field" name="searched_field" value="contents">
+		<div class="input-group">
+			<label class="sr-only">#i18n{ticketing.manage_tickets.searchDefaultTxt}</label>
+			<input class="form-control input-xs btn-group" type="text" name="query" placeholder="#i18n{ticketing.manage_tickets.searchDefaultTxt}" value="">
+			<div class="input-group-btn">
+				<button class="btn btn-xs" type="submit" >
+					<span class="fa fa-search"></span>
+				</button>
+			</div>
+		</div>
+	</form>
+	  </div>
+	</div>
   </div>
+  
   <div id="demand-panel" class="row bg-gru-light tickets">
     <div class="col-xs-12 col-sm-12">
     <ul class="nav nav-tabs nav-ticket">
@@ -208,56 +270,6 @@
     </ul>
     <div class="tab-content">
     	<@messages errors=errors />
-        <div id="filter-ticket" class="row">
-            <form id="filter_form" class="form-inline" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
-              <input type="hidden" name="submitted_form" value="1">
-              <input type="hidden" name="fltr_urgency" value="${ticket_filter.urgency!}">
-              <input type="hidden" name="selected_tab" value="<#if selected_tab?? && selected_tab?has_content>${selected_tab}<#else>agent</#if>">
-              <input type="hidden" name="fltr_order_sort" value="${ticket_filter.orderSort!}">
-              <input type="hidden" name="fltr_order_by" value="${ticket_filter.orderBy!}">
-                <div class="col-xs-12 col-sm-offset-1 col-sm-3">
-                    <button type="submit" name="fltr_new_urgency" value="-1" class="btn btn-link btn-xs <#if ticket_filter.urgency==-1>btn-primary border-gru<#else>border-gru text-gru</#if>">#i18n{ticketing.manage_tickets.urgency.all}</button>
-                    <button type="submit" name="fltr_new_urgency" value="2" class="btn btn-link btn-xs <#if ticket_filter.urgency==2>btn-danger<#else>border-red text-red</#if>">#i18n{ticketing.manage_tickets.urgency.high}</button>
-                    <button type="submit" name="fltr_new_urgency" value="1" class="btn btn-link btn-xs <#if ticket_filter.urgency==1>btn-warning<#else>border-orange text-orange</#if>">#i18n{ticketing.manage_tickets.urgency.medium}</button>
-                    <button type="submit" name="fltr_new_urgency" value="0" class="btn btn-link btn-xs <#if ticket_filter.urgency==0>btn-info<#else>border-info text-aqua</#if>">#i18n{ticketing.manage_tickets.urgency.low}</button>
-                </div>
-                <div class="col-xs-12 col-sm-5">
-                    <label class="select" for="nature">
-                        <@comboWithParams name="fltr_id_type" default_value="${ticket_filter.idType}" additionalParameters=" id=\"fltr_id_type\" class=\"form-control input-xs\" " items=type_list />
-                    </label>
-                    <label class="select" for="since">
-                        <@comboWithParams name="fltr_open_since" default_value="${ticket_filter.openSincePeriod}" additionalParameters=" id=\"fltr_open_since\" class=\"form-control input-xs\" " items=period_list/>
-                    </label>
-
-                    <!-- multi select state list -->
-                    <#if state_list?? && state_list?size != 0>
-                        <select name="fltr_state_ids" id="fltr_state_ids" multiple="multiple">
-                            <#list state_list as state>
-                                <#if state.checked ?? && state.checked == true>
-                                    <option value="${state.code!}" selected> ${state.name!}</option>
-                                <#else>
-                                    <option value="${state.code!}">${state.name!}</option>
-                                </#if>
-                            </#list>
-                        </select>
-                    </#if>
-                </div>
-            </form>
-            <div class="col-xs-8 col-sm-2">
-                <form class="form-inline pull-right" method="post" action="jsp/admin/plugins/ticketing/TicketSearch.jsp?action=search&page_index=1">
-                    <input type="hidden" id="searched_field" name="searched_field" value="contents">
-                    <div class="input-group">
-                        <label class="sr-only">#i18n{ticketing.manage_tickets.searchDefaultTxt}</label>
-                        <input class="form-control input-xs btn-group" type="text" name="query" placeholder="#i18n{ticketing.manage_tickets.searchDefaultTxt}" value="">
-                        <div class="input-group-btn">
-                            <button class="btn btn-primary btn-xs" type="submit" >
-                                <span class="fa fa-search"></span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
         <@notification infos=infos />
         <#if !selected_tab?? || ( selected_tab?? && selected_tab=="agent") >
         	<@renderTabPanel panel_list=ticket_list active=true id='agent' />
