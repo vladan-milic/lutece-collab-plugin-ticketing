@@ -16,6 +16,7 @@
 
 #demand-panel .nav-tabs{ margin-bottom: 0 }
 #demand-panel .nav-tabs.nav-gru { padding-left: 25px }
+#demand-panel .nav-tabs > li:first-of-type { padding-left: 16% }
 #demand-panel .nav-tabs > li > a{ background-color: #DDD; border: 1px solid #DDD; padding:15px 30px; margin-left:15px; text-transform: uppercase; font-size: 1.5rem }
 #demand-panel .nav-tabs > li.active > a{ border-bottom:1px solid #fff; background-color: #FFF }
 #demand-panel .nav-tabs .dropdown-menu{ padding: 0px 26px; border: 0; min-width: 300px }
@@ -108,9 +109,10 @@ textarea.ticketing.richtext {
 }
 
 /* FILTERS */
-#filter-ticket{ font-size: 1rem; color:#000; margin: 5px 0 }
+#filter-ticket{ font-size: 1rem; color:#000 }
+#filter-ticket h3 { color: #FFF }
 #filter-ticket .form-control{ border-color: #000 }
-#filter-ticket .input-group-btn > .btn { border: 1px solid #3c8dbc}
+#filter-ticket .input-group-btn > .btn { border: 1px solid #000}
 #filter-ticket span{ text-transform: uppercase }
 #filter-ticket select{ height:22px; font-weight:normal; padding: 1px 20px 0 2px; margin:0; background: #FFF; color:#000; border: 1px solid "000";border-radius: 3px; outline:none; display: inline-block; -webkit-appearance:none; -moz-appearance:none; appearance:none; cursor:pointer }
 
@@ -129,7 +131,8 @@ textarea.ticketing.richtext {
 }
 
 #filter-ticket .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover {
-	background-image: linear-gradient(to bottom,#0082D8 0,#0082D8 100%);
+    background-color: #00c0ef;
+    background-image: none;
 }
 #filter-ticket .multiselect-container>li>a>label{
     padding: 0px 15px 0px 25px;
@@ -160,6 +163,7 @@ textarea.ticketing.richtext {
 	font-size: 12px;	
 }
 #filter-ticket div .btn-group  {
+	background-color: #fff;
 	border-color: #000;
     border-style: solid;
     border-width: 1px;
@@ -183,6 +187,7 @@ textarea.ticketing.richtext {
 #filter-ticket label.select:last-of-type{ margin-right:0 }
 #filter-ticket label.select:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; font-size:18px; right: 5px; top: -2px; position:absolute; pointer-events:none }
 #filter-ticket .btn{ color:#fff; min-width: 50px }
+#filter-ticket .btn span.fa-search{ color:#000; }
 
 .timeline-body > hr { margin: 5px 0 }
 
@@ -199,7 +204,6 @@ textarea.ticketing.richtext {
 @media only screen and (max-width : 992px) {
   #demand-panel .nav-ticket{ padding-left: 80px }
   #demand-panel .nav-ticket > li > a{ padding: 15px 5px; margin-left: 5px; font-size: 1.2rem }
-  #customer-panel h2, #customer-panel h3{ text-align: center }
   #customer-panel p{ text-align: center }
   #instant-response tr td:nth-of-type(2){ width: 10rem }
   #instant-response td .detail{ width: 20rem !important }
@@ -215,7 +219,7 @@ textarea.ticketing.richtext {
   #head-ticketing{ height: auto; padding:0 5%; margin-bottom: 15px }
 
   #demand-panel.tickets .tab-content td:nth-of-type(1):before { content: "Reference"; }
-  #demand-panel.tickets .tab-content td:nth-of-type(2):before { content: "Crï¿½ï¿½e le"; }
+  #demand-panel.tickets .tab-content td:nth-of-type(2):before { content: "Créée le"; }
   #demand-panel.tickets .tab-content td:nth-of-type(3):before { content: "Nature"; }
   #demand-panel.tickets .tab-content td:nth-of-type(4):before { content: "Usager / Objet"; }
   #demand-panel.tickets .tab-content td:nth-of-type(5):before { content: "Etat"; }
@@ -235,10 +239,10 @@ textarea.ticketing.richtext {
   #instant-response td .detail{ width: auto !important }
   #instant-response td:before { /* Now like a table header */	position: absolute;	/* Top/left values mimic padding */	top: 6px;	left: 6px;	width: 45%; padding-right: 10px; 	white-space: nowrap	}
   /*	Label the data*/
-  #instant-response td:nth-of-type(1):before { content: "Crï¿½ï¿½e le"; }
-  #instant-response td:nth-of-type(2):before { content: "Problï¿½matique"; }
-  #instant-response td:nth-of-type(3):before { content: "Dï¿½tail"; }
-  #instant-response td:nth-of-type(4):before { content: "Entitï¿½/Agent"; }
+  #instant-response td:nth-of-type(1):before { content: "Créée le"; }
+  #instant-response td:nth-of-type(2):before { content: "Problématique"; }
+  #instant-response td:nth-of-type(3):before { content: "Détail"; }
+  #instant-response td:nth-of-type(4):before { content: "Entité/Agent"; }
 
 
 }
