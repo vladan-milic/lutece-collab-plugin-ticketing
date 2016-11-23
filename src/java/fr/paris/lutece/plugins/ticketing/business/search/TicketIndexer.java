@@ -256,7 +256,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new TextField( TicketSearchItem.FIELD_SUMMARY, getDisplaySummary( ticket ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_TITLE, getDisplayTitle( ticket ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_TYPE, getDocumentType(  ), Store.YES ) );
-        doc.add( new TextField (TicketSearchItem.FIELD_TICKET_NOMENCLATURE, ticket.getNomenclature(), Store.YES) );
+        if (ticket.getNomenclature() != null){
+        	doc.add( new TextField (TicketSearchItem.FIELD_TICKET_NOMENCLATURE, ticket.getNomenclature(), Store.YES) );
+        }
 
         return doc;
     }
