@@ -48,8 +48,8 @@
 .gru-wrapper #no-content{ min-height:620px; margin:0 auto; width:100%; text-align: center  }
 .gru-wrapper #no-content img{ position: absolute; top: 60%;left: 60%; margin-top: -250px; margin-left: -250px }
 
-
-table.table-hover tr:hover{ cursor: pointer }
+table.table-hover thead tr th[data-field]:hover{ cursor: pointer }
+table.table-hover tbody tr:hover{ cursor: pointer }
 
 /* TICKETING */
 .border-gru{border:1px solid #0082D8 !important;}
@@ -75,10 +75,9 @@ table.table-hover tr:hover{ cursor: pointer }
 #demand-panel.tickets .tab-content table td{ padding: 15px 15px }
 #demand-panel.tickets .tab-content table td .ticket-comments{ margin-top:20px }
 
-#demand-panel.tickets .tab-content table td:first-of-type{ width: 170px }
-#demand-panel.tickets .tab-content table td:nth-of-type(2){ width: 130px }
-#demand-panel.tickets .tab-content table td:nth-of-type(3){ width: 200px }
-#demand-panel.tickets .tab-content table td:nth-of-type(6){ width: 180px }
+#demand-panel.tickets .tab-content table td:first-of-type{ min-width: 150px }
+#demand-panel.tickets .tab-content table td:nth-of-type(2){ min-width: 120px }
+#demand-panel.tickets .tab-content table td:last-of-type{ min-width: 130px }
 
 #demand-panel .tab-content table th.th-sort-desc:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; right:5px; margin-left: 3px }
 #demand-panel .tab-content table th.th-sort-asc:after{ content:'\f106'; color:#606059; font-family: 'FontAwesome'; right:5px; margin-left: 3px }
@@ -115,6 +114,7 @@ textarea.ticketing.richtext {
 #filter-ticket .input-group-btn > .btn { border: 1px solid #000}
 #filter-ticket span{ text-transform: uppercase }
 #filter-ticket select{ height:22px; font-weight:normal; padding: 1px 20px 0 2px; margin:0; background: #FFF; color:#000; border: 1px solid "000";border-radius: 3px; outline:none; display: inline-block; -webkit-appearance:none; -moz-appearance:none; appearance:none; cursor:pointer }
+#filter-ticket select::-ms-expand { display: none }
 
 /* multiselect state */
 #filter-ticket .multiselect-selected-text {
