@@ -549,6 +549,10 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             sb.append( ticket.getChannel(  ).getLabel(  ) ).append( SEPARATOR );
         }
         
+        if (StringUtils.isNotEmpty( ticket.getTicketComment(  ) ) )
+        {
+            sb.append( ticket.getTicketComment(  ) ).append( SEPARATOR );
+        }
 
         return sb.toString(  );
     }
