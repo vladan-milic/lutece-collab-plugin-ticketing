@@ -67,6 +67,17 @@ public final class TicketCategoryHome
     }
 
     /**
+     * Create a link between a category and an input
+     * @param nIdCategory id Category
+     * @param nIdInput id Input
+     * @param nPos id Input position
+     */
+    public static void createLinkCategoryInput( int nIdCategory, int nIdInput, int nPos )
+    {
+        _dao.insertLinkCategoryInput( nIdCategory, nIdInput, nPos, _plugin );
+    }
+
+    /**
      * Update of the ticketCategory which is specified in parameter
      * @param ticketCategory The instance of the TicketCategory which contains the data to store
      */
@@ -82,6 +93,16 @@ public final class TicketCategoryHome
     public static void remove( int nKey )
     {
         _dao.delete( nKey, _plugin );
+    }
+
+    /**
+     * Remove a link between a category and an input
+     * @param nIdCategory id Category
+     * @param nIdInput id Input
+     */
+    public static void removeLinkCategoryInput( int nIdCategory, int nIdInput )
+    {
+        _dao.deleteLinkCategoryInput( nIdCategory, nIdInput, _plugin );
     }
 
     ///////////////////////////////////////////////////////////////////////////

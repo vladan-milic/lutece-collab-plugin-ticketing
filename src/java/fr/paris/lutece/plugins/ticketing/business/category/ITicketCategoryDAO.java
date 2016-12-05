@@ -52,6 +52,15 @@ public interface ITicketCategoryDAO
     void insert( TicketCategory ticketCategory, Plugin plugin );
 
     /**
+     * Insert a new record in the table linking category with input.
+     * @param nIdCategory id Category
+     * @param nIdInput id Input
+     * @param nPos input position
+     * @param plugin the Plugin
+     */
+    void insertLinkCategoryInput( int nIdCategory, int nIdInput, int nPos, Plugin plugin );
+
+    /**
      * Update the record in the table
      * @param ticketCategory the reference of the TicketCategory
      * @param plugin the Plugin
@@ -64,6 +73,14 @@ public interface ITicketCategoryDAO
      * @param plugin the Plugin
      */
     void delete( int nKey, Plugin plugin );
+
+    /**
+     * Delete a record in the table linking category with input.
+     * @param nIdCategory id Category
+     * @param nIdInput id Input
+     * @param plugin the Plugin
+     */
+    void deleteLinkCategoryInput( int nIdCategory, int nIdInput, Plugin plugin );
 
     ///////////////////////////////////////////////////////////////////////////
     // Finders

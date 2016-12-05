@@ -42,6 +42,7 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import java.util.List;
 
 /**
  * This is the business class for the object TicketCategory
@@ -57,6 +58,7 @@ public class TicketCategory implements Serializable
     private String _strTicketDomain;
     private String _strTicketType;
     private int _nIdTicketForm;
+    private List<Integer> _listIdInput;
     @NotEmpty( message = "#i18n{ticketing.validation.ticketcategory.label.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.ticketcategory.label.size}" )
     private String _strLabel;
@@ -206,6 +208,23 @@ public class TicketCategory implements Serializable
     public void setIdTicketForm( int nIdTicketForm )
     {
         this._nIdTicketForm = nIdTicketForm;
+    }
+
+    
+    /**
+     * @return the _listIdInput
+     */
+    public List<Integer> getListIdInput( )
+    {
+        return _listIdInput;
+    }
+
+    /**
+     * @param listIdInput the listIdInput to set
+     */
+    public void setListIdInput( List<Integer> listIdInput )
+    {
+        this._listIdInput = listIdInput;
     }
 
     /**
