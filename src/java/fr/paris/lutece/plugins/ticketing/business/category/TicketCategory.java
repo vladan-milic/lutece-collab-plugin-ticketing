@@ -42,6 +42,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 
+import java.util.List;
+
 /**
  * This is the business class for the object TicketCategory
  */
@@ -56,6 +58,7 @@ public class TicketCategory implements Serializable
 	private String _strTicketDomain;
 	private String _strTicketType;
 	private int _nIdTicketForm;
+	private List<Integer> _listIdInput;
 	@NotEmpty(message = "#i18n{ticketing.validation.ticketcategory.label.notEmpty}")
 	@Size(max = 50, message = "#i18n{ticketing.validation.ticketcategory.label.size}")
 	private String _strLabel;
@@ -229,6 +232,22 @@ public class TicketCategory implements Serializable
 	{
 		this._nIdTicketForm = nIdTicketForm;
 	}
+	
+	/**
+     * @return the _listIdInput
+     */
+    public List<Integer> getListIdInput( )
+    {
+        return _listIdInput;
+    }
+
+    /**
+     * @param listIdInput the listIdInput to set
+     */
+    public void setListIdInput( List<Integer> listIdInput )
+    {
+        this._listIdInput = listIdInput;
+    }
 
 	/**
 	 * Returns the Code

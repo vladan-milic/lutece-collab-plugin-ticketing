@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -66,6 +66,9 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
     private static final String SQL_QUERY_SELECT_BY_DOMAIN = "SELECT id_ticket_category, label FROM ticketing_ticket_category WHERE id_ticket_domain = ?  AND inactive <> 1 ";
     private static final String SQL_QUERY_SELECT_BY_CATEGORY = "SELECT id_ticket_category, category_precision FROM ticketing_ticket_category WHERE id_ticket_domain = ? AND label = ?  AND inactive <> 1 ";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_category FROM ticketing_ticket_category AND inactive <> 1 ";
+    private static final String SQL_QUERY_SELECT_ALL_INPUTS = "SELECT id_input FROM ticketing_ticket_category_input WHERE id_ticket_category = ? ORDER BY pos";
+    private static final String SQL_QUERY_INSERT_INPUT = "INSERT INTO ticketing_ticket_category_input ( id_ticket_category, id_input, pos ) VALUES ( ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE_INPUT = "DELETE FROM ticketing_ticket_category_input WHERE id_ticket_category = ? AND id_input = ?";
 
     /**
      * Generates a new primary key
@@ -116,6 +119,22 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
      * {@inheritDoc }
      */
     @Override
+    public void insertLinkCategoryInput( int nIdCategory, int nIdInput, int nPos, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_INPUT, plugin );
+
+        daoUtil.setInt( 1, nIdCategory );
+        daoUtil.setInt( 2, nIdInput );
+        daoUtil.setInt( 3, nPos );
+
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
     public TicketCategory load( int nKey, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
@@ -145,6 +164,21 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setAssigneeUnit( assigneeUnit );
             category.setPrecision( daoUtil.getString( nIndex++ ) );
         }
+
+        daoUtil.free(  );
+        
+        daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL_INPUTS, plugin );
+        daoUtil.setInt( 1, nKey );
+        daoUtil.executeQuery(  );
+
+        List<Integer> listIdInput = new ArrayList<Integer>(  );
+
+        while ( daoUtil.next(  ) )
+        {
+            listIdInput.add( daoUtil.getInt( 1 ) );
+        }
+        
+        category.setListIdInput( listIdInput );
 
         daoUtil.free(  );
 
@@ -198,6 +232,19 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nKey );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void deleteLinkCategoryInput( int nIdCategory, int nIdInput, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_INPUT, plugin );
+        daoUtil.setInt( 1, nIdCategory );
+        daoUtil.setInt( 2, nIdInput );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
