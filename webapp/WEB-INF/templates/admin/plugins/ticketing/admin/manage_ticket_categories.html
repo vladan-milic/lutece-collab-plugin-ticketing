@@ -17,7 +17,11 @@
         <#list ticketcategory_list as ticketcategory>
           <tr>
             <td>
-              <@categoryFormated ticketcategory/>
+            	<#if ticketcategory.precision?has_content>
+              		${ticketcategory.label!''} / ${ticketcategory.precision}
+              	<#else>
+              		${ticketcategory.label!''}
+              	</#if>
             </td>
             <td>
               ${ticketcategory.ticketType} / ${ticketcategory.ticketDomain}
