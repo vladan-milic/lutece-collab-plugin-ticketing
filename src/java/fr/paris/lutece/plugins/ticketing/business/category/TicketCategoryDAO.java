@@ -178,7 +178,10 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             listIdInput.add( daoUtil.getInt( 1 ) );
         }
 
-        category.setListIdInput( listIdInput );
+        if ( category != null )
+        {
+            category.setListIdInput( listIdInput );
+        }
 
         daoUtil.free(  );
 
