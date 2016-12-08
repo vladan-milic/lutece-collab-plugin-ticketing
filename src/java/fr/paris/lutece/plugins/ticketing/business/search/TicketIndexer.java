@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.ticketing.business.search;
 
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
@@ -231,7 +230,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new Field( TicketSearchItem.FIELD_UID, strIdTicket + "_" + SHORT_NAME_TICKET, TextField.TYPE_NOT_STORED ) );
         doc.add( new Field( TicketSearchItem.FIELD_TICKET_ID, strIdTicket, TextField.TYPE_STORED ) );
         doc.add( new TextField( TicketSearchItem.FIELD_CONTENTS, getContentForIndexer( ticket ), Store.NO ) );
-        doc.add( new TextField( TicketSearchItem.FIELD_CATEGORY, ticket.getTicketCategory(  ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_CATEGORY, ticket.getTicketCategory(  ).getLabel(  ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_DOMAIN, ticket.getTicketDomain(  ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_REFERENCE, ticket.getReference(  ), Store.YES ) );
 
@@ -274,7 +273,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         if ( WorkflowService.getInstance(  ).isAvailable(  ) )
         {
-            TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+            TicketCategory ticketCategory = ticket.getTicketCategory(  );
             int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
             StateFilter stateFilter = new StateFilter(  );
@@ -488,9 +487,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             sb.append( ticket.getTicketDomain(  ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ).getLabel(  ) ) )
         {
-            sb.append( ticket.getTicketCategory(  ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketCategory(  ).getLabel(  ) ).append( SEPARATOR );
         }
 
         if ( StringUtils.isNotEmpty( ticket.getNomenclature(  ) ) )
@@ -526,7 +525,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         if ( WorkflowService.getInstance(  ).isAvailable(  ) )
         {
-            TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+            TicketCategory ticketCategory = ticket.getTicketCategory(  );
             int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
             StateFilter stateFilter = new StateFilter(  );
@@ -534,8 +533,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
             State state = WorkflowService.getInstance(  )
                                          .getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticket.getIdTicketCategory(  ) );
+                    ticket.getTicketCategory(  ).getId(  ) );
             sb.append( state.getName(  ) ).append( SEPARATOR );
+            sb.append( ticketCategory.getPrecision(  ) ).append( SEPARATOR );
         }
 
         if ( ticket.getAssigneeUser(  ) != null )
@@ -593,9 +593,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             sb.append( ticket.getTicketDomain(  ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ).getLabel(  ) ) )
         {
-            sb.append( ticket.getTicketCategory(  ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketCategory(  ).getLabel(  ) ).append( SEPARATOR );
         }
 
         if ( StringUtils.isNotEmpty( ticket.getTicketComment(  ) ) )
@@ -630,9 +630,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             sb.append( ticket.getLastname(  ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ).getLabel(  ) ) )
         {
-            sb.append( ticket.getTicketCategory(  ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketCategory(  ).getLabel(  ) ).append( SEPARATOR );
         }
 
         return sb.toString(  );
