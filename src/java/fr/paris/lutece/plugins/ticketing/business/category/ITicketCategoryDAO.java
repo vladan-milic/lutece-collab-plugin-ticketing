@@ -105,4 +105,13 @@ public interface ITicketCategoryDAO
      * @return The reference list
      */
     ReferenceList selectReferenceListByDomain( int nDomainId, Plugin plugin );
+
+    /**
+     * Create a reference list of categories for a given domain for a given category name
+     * @param nDomainId The domain ID
+     * @param labelCategory The label category
+     * @param plugin The plugin
+     * @return The reference list
+     */
+    ReferenceList selectReferenceListByCategory( int nDomainId, String labelCategory, Plugin _plugin );
 }

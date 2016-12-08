@@ -21,6 +21,14 @@
   </select>
 </#macro>
 
+<#macro categoryFormated ticketCategory >
+	<#if ticketCategory.precision?has_content>
+		${ticketCategory.label!''} / ${ticketCategory.precision}
+	<#else>
+		${ticketCategory.label!''}
+	</#if>
+</#macro>
+
 
 <#--
 -- Check if the checkbox must be checked or not

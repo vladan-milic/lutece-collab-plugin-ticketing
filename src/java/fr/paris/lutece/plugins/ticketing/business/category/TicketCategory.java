@@ -33,214 +33,259 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.category;
 
-import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
-
-import org.hibernate.validator.constraints.NotEmpty;
-
 import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 
 /**
  * This is the business class for the object TicketCategory
  */
-public class TicketCategory implements Serializable
+public class TicketCategory implements Serializable 
 {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    // Variables declarations 
-    private int _nId;
-    private int _nIdTicketDomain;
-    private int _nIdTicketType;
-    private String _strTicketDomain;
-    private String _strTicketType;
-    private int _nIdTicketForm;
-    @NotEmpty( message = "#i18n{ticketing.validation.ticketcategory.label.notEmpty}" )
-    @Size( max = 50, message = "#i18n{ticketing.validation.ticketcategory.label.size}" )
-    private String _strLabel;
-    private String _strCode;
-    private int _nIdWorkflow;
-    @NotNull( message = "#i18n{ticketing.validation.ticketcategory.unit.notEmpty}" )
-    private transient AssigneeUnit _unit;
+	// Variables declarations
+	private int _nId;
+	private int _nIdTicketDomain;
+	private int _nIdTicketType;
+	private String _strTicketDomain;
+	private String _strTicketType;
+	private int _nIdTicketForm;
+	@NotEmpty(message = "#i18n{ticketing.validation.ticketcategory.label.notEmpty}")
+	@Size(max = 50, message = "#i18n{ticketing.validation.ticketcategory.label.size}")
+	private String _strLabel;
+	private String _strCode;
+	private int _nIdWorkflow;
+	@NotNull(message = "#i18n{ticketing.validation.ticketcategory.unit.notEmpty}")
+	private transient AssigneeUnit _unit;
+	@Size(max = 150, message = "#i18n{ticketing.validation.ticketcategory.precision.size}")
+	private String _strPrecision;
 
-    /**
-     * Returns the Id
-     * @return The Id
-     */
-    public int getId(  )
-    {
-        return _nId;
-    }
+	/**
+	 * Returns the Id
+	 * 
+	 * @return The Id
+	 */
+	public int getId()
+	{
+		return _nId;
+	}
 
-    /**
-     * Sets the Id
-     * @param nId The Id
-     */
-    public void setId( int nId )
-    {
-        _nId = nId;
-    }
+	/**
+	 * Sets the Id
+	 * 
+	 * @param nId
+	 *            The Id
+	 */
+	public void setId(int nId)
+	{
+		_nId = nId;
+	}
 
-    /**
-     * Returns the IdTicketDomain
-     * @return The IdTicketDomain
-     */
-    public int getIdTicketDomain(  )
-    {
-        return _nIdTicketDomain;
-    }
+	/**
+	 * Returns the IdTicketDomain
+	 * 
+	 * @return The IdTicketDomain
+	 */
+	public int getIdTicketDomain()
+	{
+		return _nIdTicketDomain;
+	}
 
-    /**
-     * Sets the IdTicketDomain
-     * @param nIdTicketDomain The IdTicketDomain
-     */
-    public void setIdTicketDomain( int nIdTicketDomain )
-    {
-        _nIdTicketDomain = nIdTicketDomain;
-    }
+	/**
+	 * Sets the IdTicketDomain
+	 * 
+	 * @param nIdTicketDomain
+	 *            The IdTicketDomain
+	 */
+	public void setIdTicketDomain(int nIdTicketDomain)
+	{
+		_nIdTicketDomain = nIdTicketDomain;
+	}
 
-    /**
-     * Returns the IdTicketType
-     * @return The IdTicketType
-     */
-    public int getIdTicketType(  )
-    {
-        return _nIdTicketType;
-    }
+	/**
+	 * Returns the IdTicketType
+	 * 
+	 * @return The IdTicketType
+	 */
+	public int getIdTicketType()
+	{
+		return _nIdTicketType;
+	}
 
-    /**
-     * Sets the IdTicketType
-     * @param nIdTicketType The IdTicketType
-     */
-    public void setIdTicketType( int nIdTicketType )
-    {
-        _nIdTicketType = nIdTicketType;
-    }
+	/**
+	 * Sets the IdTicketType
+	 * 
+	 * @param nIdTicketType
+	 *            The IdTicketType
+	 */
+	public void setIdTicketType(int nIdTicketType)
+	{
+		_nIdTicketType = nIdTicketType;
+	}
 
-    /**
-     * Returns the TicketDomain
-     * @return The TicketDomain
-     */
-    public String getTicketDomain(  )
-    {
-        return _strTicketDomain;
-    }
+	/**
+	 * Returns the TicketDomain
+	 * 
+	 * @return The TicketDomain
+	 */
+	public String getTicketDomain()
+	{
+		return _strTicketDomain;
+	}
 
-    /**
-     * Sets the TicketDomain
-     * @param strTicketDomain The TicketDomain
-     */
-    public void setTicketDomain( String strTicketDomain )
-    {
-        _strTicketDomain = strTicketDomain;
-    }
+	/**
+	 * Sets the TicketDomain
+	 * 
+	 * @param strTicketDomain
+	 *            The TicketDomain
+	 */
+	public void setTicketDomain(String strTicketDomain)
+	{
+		_strTicketDomain = strTicketDomain;
+	}
 
-    /**
-     * Returns the TicketType
-     * @return The TicketType
-     */
-    public String getTicketType(  )
-    {
-        return _strTicketType;
-    }
+	/**
+	 * Returns the TicketType
+	 * 
+	 * @return The TicketType
+	 */
+	public String getTicketType()
+	{
+		return _strTicketType;
+	}
 
-    /**
-     * Sets the TicketType
-     * @param strTicketType The TicketType
-     */
-    public void setTicketType( String strTicketType )
-    {
-        _strTicketType = strTicketType;
-    }
+	/**
+	 * Sets the TicketType
+	 * 
+	 * @param strTicketType
+	 *            The TicketType
+	 */
+	public void setTicketType(String strTicketType)
+	{
+		_strTicketType = strTicketType;
+	}
 
-    /**
-     * Returns the Label
-     * @return The Label
-     */
-    public String getLabel(  )
-    {
-        return _strLabel;
-    }
+	/**
+	 * Returns the Label
+	 * 
+	 * @return The Label
+	 */
+	public String getLabel()
+	{
+		return _strLabel;
+	}
 
-    /**
-     * Sets the Label
-     * @param strLabel The Label
-     */
-    public void setLabel( String strLabel )
-    {
-        _strLabel = strLabel;
-    }
+	/**
+	 * Sets the Label
+	 * 
+	 * @param strLabel
+	 *            The Label
+	 */
+	public void setLabel(String strLabel)
+	{
+		_strLabel = strLabel;
+	}
 
-    /**
-     * Get the id of the workflow associated with this ticket category
-     * @return The id of the workflow
-     */
-    public int getIdWorkflow(  )
-    {
-        return _nIdWorkflow;
-    }
+	/**
+	 * Get the id of the workflow associated with this ticket category
+	 * 
+	 * @return The id of the workflow
+	 */
+	public int getIdWorkflow()
+	{
+		return _nIdWorkflow;
+	}
 
-    /**
-     * Set the id of the workflow associated with this ticket category
-     * @param nIdWorkflow The id of the workflow
-     */
-    public void setIdWorkflow( int nIdWorkflow )
-    {
-        _nIdWorkflow = nIdWorkflow;
-    }
+	/**
+	 * Set the id of the workflow associated with this ticket category
+	 * 
+	 * @param nIdWorkflow
+	 *            The id of the workflow
+	 */
+	public void setIdWorkflow(int nIdWorkflow)
+	{
+		_nIdWorkflow = nIdWorkflow;
+	}
 
-    /**
-     * @return the _nIdTicketForm
-     */
-    public int getIdTicketForm(  )
-    {
-        return _nIdTicketForm;
-    }
+	/**
+	 * @return the _nIdTicketForm
+	 */
+	public int getIdTicketForm()
+	{
+		return _nIdTicketForm;
+	}
 
-    /**
-     * @param nIdTicketForm
-     *            the _nIdTicketForm to set
-     */
-    public void setIdTicketForm( int nIdTicketForm )
-    {
-        this._nIdTicketForm = nIdTicketForm;
-    }
+	/**
+	 * @param nIdTicketForm
+	 *            the _nIdTicketForm to set
+	 */
+	public void setIdTicketForm(int nIdTicketForm)
+	{
+		this._nIdTicketForm = nIdTicketForm;
+	}
 
-    /**
-     * Returns the Code
-     * @return The Code
-     */
-    public String getCode(  )
-    {
-        return _strCode;
-    }
+	/**
+	 * Returns the Code
+	 * 
+	 * @return The Code
+	 */
+	public String getCode()
+	{
+		return _strCode;
+	}
 
-    /**
-     * Sets the Code
-     * @param strCode The Code
-     */
-    public void setCode( String strCode )
-    {
-        _strCode = strCode;
-    }
+	/**
+	 * Sets the Code
+	 * 
+	 * @param strCode
+	 *            The Code
+	 */
+	public void setCode(String strCode)
+	{
+		_strCode = strCode;
+	}
 
-    /**
-     * Returns the AssigneeUnit
-     * @return The AssigneeUnit
-     */
-    public AssigneeUnit getAssigneeUnit(  )
-    {
-        return _unit;
-    }
+	/**
+	 * Returns the AssigneeUnit
+	 * 
+	 * @return The AssigneeUnit
+	 */
+	public AssigneeUnit getAssigneeUnit()
+	{
+		return _unit;
+	}
 
-    /**
-     * Sets the assigneeUnit
-     * @param assigneeUnit The assigneeUnit
-     */
-    public void setAssigneeUnit( AssigneeUnit assigneeUnit )
-    {
-        _unit = assigneeUnit;
-    }
+	/**
+	 * Sets the assigneeUnit
+	 * 
+	 * @param assigneeUnit
+	 *            The assigneeUnit
+	 */
+	public void setAssigneeUnit(AssigneeUnit assigneeUnit)
+	{
+		_unit = assigneeUnit;
+	}
+	
+	/**
+	 * @return the precision
+	 */
+	public String getPrecision()
+	{
+		return _strPrecision;
+	}
+
+	/**
+	 * @param strPrecision
+	 *            the precision to set
+	 */
+	public void setPrecision(String strPrecision)
+	{
+		_strPrecision = strPrecision;
+	}
 }

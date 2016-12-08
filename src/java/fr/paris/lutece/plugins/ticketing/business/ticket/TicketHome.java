@@ -37,6 +37,8 @@ import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.ticketing.business.category.ITicketCategoryDAO;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormCacheService;
 import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
@@ -56,6 +58,7 @@ public final class TicketHome
 {
     // Static variable pointed at the DAO instance
     private static ITicketDAO _dao = SpringContextService.getBean( "ticketing.ticketDAO" );
+    private static ITicketCategoryDAO _daoTicketCategory = SpringContextService.getBean( "ticketing.ticketCategoryDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
     private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance(  );
 
@@ -117,6 +120,12 @@ public final class TicketHome
     public static Ticket findByPrimaryKey( int nKey )
     {
         Ticket ticket = _dao.load( nKey, _plugin );
+        
+        if ( ticket != null )
+        {
+            TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory(  ).getId(  ), _plugin );
+            ticket.setTicketCategory( ticketCategory );
+        } 
 
         if ( ticket != null )
         {
@@ -199,7 +208,15 @@ public final class TicketHome
      */
     public static List<Ticket> getTicketsList(  )
     {
-        return _dao.selectTicketsList( _plugin );
+        List<Ticket> listTicket = _dao.selectTicketsList( _plugin );
+        
+        for ( Ticket ticket : listTicket )
+        {
+            TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory(  ).getId(  ), _plugin );
+            ticket.setTicketCategory( ticketCategory );  
+        }
+
+        return listTicket;
     }
 
     /**
@@ -212,7 +229,15 @@ public final class TicketHome
      */
     public static List<Ticket> getTicketsList( TicketFilter filter )
     {
-        return _dao.selectTicketsList( filter, _plugin );
+        List<Ticket> listTicket = _dao.selectTicketsList( filter, _plugin );
+        
+        for ( Ticket ticket : listTicket )
+        {
+            TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory(  ).getId(  ), _plugin );
+            ticket.setTicketCategory( ticketCategory );
+        }
+        
+        return listTicket;
     }
 
     /**

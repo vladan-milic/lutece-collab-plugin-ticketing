@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.ticketform;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
@@ -61,8 +62,7 @@ public class TicketForm implements RBACResource, Cloneable, Serializable
     private String _strTitle;
     @NotBlank( message = "#i18n{ticketing.validation.ticketform.Description.notEmpty}" )
     private String _strDescription;
-    private int _nIdCategory;
-    private String _strTicketCategory;
+    private TicketCategory _ticketCategory;
 
     /**
      * Returns the IdForm
@@ -122,39 +122,26 @@ public class TicketForm implements RBACResource, Cloneable, Serializable
     }
 
     /**
-     * @return the _nIdCategory
+     * Get the TicketCategory of the ticket form
+     *
+     * @return The TicketCategory of the ticket form
      */
-    public int getIdCategory(  )
+    public TicketCategory getTicketCategory(  )
     {
-        return _nIdCategory;
+        return _ticketCategory;
     }
 
     /**
-     * @param nIdCategory
-     *            the nIdCategory to set
+     * Set the TicketCategory of the ticket form
+     *
+     * @param TicketCategory
+     *            The TicketCategory of the ticket form
      */
-    public void setIdCategory( int nIdCategory )
+    public void setTicketCategory( TicketCategory ticketCategory )
     {
-        this._nIdCategory = nIdCategory;
+        _ticketCategory = ticketCategory;
     }
-
-    /**
-     * @return the _strTicketCategory
-     */
-    public String getTicketCategory(  )
-    {
-        return _strTicketCategory;
-    }
-
-    /**
-     * @param strTicketCategory
-     *            the strTicketCategory to set
-     */
-    public void setTicketCategory( String strTicketCategory )
-    {
-        this._strTicketCategory = strTicketCategory;
-    }
-
+    
     /**
      * {@inheritDoc}
      */

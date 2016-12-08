@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.test.LuteceTestCase;
@@ -80,7 +81,11 @@ public class TicketBusinessTest extends LuteceTestCase
         ticket.setEmail( EMAIL1 );
         ticket.setFixedPhoneNumber( FIXEDPHONENUMBER1 );
         ticket.setMobilePhoneNumber( MOBILEPHONENUMBER1 );
-        ticket.setIdTicketCategory( IDTICKETCATEGORY1 );
+        
+        TicketCategory ticketCategory = new TicketCategory(  );
+        ticketCategory.setId( IDTICKETCATEGORY1 );
+        ticket.setTicketCategory( ticketCategory );
+        
         ticket.setIdContactMode( CONTACTMODE1 );
         ticket.setTicketComment( TICKETCOMMENT1 );
         ticket.setTicketStatus( TICKETSTATUS1 );
@@ -98,7 +103,7 @@ public class TicketBusinessTest extends LuteceTestCase
         assertEquals( ticketStored.getEmail(  ), ticket.getEmail(  ) );
         assertEquals( ticketStored.getFixedPhoneNumber(  ), ticket.getFixedPhoneNumber(  ) );
         assertEquals( ticketStored.getMobilePhoneNumber(  ), ticket.getMobilePhoneNumber(  ) );
-        assertEquals( ticketStored.getIdTicketCategory(  ), ticket.getIdTicketCategory(  ) );
+        assertEquals( ticketStored.getTicketCategory(  ).getId(  ), ticket.getTicketCategory(  ).getId(  ) );
         assertEquals( ticketStored.getIdContactMode(  ), ticket.getIdContactMode(  ) );
         assertEquals( ticketStored.getTicketComment(  ), ticket.getTicketComment(  ) );
         assertEquals( ticketStored.getTicketStatus(  ), ticket.getTicketStatus(  ) );
@@ -114,7 +119,11 @@ public class TicketBusinessTest extends LuteceTestCase
         ticket.setEmail( EMAIL2 );
         ticket.setFixedPhoneNumber( FIXEDPHONENUMBER2 );
         ticket.setMobilePhoneNumber( MOBILEPHONENUMBER2 );
-        ticket.setIdTicketCategory( IDTICKETCATEGORY2 );
+        
+        ticketCategory = new TicketCategory(  );
+        ticketCategory.setId( IDTICKETCATEGORY2 );
+        ticket.setTicketCategory( ticketCategory );
+        
         ticket.setIdContactMode( CONTACTMODE2 );
         ticket.setTicketComment( TICKETCOMMENT2 );
         ticket.setTicketStatus( TICKETSTATUS2 );
@@ -129,7 +138,7 @@ public class TicketBusinessTest extends LuteceTestCase
         assertEquals( ticketStored.getEmail(  ), ticket.getEmail(  ) );
         assertEquals( ticketStored.getFixedPhoneNumber(  ), ticket.getFixedPhoneNumber(  ) );
         assertEquals( ticketStored.getMobilePhoneNumber(  ), ticket.getMobilePhoneNumber(  ) );
-        assertEquals( ticketStored.getIdTicketCategory(  ), ticket.getIdTicketCategory(  ) );
+        assertEquals( ticketStored.getTicketCategory(  ).getId(  ), ticket.getTicketCategory(  ).getId(  ) );
         assertEquals( ticketStored.getIdContactMode(  ), ticket.getIdContactMode(  ) );
         assertEquals( ticketStored.getTicketComment(  ), ticket.getTicketComment(  ) );
         assertEquals( ticketStored.getTicketStatus(  ), ticket.getTicketStatus(  ) );

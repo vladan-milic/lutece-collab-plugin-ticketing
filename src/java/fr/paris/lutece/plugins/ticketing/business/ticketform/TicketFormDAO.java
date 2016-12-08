@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.ticketform;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -44,10 +45,10 @@ import java.util.List;
  * This class provides Data Access methods for TicketForm objects
  */
 public final class TicketFormDAO implements ITicketFormDAO
-{
+{    
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_form ) FROM ticketing_ticket_form";
-    private static final String SQL_QUERY_SELECT_COLUMNS = "SELECT a.id_form, a.title, a.description, b.id_ticket_category, b.label FROM ticketing_ticket_form AS a " +
+    private static final String SQL_QUERY_SELECT_COLUMNS = "SELECT a.id_form, a.title, a.description, b.id_ticket_category FROM ticketing_ticket_form AS a " +
         " LEFT JOIN ticketing_ticket_category AS b ON b.id_ticket_form = a.id_form ";
     private static final String SQL_QUERY_SELECTALL = SQL_QUERY_SELECT_COLUMNS +
         "WHERE a.inactive <> 1 ORDER BY title";
@@ -187,10 +188,11 @@ public final class TicketFormDAO implements ITicketFormDAO
         ticketForm.setIdForm( daoUtil.getInt( nIndex++ ) );
         ticketForm.setTitle( daoUtil.getString( nIndex++ ) );
         ticketForm.setDescription( daoUtil.getString( nIndex++ ) );
-        ticketForm.setIdCategory( daoUtil.getInt( nIndex++ ) );
-
-        String strCat = daoUtil.getString( nIndex++ );
-        ticketForm.setTicketCategory( ( strCat == null ) ? org.apache.commons.lang.StringUtils.EMPTY : strCat );
+        
+        int idTicketCategory = daoUtil.getInt( nIndex++ );
+        TicketCategory ticketCategory = new TicketCategory(  );
+        ticketCategory.setId( idTicketCategory );
+        ticketForm.setTicketCategory( ticketCategory );
 
         return ticketForm;
     }
