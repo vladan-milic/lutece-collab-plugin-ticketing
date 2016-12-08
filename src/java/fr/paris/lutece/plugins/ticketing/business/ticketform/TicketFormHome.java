@@ -77,15 +77,15 @@ public final class TicketFormHome
     {
         TicketCategory ticketCategory = new TicketCategory(  );
         ticketForm.setTicketCategory( ticketCategory );
-        
+
         _dao.insert( ticketForm, _plugin );
 
         if ( _cacheService.isCacheEnable(  ) )
         {
             _cacheService.putInCache( TicketFormCacheService.getFormCacheKey( ticketForm.getIdForm(  ) ),
                 ticketForm.clone(  ) );
-            _cacheService.putInCache( TicketFormCacheService.getFormByCategoryCacheKey( ticketForm.getTicketCategory(  ).getId(  ) ),
-                ticketForm.clone(  ) );
+            _cacheService.putInCache( TicketFormCacheService.getFormByCategoryCacheKey( 
+                    ticketForm.getTicketCategory(  ).getId(  ) ), ticketForm.clone(  ) );
         }
     }
 
@@ -104,8 +104,8 @@ public final class TicketFormHome
         {
             _cacheService.putInCache( TicketFormCacheService.getFormCacheKey( ticketForm.getIdForm(  ) ),
                 ticketForm.clone(  ) );
-            _cacheService.putInCache( TicketFormCacheService.getFormByCategoryCacheKey( ticketForm.getTicketCategory(  ).getId(  ) ),
-                ticketForm.clone(  ) );
+            _cacheService.putInCache( TicketFormCacheService.getFormByCategoryCacheKey( 
+                    ticketForm.getTicketCategory(  ).getId(  ) ), ticketForm.clone(  ) );
         }
     }
 
@@ -123,7 +123,8 @@ public final class TicketFormHome
         if ( _cacheService.isCacheEnable(  ) )
         {
             _cacheService.removeKey( TicketFormCacheService.getFormByCategoryCacheKey( 
-                    ( (TicketForm) _cacheService.getFromCache( TicketFormCacheService.getFormCacheKey( nTicketFormId ) ) ).getTicketCategory(  ).getId(  ) ) );
+                    ( (TicketForm) _cacheService.getFromCache( TicketFormCacheService.getFormCacheKey( nTicketFormId ) ) ).getTicketCategory(  )
+                      .getId(  ) ) );
             _cacheService.removeKey( TicketFormCacheService.getFormCacheKey( nTicketFormId ) );
         }
     }
@@ -157,7 +158,7 @@ public final class TicketFormHome
             {
                 TicketCategory ticketCategory = _daoTicketCategory.load( form.getTicketCategory(  ).getId(  ), _plugin );
                 form.setTicketCategory( ticketCategory );
-                
+
                 if ( _cacheService.isCacheEnable(  ) )
                 {
                     _cacheService.putInCache( strCacheKey, form.clone(  ) );
@@ -198,7 +199,7 @@ public final class TicketFormHome
             {
                 TicketCategory ticketCategory = _daoTicketCategory.load( form.getTicketCategory(  ).getId(  ), _plugin );
                 form.setTicketCategory( ticketCategory );
-                
+
                 if ( _cacheService.isCacheEnable(  ) )
                 {
                     _cacheService.putInCache( strCacheKey, form.clone(  ) );
@@ -222,13 +223,13 @@ public final class TicketFormHome
     public static List<TicketForm> getTicketFormsList(  )
     {
         List<TicketForm> listTicketForm = _dao.selectTicketFormsList( _plugin );
-        
+
         for ( TicketForm ticketForm : listTicketForm )
         {
             TicketCategory ticketCategory = _daoTicketCategory.load( ticketForm.getTicketCategory(  ).getId(  ), _plugin );
             ticketForm.setTicketCategory( ticketCategory );
         }
-        
+
         return listTicketForm;
     }
 
@@ -241,13 +242,13 @@ public final class TicketFormHome
     public static ReferenceList getAvailableTicketFormsList(  )
     {
         List<TicketForm> lstForms = _dao.getAvailableTicketForms( _plugin );
-        
+
         for ( TicketForm ticketForm : lstForms )
         {
             TicketCategory ticketCategory = _daoTicketCategory.load( ticketForm.getTicketCategory(  ).getId(  ), _plugin );
             ticketForm.setTicketCategory( ticketCategory );
         }
-        
+
         ReferenceList lstRef = new ReferenceList( lstForms.size(  ) );
         lstRef.addItem( 0, StringUtils.EMPTY );
 

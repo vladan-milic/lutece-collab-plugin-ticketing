@@ -362,7 +362,8 @@ public class TicketXPage extends WorkflowCapableXPage
 
             if ( form != null )
             {
-                filter.setIdResource( TicketFormHome.findByCategoryId( ticket.getTicketCategory(  ).getId(  ) ).getIdForm(  ) );
+                filter.setIdResource( TicketFormHome.findByCategoryId( ticket.getTicketCategory(  ).getId(  ) )
+                                                    .getIdForm(  ) );
                 filter.setResourceType( TicketForm.RESOURCE_TYPE );
                 filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
                 filter.setFieldDependNull( EntryFilter.FILTER_TRUE );

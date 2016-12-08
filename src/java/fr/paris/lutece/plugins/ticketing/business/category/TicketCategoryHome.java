@@ -162,7 +162,7 @@ public final class TicketCategoryHome
      * @param labelCategory the label category
      * @return ReferenceList of domainId
      */
-    public static ReferenceList getReferenceListByCategory( int nDomainId,  String labelCategory )
+    public static ReferenceList getReferenceListByCategory( int nDomainId, String labelCategory )
     {
         return _dao.selectReferenceListByCategory( nDomainId, labelCategory, _plugin );
     }

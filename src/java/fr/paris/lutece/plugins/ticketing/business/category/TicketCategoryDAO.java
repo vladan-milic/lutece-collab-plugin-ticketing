@@ -166,7 +166,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         }
 
         daoUtil.free(  );
-        
+
         daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL_INPUTS, plugin );
         daoUtil.setInt( 1, nKey );
         daoUtil.executeQuery(  );
@@ -177,7 +177,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         {
             listIdInput.add( daoUtil.getInt( 1 ) );
         }
-        
+
         category.setListIdInput( listIdInput );
 
         daoUtil.free(  );
@@ -354,8 +354,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
      * {@inheritDoc }
      */
     @Override
-    public ReferenceList selectReferenceListByCategory( int nDomainId, String labelCategory,
-            Plugin plugin )
+    public ReferenceList selectReferenceListByCategory( int nDomainId, String labelCategory, Plugin plugin )
     {
         ReferenceList list = new ReferenceList(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_CATEGORY, plugin );

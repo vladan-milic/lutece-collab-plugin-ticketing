@@ -141,7 +141,7 @@ public class TicketForm implements RBACResource, Cloneable, Serializable
     {
         _ticketCategory = ticketCategory;
     }
-    
+
     /**
      * {@inheritDoc}
      */

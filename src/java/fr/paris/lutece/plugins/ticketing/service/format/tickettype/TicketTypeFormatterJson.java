@@ -111,7 +111,7 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
         json.accumulate( FormatConstants.KEY_LABEL, ticketType.getLabel(  ) );
 
         JSONArray jsonDomains = new JSONArray(  );
-        ArrayList<String> listCategoryNames = new ArrayList<String>( );
+        ArrayList<String> listCategoryNames = new ArrayList<String>(  );
 
         for ( ReferenceItem refItemDomain : TicketDomainHome.getReferenceListByType( ticketType.getId(  ) ) )
         {
@@ -123,18 +123,20 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
             JSONArray jsonCategories = new JSONArray(  );
 
             for ( ReferenceItem refItemCategory : TicketCategoryHome.getReferenceListByDomain( nDomainId ) )
-            {        
-                if(!listCategoryNames.contains( refItemCategory.getName(  ) ) )
+            {
+                if ( !listCategoryNames.contains( refItemCategory.getName(  ) ) )
                 {
                     int nCategoryId = Integer.parseInt( refItemCategory.getCode(  ) );
                     JSONObject jsonCategory = new JSONObject(  );
                     jsonCategory.accumulate( FormatConstants.KEY_ID, nCategoryId );
                     jsonCategory.accumulate( FormatConstants.KEY_LABEL, refItemCategory.getName(  ) );
-                
+
                     JSONArray jsonPrecisions = new JSONArray(  );
-                    for ( ReferenceItem refItemPrecision : TicketCategoryHome.getReferenceListByCategory( nDomainId, refItemCategory.getName(  ) ) )
+
+                    for ( ReferenceItem refItemPrecision : TicketCategoryHome.getReferenceListByCategory( nDomainId,
+                            refItemCategory.getName(  ) ) )
                     {
-                        if(!StringUtils.isEmpty( refItemPrecision.getName(  ) ) )
+                        if ( !StringUtils.isEmpty( refItemPrecision.getName(  ) ) )
                         {
                             JSONObject jsonPrecision = new JSONObject(  );
                             int nPrecisionId = Integer.parseInt( refItemPrecision.getCode(  ) );
@@ -144,14 +146,14 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
                             listCategoryNames.add( refItemCategory.getName(  ) );
                         }
                     }
-                    
-                    if(!jsonPrecisions.isEmpty( )) 
+
+                    if ( !jsonPrecisions.isEmpty(  ) )
                     {
                         jsonCategory.accumulate( FormatConstants.KEY_TICKET_PRECISIONS, jsonPrecisions );
                     }
+
                     jsonCategories.add( jsonCategory );
                 }
-                
             }
 
             jsonDomain.accumulate( FormatConstants.KEY_TICKET_CATEGORIES, jsonCategories );

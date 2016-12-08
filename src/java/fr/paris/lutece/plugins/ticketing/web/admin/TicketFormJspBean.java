@@ -493,7 +493,7 @@ public class TicketFormJspBean extends MVCAdminJspBean
         TicketCategory ticketCategory = new TicketCategory(  );
         ticketCategory.setId( nIdCategory );
         ticketForm.setTicketCategory( ticketCategory );
-        
+
         ticketForm.setDescription( strDesc );
         ticketForm.setTitle( strTitle );
 

@@ -81,11 +81,11 @@ public class TicketBusinessTest extends LuteceTestCase
         ticket.setEmail( EMAIL1 );
         ticket.setFixedPhoneNumber( FIXEDPHONENUMBER1 );
         ticket.setMobilePhoneNumber( MOBILEPHONENUMBER1 );
-        
+
         TicketCategory ticketCategory = new TicketCategory(  );
         ticketCategory.setId( IDTICKETCATEGORY1 );
         ticket.setTicketCategory( ticketCategory );
-        
+
         ticket.setIdContactMode( CONTACTMODE1 );
         ticket.setTicketComment( TICKETCOMMENT1 );
         ticket.setTicketStatus( TICKETSTATUS1 );
@@ -119,11 +119,11 @@ public class TicketBusinessTest extends LuteceTestCase
         ticket.setEmail( EMAIL2 );
         ticket.setFixedPhoneNumber( FIXEDPHONENUMBER2 );
         ticket.setMobilePhoneNumber( MOBILEPHONENUMBER2 );
-        
+
         ticketCategory = new TicketCategory(  );
         ticketCategory.setId( IDTICKETCATEGORY2 );
         ticket.setTicketCategory( ticketCategory );
-        
+
         ticket.setIdContactMode( CONTACTMODE2 );
         ticket.setTicketComment( TICKETCOMMENT2 );
         ticket.setTicketStatus( TICKETSTATUS2 );

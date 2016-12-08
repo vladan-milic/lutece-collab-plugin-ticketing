@@ -179,7 +179,8 @@ public class Ticket implements Serializable, RBACResource
             setEmail( strEmail );
         }
 
-        if ( !StringUtils.isEmpty( strCategoryCode ) && ( _ticketCategory != null && _ticketCategory.getId(  ) == 0 ) )
+        if ( !StringUtils.isEmpty( strCategoryCode ) &&
+                ( ( _ticketCategory != null ) && ( _ticketCategory.getId(  ) == 0 ) ) )
         {
             TicketCategory category = TicketCategoryHome.findByCode( strCategoryCode );
 
@@ -449,7 +450,7 @@ public class Ticket implements Serializable, RBACResource
     {
         _nIdTicketDomain = nIdTicketDomain;
     }
-    
+
     /**
      * Returns the TicketCategory
      * @return The TicketCategory
@@ -458,7 +459,7 @@ public class Ticket implements Serializable, RBACResource
     {
         return _ticketCategory;
     }
-    
+
     /**
      * Sets the TicketCategory
      * @param ticketCategory The TicketCategory

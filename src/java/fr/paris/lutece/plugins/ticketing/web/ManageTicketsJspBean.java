@@ -347,7 +347,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         Map<String, Object> model = getModel(  );
         initTicketForm( request, ticket, model );
-        TicketCategory ticketCategory = new TicketCategory( );
+
+        TicketCategory ticketCategory = new TicketCategory(  );
         ticket.setTicketCategory( ticketCategory );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKET, TEMPLATE_CREATE_TICKET, model );
@@ -377,7 +378,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
-        model.put( MARK_TICKET_PRECISIONS_LIST, new ReferenceList( ) );
+        model.put( MARK_TICKET_PRECISIONS_LIST, new ReferenceList(  ) );
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale(  ) ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_GUID, strGuid );
@@ -679,7 +680,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
         ticket = ( ticket != null ) ? ticket : new Ticket(  );
-        
+
         TicketCategory ticketCategory = new TicketCategory(  );
         ticket.setTicketCategory( ticketCategory );
 
@@ -720,7 +721,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     {
         boolean bIsFormValid = true;
         populate( ticket, request );
-        
+
         int nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
         ticket.setTicketCategory( ticketCategory );

@@ -45,7 +45,7 @@ import java.util.List;
  * This class provides Data Access methods for TicketForm objects
  */
 public final class TicketFormDAO implements ITicketFormDAO
-{    
+{
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_form ) FROM ticketing_ticket_form";
     private static final String SQL_QUERY_SELECT_COLUMNS = "SELECT a.id_form, a.title, a.description, b.id_ticket_category FROM ticketing_ticket_form AS a " +
@@ -188,7 +188,7 @@ public final class TicketFormDAO implements ITicketFormDAO
         ticketForm.setIdForm( daoUtil.getInt( nIndex++ ) );
         ticketForm.setTitle( daoUtil.getString( nIndex++ ) );
         ticketForm.setDescription( daoUtil.getString( nIndex++ ) );
-        
+
         int idTicketCategory = daoUtil.getInt( nIndex++ );
         TicketCategory ticketCategory = new TicketCategory(  );
         ticketCategory.setId( idTicketCategory );

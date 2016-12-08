@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.ticket;
 
-import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;	   
+import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
@@ -62,7 +62,7 @@ import java.util.List;
  * This class provides Data Access methods for Ticket objects
  */
 public final class TicketDAO implements ITicketDAO
-{    
+{
     // Constants
     private static final String TICKET_RESOURCE_TYPE = "ticket";
 
@@ -357,7 +357,7 @@ public final class TicketDAO implements ITicketDAO
             ticketList.add( ticket );
         }
 
-        daoUtil.free(  );  
+        daoUtil.free(  );
 
         return ticketList;
     }
@@ -508,12 +508,12 @@ public final class TicketDAO implements ITicketDAO
         ticket.setTicketType( daoUtil.getString( nIndex++ ) );
         ticket.setIdTicketDomain( daoUtil.getInt( nIndex++ ) );
         ticket.setTicketDomain( daoUtil.getString( nIndex++ ) );
-        
-        int idTicketCategory =  daoUtil.getInt( nIndex++ );
+
+        int idTicketCategory = daoUtil.getInt( nIndex++ );
         TicketCategory ticketCategory = new TicketCategory(  );
         ticketCategory.setId( idTicketCategory );
         ticket.setTicketCategory( ticketCategory );
-        
+
         ticket.setIdContactMode( daoUtil.getInt( nIndex++ ) );
         ticket.setContactMode( daoUtil.getString( nIndex++ ) );
         ticket.setTicketComment( daoUtil.getString( nIndex++ ) );

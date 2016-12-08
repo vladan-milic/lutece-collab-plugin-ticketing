@@ -33,14 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
@@ -63,6 +55,14 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * This class provides the user interface to manage TicketCategory features ( manage, create, modify, remove )
@@ -81,12 +81,12 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String TEMPLATE_MODIFY_TICKETCATEGORY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
         "modify_ticket_category.html";
     private static final String TEMPLATE_MODIFY_TICKETCATEGORY_INPUTS = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
-            "modify_ticket_category_inputs.html";
+        "modify_ticket_category_inputs.html";
 
     // Parameters
     private static final String PARAMETER_ID_TICKETCATEGORY = "id";
     private static final String PARAMETER_ID_TICKETCATEGORY_INPUT = "id_input";
-    private static final String PARAMETER_ID_TICKETCATEGORY_INPUT_POS= "pos";
+    private static final String PARAMETER_ID_TICKETCATEGORY_INPUT_POS = "pos";
     private static final String PARAMETER_ID_UNIT = "idUnit";
 
     // Properties for page titles
@@ -109,7 +109,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_CATEGORY = "category";
     private static final String JSP_MANAGE_TICKETCATEGORYS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
         "ManageTicketCategorys.jsp";
-    
+
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETCATEGORY = "ticketing.message.confirmRemoveTicketCategory";
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETCATEGORY_INPUT = "ticketing.message.confirmRemoveTicketCategoryInput";
@@ -317,19 +317,21 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         {
             _category = TicketCategoryHome.findByPrimaryKey( nId );
         }
-        
+
         List<Entry> listEntry = new ArrayList<Entry>( _category.getListIdInput(  ).size(  ) );
 
         EntryFilter entryFilter = new EntryFilter(  );
         entryFilter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
         entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-        
+
         for ( Integer nIdInput : _category.getListIdInput(  ) )
         {
             entryFilter.setIdResource( nIdInput );
+
             List<Entry> listEntryFound = EntryHome.getEntryList( entryFilter );
-            if ( listEntryFound != null && listEntryFound.size(  ) >= 1 )
+
+            if ( ( listEntryFound != null ) && ( listEntryFound.size(  ) >= 1 ) )
             {
                 listEntry.add( listEntryFound.get( 0 ) );
             }
@@ -344,7 +346,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKETCATEGORY_INPUTS, TEMPLATE_MODIFY_TICKETCATEGORY_INPUTS, model );
     }
-    
+
     /**
      * Handles the add of input to a ticketcategory
      *
@@ -356,7 +358,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY ) );
         int nIdInput = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY_INPUT ) );
-//        int nPos = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY_INPUT_POS ) );
+
+        //        int nPos = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY_INPUT_POS ) );
         int nPos = 1;
         TicketCategoryHome.createLinkCategoryInput( nId, nIdInput, nPos );
         addInfo( INFO_TICKETCATEGORY_CREATED, getLocale(  ) );
@@ -391,7 +394,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     }
 
     /**
-     * Handles the removal of a ticketcategory input 
+     * Handles the removal of a ticketcategory input
      *
      * @param request The Http request
      * @return the jsp URL to display the form to manage ticketcategory inputs
@@ -431,7 +434,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
         return refListInputs;
     }
-    
+
     /**
      * Validate Code (uniqueness and format)
      * @param category The category

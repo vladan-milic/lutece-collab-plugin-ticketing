@@ -120,12 +120,12 @@ public final class TicketHome
     public static Ticket findByPrimaryKey( int nKey )
     {
         Ticket ticket = _dao.load( nKey, _plugin );
-        
+
         if ( ticket != null )
         {
             TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory(  ).getId(  ), _plugin );
             ticket.setTicketCategory( ticketCategory );
-        } 
+        }
 
         if ( ticket != null )
         {
@@ -209,11 +209,11 @@ public final class TicketHome
     public static List<Ticket> getTicketsList(  )
     {
         List<Ticket> listTicket = _dao.selectTicketsList( _plugin );
-        
+
         for ( Ticket ticket : listTicket )
         {
             TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory(  ).getId(  ), _plugin );
-            ticket.setTicketCategory( ticketCategory );  
+            ticket.setTicketCategory( ticketCategory );
         }
 
         return listTicket;
@@ -230,13 +230,13 @@ public final class TicketHome
     public static List<Ticket> getTicketsList( TicketFilter filter )
     {
         List<Ticket> listTicket = _dao.selectTicketsList( filter, _plugin );
-        
+
         for ( Ticket ticket : listTicket )
         {
             TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory(  ).getId(  ), _plugin );
             ticket.setTicketCategory( ticketCategory );
         }
-        
+
         return listTicket;
     }
 
