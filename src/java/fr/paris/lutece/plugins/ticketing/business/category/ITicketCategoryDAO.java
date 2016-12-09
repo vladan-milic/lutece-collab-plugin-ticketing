@@ -122,4 +122,40 @@ public interface ITicketCategoryDAO
      * @return The reference list
      */
     ReferenceList selectReferenceListByDomain( int nDomainId, Plugin plugin );
+
+    /**
+     * Insert a new record in the table linking category with input
+     * Using the next available value for pos
+     * @param nIdCategory id Category
+     * @param nIdInput id Input
+     * @param plugin the Plugin
+     */
+	void insertLinkCategoryInputNextPos( int nIdCategory, int nIdInput, Plugin plugin );
+
+	
+    /**
+     * Update pos field in the table linking category with input
+     * @param nIdCategory id Category
+     * @param nIdInput id Input
+     * @param nPos the position to update
+     * @param plugin the Plugin
+     */
+	void updateLinkCategoryInputPos( int nIdCategory, int nIdInput, int nPos, Plugin plugin );
+
+	
+    /**
+     * returns the position of an input for a given category
+     * @param nId id of category
+     * @param nIdInput id of input
+     * @return the position as an integer
+     */
+	int selectCategoryInputPosition( int nId, int nIdInput, Plugin _plugin );
+
+    /**
+     * returns the iD of an input for a given category and position
+     * @param nId id of category
+     * @param nIdInput the position
+     * @return the input id
+     */
+	int selectCategoryInputByPosition( int nId, int nPos, Plugin plugin );
 }

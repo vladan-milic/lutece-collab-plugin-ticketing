@@ -33,16 +33,20 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.category;
 
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
-import java.util.List;
-
 
 /**
  * This class provides instances management methods (create, find, ...) for TicketCategory objects
+ */
+/**
+ * @author a120274
+ *
  */
 public final class TicketCategoryHome
 {
@@ -76,6 +80,18 @@ public final class TicketCategoryHome
     {
         _dao.insertLinkCategoryInput( nIdCategory, nIdInput, nPos, _plugin );
     }
+    
+    
+    /**
+     * Create a link between a category and an input
+     * @param nIdCategory id Category
+     * @param nIdInput id Input
+     * @param nPos id Input position
+     */
+    public static void createLinkCategoryInputNextPos( int nIdCategory, int nIdInput )
+    {
+        _dao.insertLinkCategoryInputNextPos( nIdCategory, nIdInput, _plugin );
+    }
 
     /**
      * Update of the ticketCategory which is specified in parameter
@@ -105,6 +121,18 @@ public final class TicketCategoryHome
         _dao.deleteLinkCategoryInput( nIdCategory, nIdInput, _plugin );
     }
 
+    /**
+     * Update the Position field in a link between a category and an input
+     * @param nIdCategory id Category
+     * @param nIdInput id Input
+     * @param nPosition the position value
+     */
+    public static void updateCategoryInputPosition( int nIdCategory, int nIdInput, int nPosition )
+    {
+        _dao.updateLinkCategoryInputPos( nIdCategory, nIdInput, nPosition, _plugin);
+    }
+    
+    
     ///////////////////////////////////////////////////////////////////////////
     // Finders
 
@@ -155,4 +183,28 @@ public final class TicketCategoryHome
     {
         return _dao.selectReferenceListByDomain( nDomainId, _plugin );
     }
+
+    /**
+     * returns the position of an input for a given category
+     * @param nId id of category
+     * @param nIdInput id of input
+     * @return the position as an integer
+     */
+	public static int getCategoryInputPosition( int nId, int nIdInput )
+	{
+		return _dao.selectCategoryInputPosition( nId, nIdInput, _plugin );
+
+	}
+
+    /**
+     * returns the iD of an input for a given category and position
+     * @param nId id of category
+     * @param nPos the position
+     * @return the input id
+     */
+	public static int getCategoryInputByPosition( int nId, int nPos )
+	{
+		return _dao.selectCategoryInputByPosition( nId, nPos, _plugin );
+	}
+	
 }

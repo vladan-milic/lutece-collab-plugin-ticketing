@@ -2,7 +2,7 @@
 <@tabsWrapper>
   <@tabs tab="ticketcategory" hasTable=false/>
   <h3>#i18n{ticketing.modify_ticketcategory.pageTitle}</h3>
-  <form class="form-horizontal" method="post" name="modify_ticketcategory" action="jsp/admin/plugins/ticketing/admin/ManageTicketCategorys.jsp">
+  <form class="form-horizontal" method="post" name="modify_ticketcategory" action="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp">
     <@messages errors=errors />
     <input type="hidden" id="id" name="id" value="${ticketcategory.id}">
     <input type="hidden" id="guid" name="guid" value="">
@@ -18,6 +18,6 @@
     <#if units_list??>
       <@fieldInputCombo i18nLabelKey='ticketing.modify_ticketcategory.labelUnit' inputName='idUnit' mandatory=true items=units_list value="${ticketcategory.assigneeUnit.unitId!}" i18nHelpBlockKey="ticketing.modify_ticketcategory.labelUnit.help" cssClass="form-control" />
     </#if>
-    <@actionButtons button1Name="action_modifyTicketCategory" button2Name="view_manageTicketCategorys"/>
+    <@actionButtons button1Name="action_modifyTicketCategory" button2Name="view_manageTicketCategories"/>
   </form>
 </@tabsWrapper>

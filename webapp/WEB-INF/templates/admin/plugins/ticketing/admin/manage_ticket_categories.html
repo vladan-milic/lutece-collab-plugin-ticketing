@@ -1,6 +1,6 @@
 <#include "admin_tabs.html" />
 <@tabsWrapper>
-  <@tabs tab="ticketcategory" formName="manage_ticketcategories" formAction="jsp/admin/plugins/ticketing/admin/ManageTicketCategorys.jsp" btnName="view_createTicketCategory" btnValue="ticketing.manage_ticketcategories.buttonAdd" />
+  <@tabs tab="ticketcategory" formName="manage_ticketcategories" formAction="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp" btnName="view_createTicketCategory" btnValue="ticketing.manage_ticketcategories.buttonAdd" />
     <@messages infos=infos />
     <table class="table table-striped table-hover">
       <thead>
@@ -29,13 +29,13 @@
               ${ticketcategory.assigneeUnit.name!''}
             </td>
             <td>
-              <a href="jsp/admin/plugins/ticketing/admin/ManageTicketCategorys.jsp?view=modifyTicketCategoryInputs&id=${ticketcategory.id}" class="btn btn-primary btn-sm" title="#i18n{ticketing.manage_ticketcategories.labelModifyInputs}">
+              <a href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?view=modifyTicketCategoryInputs&id=${ticketcategory.id}" class="btn btn-primary btn-sm" title="#i18n{ticketing.manage_ticketcategories.labelModifyInputs}">
                 <i class="fa fa-wpforms"></i>
               </a>
-              <a href="jsp/admin/plugins/ticketing/admin/ManageTicketCategorys.jsp?view=modifyTicketCategory&id=${ticketcategory.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
+              <a href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?view=modifyTicketCategory&id=${ticketcategory.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a href="jsp/admin/plugins/ticketing/admin/ManageTicketCategorys.jsp?action=confirmRemoveTicketCategory&id=${ticketcategory.id}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}">
+              <a href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?action=confirmRemoveTicketCategory&id=${ticketcategory.id}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}">
                 <i class="fa fa-trash"></i>
               </a>
             </td>

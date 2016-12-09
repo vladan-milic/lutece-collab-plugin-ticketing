@@ -25,7 +25,7 @@
             <feature-title>ticketing.adminFeature.ManageAdminTicketing.name</feature-title>
             <feature-description>ticketing.adminFeature.ManageAdminTicketing.description</feature-description>
             <feature-level>0</feature-level>
-            <feature-url>jsp/admin/plugins/ticketing/admin/ManageTicketCategorys.jsp</feature-url>
+            <feature-url>jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp</feature-url>
             <feature-icon-url/>
         </admin-feature>
         <admin-feature>

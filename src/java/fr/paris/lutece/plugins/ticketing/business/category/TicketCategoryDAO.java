@@ -67,8 +67,12 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_category FROM ticketing_ticket_category AND inactive <> 1 ";
     private static final String SQL_QUERY_SELECT_ALL_INPUTS = "SELECT id_input FROM ticketing_ticket_category_input WHERE id_ticket_category = ? ORDER BY pos";
     private static final String SQL_QUERY_INSERT_INPUT = "INSERT INTO ticketing_ticket_category_input ( id_ticket_category, id_input, pos ) VALUES ( ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE_INPUT = "DELETE FROM ticketing_ticket_category_input WHERE id_category = ? AND id_input = ?";
-
+    private static final String SQL_QUERY_DELETE_INPUT = "DELETE FROM ticketing_ticket_category_input WHERE id_ticket_category = ? AND id_input = ?";
+    private static final String SQL_QUERY_UPDATE_INPUT_POS = "UPDATE ticketing_ticket_category_input SET pos = ? WHERE id_ticket_category = ? AND id_input = ? ";
+    private static final String SQL_QUERY_SELECT_MAX_INPUT_POS_FOR_CATEGORY = "SELECT MAX(pos) FROM ticketing_ticket_category_input WHERE id_ticket_category = ? ";
+	private static final String SQL_QUERY_SELECT_INPUT_POS = "SELECT pos from ticketing_ticket_category_input WHERE id_ticket_category = ? AND id_input = ? ";
+	private static final String SQL_QUERY_SELECT_INPUT_BY_POS = "SELECT id_input from ticketing_ticket_category_input WHERE id_ticket_category = ? AND pos = ? ";
+    
     /**
      * Generates a new primary key
      * @param plugin The Plugin
@@ -115,6 +119,29 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
     }
 
     /**
+     * Return the next available Position value for inputs linked to a category
+     * @param plugin The Plugin
+     * @return The new primary key
+     */
+    public int getNextPositionForCategoryInputs( int nIdCategory, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_MAX_INPUT_POS_FOR_CATEGORY, plugin );
+        daoUtil.setInt( 1,  nIdCategory );
+        daoUtil.executeQuery(  );
+
+        int nPos = 1;
+
+        if ( daoUtil.next(  ) )
+        {
+        	nPos = daoUtil.getInt( 1 ) + 1;
+        }
+
+        daoUtil.free(  );
+
+        return nPos;
+    }
+    
+    /**
      * {@inheritDoc }
      */
     @Override
@@ -129,6 +156,34 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
+    
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void insertLinkCategoryInputNextPos( int nIdCategory, int nIdInput, Plugin plugin )
+    {
+    	int nPos = getNextPositionForCategoryInputs( nIdCategory, plugin );
+    	insertLinkCategoryInput( nIdCategory, nIdInput, nPos, plugin );
+    }
+    
+    
+    
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void updateLinkCategoryInputPos( int nIdCategory, int nIdInput, int nPos, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_INPUT_POS, plugin );
+        daoUtil.setInt( 1, nPos );
+        daoUtil.setInt( 2, nIdCategory );
+        daoUtil.setInt( 3, nIdInput );
+        daoUtil.executeUpdate(  );
+        daoUtil.free(  );
+    }
+    
+    
 
     /**
      * {@inheritDoc }
@@ -344,4 +399,47 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
 
         return list;
     }
+
+    /**
+     * {@inheritDoc }
+     */
+	@Override
+	public int selectCategoryInputPosition( int nId, int nIdInput, Plugin plugin )
+	{
+        int nPosition = 0;
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_INPUT_POS, plugin );
+        daoUtil.setInt( 1, nId );
+        daoUtil.setInt( 2, nIdInput );
+        daoUtil.executeQuery(  );
+
+        if ( daoUtil.next(  ) )
+        {
+        	nPosition = daoUtil.getInt( 1 );
+        }
+
+        daoUtil.free(  );
+        return nPosition;
+	}
+	
+    /**
+     * {@inheritDoc }
+     */
+	@Override
+	public int selectCategoryInputByPosition( int nId, int nPos, Plugin plugin )
+	{
+        int nIdInput = 0;
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_INPUT_BY_POS, plugin );
+        daoUtil.setInt( 1, nId );
+        daoUtil.setInt( 2, nPos );
+        daoUtil.executeQuery(  );
+
+        if ( daoUtil.next(  ) )
+        {
+        	nIdInput = daoUtil.getInt( 1 );
+        }
+
+        daoUtil.free(  );
+        return nIdInput;
+	}
+	
 }

@@ -2,7 +2,7 @@
 <@tabsWrapper>
   <@tabs tab="ticketcategory" hasTable=false/>
   <h3>#i18n{ticketing.create_ticketcategory.pageTitle}</h3>
-  <form class="form-horizontal" method="post" name="create_ticketcategory" action="jsp/admin/plugins/ticketing/admin/ManageTicketCategorys.jsp">
+  <form class="form-horizontal" method="post" name="create_ticketcategory" action="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp">
     <@messages errors=errors />
     <input type="hidden" id="id" name="id">
     <input type="hidden" id="guid" name="guid" value="">
@@ -22,6 +22,6 @@
         <@fieldInputCombo i18nLabelKey='ticketing.create_ticketcategory.labelUnit' inputName='idUnit' mandatory=true items=units_list value="" i18nHelpBlockKey="ticketing.create_ticketcategory.labelUnit.help" cssClass="form-control" />
       </#if>
     </#if>
-    <@actionButtons button1Name="action_createTicketCategory" button2Name="view_manageTicketCategorys"/>
+    <@actionButtons button1Name="action_createTicketCategory" button2Name="view_manageTicketCategories"/>
     </form>
 </@tabsWrapper> 
