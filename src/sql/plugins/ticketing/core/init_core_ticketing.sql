@@ -43,6 +43,10 @@ DELETE FROM core_admin_right WHERE id_right = 'TICKETING_USER_PREFERENCES_MANAGE
 INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is_updatable,plugin_name,id_feature_group,icon_url,documentation_url, id_order ) VALUES 
 ('TICKETING_USER_PREFERENCES_MANAGEMENT','ticketing.adminFeature.ManageUserPreferences.name',1,'jsp/admin/plugins/ticketing/UserPreferences.jsp','ticketing.adminFeature.ManageUserPreferences.description',0,'ticketing','TICKETING',NULL,NULL,3);
 
+DELETE FROM core_admin_right WHERE id_right = 'TICKETING_INPUT_MANAGEMENT';          
+INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is_updatable,plugin_name,id_feature_group,icon_url,documentation_url, id_order ) VALUES 
+('TICKETING_INPUT_MANAGEMENT','ticketing.adminFeature.ManageTicketInputs.name',1,'jsp/admin/plugins/ticketing/admin/ManageTicketInputs.jsp','ticketing.adminFeature.ManageTicketInputs.description',0,'ticketing','TICKETING_ADMIN',NULL,NULL,4);
+
 --
 -- Data for table core_user_right
 --
@@ -52,6 +56,8 @@ DELETE FROM core_user_right WHERE id_right = 'TICKETING_INSTANT_RESPONSE_MANAGEM
 INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_INSTANT_RESPONSE_MANAGEMENT',1);
 DELETE FROM core_user_right WHERE id_right = 'TICKETING_USER_PREFERENCES_MANAGEMENT' AND id_user = 1;
 INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_USER_PREFERENCES_MANAGEMENT',1);
+DELETE FROM core_user_right WHERE id_right = 'TICKETING_INPUT_MANAGEMENT' AND id_user = 1;
+INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_INPUT_MANAGEMENT',1);
 
 --
 -- Data for table core_admin_right

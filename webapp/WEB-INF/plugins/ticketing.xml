@@ -45,6 +45,14 @@
             <feature-icon-url/>
         </admin-feature>
         <admin-feature>
+            <feature-id>TICKETING_INPUT_MANAGEMENT</feature-id>
+            <feature-title>ticketing.adminFeature.ManageTicketInputs.name</feature-title>
+            <feature-description>ticketing.adminFeature.ManageTicketInputs.description</feature-description>
+            <feature-level>2</feature-level>
+            <feature-url>jsp/admin/plugins/ticketing/admin/ManageTicketInputs.jsp</feature-url>
+            <feature-icon-url/>
+        </admin-feature>
+        <admin-feature>
             <feature-id>TICKETING_USER_PREFERENCES_MANAGEMENT</feature-id>
             <feature-title>ticketing.adminFeature.ManageUserPreferences.name</feature-title>
             <feature-description>ticketing.adminFeature.ManageUserPreferences.description</feature-description>
