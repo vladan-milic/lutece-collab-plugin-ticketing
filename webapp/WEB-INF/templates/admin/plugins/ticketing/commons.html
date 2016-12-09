@@ -23,7 +23,7 @@
 
 <#macro categoryFormated ticketCategory >
 	<#if ticketCategory.precision?has_content>
-		${ticketCategory.label!''} / ${ticketCategory.precision}
+		${ticketCategory.label!''} - ${ticketCategory.precision}
 	<#else>
 		${ticketCategory.label!''}
 	</#if>

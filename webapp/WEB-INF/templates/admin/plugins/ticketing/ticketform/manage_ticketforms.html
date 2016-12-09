@@ -21,7 +21,7 @@
 					<td>${ticketform.title}</td>
 					<td>
 						<#if (ticketform.ticketCategory.precision)?has_content>
-							${(ticketform.ticketCategory.label)!''} / ${(ticketform.ticketCategory.precision)}
+							${(ticketform.ticketCategory.label)!''} - ${(ticketform.ticketCategory.precision)}
 						<#else>
 							${(ticketform.ticketCategory.label)!''}
 						</#if>
