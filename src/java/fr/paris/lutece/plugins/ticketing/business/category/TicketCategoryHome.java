@@ -218,4 +218,14 @@ public final class TicketCategoryHome
         return _dao.selectReferenceListByCategory( nDomainId, labelCategory, _plugin );
     }
 
+    /**
+     * Load the id of all inputs related to the ticketCategory id and returns them as a collection
+     * @param nCategoryId The Category ID
+     * @param plugin The plugin
+     * @return The collection which contains the id of all the ticketCategory objects
+     */
+    public static List<Integer> getIdInputListByCategory( int nCategoryId )
+    {
+        return _dao.selectIdInputListByCategory( nCategoryId, _plugin );
+    }
 }

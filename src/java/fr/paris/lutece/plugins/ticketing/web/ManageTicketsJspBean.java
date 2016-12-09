@@ -34,8 +34,6 @@
 package fr.paris.lutece.plugins.ticketing.web;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
-import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenAttFileItem;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
@@ -51,8 +49,6 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.ticketform.ResponseRecap;
-import fr.paris.lutece.plugins.ticketing.business.ticketform.TicketForm;
-import fr.paris.lutece.plugins.ticketing.business.ticketform.TicketFormHome;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
@@ -525,11 +521,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         if ( !StringUtils.isEmpty( strIdCategory ) && StringUtils.isNumeric( strIdCategory ) )
         {
             int nIdCategory = Integer.parseInt( strIdCategory );
-            TicketForm form = TicketFormHome.findByCategoryId( nIdCategory );
+            TicketCategory category = TicketCategoryHome.findByPrimaryKey( nIdCategory );
 
-            if ( form != null )
+            if ( category != null )
             {
-                return _ticketFormService.getHtmlForm( ticket, form, getLocale(  ), false, request );
+                return _ticketFormService.getHtmlFormInputs( ticket, category, getLocale(  ), false, request );
             }
         }
 
@@ -730,25 +726,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         if ( ticket.getTicketCategory(  ).getId(  ) > 0 )
         {
-            EntryFilter filter = new EntryFilter(  );
-            TicketForm form = TicketFormHome.findByCategoryId( ticket.getTicketCategory(  ).getId(  ) );
-
-            if ( form != null )
+            ticket.setListResponse( null );
+            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory(  ).getId(  ) ); 
+            
+            for ( Entry entry : listEntry )
             {
-                filter.setIdResource( form.getIdForm(  ) );
-                filter.setResourceType( TicketForm.RESOURCE_TYPE );
-                filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-                filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-                filter.setIdIsComment( EntryFilter.FILTER_FALSE );
-                ticket.setListResponse( null );
-
-                List<Entry> listEntryFirstLevel = EntryHome.getEntryList( filter );
-
-                for ( Entry entry : listEntryFirstLevel )
-                {
-                    listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry(  ),
-                            getLocale(  ), ticket ) );
-                }
+                listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry(  ),
+                        getLocale(  ), ticket ) );
             }
         }
 
