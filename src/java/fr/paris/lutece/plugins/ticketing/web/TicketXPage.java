@@ -163,11 +163,12 @@ public class TicketXPage extends WorkflowCapableXPage
     public XPage getCreateTicket( HttpServletRequest request )
     {
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
-
+        
         if ( ticket == null )
         {
             ticket = new Ticket(  );
             TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
+            ticket.setTicketCategory( new TicketCategory(  ) );
         }
 
         prefillTicketWithUserInfo( request, ticket );
@@ -352,6 +353,10 @@ public class TicketXPage extends WorkflowCapableXPage
         ticket = ( ticket != null ) ? ticket : new Ticket(  );
         populate( ticket, request );
         ticket.setListResponse( new ArrayList<Response>(  ) );
+        
+        int nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
+        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
+        ticket.setTicketCategory( ticketCategory );
 
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>(  );
 
@@ -402,7 +407,7 @@ public class TicketXPage extends WorkflowCapableXPage
             bIsFormValid = false;
         }
 
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getTicketCategory(  ).getIdTicketDomain(  ) );
+        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain(  ) );
         ticket.setTicketDomain( ticketDomain.getLabel(  ) );
 
         ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) ).getLabel(  ) );
