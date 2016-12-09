@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.ticketing.business.ticket;
 
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
@@ -69,7 +70,7 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket ) FROM ticketing_ticket";
     private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, " +
         " a.fixed_phone_number, a.mobile_phone_number, c.id_ticket_type, c.label, d.id_ticket_domain, " +
-        " d.label, a.id_ticket_category, e.label, a.id_contact_mode, f.code, a.ticket_comment, " +
+        " d.label, a.id_ticket_category, a.id_contact_mode, f.code, a.ticket_comment, " +
         " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, a.id_unit, a.id_assigner_user, a.id_assigner_unit, a.user_message, a.url, a.id_channel, a.nomenclature, a.is_read " +
         " FROM ticketing_ticket a, ticketing_user_title b, ticketing_ticket_type c, ticketing_ticket_domain d, ticketing_ticket_category e, ticketing_contact_mode f " +
         " WHERE a.id_ticket = ? AND a.id_user_title = b.id_user_title AND a.id_ticket_category = e.id_ticket_category AND e.id_ticket_domain = d.id_ticket_domain AND d.id_ticket_type = c.id_ticket_type AND a.id_contact_mode = f.id_contact_mode";
@@ -84,7 +85,7 @@ public final class TicketDAO implements ITicketDAO
         " date_close = ? , priority = ? , criticality = ? , id_customer = ? , id_admin_user = ? , id_unit = ?, id_assigner_user = ? , id_assigner_unit = ?, user_message = ?, url = ?, id_channel = ?, nomenclature = ?, is_read = ? " +
         " WHERE id_ticket = ?";
     private static final String SQL_QUERY_SELECTALL_SELECT_CLAUSE = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, a.fixed_phone_number, a.mobile_phone_number," +
-        " c.id_ticket_type, c.label, d.id_ticket_domain, d.label, a.id_ticket_category, e.label, a.id_contact_mode, f.code, a.ticket_comment," +
+        " c.id_ticket_type, c.label, d.id_ticket_domain, d.label, a.id_ticket_category, a.id_contact_mode, f.code, a.ticket_comment," +
         " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, a.id_unit, a.id_assigner_user, a.id_assigner_unit, a.user_message, a.url, a.id_channel, a.nomenclature, a.is_read " +
         " FROM (ticketing_ticket a, ticketing_user_title b, ticketing_ticket_type c, ticketing_ticket_domain d, ticketing_ticket_category e, ticketing_contact_mode f, ticketing_channel x) " +
         " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user" +
@@ -179,7 +180,7 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setString( nIndex++, ticket.getEmail(  ) );
         daoUtil.setString( nIndex++, ticket.getFixedPhoneNumber(  ) );
         daoUtil.setString( nIndex++, ticket.getMobilePhoneNumber(  ) );
-        daoUtil.setInt( nIndex++, ticket.getIdTicketCategory(  ) );
+        daoUtil.setInt( nIndex++, ticket.getTicketCategory(  ).getId(  ) );
         daoUtil.setInt( nIndex++, ticket.getIdContactMode(  ) );
         daoUtil.setString( nIndex++, ticket.getTicketComment(  ) );
         daoUtil.setInt( nIndex++, ticket.getTicketStatus(  ) );
@@ -272,7 +273,7 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setString( nIndex++, ticket.getEmail(  ) );
         daoUtil.setString( nIndex++, ticket.getFixedPhoneNumber(  ) );
         daoUtil.setString( nIndex++, ticket.getMobilePhoneNumber(  ) );
-        daoUtil.setInt( nIndex++, ticket.getIdTicketCategory(  ) );
+        daoUtil.setInt( nIndex++, ticket.getTicketCategory(  ).getId(  ) );
         daoUtil.setInt( nIndex++, ticket.getIdContactMode(  ) );
         daoUtil.setString( nIndex++, ticket.getTicketComment(  ) );
         daoUtil.setInt( nIndex++, ticket.getTicketStatus(  ) );
@@ -507,8 +508,12 @@ public final class TicketDAO implements ITicketDAO
         ticket.setTicketType( daoUtil.getString( nIndex++ ) );
         ticket.setIdTicketDomain( daoUtil.getInt( nIndex++ ) );
         ticket.setTicketDomain( daoUtil.getString( nIndex++ ) );
-        ticket.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
-        ticket.setTicketCategory( daoUtil.getString( nIndex++ ) );
+
+        int idTicketCategory = daoUtil.getInt( nIndex++ );
+        TicketCategory ticketCategory = new TicketCategory(  );
+        ticketCategory.setId( idTicketCategory );
+        ticket.setTicketCategory( ticketCategory );
+
         ticket.setIdContactMode( daoUtil.getInt( nIndex++ ) );
         ticket.setContactMode( daoUtil.getString( nIndex++ ) );
         ticket.setTicketComment( daoUtil.getString( nIndex++ ) );

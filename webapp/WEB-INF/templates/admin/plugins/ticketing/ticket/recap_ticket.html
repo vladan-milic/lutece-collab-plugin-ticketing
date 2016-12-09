@@ -62,7 +62,9 @@
           </div>
           <div class="form-group">
             <label for="id_ticket_category">#i18n{ticketing.create_ticket.labelTicketCategory}</label>
-            <p class="form-control-static">${ticket.ticketCategory!''}</p>
+            <p class="form-control-static">
+            	<@categoryFormated ticket.ticketCategory/>
+            </p>
           </div>
           <div class="form-group">
             <label for="id_contact_mode">#i18n{ticketing.create_ticket.labelContactMode}</label>

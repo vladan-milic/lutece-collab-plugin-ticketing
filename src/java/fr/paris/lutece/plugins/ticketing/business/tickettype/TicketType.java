@@ -108,7 +108,7 @@ public class TicketType implements Serializable
     {
         _strReferencePrefix = strReferencePrefix;
     }
-    
+
     /**
      * Returns the DemandTypeId
      * @return The DemandTypeId

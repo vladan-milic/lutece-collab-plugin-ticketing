@@ -393,7 +393,7 @@ public class TicketFormService implements Serializable
 
                 if ( formError != null )
                 {
-                    formError.setUrl( getEntryUrl( entry, ticket.getIdTicketCategory(  ) ) );
+                    formError.setUrl( getEntryUrl( entry, ticket.getTicketCategory(  ).getId(  ) ) );
                 }
             }
             else

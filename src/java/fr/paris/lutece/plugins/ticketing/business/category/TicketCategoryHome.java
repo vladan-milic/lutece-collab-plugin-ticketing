@@ -207,4 +207,15 @@ public final class TicketCategoryHome
 		return _dao.selectCategoryInputByPosition( nId, nPos, _plugin );
 	}
 	
+    /**
+     * returns referenceList of precision of category by a given category label for a given domain
+     * @param nDomainId id of domain
+     * @param labelCategory the label category
+     * @return ReferenceList of domainId
+     */
+    public static ReferenceList getReferenceListByCategory( int nDomainId, String labelCategory )
+    {
+        return _dao.selectReferenceListByCategory( nDomainId, labelCategory, _plugin );
+    }
+
 }

@@ -112,7 +112,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         {
             if ( _workflowService.isAvailable(  ) )
             {
-                TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+                TicketCategory ticketCategory = ticket.getTicketCategory(  );
                 int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
                 StateFilter stateFilter = new StateFilter(  );
@@ -150,7 +150,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
     protected boolean isInState( Ticket ticket, String strStateProperty )
     {
         int nStateIdInConf = AppPropertiesService.getPropertyInt( strStateProperty, -1 );
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+        TicketCategory ticketCategory = ticket.getTicketCategory(  );
         int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
         State state = _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
@@ -254,7 +254,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                     try
                     {
                         Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-                        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+                        TicketCategory ticketCategory = ticket.getTicketCategory(  );
 
                         if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( request ) ) )
                         {
@@ -302,7 +302,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
      */
     protected void doProcessWorkflowAutomaticAction( Ticket ticket )
     {
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+        TicketCategory ticketCategory = ticket.getTicketCategory(  );
 
         int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
@@ -333,7 +333,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
      */
     protected void doProcessNextWorkflowAction( Ticket ticket, HttpServletRequest request )
     {
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+        TicketCategory ticketCategory = ticket.getTicketCategory(  );
 
         AdminUser userFront = TicketUtils.registerAdminUserFront( request );
 

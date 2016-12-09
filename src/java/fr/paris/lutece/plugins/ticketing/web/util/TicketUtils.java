@@ -180,15 +180,15 @@ public final class TicketUtils
     public static boolean isTicketAssignedToChildUnitUserGroup( Ticket ticket, List<Unit> lstUserUnits )
     {
         boolean result = false;
-        
+
         for ( Unit unit : lstUserUnits )
         {
             if ( ticket.getAssigneeUnit(  ) != null )
             {
-                Unit currentUnit = UnitHome
-                        .findByPrimaryKey( ticket.getAssigneeUnit(  ).getUnitId(  ) );
+                Unit currentUnit = UnitHome.findByPrimaryKey( ticket.getAssigneeUnit(  ).getUnitId(  ) );
 
                 result = isParentUnit( unit, currentUnit );
+
                 if ( result )
                 {
                     break;
@@ -201,15 +201,15 @@ public final class TicketUtils
 
     /**
      * returns true if the current unit is the parent unit
-     * @param parentUnit parent unit 
-     * @param currentUnit current unit 
+     * @param parentUnit parent unit
+     * @param currentUnit current unit
      * @return true if the current unit is the parent unit
      */
     public static boolean isParentUnit( Unit parentUnit, Unit currentUnit )
     {
         boolean result = false;
-        
-        if ( parentUnit == null || currentUnit == null )
+
+        if ( ( parentUnit == null ) || ( currentUnit == null ) )
         {
             result = false;
         }

@@ -149,7 +149,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     {
         if ( _workflowService.isAvailable(  ) )
         {
-            TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+            TicketCategory ticketCategory = ticket.getTicketCategory(  );
             int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
             StateFilter stateFilter = new StateFilter(  );
@@ -320,7 +320,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 try
                 {
                     Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-                    TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+                    TicketCategory ticketCategory = ticket.getTicketCategory(  );
 
                     if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale(  ) ) )
                     {
@@ -367,7 +367,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
      */
     protected void doProcessWorkflowAutomaticAction( Ticket ticket )
     {
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+        TicketCategory ticketCategory = ticket.getTicketCategory(  );
 
         int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
@@ -398,7 +398,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
      */
     protected void doProcessNextWorkflowAction( Ticket ticket, HttpServletRequest request )
     {
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+        TicketCategory ticketCategory = ticket.getTicketCategory(  );
 
         int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
@@ -455,7 +455,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
      */
     protected String getDisplayDocumentHistory( HttpServletRequest request, Ticket ticket )
     {
-        TicketCategory category = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+        TicketCategory category = ticket.getTicketCategory(  );
         int nWorkflowId = category.getIdWorkflow(  );
 
         Map<String, Channel> mapHistoryChannel = _resourceHistoryTicketingInformationService.getChannelHistoryMap( ticket.getId(  ),

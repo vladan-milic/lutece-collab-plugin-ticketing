@@ -355,14 +355,15 @@ public class TicketXPage extends WorkflowCapableXPage
 
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>(  );
 
-        if ( ticket.getIdTicketCategory(  ) > 0 )
+        if ( ticket.getTicketCategory(  ).getId(  ) > 0 )
         {
             EntryFilter filter = new EntryFilter(  );
-            TicketForm form = TicketFormHome.findByCategoryId( ticket.getIdTicketCategory(  ) );
+            TicketForm form = TicketFormHome.findByCategoryId( ticket.getTicketCategory(  ).getId(  ) );
 
             if ( form != null )
             {
-                filter.setIdResource( TicketFormHome.findByCategoryId( ticket.getIdTicketCategory(  ) ).getIdForm(  ) );
+                filter.setIdResource( TicketFormHome.findByCategoryId( ticket.getTicketCategory(  ).getId(  ) )
+                                                    .getIdForm(  ) );
                 filter.setResourceType( TicketForm.RESOURCE_TYPE );
                 filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
                 filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
@@ -401,9 +402,7 @@ public class TicketXPage extends WorkflowCapableXPage
             bIsFormValid = false;
         }
 
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
-        ticket.setTicketCategory( ticketCategory.getLabel(  ) );
+        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getTicketCategory(  ).getIdTicketDomain(  ) );
         ticket.setTicketDomain( ticketDomain.getLabel(  ) );
 
         ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) ).getLabel(  ) );

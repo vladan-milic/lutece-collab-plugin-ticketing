@@ -133,7 +133,7 @@ public class TicketValidator
                 listErrors.add( I18nService.getLocalizedString( ERROR_USER_TITLE_UNKNOWN, _locale ) );
             }
 
-            TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+            TicketCategory ticketCategory = ticket.getTicketCategory(  );
 
             if ( ticketCategory == null )
             {

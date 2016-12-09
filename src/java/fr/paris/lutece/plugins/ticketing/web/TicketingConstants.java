@@ -170,7 +170,7 @@ public final class TicketingConstants
     public static final int PROPERTY_UNSET_INT = -1;
     public static final int NO_PARENT_ID = -1;
     public static final String RESOURCE_TYPE_INPUT = "TICKET_INPUT";
-    
+
     /**
      * Default constructor
      */

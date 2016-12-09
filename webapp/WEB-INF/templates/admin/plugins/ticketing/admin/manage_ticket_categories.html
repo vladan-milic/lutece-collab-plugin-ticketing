@@ -17,13 +17,21 @@
         <#list ticketcategory_list as ticketcategory>
           <tr>
             <td>
-              <input type="hidden" id="id" name="id" /> ${ticketcategory.label}
+            	<#if ticketcategory.precision?has_content>
+              		${ticketcategory.label!''} - ${ticketcategory.precision}
+              	<#else>
+              		${ticketcategory.label!''}
+              	</#if>
             </td>
             <td>
               ${ticketcategory.ticketType} / ${ticketcategory.ticketDomain}
             </td>
             <td>
-              ${ticketcategory.code!'-'}
+              <#if ticketcategory.code?has_content>
+              	${ticketcategory.code}
+              <#else>
+              	-
+              </#if>
             </td>
             <td>
               ${ticketcategory.assigneeUnit.name!''}

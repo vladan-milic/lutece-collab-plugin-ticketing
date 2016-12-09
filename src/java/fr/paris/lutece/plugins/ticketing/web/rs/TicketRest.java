@@ -222,7 +222,7 @@ public class TicketRest extends TicketingRest
     private List<String> create( Ticket ticket )
     {
         List<String> errors = new ArrayList<String>(  );
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
+        TicketCategory ticketCategory = ticket.getTicketCategory(  );
         int nIdWorkflow = ticketCategory.getIdWorkflow(  );
 
         if ( _workflowService == null )
