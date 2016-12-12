@@ -80,6 +80,8 @@ id_ticket_form int(6) NOT NULL default '0',
 category_code varchar(50) NULL,
 id_unit int(6) NOT NULL default '0',
 inactive int(1)  NOT NULL default '0',
+category_precision VARCHAR(150) NULL,
+help_message TEXT NULL,
 PRIMARY KEY (id_ticket_category)
 );
 

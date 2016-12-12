@@ -80,6 +80,7 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
+import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
@@ -147,10 +148,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
+    private static final String MARK_TICKET_PRECISIONS_LIST = "ticket_precisions_list";
     private static final String MARK_NB_TICKET_AGENT = "nb_ticket_agent";
     private static final String MARK_NB_TICKET_GROUP = "nb_ticket_group";
     private static final String MARK_NB_TICKET_DOMAIN = "nb_ticket_domain";
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
+    private static final String MARK_HELP_MESSAGE_LIST = "help_message_list";
     private static final String MARK_GUID = "guid";
     private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
     private static final String MARK_PAGINATOR = "paginator";
@@ -346,6 +349,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         Map<String, Object> model = getModel(  );
         initTicketForm( request, ticket, model );
 
+        TicketCategory ticketCategory = new TicketCategory(  );
+        ticket.setTicketCategory( ticketCategory );
+
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKET, TEMPLATE_CREATE_TICKET, model );
     }
 
@@ -373,6 +379,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
+        model.put( MARK_TICKET_PRECISIONS_LIST, new ReferenceList(  ) );
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale(  ) ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_GUID, strGuid );
@@ -519,11 +526,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         if ( !StringUtils.isEmpty( strIdCategory ) && StringUtils.isNumeric( strIdCategory ) )
         {
             int nIdCategory = Integer.parseInt( strIdCategory );
-            TicketForm form = TicketFormHome.findByCategoryId( nIdCategory );
+            TicketCategory category = TicketCategoryHome.findByPrimaryKey( nIdCategory );
 
-            if ( form != null )
+            if ( category != null )
             {
-                return _ticketFormService.getHtmlForm( ticket, form, getLocale(  ), false, request );
+                return _ticketFormService.getHtmlFormInputs( ticket, category, getLocale(  ), false, request );
             }
         }
 
@@ -675,6 +682,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
         ticket = ( ticket != null ) ? ticket : new Ticket(  );
 
+        TicketCategory ticketCategory = new TicketCategory(  );
+        ticket.setTicketCategory( ticketCategory );
+
         boolean bIsFormValid = populateAndValidateFormTicket( ticket, request );
 
         if ( !bIsFormValid )
@@ -685,9 +695,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
         else
         {
-            TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-            TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
-            ticket.setTicketCategory( ticketCategory.getLabel(  ) );
+            TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain(  ) );
             ticket.setTicketDomain( ticketDomain.getLabel(  ) );
 
             ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) ).getLabel(  ) );
@@ -715,29 +723,21 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         boolean bIsFormValid = true;
         populate( ticket, request );
 
+        int nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
+        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
+        ticket.setTicketCategory( ticketCategory );
+
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>(  );
 
-        if ( ticket.getIdTicketCategory(  ) > 0 )
+        if ( ticket.getTicketCategory(  ).getId(  ) > 0 )
         {
-            EntryFilter filter = new EntryFilter(  );
-            TicketForm form = TicketFormHome.findByCategoryId( ticket.getIdTicketCategory(  ) );
-
-            if ( form != null )
+            ticket.setListResponse( null );
+            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory(  ).getId(  ) ); 
+            
+            for ( Entry entry : listEntry )
             {
-                filter.setIdResource( form.getIdForm(  ) );
-                filter.setResourceType( TicketForm.RESOURCE_TYPE );
-                filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-                filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-                filter.setIdIsComment( EntryFilter.FILTER_FALSE );
-                ticket.setListResponse( null );
-
-                List<Entry> listEntryFirstLevel = EntryHome.getEntryList( filter );
-
-                for ( Entry entry : listEntryFirstLevel )
-                {
-                    listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry(  ),
-                            getLocale(  ), ticket ) );
-                }
+                listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry(  ),
+                        getLocale(  ), ticket ) );
             }
         }
 

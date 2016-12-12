@@ -75,6 +75,7 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
+import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
 import org.apache.commons.lang.StringUtils;
@@ -114,6 +115,7 @@ public class TicketXPage extends WorkflowCapableXPage
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
+    private static final String MARK_TICKET_PRECISIONS_LIST = "ticket_precisions_list";
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
     private static final String MARK_TICKET_ACTION = "ticket_action";
     private static final String MARK_MESSAGE = "message";
@@ -163,11 +165,12 @@ public class TicketXPage extends WorkflowCapableXPage
     public XPage getCreateTicket( HttpServletRequest request )
     {
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
-
+        
         if ( ticket == null )
         {
             ticket = new Ticket(  );
             TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
+            ticket.setTicketCategory( new TicketCategory(  ) );
         }
 
         prefillTicketWithUserInfo( request, ticket );
@@ -178,6 +181,7 @@ public class TicketXPage extends WorkflowCapableXPage
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
+        model.put( MARK_TICKET_PRECISIONS_LIST, new ReferenceList(  ));
 
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale(  ) ) );
 
@@ -352,29 +356,21 @@ public class TicketXPage extends WorkflowCapableXPage
         ticket = ( ticket != null ) ? ticket : new Ticket(  );
         populate( ticket, request );
         ticket.setListResponse( new ArrayList<Response>(  ) );
+        
+        int nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
+        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
+        ticket.setTicketCategory( ticketCategory );
 
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>(  );
 
-        if ( ticket.getIdTicketCategory(  ) > 0 )
+        if ( ticket.getTicketCategory(  ).getId(  ) > 0 )
         {
-            EntryFilter filter = new EntryFilter(  );
-            TicketForm form = TicketFormHome.findByCategoryId( ticket.getIdTicketCategory(  ) );
-
-            if ( form != null )
+            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory(  ).getId(  ) ); 
+            
+            for ( Entry entry : listEntry )
             {
-                filter.setIdResource( TicketFormHome.findByCategoryId( ticket.getIdTicketCategory(  ) ).getIdForm(  ) );
-                filter.setResourceType( TicketForm.RESOURCE_TYPE );
-                filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-                filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-                filter.setIdIsComment( EntryFilter.FILTER_FALSE );
-
-                List<Entry> listEntryFirstLevel = EntryHome.getEntryList( filter );
-
-                for ( Entry entry : listEntryFirstLevel )
-                {
-                    listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry(  ),
-                            getLocale( request ), ticket ) );
-                }
+                listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry(  ),
+                        getLocale( request ), ticket ) );
             }
         }
 
@@ -401,9 +397,7 @@ public class TicketXPage extends WorkflowCapableXPage
             bIsFormValid = false;
         }
 
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( ticket.getIdTicketCategory(  ) );
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticketCategory.getIdTicketDomain(  ) );
-        ticket.setTicketCategory( ticketCategory.getLabel(  ) );
+        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain(  ) );
         ticket.setTicketDomain( ticketDomain.getLabel(  ) );
 
         ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType(  ) ).getLabel(  ) );
@@ -537,12 +531,12 @@ public class TicketXPage extends WorkflowCapableXPage
         if ( !StringUtils.isEmpty( strIdCategory ) && StringUtils.isNumeric( strIdCategory ) )
         {
             int nIdCategory = Integer.parseInt( strIdCategory );
-            TicketForm form = TicketFormHome.findByCategoryId( nIdCategory );
+            TicketCategory category = TicketCategoryHome.findByPrimaryKey( nIdCategory );
 
-            if ( form != null )
+            if ( category != null )
             {
-                model.put( MARK_TICKET_FORM,
-                    _ticketFormService.getHtmlForm( ticket, form, request.getLocale(  ), bDisplayFront, request ) );
+              model.put( MARK_TICKET_FORM,
+                      _ticketFormService.getHtmlFormInputs( ticket, category, request.getLocale(  ), bDisplayFront, request ) );
             }
         }
 

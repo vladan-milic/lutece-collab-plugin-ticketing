@@ -43,6 +43,7 @@ import org.apache.lucene.document.Document;
 public class TicketSearchItem extends SearchItem
 {
     public static final String FIELD_CATEGORY = "category";
+    public static final String FIELD_PRECISION = "precision";
     public static final String FIELD_DOMAIN = "domain";
     public static final String FIELD_REFERENCE = "reference";
     public static final String FIELD_TICKET_ID = "ticket_id";
@@ -56,6 +57,7 @@ public class TicketSearchItem extends SearchItem
     private String _strReference;
     private String _strTicketId;
     private String _strCategory;
+    private String _strPrecision;
     private String _strResponse;
     private String _strComment;
     private String _strDomain;
@@ -73,6 +75,7 @@ public class TicketSearchItem extends SearchItem
         _strReference = document.get( FIELD_REFERENCE );
         _strTicketId = document.get( FIELD_TICKET_ID );
         _strCategory = document.get( FIELD_CATEGORY );
+        _strPrecision = document.get( FIELD_PRECISION );
         _strResponse = document.get( FIELD_RESPONSE );
         _strComment = document.get( FIELD_COMMENT );
         _strDomain = document.get( FIELD_DOMAIN );
@@ -130,7 +133,15 @@ public class TicketSearchItem extends SearchItem
         this._strCategory = strCategory;
     }
 
-    /**
+    public String get_strPrecision() {
+		return _strPrecision;
+	}
+
+	public void set_strPrecision(String _strPrecision) {
+		this._strPrecision = _strPrecision;
+	}
+
+	/**
      * @return the _strDomain
      */
     public String getDomain( )

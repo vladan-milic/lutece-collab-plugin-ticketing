@@ -57,6 +57,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -99,10 +100,8 @@ public class Ticket implements Serializable, RBACResource
     private int _nIdTicketDomain;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketDomain.size}" )
     private String _strTicketDomain;
-    @Min( value = 1, message = "#i18n{ticketing.validation.ticket.TicketCategory.mandatory}" )
-    private int _nIdTicketCategory;
-    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketCategory.size}" )
-    private String _strTicketCategory;
+    @NotNull( message = "#i18n{ticketing.validation.ticket.TicketCategory.mandatory}" )
+    private TicketCategory _ticketCategory;
     private int _nIdContactMode;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.ContactMode.size}" )
     private String _strContactMode;
@@ -180,13 +179,14 @@ public class Ticket implements Serializable, RBACResource
             setEmail( strEmail );
         }
 
-        if ( !StringUtils.isEmpty( strCategoryCode ) && ( getIdTicketCategory(  ) == 0 ) )
+        if ( !StringUtils.isEmpty( strCategoryCode ) &&
+                ( ( _ticketCategory != null ) && ( _ticketCategory.getId(  ) == 0 ) ) )
         {
             TicketCategory category = TicketCategoryHome.findByCode( strCategoryCode );
 
             if ( category != null )
             {
-                setIdTicketCategory( category.getId(  ) );
+                setTicketCategory( category );
                 setIdTicketDomain( category.getIdTicketDomain(  ) );
                 setIdTicketType( category.getIdTicketType(  ) );
             }
@@ -452,6 +452,24 @@ public class Ticket implements Serializable, RBACResource
     }
 
     /**
+     * Returns the TicketCategory
+     * @return The TicketCategory
+     */
+    public TicketCategory getTicketCategory(  )
+    {
+        return _ticketCategory;
+    }
+
+    /**
+     * Sets the TicketCategory
+     * @param ticketCategory The TicketCategory
+     */
+    public void setTicketCategory( TicketCategory ticketCategory )
+    {
+        _ticketCategory = ticketCategory;
+    }
+
+    /**
      * Returns the TicketDomain
      * @return The TicketDomain
      */
@@ -467,42 +485,6 @@ public class Ticket implements Serializable, RBACResource
     public void setTicketDomain( String strTicketDomain )
     {
         _strTicketDomain = strTicketDomain;
-    }
-
-    /**
-     * Returns the IdTicketCategory
-     * @return The IdTicketCategory
-     */
-    public int getIdTicketCategory(  )
-    {
-        return _nIdTicketCategory;
-    }
-
-    /**
-     * Sets the IdTicketCategory
-     * @param nIdTicketCategory The IdTicketCategory
-     */
-    public void setIdTicketCategory( int nIdTicketCategory )
-    {
-        _nIdTicketCategory = nIdTicketCategory;
-    }
-
-    /**
-     * Returns the TicketCategory
-     * @return The TicketCategory
-     */
-    public String getTicketCategory(  )
-    {
-        return _strTicketCategory;
-    }
-
-    /**
-     * Sets the TicketCategory
-     * @param strTicketCategory The TicketCategory
-     */
-    public void setTicketCategory( String strTicketCategory )
-    {
-        _strTicketCategory = strTicketCategory;
     }
 
     /**

@@ -39,9 +39,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import java.util.List;
 
 /**
  * This is the business class for the object TicketCategory
@@ -50,13 +53,14 @@ public class TicketCategory implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    // Variables declarations 
+    // Variables declarations
     private int _nId;
     private int _nIdTicketDomain;
     private int _nIdTicketType;
     private String _strTicketDomain;
     private String _strTicketType;
     private int _nIdTicketForm;
+    private List<Integer> _listIdInput;
     @NotEmpty( message = "#i18n{ticketing.validation.ticketcategory.label.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.ticketcategory.label.size}" )
     private String _strLabel;
@@ -64,9 +68,13 @@ public class TicketCategory implements Serializable
     private int _nIdWorkflow;
     @NotNull( message = "#i18n{ticketing.validation.ticketcategory.unit.notEmpty}" )
     private transient AssigneeUnit _unit;
+    @Size( max = 150, message = "#i18n{ticketing.validation.ticketcategory.precision.size}" )
+    private String _strPrecision;
+	private String _strHelpMessage;
 
     /**
      * Returns the Id
+     *
      * @return The Id
      */
     public int getId(  )
@@ -76,7 +84,9 @@ public class TicketCategory implements Serializable
 
     /**
      * Sets the Id
-     * @param nId The Id
+     *
+     * @param nId
+     *            The Id
      */
     public void setId( int nId )
     {
@@ -85,6 +95,7 @@ public class TicketCategory implements Serializable
 
     /**
      * Returns the IdTicketDomain
+     *
      * @return The IdTicketDomain
      */
     public int getIdTicketDomain(  )
@@ -94,7 +105,9 @@ public class TicketCategory implements Serializable
 
     /**
      * Sets the IdTicketDomain
-     * @param nIdTicketDomain The IdTicketDomain
+     *
+     * @param nIdTicketDomain
+     *            The IdTicketDomain
      */
     public void setIdTicketDomain( int nIdTicketDomain )
     {
@@ -103,6 +116,7 @@ public class TicketCategory implements Serializable
 
     /**
      * Returns the IdTicketType
+     *
      * @return The IdTicketType
      */
     public int getIdTicketType(  )
@@ -112,7 +126,9 @@ public class TicketCategory implements Serializable
 
     /**
      * Sets the IdTicketType
-     * @param nIdTicketType The IdTicketType
+     *
+     * @param nIdTicketType
+     *            The IdTicketType
      */
     public void setIdTicketType( int nIdTicketType )
     {
@@ -121,6 +137,7 @@ public class TicketCategory implements Serializable
 
     /**
      * Returns the TicketDomain
+     *
      * @return The TicketDomain
      */
     public String getTicketDomain(  )
@@ -130,7 +147,9 @@ public class TicketCategory implements Serializable
 
     /**
      * Sets the TicketDomain
-     * @param strTicketDomain The TicketDomain
+     *
+     * @param strTicketDomain
+     *            The TicketDomain
      */
     public void setTicketDomain( String strTicketDomain )
     {
@@ -139,6 +158,7 @@ public class TicketCategory implements Serializable
 
     /**
      * Returns the TicketType
+     *
      * @return The TicketType
      */
     public String getTicketType(  )
@@ -148,7 +168,9 @@ public class TicketCategory implements Serializable
 
     /**
      * Sets the TicketType
-     * @param strTicketType The TicketType
+     *
+     * @param strTicketType
+     *            The TicketType
      */
     public void setTicketType( String strTicketType )
     {
@@ -157,6 +179,7 @@ public class TicketCategory implements Serializable
 
     /**
      * Returns the Label
+     *
      * @return The Label
      */
     public String getLabel(  )
@@ -166,7 +189,9 @@ public class TicketCategory implements Serializable
 
     /**
      * Sets the Label
-     * @param strLabel The Label
+     *
+     * @param strLabel
+     *            The Label
      */
     public void setLabel( String strLabel )
     {
@@ -175,6 +200,7 @@ public class TicketCategory implements Serializable
 
     /**
      * Get the id of the workflow associated with this ticket category
+     *
      * @return The id of the workflow
      */
     public int getIdWorkflow(  )
@@ -184,7 +210,9 @@ public class TicketCategory implements Serializable
 
     /**
      * Set the id of the workflow associated with this ticket category
-     * @param nIdWorkflow The id of the workflow
+     *
+     * @param nIdWorkflow
+     *            The id of the workflow
      */
     public void setIdWorkflow( int nIdWorkflow )
     {
@@ -208,8 +236,26 @@ public class TicketCategory implements Serializable
         this._nIdTicketForm = nIdTicketForm;
     }
 
+    
+    /**
+    * @return the _listIdInput
+    */
+    public List<Integer> getListIdInput(  )
+    {
+        return _listIdInput;
+    }
+
+    /**
+     * @param listIdInput the listIdInput to set
+     */
+    public void setListIdInput( List<Integer> listIdInput )
+    {
+        this._listIdInput = listIdInput;
+    }
+
     /**
      * Returns the Code
+     *
      * @return The Code
      */
     public String getCode(  )
@@ -219,7 +265,9 @@ public class TicketCategory implements Serializable
 
     /**
      * Sets the Code
-     * @param strCode The Code
+     *
+     * @param strCode
+     *            The Code
      */
     public void setCode( String strCode )
     {
@@ -228,6 +276,7 @@ public class TicketCategory implements Serializable
 
     /**
      * Returns the AssigneeUnit
+     *
      * @return The AssigneeUnit
      */
     public AssigneeUnit getAssigneeUnit(  )
@@ -237,10 +286,46 @@ public class TicketCategory implements Serializable
 
     /**
      * Sets the assigneeUnit
-     * @param assigneeUnit The assigneeUnit
+     *
+     * @param assigneeUnit
+     *            The assigneeUnit
      */
     public void setAssigneeUnit( AssigneeUnit assigneeUnit )
     {
         _unit = assigneeUnit;
     }
+
+    /**
+     * @return the precision
+     */
+    public String getPrecision(  )
+    {
+        return _strPrecision;
+    }
+
+    /**
+     * @param strPrecision
+     *            the precision to set
+     */
+    public void setPrecision( String strPrecision )
+    {
+        _strPrecision = strPrecision;
+    }
+	
+	/**
+	 * @return the _strHelpMessage
+	 */
+	public String getHelpMessage()
+	{
+		return _strHelpMessage;
+	}
+
+	/**
+	 * @param _strHelpMessage
+	 *            the _strHelpMessage to set
+	 */
+	public void setHelpMessage(String _strHelpMessage)
+	{
+		this._strHelpMessage = _strHelpMessage;
+	}
 }

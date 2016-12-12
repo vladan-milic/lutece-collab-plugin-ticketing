@@ -45,6 +45,7 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -110,23 +111,49 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
         json.accumulate( FormatConstants.KEY_LABEL, ticketType.getLabel(  ) );
 
         JSONArray jsonDomains = new JSONArray(  );
+        ArrayList<String> listCategoryNames = new ArrayList<String>(  );
 
-        for ( ReferenceItem domain : TicketDomainHome.getReferenceListByType( ticketType.getId(  ) ) )
+        for ( ReferenceItem refItemDomain : TicketDomainHome.getReferenceListByType( ticketType.getId(  ) ) )
         {
-            int nDomainId = Integer.parseInt( domain.getCode(  ) );
+            int nDomainId = Integer.parseInt( refItemDomain.getCode(  ) );
             JSONObject jsonDomain = new JSONObject(  );
             jsonDomain.accumulate( FormatConstants.KEY_ID, nDomainId );
-            jsonDomain.accumulate( FormatConstants.KEY_LABEL, domain.getName(  ) );
+            jsonDomain.accumulate( FormatConstants.KEY_LABEL, refItemDomain.getName(  ) );
 
             JSONArray jsonCategories = new JSONArray(  );
 
-            for ( ReferenceItem category : TicketCategoryHome.getReferenceListByDomain( nDomainId ) )
+            for ( ReferenceItem refItemCategory : TicketCategoryHome.getReferenceListByDomain( nDomainId ) )
             {
-                int nCategoryId = Integer.parseInt( category.getCode(  ) );
-                JSONObject jsonCategory = new JSONObject(  );
-                jsonCategory.accumulate( FormatConstants.KEY_ID, nCategoryId );
-                jsonCategory.accumulate( FormatConstants.KEY_LABEL, category.getName(  ) );
-                jsonCategories.add( jsonCategory );
+                if ( !listCategoryNames.contains( refItemCategory.getName(  ) ) )
+                {
+                    int nCategoryId = Integer.parseInt( refItemCategory.getCode(  ) );
+                    JSONObject jsonCategory = new JSONObject(  );
+                    jsonCategory.accumulate( FormatConstants.KEY_ID, nCategoryId );
+                    jsonCategory.accumulate( FormatConstants.KEY_LABEL, refItemCategory.getName(  ) );
+
+                    JSONArray jsonPrecisions = new JSONArray(  );
+
+                    for ( ReferenceItem refItemPrecision : TicketCategoryHome.getReferenceListByCategory( nDomainId,
+                            refItemCategory.getName(  ) ) )
+                    {
+                        if ( !StringUtils.isEmpty( refItemPrecision.getName(  ) ) )
+                        {
+                            JSONObject jsonPrecision = new JSONObject(  );
+                            int nPrecisionId = Integer.parseInt( refItemPrecision.getCode(  ) );
+                            jsonPrecision.accumulate( FormatConstants.KEY_ID, nPrecisionId );
+                            jsonPrecision.accumulate( FormatConstants.KEY_LABEL, refItemPrecision.getName(  ) );
+                            jsonPrecisions.add( jsonPrecision );
+                            listCategoryNames.add( refItemCategory.getName(  ) );
+                        }
+                    }
+
+                    if ( !jsonPrecisions.isEmpty(  ) )
+                    {
+                        jsonCategory.accumulate( FormatConstants.KEY_TICKET_PRECISIONS, jsonPrecisions );
+                    }
+
+                    jsonCategories.add( jsonCategory );
+                }
             }
 
             jsonDomain.accumulate( FormatConstants.KEY_TICKET_CATEGORIES, jsonCategories );

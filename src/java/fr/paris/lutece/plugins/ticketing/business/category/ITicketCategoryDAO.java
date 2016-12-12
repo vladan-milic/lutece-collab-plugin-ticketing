@@ -52,6 +52,15 @@ public interface ITicketCategoryDAO
     void insert( TicketCategory ticketCategory, Plugin plugin );
 
     /**
+     * Insert a new record in the table linking category with input.
+     * @param nIdCategory id Category
+     * @param nIdInput id Input
+     * @param nPos input position
+     * @param plugin the Plugin
+     */
+    void insertLinkCategoryInput( int nIdCategory, int nIdInput, int nPos, Plugin plugin );
+
+    /**
      * Update the record in the table
      * @param ticketCategory the reference of the TicketCategory
      * @param plugin the Plugin
@@ -64,6 +73,14 @@ public interface ITicketCategoryDAO
      * @param plugin the Plugin
      */
     void delete( int nKey, Plugin plugin );
+
+    /**
+     * Delete a record in the table linking category with input.
+     * @param nIdCategory id Category
+     * @param nIdInput id Input
+     * @param plugin the Plugin
+     */
+    void deleteLinkCategoryInput( int nIdCategory, int nIdInput, Plugin plugin );
 
     ///////////////////////////////////////////////////////////////////////////
     // Finders
@@ -105,4 +122,65 @@ public interface ITicketCategoryDAO
      * @return The reference list
      */
     ReferenceList selectReferenceListByDomain( int nDomainId, Plugin plugin );
+
+    /**
+     * Insert a new record in the table linking category with input
+     * Using the next available value for pos
+     * @param nIdCategory id Category
+     * @param nIdInput id Input
+     * @param plugin the Plugin
+     */
+	void insertLinkCategoryInputNextPos( int nIdCategory, int nIdInput, Plugin plugin );
+
+	
+    /**
+     * Update pos field in the table linking category with input
+     * @param nIdCategory id Category
+     * @param nIdInput id Input
+     * @param nPos the position to update
+     * @param plugin the Plugin
+     */
+	void updateLinkCategoryInputPos( int nIdCategory, int nIdInput, int nPos, Plugin plugin );
+
+	
+    /**
+     * returns the position of an input for a given category
+     * @param nId id of category
+     * @param nIdInput id of input
+     * @return the position as an integer
+     */
+	int selectCategoryInputPosition( int nId, int nIdInput, Plugin _plugin );
+
+    /**
+     * returns the iD of an input for a given category and position
+     * @param nId id of category
+     * @param nIdInput the position
+     * @return the input id
+     */
+	int selectCategoryInputByPosition( int nId, int nPos, Plugin plugin );
+	
+    /**
+     * Create a reference list of categories for a given domain for a given category name
+     * @param nDomainId The domain ID
+     * @param labelCategory The label category
+     * @param plugin The plugin
+     * @return The reference list
+     */
+    ReferenceList selectReferenceListByCategory( int nDomainId, String labelCategory, Plugin _plugin );
+
+    /**
+     * Return the help message of the specified category
+     * @param nCategoryId The category ID
+     * @param plugin The plugin
+     * @return The help message
+     */
+    String selectHelpMessageByCategory( int nCategoryId, Plugin plugin );
+
+	/**
+     * Load the id of all inputs related to the ticketCategory id and returns them as a collection
+     * @param nCategoryId The Category ID
+     * @param plugin The plugin
+     * @return The collection which contains the id of all the ticketCategory objects
+     */
+    List<Integer> selectIdInputListByCategory( int nCategoryId, Plugin _plugin );
 }
