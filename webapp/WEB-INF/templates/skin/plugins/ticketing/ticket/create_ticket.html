@@ -70,8 +70,8 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="id_ticket_category" >#i18n{ticketing.xpage.create_ticket.labelTicketCategory}&#8239;*&#8239;:</label>
                 <div class="col-sm-9">
-                    <@comboWithParams name="id_ticket_category" default_value="${ticket.idTicketCategory!''}"  additionalParameters="class=\"form-control\""  items=ticket_categories_list />
-                    <span class="help-block" id="help_message_category" style="display:none;"></span>
+                     <@comboWithParams name="id_ticket_category" default_value="${ticket.ticketCategory.id!''}"  additionalParameters="class=\"form-control\""  items=ticket_categories_list />
+                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdTicketCategory.help}</span>
                 </div>
                 <div id="label_category" style="display:none;"></div>
             </div>
@@ -113,7 +113,7 @@
 
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
 <script language="javascript"> 
-    var category_id = ${ticket.idTicketCategory!''};
+    var category_id = ${ticket.ticketCategory.id!''};
     var is_front = true ;
     var is_generic_attributes_managed = true;
     $(document).ready(function() {

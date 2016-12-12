@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.ticketform;
 
+import fr.paris.lutece.plugins.ticketing.business.category.ITicketCategoryDAO;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormCacheService;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -53,6 +55,7 @@ public final class TicketFormHome
 {
     // Static variable pointed at the DAO instance
     private static ITicketFormDAO _dao = SpringContextService.getBean( "ticketing.ticketFormDAO" );
+    private static ITicketCategoryDAO _daoTicketCategory = SpringContextService.getBean( "ticketing.ticketCategoryDAO" );
     private static Plugin _plugin = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME );
     private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance(  );
 
@@ -72,14 +75,17 @@ public final class TicketFormHome
      */
     public static void create( TicketForm ticketForm )
     {
+        TicketCategory ticketCategory = new TicketCategory(  );
+        ticketForm.setTicketCategory( ticketCategory );
+
         _dao.insert( ticketForm, _plugin );
 
         if ( _cacheService.isCacheEnable(  ) )
         {
             _cacheService.putInCache( TicketFormCacheService.getFormCacheKey( ticketForm.getIdForm(  ) ),
                 ticketForm.clone(  ) );
-            _cacheService.putInCache( TicketFormCacheService.getFormByCategoryCacheKey( ticketForm.getIdCategory(  ) ),
-                ticketForm.clone(  ) );
+            _cacheService.putInCache( TicketFormCacheService.getFormByCategoryCacheKey( 
+                    ticketForm.getTicketCategory(  ).getId(  ) ), ticketForm.clone(  ) );
         }
     }
 
@@ -98,8 +104,8 @@ public final class TicketFormHome
         {
             _cacheService.putInCache( TicketFormCacheService.getFormCacheKey( ticketForm.getIdForm(  ) ),
                 ticketForm.clone(  ) );
-            _cacheService.putInCache( TicketFormCacheService.getFormByCategoryCacheKey( ticketForm.getIdCategory(  ) ),
-                ticketForm.clone(  ) );
+            _cacheService.putInCache( TicketFormCacheService.getFormByCategoryCacheKey( 
+                    ticketForm.getTicketCategory(  ).getId(  ) ), ticketForm.clone(  ) );
         }
     }
 
@@ -117,7 +123,8 @@ public final class TicketFormHome
         if ( _cacheService.isCacheEnable(  ) )
         {
             _cacheService.removeKey( TicketFormCacheService.getFormByCategoryCacheKey( 
-                    ( (TicketForm) _cacheService.getFromCache( TicketFormCacheService.getFormCacheKey( nTicketFormId ) ) ).getIdCategory(  ) ) );
+                    ( (TicketForm) _cacheService.getFromCache( TicketFormCacheService.getFormCacheKey( nTicketFormId ) ) ).getTicketCategory(  )
+                      .getId(  ) ) );
             _cacheService.removeKey( TicketFormCacheService.getFormCacheKey( nTicketFormId ) );
         }
     }
@@ -149,6 +156,9 @@ public final class TicketFormHome
 
             if ( form != null )
             {
+                TicketCategory ticketCategory = _daoTicketCategory.load( form.getTicketCategory(  ).getId(  ), _plugin );
+                form.setTicketCategory( ticketCategory );
+
                 if ( _cacheService.isCacheEnable(  ) )
                 {
                     _cacheService.putInCache( strCacheKey, form.clone(  ) );
@@ -187,6 +197,9 @@ public final class TicketFormHome
 
             if ( form != null )
             {
+                TicketCategory ticketCategory = _daoTicketCategory.load( form.getTicketCategory(  ).getId(  ), _plugin );
+                form.setTicketCategory( ticketCategory );
+
                 if ( _cacheService.isCacheEnable(  ) )
                 {
                     _cacheService.putInCache( strCacheKey, form.clone(  ) );
@@ -209,7 +222,15 @@ public final class TicketFormHome
      */
     public static List<TicketForm> getTicketFormsList(  )
     {
-        return _dao.selectTicketFormsList( _plugin );
+        List<TicketForm> listTicketForm = _dao.selectTicketFormsList( _plugin );
+
+        for ( TicketForm ticketForm : listTicketForm )
+        {
+            TicketCategory ticketCategory = _daoTicketCategory.load( ticketForm.getTicketCategory(  ).getId(  ), _plugin );
+            ticketForm.setTicketCategory( ticketCategory );
+        }
+
+        return listTicketForm;
     }
 
     /**
@@ -221,6 +242,13 @@ public final class TicketFormHome
     public static ReferenceList getAvailableTicketFormsList(  )
     {
         List<TicketForm> lstForms = _dao.getAvailableTicketForms( _plugin );
+
+        for ( TicketForm ticketForm : lstForms )
+        {
+            TicketCategory ticketCategory = _daoTicketCategory.load( ticketForm.getTicketCategory(  ).getId(  ), _plugin );
+            ticketForm.setTicketCategory( ticketCategory );
+        }
+
         ReferenceList lstRef = new ReferenceList( lstForms.size(  ) );
         lstRef.addItem( 0, StringUtils.EMPTY );
 

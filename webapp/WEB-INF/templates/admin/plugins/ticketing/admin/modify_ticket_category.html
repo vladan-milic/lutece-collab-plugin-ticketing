@@ -2,14 +2,14 @@
 <@tabsWrapper>
   <@tabs tab="ticketcategory" hasTable=false/>
   <h3>#i18n{ticketing.modify_ticketcategory.pageTitle}</h3>
-  <form class="form-horizontal" method="post" name="modify_ticketcategory" action="jsp/admin/plugins/ticketing/admin/ManageTicketCategorys.jsp">
+  <form class="form-horizontal" method="post" name="modify_ticketcategory" action="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp">
     <@messages errors=errors />
     <input type="hidden" id="id" name="id" value="${ticketcategory.id}">
     <input type="hidden" id="guid" name="guid" value="">
     <@fieldInputCombo i18nLabelKey="ticketing.modify_ticketcategory.labelIdTicketDomain" inputName="id_ticket_domain" items=ticket_domains_list value="${ticketcategory.idTicketDomain!''}" i18nHelpBlockKey="ticketing.modify_ticketcategory.labelIdTicketDomain.help" cssClass='form-control' />
     <@fieldInputText i18nLabelKey="ticketing.modify_ticketcategory.labelLabel" inputName="label" mandatory=true value="${ticketcategory.label}" i18nHelpBlockKey="ticketing.modify_ticketcategory.labelLabel.help" />
-    <@fieldInputText i18nLabelKey="ticketing.create_ticketcategory.labelPrecision" inputName="precision" mandatory=false value="${ticketcategory.precision!''}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelPrecision.help" />
-    <@fieldInputText i18nLabelKey="ticketing.create_ticketcategory.labelHelpMessage" inputName="help_message" mandatory=false value="${ticketcategory.helpMessage!''}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelHelpMessage.help" />
+    <@fieldInputText i18nLabelKey="ticketing.modify_ticketcategory.labelPrecision" inputName="precision" mandatory=false value="${ticketcategory.precision!''}" i18nHelpBlockKey="ticketing.modify_ticketcategory.labelPrecision.help" />
+	<@fieldInputText i18nLabelKey="ticketing.modify_ticketcategory.labelHelpMessage" inputName="help_message" mandatory=false value="${ticketcategory.helpMessage!''}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelHelpMessage.help" />
     <@fieldInputText i18nLabelKey="ticketing.modify_ticketcategory.labelCode" inputName="code" mandatory=false value="${ticketcategory.code!''}" i18nHelpBlockKey="ticketing.modify_ticketcategory.labelCode.help" />
     <#if listWorkflows??>
   		<@fieldInputCombo i18nLabelKey='ticketing.modify_ticketcategory.labelWorkflow' inputName='idWorkflow' items=listWorkflows value="${ticketcategory.idWorkflow!}" i18nHelpBlockKey="ticketing.modify_ticketcategory.labelWorkflow.help" cssClass="form-control" />
@@ -20,6 +20,6 @@
     <#if units_list??>
       <@fieldInputCombo i18nLabelKey='ticketing.modify_ticketcategory.labelUnit' inputName='idUnit' mandatory=true items=units_list value="${ticketcategory.assigneeUnit.unitId!}" i18nHelpBlockKey="ticketing.modify_ticketcategory.labelUnit.help" cssClass="form-control" />
     </#if>
-    <@actionButtons button1Name="action_modifyTicketCategory" button2Name="view_manageTicketCategorys"/>
+    <@actionButtons button1Name="action_modifyTicketCategory" button2Name="view_manageTicketCategories"/>
   </form>
 </@tabsWrapper>

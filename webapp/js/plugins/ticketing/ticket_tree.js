@@ -87,8 +87,7 @@ function lutece_ticket_tree(id_type, id_domain, id_category, selected_category_i
                     load_category_combo(domain, initial_category_id);
                     var category_id = $(id_category).val();
                     var category = types_map[type_id].domains_map[domain_id].categories_map[category_id];
-                    if(typeof(category) != 'undefined') {
-                    	
+                    if(typeof(category) != 'undefined') {                    	
                     	if(typeof(help_category_messages_map[category_id]) != 'undefined'){
                     		$("#help_message_category").html(help_category_messages_map[category_id]);
                     		$("#help_message_category").show();
@@ -96,7 +95,6 @@ function lutece_ticket_tree(id_type, id_domain, id_category, selected_category_i
                     		$("#help_message_category").html("");
                     		$("#help_message_category").hide();
                     	}
-                    	
                 		initial_category_id = category_id;
                     	load_precision_combo(category, initial_category_id);
                     }
@@ -120,7 +118,6 @@ function lutece_ticket_tree(id_type, id_domain, id_category, selected_category_i
                 	var category_id = $(id_category).val();
                 	var category = types_map[type_id].domains_map[domain_id].categories_map[category_id];
                 	if(typeof(category) != 'undefined') {
-
                     	if(typeof(help_category_messages_map[category_id]) != 'undefined'){
                     		$("#help_message_category").html(help_category_messages_map[category_id]);
                     		$("#help_message_category").show();
@@ -200,10 +197,36 @@ function lutece_ticket_tree(id_type, id_domain, id_category, selected_category_i
                     		$("#help_message_precision").html("");
                     		$("#help_message_precision").hide();
                     	}
+						
+						var type_id = $(id_type).val();
+                        var domain_id = $(id_domain).val();
+                		var libelleCategory = $("#label_category").val();
+						var map_category = types_map[type_id].domains_map[domain_id].categories_map;
+						var key_to_erase = category.id;
+						var map_to_extract = "";
+						for(var key in map_category){
+							var currentLabel = map_category[key].label;
+                		    if(currentLabel == libelleCategory){
+								key_to_erase = key;
+								map_to_extract = map_category[key];
+                		    }
+						}
+						if(key_to_erase != precisions[i].id){
+							types_map[type_id].domains_map[domain_id].categories_map[precisions[i].id] = map_to_extract;
+							delete types_map[type_id].domains_map[domain_id].categories_map[key_to_erase];
+						}
                 	}
+        		}
+				var form_precision_area = $("#requalify_category");
+        		if(form_precision_area != undefined) {
+        			form_precision_area.show();
         		}
         		$("#id_ticket_precision").show();
         	} else {
+				var form_precision_area = $("#requalify_category");
+        		if(form_precision_area != undefined) {
+        			form_precision_area.hide();
+        		}
         		$("#id_ticket_precision").hide();
         		$("#help_message_precision").hide();
                 var type_id = $(id_type).val();
@@ -220,7 +243,6 @@ function lutece_ticket_tree(id_type, id_domain, id_category, selected_category_i
         $("#id_ticket_precision").change(function() {
         	var selectedPrecision = document.getElementById("id_ticket_precision");
         	var categorySelect = document.getElementById("id_ticket_category");
-
     		if (typeof(help_precision_messages_map[selectedPrecision.options[selectedPrecision.selectedIndex].value]) != 'undefined'){
         		$("#help_message_precision").html(help_precision_messages_map[selectedPrecision.options[selectedPrecision.selectedIndex].value]);
         		$("#help_message_precision").show();

@@ -1,10 +1,9 @@
 <#include "/admin/util/editor/editor.html" />
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		<form class="form-horizontal" action="jsp/admin/plugins/ticketing/admin/ManageTicketFormEntries.jsp" method="post" name="" id=""  >
+		<form class="form-horizontal" action="jsp/admin/plugins/ticketing/admin/ManageTicketInputEntry.jsp" method="post" name="" id=""  >
 			<fieldset>
-				<legend>#i18n{ticketing.modifyEntry.titleQuestion} : '${form.title}'</legend>
-				
+                <legend>#i18n{ticketing.modifyEntry.titleInput} '${entry.title}'</legend>
 			    <input name="id_entry" value="${entry.idEntry}" type="hidden" />
 				<input name="action" value="doModifyEntry" type="hidden" />
 				<div class="form-group">

@@ -19,7 +19,13 @@
 			<#list ticketform_list as ticketform >
 				<tr>
 					<td>${ticketform.title}</td>
-					<td>${ticketform.ticketCategory}</td>
+					<td>
+						<#if (ticketform.ticketCategory.precision)?has_content>
+							${(ticketform.ticketCategory.label)!''} - ${(ticketform.ticketCategory.precision)}
+						<#else>
+							${(ticketform.ticketCategory.label)!''}
+						</#if>
+					</td>
 					<td>
 						<a href="jsp/admin/plugins/ticketing/admin/ManageTicketForms.jsp?view=modifyTicketForm&id_form=${ticketform.idForm}&forceReload=true" class="btn btn-primary" title="#i18n{portal.util.labelModify}">
 							<i class="fa fa-pencil"></i>

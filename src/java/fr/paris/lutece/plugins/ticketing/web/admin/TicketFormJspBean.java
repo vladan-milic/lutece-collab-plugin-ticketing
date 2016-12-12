@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.ticketing.web.admin;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.ticketform.TicketForm;
 import fr.paris.lutece.plugins.ticketing.business.ticketform.TicketFormHome;
 import fr.paris.lutece.plugins.ticketing.service.EntryService;
@@ -489,7 +490,10 @@ public class TicketFormJspBean extends MVCAdminJspBean
             ticketForm = TicketFormHome.findByPrimaryKey( nIdTicketForm );
         }
 
-        ticketForm.setIdCategory( nIdCategory );
+        TicketCategory ticketCategory = new TicketCategory(  );
+        ticketCategory.setId( nIdCategory );
+        ticketForm.setTicketCategory( ticketCategory );
+
         ticketForm.setDescription( strDesc );
         ticketForm.setTitle( strTitle );
 

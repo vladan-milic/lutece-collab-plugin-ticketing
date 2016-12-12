@@ -157,6 +157,7 @@ public final class TicketingConstants
     public static final String TEMPLATE_ADMIN_INSTANTRESPONSE_FEATURE_PATH = TEMPLATE_ADMIN_PATH + "instantresponse/";
     public static final String TEMPLATE_ADMIN_ADMIN_FEATURE_PATH = TEMPLATE_ADMIN_PATH + "admin/";
     public static final String TEMPLATE_ADMIN_TICKETFORM_FEATURE_PATH = TEMPLATE_ADMIN_PATH + "ticketform/";
+    public static final String TEMPLATE_ADMIN_TICKETINPUTS_FEATURE_PATH = TEMPLATE_ADMIN_PATH + "ticketinputs/";
     public static final String TEMPLATE_FRONT_PATH = "/skin/plugins/ticketing/";
     public static final String TEMPLATE_FRONT_TICKET_FEATURE_PATH = TEMPLATE_FRONT_PATH + "ticket/";
     public static final String JSP_MANAGE_TICKETS = "ManageTickets.jsp";
@@ -169,6 +170,7 @@ public final class TicketingConstants
     public static final int TICKET_STATUS_CLOSED = 1;
     public static final int PROPERTY_UNSET_INT = -1;
     public static final int NO_PARENT_ID = -1;
+    public static final String RESOURCE_TYPE_INPUT = "TICKET_INPUT";
 
     /**
      * Default constructor
