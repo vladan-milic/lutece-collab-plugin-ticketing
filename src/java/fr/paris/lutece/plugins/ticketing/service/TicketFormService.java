@@ -143,7 +143,6 @@ public class TicketFormService implements Serializable
         filter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-        filter.setIdIsComment( EntryFilter.FILTER_FALSE );
         
         for ( Integer nInput : listInputs )
         {
@@ -230,17 +229,11 @@ public class TicketFormService implements Serializable
         model.put( MARK_TICKET, ticket );
 
         List<GenericAttributeError> listErrors = (List<GenericAttributeError>) request.getSession(  )
-                                                                                      .getAttribute( TicketingConstants.SESSION_TICKET_FORM_ERRORS );
+        		.getAttribute( TicketingConstants.SESSION_TICKET_FORM_ERRORS );
 
         model.put( MARK_FORM_ERRORS, listErrors );
         model.put( MARK_LIST_ERRORS, getAllErrors( request ) );
 
-        // HtmlTemplate template = AppTemplateService.getTemplate( bDisplayFront
-        // ? TEMPLATE_HTML_CODE_FORM
-        // : TEMPLATE_HTML_CODE_FORM_ADMIN, locale,
-        // model );
-
-        // return template.getHtml( );
         return strBuffer.toString(  );
     }
 
