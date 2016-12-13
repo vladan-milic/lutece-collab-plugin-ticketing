@@ -3,7 +3,7 @@
 --
 
 ALTER TABLE ticketing_ticket_category ADD category_precision VARCHAR(150) NULL DEFAULT NULL;
-
+ALTER TABLE ticketing_ticket_category DROP COLUMN id_ticket_form;
 --
 -- Data for table core_admin_right
 --

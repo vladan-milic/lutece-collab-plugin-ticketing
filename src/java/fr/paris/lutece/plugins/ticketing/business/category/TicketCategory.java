@@ -58,7 +58,6 @@ public class TicketCategory implements Serializable
     private int _nIdTicketType;
     private String _strTicketDomain;
     private String _strTicketType;
-    private int _nIdTicketForm;
     private List<Integer> _listIdInput;
     @NotEmpty( message = "#i18n{ticketing.validation.ticketcategory.label.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.ticketcategory.label.size}" )
@@ -215,23 +214,6 @@ public class TicketCategory implements Serializable
     public void setIdWorkflow( int nIdWorkflow )
     {
         _nIdWorkflow = nIdWorkflow;
-    }
-
-    /**
-     * @return the _nIdTicketForm
-     */
-    public int getIdTicketForm(  )
-    {
-        return _nIdTicketForm;
-    }
-
-    /**
-     * @param nIdTicketForm
-     *            the _nIdTicketForm to set
-     */
-    public void setIdTicketForm( int nIdTicketForm )
-    {
-        this._nIdTicketForm = nIdTicketForm;
     }
 
     /**

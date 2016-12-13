@@ -103,7 +103,6 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_LIST_WORKFLOWS = "listWorkflows";
     private static final String MARK_LIST_UNITS = "units_list";
-    private static final String MARK_TICKET_FORM_LIST = "ticketform_list";
     private static final String MARK_ALL_INPUTS_LIST = "inputs_list";
     private static final String MARK_LOCALE = "language";
     private static final String MARK_LOCALE_TINY = "locale";
@@ -182,7 +181,6 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_LIST_WORKFLOWS,
             WorkflowService.getInstance(  ).getWorkflowsEnabled( getUser(  ), getLocale(  ) ) );
-        model.put( MARK_TICKET_FORM_LIST, TicketFormHome.getAvailableTicketFormsList(  ) );
         model.put( MARK_LIST_UNITS, getUnitsList(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKETCATEGORY, TEMPLATE_CREATE_TICKETCATEGORY, model );
@@ -269,15 +267,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         model.put( MARK_LIST_WORKFLOWS,
             WorkflowService.getInstance(  ).getWorkflowsEnabled( getUser(  ), getLocale(  ) ) );
 
-        ReferenceList lstForms = TicketFormHome.getAvailableTicketFormsList(  );
-        TicketForm form = TicketFormHome.findByPrimaryKey( _category.getIdTicketForm(  ) );
 
-        if ( form != null )
-        {
-            lstForms.addItem( _category.getIdTicketForm(  ), form.getTitle(  ) );
-        }
-
-        model.put( MARK_TICKET_FORM_LIST, lstForms );
         model.put( MARK_LIST_UNITS, getUnitsList(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKETCATEGORY, TEMPLATE_MODIFY_TICKETCATEGORY, model );
