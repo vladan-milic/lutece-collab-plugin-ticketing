@@ -143,7 +143,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
     // Misc
     private static final String COMMENT_CLASS_NAME = "ticketing.entryTypeComment";
-    
+
     // Session variable to store working values
     private TicketCategory _category;
 
@@ -457,7 +457,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
     /**
      * Get the reference list of inputs not already linked to a given Category
-     * 
+     *
      * @param category The ticket category
      * @return The reference list of inputs
      */
@@ -468,37 +468,42 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
-        List<Entry> listReferenceEntry = EntryHome.getEntryList( entryFilter );        
-        List<Entry> listExistingEntries = getCategoryEntryList (category) ;
+        List<Entry> listReferenceEntry = EntryHome.getEntryList( entryFilter );
+        List<Entry> listExistingEntries = getCategoryEntryList( category );
         ReferenceList refListInputs = new ReferenceList(  );
-        
+
         for ( Entry entry : listReferenceEntry )
         {
             boolean b_found = false;
+
             for ( Entry existingEntry : listExistingEntries )
             {
-                if (existingEntry.getIdResource() == entry.getIdResource() )
-                            b_found = true;
+                if ( existingEntry.getIdResource(  ) == entry.getIdResource(  ) )
+                {
+                    b_found = true;
+                }
             }
-            if (!b_found )
+
+            if ( !b_found )
             {
                 refListInputs.addItem( entry.getIdResource(  ), buildItemComboInput( entry ) );
             }
         }
+
         return refListInputs;
     }
 
     /**
      * Build item present in the inputs list combo for each input with the input title and the input type.
      * Except for type comment having not title. For it, the item combo is build with the technical id
-     * 
+     *
      * @param entry The current entry
      * @return The item present in the input list combo
      */
     private String buildItemComboInput( Entry entry )
     {
         StringBuilder itemComboInput;
-        
+
         if ( COMMENT_CLASS_NAME.equals( entry.getEntryType(  ).getBeanName(  ) ) )
         {
             itemComboInput = new StringBuilder( entry.getCode(  ) );
@@ -507,8 +512,9 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         {
             itemComboInput = new StringBuilder( entry.getTitle(  ) );
         }
+
         itemComboInput.append( " (" ).append( entry.getEntryType(  ).getTitle(  ) ).append( ")" );
-        
+
         return itemComboInput.toString(  );
     }
 

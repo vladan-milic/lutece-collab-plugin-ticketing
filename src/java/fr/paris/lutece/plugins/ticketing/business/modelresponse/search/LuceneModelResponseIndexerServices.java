@@ -345,7 +345,15 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
 
             try
             {
-                _analyzer = (Analyzer) Class.forName( strAnalyserClassName ).newInstance(  );
+                @SuppressWarnings( {"unchecked",
+                    "rawtypes"
+                } )
+                java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName )
+                                                                  .getConstructor( Version.class, String[].class );
+                _analyzer = (Analyzer) constructeur.newInstance( new Object[]
+                        {
+                            IndexationService.LUCENE_INDEX_VERSION, new String[] {  }
+                        } );
             }
             catch ( InstantiationException ie )
             {

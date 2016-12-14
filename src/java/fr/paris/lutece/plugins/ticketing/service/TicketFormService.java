@@ -106,7 +106,6 @@ public class TicketFormService implements Serializable
     // Templates
     private static final String TEMPLATE_DIV_CONDITIONAL_ENTRY = "skin/plugins/ticketing/html_code_div_conditional_entry.html";
 
-
     /**
      * Get an Entry Filter
      *
