@@ -717,7 +717,6 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
         entryFilter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
         entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-        entryFilter.setIdIsComment( EntryFilter.FILTER_FALSE );
 
         List<Entry> listEntry = EntryHome.getEntryList( entryFilter );
         ArrayList<Integer> listIdInput = new ArrayList<Integer>(  );

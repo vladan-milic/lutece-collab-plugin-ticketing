@@ -143,6 +143,9 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static Pattern _pattern = Pattern.compile( PATTERN_CATEGORY_CODE );
     private static final long serialVersionUID = 1L;
 
+    // Misc
+    private static final String COMMENT_CLASS_NAME = "ticketing.entryTypeComment";
+    
     // Session variable to store working values
     private TicketCategory _category;
 
@@ -456,40 +459,59 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
     /**
      * Get the reference list of inputs not already linked to a given Category
-     *
-     * @param _category The ticket category
+     * 
+     * @param category The ticket category
      * @return The reference list of inputs
      */
-    private ReferenceList getFilteredRefListInputs( TicketCategory _category )
+    private ReferenceList getFilteredRefListInputs( TicketCategory category )
     {
         EntryFilter entryFilter = new EntryFilter(  );
         entryFilter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
         entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
-        List<Entry> listReferenceEntry = EntryHome.getEntryList( entryFilter );
-        List<Entry> listExistingEntries = getCategoryEntryList( _category );
+        List<Entry> listReferenceEntry = EntryHome.getEntryList( entryFilter );        
+        List<Entry> listExistingEntries = getCategoryEntryList (category) ;
         ReferenceList refListInputs = new ReferenceList(  );
-
+        
         for ( Entry entry : listReferenceEntry )
         {
             boolean b_found = false;
-
             for ( Entry existingEntry : listExistingEntries )
             {
-                if ( existingEntry.getIdResource(  ) == entry.getIdResource(  ) )
-                {
-                    b_found = true;
-                }
+                if (existingEntry.getIdResource() == entry.getIdResource() )
+                            b_found = true;
             }
-
-            if ( !b_found )
+            if (!b_found )
             {
-                refListInputs.addItem( entry.getIdResource(  ), entry.getTitle(  ) );
+                refListInputs.addItem( entry.getIdResource(  ), buildItemComboInput( entry ) );
             }
         }
-
         return refListInputs;
+    }
+
+    /**
+     * Build item present in the inputs list combo for each input with the input title and the input type.
+     * Except for type comment having not title. For it, the item combo is build with the technical id
+     * 
+     * @param entry The current entry
+     * @return The item present in the input list combo
+     */
+    private String buildItemComboInput( Entry entry )
+    {
+        StringBuilder itemComboInput;
+        
+        if ( COMMENT_CLASS_NAME.equals( entry.getEntryType(  ).getBeanName(  ) ) )
+        {
+            itemComboInput = new StringBuilder( entry.getCode(  ) );
+        }
+        else
+        {
+            itemComboInput = new StringBuilder( entry.getTitle(  ) );
+        }
+        itemComboInput.append( " (" ).append( entry.getEntryType(  ).getTitle(  ) ).append( ")" );
+        
+        return itemComboInput.toString(  );
     }
 
     /**
