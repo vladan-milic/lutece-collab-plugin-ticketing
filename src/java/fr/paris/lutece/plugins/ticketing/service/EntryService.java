@@ -314,5 +314,4 @@ public class EntryService extends RemovalListenerService implements Serializable
             orderFirstLevel.add( entry.getPosition(  ) );
         }
     }
-
 }
