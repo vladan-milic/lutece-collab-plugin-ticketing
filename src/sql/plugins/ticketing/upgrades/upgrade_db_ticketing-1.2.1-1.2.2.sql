@@ -34,4 +34,26 @@ CREATE TABLE ticketing_ticket_category_input (
     PRIMARY KEY (id_ticket_category, id_input)
 );
 
+
 DROP TABLE IF EXISTS ticketing_ticket_form;
+
+--
+-- Delete unused entry types
+--
+DELETE gvb
+      FROM genatt_verify_by gvb
+      JOIN genatt_field gf ON gvb.id_field = gf.id_field
+      JOIN genatt_entry ge ON ge.id_entry = gf.id_entry
+     WHERE ge.id_type >= 208 AND ge.id_type <= 213;
+     
+DELETE FROM genatt_response WHERE id_entry IN ( 
+   SELECT id_entry FROM genatt_entry WHERE id_type >= 208 AND id_type <= 213 );
+
+DELETE FROM genatt_field WHERE id_entry IN ( 
+   SELECT id_entry FROM genatt_entry WHERE id_type >= 208 AND id_type <= 213 );
+
+DELETE FROM genatt_entry WHERE id_type >= 208 AND id_type <= 213;
+
+DELETE FROM genatt_entry_type WHERE id_type >= 208 AND id_type <= 213;
+
+

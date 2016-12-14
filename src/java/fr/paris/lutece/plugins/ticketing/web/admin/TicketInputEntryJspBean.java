@@ -33,17 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
@@ -70,6 +59,17 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -407,7 +407,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
             if ( entry.getFieldDepend(  ) != null )
             {
                 return redirect( request,
-                        TicketInputFieldJspBean.getUrlModifyField( request, entry.getFieldDepend(  ).getIdField(  ) ) );
+                    TicketInputFieldJspBean.getUrlModifyField( request, entry.getFieldDepend(  ).getIdField(  ) ) );
             }
         }
 
@@ -575,7 +575,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
             }
 
             EntryHome.copy( entry );
-            
+
             Entry entryCopy = EntryHome.findByPrimaryKey( entry.getIdEntry(  ) );
             entryCopy.setIdResource( getNextIdInput(  ) );
             entryCopy.setPosition( getNextIdInput(  ) );
@@ -694,10 +694,10 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
         return urlItem.getUrl(  );
     }
- 
+
     /**
      * Get the next idResource of type TICKET_INPUT
-     * @return The next id resource of type TICKET_INPUT 
+     * @return The next id resource of type TICKET_INPUT
      */
     public int getNextIdInput(  )
     {
@@ -706,24 +706,24 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
         entryFilter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
         entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-        entryFilter.setIdIsComment( EntryFilter.FILTER_FALSE );
 
         List<Entry> listEntry = EntryHome.getEntryList( entryFilter );
         ArrayList<Integer> listIdInput = new ArrayList<Integer>(  );
+
         for ( Entry entry : listEntry )
         {
-            listIdInput.add( entry.getIdResource( ) );
+            listIdInput.add( entry.getIdResource(  ) );
         }
-        
+
         try
         {
-            nNextIdInput = (Integer)Collections.max( listIdInput ) + 1;
+            nNextIdInput = (Integer) Collections.max( listIdInput ) + 1;
         }
         catch ( NoSuchElementException e )
         {
             nNextIdInput = 1;
         }
-        
+
         return nNextIdInput;
     }
 }
