@@ -19,6 +19,8 @@ INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is
 DELETE FROM core_user_right WHERE id_right = 'TICKETING_INPUT_MANAGEMENT' AND id_user = 1;
 INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_INPUT_MANAGEMENT',1);
 
+DELETE FROM core_admin_right WHERE id_right = 'TICKETING_FORM_MANAGEMENT';
+DELETE FROM core_user_right WHERE id_right = 'TICKETING_FORM_MANAGEMENT' AND id_user = 1;
 --
 -- Structure for table ticketing_ticket_category_input
 --
@@ -31,3 +33,5 @@ CREATE TABLE ticketing_ticket_category_input (
     pos int(1) NOT NULL default '0',
     PRIMARY KEY (id_ticket_category, id_input)
 );
+
+DROP TABLE IF EXISTS ticketing_ticket_form;

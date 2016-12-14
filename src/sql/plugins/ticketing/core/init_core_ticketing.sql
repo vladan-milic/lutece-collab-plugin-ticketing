@@ -66,10 +66,6 @@ DELETE FROM core_admin_right WHERE id_right = 'TICKETING_MANAGEMENT';
 INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is_updatable,plugin_name,id_feature_group,icon_url,documentation_url, id_order ) VALUES 
 ('TICKETING_MANAGEMENT','ticketing.adminFeature.ManageAdminTicketing.name',1,'jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp','ticketing.adminFeature.ManageAdminTicketing.description',0,'ticketing','TICKETING_ADMIN',NULL,NULL,1);
 
-DELETE FROM core_admin_right WHERE id_right = 'TICKETING_FORM_MANAGEMENT';          
-INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is_updatable,plugin_name,id_feature_group,icon_url,documentation_url, id_order ) VALUES 
-('TICKETING_FORM_MANAGEMENT','ticketing.adminFeature.ManageTicketForms.name',1,'jsp/admin/plugins/ticketing/admin/ManageTicketForms.jsp','ticketing.adminFeature.ManageTicketForms.description',0,'ticketing','TICKETING_ADMIN',NULL,NULL,2);
-
 DELETE FROM core_admin_right WHERE id_right = 'TICKETING_MANAGEMENT_MODEL_RESPONSE';
 INSERT INTO core_admin_right (`id_right`, `name`, `level_right`, `admin_url`, `description`, `is_updatable`, `plugin_name`, `id_feature_group`, `icon_url`, `documentation_url`, `id_order`) VALUES
 ('TICKETING_MANAGEMENT_MODEL_RESPONSE', 'ticketing.adminFeature.ManageTicketingModelResponse.name', '2', 'jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp', 'ticketing.adminFeature.ManageTicketingModelResponse.description', '0', 'ticketing', 'TICKETING_ADMIN', NULL, NULL, '3');
@@ -83,8 +79,6 @@ INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is
 --
 DELETE FROM core_user_right WHERE id_right = 'TICKETING_MANAGEMENT' AND id_user = 1;
 INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_MANAGEMENT',1);
-DELETE FROM core_user_right WHERE id_right = 'TICKETING_FORM_MANAGEMENT' AND id_user = 1;
-INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_FORM_MANAGEMENT',1);
 DELETE FROM core_user_right WHERE id_right = 'TICKETING_MANAGEMENT_MODEL_RESPONSE';
 INSERT INTO core_user_right (id_right,id_user) VALUES ('TICKETING_MANAGEMENT_MODEL_RESPONSE',1);
 DELETE FROM core_user_right WHERE id_right = 'TICKETING_PLUGIN_CONFIGURATION';

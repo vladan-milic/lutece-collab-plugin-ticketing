@@ -46,9 +46,8 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeSer
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
-import fr.paris.lutece.plugins.ticketing.business.ticketform.ResponseRecap;
-import fr.paris.lutece.plugins.ticketing.business.ticketform.TicketForm;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.ticketing.web.util.ResponseRecap;
 import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
@@ -106,25 +105,6 @@ public class TicketFormService implements Serializable
     // Templates
     private static final String TEMPLATE_DIV_CONDITIONAL_ENTRY = "skin/plugins/ticketing/html_code_div_conditional_entry.html";
 
-    /**
-     * Get an Entry Filter
-     *
-     * @param idForm
-     *            the id form
-     * @return List a filter Entry
-     */
-    private static List<Entry> getFilter( int idForm )
-    {
-        EntryFilter filter = new EntryFilter(  );
-        filter.setIdResource( idForm );
-        filter.setResourceType( TicketForm.RESOURCE_TYPE );
-        filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-        filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-
-        List<Entry> listEntryFirstLevel = EntryHome.getEntryList( filter );
-
-        return listEntryFirstLevel;
-    }
 
     /**
      * Get an Entry Filter
@@ -155,49 +135,6 @@ public class TicketFormService implements Serializable
         }
 
         return listEntry;
-    }
-    
-    /**
-     * Return the HTML code of the form
-     * @param ticket the ticket
-     * @param form The form messages associated with the form
-     * @param locale the locale
-     * @param bDisplayFront True if the entry will be displayed in Front Office,
-     *            false if it will be displayed in Back Office.
-     * @param request HttpServletRequest
-     * @return the HTML code of the form
-     */
-    public String getHtmlForm( Ticket ticket, TicketForm form, Locale locale, boolean bDisplayFront,
-        HttpServletRequest request )
-    {
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        StringBuffer strBuffer = new StringBuffer(  );
-
-        List<Entry> listEntryFirstLevel = getFilter( form.getIdForm(  ) );
-
-        for ( Entry entry : listEntryFirstLevel )
-        {
-            getHtmlEntry( entry.getIdEntry(  ), strBuffer, locale, bDisplayFront, request );
-        }
-
-        model.put( MARK_FORM, form );
-        model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
-        model.put( MARK_LOCALE, locale );
-        model.put( MARK_TICKET, ticket );
-
-        List<GenericAttributeError> listErrors = (List<GenericAttributeError>) request.getSession(  )
-                                                                                      .getAttribute( TicketingConstants.SESSION_TICKET_FORM_ERRORS );
-
-        model.put( MARK_FORM_ERRORS, listErrors );
-        model.put( MARK_LIST_ERRORS, getAllErrors( request ) );
-
-        // HtmlTemplate template = AppTemplateService.getTemplate( bDisplayFront
-        // ? TEMPLATE_HTML_CODE_FORM
-        // : TEMPLATE_HTML_CODE_FORM_ADMIN, locale,
-        // model );
-
-        // return template.getHtml( );
-        return strBuffer.toString(  );
     }
 
     /**

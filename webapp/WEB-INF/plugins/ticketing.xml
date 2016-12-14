@@ -37,14 +37,6 @@
             <feature-icon-url/>
         </admin-feature>
         <admin-feature>
-            <feature-id>TICKETING_FORM_MANAGEMENT</feature-id>
-            <feature-title>ticketing.adminFeature.ManageTicketForms.name</feature-title>
-            <feature-description>ticketing.adminFeature.ManageTicketForms.description</feature-description>
-            <feature-level>2</feature-level>
-            <feature-url>jsp/admin/plugins/ticketing/admin/ManageTicketForms.jsp</feature-url>
-            <feature-icon-url/>
-        </admin-feature>
-        <admin-feature>
             <feature-id>TICKETING_INPUT_MANAGEMENT</feature-id>
             <feature-title>ticketing.adminFeature.ManageTicketInputs.name</feature-title>
             <feature-description>ticketing.adminFeature.ManageTicketInputs.description</feature-description>

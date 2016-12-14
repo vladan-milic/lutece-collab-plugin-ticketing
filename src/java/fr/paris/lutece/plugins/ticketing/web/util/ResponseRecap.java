@@ -31,7 +31,7 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business.ticketform;
+package fr.paris.lutece.plugins.ticketing.web.util;
 
 import java.io.Serializable;
 

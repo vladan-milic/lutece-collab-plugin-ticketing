@@ -470,17 +470,6 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
             filter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
             listEntry = EntryHome.getEntryList( filter );
 
-            if ( entry.getFieldDepend(  ) == null )
-            {
-                _entryService.moveDownEntryOrder( listEntry.size(  ), entry );
-            }
-            else
-            {
-                //conditional questions
-                EntryHome.decrementOrderByOne( entry.getPosition(  ), entry.getFieldDepend(  ).getIdField(  ),
-                    entry.getIdResource(  ), entry.getResourceType(  ) );
-            }
-
             TicketHome.removeResponsesByIdEntry( nIdEntry );
 
             // Remove entry

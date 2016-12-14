@@ -122,19 +122,6 @@ inactive int(1)  NOT NULL default '0',
 PRIMARY KEY (id_user_title)
 );
 
---
--- Structure for table ticketing_form
---
-
-DROP TABLE IF EXISTS ticketing_ticket_form;
-
-CREATE TABLE ticketing_ticket_form (
-	id_form int(6) NOT NULL,
-	title varchar(255) NOT NULL default '',
-	description long varchar NOT NULL,
-	inactive int(1)  NOT NULL default '0',	
-	PRIMARY KEY (id_form)
-);
 
 --
 -- Structure for table ticketing_ticket_response
