@@ -33,16 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
@@ -65,6 +55,15 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -133,7 +132,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String ACTION_REMOVE_TICKETCATEGORY_INPUT = "removeTicketCategoryInput";
     private static final String ACTION_CONFIRM_REMOVE_TICKETCATEGORY_INPUT = "confirmRemoveTicketCategoryInput";
     private static final String ACTION_DO_MOVE_FIELD_UP = "doMoveFieldUp";
-    private static final String ACTION_DO_MOVE_FIELD_DOWN = "doMoveFieldDown";   
+    private static final String ACTION_DO_MOVE_FIELD_DOWN = "doMoveFieldDown";
 
     // Infos
     private static final String INFO_TICKETCATEGORY_CREATED = "ticketing.info.ticketcategory.created";
@@ -267,7 +266,6 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         model.put( MARK_LIST_WORKFLOWS,
             WorkflowService.getInstance(  ).getWorkflowsEnabled( getUser(  ), getLocale(  ) ) );
 
-
         model.put( MARK_LIST_UNITS, getUnitsList(  ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKETCATEGORY, TEMPLATE_MODIFY_TICKETCATEGORY, model );
@@ -308,12 +306,12 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY ) );
 
         _category = TicketCategoryHome.findByPrimaryKey( nId );
-        
-        List<Entry> listEntry = getCategoryEntryList (_category) ;
+
+        List<Entry> listEntry = getCategoryEntryList( _category );
 
         Map<String, Object> model = getModel(  );
         model.put( MARK_CATEGORY, _category );
-        model.put( MARK_ALL_INPUTS_LIST, getFilteredRefListInputs( _category  ) );
+        model.put( MARK_ALL_INPUTS_LIST, getFilteredRefListInputs( _category ) );
         model.put( MARK_CATEGORY_INPUTS_LIST, listEntry );
         model.put( MARK_LOCALE, getLocale(  ) );
         model.put( MARK_LOCALE_TINY, getLocale(  ) );
@@ -330,21 +328,21 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     @Action( ACTION_ADD_TICKETCATEGORY_INPUT )
     public String doAddTicketCategoryInput( HttpServletRequest request )
     {
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY ) );
 
-    	int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY ) );
-    	if (StringUtils.isNotBlank( request.getParameter( PARAMETER_ID_TICKETCATEGORY_INPUT ) ) )
-    	{
-    		int nIdInput = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY_INPUT ) );
-    		TicketCategoryHome.createLinkCategoryInputNextPos( nId, nIdInput );
-    		addInfo( INFO_TICKETCATEGORY_CREATED, getLocale(  ) );
-    	}
-    	UrlItem url = new UrlItem( getViewUrl( VIEW_MODIFY_TICKETCATEGORY_INPUTS ) );
-    	url.addParameter( PARAMETER_ID_TICKETCATEGORY, nId );
+        if ( StringUtils.isNotBlank( request.getParameter( PARAMETER_ID_TICKETCATEGORY_INPUT ) ) )
+        {
+            int nIdInput = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY_INPUT ) );
+            TicketCategoryHome.createLinkCategoryInputNextPos( nId, nIdInput );
+            addInfo( INFO_TICKETCATEGORY_CREATED, getLocale(  ) );
+        }
 
-    	return redirect( request, url.getUrl(  ) );
+        UrlItem url = new UrlItem( getViewUrl( VIEW_MODIFY_TICKETCATEGORY_INPUTS ) );
+        url.addParameter( PARAMETER_ID_TICKETCATEGORY, nId );
+
+        return redirect( request, url.getUrl(  ) );
     }
-    
-     
+
     /**
      * Move a field up
      * @param request The request
@@ -380,21 +378,21 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
         int nOldPosition = TicketCategoryHome.getCategoryInputPosition( nId, nIdInput );
         int nNewPosition = bMoveUp ? ( nOldPosition - 1 ) : ( nOldPosition + 1 );
-        
+
         int nInputToInversePosition = TicketCategoryHome.getCategoryInputByPosition( nId, nNewPosition );
-        
+
         //Update the Input with new Position
         TicketCategoryHome.updateCategoryInputPosition( nId, nIdInput, nNewPosition );
-        
+
         //Update the Input that was on that position before
         TicketCategoryHome.updateCategoryInputPosition( nId, nInputToInversePosition, nOldPosition );
-        
+
         UrlItem url = new UrlItem( getViewUrl( VIEW_MODIFY_TICKETCATEGORY_INPUTS ) );
         url.addParameter( PARAMETER_ID_TICKETCATEGORY, nId );
-        return redirect( request, url.getUrl(  ) );
 
-    }  
-    
+        return redirect( request, url.getUrl(  ) );
+    }
+
     /**
      * Manages the removal form of a ticketcategory whose identifier is in the http
      * request
@@ -416,9 +414,6 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
         return redirect( request, strMessageUrl );
     }
-    
-    
-    
 
     /**
      * Handles the removal of a ticketcategory input
@@ -432,35 +427,36 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY ) );
         int nIdInput = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY_INPUT ) );
         TicketCategoryHome.removeLinkCategoryInput( nId, nIdInput );
-        reorganizeCategoryInputs(nId);
+        reorganizeCategoryInputs( nId );
         addInfo( INFO_TICKETCATEGORY_INPUT_REMOVED, getLocale(  ) );
 
         UrlItem url = new UrlItem( getViewUrl( VIEW_MODIFY_TICKETCATEGORY_INPUTS ) );
         url.addParameter( PARAMETER_ID_TICKETCATEGORY, nId );
+
         return redirect( request, url.getUrl(  ) );
     }
 
-    
     /**
      * Update the inputs within a given category
      *  with consecutive position indexes
-     * 
+     *
      * @param nId the category which inputs are being reordered
      */
     private void reorganizeCategoryInputs( int nId )
-	{
-		TicketCategory _category = TicketCategoryHome.findByPrimaryKey( nId );
-		List<Integer> listInputs = _category.getListIdInput() ;
-		int i = 1;
-		for (Integer input : listInputs){
-			TicketCategoryHome.updateCategoryInputPosition( nId, input, i++ );
-		}		
-	}
+    {
+        TicketCategory _category = TicketCategoryHome.findByPrimaryKey( nId );
+        List<Integer> listInputs = _category.getListIdInput(  );
+        int i = 1;
 
-    
+        for ( Integer input : listInputs )
+        {
+            TicketCategoryHome.updateCategoryInputPosition( nId, input, i++ );
+        }
+    }
+
     /**
      * Get the reference list of inputs not already linked to a given Category
-     * 
+     *
      * @param _category The ticket category
      * @return The reference list of inputs
      */
@@ -468,26 +464,31 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     {
         EntryFilter entryFilter = new EntryFilter(  );
         entryFilter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
-    	entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-    	entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
+        entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
+        entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
-        List<Entry> listReferenceEntry = EntryHome.getEntryList( entryFilter );        
-        List<Entry> listExistingEntries = getCategoryEntryList (_category) ;
+        List<Entry> listReferenceEntry = EntryHome.getEntryList( entryFilter );
+        List<Entry> listExistingEntries = getCategoryEntryList( _category );
         ReferenceList refListInputs = new ReferenceList(  );
-        
+
         for ( Entry entry : listReferenceEntry )
         {
-        	boolean b_found = false;
-	        for ( Entry existingEntry : listExistingEntries )
-	        {
-	        	if (existingEntry.getIdResource() == entry.getIdResource() )
-	        				b_found = true;
-	        }
-	        if (!b_found )
-	        {
-	        	refListInputs.addItem( entry.getIdResource(  ), entry.getTitle(  ) );
-	        }
+            boolean b_found = false;
+
+            for ( Entry existingEntry : listExistingEntries )
+            {
+                if ( existingEntry.getIdResource(  ) == entry.getIdResource(  ) )
+                {
+                    b_found = true;
+                }
+            }
+
+            if ( !b_found )
+            {
+                refListInputs.addItem( entry.getIdResource(  ), entry.getTitle(  ) );
+            }
         }
+
         return refListInputs;
     }
 
@@ -540,38 +541,36 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
         ticketCategory.setAssigneeUnit( assigneeUnit );
     }
-    
-    
+
     /**
      * Return a list of Entries linked to a category
      * @param _category
      * @return
      */
-    private List<Entry> getCategoryEntryList (TicketCategory _category) 
-    {	    
-	    List<Entry> listEntry = new ArrayList<Entry>();
-	    
-	    if (_category != null && _category.getListIdInput(  ) != null )
-	    {
-	    	EntryFilter entryFilter = new EntryFilter(  );
-	    	entryFilter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
-	    	entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-	    	entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
+    private List<Entry> getCategoryEntryList( TicketCategory _category )
+    {
+        List<Entry> listEntry = new ArrayList<Entry>(  );
 
-	    	for ( Integer nIdInput : _category.getListIdInput(  ) )
-	    	{
-	    		entryFilter.setIdResource( nIdInput );
-	    		List<Entry> listEntryFound = EntryHome.getEntryList( entryFilter );
-	    		if ( listEntryFound != null && listEntryFound.size(  ) >= 1 )
-	    		{
-	    			listEntry.add( listEntryFound.get( 0 ) );
-	    		}
-	    	}
-	    }
-    return listEntry;
+        if ( ( _category != null ) && ( _category.getListIdInput(  ) != null ) )
+        {
+            EntryFilter entryFilter = new EntryFilter(  );
+            entryFilter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
+            entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
+            entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
+
+            for ( Integer nIdInput : _category.getListIdInput(  ) )
+            {
+                entryFilter.setIdResource( nIdInput );
+
+                List<Entry> listEntryFound = EntryHome.getEntryList( entryFilter );
+
+                if ( ( listEntryFound != null ) && ( listEntryFound.size(  ) >= 1 ) )
+                {
+                    listEntry.add( listEntryFound.get( 0 ) );
+                }
+            }
+        }
+
+        return listEntry;
     }
-    
-
-   
-    
 }

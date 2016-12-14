@@ -611,7 +611,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             sb.append( ticket.getTicketCategory(  ).getLabel(  ) ).append( SEPARATOR );
         }
-        
+
         if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ).getPrecision(  ) ) )
         {
             sb.append( ticket.getTicketCategory(  ).getPrecision(  ) ).append( SEPARATOR );
@@ -653,7 +653,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             sb.append( ticket.getTicketCategory(  ).getLabel(  ) ).append( SEPARATOR );
         }
-        
+
         if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ).getPrecision(  ) ) )
         {
             sb.append( ticket.getTicketCategory(  ).getPrecision(  ) ).append( SEPARATOR );

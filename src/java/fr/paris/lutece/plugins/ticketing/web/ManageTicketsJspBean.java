@@ -727,8 +727,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         if ( ticket.getTicketCategory(  ).getId(  ) > 0 )
         {
             ticket.setListResponse( null );
-            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory(  ).getId(  ) ); 
-            
+
+            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory(  ).getId(  ) );
+
             for ( Entry entry : listEntry )
             {
                 listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry(  ),

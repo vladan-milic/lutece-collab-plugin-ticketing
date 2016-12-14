@@ -59,6 +59,7 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -136,19 +137,20 @@ public class TicketFormService implements Serializable
     public static List<Entry> getFilterInputs( int idCategory )
     {
         List<Integer> listInputs = TicketCategoryHome.getIdInputListByCategory( idCategory );
-        List<Entry> listEntryFirstLevel; 
+        List<Entry> listEntryFirstLevel;
         List<Entry> listEntry = new ArrayList<Entry>(  );
-        
+
         EntryFilter filter = new EntryFilter(  );
         filter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-        
+
         for ( Integer nInput : listInputs )
         {
             filter.setIdResource( nInput );
             listEntryFirstLevel = EntryHome.getEntryList( filter );
-            if ( listEntryFirstLevel != null && listEntryFirstLevel.size( ) > 0 )
+
+            if ( ( listEntryFirstLevel != null ) && ( listEntryFirstLevel.size(  ) > 0 ) )
             {
                 listEntry.add( listEntryFirstLevel.get( 0 ) );
             }
@@ -156,7 +158,7 @@ public class TicketFormService implements Serializable
 
         return listEntry;
     }
-    
+
     /**
      * Return the HTML code of the form
      * @param ticket the ticket
@@ -229,7 +231,7 @@ public class TicketFormService implements Serializable
         model.put( MARK_TICKET, ticket );
 
         List<GenericAttributeError> listErrors = (List<GenericAttributeError>) request.getSession(  )
-        		.getAttribute( TicketingConstants.SESSION_TICKET_FORM_ERRORS );
+                                                                                      .getAttribute( TicketingConstants.SESSION_TICKET_FORM_ERRORS );
 
         model.put( MARK_FORM_ERRORS, listErrors );
         model.put( MARK_LIST_ERRORS, getAllErrors( request ) );

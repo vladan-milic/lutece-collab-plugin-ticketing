@@ -159,7 +159,7 @@ public class TicketXPage extends WorkflowCapableXPage
     public XPage getCreateTicket( HttpServletRequest request )
     {
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
-        
+
         if ( ticket == null )
         {
             ticket = new Ticket(  );
@@ -349,7 +349,7 @@ public class TicketXPage extends WorkflowCapableXPage
         ticket = ( ticket != null ) ? ticket : new Ticket(  );
         populate( ticket, request );
         ticket.setListResponse( new ArrayList<Response>(  ) );
-        
+
         int nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
         ticket.setTicketCategory( ticketCategory );
@@ -358,8 +358,8 @@ public class TicketXPage extends WorkflowCapableXPage
 
         if ( ticket.getTicketCategory(  ).getId(  ) > 0 )
         {
-            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory(  ).getId(  ) ); 
-            
+            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory(  ).getId(  ) );
+
             for ( Entry entry : listEntry )
             {
                 listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry(  ),
@@ -528,8 +528,9 @@ public class TicketXPage extends WorkflowCapableXPage
 
             if ( category != null )
             {
-              model.put( MARK_TICKET_FORM,
-                      _ticketFormService.getHtmlFormInputs( ticket, category, request.getLocale(  ), bDisplayFront, request ) );
+                model.put( MARK_TICKET_FORM,
+                    _ticketFormService.getHtmlFormInputs( ticket, category, request.getLocale(  ), bDisplayFront,
+                        request ) );
             }
         }
 
