@@ -17,6 +17,7 @@
 	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelTicketType">${ticket.ticketType!''}</@fieldStaticText>
 	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelTicketDomain">${ticket.ticketDomain!''}</@fieldStaticText>
 	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelTicketCategory">${ticket.ticketCategory.label!''}</@fieldStaticText>
+	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelTicketPrecision">${ticket.ticketCategory.precision!''}</@fieldStaticText>
 	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelContactMode">${getContactModeLabel(ticket.contactMode!'')}</@fieldStaticText>
 	        <@fieldStaticText i18nLabelKey="ticketing.xpage.recap_ticket.labelTicketComment">${convertNewLineToHtml(ticket.ticketComment!'')}</@fieldStaticText>
              <#list response_recap_list as response>

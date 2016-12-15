@@ -100,6 +100,14 @@ public interface ITicketCategoryDAO
      * @return The instance of the ticketCategory
      */
     TicketCategory loadByCode( String strCode, Plugin plugin );
+    
+    /**
+     * Load the data from the table
+     * @param nDomainId The domain id of the category
+     * @param plugin the Plugin
+     * @return The instance of the ticketCategory
+     */
+    List<TicketCategory> loadByDomainId( int nDomainId, Plugin plugin );
 
     /**
      * Load the data of all the ticketCategory objects and returns them as a collection
@@ -167,14 +175,6 @@ public interface ITicketCategoryDAO
      * @return The reference list
      */
     ReferenceList selectReferenceListByCategory( int nDomainId, String labelCategory, Plugin _plugin );
-
-    /**
-     * Return the help message of the specified category
-     * @param nCategoryId The category ID
-     * @param plugin The plugin
-     * @return The help message
-     */
-    String selectHelpMessageByCategory( int nCategoryId, Plugin plugin );
 
 	/**
      * Load the id of all inputs related to the ticketCategory id and returns them as a collection

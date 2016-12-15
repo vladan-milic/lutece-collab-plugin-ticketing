@@ -3,6 +3,7 @@
 --
 
 ALTER TABLE ticketing_ticket_category ADD category_precision VARCHAR(150) NULL DEFAULT NULL;
+ALTER TABLE ticketing_ticket_category ADD help_message VARCHAR(500) NULL;
 
 --
 -- Data for table core_admin_right

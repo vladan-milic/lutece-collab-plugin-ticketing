@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format.tickettype;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
@@ -46,7 +47,10 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -120,38 +124,72 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
             jsonDomain.accumulate( FormatConstants.KEY_ID, nDomainId );
             jsonDomain.accumulate( FormatConstants.KEY_LABEL, refItemDomain.getName(  ) );
 
+            Map<String, List<TicketCategory>> mapTicketCategories = new HashMap<String, List<TicketCategory>>(  );
+
+            for ( TicketCategory ticketCategory : TicketCategoryHome.findByDomainId( nDomainId ) )
+            {
+                if ( mapTicketCategories.containsKey( ticketCategory.getLabel(  ) ) )
+                { // Precision
+                    mapTicketCategories.get( ticketCategory.getLabel(  ) ).add( ticketCategory );
+                }
+                else
+                {
+                    mapTicketCategories.put( ticketCategory.getLabel(  ), new ArrayList<TicketCategory>(  ) );
+                    mapTicketCategories.get( ticketCategory.getLabel(  ) ).add( ticketCategory );
+                }
+            }
+
             JSONArray jsonCategories = new JSONArray(  );
 
-            for ( ReferenceItem refItemCategory : TicketCategoryHome.getReferenceListByDomain( nDomainId ) )
+            for ( Map.Entry<String, List<TicketCategory>> mapEntryCategoryByLabel : mapTicketCategories.entrySet(  ) )
             {
-                if ( !listCategoryNames.contains( refItemCategory.getName(  ) ) )
+                String labelCategory = mapEntryCategoryByLabel.getKey(  );
+                List<TicketCategory> listCategoryByLabel = mapEntryCategoryByLabel.getValue(  );
+                Iterator itListCategoryByLabel = listCategoryByLabel.iterator(  );
+                TicketCategory category = new TicketCategory(  );
+
+                JSONObject jsonCategory = new JSONObject(  );
+                JSONArray jsonPrecisions = new JSONArray(  );
+                JSONObject jsonPrecision = new JSONObject(  );
+
+                while ( itListCategoryByLabel.hasNext(  ) )
                 {
-                    int nCategoryId = Integer.parseInt( refItemCategory.getCode(  ) );
-                    JSONObject jsonCategory = new JSONObject(  );
-                    jsonCategory.accumulate( FormatConstants.KEY_ID, nCategoryId );
-                    jsonCategory.accumulate( FormatConstants.KEY_LABEL, refItemCategory.getName(  ) );
+                    category = null;
+                    category = (TicketCategory) itListCategoryByLabel.next(  );
+                    jsonCategory = new JSONObject(  );
 
-                    JSONArray jsonPrecisions = new JSONArray(  );
-
-                    for ( ReferenceItem refItemPrecision : TicketCategoryHome.getReferenceListByCategory( nDomainId,
-                            refItemCategory.getName(  ) ) )
+                    if ( StringUtils.isNotEmpty( category.getPrecision(  ) ) )
                     {
-                        if ( !StringUtils.isEmpty( refItemPrecision.getName(  ) ) )
+                        jsonPrecision = new JSONObject(  );
+                        jsonPrecision.accumulate( FormatConstants.KEY_ID, category.getId(  ) );
+                        jsonPrecision.accumulate( FormatConstants.KEY_LABEL, category.getPrecision(  ) );
+
+                        if ( StringUtils.isNotEmpty( category.getHelpMessage(  ) ) )
                         {
-                            JSONObject jsonPrecision = new JSONObject(  );
-                            int nPrecisionId = Integer.parseInt( refItemPrecision.getCode(  ) );
-                            jsonPrecision.accumulate( FormatConstants.KEY_ID, nPrecisionId );
-                            jsonPrecision.accumulate( FormatConstants.KEY_LABEL, refItemPrecision.getName(  ) );
-                            jsonPrecisions.add( jsonPrecision );
-                            listCategoryNames.add( refItemCategory.getName(  ) );
+                            jsonPrecision.accumulate( FormatConstants.KEY_HELP, category.getHelpMessage(  ) );
                         }
-                    }
 
-                    if ( !jsonPrecisions.isEmpty(  ) )
+                        jsonPrecisions.add( jsonPrecision );
+                    }
+                    else
                     {
-                        jsonCategory.accumulate( FormatConstants.KEY_TICKET_PRECISIONS, jsonPrecisions );
-                    }
+                        jsonCategory.accumulate( FormatConstants.KEY_ID, category.getId(  ) );
+                        jsonCategory.accumulate( FormatConstants.KEY_LABEL, category.getLabel(  ) );
 
+                        if ( StringUtils.isNotEmpty( category.getHelpMessage(  ) ) )
+                        {
+                            jsonCategory.accumulate( FormatConstants.KEY_HELP, category.getHelpMessage(  ) );
+                        }
+
+                        jsonCategories.add( jsonCategory );
+                    }
+                }
+
+                if ( !jsonPrecisions.isEmpty(  ) )
+                {
+                    jsonCategory.accumulate( FormatConstants.KEY_ID, category.getId(  ) );
+                    jsonCategory.accumulate( FormatConstants.KEY_LABEL, category.getLabel(  ) );
+                    jsonCategory.accumulate( FormatConstants.KEY_TICKET_PRECISIONS, jsonPrecisions );
                     jsonCategories.add( jsonCategory );
                 }
             }

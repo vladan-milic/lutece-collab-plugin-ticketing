@@ -70,7 +70,7 @@ public class TicketCategory implements Serializable
     private transient AssigneeUnit _unit;
     @Size( max = 150, message = "#i18n{ticketing.validation.ticketcategory.precision.size}" )
     private String _strPrecision;
-	private String _strHelpMessage;
+    private String _strHelpMessage;
 
     /**
      * Returns the Id
@@ -236,7 +236,6 @@ public class TicketCategory implements Serializable
         this._nIdTicketForm = nIdTicketForm;
     }
 
-    
     /**
     * @return the _listIdInput
     */
@@ -311,21 +310,21 @@ public class TicketCategory implements Serializable
     {
         _strPrecision = strPrecision;
     }
-	
-	/**
-	 * @return the _strHelpMessage
-	 */
-	public String getHelpMessage()
-	{
-		return _strHelpMessage;
-	}
 
-	/**
-	 * @param _strHelpMessage
-	 *            the _strHelpMessage to set
-	 */
-	public void setHelpMessage(String _strHelpMessage)
-	{
-		this._strHelpMessage = _strHelpMessage;
-	}
+    /**
+     * @return the _strHelpMessage
+     */
+    public String getHelpMessage(  )
+    {
+        return _strHelpMessage;
+    }
+
+    /**
+     * @param _strHelpMessage
+     *            the _strHelpMessage to set
+     */
+    public void setHelpMessage( String _strHelpMessage )
+    {
+        this._strHelpMessage = _strHelpMessage;
+    }
 }

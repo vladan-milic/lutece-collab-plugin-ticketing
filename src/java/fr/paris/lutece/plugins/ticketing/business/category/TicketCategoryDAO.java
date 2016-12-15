@@ -63,7 +63,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
     private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label, a.id_workflow, b.label, c.label, c.id_ticket_type, a.category_code, a.id_unit, a.category_precision, a.help_message " +
         " FROM ticketing_ticket_category a, ticketing_ticket_domain b , ticketing_ticket_type c " +
         " WHERE a.id_ticket_domain = b.id_ticket_domain AND b.id_ticket_type = c.id_ticket_type  AND a.inactive <> 1 AND  b.inactive <> 1 AND  c.inactive <> 1";
-    private static final String SQL_QUERY_SELECT_BY_DOMAIN = "SELECT id_ticket_category, label FROM ticketing_ticket_category WHERE id_ticket_domain = ?  AND inactive <> 1 ";
+    private static final String SQL_QUERY_SELECT_BY_DOMAIN = "SELECT id_ticket_category, label, category_precision, help_message FROM ticketing_ticket_category WHERE id_ticket_domain = ?  AND inactive <> 1 ";
     private static final String SQL_QUERY_SELECT_BY_CATEGORY = "SELECT id_ticket_category, category_precision FROM ticketing_ticket_category WHERE id_ticket_domain = ? AND label = ?  AND inactive <> 1 ";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_category FROM ticketing_ticket_category AND inactive <> 1 ";
     private static final String SQL_QUERY_SELECT_INPUTS_BY_CATEGORY = "SELECT id_input FROM ticketing_ticket_category_input WHERE id_ticket_category = ? ORDER BY pos";
@@ -73,7 +73,6 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
     private static final String SQL_QUERY_SELECT_MAX_INPUT_POS_FOR_CATEGORY = "SELECT MAX(pos) FROM ticketing_ticket_category_input WHERE id_ticket_category = ? ";
 	private static final String SQL_QUERY_SELECT_INPUT_POS = "SELECT pos from ticketing_ticket_category_input WHERE id_ticket_category = ? AND id_input = ? ";
 	private static final String SQL_QUERY_SELECT_INPUT_BY_POS = "SELECT id_input from ticketing_ticket_category_input WHERE id_ticket_category = ? AND pos = ? ";
-    private static final String SQL_QUERY_SELECT_HELP_MESSAGE = "SELECT help_message FROM ticketing_ticket_category WHERE id_ticket_category = ? AND help_message IS NOT NULL AND help_message != '' AND inactive <> 1 ";
 
 
     /**
@@ -276,6 +275,38 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
 
         return category;
     }
+    
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<TicketCategory> loadByDomainId( int nDomainId, Plugin plugin )
+    {
+        List<TicketCategory> ticketCategoryList = new ArrayList<TicketCategory>(  );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_DOMAIN, plugin );
+        daoUtil.setInt( 1, nDomainId );
+        daoUtil.executeQuery(  );
+
+        TicketCategory category = null;
+
+        int nIndex;
+
+        while ( daoUtil.next(  ) )
+        {
+            nIndex = 1;
+            category = new TicketCategory(  );
+            category.setId( daoUtil.getInt( nIndex++ ) );
+            category.setLabel( daoUtil.getString( nIndex++ ) );
+            category.setPrecision( daoUtil.getString( nIndex++ ) );
+            category.setHelpMessage( daoUtil.getString( nIndex++ ) );
+
+            ticketCategoryList.add( category );
+        }
+
+        daoUtil.free(  );
+
+        return ticketCategoryList;
+    }
 
     /**
      * {@inheritDoc }
@@ -355,8 +386,8 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setAssigneeUnit( assigneeUnit );
             category.setPrecision( daoUtil.getString( nIndex++ ) );
             category.setHelpMessage( daoUtil.getString( nIndex++ ) );
-            
-			ticketCategoryList.add( category );
+
+            ticketCategoryList.add( category );
         }
 
         daoUtil.free(  );
@@ -464,25 +495,6 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.free(  );
 
         return list;
-    }
-    
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public String selectHelpMessageByCategory( int nCategoryId, Plugin plugin )
-    {
-    	String help_message = null;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_HELP_MESSAGE, plugin );
-        daoUtil.setInt( 1, nCategoryId );
-        daoUtil.executeQuery(  );
-        if(daoUtil.next()){
-        	help_message = daoUtil.getString( 1 );
-        }
-        
-        daoUtil.free(  ); 
-
-        return help_message;
     }
     
 	/**

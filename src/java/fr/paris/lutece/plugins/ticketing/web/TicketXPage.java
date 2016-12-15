@@ -181,7 +181,7 @@ public class TicketXPage extends WorkflowCapableXPage
         model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
         model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
         model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
-        model.put( MARK_TICKET_PRECISIONS_LIST, new ReferenceList(  ));
+        model.put( MARK_TICKET_PRECISIONS_LIST, new ReferenceList(  ) );
 
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale(  ) ) );
 

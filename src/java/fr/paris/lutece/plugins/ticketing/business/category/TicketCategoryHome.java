@@ -155,6 +155,16 @@ public final class TicketCategoryHome
     {
         return _dao.loadByCode( strCode, _plugin );
     }
+    
+    /**
+     * Find a category by its domain id
+     * @param nDomainId The domain id
+     * @return The category
+     */
+    public static List<TicketCategory> findByDomainId( int nDomainId )
+    {
+        return _dao.loadByDomainId( nDomainId, _plugin );
+    }
 
     /**
      * Load the data of all the ticketCategory objects and returns them in form of a collection
@@ -227,15 +237,5 @@ public final class TicketCategoryHome
     public static List<Integer> getIdInputListByCategory( int nCategoryId )
     {
         return _dao.selectIdInputListByCategory( nCategoryId, _plugin );
-    }
-    
-    /**
-     * returns referenceList of input categoryLabel
-     * @param nCategoryLabel id of category
-     * @return ReferenceList of category
-     */
-    public static String getHelpMessageByCategory( int nCategoryId )
-    {
-        return _dao.selectHelpMessageByCategory( nCategoryId, _plugin );
     }
 }
