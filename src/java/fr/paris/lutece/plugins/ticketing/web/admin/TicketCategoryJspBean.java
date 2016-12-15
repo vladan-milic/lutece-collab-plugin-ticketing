@@ -141,9 +141,6 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static Pattern _pattern = Pattern.compile( PATTERN_CATEGORY_CODE );
     private static final long serialVersionUID = 1L;
 
-    // Misc
-    private static final String COMMENT_CLASS_NAME = "ticketing.entryTypeComment";
-
     // Session variable to store working values
     private TicketCategory _category;
 
@@ -504,7 +501,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     {
         StringBuilder itemComboInput;
 
-        if ( COMMENT_CLASS_NAME.equals( entry.getEntryType(  ).getBeanName(  ) ) )
+        if ( entry.getEntryType(  ).getComment(  ) )
         {
             itemComboInput = new StringBuilder( entry.getCode(  ) );
         }
