@@ -42,6 +42,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.EntryService;
 import fr.paris.lutece.plugins.ticketing.service.EntryTypeService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
@@ -95,6 +96,8 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
         "ManageTicketInputEntry.jsp";
 
     // Messages
+    private static final String MESSAGE_CONFIRM_REMOVE_ENTRY = "ticketing.message.confirmRemoveEntry";
+    private static final String MESSAGE_CANT_REMOVE_ENTRY = "advert.message.cantRemoveEntry";
     private static final String MESSAGE_MANDATORY_FIELD = "portal.util.message.mandatoryField";
     private static final String PROPERTY_CREATE_ENTRY_TITLE = "ticketing.createEntry.titleInput";
     private static final String PROPERTY_MODIFY_QUESTION_TITLE = "ticketing.modifyEntry.titleInput";
@@ -103,10 +106,12 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
     // Views
     private static final String VIEW_GET_CREATE_ENTRY = "getCreateEntry";
     private static final String VIEW_GET_MODIFY_ENTRY = "getModifyEntry";
+    private static final String VIEW_CONFIRM_REMOVE_ENTRY = "confirmRemoveEntry";
 
     // Actions
     private static final String ACTION_DO_CREATE_ENTRY = "doCreateEntry";
     private static final String ACTION_DO_MODIFY_ENTRY = "doModifyEntry";
+    private static final String ACTION_DO_REMOVE_ENTRY = "doRemoveEntry";
     private static final String ACTION_DO_COPY_ENTRY = "doCopyEntry";
     private static final String ACTION_DO_MOVE_OUT_ENTRY = "doMoveOutEntry";
     private static final String ACTION_DO_MOVE_UP_ENTRY_CONDITIONAL = "doMoveUpEntryConditional";
@@ -409,6 +414,76 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
         return redirect( request, TicketInputsJspBean.getURLManageTicketInputs( request ) );
     }
 
+    /**
+     * Gets the confirmation page of delete entry
+     * @param request The HTTP request
+     * @return the confirmation page of delete entry
+     */
+    @View( VIEW_CONFIRM_REMOVE_ENTRY )
+    public String getConfirmRemoveEntry( HttpServletRequest request )
+    {
+        String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
+        UrlItem url = new UrlItem( getActionUrl( ACTION_DO_REMOVE_ENTRY ) );
+        url.addParameter( PARAMETER_ID_ENTRY, strIdEntry );
+
+        return redirect( request,
+            AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ENTRY, url.getUrl(  ),
+                AdminMessage.TYPE_CONFIRMATION ) );
+    }
+
+    /**
+     * Perform the entry removal
+     * @param request The HTTP request
+     * @return The URL to go after performing the action
+     */
+    @Action( ACTION_DO_REMOVE_ENTRY )
+    public String doRemoveEntry( HttpServletRequest request )
+    {
+        String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
+
+        if ( StringUtils.isNotEmpty( strIdEntry ) && StringUtils.isNumeric( strIdEntry ) )
+        {
+            int nIdEntry = Integer.parseInt( strIdEntry );
+
+            if ( nIdEntry <= 0 )
+            {
+                return redirect( request, TicketInputsJspBean.getURLManageTicketInputs( request ) );
+            }
+
+            Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
+
+            List<String> listErrors = new ArrayList<String>(  );
+
+            if ( !_entryService.checkForRemoval( strIdEntry, listErrors, getLocale(  ) ) )
+            {
+                String strCause = AdminMessageService.getFormattedList( listErrors, getLocale(  ) );
+                Object[] args = { strCause };
+
+                return AdminMessageService.getMessageUrl( request, MESSAGE_CANT_REMOVE_ENTRY, args,
+                    AdminMessage.TYPE_STOP );
+            }
+
+            // Update order
+            List<Entry> listEntry;
+            EntryFilter filter = new EntryFilter(  );
+            filter.setIdResource( entry.getIdResource(  ) );
+            filter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
+            listEntry = EntryHome.getEntryList( filter );
+
+            TicketHome.removeResponsesByIdEntry( nIdEntry );
+
+            // Remove entry
+            EntryHome.remove( nIdEntry );
+
+            if ( entry.getFieldDepend(  ) != null )
+            {
+                return redirect( request,
+                    TicketInputFieldJspBean.getUrlModifyField( request, entry.getFieldDepend(  ).getIdField(  ) ) );
+            }
+        }
+
+        return redirect( request, TicketInputsJspBean.getURLManageTicketInputs( request ) );
+    }
 
     /**
      * Do move up an conditional entry of a field
