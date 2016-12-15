@@ -8,7 +8,7 @@
     <input type="hidden" id="guid" name="guid" value="">
     <@fieldInputCombo i18nLabelKey="ticketing.create_ticketcategory.labelIdTicketDomain" inputName="id_ticket_domain" items=ticket_domains_list value="${ticketcategory.idTicketDomain!''}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelIdTicketDomain.help" cssClass='form-control' />
     <@fieldInputText i18nLabelKey="ticketing.create_ticketcategory.labelLabel" inputName="label" mandatory=true value="${ticketcategory.label!''}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelLabel.help" />
-    <@fieldInputText i18nLabelKey="ticketing.create_ticketcategory.labelPrecision" inputName="precision" mandatory=false value="${ticketcategory.precision!''}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelPrecision.help" />
+    <@fieldInputText i18nLabelKey="ticketing.create_ticketcategory.labelPrecision" inputName="precision" mandatory=false maxlength=150 value="${ticketcategory.precision!''}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelPrecision.help" />
     <@fieldInputText i18nLabelKey="ticketing.create_ticketcategory.labelHelpMessage" inputName="help_message" mandatory=false maxlength=500 value="${ticketcategory.help_message!''}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelHelpMessage.help" />
     <@fieldInputText i18nLabelKey="ticketing.create_ticketcategory.labelCode" inputName="code" mandatory=false value="${ticketcategory.code!''}" i18nHelpBlockKey="ticketing.create_ticketcategory.labelCode.help" />
     <#if listWorkflows??>
