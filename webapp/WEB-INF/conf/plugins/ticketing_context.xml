@@ -20,7 +20,6 @@
     <bean id="ticketing.contactModeDAO"  class="fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeDAO" /> 
     <bean id="ticketing.channelDAO"  class="fr.paris.lutece.plugins.ticketing.business.channel.ChannelDAO" /> 
     <bean id="ticketing.supportEntityDAO"  class="fr.paris.lutece.plugins.ticketing.business.supportentity.SupportEntityDAO" />  
-    <bean id="ticketing.ticketFormDAO"  class="fr.paris.lutece.plugins.ticketing.business.ticketform.TicketFormDAO" />  
     <bean id="ticketing.instantResponseDAO"  class="fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponseDAO" />  
     <bean id="ticketing.modelResponseDAO" class=" fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseDAO" />
 

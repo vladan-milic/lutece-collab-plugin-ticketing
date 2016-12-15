@@ -138,9 +138,8 @@ public interface ITicketCategoryDAO
      * @param nIdInput id Input
      * @param plugin the Plugin
      */
-	void insertLinkCategoryInputNextPos( int nIdCategory, int nIdInput, Plugin plugin );
+    void insertLinkCategoryInputNextPos( int nIdCategory, int nIdInput, Plugin plugin );
 
-	
     /**
      * Update pos field in the table linking category with input
      * @param nIdCategory id Category
@@ -148,16 +147,15 @@ public interface ITicketCategoryDAO
      * @param nPos the position to update
      * @param plugin the Plugin
      */
-	void updateLinkCategoryInputPos( int nIdCategory, int nIdInput, int nPos, Plugin plugin );
+    void updateLinkCategoryInputPos( int nIdCategory, int nIdInput, int nPos, Plugin plugin );
 
-	
     /**
      * returns the position of an input for a given category
      * @param nId id of category
      * @param nIdInput id of input
      * @return the position as an integer
      */
-	int selectCategoryInputPosition( int nId, int nIdInput, Plugin _plugin );
+    int selectCategoryInputPosition( int nId, int nIdInput, Plugin _plugin );
 
     /**
      * returns the iD of an input for a given category and position
@@ -165,8 +163,8 @@ public interface ITicketCategoryDAO
      * @param nIdInput the position
      * @return the input id
      */
-	int selectCategoryInputByPosition( int nId, int nPos, Plugin plugin );
-	
+    int selectCategoryInputByPosition( int nId, int nPos, Plugin plugin );
+
     /**
      * Create a reference list of categories for a given domain for a given category name
      * @param nDomainId The domain ID

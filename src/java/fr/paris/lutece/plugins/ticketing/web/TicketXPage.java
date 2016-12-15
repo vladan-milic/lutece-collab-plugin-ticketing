@@ -34,8 +34,6 @@
 package fr.paris.lutece.plugins.ticketing.web;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
-import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
@@ -52,8 +50,6 @@ import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.ticketform.ResponseRecap;
-import fr.paris.lutece.plugins.ticketing.business.ticketform.TicketForm;
-import fr.paris.lutece.plugins.ticketing.business.ticketform.TicketFormHome;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
@@ -165,7 +161,7 @@ public class TicketXPage extends WorkflowCapableXPage
     public XPage getCreateTicket( HttpServletRequest request )
     {
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
-        
+
         if ( ticket == null )
         {
             ticket = new Ticket(  );
@@ -356,7 +352,7 @@ public class TicketXPage extends WorkflowCapableXPage
         ticket = ( ticket != null ) ? ticket : new Ticket(  );
         populate( ticket, request );
         ticket.setListResponse( new ArrayList<Response>(  ) );
-        
+
         int nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
         ticket.setTicketCategory( ticketCategory );
@@ -365,8 +361,8 @@ public class TicketXPage extends WorkflowCapableXPage
 
         if ( ticket.getTicketCategory(  ).getId(  ) > 0 )
         {
-            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory(  ).getId(  ) ); 
-            
+            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory(  ).getId(  ) );
+
             for ( Entry entry : listEntry )
             {
                 listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry(  ),
@@ -535,8 +531,9 @@ public class TicketXPage extends WorkflowCapableXPage
 
             if ( category != null )
             {
-              model.put( MARK_TICKET_FORM,
-                      _ticketFormService.getHtmlFormInputs( ticket, category, request.getLocale(  ), bDisplayFront, request ) );
+                model.put( MARK_TICKET_FORM,
+                    _ticketFormService.getHtmlFormInputs( ticket, category, request.getLocale(  ), bDisplayFront,
+                        request ) );
             }
         }
 

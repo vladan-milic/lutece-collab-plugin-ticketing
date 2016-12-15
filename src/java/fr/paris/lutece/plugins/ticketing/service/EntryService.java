@@ -36,7 +36,7 @@ package fr.paris.lutece.plugins.ticketing.service;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
-import fr.paris.lutece.plugins.ticketing.business.ticketform.TicketForm;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.RemovalListenerService;
 
@@ -80,7 +80,7 @@ public class EntryService extends RemovalListenerService implements Serializable
 
             EntryFilter filter = new EntryFilter(  );
             filter.setIdResource( entryToChangeOrder.getIdResource(  ) );
-            filter.setResourceType( TicketForm.RESOURCE_TYPE );
+            filter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
             filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
             filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
@@ -151,7 +151,7 @@ public class EntryService extends RemovalListenerService implements Serializable
         {
             EntryFilter filter = new EntryFilter(  );
             filter.setIdResource( entryToChangeOrder.getIdResource(  ) );
-            filter.setResourceType( TicketForm.RESOURCE_TYPE );
+            filter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
             filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
             List<Entry> listAllEntry = EntryHome.getEntryList( filter );
@@ -180,7 +180,7 @@ public class EntryService extends RemovalListenerService implements Serializable
     {
         EntryFilter filter = new EntryFilter(  );
         filter.setIdResource( entryToChangeOrder.getIdResource(  ) );
-        filter.setResourceType( TicketForm.RESOURCE_TYPE );
+        filter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
         if ( entryToChangeOrder.getParent(  ) == null )
@@ -312,26 +312,6 @@ public class EntryService extends RemovalListenerService implements Serializable
         for ( Entry entry : listEntryFirstLevel )
         {
             orderFirstLevel.add( entry.getPosition(  ) );
-        }
-    }
-
-    /**
-     * Remove every entries associated with a given ticketing form
-     * @param nIdForm The id of the ticketing to remove entries of
-     */
-    public void removeEntriesByIdTicketForm( int nIdForm )
-    {
-        EntryFilter entryFilter = new EntryFilter(  );
-        entryFilter.setIdResource( nIdForm );
-        entryFilter.setResourceType( TicketForm.RESOURCE_TYPE );
-        entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
-        entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
-
-        List<Entry> listEntry = EntryHome.getEntryList( entryFilter );
-
-        for ( Entry entry : listEntry )
-        {
-            EntryHome.remove( entry.getIdEntry(  ) );
         }
     }
 }
