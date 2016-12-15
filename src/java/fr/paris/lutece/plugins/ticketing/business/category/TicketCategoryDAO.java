@@ -57,7 +57,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
     private static final String SQL_QUERY_SELECT_BY_CODE = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label,  a.id_workflow, b.label, c.label, c.id_ticket_type, a.category_code, a.id_unit, a.category_precision, a.help_message " +
         " FROM ticketing_ticket_category a, ticketing_ticket_domain b , ticketing_ticket_type c " +
         " WHERE category_code = ? AND a.id_ticket_domain = b.id_ticket_domain AND b.id_ticket_type = c.id_ticket_type  AND a.inactive <> 1 AND  b.inactive <> 1 AND  c.inactive <> 1";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_category ( id_ticket_category, id_ticket_domain, label, id_workflow, category_code, id_unit, inactive, category_precision, help_message ) VALUES ( ?, ?, ?, ?, ?, ?, ?, 0, ?, ? ) ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_category ( id_ticket_category, id_ticket_domain, label, id_workflow, category_code, id_unit, inactive, category_precision, help_message ) VALUES ( ?, ?, ?, ?, ?, ?, 0, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "UPDATE ticketing_ticket_category SET inactive = 1 WHERE id_ticket_category = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_category SET id_ticket_category = ?, id_ticket_domain = ?, label = ?, id_workflow = ?, category_code = ?, id_unit = ?, category_precision = ?, help_message = ? WHERE id_ticket_category = ?";
     private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label, a.id_workflow, b.label, c.label, c.id_ticket_type, a.category_code, a.id_unit, a.category_precision, a.help_message " +
