@@ -1,8 +1,8 @@
 // Turns the 3 combos identified by the jquery selectors into dynamic combos
-function lutece_ticket_tree(id_type, id_domain, id_category, selected_category_id, is_front, is_generic_attributes_managed) {
+function lutece_ticket_tree(id_type, id_domain, id_category, id_precision, selected_category_id, is_front, is_generic_attributes_managed) {
     var base = $('head base').attr('href');
     $.getJSON( base + "rest/ticketing/type/s?format=json", function( data ) {
-    	$("#id_ticket_precision").hide();
+        $(id_precision).hide();
         var types_map = {};
         var help_category_messages_map = {};
         var help_precision_messages_map = {};
@@ -72,7 +72,7 @@ function lutece_ticket_tree(id_type, id_domain, id_category, selected_category_i
         };
 
         var change_domain_type = function() {
-        	$('#id_ticket_category').find($('option')).attr('selected',false);
+            $(id_precision).find($('option')).attr('selected',false);
             change_domain_type_impl();
         }
         var change_domain_type_impl = function(initial_category_id) {
@@ -140,7 +140,7 @@ function lutece_ticket_tree(id_type, id_domain, id_category, selected_category_i
             $(id_category + " > option").each(function(idx, elem) { $(elem).remove(); });
         }
         var clear_precision_combo = function() {
-            $("#id_ticket_precision" + " > option").each(function(idx, elem) { $(elem).remove(); });
+            $(id_precision + " > option").each(function(idx, elem) { $(elem).remove(); });
         }
         
         var load_domain_combo = function(type, initial_domain_id) {
@@ -187,7 +187,7 @@ function lutece_ticket_tree(id_type, id_domain, id_category, selected_category_i
         		for (var i = 0; i<precisions.length; i++) {
                 	var selected = initial_precision_id == precisions[i].id ? " selected=\"selected\"" : "";
                 	var newOption = "<option value=\"" +precisions[i].id + "\"" + selected + ">" + precisions[i].label + "</option>";
-                	$(newOption).appendTo("#id_ticket_precision");
+                	$(newOption).appendTo(id_precision);
                 	if (selected) {
                 		has_precision_changed = false;
                 		if(typeof(help_precision_messages_map[precisions[i].id]) != 'undefined'){
@@ -221,13 +221,13 @@ function lutece_ticket_tree(id_type, id_domain, id_category, selected_category_i
         		if(form_precision_area != undefined) {
         			form_precision_area.show();
         		}
-        		$("#id_ticket_precision").show();
+        		$(id_precision).show();
         	} else {
 				var form_precision_area = $("#requalify_category");
         		if(form_precision_area != undefined) {
         			form_precision_area.hide();
         		}
-        		$("#id_ticket_precision").hide();
+        		$(id_precision).hide();
         		$("#help_message_precision").hide();
                 var type_id = $(id_type).val();
                 var domain_id = $(id_domain).val();
@@ -240,7 +240,7 @@ function lutece_ticket_tree(id_type, id_domain, id_category, selected_category_i
         $(id_type).change(change_ticket_type);
         $(id_domain).change(change_domain_type);
         $(id_category).change(change_category_type);
-        $("#id_ticket_precision").change(function() {
+        $(id_precision).change(function() {
         	var selectedPrecision = document.getElementById("id_ticket_precision");
         	var categorySelect = document.getElementById("id_ticket_category");
     		if (typeof(help_precision_messages_map[selectedPrecision.options[selectedPrecision.selectedIndex].value]) != 'undefined'){
@@ -252,7 +252,10 @@ function lutece_ticket_tree(id_type, id_domain, id_category, selected_category_i
         	}
     		
     		categorySelect.options[categorySelect.selectedIndex].value = selectedPrecision.options[selectedPrecision.selectedIndex].value;
-        	loadGenericAttributesForm(true, is_front);
+            if (is_generic_attributes_managed)
+            {
+                loadGenericAttributesForm(true, is_front);
+            }
         });
         var domain_id = $(id_domain).val();
         change_ticket_type_impl(domain_id, selected_category_id);
