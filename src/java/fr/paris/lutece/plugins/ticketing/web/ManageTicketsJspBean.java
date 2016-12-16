@@ -340,13 +340,15 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         clearUploadFilesIfNeeded( request.getSession(  ) );
 
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
-        ticket = ( ticket != null ) ? ticket : new Ticket(  );
+
+        if ( ticket == null )
+        {
+            ticket = new Ticket(  );
+            ticket.setTicketCategory( new TicketCategory(  ) );
+        }
 
         Map<String, Object> model = getModel(  );
         initTicketForm( request, ticket, model );
-
-        TicketCategory ticketCategory = new TicketCategory(  );
-        ticket.setTicketCategory( ticketCategory );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKET, TEMPLATE_CREATE_TICKET, model );
     }
@@ -678,7 +680,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
         ticket = ( ticket != null ) ? ticket : new Ticket(  );
 
-        TicketCategory ticketCategory = new TicketCategory(  );
+        int nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
+        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
         ticket.setTicketCategory( ticketCategory );
 
         boolean bIsFormValid = populateAndValidateFormTicket( ticket, request );
