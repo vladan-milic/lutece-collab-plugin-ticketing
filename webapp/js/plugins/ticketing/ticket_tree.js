@@ -65,6 +65,7 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
                     }
                     if(typeof(category) != 'undefined') {
                     	load_precision_combo(category, selected_category_id);
+                    	toggleHelpMessage(help_category_messages_map[category_id], "#help_message_category");
                     }
                 } else {
                 	resetGenericAttributesForm();
