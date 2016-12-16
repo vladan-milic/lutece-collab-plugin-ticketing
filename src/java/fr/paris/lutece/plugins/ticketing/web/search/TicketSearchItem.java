@@ -37,6 +37,7 @@ import fr.paris.lutece.portal.service.search.SearchItem;
 
 import org.apache.lucene.document.Document;
 
+
 /**
  * Ticket Search Item
  */
@@ -133,17 +134,19 @@ public class TicketSearchItem extends SearchItem
         this._strCategory = strCategory;
     }
 
-    public String get_strPrecision() {
-		return _strPrecision;
-	}
+    public String get_strPrecision(  )
+    {
+        return _strPrecision;
+    }
 
-	public void set_strPrecision(String _strPrecision) {
-		this._strPrecision = _strPrecision;
-	}
+    public void set_strPrecision( String _strPrecision )
+    {
+        this._strPrecision = _strPrecision;
+    }
 
-	/**
-     * @return the _strDomain
-     */
+    /**
+    * @return the _strDomain
+    */
     public String getDomain(  )
     {
         return _strDomain;

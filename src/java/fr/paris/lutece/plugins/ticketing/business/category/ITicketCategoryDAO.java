@@ -100,7 +100,7 @@ public interface ITicketCategoryDAO
      * @return The instance of the ticketCategory
      */
     TicketCategory loadByCode( String strCode, Plugin plugin );
-    
+
     /**
      * Load the data from the table
      * @param nDomainId The domain id of the category
@@ -174,11 +174,11 @@ public interface ITicketCategoryDAO
      */
     ReferenceList selectReferenceListByCategory( int nDomainId, String labelCategory, Plugin _plugin );
 
-	/**
-     * Load the id of all inputs related to the ticketCategory id and returns them as a collection
-     * @param nCategoryId The Category ID
-     * @param plugin The plugin
-     * @return The collection which contains the id of all the ticketCategory objects
-     */
+    /**
+    * Load the id of all inputs related to the ticketCategory id and returns them as a collection
+    * @param nCategoryId The Category ID
+    * @param plugin The plugin
+    * @return The collection which contains the id of all the ticketCategory objects
+    */
     List<Integer> selectIdInputListByCategory( int nCategoryId, Plugin _plugin );
 }

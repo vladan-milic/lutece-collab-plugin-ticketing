@@ -154,7 +154,7 @@ public final class TicketCategoryHome
     {
         return _dao.loadByCode( strCode, _plugin );
     }
-    
+
     /**
      * Find a category by its domain id
      * @param nDomainId The domain id

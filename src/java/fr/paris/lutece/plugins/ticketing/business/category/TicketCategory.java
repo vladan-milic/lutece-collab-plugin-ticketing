@@ -40,11 +40,11 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.io.Serializable;
 
 import java.util.List;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import java.util.List;
 
 /**
  * This is the business class for the object TicketCategory
