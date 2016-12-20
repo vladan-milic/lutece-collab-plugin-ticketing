@@ -53,7 +53,6 @@
 					<tr> 
 						<th>#i18n{ticketing.createEntry.manageField.rowTitle}</th>
 						<th>#i18n{ticketing.createEntry.manageField.rowValue}</th>
-						<th><i class="glyphicon glyphicon-question-sign" title="#i18n{ticketing.createEntry.manageField.rowConditionalQuestion}"></i>&nbsp;</th>
 						<th>#i18n{ticketing.createEntry.manageField.rowActions}</th>
 					</tr>
 					<#assign cpt=0>
@@ -63,18 +62,7 @@
 								<td>${field.title}</td>
 								<td><#if field.defaultValue><span class="label label-success"><i class="glyphicon glyphicon-ok" title="#i18n{ticketing.createEntry.manageField.rowDefaultValue}"></i></span></#if>&nbsp;${field.value}</td>
 								<td>
-									<#if field.conditionalQuestions?exists>
-										 <#list field.conditionalQuestions as entry>
-											<#if entry.entryType.comment>
-												${entry.comment}
-											<#else>
-												${entry.title}
-											</#if><br>
-										</#list>
-									</#if>     	
-								</td>
-								<td>
-									<a class="btn btn-primary btn-xs" href="jsp/admin/plugins/ticketing/admin/ManageTicketInputFields.jsp?view=getModifyFieldCC&id_field=${field.idField}"  title="#i18n{portal.util.labelModify}" >
+									<a class="btn btn-primary btn-xs" href="jsp/admin/plugins/ticketing/admin/ManageTicketInputFields.jsp?view=getModifyField&id_field=${field.idField}"  title="#i18n{portal.util.labelModify}" >
 										<i class="glyphicon glyphicon-edit"></i>
 									</a>
 									<#if cpt!=1 >
