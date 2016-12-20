@@ -139,9 +139,9 @@ function load_combo(id_combo, options, selected_option) {
 		}
 		for (var i = 0; i<options.length; i++) {
 			$(id_combo).append(new Option(options[i].label, options[i].id, selected_option.id == options[i].id, selected_option.id == options[i].id));
-			$(id_combo).show();
+			$(id_combo).parents(".form-group:first").show();
 		}
 	} else {
-		$(id_combo).hide();
+		$(id_combo).parents(".form-group:first").hide();
 	}
 }
