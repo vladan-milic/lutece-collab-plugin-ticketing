@@ -52,7 +52,7 @@ public final class TicketTypeDAO implements ITicketTypeDAO
     private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_type ( id_ticket_type, label, reference_prefix, demand_type_id, inactive ) VALUES ( ?, ?, ?, ?, 0 ) ";
     private static final String SQL_QUERY_DELETE = "UPDATE ticketing_ticket_type SET inactive = 1 WHERE id_ticket_type = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_type SET id_ticket_type = ?, label = ?, reference_prefix = ?, demand_type_id = ? WHERE id_ticket_type = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_ticket_type, label, reference_prefix, demand_type_id FROM ticketing_ticket_type WHERE inactive <> 1 ";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_ticket_type, label, reference_prefix, demand_type_id FROM ticketing_ticket_type WHERE inactive <> 1 ORDER BY label ASC";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_type FROM ticketing_ticket_type WHERE inactive <> 1 ";
     private static final String SQL_QUERY_COUNT_DOMAIN_BY_TYPE = "SELECT COUNT(1) FROM ticketing_ticket_domain WHERE id_ticket_type = ? AND inactive <> 1 ";
 

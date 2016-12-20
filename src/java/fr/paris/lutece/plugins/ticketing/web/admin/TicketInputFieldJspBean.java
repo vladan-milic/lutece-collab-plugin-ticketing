@@ -134,7 +134,6 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
         return getPage( PROPERTY_CREATE_FIELD_TITLE, TEMPLATE_CREATE_FIELD, model );
     }
 
-
     /**
      * Get the page to modify a field
      * questions
@@ -237,9 +236,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
                 TicketInputEntryJspBean.getURLModifyEntry( request, field.getParentEntry(  ).getIdEntry(  ) ) );
         }
 
-        return redirect( request,
-                VIEW_GET_MODIFY_FIELD,
-                PARAMETER_ID_FIELD, nIdField );
+        return redirect( request, VIEW_GET_MODIFY_FIELD, PARAMETER_ID_FIELD, nIdField );
     }
 
     /**
@@ -450,7 +447,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
         UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_URL_MANAGE_TICKETING_INPUT_FIELDS );
         urlItem.addParameter( MVCUtils.PARAMETER_VIEW, VIEW_GET_MODIFY_FIELD );
         urlItem.addParameter( PARAMETER_ID_FIELD, nIdField );
-        
+
         return urlItem.getUrl(  );
     }
 }
