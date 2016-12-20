@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,10 +47,12 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 
 /**
@@ -109,13 +111,13 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
      * @param json The JSON Object
      * @param ticketType The ticket type
      */
+    @SuppressWarnings( "unchecked" )
     private void add( JSONObject json, TicketType ticketType )
     {
         json.accumulate( FormatConstants.KEY_ID, ticketType.getId(  ) );
         json.accumulate( FormatConstants.KEY_LABEL, ticketType.getLabel(  ) );
 
         JSONArray jsonDomains = new JSONArray(  );
-        ArrayList<String> listCategoryNames = new ArrayList<String>(  );
 
         for ( ReferenceItem refItemDomain : TicketDomainHome.getReferenceListByType( ticketType.getId(  ) ) )
         {
@@ -124,7 +126,7 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
             jsonDomain.accumulate( FormatConstants.KEY_ID, nDomainId );
             jsonDomain.accumulate( FormatConstants.KEY_LABEL, refItemDomain.getName(  ) );
 
-            Map<String, List<TicketCategory>> mapTicketCategories = new HashMap<String, List<TicketCategory>>(  );
+            TreeMap<String, List<TicketCategory>> mapTicketCategories = new TreeMap<String, List<TicketCategory>>(  );
 
             for ( TicketCategory ticketCategory : TicketCategoryHome.findByDomainId( nDomainId ) )
             {
@@ -143,9 +145,8 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
 
             for ( Map.Entry<String, List<TicketCategory>> mapEntryCategoryByLabel : mapTicketCategories.entrySet(  ) )
             {
-                String labelCategory = mapEntryCategoryByLabel.getKey(  );
                 List<TicketCategory> listCategoryByLabel = mapEntryCategoryByLabel.getValue(  );
-                Iterator itListCategoryByLabel = listCategoryByLabel.iterator(  );
+                Iterator<TicketCategory> itListCategoryByLabel = listCategoryByLabel.iterator(  );
                 TicketCategory category = new TicketCategory(  );
 
                 JSONObject jsonCategory = new JSONObject(  );
@@ -187,6 +188,8 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
 
                 if ( !jsonPrecisions.isEmpty(  ) )
                 {
+                    Collections.sort( jsonPrecisions, new JsonLabelFormatter(  ) );
+                    
                     jsonCategory.accumulate( FormatConstants.KEY_ID, category.getId(  ) );
                     jsonCategory.accumulate( FormatConstants.KEY_LABEL, category.getLabel(  ) );
                     jsonCategory.accumulate( FormatConstants.KEY_TICKET_PRECISIONS, jsonPrecisions );
@@ -199,5 +202,22 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
         }
 
         json.accumulate( FormatConstants.KEY_TICKET_DOMAINS, jsonDomains );
+    }
+    
+    /**
+     * Comparator for JSONArray. 
+     * The comparison is based on the label element which composed each JSONObject of the Array.
+     */
+    private class JsonLabelFormatter implements Comparator<JSONObject>
+    {
+
+        @Override
+        public int compare( JSONObject jsonObjectA, JSONObject jsonObjectB )
+        {
+            String strLabelObjectA = ( String ) jsonObjectA.get( FormatConstants.KEY_LABEL );
+            String strLabelObjectB = ( String ) jsonObjectB.get( FormatConstants.KEY_LABEL );
+            return strLabelObjectA.compareTo( strLabelObjectB );
+        }
+        
     }
 }
