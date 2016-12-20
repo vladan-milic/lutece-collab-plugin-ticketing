@@ -189,7 +189,7 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
                 if ( !jsonPrecisions.isEmpty(  ) )
                 {
                     Collections.sort( jsonPrecisions, new JsonLabelFormatter(  ) );
-                    
+
                     jsonCategory.accumulate( FormatConstants.KEY_ID, category.getId(  ) );
                     jsonCategory.accumulate( FormatConstants.KEY_LABEL, category.getLabel(  ) );
                     jsonCategory.accumulate( FormatConstants.KEY_TICKET_PRECISIONS, jsonPrecisions );
@@ -203,21 +203,20 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
 
         json.accumulate( FormatConstants.KEY_TICKET_DOMAINS, jsonDomains );
     }
-    
+
     /**
-     * Comparator for JSONArray. 
+     * Comparator for JSONArray.
      * The comparison is based on the label element which composed each JSONObject of the Array.
      */
     private class JsonLabelFormatter implements Comparator<JSONObject>
     {
-
         @Override
         public int compare( JSONObject jsonObjectA, JSONObject jsonObjectB )
         {
-            String strLabelObjectA = ( String ) jsonObjectA.get( FormatConstants.KEY_LABEL );
-            String strLabelObjectB = ( String ) jsonObjectB.get( FormatConstants.KEY_LABEL );
+            String strLabelObjectA = (String) jsonObjectA.get( FormatConstants.KEY_LABEL );
+            String strLabelObjectB = (String) jsonObjectB.get( FormatConstants.KEY_LABEL );
+
             return strLabelObjectA.compareTo( strLabelObjectB );
         }
-        
     }
 }
