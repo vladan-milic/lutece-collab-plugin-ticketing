@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -113,9 +113,6 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
     private static final String ACTION_DO_MODIFY_ENTRY = "doModifyEntry";
     private static final String ACTION_DO_REMOVE_ENTRY = "doRemoveEntry";
     private static final String ACTION_DO_COPY_ENTRY = "doCopyEntry";
-    private static final String ACTION_DO_MOVE_OUT_ENTRY = "doMoveOutEntry";
-    private static final String ACTION_DO_MOVE_UP_ENTRY_CONDITIONAL = "doMoveUpEntryConditional";
-    private static final String ACTION_DO_MOVE_DOWN_ENTRY_CONDITIONAL = "doMoveDownEntryConditional";
     private static final String ACTION_DO_REMOVE_REGULAR_EXPRESSION = "doRemoveRegularExpression";
     private static final String ACTION_DO_INSERT_REGULAR_EXPRESSION = "doInsertRegularExpression";
 
@@ -124,7 +121,6 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
     private static final String MARK_ENTRY = "entry";
     private static final String MARK_LIST = "list";
     private static final String MARK_ENTRY_TYPE_SERVICE = "entryTypeService";
-    private static final String ENTRY_TYPE_LUTECE_USER_BEAN_NAME = "ticketing.entryTypeMyLuteceUser";
 
     // Local variables
     private EntryService _entryService = EntryService.getService(  );
@@ -200,7 +196,6 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
         String strIdType = request.getParameter( PARAMETER_ID_ENTRY_TYPE );
 
         int nIdInput = Integer.parseInt( strIdInput );
-        Field fieldDepend = null;
 
         if ( ( request.getParameter( PARAMETER_CANCEL ) == null ) && StringUtils.isNotEmpty( strIdType ) &&
                 StringUtils.isNumeric( strIdType ) )
@@ -211,18 +206,6 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
             Entry entry = new Entry(  );
             entry.setEntryType( EntryTypeService.getInstance(  ).getEntryType( nIdType ) );
-
-            String strIdField = request.getParameter( PARAMETER_ID_FIELD );
-            int nIdField = -1;
-
-            if ( StringUtils.isNotEmpty( strIdField ) && StringUtils.isNumeric( strIdField ) )
-            {
-                nIdField = Integer.parseInt( strIdField );
-
-                fieldDepend = new Field(  );
-                fieldDepend.setIdField( nIdField );
-                entry.setFieldDepend( fieldDepend );
-            }
 
             String strError = EntryTypeServiceManager.getEntryTypeService( entry )
                                                      .getRequestData( entry, request, getLocale(  ) );
@@ -235,8 +218,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
             // entry code is mandatory for ticketing
             String strEntryCode = request.getParameter( PARAMETER_ENTRY_CODE );
 
-            if ( StringUtils.isEmpty( strEntryCode ) &&
-                    !entry.getEntryType(  ).getBeanName(  ).equals( ENTRY_TYPE_LUTECE_USER_BEAN_NAME ) )
+            if ( StringUtils.isEmpty( strEntryCode ) )
             {
                 String[] tabErr = new String[] { I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale(  ) ) };
 
@@ -264,11 +246,6 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
             {
                 return redirect( request, VIEW_GET_MODIFY_ENTRY, PARAMETER_ID_ENTRY, entry.getIdEntry(  ) );
             }
-        }
-
-        if ( fieldDepend != null )
-        {
-            return redirect( request, TicketInputFieldJspBean.getUrlModifyField( request, fieldDepend.getIdField(  ) ) );
         }
 
         return redirect( request, TicketInputsJspBean.getURLManageTicketInputs( request ) );
@@ -403,12 +380,6 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
             {
                 return redirect( request, VIEW_GET_MODIFY_ENTRY, PARAMETER_ID_ENTRY, nIdEntry );
             }
-
-            if ( entry.getFieldDepend(  ) != null )
-            {
-                return redirect( request,
-                    TicketInputFieldJspBean.getUrlModifyField( request, entry.getFieldDepend(  ).getIdField(  ) ) );
-            }
         }
 
         return redirect( request, TicketInputsJspBean.getURLManageTicketInputs( request ) );
@@ -474,71 +445,6 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
             // Remove entry
             EntryHome.remove( nIdEntry );
-
-            if ( entry.getFieldDepend(  ) != null )
-            {
-                return redirect( request,
-                    TicketInputFieldJspBean.getUrlModifyField( request, entry.getFieldDepend(  ).getIdField(  ) ) );
-            }
-        }
-
-        return redirect( request, TicketInputsJspBean.getURLManageTicketInputs( request ) );
-    }
-
-    /**
-     * Do move up an conditional entry of a field
-     * @param request The request
-     * @return The next URL to redirect to
-     */
-    @Action( ACTION_DO_MOVE_UP_ENTRY_CONDITIONAL )
-    public String doMoveUpEntryConditional( HttpServletRequest request )
-    {
-        return doMoveEntryConditional( request, true );
-    }
-
-    /**
-     * Do move down an conditional entry of a field
-     * @param request The request
-     * @return The next URL to redirect to
-     */
-    @Action( ACTION_DO_MOVE_DOWN_ENTRY_CONDITIONAL )
-    public String doMoveDownEntryConditional( HttpServletRequest request )
-    {
-        return doMoveEntryConditional( request, false );
-    }
-
-    /**
-     * Do move up or down an conditional entry of a field
-     * @param request The request
-     * @param bMoveUp True to move the entry up, false to move it down
-     * @return The next URL to redirect to
-     */
-    private String doMoveEntryConditional( HttpServletRequest request, boolean bMoveUp )
-    {
-        String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
-
-        if ( StringUtils.isNotEmpty( strIdEntry ) && StringUtils.isNumeric( strIdEntry ) )
-        {
-            int nIdEntry = Integer.parseInt( strIdEntry );
-            Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
-            int nNewPosition = bMoveUp ? ( entry.getPosition(  ) - 1 ) : ( entry.getPosition(  ) + 1 );
-
-            if ( nNewPosition > 0 )
-            {
-                Entry entryToMove = EntryHome.findByOrderAndIdFieldAndIdResource( nNewPosition,
-                        entry.getFieldDepend(  ).getIdField(  ), entry.getIdResource(  ), entry.getResourceType(  ) );
-
-                if ( entryToMove != null )
-                {
-                    entryToMove.setPosition( entry.getPosition(  ) );
-                    EntryHome.update( entryToMove );
-                    entry.setPosition( nNewPosition );
-                    EntryHome.update( entry );
-                }
-            }
-
-            return redirect( request,
-                TicketInputFieldJspBean.getUrlModifyField( request, entry.getFieldDepend(  ).getIdField(  ) ) );
         }
 
         return redirect( request, TicketInputsJspBean.getURLManageTicketInputs( request ) );
@@ -591,36 +497,6 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
                 Entry entryParent = EntryHome.findByPrimaryKey( entry.getParent(  ).getIdEntry(  ) );
                 _entryService.moveUpEntryOrder( entryParent.getPosition(  ) + entryParent.getChildren(  ).size(  ),
                     entry );
-            }
-
-            if ( entry.getFieldDepend(  ) != null )
-            {
-                return redirect( request,
-                    TicketInputFieldJspBean.getUrlModifyField( request, entry.getFieldDepend(  ).getIdField(  ) ) );
-            }
-        }
-
-        return redirect( request, TicketInputsJspBean.getURLManageTicketInputs( request ) );
-    }
-
-    /**
-     * Remove an entry from a group
-     * @param request The request
-     * @return The newt URL to redirect to
-     */
-    @Action( ACTION_DO_MOVE_OUT_ENTRY )
-    public String doMoveOutEntry( HttpServletRequest request )
-    {
-        String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
-
-        if ( StringUtils.isNotEmpty( strIdEntry ) && StringUtils.isNumeric( strIdEntry ) )
-        {
-            int nIdEntry = Integer.parseInt( strIdEntry );
-            Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
-
-            if ( entry.getParent(  ) != null )
-            {
-                _entryService.moveOutEntryFromGroup( entry );
             }
         }
 

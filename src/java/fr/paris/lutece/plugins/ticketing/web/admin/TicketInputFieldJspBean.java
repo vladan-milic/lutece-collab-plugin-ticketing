@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
-import fr.paris.lutece.plugins.ticketing.service.EntryTypeService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -78,8 +77,6 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
 
     // Marks
     private static final String MARK_FIELD = "field";
-    private static final String MARK_ENTRY_LIST = "entry_list";
-    private static final String MARK_ENTRY_TYPE_LIST = "entry_type_list";
 
     // Messages
     private static final String MESSAGE_CONFIRM_REMOVE_FIELD = "ticketing.message.confirmRemoveField";
@@ -89,13 +86,11 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
     // Views
     private static final String VIEW_GET_CREATE_FIELD = "getCreateField";
     private static final String VIEW_GET_MODIFY_FIELD = "getModifyField";
-    private static final String VIEW_GET_MODIFY_FIELD_WITH_CONDITIONAL_QUESTIONS = "getModifyFieldCC";
     private static final String VIEW_GET_CONFIRM_REMOVE_FIELD = "getConfirmRemoveField";
 
     // Actions
     private static final String ACTION_DO_CREATE_FIELD = "doCreateField";
     private static final String ACTION_DO_MODIFY_FIELD = "doModifyField";
-    private static final String ACTION_DO_MODIFY_FIELD_WITH_CONDITIONAL_QUESTIONS = "doModifyFieldCC";
     private static final String ACTION_DO_MOVE_FIELD_UP = "doMoveFieldUp";
     private static final String ACTION_DO_MOVE_FIELD_DOWN = "doMoveFieldDown";
     private static final String ACTION_DO_REMOVE_FIELD = "doRemoveField";
@@ -118,8 +113,6 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
     // Templates
     private static final String TEMPLATE_CREATE_FIELD = TicketingConstants.TEMPLATE_ADMIN_TICKETINPUTS_FEATURE_PATH +
         "create_field.html";
-    private static final String TEMPLATE_MODIFY_FIELD_WITH_CONDITIONAL_QUESTION = TicketingConstants.TEMPLATE_ADMIN_TICKETINPUTS_FEATURE_PATH +
-        "modify_field_with_conditional_question.html";
     private static final String TEMPLATE_MODIFY_FIELD = TicketingConstants.TEMPLATE_ADMIN_TICKETINPUTS_FEATURE_PATH +
         "modify_field.html";
 
@@ -141,37 +134,15 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
         return getPage( PROPERTY_CREATE_FIELD_TITLE, TEMPLATE_CREATE_FIELD, model );
     }
 
+
     /**
-     * Get the page to modify a field without displaying its conditional
+     * Get the page to modify a field
      * questions
      * @param request The request
      * @return The HTML content to display, or the next URL to redirect to
      */
     @View( VIEW_GET_MODIFY_FIELD )
     public String getModifyField( HttpServletRequest request )
-    {
-        return getModifyField( request, false );
-    }
-
-    /**
-     * Get the page to modify a field with its conditional questions
-     * @param request The request
-     * @return The HTML content to display, or the next URL to redirect to
-     */
-    @View( VIEW_GET_MODIFY_FIELD_WITH_CONDITIONAL_QUESTIONS )
-    public String getModifyFieldWithConditionalQuestions( HttpServletRequest request )
-    {
-        return getModifyField( request, true );
-    }
-
-    /**
-     * Gets the field modification page
-     * @param request The HTTP request
-     * @param bWithConditionalQuestion true if the field is associate to
-     *            conditionals questions
-     * @return the field modification page
-     */
-    private String getModifyField( HttpServletRequest request, boolean bWithConditionalQuestion )
     {
         if ( StringUtils.isEmpty( request.getParameter( PARAMETER_ID_FIELD ) ) ||
                 !StringUtils.isNumeric( request.getParameter( PARAMETER_ID_FIELD ) ) )
@@ -188,20 +159,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_FIELD, field );
 
-        String strTemplateName;
-
-        if ( bWithConditionalQuestion )
-        {
-            model.put( MARK_ENTRY_TYPE_LIST, EntryTypeService.getInstance(  ).getEntryTypeReferenceList(  ) );
-            model.put( MARK_ENTRY_LIST, field.getConditionalQuestions(  ) );
-            strTemplateName = TEMPLATE_MODIFY_FIELD_WITH_CONDITIONAL_QUESTION;
-        }
-        else
-        {
-            strTemplateName = TEMPLATE_MODIFY_FIELD;
-        }
-
-        return getPage( PROPERTY_MODIFY_FIELD_TITLE, strTemplateName, model );
+        return getPage( PROPERTY_MODIFY_FIELD_TITLE, TEMPLATE_MODIFY_FIELD, model );
     }
 
     /**
@@ -249,30 +207,6 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
     @Action( ACTION_DO_MODIFY_FIELD )
     public String doModifyField( HttpServletRequest request )
     {
-        return doModifyField( request, false );
-    }
-
-    /**
-     * Perform modification field
-     * @param request The HTTP request
-     * @return The URL to go after performing the action
-     */
-    @Action( ACTION_DO_MODIFY_FIELD_WITH_CONDITIONAL_QUESTIONS )
-    public String doModifyFieldWithConditionalQuestions( HttpServletRequest request )
-    {
-        return doModifyField( request, true );
-    }
-
-    /**
-     * Perform modification field
-     * @param request The HTTP request
-     * @param bWithConditionalQuestion True if the field to modify accepts
-     *            conditional questions
-     * @return The URL to go after performing the action
-     */
-    @Action( ACTION_DO_MODIFY_FIELD )
-    private String doModifyField( HttpServletRequest request, boolean bWithConditionalQuestion )
-    {
         String strIdField = request.getParameter( PARAMETER_ID_FIELD );
 
         if ( StringUtils.isEmpty( strIdField ) || !StringUtils.isNumeric( strIdField ) )
@@ -304,8 +238,8 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
         }
 
         return redirect( request,
-            bWithConditionalQuestion ? VIEW_GET_MODIFY_FIELD_WITH_CONDITIONAL_QUESTIONS : VIEW_GET_MODIFY_FIELD,
-            PARAMETER_ID_FIELD, nIdField );
+                VIEW_GET_MODIFY_FIELD,
+                PARAMETER_ID_FIELD, nIdField );
     }
 
     /**
@@ -514,9 +448,9 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
     public static String getUrlModifyField( HttpServletRequest request, int nIdField )
     {
         UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_URL_MANAGE_TICKETING_INPUT_FIELDS );
-        urlItem.addParameter( MVCUtils.PARAMETER_VIEW, VIEW_GET_MODIFY_FIELD_WITH_CONDITIONAL_QUESTIONS );
+        urlItem.addParameter( MVCUtils.PARAMETER_VIEW, VIEW_GET_MODIFY_FIELD );
         urlItem.addParameter( PARAMETER_ID_FIELD, nIdField );
-
+        
         return urlItem.getUrl(  );
     }
 }
