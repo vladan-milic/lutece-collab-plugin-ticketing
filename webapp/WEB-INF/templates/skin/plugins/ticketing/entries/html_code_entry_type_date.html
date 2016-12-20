@@ -8,11 +8,16 @@
 			<#if list_responses??>
 			<#list list_responses as response>
 				<#if response.entry.idEntry == entry.idEntry>
-					<#if response.entry.error??>error</#if>" <#if response.toStringValueResponse??>value="${response.toStringValueResponse}"</#if>
+					<#if response.entry.error??>error</#if>
+					" <#if response.responseValue??>value="${response.responseValue}"
+					</#if>
 				</#if>
 			</#list>
 		<#else>
-			<#if field.valueTypeDate?exists>" value="${field.valueTypeDate}" <#else>" value="" 	</#if></#if>/>
+			<#if field.valueTypeDate?exists>" value="${field.valueTypeDate}" <#else>" value="" 	</#if>
+		</#if>/>
+		
+		
 		</#list>
 		</div>
 		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
@@ -30,5 +35,8 @@
 		</#if>
 	</div>
 </div>
-
-<@getDatePickerBootstrap idField="attribute${entry.idEntry}" language=locale.language />
+<script type="text/javascript" charset="utf-8">
+$(document).ready( function() {
+		$('#attribute${entry.idEntry}').datepicker({language: 'fr'});
+});
+</script>
