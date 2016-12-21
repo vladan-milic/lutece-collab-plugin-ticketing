@@ -127,6 +127,7 @@ public class TicketXPage extends WorkflowCapableXPage
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
     private static final String PARAMETER_RESET_RESPONSE = "reset_response";
     private static final String PARAMETER_DISPLAY_FRONT = "display_front";
+    private static final String PARAMETER_ENTRIES_FILTER = "entries_filter";
 
     // Views
     private static final String VIEW_CREATE_TICKET = "createTicket";
@@ -502,6 +503,7 @@ public class TicketXPage extends WorkflowCapableXPage
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         String strResetResponse = request.getParameter( PARAMETER_RESET_RESPONSE );
         String strDisplayFront = request.getParameter( PARAMETER_DISPLAY_FRONT );
+        String strEntriesFilter = request.getParameter( PARAMETER_ENTRIES_FILTER );
         boolean bDisplayFront = false;
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
 
@@ -521,6 +523,17 @@ public class TicketXPage extends WorkflowCapableXPage
         {
             bDisplayFront = true;
         }
+        
+        List<Integer> lEntryId = new ArrayList<Integer>(  );
+        if( StringUtils.isNotEmpty( strEntriesFilter ) )
+        {
+        	String[] tStrEntryId = strEntriesFilter.split( "," );
+        	for ( String strEntryId : tStrEntryId )
+            {
+        		lEntryId.add( Integer.parseInt( strEntryId ) );
+            }
+        }
+
 
         Map<String, Object> model = getModel(  );
 
@@ -533,7 +546,7 @@ public class TicketXPage extends WorkflowCapableXPage
             {
                 model.put( MARK_TICKET_FORM,
                     _ticketFormService.getHtmlFormInputs( ticket, category, request.getLocale(  ), bDisplayFront,
-                        request ) );
+                    		lEntryId, request ) );
             }
         }
 

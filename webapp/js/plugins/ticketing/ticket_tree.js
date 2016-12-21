@@ -119,13 +119,27 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
 
 //load generic attributes form from selected category
 function loadGenericAttributesForm(is_generic_attributes_managed, is_response_reseted, is_front, category_selector) {
+	var filterIdEntry = "";
+	if( typeof generic_attributes_filter !== "undefined" && Array.isArray( generic_attributes_filter ) )
+	{
+		filterIdEntry = generic_attributes_filter.join(  );
+	}
+	
 	if (is_generic_attributes_managed) {
 		$.ajax({
-			url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+$(category_selector).val()+"&reset_response="+is_response_reseted+"&display_front="+is_front,
+			url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+$(category_selector).val()+"&reset_response="+is_response_reseted+"&display_front="+is_front+"&entries_filter="+filterIdEntry,
 			type: "GET",
 			dataType : "html",
-			success: function( response ) {
+			success: function( response ) {				
 				$('#generic_attributes').replaceWith('<div id="generic_attributes">' + response + '</div>');
+				if( $('#generic_attributes').children("div").length>0 )
+				{
+					$('#generic_attributes_parent').show();
+				}
+				else
+				{
+					$('#generic_attributes_parent').hide();
+				}
 			}
 		});
 	}

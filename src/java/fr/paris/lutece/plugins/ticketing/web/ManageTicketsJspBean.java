@@ -528,7 +528,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
             if ( category != null )
             {
-                return _ticketFormService.getHtmlFormInputs( ticket, category, getLocale(  ), false, request );
+                return _ticketFormService.getHtmlFormInputs( ticket, category, getLocale(  ), false, null, request );
             }
         }
 

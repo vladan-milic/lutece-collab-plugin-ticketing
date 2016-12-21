@@ -146,20 +146,25 @@ public class TicketFormService implements Serializable
      * @param locale the locale
      * @param bDisplayFront True if the entry will be displayed in Front Office,
      *            false if it will be displayed in Back Office.
+     * @param lEntryIdFilter list of EntryId which have to be retrieved. If list is empty or null no filtering is done
      * @param request HttpServletRequest
      * @return the HTML code of the form
      */
-    public String getHtmlFormInputs( Ticket ticket, TicketCategory category, Locale locale, boolean bDisplayFront,
+    public String getHtmlFormInputs( Ticket ticket, TicketCategory category, Locale locale, boolean bDisplayFront, List<Integer> lEntryIdFilter, 
         HttpServletRequest request )
     {
         Map<String, Object> model = new HashMap<String, Object>(  );
         StringBuffer strBuffer = new StringBuffer(  );
 
         List<Entry> listEntryFirstLevel = getFilterInputs( category.getId(  ) );
+        boolean bEntryFilter = ( lEntryIdFilter != null ) && ( lEntryIdFilter.size(  ) > 0 );
 
         for ( Entry entry : listEntryFirstLevel )
         {
-            getHtmlEntry( entry.getIdEntry(  ), strBuffer, locale, bDisplayFront, request );
+        	if( bEntryFilter && lEntryIdFilter.contains( entry.getIdEntry(  ) ) )
+        	{
+        		getHtmlEntry( entry.getIdEntry(  ), strBuffer, locale, bDisplayFront, request );
+        	}
         }
 
         model.put( MARK_CATEGORY, category );
