@@ -181,4 +181,11 @@ public interface ITicketCategoryDAO
     * @return The collection which contains the id of all the ticketCategory objects
     */
     List<Integer> selectIdInputListByCategory( int nCategoryId, Plugin _plugin );
+
+    /**
+     * Check if an input is already used in a Category form
+     * @param nIdResource the id_resource of the input to be checked
+     * @return  true if the input is linked to 1 or more Categories
+     */
+    boolean checkIfInputIsUsedInCategories( int nIdResource, Plugin _plugin );
 }

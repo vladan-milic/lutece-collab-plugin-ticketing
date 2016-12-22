@@ -236,4 +236,14 @@ public final class TicketCategoryHome
     {
         return _dao.selectIdInputListByCategory( nCategoryId, _plugin );
     }
+
+    /**
+     * Check if an input is already used in a Category form
+     * @param nIdResource the id_resource of the input to be checked
+     * @return  true if the input is linked to 1 or more Categories
+     */
+    public static boolean checkIfInputIsUsedInCategories( int nIdResource )
+    {
+        return _dao.checkIfInputIsUsedInCategories( nIdResource, _plugin );
+    }
 }

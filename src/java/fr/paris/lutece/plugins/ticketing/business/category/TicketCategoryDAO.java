@@ -73,6 +73,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
     private static final String SQL_QUERY_SELECT_MAX_INPUT_POS_FOR_CATEGORY = "SELECT MAX(pos) FROM ticketing_ticket_category_input WHERE id_ticket_category = ? ";
     private static final String SQL_QUERY_SELECT_INPUT_POS = "SELECT pos from ticketing_ticket_category_input WHERE id_ticket_category = ? AND id_input = ? ";
     private static final String SQL_QUERY_SELECT_INPUT_BY_POS = "SELECT id_input from ticketing_ticket_category_input WHERE id_ticket_category = ? AND pos = ? ";
+    private static final String SQL_QUERY_SELECT_INPUT_IN_ALL_CATEGORIES = "SELECT id_ticket_category from ticketing_ticket_category_input WHERE id_input = ? ";
 
     /**
      * Generates a new primary key
@@ -310,6 +311,24 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.setInt( 1, nKey );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public boolean checkIfInputIsUsedInCategories( int nIdResource, Plugin _plugin )
+    {
+        boolean InputIsUsedInCategories = false;
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_INPUT_IN_ALL_CATEGORIES, _plugin );
+        daoUtil.setInt( 1, nIdResource );
+        daoUtil.executeQuery(  );
+
+        InputIsUsedInCategories = daoUtil.next(  );
+
+        daoUtil.free(  );
+
+        return InputIsUsedInCategories;
     }
 
     /**

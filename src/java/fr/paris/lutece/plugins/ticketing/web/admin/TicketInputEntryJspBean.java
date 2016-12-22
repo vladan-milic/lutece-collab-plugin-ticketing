@@ -42,6 +42,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.EntryService;
 import fr.paris.lutece.plugins.ticketing.service.EntryTypeService;
@@ -102,6 +103,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
     private static final String PROPERTY_CREATE_ENTRY_TITLE = "ticketing.createEntry.titleInput";
     private static final String PROPERTY_MODIFY_QUESTION_TITLE = "ticketing.modifyEntry.titleInput";
     private static final String PROPERTY_COPY_ENTRY_TITLE = "ticketing.copyEntry.title";
+    private static final String MESSAGE_CANNOT_REMOVE_ENTRY = "ticketing.message.errorTicketCategory.cannotRemoveEntry";
 
     // Views
     private static final String VIEW_GET_CREATE_ENTRY = "getCreateEntry";
@@ -394,12 +396,32 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
     public String getConfirmRemoveEntry( HttpServletRequest request )
     {
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
-        UrlItem url = new UrlItem( getActionUrl( ACTION_DO_REMOVE_ENTRY ) );
-        url.addParameter( PARAMETER_ID_ENTRY, strIdEntry );
 
-        return redirect( request,
-            AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ENTRY, url.getUrl(  ),
-                AdminMessage.TYPE_CONFIRMATION ) );
+        if ( StringUtils.isNotEmpty( strIdEntry ) && StringUtils.isNumeric( strIdEntry ) &&
+                ( Integer.parseInt( strIdEntry ) > 0 ) )
+        {
+            int nIdEntry = Integer.parseInt( strIdEntry );
+
+            if ( checkIfEntryIsLinkedToACategory( nIdEntry ) )
+            {
+                return redirect( request,
+                    AdminMessageService.getMessageUrl( request, MESSAGE_CANNOT_REMOVE_ENTRY,
+                        TicketInputsJspBean.getURLManageTicketInputs( request ), AdminMessage.TYPE_ERROR ) );
+            }
+            else
+            {
+                UrlItem url = new UrlItem( getActionUrl( ACTION_DO_REMOVE_ENTRY ) );
+                url.addParameter( PARAMETER_ID_ENTRY, strIdEntry );
+
+                return redirect( request,
+                    AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ENTRY, url.getUrl(  ),
+                        AdminMessage.TYPE_CONFIRMATION ) );
+            }
+        }
+        else
+        {
+            return redirect( request, TicketInputsJspBean.getURLManageTicketInputs( request ) );
+        }
     }
 
     /**
@@ -421,8 +443,6 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
                 return redirect( request, TicketInputsJspBean.getURLManageTicketInputs( request ) );
             }
 
-            Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
-
             List<String> listErrors = new ArrayList<String>(  );
 
             if ( !_entryService.checkForRemoval( strIdEntry, listErrors, getLocale(  ) ) )
@@ -433,13 +453,6 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
                 return AdminMessageService.getMessageUrl( request, MESSAGE_CANT_REMOVE_ENTRY, args,
                     AdminMessage.TYPE_STOP );
             }
-
-            // Update order
-            List<Entry> listEntry;
-            EntryFilter filter = new EntryFilter(  );
-            filter.setIdResource( entry.getIdResource(  ) );
-            filter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
-            listEntry = EntryHome.getEntryList( filter );
 
             TicketHome.removeResponsesByIdEntry( nIdEntry );
 
@@ -601,5 +614,26 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
         }
 
         return nNextIdInput;
+    }
+
+    /**
+     * Check if an input is already used in a Category form
+     *
+     * @param nIdEntry the id of entry
+     *
+     * @return  true if the Entry is linked to 1 or more Categories
+     *
+     */
+    private boolean checkIfEntryIsLinkedToACategory( int nIdEntry )
+    {
+        boolean bIsUsedInput = false;
+        Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
+
+        if ( ( entry != null ) && ( entry.getIdResource(  ) >= 0 ) )
+        {
+            bIsUsedInput = TicketCategoryHome.checkIfInputIsUsedInCategories( entry.getIdResource(  ) );
+        }
+
+        return bIsUsedInput;
     }
 }
