@@ -125,12 +125,6 @@ function loadGenericAttributesForm(url, is_response_reseted, category_selector) 
 			dataType : "html",
 			success: function( response ) {
 				$('#generic_attributes').replaceWith('<div id="generic_attributes">' + response + '</div>');
-
-				if( $('#generic_attributes').children("div").length>0 ) {
-					$('#generic_attributes_parent').show();
-				} else {
-					$('#generic_attributes_parent').hide();
-				}
 			}
 		});
 	}
