@@ -33,6 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
@@ -73,16 +83,6 @@ import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 
 /**
@@ -126,8 +126,6 @@ public class TicketXPage extends WorkflowCapableXPage
     // Parameters
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
     private static final String PARAMETER_RESET_RESPONSE = "reset_response";
-    private static final String PARAMETER_DISPLAY_FRONT = "display_front";
-    private static final String PARAMETER_ENTRIES_FILTER = "entries_filter";
 
     // Views
     private static final String VIEW_CREATE_TICKET = "createTicket";
@@ -362,7 +360,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
         if ( ticket.getTicketCategory(  ).getId(  ) > 0 )
         {
-            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory(  ).getId(  ) );
+            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory(  ).getId(  ), null );
 
             for ( Entry entry : listEntry )
             {
@@ -502,9 +500,6 @@ public class TicketXPage extends WorkflowCapableXPage
     {
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         String strResetResponse = request.getParameter( PARAMETER_RESET_RESPONSE );
-        String strDisplayFront = request.getParameter( PARAMETER_DISPLAY_FRONT );
-        String strEntriesFilter = request.getParameter( PARAMETER_ENTRIES_FILTER );
-        boolean bDisplayFront = false;
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
 
         if ( StringUtils.isNotEmpty( strResetResponse ) &&
@@ -517,37 +512,14 @@ public class TicketXPage extends WorkflowCapableXPage
                 ticket.setListResponse( new ArrayList<Response>(  ) );
             }
         }
-
-        if ( StringUtils.isNotEmpty( strDisplayFront ) &&
-                strDisplayFront.equalsIgnoreCase( Boolean.TRUE.toString(  ) ) )
-        {
-            bDisplayFront = true;
-        }
         
-        List<Integer> lEntryId = new ArrayList<Integer>(  );
-        if( StringUtils.isNotEmpty( strEntriesFilter ) )
-        {
-        	String[] tStrEntryId = strEntriesFilter.split( "," );
-        	for ( String strEntryId : tStrEntryId )
-            {
-        		lEntryId.add( Integer.parseInt( strEntryId ) );
-            }
-        }
-
-
         Map<String, Object> model = getModel(  );
 
         if ( !StringUtils.isEmpty( strIdCategory ) && StringUtils.isNumeric( strIdCategory ) )
         {
             int nIdCategory = Integer.parseInt( strIdCategory );
-            TicketCategory category = TicketCategoryHome.findByPrimaryKey( nIdCategory );
-
-            if ( category != null )
-            {
-                model.put( MARK_TICKET_FORM,
-                    _ticketFormService.getHtmlFormInputs( ticket, category, request.getLocale(  ), bDisplayFront,
-                    		lEntryId, request ) );
-            }
+            model.put( MARK_TICKET_FORM,
+                _ticketFormService.getHtmlFormInputs( request.getLocale(  ), true, nIdCategory, null, request ) );
         }
 
         XPage page = getXPage( TEMPLATE_TICKET_FORM, request.getLocale(  ), model );

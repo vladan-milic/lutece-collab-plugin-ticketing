@@ -1,5 +1,5 @@
 // Turns the 3 combos identified by the jquery selectors into dynamic combos
-function lutece_ticket_tree(type_selector, domain_selector, category_selector, precision_selector, selected_category_id, is_front, is_generic_attributes_managed) {
+function lutece_ticket_tree(type_selector, domain_selector, category_selector, precision_selector, selected_category_id, url) {
     var base = $('head base').attr('href');
     $.getJSON( base + "rest/ticketing/type/s?format=json", function( data ) {
         var types_map = {};
@@ -84,7 +84,7 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
 		load_combo(precision_selector, selectedCategory.precisions, selectedPrecision);
 		load_messages();
 		setSelectedCategoryId();
-		loadGenericAttributesForm(is_generic_attributes_managed, false, is_front, category_selector);
+		loadGenericAttributesForm(url, false, category_selector);
 		
 
 		$(type_selector).change(function() {
@@ -110,34 +110,25 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
         	selectedPrecision = selectedCategory.precisions_map[$(precision_selector).val()];
 			load_messages();
 			setSelectedCategoryId();
-			loadGenericAttributesForm(is_generic_attributes_managed, true, is_front, category_selector);
+			loadGenericAttributesForm(url, false, category_selector);
         });
-
     });
 }
 
 
 //load generic attributes form from selected category
-function loadGenericAttributesForm(is_generic_attributes_managed, is_response_reseted, is_front, category_selector) {
-	var filterIdEntry = "";
-	if( typeof generic_attributes_filter !== "undefined" && Array.isArray( generic_attributes_filter ) )
-	{
-		filterIdEntry = generic_attributes_filter.join(  );
-	}
-	
-	if (is_generic_attributes_managed) {
+function loadGenericAttributesForm(url, is_response_reseted, category_selector) {
+	if (typeof url !== "undefined") {
 		$.ajax({
-			url: "jsp/site/Portal.jsp?page=ticket&view=ticketForm&id_ticket_category="+$(category_selector).val()+"&reset_response="+is_response_reseted+"&display_front="+is_front+"&entries_filter="+filterIdEntry,
+			url: url+"&id_ticket_category="+$(category_selector).val()+"&reset_response="+is_response_reseted,
 			type: "GET",
 			dataType : "html",
-			success: function( response ) {				
+			success: function( response ) {
 				$('#generic_attributes').replaceWith('<div id="generic_attributes">' + response + '</div>');
-				if( $('#generic_attributes').children("div").length>0 )
-				{
+
+				if( $('#generic_attributes').children("div").length>0 ) {
 					$('#generic_attributes_parent').show();
-				}
-				else
-				{
+				} else {
 					$('#generic_attributes_parent').hide();
 				}
 			}

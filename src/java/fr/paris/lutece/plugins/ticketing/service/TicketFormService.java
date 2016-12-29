@@ -43,7 +43,6 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
@@ -65,7 +64,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -94,15 +92,9 @@ public class TicketFormService implements Serializable
     private static final String MARK_ENTRY = "entry";
     private static final String MARK_FIELD = "field";
     private static final String MARK_STR_LIST_CHILDREN = "str_list_entry_children";
-    private static final String MARK_CATEGORY = "category";
-    private static final String MARK_FORM = "form";
-    private static final String MARK_FORM_ERRORS = "form_errors";
-    private static final String MARK_STR_ENTRY = "str_entry";
     private static final String MARK_USER = "user";
     private static final String MARK_LIST_RESPONSES = "list_responses";
-    private static final String MARK_TICKET = "ticket";
     private static final String MARK_UPLOAD_HANDLER = "uploadHandler";
-    private static final String MARK_LIST_ERRORS = "listAllErrors";
 
     // Templates
     private static final String TEMPLATE_DIV_CONDITIONAL_ENTRY = "skin/plugins/ticketing/html_code_div_conditional_entry.html";
@@ -114,7 +106,7 @@ public class TicketFormService implements Serializable
      *            the id category
      * @return List a filter Entry
      */
-    public static List<Entry> getFilterInputs( int idCategory )
+    public static List<Entry> getFilterInputs( int idCategory, List<Integer> listEntryId )
     {
         List<Integer> listInputs = TicketCategoryHome.getIdInputListByCategory( idCategory );
         List<Entry> listEntryFirstLevel;
@@ -132,7 +124,10 @@ public class TicketFormService implements Serializable
 
             if ( ( listEntryFirstLevel != null ) && ( listEntryFirstLevel.size(  ) > 0 ) )
             {
-                listEntry.add( listEntryFirstLevel.get( 0 ) );
+                if ( listEntryId == null || listEntryId.contains( listEntryFirstLevel.get( 0 ).getIdEntry(  ) ) )
+                {
+                    listEntry.add( listEntryFirstLevel.get( 0 ) );
+                }
             }
         }
 
@@ -141,42 +136,24 @@ public class TicketFormService implements Serializable
 
     /**
      * Return the HTML code of the form
-     * @param ticket the ticket
      * @param category The category associated with the form
      * @param locale the locale
      * @param bDisplayFront True if the entry will be displayed in Front Office,
      *            false if it will be displayed in Back Office.
-     * @param lEntryIdFilter list of EntryId which have to be retrieved. If list is empty or null no filtering is done
+     * @param listEntryId list of EntryId which have to be retrieved. If list is null no filtering is done
      * @param request HttpServletRequest
      * @return the HTML code of the form
      */
-    public String getHtmlFormInputs( Ticket ticket, TicketCategory category, Locale locale, boolean bDisplayFront, List<Integer> lEntryIdFilter, 
-        HttpServletRequest request )
+    public String getHtmlFormInputs( Locale locale, boolean bDisplayFront, int nIdcategory, List<Integer> listEntryId, HttpServletRequest request )
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
         StringBuffer strBuffer = new StringBuffer(  );
 
-        List<Entry> listEntryFirstLevel = getFilterInputs( category.getId(  ) );
-        boolean bEntryFilter = ( lEntryIdFilter != null ) && ( lEntryIdFilter.size(  ) > 0 );
-
+        List<Entry> listEntryFirstLevel = getFilterInputs( nIdcategory, listEntryId );
+        
         for ( Entry entry : listEntryFirstLevel )
         {
-        	if( bEntryFilter && lEntryIdFilter.contains( entry.getIdEntry(  ) ) )
-        	{
-        		getHtmlEntry( entry.getIdEntry(  ), strBuffer, locale, bDisplayFront, request );
-        	}
+    		getHtmlEntry( entry.getIdEntry(  ), strBuffer, locale, bDisplayFront, request );
         }
-
-        model.put( MARK_CATEGORY, category );
-        model.put( MARK_STR_ENTRY, strBuffer.toString(  ) );
-        model.put( MARK_LOCALE, locale );
-        model.put( MARK_TICKET, ticket );
-
-        List<GenericAttributeError> listErrors = (List<GenericAttributeError>) request.getSession(  )
-                                                                                      .getAttribute( TicketingConstants.SESSION_TICKET_FORM_ERRORS );
-
-        model.put( MARK_FORM_ERRORS, listErrors );
-        model.put( MARK_LIST_ERRORS, getAllErrors( request ) );
 
         return strBuffer.toString(  );
     }
@@ -201,19 +178,6 @@ public class TicketFormService implements Serializable
         }
 
         return strBuffer.toString(  );
-    }
-
-    /**
-     * returns all errors
-     * @param request request
-     * @return List of errors
-     */
-    private List<String> getAllErrors( HttpServletRequest request )
-    {
-        List<String> listAllErrors = new ArrayList<String>(  );
-
-        // TODO
-        return listAllErrors;
     }
 
     /**

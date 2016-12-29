@@ -48,7 +48,7 @@
       <#list ticket.listWorkflowActions as action>
         <p>
           <#if action.displayTasksForm>
-            <a class="btn btn-lg btn-primary btn-block bg-gru-dark"  href="jsp/admin/plugins/ticketing/Ajax.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}&amp;jsp=${jsp_controller}"
+            <a class="btn btn-lg btn-primary btn-block bg-gru-dark"  href="jsp/admin/plugins/ticketing/Standalone.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}&amp;jsp=${jsp_controller}"
               data-remote="false" data-toggle="modal" data-title="${action.description}" data-target="#ticketing-modal-workflow-action-form" title="${action.name}" data-action-id="${action.id}">
               <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
             </a>

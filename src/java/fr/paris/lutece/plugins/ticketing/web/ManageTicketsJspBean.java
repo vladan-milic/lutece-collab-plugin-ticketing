@@ -33,6 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.GenAttFileItem;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
@@ -79,16 +89,6 @@ import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 
 /**
@@ -149,7 +149,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String MARK_NB_TICKET_GROUP = "nb_ticket_group";
     private static final String MARK_NB_TICKET_DOMAIN = "nb_ticket_domain";
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
-    private static final String MARK_HELP_MESSAGE_LIST = "help_message_list";
     private static final String MARK_GUID = "guid";
     private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
     private static final String MARK_PAGINATOR = "paginator";
@@ -164,7 +163,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String VIEW_MANAGE_TICKETS = "manageTickets";
     private static final String VIEW_CREATE_TICKET = "createTicket";
     private static final String VIEW_MODIFY_TICKET = "modifyTicket";
-    private static final String VIEW_TICKET_FORM = "ticketForm";
     private static final String VIEW_RECAP_TICKET = "recapTicket";
 
     // Actions
@@ -374,9 +372,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             strCategoryCode, null, null, null, strGuid, strIdCustomer, strNomenclature );
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale(  ) ) );
-        model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
-        model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
+        model.put( MARK_TICKET_TYPES_LIST, new ReferenceList(  ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, new ReferenceList(  ) );
+        model.put( MARK_TICKET_CATEGORIES_LIST, new ReferenceList(  ) );
         model.put( MARK_TICKET_PRECISIONS_LIST, new ReferenceList(  ) );
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale(  ) ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
@@ -498,41 +496,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         addInfo( INFO_TICKET_REMOVED, getLocale(  ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETS );
-    }
-
-    /**
-     * returns form linked to the selected category
-     *
-     * @param request
-     *            http request with id_ticket_category
-     * @return ticket form
-     */
-    @View( VIEW_TICKET_FORM )
-    public String getTicketForm( HttpServletRequest request )
-    {
-        //Check user rights
-        if ( !RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_VIEW, getUser(  ) ) )
-        {
-            return redirect( request,
-                AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
-        }
-
-        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
-
-        String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
-
-        if ( !StringUtils.isEmpty( strIdCategory ) && StringUtils.isNumeric( strIdCategory ) )
-        {
-            int nIdCategory = Integer.parseInt( strIdCategory );
-            TicketCategory category = TicketCategoryHome.findByPrimaryKey( nIdCategory );
-
-            if ( category != null )
-            {
-                return _ticketFormService.getHtmlFormInputs( ticket, category, getLocale(  ), false, null, request );
-            }
-        }
-
-        return StringUtils.EMPTY;
     }
 
     /**
@@ -732,7 +695,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             ticket.setListResponse( null );
 
-            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory(  ).getId(  ) );
+            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory(  ).getId(  ), null );
 
             for ( Entry entry : listEntry )
             {
