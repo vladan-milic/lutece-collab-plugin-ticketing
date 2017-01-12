@@ -18,7 +18,7 @@
 		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
 			<span class="help-block">${entry.helpMessage}</span>
 		</#if>
-	</div>	
+	</div>
 </div>
 <#if list_responses??>
 	<#list list_responses as response>
@@ -40,8 +40,5 @@
 		</#if>
 	</#list>
 </#if>
-<#if !listFiles??>
-	<#assign listFiles = ''>
-</#if>
 
-<@addUploadedFilesBox fieldName=fieldName handler=uploadHandler listFiles=listFiles />
+<@addUploadedFilesBox fieldName=fieldName handler=uploadHandler listFiles=listFiles!'' />

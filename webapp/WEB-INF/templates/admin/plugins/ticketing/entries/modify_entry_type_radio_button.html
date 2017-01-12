@@ -62,20 +62,20 @@
 								<td>${field.title}</td>
 								<td><#if field.defaultValue><span class="label label-success"><i class="glyphicon glyphicon-ok" title="#i18n{ticketing.createEntry.manageField.rowDefaultValue}"></i></span></#if>&nbsp;${field.value}</td>
 								<td>
-									<a class="btn btn-primary btn-xs" href="jsp/admin/plugins/ticketing/admin/ManageTicketInputFields.jsp?view=getModifyField&id_field=${field.idField}"  title="#i18n{portal.util.labelModify}" >
+									<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketInputFields.jsp?view=getModifyField&id_field=${field.idField}"  title="#i18n{portal.util.labelModify}" >
 										<i class="glyphicon glyphicon-edit"></i>
 									</a>
 									<#if cpt!=1 >
-									<a class="btn btn-primary btn-xs" href="jsp/admin/plugins/ticketing/admin/ManageTicketInputFields.jsp?action=doMoveFieldUp&id_field=${field.idField}#list"  title="#i18n{ticketing.createEntry.manageField.titleMoveUp}" >
+									<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketInputFields.jsp?action=doMoveFieldUp&id_field=${field.idField}#list"  title="#i18n{ticketing.createEntry.manageField.titleMoveUp}" >
 										<i class="glyphicon glyphicon-chevron-up"></i>
 									</a>
 									</#if> 
 									<#if field_has_next >
-									<a class="btn btn-primary btn-xs" href="jsp/admin/plugins/ticketing/admin/ManageTicketInputFields.jsp?action=doMoveFieldDown&id_field=${field.idField}#list"  title="#i18n{ticketing.createEntry.manageField.titleMoveDown}" >
+									<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketInputFields.jsp?action=doMoveFieldDown&id_field=${field.idField}#list"  title="#i18n{ticketing.createEntry.manageField.titleMoveDown}" >
 										<i class="glyphicon glyphicon-chevron-down"></i>
 									</a>
 									</#if>
-									<a class="btn btn-danger btn-xs" href="jsp/admin/plugins/ticketing/admin/ManageTicketInputFields.jsp?view=getConfirmRemoveField&id_field=${field.idField}#list"  title="#i18n{ticketing.createEntry.manageField.titleDelete}" >
+									<a class="btn btn-danger btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketInputFields.jsp?view=getConfirmRemoveField&id_field=${field.idField}#list"  title="#i18n{ticketing.createEntry.manageField.titleDelete}" >
 										<i class="glyphicon glyphicon-trash"></i>
 									</a>
 								</td>

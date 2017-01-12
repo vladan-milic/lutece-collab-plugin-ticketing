@@ -18,7 +18,7 @@
 	</#if>
 	<#if list_responses??>
     <#list list_responses as response>
-        <#if response.entry.idEntry == entry.idEntry && response.entry.error??    && response.entry.error.isDisplayableError>
+        <#if response.entry.idEntry == entry.idEntry && response.entry.error?? && response.entry.error.isDisplayableError>
             <#assign error = response.entry.error>
             <div class="alert alert-error alert-danger">${error.errorMessage}</div>
         </#if>
@@ -37,8 +37,5 @@
 		</#if>
 	</#list>
 </#if>
-<#if !listFiles??>
-	<#assign listFiles = ''>
-</#if>
 
-<@addUploadedFilesBox fieldName=fieldName handler=uploadHandler listFiles=listFiles />
+<@addUploadedFilesBox fieldName=fieldName handler=uploadHandler listFiles=listFiles!'' />

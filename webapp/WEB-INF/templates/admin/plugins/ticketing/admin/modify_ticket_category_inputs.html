@@ -51,19 +51,19 @@
 						<td>
 							<div class="input-group">
 								<#if cpt!=1>
-								<a class="btn  btn-primary btn-xs" href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?action=doMoveFieldUp&id=${category.id}&id_input=${entry.idResource}#list"  title="#i18n{ticketing.createEntry.manageField.titleMoveUp}" >
+								<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?action=doMoveFieldUp&id=${category.id}&id_input=${entry.idResource}#list"  title="#i18n{ticketing.createEntry.manageField.titleMoveUp}" >
 									<i class="glyphicon glyphicon-chevron-up"></i>
 								</a>
 								</#if>
 								<#if entry_has_next>
-									<a class="btn btn-primary btn-xs" href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?&action=doMoveFieldDown&id=${category.id}&id_input=${entry.idResource}#list"  title="#i18n{ticketing.createEntry.manageField.titleMoveDown}" >
+									<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?&action=doMoveFieldDown&id=${category.id}&id_input=${entry.idResource}#list"  title="#i18n{ticketing.createEntry.manageField.titleMoveDown}" >
 										<i class="glyphicon glyphicon-chevron-down"></i>
 									</a>
 								</#if>
 							</div>
 						</td>
                          <td>
-                             <a href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?view=confirmRemoveTicketCategoryInput&id=${category.id}&id_input=${entry.idResource}#list" title="#i18n{ticketing.modify_ticketcategory_inputs.titleDelete}" class="btn btn-danger">
+                             <a href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?view=confirmRemoveTicketCategoryInput&id=${category.id}&id_input=${entry.idResource}#list" title="#i18n{ticketing.modify_ticketcategory_inputs.titleDelete}" class="btn btn-danger btn-sm">
                                  <i class="fa fa-trash"></i>
                              </a>
                          </td>
