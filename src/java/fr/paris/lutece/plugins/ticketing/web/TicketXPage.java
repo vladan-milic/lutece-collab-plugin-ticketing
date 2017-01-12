@@ -33,16 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
@@ -83,6 +73,16 @@ import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -170,6 +170,8 @@ public class TicketXPage extends WorkflowCapableXPage
 
         prefillTicketWithUserInfo( request, ticket );
 
+        _ticketFormService.saveTicketInSession( request.getSession(  ), ticket );
+
         Map<String, Object> model = getModel(  );
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale(  ) ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
@@ -193,6 +195,8 @@ public class TicketXPage extends WorkflowCapableXPage
     private void prefillTicketWithUserInfo( HttpServletRequest request, Ticket ticket )
     {
         LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
+
+        ticket.setCustomerId( StringUtils.EMPTY );
 
         if ( user != null )
         {
@@ -512,7 +516,7 @@ public class TicketXPage extends WorkflowCapableXPage
                 ticket.setListResponse( new ArrayList<Response>(  ) );
             }
         }
-        
+
         Map<String, Object> model = getModel(  );
 
         if ( !StringUtils.isEmpty( strIdCategory ) && StringUtils.isNumeric( strIdCategory ) )
