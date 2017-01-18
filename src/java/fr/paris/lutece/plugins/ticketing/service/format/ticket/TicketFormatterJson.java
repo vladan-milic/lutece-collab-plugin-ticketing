@@ -44,7 +44,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 
-
 /**
  * JSON formatter for ticket resource
  *
@@ -54,13 +53,13 @@ public class TicketFormatterJson implements ITicketingFormatter<Ticket>
     @Override
     public String format( Ticket ticket )
     {
-        JSONObject json = new JSONObject(  );
+        JSONObject json = new JSONObject( );
         String strJson = StringUtils.EMPTY;
 
         if ( ticket != null )
         {
             add( json, ticket );
-            strJson = json.toString(  );
+            strJson = json.toString( );
         }
 
         return strJson;
@@ -69,19 +68,19 @@ public class TicketFormatterJson implements ITicketingFormatter<Ticket>
     @Override
     public String format( List<Ticket> listTickets )
     {
-        JSONObject json = new JSONObject(  );
-        JSONArray jsonTickets = new JSONArray(  );
+        JSONObject json = new JSONObject( );
+        JSONArray jsonTickets = new JSONArray( );
 
         for ( Ticket ticket : listTickets )
         {
-            JSONObject jsonTicket = new JSONObject(  );
+            JSONObject jsonTicket = new JSONObject( );
             add( jsonTicket, ticket );
             jsonTickets.add( jsonTicket );
         }
 
         json.accumulate( FormatConstants.KEY_TICKETS, jsonTickets );
 
-        return json.toString(  );
+        return json.toString( );
     }
 
     @Override
@@ -93,33 +92,36 @@ public class TicketFormatterJson implements ITicketingFormatter<Ticket>
     @Override
     public String formatResponse( Ticket ticket )
     {
-        JSONObject jsonTicket = new JSONObject(  );
-        jsonTicket.accumulate( FormatConstants.KEY_TICKET_REFERENCE, ticket.getReference(  ) );
+        JSONObject jsonTicket = new JSONObject( );
+        jsonTicket.accumulate( FormatConstants.KEY_TICKET_REFERENCE, ticket.getReference( ) );
 
-        return jsonTicket.toString(  );
+        return jsonTicket.toString( );
     }
 
     /**
      * Write a ticket into a JSON Object
-     * @param json The JSON Object
-     * @param ticket The ticket
+     * 
+     * @param json
+     *            The JSON Object
+     * @param ticket
+     *            The ticket
      */
     private void add( JSONObject json, Ticket ticket )
     {
-        JSONObject jsonUser = new JSONObject(  );
-        jsonUser.accumulate( FormatConstants.KEY_USER_TITLE_ID, ticket.getIdUserTitle(  ) );
-        jsonUser.accumulate( FormatConstants.KEY_USER_FIRST_NAME, ticket.getFirstname(  ) );
-        jsonUser.accumulate( FormatConstants.KEY_USER_LAST_NAME, ticket.getLastname(  ) );
-        jsonUser.accumulate( FormatConstants.KEY_USER_EMAIL, ticket.getEmail(  ) );
-        jsonUser.accumulate( FormatConstants.KEY_USER_FIXED_PHONE_NUMBER, ticket.getFixedPhoneNumber(  ) );
-        jsonUser.accumulate( FormatConstants.KEY_USER_MOBILE_PHONE_NUMBER, ticket.getMobilePhoneNumber(  ) );
+        JSONObject jsonUser = new JSONObject( );
+        jsonUser.accumulate( FormatConstants.KEY_USER_TITLE_ID, ticket.getIdUserTitle( ) );
+        jsonUser.accumulate( FormatConstants.KEY_USER_FIRST_NAME, ticket.getFirstname( ) );
+        jsonUser.accumulate( FormatConstants.KEY_USER_LAST_NAME, ticket.getLastname( ) );
+        jsonUser.accumulate( FormatConstants.KEY_USER_EMAIL, ticket.getEmail( ) );
+        jsonUser.accumulate( FormatConstants.KEY_USER_FIXED_PHONE_NUMBER, ticket.getFixedPhoneNumber( ) );
+        jsonUser.accumulate( FormatConstants.KEY_USER_MOBILE_PHONE_NUMBER, ticket.getMobilePhoneNumber( ) );
         json.accumulate( FormatConstants.KEY_USER, jsonUser );
 
-        json.accumulate( FormatConstants.KEY_TICKET_REFERENCE, ticket.getReference(  ) );
-        json.accumulate( FormatConstants.KEY_TICKET_CATEGORY_CODE, ticket.getTicketCategory(  ).getId(  ) );
-        json.accumulate( FormatConstants.KEY_TICKET_CONTACT_MODE_ID, ticket.getIdContactMode(  ) );
-        json.accumulate( FormatConstants.KEY_TICKET_CHANNEL_ID, ticket.getChannel(  ).getId(  ) );
-        json.accumulate( FormatConstants.KEY_TICKET_COMMENT, ticket.getTicketComment(  ) );
-        json.accumulate( FormatConstants.KEY_TICKET_NOMENCLATURE, ticket.getNomenclature(  ) );
+        json.accumulate( FormatConstants.KEY_TICKET_REFERENCE, ticket.getReference( ) );
+        json.accumulate( FormatConstants.KEY_TICKET_CATEGORY_CODE, ticket.getTicketCategory( ).getId( ) );
+        json.accumulate( FormatConstants.KEY_TICKET_CONTACT_MODE_ID, ticket.getIdContactMode( ) );
+        json.accumulate( FormatConstants.KEY_TICKET_CHANNEL_ID, ticket.getChannel( ).getId( ) );
+        json.accumulate( FormatConstants.KEY_TICKET_COMMENT, ticket.getTicketComment( ) );
+        json.accumulate( FormatConstants.KEY_TICKET_NOMENCLATURE, ticket.getNomenclature( ) );
     }
 }

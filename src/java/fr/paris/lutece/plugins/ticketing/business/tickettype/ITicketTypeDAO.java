@@ -38,7 +38,6 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
 
-
 /**
  * ITicketTypeDAO Interface
  */
@@ -46,61 +45,82 @@ public interface ITicketTypeDAO
 {
     /**
      * Insert a new record in the table.
-     * @param ticketType instance of the TicketType object to insert
-     * @param plugin the Plugin
+     * 
+     * @param ticketType
+     *            instance of the TicketType object to insert
+     * @param plugin
+     *            the Plugin
      */
     void insert( TicketType ticketType, Plugin plugin );
 
     /**
      * Update the record in the table
-     * @param ticketType the reference of the TicketType
-     * @param plugin the Plugin
+     * 
+     * @param ticketType
+     *            the reference of the TicketType
+     * @param plugin
+     *            the Plugin
      */
     void store( TicketType ticketType, Plugin plugin );
 
     /**
      * Delete a record from the table
-     * @param nKey The identifier of the TicketType to delete
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the TicketType to delete
+     * @param plugin
+     *            the Plugin
      */
     void delete( int nKey, Plugin plugin );
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Load the data from the table
-     * @param nKey The identifier of the ticketType
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the ticketType
+     * @param plugin
+     *            the Plugin
      * @return The instance of the ticketType
      */
     TicketType load( int nKey, Plugin plugin );
 
     /**
      * Load the data of all the ticketType objects and returns them as a collection
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The collection which contains the data of all the ticketType objects
      */
     List<TicketType> selectTicketTypesList( Plugin plugin );
 
     /**
      * Load the id of all the ticketType objects and returns them as a collection
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The collection which contains the id of all the ticketType objects
      */
     List<Integer> selectIdTicketTypesList( Plugin plugin );
 
     /**
      * Get a reference list of ticket types
-     * @param plugin The plugin
+     * 
+     * @param plugin
+     *            The plugin
      * @return The reference list
      */
     ReferenceList selectReferenceList( Plugin plugin );
 
     /**
      * check if type can be removed
-     * @param nKey The identifier of the TicketType to delete
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the TicketType to delete
+     * @param plugin
+     *            the Plugin
      * @return true if type can be removed, false otherwise
      */
     boolean canRemoveType( int nKey, Plugin plugin );

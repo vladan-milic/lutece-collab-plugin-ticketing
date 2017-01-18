@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.ticketing.service;
 
 import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 
-
 /**
  * Get the instance of the cache service
  */
@@ -50,28 +49,31 @@ public final class TicketFormCacheService extends AbstractCacheableService
     private static final String CACHE_KEY_TICKET_TYPE = "ticketing.ticketType";
     private static final String CACHE_KEY_TICKET_USER_TITLE = "ticketing.ticketUserTitle";
     private static final String CACHE_KEY_TICKET_CONTACT_MODE = "ticketing.ticketContactMode";
-    private static TicketFormCacheService _instance = new TicketFormCacheService(  );
+    private static TicketFormCacheService _instance = new TicketFormCacheService( );
 
     /**
      * Private constructor
      */
-    private TicketFormCacheService(  )
+    private TicketFormCacheService( )
     {
-        initCache(  );
+        initCache( );
     }
 
     /**
      * Get the instance of the cache service
+     * 
      * @return The instance of the service
      */
-    public static TicketFormCacheService getInstance(  )
+    public static TicketFormCacheService getInstance( )
     {
         return _instance;
     }
 
     /**
      * Get the cache key for a given form
-     * @param nIdForm The id of the form
+     * 
+     * @param nIdForm
+     *            The id of the form
      * @return The cache key for the form
      */
     public static String getFormCacheKey( int nIdForm )
@@ -167,7 +169,7 @@ public final class TicketFormCacheService extends AbstractCacheableService
      * {@inheritDoc}
      */
     @Override
-    public String getName(  )
+    public String getName( )
     {
         return SERVICE_NAME;
     }

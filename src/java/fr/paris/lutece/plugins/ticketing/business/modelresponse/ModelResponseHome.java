@@ -40,7 +40,6 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
 
-
 /**
  * This class provides instances management methods (create, find, ...) for TypeResponse objects
  */
@@ -53,14 +52,16 @@ public final class ModelResponseHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private ModelResponseHome(  )
+    private ModelResponseHome( )
     {
     }
 
     /**
      * Create an instance of the modelResponse class
-     * @param modelResponse The instance of the ModelResponse which contains the informations to store
-     * @return The  instance of modelResponse which has been created with its primary key.
+     * 
+     * @param modelResponse
+     *            The instance of the ModelResponse which contains the informations to store
+     * @return The instance of modelResponse which has been created with its primary key.
      */
     public static ModelResponse create( ModelResponse modelResponse )
     {
@@ -71,8 +72,10 @@ public final class ModelResponseHome
 
     /**
      * Update of the modelResponse which is specified in parameter
-     * @param modelResponse The instance of the ModelResponse which contains the data to store
-     * @return The instance of the  modelResponse which has been updated
+     * 
+     * @param modelResponse
+     *            The instance of the ModelResponse which contains the data to store
+     * @return The instance of the modelResponse which has been updated
      */
     public static ModelResponse update( ModelResponse modelResponse )
     {
@@ -83,7 +86,9 @@ public final class ModelResponseHome
 
     /**
      * Remove the modelResponse whose identifier is specified in parameter
-     * @param nKey The modelResponse Id
+     * 
+     * @param nKey
+     *            The modelResponse Id
      */
     public static void remove( int nKey )
     {
@@ -92,7 +97,9 @@ public final class ModelResponseHome
 
     /**
      * Returns an instance of a modelResponse whose identifier is specified in parameter
-     * @param nKey The modelResponse primary key
+     * 
+     * @param nKey
+     *            The modelResponse primary key
      * @return an instance of ModelResponse
      */
     public static ModelResponse findByPrimaryKey( int nKey )
@@ -102,27 +109,30 @@ public final class ModelResponseHome
 
     /**
      * Load the data of all the modelResponse objects and returns them as a list
+     * 
      * @return the list which contains the data of all the modelResponse objects
      */
-    public static List<ModelResponse> getModelResponsesList(  )
+    public static List<ModelResponse> getModelResponsesList( )
     {
         return _dao.selectModelResponsesList( _plugin );
     }
 
     /**
      * Load the id of all the modelResponse objects and returns them as a list
+     * 
      * @return the list which contains the id of all the modelResponse objects
      */
-    public static List<Integer> getIdTypeResponsesList(  )
+    public static List<Integer> getIdTypeResponsesList( )
     {
         return _dao.selectIdModelResponsesList( _plugin );
     }
 
     /**
      * Load the data of all the modelResponse objects and returns them as a referenceList
+     * 
      * @return the referenceList which contains the data of all the modelResponse objects
      */
-    public static ReferenceList getTypeResponsesReferenceList(  )
+    public static ReferenceList getTypeResponsesReferenceList( )
     {
         return _dao.selectModelResponsesReferenceList( _plugin );
     }

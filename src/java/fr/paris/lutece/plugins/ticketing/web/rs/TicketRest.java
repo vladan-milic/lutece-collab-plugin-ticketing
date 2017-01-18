@@ -67,7 +67,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
-
 /**
  * REST service for ticket resource
  */
@@ -93,63 +92,70 @@ public class TicketRest extends TicketingRest
     /**
      * Default constructor
      */
-    public TicketRest(  )
+    public TicketRest( )
     {
-        super(  );
+        super( );
     }
 
     /**
      * Creates a ticket
-     * @param strIdUserTitle the user title id
-     * @param strFirstname the user first name
-     * @param strLastname the user last name
-     * @param strEmail the email
-     * @param strFixedPhoneNumber the user fixed phone number
-     * @param strMobilePhoneNumber the user mobile phone number
-     * @param strCategoryCode the category code
-     * @param strIdContactMode the contact mode
-     * @param strIdChannel the channel id
-     * @param strComment the comment
-     * @param strGuid the guid
-     * @param strIdCustomer the customer id
-     * @param accept the accepted format
-     * @param format the format
-     * @param request the request
+     * 
+     * @param strIdUserTitle
+     *            the user title id
+     * @param strFirstname
+     *            the user first name
+     * @param strLastname
+     *            the user last name
+     * @param strEmail
+     *            the email
+     * @param strFixedPhoneNumber
+     *            the user fixed phone number
+     * @param strMobilePhoneNumber
+     *            the user mobile phone number
+     * @param strCategoryCode
+     *            the category code
+     * @param strIdContactMode
+     *            the contact mode
+     * @param strIdChannel
+     *            the channel id
+     * @param strComment
+     *            the comment
+     * @param strGuid
+     *            the guid
+     * @param strIdCustomer
+     *            the customer id
+     * @param accept
+     *            the accepted format
+     * @param format
+     *            the format
+     * @param request
+     *            the request
      * @return the reference of the created ticket
      */
     @PUT
-    public Response createTicket( @FormParam( PARAMETER_USER_TITLE_ID )
-    String strIdUserTitle, @FormParam( PARAMETER_USER_FIRST_NAME )
-    String strFirstname, @FormParam( PARAMETER_USER_LAST_NAME )
-    String strLastname, @FormParam( PARAMETER_USER_EMAIL )
-    String strEmail, @FormParam( PARAMETER_USER_FIXED_PHONE_NUMBER )
-    String strFixedPhoneNumber, @FormParam( PARAMETER_USER_MOBILE_PHONE_NUMBER )
-    String strMobilePhoneNumber, @FormParam( PARAMETER_TICKET_CATEGORY_CODE )
-    String strCategoryCode, @FormParam( PARAMETER_TICKET_CONTACT_MODE_ID )
-    String strIdContactMode, @FormParam( PARAMETER_TICKET_CHANNEL_ID )
-    String strIdChannel, @FormParam( PARAMETER_TICKET_COMMENT )
-    String strNomenclature, @FormParam( PARAMETER_TICKET_NOMENCLATURE )
-    String strComment, @FormParam( TicketingConstants.PARAMETER_GUID )
-    String strGuid, @FormParam( TicketingConstants.PARAMETER_CUSTOMER_ID )
-    String strIdCustomer, @HeaderParam( HttpHeaders.ACCEPT )
-    String accept, @QueryParam( Constants.FORMAT_QUERY )
-    String format, @Context
-    HttpServletRequest request )
+    public Response createTicket( @FormParam( PARAMETER_USER_TITLE_ID ) String strIdUserTitle, @FormParam( PARAMETER_USER_FIRST_NAME ) String strFirstname,
+            @FormParam( PARAMETER_USER_LAST_NAME ) String strLastname, @FormParam( PARAMETER_USER_EMAIL ) String strEmail,
+            @FormParam( PARAMETER_USER_FIXED_PHONE_NUMBER ) String strFixedPhoneNumber,
+            @FormParam( PARAMETER_USER_MOBILE_PHONE_NUMBER ) String strMobilePhoneNumber, @FormParam( PARAMETER_TICKET_CATEGORY_CODE ) String strCategoryCode,
+            @FormParam( PARAMETER_TICKET_CONTACT_MODE_ID ) String strIdContactMode, @FormParam( PARAMETER_TICKET_CHANNEL_ID ) String strIdChannel,
+            @FormParam( PARAMETER_TICKET_COMMENT ) String strNomenclature, @FormParam( PARAMETER_TICKET_NOMENCLATURE ) String strComment,
+            @FormParam( TicketingConstants.PARAMETER_GUID ) String strGuid, @FormParam( TicketingConstants.PARAMETER_CUSTOMER_ID ) String strIdCustomer,
+            @HeaderParam( HttpHeaders.ACCEPT ) String accept, @QueryParam( Constants.FORMAT_QUERY ) String format, @Context HttpServletRequest request )
     {
         String strMediaType = getMediaType( accept, format );
 
-        Ticket ticket = new Ticket(  );
+        Ticket ticket = new Ticket( );
 
         String strModifiedIdUserTitle = strIdUserTitle;
 
         if ( StringUtils.isEmpty( strIdUserTitle ) )
         {
-            List<UserTitle> listUserTitle = UserTitleHome.getUserTitlesList(  );
-            Iterator<UserTitle> iterator = listUserTitle.iterator(  );
+            List<UserTitle> listUserTitle = UserTitleHome.getUserTitlesList( );
+            Iterator<UserTitle> iterator = listUserTitle.iterator( );
 
-            if ( iterator.hasNext(  ) )
+            if ( iterator.hasNext( ) )
             {
-                strModifiedIdUserTitle = String.valueOf( iterator.next(  ).getId(  ) );
+                strModifiedIdUserTitle = String.valueOf( iterator.next( ).getId( ) );
             }
         }
 
@@ -157,12 +163,12 @@ public class TicketRest extends TicketingRest
 
         if ( StringUtils.isEmpty( strIdContactMode ) )
         {
-            List<Integer> listIdContactMode = ContactModeHome.getIdContactModesList(  );
-            Iterator<Integer> iterator = listIdContactMode.iterator(  );
+            List<Integer> listIdContactMode = ContactModeHome.getIdContactModesList( );
+            Iterator<Integer> iterator = listIdContactMode.iterator( );
 
-            if ( iterator.hasNext(  ) )
+            if ( iterator.hasNext( ) )
             {
-                strModifiedIdContactMode = iterator.next(  ).toString(  );
+                strModifiedIdContactMode = iterator.next( ).toString( );
             }
         }
 
@@ -170,84 +176,81 @@ public class TicketRest extends TicketingRest
 
         if ( StringUtils.isEmpty( strIdChannel ) )
         {
-            List<Integer> listIdChannel = ChannelHome.getIdChannelList(  );
-            Iterator<Integer> iterator = listIdChannel.iterator(  );
+            List<Integer> listIdChannel = ChannelHome.getIdChannelList( );
+            Iterator<Integer> iterator = listIdChannel.iterator( );
 
-            if ( iterator.hasNext(  ) )
+            if ( iterator.hasNext( ) )
             {
-                strModifiedIdChannel = iterator.next(  ).toString(  );
+                strModifiedIdChannel = iterator.next( ).toString( );
             }
         }
 
-        ticket.enrich( strModifiedIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber,
-            strEmail, strCategoryCode, strModifiedIdContactMode, strModifiedIdChannel, strComment, strGuid,
-            strIdCustomer, strNomenclature );
+        ticket.enrich( strModifiedIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber, strEmail, strCategoryCode,
+                strModifiedIdContactMode, strModifiedIdChannel, strComment, strGuid, strIdCustomer, strNomenclature );
 
         IFormatterFactory formatterFactory = _formatterFactories.get( strMediaType );
 
-        TicketValidator validator = TicketValidatorFactory.getInstance(  ).create( request.getLocale(  ) );
+        TicketValidator validator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = validator.validateBean( ticket );
         listValidationErrors.addAll( validator.validate( ticket ) );
 
-        if ( !listValidationErrors.isEmpty(  ) )
+        if ( !listValidationErrors.isEmpty( ) )
         {
-            String strValidationErrorsMessage = formatterFactory.createRestFormatter(  )
-                                                                .formatErrors( listValidationErrors );
+            String strValidationErrorsMessage = formatterFactory.createRestFormatter( ).formatErrors( listValidationErrors );
 
-            return Response.ok( strValidationErrorsMessage, strMediaType ).build(  );
+            return Response.ok( strValidationErrorsMessage, strMediaType ).build( );
         }
 
         List<String> creationErrors = create( ticket );
 
-        if ( !creationErrors.isEmpty(  ) )
+        if ( !creationErrors.isEmpty( ) )
         {
-            String strCreationErrorsMessage = formatterFactory.createRestFormatter(  ).formatErrors( creationErrors );
+            String strCreationErrorsMessage = formatterFactory.createRestFormatter( ).formatErrors( creationErrors );
 
-            return Response.ok( strCreationErrorsMessage, strMediaType ).build(  );
+            return Response.ok( strCreationErrorsMessage, strMediaType ).build( );
         }
 
         // Reloads the ticket to have the data updated by the workflow
-        ticket = TicketHome.findByPrimaryKey( ticket.getId(  ) );
+        ticket = TicketHome.findByPrimaryKey( ticket.getId( ) );
 
         String strResponse = formatterFactory.createFormatter( Ticket.class ).formatResponse( ticket );
 
-        return Response.ok( strResponse, strMediaType ).build(  );
+        return Response.ok( strResponse, strMediaType ).build( );
     }
 
     /**
      * Creates the specified ticket. The ticket is saved and injected in the workflow.
-     * @param ticket the ticket to create
+     * 
+     * @param ticket
+     *            the ticket to create
      * @return the list of errors which occurred during the creation
      */
     private List<String> create( Ticket ticket )
     {
-        List<String> errors = new ArrayList<String>(  );
-        TicketCategory ticketCategory = ticket.getTicketCategory(  );
-        int nIdWorkflow = ticketCategory.getIdWorkflow(  );
+        List<String> errors = new ArrayList<String>( );
+        TicketCategory ticketCategory = ticket.getTicketCategory( );
+        int nIdWorkflow = ticketCategory.getIdWorkflow( );
 
         if ( _workflowService == null )
         {
-            _workflowService = WorkflowService.getInstance(  );
+            _workflowService = WorkflowService.getInstance( );
         }
 
         TicketHome.create( ticket );
 
-        if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable(  ) )
+        if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable( ) )
         {
             try
             {
-                _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticketCategory.getId(  ) );
-                _workflowService.executeActionAutomatic( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticketCategory.getId(  ) );
+                _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+                _workflowService.executeActionAutomatic( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
             }
-            catch ( Exception e )
+            catch( Exception e )
             {
-                _workflowService.doRemoveWorkFlowResource( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE );
-                TicketHome.remove( ticket.getId(  ) );
+                _workflowService.doRemoveWorkFlowResource( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE );
+                TicketHome.remove( ticket.getId( ) );
 
-                errors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_TICKET_CREATION_ABORTED,
-                        Locale.FRENCH ) );
+                errors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_TICKET_CREATION_ABORTED, Locale.FRENCH ) );
             }
         }
 

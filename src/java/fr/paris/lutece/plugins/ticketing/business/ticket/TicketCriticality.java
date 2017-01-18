@@ -46,24 +46,25 @@ import java.util.Map;
  *
  */
 public enum TicketCriticality
-{LOW,
-    MEDIUM,
-    HIGH;
+{
+    LOW, MEDIUM, HIGH;
 
     private static final String MESSAGE_PREFIX = "ticketing.criticality.";
-    private static Map<Integer,TicketCriticality> _mapTicketCriticality = new HashMap<Integer,TicketCriticality>(  );
+    private static Map<Integer, TicketCriticality> _mapTicketCriticality = new HashMap<Integer, TicketCriticality>( );
 
     static
     {
         for ( TicketCriticality enumTicketCriticality : EnumSet.allOf( TicketCriticality.class ) )
         {
-            _mapTicketCriticality.put( enumTicketCriticality.ordinal(  ), enumTicketCriticality );
+            _mapTicketCriticality.put( enumTicketCriticality.ordinal( ), enumTicketCriticality );
         }
     }
 
     /**
      * returns TicketCriticality enum from id
-     * @param nTicketCriticalityId level value
+     * 
+     * @param nTicketCriticalityId
+     *            level value
      * @return TicketCriticality enum
      */
     public static TicketCriticality valueOf( int nTicketCriticalityId )
@@ -73,26 +74,30 @@ public enum TicketCriticality
 
     /**
      * Gives the localized message
-     * @param locale the locale to use
+     * 
+     * @param locale
+     *            the locale to use
      * @return the message
      */
     public String getLocalizedMessage( Locale locale )
     {
-        return I18nService.getLocalizedString( MESSAGE_PREFIX + this.name(  ).toLowerCase(  ), locale );
+        return I18nService.getLocalizedString( MESSAGE_PREFIX + this.name( ).toLowerCase( ), locale );
     }
 
     /**
      * Builds a RefenrenceList object containing all the TicketCriticality objects
-     * @param locale the locale used to retrieve the localized messages
+     * 
+     * @param locale
+     *            the locale used to retrieve the localized messages
      * @return the ReferenceList object
      */
     public static ReferenceList getReferenceList( Locale locale )
     {
-        ReferenceList listCriticalities = new ReferenceList(  );
+        ReferenceList listCriticalities = new ReferenceList( );
 
-        for ( TicketCriticality ticketCriticality : TicketCriticality.values(  ) )
+        for ( TicketCriticality ticketCriticality : TicketCriticality.values( ) )
         {
-            listCriticalities.addItem( ticketCriticality.ordinal(  ), ticketCriticality.getLocalizedMessage( locale ) );
+            listCriticalities.addItem( ticketCriticality.ordinal( ), ticketCriticality.getLocalizedMessage( locale ) );
         }
 
         return listCriticalities;

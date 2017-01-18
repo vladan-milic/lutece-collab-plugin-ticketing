@@ -33,21 +33,21 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
-
 /**
  * enum for ticket tabulation in list ticket view
  *
  */
 public enum TabulationEnum
-{AGENT( "agent" ),
-    GROUP( "group" ),
-    DOMAIN( "domain" );
+{
+    AGENT( "agent" ), GROUP( "group" ), DOMAIN( "domain" );
 
     private String _strLabel;
 
     /**
      * constructor
-     * @param strLabel label of ticket
+     * 
+     * @param strLabel
+     *            label of ticket
      */
     TabulationEnum( String strLabel )
     {
@@ -56,9 +56,10 @@ public enum TabulationEnum
 
     /**
      * returns value of tab
+     * 
      * @return period id
      */
-    public String getLabel(  )
+    public String getLabel( )
     {
         return _strLabel;
     }

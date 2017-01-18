@@ -39,7 +39,6 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * This class is a utility class for Ticketing EntryType
  *
@@ -54,23 +53,26 @@ public final class EntryTypeUtils
     /**
      * Default constructor
      */
-    private EntryTypeUtils(  )
+    private EntryTypeUtils( )
     {
     }
 
     /**
      * Initializes the Model
-     * @param entry the Entry Object
-     * @param response the Response object
+     * 
+     * @param entry
+     *            the Entry Object
+     * @param response
+     *            the Response object
      * @return the initialized Model
      */
     public static Map<String, Object> initModel( Entry entry, Response response )
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
 
         model.put( MARK_ENTRY, entry );
         model.put( MARK_RESPONSE, response );
-        model.put( MARK_FIELD, response.getField(  ) );
+        model.put( MARK_FIELD, response.getField( ) );
 
         return model;
     }

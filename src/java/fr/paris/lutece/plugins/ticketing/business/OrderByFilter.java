@@ -39,7 +39,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  *
  * abstract class OrderByFilter
@@ -53,8 +52,7 @@ public abstract class OrderByFilter
     private static final String CONSTANT_SQL_SEPARATOR = " , ";
 
     /**
-     * map containing functional field name as key
-     * target sql column list name as value
+     * map containing functional field name as key target sql column list name as value
      */
     protected Map<String, List<String>> _mapOrderNameToColumnName;
     private String _strOrderBy;
@@ -63,36 +61,36 @@ public abstract class OrderByFilter
     /**
      * constructor
      */
-    public OrderByFilter(  )
+    public OrderByFilter( )
     {
-        super(  );
-        initOrderNameToColumnNameMap(  );
+        super( );
+        initOrderNameToColumnNameMap( );
     }
 
     /**
      * init _mapOrderNameToColumnName map
      *
      */
-    protected abstract void initOrderNameToColumnNameMap(  );
+    protected abstract void initOrderNameToColumnNameMap( );
 
     /**
      * returns default order by columns
+     * 
      * @return default order by columns
      */
-    public abstract List<String> getDefaultOrderBySqlColumns(  );
+    public abstract List<String> getDefaultOrderBySqlColumns( );
 
     /**
-     * @return  the strOrderSort to set
+     * @return the strOrderSort to set
      */
-    public abstract String getDefaultOrderSort(  );
+    public abstract String getDefaultOrderSort( );
 
     /**
      * Set the order by attribute of this filter.
      *
      * @param strOrderBy
-     *            The order by attribute of this filter. If the specified order
-     *            does not match with column names of the ticket table of the
-     *            database, then the order by is reinitialized.
+     *            The order by attribute of this filter. If the specified order does not match with column names of the ticket table of the database, then the
+     *            order by is reinitialized.
      */
     public void setOrderBy( String strOrderBy )
     {
@@ -101,26 +99,27 @@ public abstract class OrderByFilter
 
     /**
      * return order by column matching order by filter name
-     * @param isOrderAsc true if order ascending false otherwise
+     * 
+     * @param isOrderAsc
+     *            true if order ascending false otherwise
      * @return the _strOrderBy
      */
     public String getOrderBySqlClause( boolean isOrderAsc )
     {
-        String strComputedOrderby = new String(  );
+        String strComputedOrderby = new String( );
 
         if ( _mapOrderNameToColumnName.containsKey( _strOrderBy ) )
         {
-            Iterator<String> iterator = _mapOrderNameToColumnName.get( _strOrderBy ).iterator(  );
+            Iterator<String> iterator = _mapOrderNameToColumnName.get( _strOrderBy ).iterator( );
             strComputedOrderby += CONSTANT_ORDER_BY;
 
-            while ( iterator.hasNext(  ) )
+            while ( iterator.hasNext( ) )
             {
-                String strColumnName = iterator.next(  );
+                String strColumnName = iterator.next( );
 
-                if ( iterator.hasNext(  ) )
+                if ( iterator.hasNext( ) )
                 {
-                    strComputedOrderby += ( strColumnName + ( isOrderAsc ? CONSTANT_ASC : CONSTANT_DESC ) +
-                    CONSTANT_SQL_SEPARATOR );
+                    strComputedOrderby += ( strColumnName + ( isOrderAsc ? CONSTANT_ASC : CONSTANT_DESC ) + CONSTANT_SQL_SEPARATOR );
                 }
                 else
                 {
@@ -139,24 +138,25 @@ public abstract class OrderByFilter
 
     /**
      * return order by column matching order by filter name
-     * @param isOrderAsc true if order ascending false otherwise
+     * 
+     * @param isOrderAsc
+     *            true if order ascending false otherwise
      * @return the _strOrderBy
      */
     public String getDefaultOrderBySqlClause( boolean isOrderAsc )
     {
-        String strComputedOrderby = new String(  );
+        String strComputedOrderby = new String( );
 
-        Iterator<String> iterator = getDefaultOrderBySqlColumns(  ).iterator(  );
+        Iterator<String> iterator = getDefaultOrderBySqlColumns( ).iterator( );
         strComputedOrderby += CONSTANT_ORDER_BY;
 
-        while ( iterator.hasNext(  ) )
+        while ( iterator.hasNext( ) )
         {
-            String strColumnName = iterator.next(  );
+            String strColumnName = iterator.next( );
 
-            if ( iterator.hasNext(  ) )
+            if ( iterator.hasNext( ) )
             {
-                strComputedOrderby += ( strColumnName + ( isOrderAsc ? CONSTANT_ASC : CONSTANT_DESC ) +
-                CONSTANT_SQL_SEPARATOR );
+                strComputedOrderby += ( strColumnName + ( isOrderAsc ? CONSTANT_ASC : CONSTANT_DESC ) + CONSTANT_SQL_SEPARATOR );
             }
             else
             {
@@ -171,7 +171,7 @@ public abstract class OrderByFilter
     /**
      * @return the _strOrderBy
      */
-    public String getOrderBy(  )
+    public String getOrderBy( )
     {
         return _strOrderBy;
     }
@@ -181,7 +181,7 @@ public abstract class OrderByFilter
      *
      * @return the _strOrderBy
      */
-    public boolean containsOrderBy(  )
+    public boolean containsOrderBy( )
     {
         return StringUtils.isNotEmpty( _strOrderBy );
     }
@@ -189,9 +189,9 @@ public abstract class OrderByFilter
     /**
      * @return the _bOrderASC
      */
-    public boolean isOrderASC(  )
+    public boolean isOrderASC( )
     {
-        return OrderSortAllowed.ASC.name(  ).equalsIgnoreCase( _strOrderSort );
+        return OrderSortAllowed.ASC.name( ).equalsIgnoreCase( _strOrderSort );
     }
 
     /**
@@ -199,15 +199,15 @@ public abstract class OrderByFilter
      *
      * @return true if filter contains a valid ordersort
      */
-    public boolean containsOrderSort(  )
+    public boolean containsOrderSort( )
     {
         boolean bResult = false;
 
         if ( StringUtils.isNotEmpty( _strOrderSort ) )
         {
-            for ( OrderSortAllowed osa : OrderSortAllowed.values(  ) )
+            for ( OrderSortAllowed osa : OrderSortAllowed.values( ) )
             {
-                if ( osa.name(  ).equalsIgnoreCase( _strOrderSort ) )
+                if ( osa.name( ).equalsIgnoreCase( _strOrderSort ) )
                 {
                     bResult = true;
 
@@ -229,18 +229,19 @@ public abstract class OrderByFilter
     }
 
     /**
-     * @return  the strOrderSort to set
+     * @return the strOrderSort to set
      */
-    public String getOrderSort(  )
+    public String getOrderSort( )
     {
         return _strOrderSort;
     }
 
     /**
      * returns true if filter is empty
+     * 
      * @return true if filter is empty
      */
-    public boolean isEmpty(  )
+    public boolean isEmpty( )
     {
         return StringUtils.isEmpty( _strOrderBy ) && StringUtils.isEmpty( _strOrderSort );
     }
@@ -249,7 +250,7 @@ public abstract class OrderByFilter
      * Sort order allowed
      */
     public enum OrderSortAllowed
-    {ASC,
-        DESC;
+    {
+        ASC, DESC;
     }
 }

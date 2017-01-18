@@ -41,7 +41,6 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
 
-
 /**
  * This class provides instances management methods (create, find, ...) for TicketType objects
  */
@@ -54,13 +53,15 @@ public final class TicketTypeHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private TicketTypeHome(  )
+    private TicketTypeHome( )
     {
     }
 
     /**
      * Create an instance of the ticketType class
-     * @param ticketType The instance of the TicketType which contains the informations to store
+     * 
+     * @param ticketType
+     *            The instance of the TicketType which contains the informations to store
      */
     public static void create( TicketType ticketType )
     {
@@ -69,7 +70,9 @@ public final class TicketTypeHome
 
     /**
      * Update of the ticketType which is specified in parameter
-     * @param ticketType The instance of the TicketType which contains the data to store
+     * 
+     * @param ticketType
+     *            The instance of the TicketType which contains the data to store
      */
     public static void update( TicketType ticketType )
     {
@@ -78,7 +81,9 @@ public final class TicketTypeHome
 
     /**
      * Remove the ticketType whose identifier is specified in parameter
-     * @param nKey The ticketType Id
+     * 
+     * @param nKey
+     *            The ticketType Id
      */
     public static void remove( int nKey )
     {
@@ -94,7 +99,9 @@ public final class TicketTypeHome
 
     /**
      * return true if type can be removed false otherwise
-     * @param nKey The ticketType Id
+     * 
+     * @param nKey
+     *            The ticketType Id
      * @return true if type can be removed false otherwise
      */
     public static boolean canRemove( int nKey )
@@ -102,12 +109,14 @@ public final class TicketTypeHome
         return _dao.canRemoveType( nKey, _plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Returns an instance of a ticketType whose identifier is specified in parameter
-     * @param nKey The ticketType primary key
+     * 
+     * @param nKey
+     *            The ticketType primary key
      * @return an instance of TicketType
      */
     public static TicketType findByPrimaryKey( int nKey )
@@ -117,27 +126,30 @@ public final class TicketTypeHome
 
     /**
      * Load the data of all the ticketType objects and returns them in form of a collection
+     * 
      * @return the collection which contains the data of all the ticketType objects
      */
-    public static List<TicketType> getTicketTypesList(  )
+    public static List<TicketType> getTicketTypesList( )
     {
         return _dao.selectTicketTypesList( _plugin );
     }
 
     /**
      * Load the id of all the ticketType objects and returns them in form of a collection
+     * 
      * @return the collection which contains the id of all the ticketType objects
      */
-    public static List<Integer> getIdTicketTypesList(  )
+    public static List<Integer> getIdTicketTypesList( )
     {
         return _dao.selectIdTicketTypesList( _plugin );
     }
 
     /**
      * returns referenceList
+     * 
      * @return ReferenceList
      */
-    public static ReferenceList getReferenceList(  )
+    public static ReferenceList getReferenceList( )
     {
         return _dao.selectReferenceList( _plugin );
     }

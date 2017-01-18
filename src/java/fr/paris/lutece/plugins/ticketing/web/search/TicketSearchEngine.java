@@ -61,7 +61,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * TicketSearchEngine
  */
@@ -76,32 +75,31 @@ public class TicketSearchEngine implements ITicketSearchEngine
      */
     private List<SearchResult> convertList( List<TicketSearchItem> listSource )
     {
-        List<SearchResult> listDest = new ArrayList<SearchResult>(  );
+        List<SearchResult> listDest = new ArrayList<SearchResult>( );
 
         for ( TicketSearchItem item : listSource )
         {
-            TicketSearchResult result = new TicketSearchResult(  );
-            result.setId( item.getTicketId(  ) );
+            TicketSearchResult result = new TicketSearchResult( );
+            result.setId( item.getTicketId( ) );
 
             try
             {
-                if ( StringUtils.isNotEmpty( item.getDate(  ) ) )
+                if ( StringUtils.isNotEmpty( item.getDate( ) ) )
                 {
-                    result.setDate( DateTools.stringToDate( item.getDate(  ) ) );
+                    result.setDate( DateTools.stringToDate( item.getDate( ) ) );
                 }
             }
-            catch ( java.text.ParseException e )
+            catch( java.text.ParseException e )
             {
-                AppLogService.error( "Bad Date Format for indexed item \"" + item.getTitle(  ) + "\" : " +
-                    e.getMessage(  ) );
+                AppLogService.error( "Bad Date Format for indexed item \"" + item.getTitle( ) + "\" : " + e.getMessage( ) );
             }
 
-            result.setUrl( item.getUrl(  ) );
-            result.setTitle( item.getTitle(  ) );
-            result.setSummary( item.getSummary(  ) );
-            result.setType( item.getType(  ) );
-            result.setComment( item.getComment(  ) );
-            result.setResponse( item.getResponse(  ) );
+            result.setUrl( item.getUrl( ) );
+            result.setTitle( item.getTitle( ) );
+            result.setSummary( item.getSummary( ) );
+            result.setType( item.getType( ) );
+            result.setComment( item.getComment( ) );
+            result.setResponse( item.getResponse( ) );
             listDest.add( (SearchResult) result );
         }
 
@@ -117,26 +115,26 @@ public class TicketSearchEngine implements ITicketSearchEngine
      */
     private List<SearchResult> search( Query query )
     {
-        List<TicketSearchItem> listResults = new ArrayList<TicketSearchItem>(  );
+        List<TicketSearchItem> listResults = new ArrayList<TicketSearchItem>( );
 
         try
         {
-            IndexSearcher searcher = TicketSearchService.getInstance(  ).getSearcher(  );
+            IndexSearcher searcher = TicketSearchService.getInstance( ).getSearcher( );
 
             if ( searcher != null )
             {
-                //hook because of strange behaviour with native query (using toString seems to fix issue)
-                String strQuery = query.toString(  );
-                Query queryToLaunch = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
-                        TicketSearchItem.FIELD_CONTENTS, TicketSearchService.getInstance(  ).getAnalyzer(  ) ).parse( strQuery );
+                // hook because of strange behaviour with native query (using toString seems to fix issue)
+                String strQuery = query.toString( );
+                Query queryToLaunch = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, TicketSearchItem.FIELD_CONTENTS, TicketSearchService
+                        .getInstance( ).getAnalyzer( ) ).parse( strQuery );
 
                 // Get results documents
                 TopDocs topDocs = searcher.search( queryToLaunch, LuceneSearchEngine.MAX_RESPONSES );
-                ScoreDoc[] hits = topDocs.scoreDocs;
+                ScoreDoc [ ] hits = topDocs.scoreDocs;
 
                 for ( int i = 0; i < hits.length; i++ )
                 {
-                    int docId = hits[i].doc;
+                    int docId = hits [i].doc;
                     Document document = searcher.doc( docId );
                     TicketSearchItem si = new TicketSearchItem( document );
 
@@ -144,13 +142,13 @@ public class TicketSearchEngine implements ITicketSearchEngine
                 }
             }
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
         }
-        catch ( ParseException e )
+        catch( ParseException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
         }
 
         return convertList( listResults );
@@ -160,10 +158,9 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * {@inheritDoc}
      */
     @Override
-    public List<SearchResult> searchTickets( String strQuery, List<TicketDomain> listTicketDomain )
-        throws ParseException
+    public List<SearchResult> searchTickets( String strQuery, List<TicketDomain> listTicketDomain ) throws ParseException
     {
-        BooleanQuery mainQuery = new BooleanQuery(  );
+        BooleanQuery mainQuery = new BooleanQuery( );
         TermQuery queryTicket = new TermQuery( new Term( TicketSearchItem.FIELD_CONTENTS, strQuery ) );
         mainQuery.add( queryTicket, BooleanClause.Occur.MUST );
         addQueryDomainClause( mainQuery, listTicketDomain );
@@ -174,33 +171,37 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
     /**
      * add ticket type clause
-     * @param booleanQuery input query
-     * @throws ParseException exception while parsing  document type
+     * 
+     * @param booleanQuery
+     *            input query
+     * @throws ParseException
+     *             exception while parsing document type
      */
-    private void addQueryTypeClause( BooleanQuery booleanQuery )
-        throws ParseException
+    private void addQueryTypeClause( BooleanQuery booleanQuery ) throws ParseException
     {
-        QueryParser qpt = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, TicketSearchItem.FIELD_TYPE,
-                TicketSearchService.getInstance(  ).getAnalyzer(  ) );
-        Query queryType = qpt.parse( TicketIndexer.getDocumentType(  ) );
+        QueryParser qpt = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, TicketSearchItem.FIELD_TYPE, TicketSearchService.getInstance( )
+                .getAnalyzer( ) );
+        Query queryType = qpt.parse( TicketIndexer.getDocumentType( ) );
         booleanQuery.add( queryType, BooleanClause.Occur.MUST );
     }
 
     /**
      * add ticket domain clause
-     * @param booleanQuery input query
-     * @param listUserDomain list domains authorized for admin user
-     * @throws ParseException exception while parsing  document type
+     * 
+     * @param booleanQuery
+     *            input query
+     * @param listUserDomain
+     *            list domains authorized for admin user
+     * @throws ParseException
+     *             exception while parsing document type
      */
-    private void addQueryDomainClause( BooleanQuery booleanQuery, List<TicketDomain> listUserDomain )
-        throws ParseException
+    private void addQueryDomainClause( BooleanQuery booleanQuery, List<TicketDomain> listUserDomain ) throws ParseException
     {
-        BooleanQuery domainsQuery = new BooleanQuery(  );
+        BooleanQuery domainsQuery = new BooleanQuery( );
 
         for ( TicketDomain domain : listUserDomain )
         {
-            TermQuery domQuery = new TermQuery( new Term( TicketSearchItem.FIELD_DOMAIN,
-                        QueryParser.escape( domain.getLabel(  ) ) ) );
+            TermQuery domQuery = new TermQuery( new Term( TicketSearchItem.FIELD_DOMAIN, QueryParser.escape( domain.getLabel( ) ) ) );
             domainsQuery.add( new BooleanClause( domQuery, BooleanClause.Occur.SHOULD ) );
         }
 

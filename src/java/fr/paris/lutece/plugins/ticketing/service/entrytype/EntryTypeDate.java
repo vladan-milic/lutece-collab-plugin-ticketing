@@ -44,7 +44,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  * class EntryTypeDate
@@ -92,6 +91,6 @@ public class EntryTypeDate extends AbstractEntryTypeDate
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_READ_ONLY_HTML, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 }

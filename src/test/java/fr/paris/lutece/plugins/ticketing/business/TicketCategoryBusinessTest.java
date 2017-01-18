@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.test.LuteceTestCase;
 
-
 public class TicketCategoryBusinessTest extends LuteceTestCase
 {
     private final static int IDTICKETDOMAIN1 = 100;
@@ -45,34 +44,34 @@ public class TicketCategoryBusinessTest extends LuteceTestCase
     private final static String LABEL1 = "Label1";
     private final static String LABEL2 = "Label2";
 
-    public void testBusiness(  )
+    public void testBusiness( )
     {
         // Initialize an object
-        TicketCategory ticketCategory = new TicketCategory(  );
+        TicketCategory ticketCategory = new TicketCategory( );
         ticketCategory.setIdTicketDomain( IDTICKETDOMAIN1 );
         ticketCategory.setLabel( LABEL1 );
 
         // Create test
         TicketCategoryHome.create( ticketCategory );
 
-        TicketCategory ticketCategoryStored = TicketCategoryHome.findByPrimaryKey( ticketCategory.getId(  ) );
-        assertEquals( ticketCategoryStored.getIdTicketDomain(  ), ticketCategory.getIdTicketDomain(  ) );
-        assertEquals( ticketCategoryStored.getLabel(  ), ticketCategory.getLabel(  ) );
+        TicketCategory ticketCategoryStored = TicketCategoryHome.findByPrimaryKey( ticketCategory.getId( ) );
+        assertEquals( ticketCategoryStored.getIdTicketDomain( ), ticketCategory.getIdTicketDomain( ) );
+        assertEquals( ticketCategoryStored.getLabel( ), ticketCategory.getLabel( ) );
 
         // Update test
         ticketCategory.setIdTicketDomain( IDTICKETDOMAIN2 );
         ticketCategory.setLabel( LABEL2 );
         TicketCategoryHome.update( ticketCategory );
-        ticketCategoryStored = TicketCategoryHome.findByPrimaryKey( ticketCategory.getId(  ) );
-        assertEquals( ticketCategoryStored.getIdTicketDomain(  ), ticketCategory.getIdTicketDomain(  ) );
-        assertEquals( ticketCategoryStored.getLabel(  ), ticketCategory.getLabel(  ) );
+        ticketCategoryStored = TicketCategoryHome.findByPrimaryKey( ticketCategory.getId( ) );
+        assertEquals( ticketCategoryStored.getIdTicketDomain( ), ticketCategory.getIdTicketDomain( ) );
+        assertEquals( ticketCategoryStored.getLabel( ), ticketCategory.getLabel( ) );
 
         // List test
-        TicketCategoryHome.getTicketCategorysList(  );
+        TicketCategoryHome.getTicketCategorysList( );
 
         // Delete test
-        TicketCategoryHome.remove( ticketCategory.getId(  ) );
-        ticketCategoryStored = TicketCategoryHome.findByPrimaryKey( ticketCategory.getId(  ) );
+        TicketCategoryHome.remove( ticketCategory.getId( ) );
+        ticketCategoryStored = TicketCategoryHome.findByPrimaryKey( ticketCategory.getId( ) );
         assertNotNull( ticketCategoryStored );
     }
 }

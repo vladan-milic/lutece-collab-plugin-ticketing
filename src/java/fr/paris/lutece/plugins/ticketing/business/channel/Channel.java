@@ -39,7 +39,6 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Size;
 
-
 /**
  * This is the business class for the object Channel
  */
@@ -52,7 +51,7 @@ public class Channel implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    // Variables declarations 
+    // Variables declarations
     private int _nId;
     @NotEmpty( message = "#i18n{ticketing.validation.channel.Label.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.channel.Label.size}" )
@@ -62,16 +61,19 @@ public class Channel implements Serializable
 
     /**
      * Returns the Id
+     * 
      * @return The Id
      */
-    public int getId(  )
+    public int getId( )
     {
         return _nId;
     }
 
     /**
      * Sets the Id
-     * @param nId The Id
+     * 
+     * @param nId
+     *            The Id
      */
     public void setId( int nId )
     {
@@ -80,16 +82,19 @@ public class Channel implements Serializable
 
     /**
      * Returns the Label
+     * 
      * @return The Label
      */
-    public String getLabel(  )
+    public String getLabel( )
     {
         return _strLabel;
     }
 
     /**
      * Sets the Label
-     * @param strLabel The Label
+     * 
+     * @param strLabel
+     *            The Label
      */
     public void setLabel( String strLabel )
     {
@@ -98,16 +103,19 @@ public class Channel implements Serializable
 
     /**
      * Returns the Icon font label
+     * 
      * @return The Icon font label
      */
-    public String getIconFont(  )
+    public String getIconFont( )
     {
         return _strIconFont;
     }
 
     /**
      * Sets the Icon font label
-     * @param strIconFont The Icon font label
+     * 
+     * @param strIconFont
+     *            The Icon font label
      */
     public void setIconFont( String strIconFont )
     {

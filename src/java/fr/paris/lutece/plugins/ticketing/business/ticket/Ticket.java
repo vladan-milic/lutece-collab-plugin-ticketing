@@ -61,7 +61,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-
 /**
  * This is the business class for the object Ticket
  */
@@ -72,7 +71,7 @@ public class Ticket implements Serializable, RBACResource
     private static final String SEPARATOR = " ";
     private static final String PHONE_NUMBER_REGEX = "(^$|[0-9]{10})";
 
-    // Variables declarations 
+    // Variables declarations
     private int _nId;
     private String _strReference;
     private int _nIdUserTitle;
@@ -126,69 +125,81 @@ public class Ticket implements Serializable, RBACResource
     private transient AssigneeUnit _assignerUnit;
     private String _strUserMessage;
     private String _strUrl;
-    private Channel _channel = new Channel(  );
+    private Channel _channel = new Channel( );
     private String _strNomenclature;
     private boolean _bRead;
 
     /**
      * Enriches empty ticket attributes with specified values
-     * @param strIdUserTitle the user title id as String
-     * @param strFirstname the first name
-     * @param strLastname the last name
-     * @param strFixedPhoneNumber the fixed phone number
-     * @param strMobilePhoneNumber the mobile phone number
-     * @param strEmail the email
-     * @param strCategoryCode the categoryCode
-     * @param strIdContactMode the contact mode id
-     * @param strIdChannel the channel id
-     * @param strComment the comment
-     * @param strGuid the guid
-     * @param strCustomerId the customer id
+     * 
+     * @param strIdUserTitle
+     *            the user title id as String
+     * @param strFirstname
+     *            the first name
+     * @param strLastname
+     *            the last name
+     * @param strFixedPhoneNumber
+     *            the fixed phone number
+     * @param strMobilePhoneNumber
+     *            the mobile phone number
+     * @param strEmail
+     *            the email
+     * @param strCategoryCode
+     *            the categoryCode
+     * @param strIdContactMode
+     *            the contact mode id
+     * @param strIdChannel
+     *            the channel id
+     * @param strComment
+     *            the comment
+     * @param strGuid
+     *            the guid
+     * @param strCustomerId
+     *            the customer id
      */
-    public void enrich( String strIdUserTitle, String strFirstname, String strLastname, String strFixedPhoneNumber,
-        String strMobilePhoneNumber, String strEmail, String strCategoryCode, String strIdContactMode,
-        String strIdChannel, String strComment, String strGuid, String strCustomerId, String strNomenclature )
+    public void enrich( String strIdUserTitle, String strFirstname, String strLastname, String strFixedPhoneNumber, String strMobilePhoneNumber,
+            String strEmail, String strCategoryCode, String strIdContactMode, String strIdChannel, String strComment, String strGuid, String strCustomerId,
+            String strNomenclature )
     {
         if ( !StringUtils.isEmpty( strIdUserTitle ) )
         {
             setIdUserTitle( Integer.parseInt( strIdUserTitle ) );
         }
 
-        if ( !StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty( getFirstname(  ) ) )
+        if ( !StringUtils.isEmpty( strFirstname ) && StringUtils.isEmpty( getFirstname( ) ) )
         {
             setFirstname( strFirstname );
         }
 
-        if ( !StringUtils.isEmpty( strLastname ) && StringUtils.isEmpty( getLastname(  ) ) )
+        if ( !StringUtils.isEmpty( strLastname ) && StringUtils.isEmpty( getLastname( ) ) )
         {
             setLastname( strLastname );
         }
 
-        if ( !StringUtils.isEmpty( strFixedPhoneNumber ) && StringUtils.isEmpty( getFixedPhoneNumber(  ) ) )
+        if ( !StringUtils.isEmpty( strFixedPhoneNumber ) && StringUtils.isEmpty( getFixedPhoneNumber( ) ) )
         {
             setFixedPhoneNumber( strFixedPhoneNumber );
         }
 
-        if ( !StringUtils.isEmpty( strMobilePhoneNumber ) && StringUtils.isEmpty( getMobilePhoneNumber(  ) ) )
+        if ( !StringUtils.isEmpty( strMobilePhoneNumber ) && StringUtils.isEmpty( getMobilePhoneNumber( ) ) )
         {
             setMobilePhoneNumber( strMobilePhoneNumber );
         }
 
-        if ( !StringUtils.isEmpty( strEmail ) && StringUtils.isEmpty( getEmail(  ) ) )
+        if ( !StringUtils.isEmpty( strEmail ) && StringUtils.isEmpty( getEmail( ) ) )
         {
             setEmail( strEmail );
         }
 
-        if ( !StringUtils.isEmpty( strCategoryCode ) &&
-                ( ( _ticketCategory != null ) && ( _ticketCategory.getId(  ) == 0 ) ) )
+        if ( !StringUtils.isEmpty( strCategoryCode ) && ( ( _ticketCategory != null ) && ( _ticketCategory.getId( ) == 0 ) ) )
         {
             TicketCategory category = TicketCategoryHome.findByCode( strCategoryCode );
 
             if ( category != null )
             {
                 setTicketCategory( category );
-                setIdTicketDomain( category.getIdTicketDomain(  ) );
-                setIdTicketType( category.getIdTicketType(  ) );
+                setIdTicketDomain( category.getIdTicketDomain( ) );
+                setIdTicketType( category.getIdTicketType( ) );
             }
         }
 
@@ -203,7 +214,7 @@ public class Ticket implements Serializable, RBACResource
             {
                 setChannel( ChannelHome.findByPrimaryKey( Integer.parseInt( strIdChannel ) ) );
             }
-            catch ( NumberFormatException e )
+            catch( NumberFormatException e )
             {
             }
         }
@@ -213,34 +224,37 @@ public class Ticket implements Serializable, RBACResource
             setNomenclature( strNomenclature );
         }
 
-        if ( !StringUtils.isEmpty( strComment ) && StringUtils.isEmpty( getTicketComment(  ) ) )
+        if ( !StringUtils.isEmpty( strComment ) && StringUtils.isEmpty( getTicketComment( ) ) )
         {
             setTicketComment( strComment );
         }
 
-        if ( !StringUtils.isEmpty( strGuid ) && StringUtils.isEmpty( getGuid(  ) ) )
+        if ( !StringUtils.isEmpty( strGuid ) && StringUtils.isEmpty( getGuid( ) ) )
         {
             setGuid( strGuid );
         }
 
-        if ( !StringUtils.isEmpty( strCustomerId ) && StringUtils.isEmpty( getCustomerId(  ) ) )
+        if ( !StringUtils.isEmpty( strCustomerId ) && StringUtils.isEmpty( getCustomerId( ) ) )
         {
             setCustomerId( strCustomerId );
         }
     }
 
     /**
-    * Returns the Id
-    * @return The Id
-    */
-    public int getId(  )
+     * Returns the Id
+     * 
+     * @return The Id
+     */
+    public int getId( )
     {
         return _nId;
     }
 
     /**
      * Sets the Id
-     * @param nId The Id
+     * 
+     * @param nId
+     *            The Id
      */
     public void setId( int nId )
     {
@@ -249,16 +263,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the IdUserTitle
+     * 
      * @return The IdUserTitle
      */
-    public int getIdUserTitle(  )
+    public int getIdUserTitle( )
     {
         return _nIdUserTitle;
     }
 
     /**
      * Sets the IdUserTitle
-     * @param nIdUserTitle The IdUserTitle
+     * 
+     * @param nIdUserTitle
+     *            The IdUserTitle
      */
     public void setIdUserTitle( int nIdUserTitle )
     {
@@ -267,16 +284,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the Reference
+     * 
      * @return The Reference
      */
-    public String getReference(  )
+    public String getReference( )
     {
         return _strReference;
     }
 
     /**
      * Sets the Reference
-     * @param strReference The Reference
+     * 
+     * @param strReference
+     *            The Reference
      */
     public void setReference( String strReference )
     {
@@ -285,16 +305,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the UserTitle
+     * 
      * @return The UserTitle
      */
-    public String getUserTitle(  )
+    public String getUserTitle( )
     {
         return _strUserTitle;
     }
 
     /**
      * Sets the UserTitle
-     * @param strUserTitle The UserTitle
+     * 
+     * @param strUserTitle
+     *            The UserTitle
      */
     public void setUserTitle( String strUserTitle )
     {
@@ -303,16 +326,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the Firstname
+     * 
      * @return The Firstname
      */
-    public String getFirstname(  )
+    public String getFirstname( )
     {
         return _strFirstname;
     }
 
     /**
      * Sets the Firstname
-     * @param strFirstname The Firstname
+     * 
+     * @param strFirstname
+     *            The Firstname
      */
     public void setFirstname( String strFirstname )
     {
@@ -321,16 +347,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the Lastname
+     * 
      * @return The Lastname
      */
-    public String getLastname(  )
+    public String getLastname( )
     {
         return _strLastname;
     }
 
     /**
      * Sets the Lastname
-     * @param strLastname The Lastname
+     * 
+     * @param strLastname
+     *            The Lastname
      */
     public void setLastname( String strLastname )
     {
@@ -339,16 +368,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the Email
+     * 
      * @return The Email
      */
-    public String getEmail(  )
+    public String getEmail( )
     {
         return _strEmail;
     }
 
     /**
      * Sets the Email
-     * @param strEmail The Email
+     * 
+     * @param strEmail
+     *            The Email
      */
     public void setEmail( String strEmail )
     {
@@ -360,7 +392,7 @@ public class Ticket implements Serializable, RBACResource
      *
      * @return The FixedPhoneNumber
      */
-    public String getFixedPhoneNumber(  )
+    public String getFixedPhoneNumber( )
     {
         return _strFixedPhoneNumber;
     }
@@ -381,7 +413,7 @@ public class Ticket implements Serializable, RBACResource
      *
      * @return The MobilePhoneNumber
      */
-    public String getMobilePhoneNumber(  )
+    public String getMobilePhoneNumber( )
     {
         return _strMobilePhoneNumber;
     }
@@ -399,16 +431,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the IdTicketType
+     * 
      * @return The IdTicketType
      */
-    public int getIdTicketType(  )
+    public int getIdTicketType( )
     {
         return _nIdTicketType;
     }
 
     /**
      * Sets the IdTicketType
-     * @param nIdTicketType The IdTicketType
+     * 
+     * @param nIdTicketType
+     *            The IdTicketType
      */
     public void setIdTicketType( int nIdTicketType )
     {
@@ -417,16 +452,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the TicketType
+     * 
      * @return The TicketType
      */
-    public String getTicketType(  )
+    public String getTicketType( )
     {
         return _strTicketType;
     }
 
     /**
      * Sets the TicketType
-     * @param strTicketType The TicketType
+     * 
+     * @param strTicketType
+     *            The TicketType
      */
     public void setTicketType( String strTicketType )
     {
@@ -435,16 +473,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the IdTicketDomain
+     * 
      * @return The IdTicketDomain
      */
-    public int getIdTicketDomain(  )
+    public int getIdTicketDomain( )
     {
         return _nIdTicketDomain;
     }
 
     /**
      * Sets the IdTicketDomain
-     * @param nIdTicketDomain The IdTicketDomain
+     * 
+     * @param nIdTicketDomain
+     *            The IdTicketDomain
      */
     public void setIdTicketDomain( int nIdTicketDomain )
     {
@@ -453,16 +494,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the TicketCategory
+     * 
      * @return The TicketCategory
      */
-    public TicketCategory getTicketCategory(  )
+    public TicketCategory getTicketCategory( )
     {
         return _ticketCategory;
     }
 
     /**
      * Sets the TicketCategory
-     * @param ticketCategory The TicketCategory
+     * 
+     * @param ticketCategory
+     *            The TicketCategory
      */
     public void setTicketCategory( TicketCategory ticketCategory )
     {
@@ -471,16 +515,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the TicketDomain
+     * 
      * @return The TicketDomain
      */
-    public String getTicketDomain(  )
+    public String getTicketDomain( )
     {
         return _strTicketDomain;
     }
 
     /**
      * Sets the TicketDomain
-     * @param strTicketDomain The TicketDomain
+     * 
+     * @param strTicketDomain
+     *            The TicketDomain
      */
     public void setTicketDomain( String strTicketDomain )
     {
@@ -492,7 +539,7 @@ public class Ticket implements Serializable, RBACResource
      *
      * @return The IdContactMode
      */
-    public int getIdContactMode(  )
+    public int getIdContactMode( )
     {
         return _nIdContactMode;
     }
@@ -513,7 +560,7 @@ public class Ticket implements Serializable, RBACResource
      *
      * @return The ContactMode
      */
-    public String getContactMode(  )
+    public String getContactMode( )
     {
         return _strContactMode;
     }
@@ -534,7 +581,7 @@ public class Ticket implements Serializable, RBACResource
      *
      * @return The TicketComment
      */
-    public String getTicketComment(  )
+    public String getTicketComment( )
     {
         return _strTicketComment;
     }
@@ -555,23 +602,26 @@ public class Ticket implements Serializable, RBACResource
      *
      * @return The ConfirmationMsg
      */
-    public String getConfirmationMsg(  )
+    public String getConfirmationMsg( )
     {
         return _strConfirmationMsg;
     }
 
     /**
      * Gets the create date
+     * 
      * @return the create date
      */
-    public Timestamp getDateCreate(  )
+    public Timestamp getDateCreate( )
     {
         return _dDateCreate;
     }
 
     /**
      * Sets the create date
-     * @param dDateCreate the create date
+     * 
+     * @param dDateCreate
+     *            the create date
      */
     public void setDateCreate( Timestamp dDateCreate )
     {
@@ -580,16 +630,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Gets the update date
+     * 
      * @return the update date
      */
-    public Timestamp getDateUpdate(  )
+    public Timestamp getDateUpdate( )
     {
         return _dDateUpdate;
     }
 
     /**
      * Sets the update date
-     * @param dDateUpdate the update date
+     * 
+     * @param dDateUpdate
+     *            the update date
      */
     public void setDateUpdate( Timestamp dDateUpdate )
     {
@@ -598,16 +651,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Gets the close date
+     * 
      * @return the close date
      */
-    public Timestamp getDateClose(  )
+    public Timestamp getDateClose( )
     {
         return _dDateClose;
     }
 
     /**
      * Sets the close date
-     * @param dDateClose The close date
+     * 
+     * @param dDateClose
+     *            The close date
      */
     public void setDateClose( Timestamp dDateClose )
     {
@@ -630,14 +686,16 @@ public class Ticket implements Serializable, RBACResource
      *
      * @return The TicketStatus
      */
-    public int getTicketStatus(  )
+    public int getTicketStatus( )
     {
         return _nTicketStatus;
     }
 
     /**
      * Sets the TicketStatus
-     * @param nTicketStatus The TicketStatus
+     * 
+     * @param nTicketStatus
+     *            The TicketStatus
      */
     public void setTicketStatus( int nTicketStatus )
     {
@@ -646,16 +704,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the TicketStatusText
+     * 
      * @return The TicketStatusText
      */
-    public String getTicketStatusText(  )
+    public String getTicketStatusText( )
     {
         return _strTicketStatusText;
     }
 
     /**
      * Sets the TicketStatusText
-     * @param strTicketStatusText The TicketStatusText
+     * 
+     * @param strTicketStatusText
+     *            The TicketStatusText
      */
     public void setTicketStatusText( String strTicketStatusText )
     {
@@ -664,16 +725,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the State
+     * 
      * @return The State
      */
-    public State getState(  )
+    public State getState( )
     {
         return _state;
     }
 
     /**
      * Sets the State
-     * @param state The state
+     * 
+     * @param state
+     *            The state
      */
     public void setState( State state )
     {
@@ -681,21 +745,21 @@ public class Ticket implements Serializable, RBACResource
     }
 
     /**
-     * Get the list of workflow actions available for this ticket. Workflow
-     * actions are NOT loaded by default, so check that they have been set
-     * before calling this method.
+     * Get the list of workflow actions available for this ticket. Workflow actions are NOT loaded by default, so check that they have been set before calling
+     * this method.
+     * 
      * @return The list of workflow actions available for this ticket.
      */
-    public Collection<Action> getListWorkflowActions(  )
+    public Collection<Action> getListWorkflowActions( )
     {
         return _listWorkflowActions;
     }
 
     /**
      * Set the list of workflow actions available for this ticket.
-     * @param listWorkflowActions The list of workflow actions available for
-     *            this
-     *            ticket.
+     * 
+     * @param listWorkflowActions
+     *            The list of workflow actions available for this ticket.
      */
     public void setListWorkflowActions( Collection<Action> listWorkflowActions )
     {
@@ -704,16 +768,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Get the list of response of this ticket
+     * 
      * @return the list of response of this ticket
      */
-    public List<Response> getListResponse(  )
+    public List<Response> getListResponse( )
     {
         return _listResponse;
     }
 
     /**
      * Set the list of responses of this ticket
-     * @param listResponse The list of responses
+     * 
+     * @param listResponse
+     *            The list of responses
      */
     public void setListResponse( List<Response> listResponse )
     {
@@ -724,14 +791,16 @@ public class Ticket implements Serializable, RBACResource
      *
      * @return the _strGuid
      */
-    public String getGuid(  )
+    public String getGuid( )
     {
         return _strGuid;
     }
 
     /**
      * Sets the GUID
-     * @param strGuid the Guid to set
+     * 
+     * @param strGuid
+     *            the Guid to set
      */
     public void setGuid( String strGuid )
     {
@@ -743,14 +812,16 @@ public class Ticket implements Serializable, RBACResource
      *
      * @return The Criticality
      */
-    public int getCriticality(  )
+    public int getCriticality( )
     {
         return _nCriticality;
     }
 
     /**
      * Sets the Criticality
-     * @param nCriticality The Criticality
+     * 
+     * @param nCriticality
+     *            The Criticality
      */
     public void setCriticality( int nCriticality )
     {
@@ -762,14 +833,16 @@ public class Ticket implements Serializable, RBACResource
      *
      * @return The Priority
      */
-    public int getPriority(  )
+    public int getPriority( )
     {
         return _nPriority;
     }
 
     /**
      * Sets the Priority
-     * @param nPriority The Priority
+     * 
+     * @param nPriority
+     *            The Priority
      */
     public void setPriority( int nPriority )
     {
@@ -781,7 +854,7 @@ public class Ticket implements Serializable, RBACResource
      *
      * @return The CustomerId
      */
-    public String getCustomerId(  )
+    public String getCustomerId( )
     {
         return _strCustomerId;
     }
@@ -798,17 +871,20 @@ public class Ticket implements Serializable, RBACResource
     }
 
     /**
-    * Returns the AssigneeUser
-    * @return The AssigneeUser
-    */
-    public AssigneeUser getAssigneeUser(  )
+     * Returns the AssigneeUser
+     * 
+     * @return The AssigneeUser
+     */
+    public AssigneeUser getAssigneeUser( )
     {
         return _user;
     }
 
     /**
      * Sets the AssigneeUser
-     * @param assigneeUser The AssigneeUser
+     * 
+     * @param assigneeUser
+     *            The AssigneeUser
      */
     public void setAssigneeUser( AssigneeUser assigneeUser )
     {
@@ -817,16 +893,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the AssigneeUnit
+     * 
      * @return The AssigneeUnit
      */
-    public AssigneeUnit getAssigneeUnit(  )
+    public AssigneeUnit getAssigneeUnit( )
     {
         return _unit;
     }
 
     /**
      * Sets the assigneeUnit
-     * @param assigneeUnit The assigneeUnit
+     * 
+     * @param assigneeUnit
+     *            The assigneeUnit
      */
     public void setAssigneeUnit( AssigneeUnit assigneeUnit )
     {
@@ -834,17 +913,20 @@ public class Ticket implements Serializable, RBACResource
     }
 
     /**
-    * Returns the user from assign up
-    * @return The user from assign up
-    */
-    public AssigneeUser getAssignerUser(  )
+     * Returns the user from assign up
+     * 
+     * @return The user from assign up
+     */
+    public AssigneeUser getAssignerUser( )
     {
         return _assignerUser;
     }
 
     /**
      * Sets the user from assign up
-     * @param assignerUser The user from assign up
+     * 
+     * @param assignerUser
+     *            The user from assign up
      */
     public void setAssignerUser( AssigneeUser assignerUser )
     {
@@ -853,16 +935,19 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the unit from assign up
+     * 
      * @return The unit from assign up
      */
-    public AssigneeUnit getAssignerUnit(  )
+    public AssigneeUnit getAssignerUnit( )
     {
         return _assignerUnit;
     }
 
     /**
      * Sets the unit from assign up
-     * @param assignerUnit The unit from assign up
+     * 
+     * @param assignerUnit
+     *            The unit from assign up
      */
     public void setAssignerUnit( AssigneeUnit assignerUnit )
     {
@@ -870,13 +955,13 @@ public class Ticket implements Serializable, RBACResource
     }
 
     @Override
-    public String getResourceId(  )
+    public String getResourceId( )
     {
         return String.valueOf( _nId );
     }
 
     @Override
-    public String getResourceTypeCode(  )
+    public String getResourceTypeCode( )
     {
         return TICKET_RESOURCE_TYPE;
     }
@@ -886,7 +971,7 @@ public class Ticket implements Serializable, RBACResource
      *
      * @return The user message
      */
-    public String getUserMessage(  )
+    public String getUserMessage( )
     {
         return _strUserMessage;
     }
@@ -907,7 +992,7 @@ public class Ticket implements Serializable, RBACResource
      *
      * @return The url
      */
-    public String getUrl(  )
+    public String getUrl( )
     {
         return _strUrl;
     }
@@ -925,7 +1010,9 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the channel
-     * @param channel The channel
+     * 
+     * @param channel
+     *            The channel
      */
     public void setChannel( Channel channel )
     {
@@ -934,24 +1021,27 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the channel
+     * 
      * @return The channel
      */
-    public Channel getChannel(  )
+    public Channel getChannel( )
     {
         return _channel;
     }
 
     /**
-    * Returns the nomenclature
-    * @return The string of the nomenclature
-    */
-    public String getNomenclature(  )
+     * Returns the nomenclature
+     * 
+     * @return The string of the nomenclature
+     */
+    public String getNomenclature( )
     {
         return _strNomenclature;
     }
 
     /**
      * Sets the Nomenclature
+     * 
      * @param String
      */
     public void setNomenclature( String _strNomenclature )
@@ -961,7 +1051,9 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the flag to know if the ticket has been read (by the assignee user)
-     * @param bRead {@code true} if the ticket has been read, {@code false} otherwise
+     * 
+     * @param bRead
+     *            {@code true} if the ticket has been read, {@code false} otherwise
      */
     public void setRead( boolean bRead )
     {
@@ -970,18 +1062,20 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the flag to know if the ticket has been read (by the assignee user)
+     * 
      * @return {@code true} if the ticket has been read, {@code false} otherwise
      */
-    public boolean isRead(  )
+    public boolean isRead( )
     {
         return _bRead;
     }
 
     /**
      * Returns urgency, it s computed from max of criticty and priority value
+     * 
      * @return urgency
      */
-    public int getUrgency(  )
+    public int getUrgency( )
     {
         return ( _nCriticality >= _nPriority ) ? _nCriticality : _nPriority;
     }
@@ -989,9 +1083,9 @@ public class Ticket implements Serializable, RBACResource
     /**
      * {@inheritDoc}
      */
-    public String toString(  )
+    public String toString( )
     {
-        StringBuilder sb = new StringBuilder(  );
+        StringBuilder sb = new StringBuilder( );
         sb.append( _nId );
 
         if ( StringUtils.isNotEmpty( _strReference ) )
@@ -999,6 +1093,6 @@ public class Ticket implements Serializable, RBACResource
             sb.append( SEPARATOR ).append( _strReference );
         }
 
-        return sb.toString(  );
+        return sb.toString( );
     }
 }

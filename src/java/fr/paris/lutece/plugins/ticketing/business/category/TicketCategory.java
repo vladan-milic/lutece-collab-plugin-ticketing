@@ -45,7 +45,6 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
 /**
  * This is the business class for the object TicketCategory
  */
@@ -76,7 +75,7 @@ public class TicketCategory implements Serializable
      *
      * @return The Id
      */
-    public int getId(  )
+    public int getId( )
     {
         return _nId;
     }
@@ -97,7 +96,7 @@ public class TicketCategory implements Serializable
      *
      * @return The IdTicketDomain
      */
-    public int getIdTicketDomain(  )
+    public int getIdTicketDomain( )
     {
         return _nIdTicketDomain;
     }
@@ -118,7 +117,7 @@ public class TicketCategory implements Serializable
      *
      * @return The IdTicketType
      */
-    public int getIdTicketType(  )
+    public int getIdTicketType( )
     {
         return _nIdTicketType;
     }
@@ -139,7 +138,7 @@ public class TicketCategory implements Serializable
      *
      * @return The TicketDomain
      */
-    public String getTicketDomain(  )
+    public String getTicketDomain( )
     {
         return _strTicketDomain;
     }
@@ -160,7 +159,7 @@ public class TicketCategory implements Serializable
      *
      * @return The TicketType
      */
-    public String getTicketType(  )
+    public String getTicketType( )
     {
         return _strTicketType;
     }
@@ -181,7 +180,7 @@ public class TicketCategory implements Serializable
      *
      * @return The Label
      */
-    public String getLabel(  )
+    public String getLabel( )
     {
         return _strLabel;
     }
@@ -202,7 +201,7 @@ public class TicketCategory implements Serializable
      *
      * @return The id of the workflow
      */
-    public int getIdWorkflow(  )
+    public int getIdWorkflow( )
     {
         return _nIdWorkflow;
     }
@@ -219,15 +218,16 @@ public class TicketCategory implements Serializable
     }
 
     /**
-    * @return the _listIdInput
-    */
-    public List<Integer> getListIdInput(  )
+     * @return the _listIdInput
+     */
+    public List<Integer> getListIdInput( )
     {
         return _listIdInput;
     }
 
     /**
-     * @param listIdInput the listIdInput to set
+     * @param listIdInput
+     *            the listIdInput to set
      */
     public void setListIdInput( List<Integer> listIdInput )
     {
@@ -239,7 +239,7 @@ public class TicketCategory implements Serializable
      *
      * @return The Code
      */
-    public String getCode(  )
+    public String getCode( )
     {
         return _strCode;
     }
@@ -260,7 +260,7 @@ public class TicketCategory implements Serializable
      *
      * @return The AssigneeUnit
      */
-    public AssigneeUnit getAssigneeUnit(  )
+    public AssigneeUnit getAssigneeUnit( )
     {
         return _unit;
     }
@@ -279,7 +279,7 @@ public class TicketCategory implements Serializable
     /**
      * @return the precision
      */
-    public String getPrecision(  )
+    public String getPrecision( )
     {
         return _strPrecision;
     }
@@ -296,7 +296,7 @@ public class TicketCategory implements Serializable
     /**
      * @return the _strHelpMessage
      */
-    public String getHelpMessage(  )
+    public String getHelpMessage( )
     {
         return _strHelpMessage;
     }

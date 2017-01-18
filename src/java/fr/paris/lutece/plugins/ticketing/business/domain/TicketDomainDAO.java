@@ -40,7 +40,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This class provides Data Access methods for TicketDomain objects
  */
@@ -48,13 +47,13 @@ public final class TicketDomainDAO implements ITicketDomainDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket_domain ) FROM ticketing_ticket_domain";
-    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label FROM ticketing_ticket_domain a, ticketing_ticket_type b " +
-        " WHERE a.id_ticket_domain = ? AND a.id_ticket_type = b.id_ticket_type ";
+    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label FROM ticketing_ticket_domain a, ticketing_ticket_type b "
+            + " WHERE a.id_ticket_domain = ? AND a.id_ticket_type = b.id_ticket_type ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_domain ( id_ticket_domain, id_ticket_type, label, inactive ) VALUES ( ?, ?, ?, 0 ) ";
     private static final String SQL_QUERY_DELETE = "UPDATE ticketing_ticket_domain SET inactive = 1 WHERE id_ticket_domain = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_domain SET id_ticket_domain = ?, id_ticket_type = ?, label = ? WHERE id_ticket_domain = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label FROM ticketing_ticket_domain a, ticketing_ticket_type b " +
-        " WHERE a.id_ticket_type = b.id_ticket_type  AND a.inactive <> 1 AND b.inactive <> 1 ";
+    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label FROM ticketing_ticket_domain a, ticketing_ticket_type b "
+            + " WHERE a.id_ticket_type = b.id_ticket_type  AND a.inactive <> 1 AND b.inactive <> 1 ";
     private static final String SQL_QUERY_SELECTALL_SIMPLE = "SELECT a.id_ticket_domain, a.label FROM ticketing_ticket_domain a  WHERE a.inactive <> 1";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_domain FROM ticketing_ticket_domain  AND inactive <> 1 ";
     private static final String SQL_QUERY_SELECT_BY_TYPE = "SELECT id_ticket_domain , label FROM ticketing_ticket_domain WHERE id_ticket_type = ?  AND inactive <> 1 ORDER BY label ASC";
@@ -62,22 +61,24 @@ public final class TicketDomainDAO implements ITicketDomainDAO
 
     /**
      * Generates a new primary key
-     * @param plugin The Plugin
+     * 
+     * @param plugin
+     *            The Plugin
      * @return The new primary key
      */
     public int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nKey = 1;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             nKey = daoUtil.getInt( 1 ) + 1;
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nKey;
     }
@@ -92,12 +93,12 @@ public final class TicketDomainDAO implements ITicketDomainDAO
 
         ticketDomain.setId( newPrimaryKey( plugin ) );
 
-        daoUtil.setInt( 1, ticketDomain.getId(  ) );
-        daoUtil.setInt( 2, ticketDomain.getIdTicketType(  ) );
-        daoUtil.setString( 3, ticketDomain.getLabel(  ) );
+        daoUtil.setInt( 1, ticketDomain.getId( ) );
+        daoUtil.setInt( 2, ticketDomain.getIdTicketType( ) );
+        daoUtil.setString( 3, ticketDomain.getLabel( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -108,20 +109,20 @@ public final class TicketDomainDAO implements ITicketDomainDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         TicketDomain ticketDomain = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            ticketDomain = new TicketDomain(  );
+            ticketDomain = new TicketDomain( );
             ticketDomain.setId( daoUtil.getInt( 1 ) );
             ticketDomain.setIdTicketType( daoUtil.getInt( 2 ) );
             ticketDomain.setLabel( daoUtil.getString( 3 ) );
             ticketDomain.setTicketType( daoUtil.getString( 4 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return ticketDomain;
     }
@@ -135,9 +136,9 @@ public final class TicketDomainDAO implements ITicketDomainDAO
         boolean bResult = false;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_CATEGORY_BY_DOMAIN, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             if ( daoUtil.getInt( 1 ) == 0 )
             {
@@ -145,7 +146,7 @@ public final class TicketDomainDAO implements ITicketDomainDAO
             }
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return bResult;
     }
@@ -158,8 +159,8 @@ public final class TicketDomainDAO implements ITicketDomainDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -170,13 +171,13 @@ public final class TicketDomainDAO implements ITicketDomainDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-        daoUtil.setInt( 1, ticketDomain.getId(  ) );
-        daoUtil.setInt( 2, ticketDomain.getIdTicketType(  ) );
-        daoUtil.setString( 3, ticketDomain.getLabel(  ) );
-        daoUtil.setInt( 4, ticketDomain.getId(  ) );
+        daoUtil.setInt( 1, ticketDomain.getId( ) );
+        daoUtil.setInt( 2, ticketDomain.getIdTicketType( ) );
+        daoUtil.setString( 3, ticketDomain.getLabel( ) );
+        daoUtil.setInt( 4, ticketDomain.getId( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -185,13 +186,13 @@ public final class TicketDomainDAO implements ITicketDomainDAO
     @Override
     public List<TicketDomain> selectTicketDomainsList( Plugin plugin )
     {
-        List<TicketDomain> ticketDomainList = new ArrayList<TicketDomain>(  );
+        List<TicketDomain> ticketDomainList = new ArrayList<TicketDomain>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            TicketDomain ticketDomain = new TicketDomain(  );
+            TicketDomain ticketDomain = new TicketDomain( );
 
             ticketDomain.setId( daoUtil.getInt( 1 ) );
             ticketDomain.setIdTicketType( daoUtil.getInt( 2 ) );
@@ -201,7 +202,7 @@ public final class TicketDomainDAO implements ITicketDomainDAO
             ticketDomainList.add( ticketDomain );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return ticketDomainList;
     }
@@ -212,16 +213,16 @@ public final class TicketDomainDAO implements ITicketDomainDAO
     @Override
     public List<Integer> selectIdTicketDomainsList( Plugin plugin )
     {
-        List<Integer> ticketDomainList = new ArrayList<Integer>(  );
+        List<Integer> ticketDomainList = new ArrayList<Integer>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             ticketDomainList.add( daoUtil.getInt( 1 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return ticketDomainList;
     }
@@ -232,17 +233,17 @@ public final class TicketDomainDAO implements ITicketDomainDAO
     @Override
     public ReferenceList selectReferenceListByType( int nTicketTypeId, Plugin plugin )
     {
-        ReferenceList list = new ReferenceList(  );
+        ReferenceList list = new ReferenceList( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_TYPE, plugin );
         daoUtil.setInt( 1, nTicketTypeId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             list.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return list;
     }
@@ -253,36 +254,36 @@ public final class TicketDomainDAO implements ITicketDomainDAO
     @Override
     public ReferenceList selectReferenceList( Plugin plugin )
     {
-        ReferenceList list = new ReferenceList(  );
+        ReferenceList list = new ReferenceList( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             list.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 4 ) + " / " + daoUtil.getString( 3 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return list;
     }
 
     /**
-    * {@inheritDoc }
-    */
+     * {@inheritDoc }
+     */
     @Override
     public ReferenceList selectReferenceListSimple( Plugin plugin )
     {
-        ReferenceList list = new ReferenceList(  );
+        ReferenceList list = new ReferenceList( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_SIMPLE, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             list.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return list;
     }

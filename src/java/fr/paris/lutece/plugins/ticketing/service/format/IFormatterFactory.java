@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format;
 
-
 /**
  * Factory of formatters
  *
@@ -44,7 +43,8 @@ public interface IFormatterFactory
 
     /**
      * Creates a formatter for REST purpose
+     * 
      * @return the formatter
      */
-    IRestFormatter createRestFormatter(  );
+    IRestFormatter createRestFormatter( );
 }

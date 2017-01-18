@@ -44,7 +44,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  * class EntryTypeSelect
@@ -92,6 +91,6 @@ public class EntryTypeSelect extends AbstractEntryTypeSelect
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_READ_ONLY_HTML, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 }

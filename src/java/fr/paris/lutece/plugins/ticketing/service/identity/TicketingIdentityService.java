@@ -36,10 +36,8 @@ package fr.paris.lutece.plugins.ticketing.service.identity;
 import fr.paris.lutece.plugins.identitystore.web.service.IdentityService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-
 /**
- * This class provides the IdentityService
- * Designed as a singleton
+ * This class provides the IdentityService Designed as a singleton
  *
  */
 public final class TicketingIdentityService
@@ -51,24 +49,25 @@ public final class TicketingIdentityService
     /**
      * Default constructor
      */
-    private TicketingIdentityService(  )
+    private TicketingIdentityService( )
     {
         _identityService = SpringContextService.getBean( BEAN_IDENTITYSTORE_SERVICE );
     }
 
     /**
      * Gives the instance
+     * 
      * @return the instance
      */
-    public static TicketingIdentityService getInstance(  )
+    public static TicketingIdentityService getInstance( )
     {
         if ( _instance == null )
         {
-            synchronized ( TicketingIdentityService.class )
+            synchronized( TicketingIdentityService.class )
             {
                 if ( _instance == null )
                 {
-                    _instance = new TicketingIdentityService(  );
+                    _instance = new TicketingIdentityService( );
                 }
             }
         }
@@ -78,9 +77,10 @@ public final class TicketingIdentityService
 
     /**
      * Gives the IdentityService
+     * 
      * @return the IdentityService
      */
-    public IdentityService getIdentityService(  )
+    public IdentityService getIdentityService( )
     {
         return _identityService;
     }

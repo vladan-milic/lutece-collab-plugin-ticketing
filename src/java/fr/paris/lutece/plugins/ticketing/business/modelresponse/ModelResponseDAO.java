@@ -42,7 +42,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This class provides Data Access methods for TypeResponse objects
  */
@@ -59,22 +58,24 @@ public final class ModelResponseDAO implements IModelResponseDAO
 
     /**
      * Generates a new primary key
-     * @param plugin The Plugin
+     * 
+     * @param plugin
+     *            The Plugin
      * @return The new primary key
      */
     public int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nKey = 1;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             nKey = daoUtil.getInt( 1 ) + 1;
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nKey;
     }
@@ -90,14 +91,14 @@ public final class ModelResponseDAO implements IModelResponseDAO
 
         int nIndex = 1;
 
-        daoUtil.setInt( nIndex++, modelResponse.getId(  ) );
-        daoUtil.setInt( nIndex++, modelResponse.getIdDomain(  ) );
-        daoUtil.setString( nIndex++, modelResponse.getTitle(  ) );
-        daoUtil.setString( nIndex++, modelResponse.getReponse(  ) );
-        daoUtil.setString( nIndex++, modelResponse.getKeyword(  ) );
+        daoUtil.setInt( nIndex++, modelResponse.getId( ) );
+        daoUtil.setInt( nIndex++, modelResponse.getIdDomain( ) );
+        daoUtil.setString( nIndex++, modelResponse.getTitle( ) );
+        daoUtil.setString( nIndex++, modelResponse.getReponse( ) );
+        daoUtil.setString( nIndex++, modelResponse.getKeyword( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -108,15 +109,15 @@ public final class ModelResponseDAO implements IModelResponseDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         ModelResponse modelResponse = null;
 
         TicketDomain ticketDomain;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            modelResponse = new ModelResponse(  );
+            modelResponse = new ModelResponse( );
 
             int nIndex = 1;
 
@@ -126,12 +127,12 @@ public final class ModelResponseDAO implements IModelResponseDAO
             modelResponse.setReponse( daoUtil.getString( nIndex++ ) );
             modelResponse.setKeyword( daoUtil.getString( nIndex++ ) );
 
-            //populate id category, domain and type
-            ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain(  ) );
-            modelResponse.setDomain( ticketDomain.getLabel(  ) );
+            // populate id category, domain and type
+            ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain( ) );
+            modelResponse.setDomain( ticketDomain.getLabel( ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return modelResponse;
     }
@@ -144,8 +145,8 @@ public final class ModelResponseDAO implements IModelResponseDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -157,15 +158,15 @@ public final class ModelResponseDAO implements IModelResponseDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
         int nIndex = 1;
 
-        daoUtil.setInt( nIndex++, modelResponse.getId(  ) );
-        daoUtil.setInt( nIndex++, modelResponse.getIdDomain(  ) );
-        daoUtil.setString( nIndex++, modelResponse.getTitle(  ) );
-        daoUtil.setString( nIndex++, modelResponse.getReponse(  ) );
-        daoUtil.setString( nIndex++, modelResponse.getKeyword(  ) );
-        daoUtil.setInt( nIndex, modelResponse.getId(  ) );
+        daoUtil.setInt( nIndex++, modelResponse.getId( ) );
+        daoUtil.setInt( nIndex++, modelResponse.getIdDomain( ) );
+        daoUtil.setString( nIndex++, modelResponse.getTitle( ) );
+        daoUtil.setString( nIndex++, modelResponse.getReponse( ) );
+        daoUtil.setString( nIndex++, modelResponse.getKeyword( ) );
+        daoUtil.setInt( nIndex, modelResponse.getId( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -174,15 +175,15 @@ public final class ModelResponseDAO implements IModelResponseDAO
     @Override
     public List<ModelResponse> selectModelResponsesList( Plugin plugin )
     {
-        List<ModelResponse> typeResponseList = new ArrayList<ModelResponse>(  );
+        List<ModelResponse> typeResponseList = new ArrayList<ModelResponse>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         TicketDomain ticketDomain;
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            ModelResponse modelResponse = new ModelResponse(  );
+            ModelResponse modelResponse = new ModelResponse( );
             int nIndex = 1;
 
             modelResponse.setId( daoUtil.getInt( nIndex++ ) );
@@ -191,14 +192,14 @@ public final class ModelResponseDAO implements IModelResponseDAO
             modelResponse.setReponse( daoUtil.getString( nIndex++ ) );
             modelResponse.setKeyword( daoUtil.getString( nIndex++ ) );
 
-            //populate label category, domain and type
-            ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain(  ) );
-            modelResponse.setDomain( ( ticketDomain != null ) ? ticketDomain.getLabel(  ) : "" );
+            // populate label category, domain and type
+            ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain( ) );
+            modelResponse.setDomain( ( ticketDomain != null ) ? ticketDomain.getLabel( ) : "" );
 
             typeResponseList.add( modelResponse );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return typeResponseList;
     }
@@ -209,16 +210,16 @@ public final class ModelResponseDAO implements IModelResponseDAO
     @Override
     public List<Integer> selectIdModelResponsesList( Plugin plugin )
     {
-        List<Integer> modelResponseList = new ArrayList<Integer>(  );
+        List<Integer> modelResponseList = new ArrayList<Integer>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             modelResponseList.add( daoUtil.getInt( 1 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return modelResponseList;
     }
@@ -229,16 +230,16 @@ public final class ModelResponseDAO implements IModelResponseDAO
     @Override
     public ReferenceList selectModelResponsesReferenceList( Plugin plugin )
     {
-        ReferenceList modelResponseList = new ReferenceList(  );
+        ReferenceList modelResponseList = new ReferenceList( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             modelResponseList.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return modelResponseList;
     }

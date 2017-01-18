@@ -46,24 +46,25 @@ import java.util.Map;
  *
  */
 public enum TicketPriority
-{LOW,
-    MEDIUM,
-    HIGH;
+{
+    LOW, MEDIUM, HIGH;
 
     private static final String MESSAGE_PREFIX = "ticketing.priority.";
-    private static Map<Integer,TicketPriority> _mapTicketPriority = new HashMap<Integer,TicketPriority>(  );
+    private static Map<Integer, TicketPriority> _mapTicketPriority = new HashMap<Integer, TicketPriority>( );
 
     static
     {
         for ( TicketPriority enumTicketPriority : EnumSet.allOf( TicketPriority.class ) )
         {
-            _mapTicketPriority.put( enumTicketPriority.ordinal(  ), enumTicketPriority );
+            _mapTicketPriority.put( enumTicketPriority.ordinal( ), enumTicketPriority );
         }
     }
 
     /**
      * returns TicketPriority enum from id
-     * @param nTicketPriorityId level value
+     * 
+     * @param nTicketPriorityId
+     *            level value
      * @return TicketPriority enum
      */
     public static TicketPriority valueOf( int nTicketPriorityId )
@@ -73,26 +74,30 @@ public enum TicketPriority
 
     /**
      * Gives the localized message
-     * @param locale the locale to use
+     * 
+     * @param locale
+     *            the locale to use
      * @return the message
      */
     public String getLocalizedMessage( Locale locale )
     {
-        return I18nService.getLocalizedString( MESSAGE_PREFIX + this.name(  ).toLowerCase(  ), locale );
+        return I18nService.getLocalizedString( MESSAGE_PREFIX + this.name( ).toLowerCase( ), locale );
     }
 
     /**
      * Builds a RefenrenceList object containing all the TicketPriority objects
-     * @param locale the locale used to retrieve the localized messages
+     * 
+     * @param locale
+     *            the locale used to retrieve the localized messages
      * @return the ReferenceList object
      */
     public static ReferenceList getReferenceList( Locale locale )
     {
-        ReferenceList listPriorities = new ReferenceList(  );
+        ReferenceList listPriorities = new ReferenceList( );
 
-        for ( TicketPriority ticketPriority : TicketPriority.values(  ) )
+        for ( TicketPriority ticketPriority : TicketPriority.values( ) )
         {
-            listPriorities.addItem( ticketPriority.ordinal(  ), ticketPriority.getLocalizedMessage( locale ) );
+            listPriorities.addItem( ticketPriority.ordinal( ), ticketPriority.getLocalizedMessage( locale ) );
         }
 
         return listPriorities;

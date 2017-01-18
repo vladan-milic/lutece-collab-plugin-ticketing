@@ -40,7 +40,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This class provides Data Access methods for TicketType objects
  */
@@ -58,22 +57,24 @@ public final class TicketTypeDAO implements ITicketTypeDAO
 
     /**
      * Generates a new primary key
-     * @param plugin The Plugin
+     * 
+     * @param plugin
+     *            The Plugin
      * @return The new primary key
      */
     public int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nKey = 1;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             nKey = daoUtil.getInt( 1 ) + 1;
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nKey;
     }
@@ -88,13 +89,13 @@ public final class TicketTypeDAO implements ITicketTypeDAO
 
         ticketType.setId( newPrimaryKey( plugin ) );
 
-        daoUtil.setInt( 1, ticketType.getId(  ) );
-        daoUtil.setString( 2, ticketType.getLabel(  ) );
-        daoUtil.setString( 3, ticketType.getReferencePrefix(  ) );
-        daoUtil.setInt( 4, ticketType.getDemandTypeId(  ) );
+        daoUtil.setInt( 1, ticketType.getId( ) );
+        daoUtil.setString( 2, ticketType.getLabel( ) );
+        daoUtil.setString( 3, ticketType.getReferencePrefix( ) );
+        daoUtil.setInt( 4, ticketType.getDemandTypeId( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -105,20 +106,20 @@ public final class TicketTypeDAO implements ITicketTypeDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         TicketType ticketType = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            ticketType = new TicketType(  );
+            ticketType = new TicketType( );
             ticketType.setId( daoUtil.getInt( 1 ) );
             ticketType.setLabel( daoUtil.getString( 2 ) );
             ticketType.setReferencePrefix( daoUtil.getString( 3 ) );
             ticketType.setDemandTypeId( daoUtil.getInt( 4 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return ticketType;
     }
@@ -131,8 +132,8 @@ public final class TicketTypeDAO implements ITicketTypeDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -143,14 +144,14 @@ public final class TicketTypeDAO implements ITicketTypeDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-        daoUtil.setInt( 1, ticketType.getId(  ) );
-        daoUtil.setString( 2, ticketType.getLabel(  ) );
-        daoUtil.setString( 3, ticketType.getReferencePrefix(  ) );
-        daoUtil.setInt( 4, ticketType.getDemandTypeId(  ) );
-        daoUtil.setInt( 5, ticketType.getId(  ) );
+        daoUtil.setInt( 1, ticketType.getId( ) );
+        daoUtil.setString( 2, ticketType.getLabel( ) );
+        daoUtil.setString( 3, ticketType.getReferencePrefix( ) );
+        daoUtil.setInt( 4, ticketType.getDemandTypeId( ) );
+        daoUtil.setInt( 5, ticketType.getId( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -159,13 +160,13 @@ public final class TicketTypeDAO implements ITicketTypeDAO
     @Override
     public List<TicketType> selectTicketTypesList( Plugin plugin )
     {
-        List<TicketType> ticketTypeList = new ArrayList<TicketType>(  );
+        List<TicketType> ticketTypeList = new ArrayList<TicketType>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            TicketType ticketType = new TicketType(  );
+            TicketType ticketType = new TicketType( );
 
             ticketType.setId( daoUtil.getInt( 1 ) );
             ticketType.setLabel( daoUtil.getString( 2 ) );
@@ -175,7 +176,7 @@ public final class TicketTypeDAO implements ITicketTypeDAO
             ticketTypeList.add( ticketType );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return ticketTypeList;
     }
@@ -186,16 +187,16 @@ public final class TicketTypeDAO implements ITicketTypeDAO
     @Override
     public List<Integer> selectIdTicketTypesList( Plugin plugin )
     {
-        List<Integer> ticketTypeList = new ArrayList<Integer>(  );
+        List<Integer> ticketTypeList = new ArrayList<Integer>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             ticketTypeList.add( daoUtil.getInt( 1 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return ticketTypeList;
     }
@@ -206,16 +207,16 @@ public final class TicketTypeDAO implements ITicketTypeDAO
     @Override
     public ReferenceList selectReferenceList( Plugin plugin )
     {
-        ReferenceList list = new ReferenceList(  );
+        ReferenceList list = new ReferenceList( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             list.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return list;
     }
@@ -229,9 +230,9 @@ public final class TicketTypeDAO implements ITicketTypeDAO
         boolean bResult = false;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_DOMAIN_BY_TYPE, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             if ( daoUtil.getInt( 1 ) == 0 )
             {
@@ -239,7 +240,7 @@ public final class TicketTypeDAO implements ITicketTypeDAO
             }
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return bResult;
     }

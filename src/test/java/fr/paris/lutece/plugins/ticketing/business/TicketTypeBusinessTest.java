@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.test.LuteceTestCase;
 
-
 public class TicketTypeBusinessTest extends LuteceTestCase
 {
     private final static String LABEL1 = "Label1";
@@ -45,34 +44,34 @@ public class TicketTypeBusinessTest extends LuteceTestCase
     private final static String REFERENCE1 = "RF1";
     private final static String REFERENCE2 = "RF2";
 
-    public void testBusiness(  )
+    public void testBusiness( )
     {
         // Initialize an object
-        TicketType ticketType = new TicketType(  );
+        TicketType ticketType = new TicketType( );
         ticketType.setLabel( LABEL1 );
         ticketType.setReferencePrefix( REFERENCE1 );
 
         // Create test
         TicketTypeHome.create( ticketType );
 
-        TicketType ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId(  ) );
-        assertEquals( ticketTypeStored.getLabel(  ), ticketType.getLabel(  ) );
-        assertEquals( ticketTypeStored.getReferencePrefix(  ), ticketType.getReferencePrefix(  ) );
+        TicketType ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId( ) );
+        assertEquals( ticketTypeStored.getLabel( ), ticketType.getLabel( ) );
+        assertEquals( ticketTypeStored.getReferencePrefix( ), ticketType.getReferencePrefix( ) );
 
         // Update test
         ticketType.setLabel( LABEL2 );
         ticketType.setReferencePrefix( REFERENCE2 );
         TicketTypeHome.update( ticketType );
-        ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId(  ) );
-        assertEquals( ticketTypeStored.getLabel(  ), ticketType.getLabel(  ) );
-        assertEquals( ticketTypeStored.getReferencePrefix(  ), ticketType.getReferencePrefix(  ) );
+        ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId( ) );
+        assertEquals( ticketTypeStored.getLabel( ), ticketType.getLabel( ) );
+        assertEquals( ticketTypeStored.getReferencePrefix( ), ticketType.getReferencePrefix( ) );
 
         // List test
-        TicketTypeHome.getTicketTypesList(  );
+        TicketTypeHome.getTicketTypesList( );
 
         // Delete test
-        TicketTypeHome.remove( ticketType.getId(  ) );
-        ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId(  ) );
+        TicketTypeHome.remove( ticketType.getId( ) );
+        ticketTypeStored = TicketTypeHome.findByPrimaryKey( ticketType.getId( ) );
         assertNotNull( ticketTypeStored );
     }
 }

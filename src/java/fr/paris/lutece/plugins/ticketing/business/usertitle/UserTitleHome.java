@@ -43,7 +43,6 @@ import fr.paris.lutece.util.ReferenceList;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  * This class provides instances management methods (create, find, ...) for UserTitle objects
  */
@@ -59,13 +58,15 @@ public final class UserTitleHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private UserTitleHome(  )
+    private UserTitleHome( )
     {
     }
 
     /**
      * Create an instance of the userTitle class
-     * @param userTitle The instance of the UserTitle which contains the informations to store
+     * 
+     * @param userTitle
+     *            The instance of the UserTitle which contains the informations to store
      */
     public static void create( UserTitle userTitle )
     {
@@ -74,7 +75,9 @@ public final class UserTitleHome
 
     /**
      * Update of the userTitle which is specified in parameter
-     * @param userTitle The instance of the UserTitle which contains the data to store
+     * 
+     * @param userTitle
+     *            The instance of the UserTitle which contains the data to store
      */
     public static void update( UserTitle userTitle )
     {
@@ -83,19 +86,23 @@ public final class UserTitleHome
 
     /**
      * Remove the userTitle whose identifier is specified in parameter
-     * @param nKey The userTitle Id
+     * 
+     * @param nKey
+     *            The userTitle Id
      */
     public static void remove( int nKey )
     {
         _dao.delete( nKey, _plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Returns an instance of a userTitle whose identifier is specified in parameter
-     * @param nKey The userTitle primary key
+     * 
+     * @param nKey
+     *            The userTitle primary key
      * @return an instance of UserTitle
      */
     public static UserTitle findByPrimaryKey( int nKey )
@@ -105,25 +112,29 @@ public final class UserTitleHome
 
     /**
      * Load the data of all the userTitle objects and returns them in form of a collection
+     * 
      * @return the collection which contains the data of all the userTitle objects
      */
-    public static List<UserTitle> getUserTitlesList(  )
+    public static List<UserTitle> getUserTitlesList( )
     {
         return _dao.selectUserTitlesList( _plugin );
     }
 
     /**
      * Load the id of all the userTitle objects and returns them in form of a collection
+     * 
      * @return the collection which contains the id of all the userTitle objects
      */
-    public static List<Integer> getIdUserTitlesList(  )
+    public static List<Integer> getIdUserTitlesList( )
     {
         return _dao.selectIdUserTitlesList( _plugin );
     }
 
     /**
      * returns referenceList
-     * @param locale locale
+     * 
+     * @param locale
+     *            locale
      * @return ReferenceList
      */
     public static ReferenceList getReferenceList( Locale locale )
@@ -132,7 +143,7 @@ public final class UserTitleHome
 
         for ( ReferenceItem item : list )
         {
-            if ( item.getName(  ).isEmpty(  ) )
+            if ( item.getName( ).isEmpty( ) )
             {
                 item.setName( I18nService.getLocalizedString( PROPERTY_USER_TITLE_EMPTY, locale ) );
             }

@@ -47,7 +47,6 @@ import fr.paris.lutece.plugins.ticketing.service.format.usertitle.UserTitleForma
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Factory for the XML formatters
  */
@@ -59,15 +58,15 @@ public class FormatterXmlFactory implements IFormatterFactory
     /**
      * Default constructor
      */
-    public FormatterXmlFactory(  )
+    public FormatterXmlFactory( )
     {
-        _formatters = new HashMap<Class<?>, ITicketingFormatter<?>>(  );
-        _formatters.put( Ticket.class, new TicketFormatterXml(  ) );
-        _formatters.put( TicketType.class, new TicketTypeFormatterXml(  ) );
-        _formatters.put( Channel.class, new ChannelFormatterXml(  ) );
-        _formatters.put( ContactMode.class, new ContactModeFormatterXml(  ) );
-        _formatters.put( UserTitle.class, new UserTitleFormatterXml(  ) );
-        _restFormatter = new RestFormatterXml(  );
+        _formatters = new HashMap<Class<?>, ITicketingFormatter<?>>( );
+        _formatters.put( Ticket.class, new TicketFormatterXml( ) );
+        _formatters.put( TicketType.class, new TicketTypeFormatterXml( ) );
+        _formatters.put( Channel.class, new ChannelFormatterXml( ) );
+        _formatters.put( ContactMode.class, new ContactModeFormatterXml( ) );
+        _formatters.put( UserTitle.class, new UserTitleFormatterXml( ) );
+        _restFormatter = new RestFormatterXml( );
     }
 
     @SuppressWarnings( "unchecked" )
@@ -78,7 +77,7 @@ public class FormatterXmlFactory implements IFormatterFactory
     }
 
     @Override
-    public IRestFormatter createRestFormatter(  )
+    public IRestFormatter createRestFormatter( )
     {
         return _restFormatter;
     }

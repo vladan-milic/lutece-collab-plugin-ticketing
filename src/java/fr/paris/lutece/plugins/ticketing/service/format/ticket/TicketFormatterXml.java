@@ -40,7 +40,6 @@ import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.util.List;
 
-
 /**
  * XML formatter for ticket resource
  *
@@ -50,7 +49,7 @@ public class TicketFormatterXml implements ITicketingFormatter<Ticket>
     @Override
     public String format( Ticket ticket )
     {
-        StringBuffer sbXML = new StringBuffer(  );
+        StringBuffer sbXML = new StringBuffer( );
 
         if ( ticket != null )
         {
@@ -58,13 +57,13 @@ public class TicketFormatterXml implements ITicketingFormatter<Ticket>
             add( sbXML, ticket );
         }
 
-        return sbXML.toString(  );
+        return sbXML.toString( );
     }
 
     @Override
     public String format( List<Ticket> listTickets )
     {
-        StringBuffer sbXML = new StringBuffer(  );
+        StringBuffer sbXML = new StringBuffer( );
         sbXML.append( FormatConstants.XML_HEADER );
         XmlUtil.beginElement( sbXML, FormatConstants.KEY_TICKETS );
 
@@ -75,7 +74,7 @@ public class TicketFormatterXml implements ITicketingFormatter<Ticket>
 
         XmlUtil.endElement( sbXML, FormatConstants.KEY_TICKETS );
 
-        return sbXML.toString(  );
+        return sbXML.toString( );
     }
 
     @Override
@@ -87,38 +86,41 @@ public class TicketFormatterXml implements ITicketingFormatter<Ticket>
     @Override
     public String formatResponse( Ticket ticket )
     {
-        StringBuffer sbXML = new StringBuffer(  );
+        StringBuffer sbXML = new StringBuffer( );
 
         sbXML.append( FormatConstants.XML_HEADER );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_REFERENCE, ticket.getReference(  ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_REFERENCE, ticket.getReference( ) );
 
-        return sbXML.toString(  );
+        return sbXML.toString( );
     }
 
     /**
      * Write a ticket into a buffer
-     * @param sbXML The buffer
-     * @param ticket The ticket
+     * 
+     * @param sbXML
+     *            The buffer
+     * @param ticket
+     *            The ticket
      */
     private void add( StringBuffer sbXML, Ticket ticket )
     {
         XmlUtil.beginElement( sbXML, FormatConstants.KEY_TICKET );
 
         XmlUtil.beginElement( sbXML, FormatConstants.KEY_USER );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_USER_TITLE_ID, ticket.getIdUserTitle(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_USER_FIRST_NAME, ticket.getFirstname(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_USER_LAST_NAME, ticket.getLastname(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_USER_EMAIL, ticket.getEmail(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_USER_FIXED_PHONE_NUMBER, ticket.getFixedPhoneNumber(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_USER_MOBILE_PHONE_NUMBER, ticket.getMobilePhoneNumber(  ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_USER_TITLE_ID, ticket.getIdUserTitle( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_USER_FIRST_NAME, ticket.getFirstname( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_USER_LAST_NAME, ticket.getLastname( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_USER_EMAIL, ticket.getEmail( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_USER_FIXED_PHONE_NUMBER, ticket.getFixedPhoneNumber( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_USER_MOBILE_PHONE_NUMBER, ticket.getMobilePhoneNumber( ) );
         XmlUtil.endElement( sbXML, FormatConstants.KEY_USER );
 
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_REFERENCE, ticket.getReference(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_CATEGORY_CODE, ticket.getTicketCategory(  ).getLabel(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_CONTACT_MODE_ID, ticket.getIdContactMode(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_CHANNEL_ID, ticket.getChannel(  ).getId(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_COMMENT, ticket.getTicketComment(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_NOMENCLATURE, ticket.getNomenclature(  ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_REFERENCE, ticket.getReference( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_CATEGORY_CODE, ticket.getTicketCategory( ).getLabel( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_CONTACT_MODE_ID, ticket.getIdContactMode( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_CHANNEL_ID, ticket.getChannel( ).getId( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_COMMENT, ticket.getTicketComment( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_NOMENCLATURE, ticket.getNomenclature( ) );
 
         XmlUtil.endElement( sbXML, FormatConstants.KEY_TICKET );
     }

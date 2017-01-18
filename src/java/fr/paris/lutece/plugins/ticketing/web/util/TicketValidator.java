@@ -53,7 +53,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  * This class permits to validate a ticket
  *
@@ -72,7 +71,9 @@ public class TicketValidator
 
     /**
      * Constructor
-     * @param locale the locale used to select the correct validation error messages
+     * 
+     * @param locale
+     *            the locale used to select the correct validation error messages
      */
     public TicketValidator( Locale locale )
     {
@@ -81,19 +82,20 @@ public class TicketValidator
 
     /**
      * Validates a ticket, considered as a bean
-     * @param ticket the ticket
+     * 
+     * @param ticket
+     *            the ticket
      * @return the list of validation errors
      */
     public List<String> validateBean( Ticket ticket )
     {
-        List<String> listErrors = new ArrayList<String>(  );
+        List<String> listErrors = new ArrayList<String>( );
 
-        List<ValidationError> listValidationErrors = BeanValidationUtil.validate( ticket, _locale,
-                TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
+        List<ValidationError> listValidationErrors = BeanValidationUtil.validate( ticket, _locale, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
 
         for ( ValidationError error : listValidationErrors )
         {
-            listErrors.add( error.getMessage(  ) );
+            listErrors.add( error.getMessage( ) );
         }
 
         return listErrors;
@@ -101,7 +103,9 @@ public class TicketValidator
 
     /**
      * Validates a ticket
-     * @param ticket the ticket
+     * 
+     * @param ticket
+     *            the ticket
      * @return the validation errors
      */
     public List<String> validate( Ticket ticket )
@@ -111,13 +115,16 @@ public class TicketValidator
 
     /**
      * Validates a ticket
-     * @param ticket the ticket
-     * @param bValidateReferenceData {@code true} if the reference data must be validated, {@code false} otherwise
+     * 
+     * @param ticket
+     *            the ticket
+     * @param bValidateReferenceData
+     *            {@code true} if the reference data must be validated, {@code false} otherwise
      * @return the validation errors
      */
     public List<String> validate( Ticket ticket, boolean bValidateReferenceData )
     {
-        List<String> listErrors = new ArrayList<String>(  );
+        List<String> listErrors = new ArrayList<String>( );
 
         if ( !hasPhoneNumber( ticket ) )
         {
@@ -126,28 +133,28 @@ public class TicketValidator
 
         if ( bValidateReferenceData )
         {
-            UserTitle userTitle = UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle(  ) );
+            UserTitle userTitle = UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle( ) );
 
             if ( userTitle == null )
             {
                 listErrors.add( I18nService.getLocalizedString( ERROR_USER_TITLE_UNKNOWN, _locale ) );
             }
 
-            TicketCategory ticketCategory = ticket.getTicketCategory(  );
+            TicketCategory ticketCategory = ticket.getTicketCategory( );
 
             if ( ticketCategory == null )
             {
                 listErrors.add( I18nService.getLocalizedString( ERROR_TICKET_CATEGORY_UNKNOWN, _locale ) );
             }
 
-            ContactMode contactMode = ContactModeHome.findByPrimaryKey( ticket.getIdContactMode(  ) );
+            ContactMode contactMode = ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) );
 
             if ( contactMode == null )
             {
                 listErrors.add( I18nService.getLocalizedString( ERROR_CONTACT_MODE_UNKNOWN, _locale ) );
             }
 
-            Channel channel = ChannelHome.findByPrimaryKey( ticket.getChannel(  ).getId(  ) );
+            Channel channel = ChannelHome.findByPrimaryKey( ticket.getChannel( ).getId( ) );
 
             if ( channel == null )
             {
@@ -161,13 +168,12 @@ public class TicketValidator
     /**
      * Tests whether the specified ticket has a phone number or not
      *
-     * @param ticket the ticket to test
-     * @return {@code true} if neither the fixed phone number nor the mobile phone number are
-     * filled, {@code false} otherwise
+     * @param ticket
+     *            the ticket to test
+     * @return {@code true} if neither the fixed phone number nor the mobile phone number are filled, {@code false} otherwise
      */
     private boolean hasPhoneNumber( Ticket ticket )
     {
-        return !StringUtils.isBlank( ticket.getFixedPhoneNumber(  ) ) ||
-        !StringUtils.isBlank( ticket.getMobilePhoneNumber(  ) );
+        return !StringUtils.isBlank( ticket.getFixedPhoneNumber( ) ) || !StringUtils.isBlank( ticket.getMobilePhoneNumber( ) );
     }
 }

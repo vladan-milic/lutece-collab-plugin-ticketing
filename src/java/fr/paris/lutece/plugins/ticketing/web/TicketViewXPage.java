@@ -46,7 +46,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * This class provides the user interface to view a ticket
  *
@@ -66,15 +65,16 @@ public class TicketViewXPage extends WorkflowCapableXPage
     private static final long serialVersionUID = -5182134645557350678L;
 
     // Templates
-    private static final String TEMPLATE_VIEW_TICKET_DETAILS = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH +
-        "view_ticket_details.html";
+    private static final String TEMPLATE_VIEW_TICKET_DETAILS = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "view_ticket_details.html";
 
     // Views
     private static final String VIEW_DETAILS = "ticketDetails";
 
     /**
      * Gets the Ticket details view
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The view
      */
     @View( value = VIEW_DETAILS, defaultView = true )
@@ -86,24 +86,26 @@ public class TicketViewXPage extends WorkflowCapableXPage
         Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
         setWorkflowAttributes( request, ticket );
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
         model.put( TicketingConstants.MARK_TICKET, ticket );
 
         ModelUtils.storeReadOnlyHtmlResponses( request, model, ticket );
 
-        return getXPage( TEMPLATE_VIEW_TICKET_DETAILS, request.getLocale(  ), model );
+        return getXPage( TEMPLATE_VIEW_TICKET_DETAILS, request.getLocale( ), model );
     }
 
     /**
      * Redirects to the default page
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return the default page
      */
     private XPage defaultRedirect( HttpServletRequest request )
     {
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
 
-        Map<String, String> mapParams = new HashMap<String, String>(  );
+        Map<String, String> mapParams = new HashMap<String, String>( );
         mapParams.put( TicketingConstants.PARAMETER_ID_TICKET, strIdTicket );
 
         return redirect( request, VIEW_DETAILS, mapParams );

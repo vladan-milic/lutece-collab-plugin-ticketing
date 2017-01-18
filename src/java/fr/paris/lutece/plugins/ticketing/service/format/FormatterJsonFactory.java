@@ -47,7 +47,6 @@ import fr.paris.lutece.plugins.ticketing.service.format.usertitle.UserTitleForma
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Factory for the JSON formatters
  */
@@ -59,15 +58,15 @@ public class FormatterJsonFactory implements IFormatterFactory
     /**
      * Default constructor
      */
-    public FormatterJsonFactory(  )
+    public FormatterJsonFactory( )
     {
-        _formatters = new HashMap<Class<?>, ITicketingFormatter<?>>(  );
-        _formatters.put( Ticket.class, new TicketFormatterJson(  ) );
-        _formatters.put( TicketType.class, new TicketTypeFormatterJson(  ) );
-        _formatters.put( Channel.class, new ChannelFormatterJson(  ) );
-        _formatters.put( ContactMode.class, new ContactModeFormatterJson(  ) );
-        _formatters.put( UserTitle.class, new UserTitleFormatterJson(  ) );
-        _restFormatter = new RestFormatterJson(  );
+        _formatters = new HashMap<Class<?>, ITicketingFormatter<?>>( );
+        _formatters.put( Ticket.class, new TicketFormatterJson( ) );
+        _formatters.put( TicketType.class, new TicketTypeFormatterJson( ) );
+        _formatters.put( Channel.class, new ChannelFormatterJson( ) );
+        _formatters.put( ContactMode.class, new ContactModeFormatterJson( ) );
+        _formatters.put( UserTitle.class, new UserTitleFormatterJson( ) );
+        _restFormatter = new RestFormatterJson( );
     }
 
     @SuppressWarnings( "unchecked" )
@@ -78,7 +77,7 @@ public class FormatterJsonFactory implements IFormatterFactory
     }
 
     @Override
-    public IRestFormatter createRestFormatter(  )
+    public IRestFormatter createRestFormatter( )
     {
         return _restFormatter;
     }

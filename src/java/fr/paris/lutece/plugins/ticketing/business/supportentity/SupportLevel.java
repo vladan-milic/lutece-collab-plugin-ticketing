@@ -43,16 +43,14 @@ import java.util.Map;
 
 /**
  *
- * @author s267533
- * this enum represents support level
+ * @author s267533 this enum represents support level
  */
 public enum SupportLevel
-{LEVEL1( 1 ),
-    LEVEL2( 2 ),
-    LEVEL3( 3 );
+{
+    LEVEL1( 1 ), LEVEL2( 2 ), LEVEL3( 3 );
 
     private static final String MESSAGE_PREFIX = "ticketing.supportentity.level";
-    private static Map<Integer,SupportLevel> _mapSupportLevel = new HashMap<Integer,SupportLevel>(  );
+    private static Map<Integer, SupportLevel> _mapSupportLevel = new HashMap<Integer, SupportLevel>( );
 
     static
     {
@@ -66,7 +64,9 @@ public enum SupportLevel
 
     /**
      * enum constructor
-     * @param nLevelValue level value
+     * 
+     * @param nLevelValue
+     *            level value
      */
     SupportLevel( int nLevelValue )
     {
@@ -75,16 +75,19 @@ public enum SupportLevel
 
     /**
      * returns level value
+     * 
      * @return levelValue
      */
-    public int getLevelValue(  )
+    public int getLevelValue( )
     {
         return _nLevelValue;
     }
 
     /**
      * returns SupportLevel enum for level value
-     * @param nLevelValue level value
+     * 
+     * @param nLevelValue
+     *            level value
      * @return SupportLevel enum
      */
     public static SupportLevel valueOf( int nLevelValue )
@@ -94,7 +97,9 @@ public enum SupportLevel
 
     /**
      * returns level label
-     * @param locale the locale used to retrieve the localized messages
+     * 
+     * @param locale
+     *            the locale used to retrieve the localized messages
      * @return the message
      */
     public String getLocalizedMessage( Locale locale )
@@ -104,16 +109,18 @@ public enum SupportLevel
 
     /**
      * Builds a RefenrenceList object containing all the SupportLevel objects
-     * @param locale the locale used to retrieve the localized messages
+     * 
+     * @param locale
+     *            the locale used to retrieve the localized messages
      * @return the ReferenceList object
      */
     public static ReferenceList getReferenceList( Locale locale )
     {
-        ReferenceList refListLevel = new ReferenceList(  );
+        ReferenceList refListLevel = new ReferenceList( );
 
-        for ( SupportLevel supportLevel : SupportLevel.values(  ) )
+        for ( SupportLevel supportLevel : SupportLevel.values( ) )
         {
-            refListLevel.addItem( supportLevel.getLevelValue(  ), supportLevel.getLocalizedMessage( locale ) );
+            refListLevel.addItem( supportLevel.getLevelValue( ), supportLevel.getLocalizedMessage( locale ) );
         }
 
         return refListLevel;

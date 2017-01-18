@@ -40,7 +40,6 @@ import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.util.List;
 
-
 /**
  * XML formatter for contact mode resource
  *
@@ -50,7 +49,7 @@ public class ContactModeFormatterXml implements ITicketingFormatter<ContactMode>
     @Override
     public String format( ContactMode contactMode )
     {
-        StringBuffer sbXML = new StringBuffer(  );
+        StringBuffer sbXML = new StringBuffer( );
 
         if ( contactMode != null )
         {
@@ -58,13 +57,13 @@ public class ContactModeFormatterXml implements ITicketingFormatter<ContactMode>
             add( sbXML, contactMode );
         }
 
-        return sbXML.toString(  );
+        return sbXML.toString( );
     }
 
     @Override
     public String format( List<ContactMode> listContactModes )
     {
-        StringBuffer sbXML = new StringBuffer(  );
+        StringBuffer sbXML = new StringBuffer( );
         sbXML.append( FormatConstants.XML_HEADER );
         XmlUtil.beginElement( sbXML, FormatConstants.KEY_CONTACT_MODES );
 
@@ -75,7 +74,7 @@ public class ContactModeFormatterXml implements ITicketingFormatter<ContactMode>
 
         XmlUtil.endElement( sbXML, FormatConstants.KEY_CONTACT_MODES );
 
-        return sbXML.toString(  );
+        return sbXML.toString( );
     }
 
     @Override
@@ -92,15 +91,18 @@ public class ContactModeFormatterXml implements ITicketingFormatter<ContactMode>
 
     /**
      * Write a contact mode into a buffer
-     * @param sbXML The buffer
-     * @param contactMode The contact mode
+     * 
+     * @param sbXML
+     *            The buffer
+     * @param contactMode
+     *            The contact mode
      */
     private void add( StringBuffer sbXML, ContactMode contactMode )
     {
         XmlUtil.beginElement( sbXML, FormatConstants.KEY_CONTACT_MODE );
 
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_ID, contactMode.getId(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, contactMode.getCode(  ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_ID, contactMode.getId( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, contactMode.getCode( ) );
 
         XmlUtil.endElement( sbXML, FormatConstants.KEY_CONTACT_MODE );
     }

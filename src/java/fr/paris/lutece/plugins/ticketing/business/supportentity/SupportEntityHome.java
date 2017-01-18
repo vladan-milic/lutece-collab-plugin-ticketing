@@ -44,7 +44,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This class provides instances management methods (create, find, ...) for SupportEntity objects
  */
@@ -57,13 +56,15 @@ public final class SupportEntityHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private SupportEntityHome(  )
+    private SupportEntityHome( )
     {
     }
 
     /**
      * Create an instance of the supportEntity class
-     * @param supportEntity The instance of the SupportEntity which contains the informations to store
+     * 
+     * @param supportEntity
+     *            The instance of the SupportEntity which contains the informations to store
      */
     public static void create( SupportEntity supportEntity )
     {
@@ -72,7 +73,9 @@ public final class SupportEntityHome
 
     /**
      * Update of the supportEntity which is specified in parameter
-     * @param supportEntity The instance of the SupportEntity which contains the data to store
+     * 
+     * @param supportEntity
+     *            The instance of the SupportEntity which contains the data to store
      */
     public static void update( SupportEntity supportEntity )
     {
@@ -81,19 +84,23 @@ public final class SupportEntityHome
 
     /**
      * Remove the supportEntity whose identifier is specified in parameter
-     * @param nKey The supportEntity Id
+     * 
+     * @param nKey
+     *            The supportEntity Id
      */
     public static void remove( int nKey )
     {
         _dao.delete( nKey, _plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Returns an instance of a supportEntity whose identifier is specified in parameter
-     * @param nKey The supportEntity primary key
+     * 
+     * @param nKey
+     *            The supportEntity primary key
      * @return an instance of SupportEntity
      */
     public static SupportEntity findByPrimaryKey( int nKey )
@@ -103,21 +110,24 @@ public final class SupportEntityHome
 
     /**
      * Load the data of all the supportEntity objects and returns them in form of a collection
+     * 
      * @return the collection which contains the data of all the supportEntity objects
      */
-    public static List<SupportEntity> getSupportEntityList(  )
+    public static List<SupportEntity> getSupportEntityList( )
     {
         return _dao.selectSupportEntityList( _plugin );
     }
 
     /**
      * Load the data of supportEntity eligible
-     * @param adminUser admin user
+     * 
+     * @param adminUser
+     *            admin user
      * @return the collection which contains the data of all eligible supportEntities
      */
     public static List<SupportEntity> getEligibleSupportEntities( AdminUser adminUser )
     {
-        List<SupportEntity> lstSupportEntity = new ArrayList<SupportEntity>(  );
+        List<SupportEntity> lstSupportEntity = new ArrayList<SupportEntity>( );
 
         for ( SupportEntity supportEntity : _dao.selectSupportEntityList( _plugin ) )
         {

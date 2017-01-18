@@ -50,7 +50,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This class provides instances management methods (create, find, ...) for Ticket objects
  */
@@ -60,19 +59,21 @@ public final class TicketHome
     private static ITicketDAO _dao = SpringContextService.getBean( "ticketing.ticketDAO" );
     private static ITicketCategoryDAO _daoTicketCategory = SpringContextService.getBean( "ticketing.ticketCategoryDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
-    private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance(  );
+    private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance( );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private TicketHome(  )
+    private TicketHome( )
     {
     }
 
     /**
      * Create an instance of the ticket class
-     * @param ticket The instance of the Ticket which contains the informations to store
-     * @return The  instance of ticket which has been created with its primary key.
+     * 
+     * @param ticket
+     *            The instance of the Ticket which contains the informations to store
+     * @return The instance of ticket which has been created with its primary key.
      */
     public static Ticket create( Ticket ticket )
     {
@@ -83,8 +84,10 @@ public final class TicketHome
 
     /**
      * Update of the ticket which is specified in parameter
-     * @param ticket The instance of the Ticket which contains the data to store
-     * @return The instance of the  ticket which has been updated
+     * 
+     * @param ticket
+     *            The instance of the Ticket which contains the data to store
+     * @return The instance of the ticket which has been updated
      */
     public static Ticket update( Ticket ticket )
     {
@@ -94,8 +97,7 @@ public final class TicketHome
     }
 
     /**
-     * Remove the ticket and its generic attributes responses whose identifier
-     * is specified in parameter
+     * Remove the ticket and its generic attributes responses whose identifier is specified in parameter
      *
      * @param nKey
      *            The ticket Id
@@ -106,12 +108,11 @@ public final class TicketHome
         _dao.delete( nKey, _plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
-     * Returns an instance of a ticket whose identifier is specified in
-     * parameter generic attributes responses are also loaded
+     * Returns an instance of a ticket whose identifier is specified in parameter generic attributes responses are also loaded
      *
      * @param nKey
      *            The ticket primary key
@@ -123,15 +124,15 @@ public final class TicketHome
 
         if ( ticket != null )
         {
-            TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory(  ).getId(  ), _plugin );
+            TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory( ).getId( ), _plugin );
             ticket.setTicketCategory( ticketCategory );
         }
 
         if ( ticket != null )
         {
             // retrieving tickets generic attributes response
-            List<Integer> listIdResponse = TicketHome.findListIdResponse( ticket.getId(  ) );
-            List<Response> listResponses = new ArrayList<Response>( listIdResponse.size(  ) );
+            List<Integer> listIdResponse = TicketHome.findListIdResponse( ticket.getId( ) );
+            List<Response> listResponses = new ArrayList<Response>( listIdResponse.size( ) );
 
             if ( listIdResponse != null )
             {
@@ -139,17 +140,15 @@ public final class TicketHome
                 {
                     Response response = ResponseHome.findByPrimaryKey( nIdResponse );
 
-                    if ( response.getField(  ) != null )
+                    if ( response.getField( ) != null )
                     {
-                        response.setField( FieldHome.findByPrimaryKey( response.getField(  ).getIdField(  ) ) );
+                        response.setField( FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) ) );
                     }
 
-                    if ( response.getFile(  ) != null )
+                    if ( response.getFile( ) != null )
                     {
-                        fr.paris.lutece.portal.business.file.File file = FileHome.findByPrimaryKey( response.getFile(  )
-                                                                                                            .getIdFile(  ) );
-                        PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile(  )
-                                                                                           .getIdPhysicalFile(  ) );
+                        fr.paris.lutece.portal.business.file.File file = FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) );
+                        PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) );
                         file.setPhysicalFile( physicalFile );
                         response.setFile( file );
                     }
@@ -166,16 +165,20 @@ public final class TicketHome
 
     /**
      * Marks the specified ticket as read
-     * @param ticket the ticket
+     * 
+     * @param ticket
+     *            the ticket
      */
     public static void markAsRead( Ticket ticket )
     {
-        markAsRead( ticket.getId(  ) );
+        markAsRead( ticket.getId( ) );
     }
 
     /**
      * Marks the specified ticket as read
-     * @param nIdTicket the ticket
+     * 
+     * @param nIdTicket
+     *            the ticket
      */
     public static void markAsRead( int nIdTicket )
     {
@@ -184,16 +187,20 @@ public final class TicketHome
 
     /**
      * Marks the specified ticket as unread
-     * @param ticket the ticket
+     * 
+     * @param ticket
+     *            the ticket
      */
     public static void markAsUnread( Ticket ticket )
     {
-        markAsUnread( ticket.getId(  ) );
+        markAsUnread( ticket.getId( ) );
     }
 
     /**
      * Marks the specified ticket as unread
-     * @param nIdTicket the ticket
+     * 
+     * @param nIdTicket
+     *            the ticket
      */
     public static void markAsUnread( int nIdTicket )
     {
@@ -201,18 +208,18 @@ public final class TicketHome
     }
 
     /**
-     * Load the data of all the ticket objects and returns them in form of a collection
-     * be carefull generic attribute response are not loaded in this method
+     * Load the data of all the ticket objects and returns them in form of a collection be carefull generic attribute response are not loaded in this method
+     * 
      * @see findByPrimaryKey for loading all attribute responses
      * @return the collection which contains the data of all the ticket objects
      */
-    public static List<Ticket> getTicketsList(  )
+    public static List<Ticket> getTicketsList( )
     {
         List<Ticket> listTicket = _dao.selectTicketsList( _plugin );
 
         for ( Ticket ticket : listTicket )
         {
-            TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory(  ).getId(  ), _plugin );
+            TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory( ).getId( ), _plugin );
             ticket.setTicketCategory( ticketCategory );
         }
 
@@ -220,8 +227,7 @@ public final class TicketHome
     }
 
     /**
-     * Load the data of all the ticket objects and returns them in form of a
-     * collection
+     * Load the data of all the ticket objects and returns them in form of a collection
      *
      * @param filter
      *            filter to apply to ticket search
@@ -233,7 +239,7 @@ public final class TicketHome
 
         for ( Ticket ticket : listTicket )
         {
-            TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory(  ).getId(  ), _plugin );
+            TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory( ).getId( ), _plugin );
             ticket.setTicketCategory( ticketCategory );
         }
 
@@ -242,9 +248,10 @@ public final class TicketHome
 
     /**
      * Load the id of all the ticket objects and returns them in form of a collection
+     * 
      * @return the collection which contains the id of all the ticket objects
      */
-    public static List<Integer> getIdTicketsList(  )
+    public static List<Integer> getIdTicketsList( )
     {
         return _dao.selectIdTicketsList( _plugin );
     }
@@ -255,8 +262,11 @@ public final class TicketHome
 
     /**
      * Associates a response to a ticket
-     * @param nIdTicket The id of the ticket
-     * @param nIdResponse The id of the response
+     * 
+     * @param nIdTicket
+     *            The id of the ticket
+     * @param nIdResponse
+     *            The id of the response
      */
     public static void insertTicketResponse( int nIdTicket, int nIdResponse )
     {
@@ -266,7 +276,9 @@ public final class TicketHome
 
     /**
      * Get the list of id of responses associated with an ticket
-     * @param nIdticket the id of the ticket
+     * 
+     * @param nIdticket
+     *            the id of the ticket
      * @return the list of responses, or an empty list if no response was found
      */
     @SuppressWarnings( "unchecked" )
@@ -290,13 +302,15 @@ public final class TicketHome
 
     /**
      * Get the list of responses associated with an ticket
-     * @param nIdticket the id of the ticket
+     * 
+     * @param nIdticket
+     *            the id of the ticket
      * @return the list of responses, or an empty list if no response was found
      */
     public static List<Response> findListResponse( int nIdticket )
     {
         List<Integer> listIdResponse = findListIdResponse( nIdticket );
-        List<Response> listResponse = new ArrayList<Response>( listIdResponse.size(  ) );
+        List<Response> listResponse = new ArrayList<Response>( listIdResponse.size( ) );
 
         for ( Integer nIdResponse : listIdResponse )
         {
@@ -308,9 +322,10 @@ public final class TicketHome
 
     /**
      * Find the id of the ticket associated with a given response
-     * @param nIdResponse The id of the response
-     * @return The id of the ticket, or 0 if no ticket is associated
-     *         with he given response.
+     * 
+     * @param nIdResponse
+     *            The id of the response
+     * @return The id of the ticket, or 0 if no ticket is associated with he given response.
      */
     public static int findIdTicketByIdResponse( int nIdResponse )
     {
@@ -331,21 +346,23 @@ public final class TicketHome
 
     /**
      * Remove every ticket responses associated with a given entry.
-     * @param nIdEntry The id of the entry
+     * 
+     * @param nIdEntry
+     *            The id of the entry
      */
     public static void removeResponsesByIdEntry( int nIdEntry )
     {
-        ResponseFilter filter = new ResponseFilter(  );
+        ResponseFilter filter = new ResponseFilter( );
         filter.setIdEntry( nIdEntry );
 
         List<Response> listResponses = ResponseHome.getResponseList( filter );
 
         for ( Response response : listResponses )
         {
-            _dao.removeTicketResponsesByIdResponse( response.getIdResponse(  ), _plugin );
-            ResponseHome.remove( response.getIdResponse(  ) );
+            _dao.removeTicketResponsesByIdResponse( response.getIdResponse( ), _plugin );
+            ResponseHome.remove( response.getIdResponse( ) );
         }
 
-        _cacheService.resetCache(  );
+        _cacheService.resetCache( );
     }
 }

@@ -44,7 +44,6 @@ import fr.paris.lutece.util.ReferenceList;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  *
  * TicketDomainResourceIdService
@@ -62,7 +61,7 @@ public class TicketDomainResourceIdService extends ResourceIdService
     /**
      * Constructor
      */
-    public TicketDomainResourceIdService(  )
+    public TicketDomainResourceIdService( )
     {
         setPluginName( TicketingPlugin.PLUGIN_NAME );
     }
@@ -70,20 +69,20 @@ public class TicketDomainResourceIdService extends ResourceIdService
     /**
      * Initializes the service
      */
-    public void register(  )
+    public void register( )
     {
-        ResourceType rt = new ResourceType(  );
-        rt.setResourceIdServiceClass( TicketDomainResourceIdService.class.getName(  ) );
+        ResourceType rt = new ResourceType( );
+        rt.setResourceIdServiceClass( TicketDomainResourceIdService.class.getName( ) );
         rt.setPluginName( TicketingPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( TicketDomain.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
-        Permission p = new Permission(  );
+        Permission p = new Permission( );
         p.setPermissionKey( PERMISSION_VIEW );
         p.setPermissionTitleKey( PROPERTY_LABEL_VIEW );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_BELONG_TO );
         p.setPermissionTitleKey( PROPERTY_LABEL_BELONG_TO );
         rt.registerPermission( p );
@@ -93,12 +92,14 @@ public class TicketDomainResourceIdService extends ResourceIdService
 
     /**
      * Returns a list of resource ids
-     * @param locale The current locale
+     * 
+     * @param locale
+     *            The current locale
      * @return A list of resource ids
      */
     public ReferenceList getResourceIdList( Locale locale )
     {
-        List<TicketDomain> listTicketDomain = TicketDomainHome.getTicketDomainsList(  );
+        List<TicketDomain> listTicketDomain = TicketDomainHome.getTicketDomainsList( );
 
         return ReferenceList.convert( listTicketDomain, "id", "label", true );
     }
@@ -110,6 +111,6 @@ public class TicketDomainResourceIdService extends ResourceIdService
     {
         TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( Integer.parseInt( strId ) );
 
-        return ticketDomain.getLabel(  );
+        return ticketDomain.getLabel( );
     }
 }

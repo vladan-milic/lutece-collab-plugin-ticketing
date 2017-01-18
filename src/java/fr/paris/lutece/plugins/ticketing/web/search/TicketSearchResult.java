@@ -35,9 +35,9 @@ package fr.paris.lutece.plugins.ticketing.web.search;
 
 import fr.paris.lutece.portal.service.search.SearchResult;
 
-
 /**
  * ticket search results
+ * 
  * @author s267533
  *
  */
@@ -49,21 +49,22 @@ public class TicketSearchResult extends SearchResult
     /**
      * constructor
      */
-    public TicketSearchResult(  )
+    public TicketSearchResult( )
     {
-        super(  );
+        super( );
     }
 
     /**
      * @return the _strResponse
      */
-    public String getResponse(  )
+    public String getResponse( )
     {
         return _strResponse;
     }
 
     /**
-     * @param strResponse the strResponse to set
+     * @param strResponse
+     *            the strResponse to set
      */
     public void setResponse( String strResponse )
     {
@@ -73,13 +74,14 @@ public class TicketSearchResult extends SearchResult
     /**
      * @return the _strCommment
      */
-    public String getComment(  )
+    public String getComment( )
     {
         return _strComment;
     }
 
     /**
-     * @param strComment the _strComment to set
+     * @param strComment
+     *            the _strComment to set
      */
     public void setComment( String strComment )
     {

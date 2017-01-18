@@ -39,7 +39,6 @@ import java.io.IOException;
 
 import java.util.List;
 
-
 /**
  *
  * @author root
@@ -58,35 +57,48 @@ interface IModelResponseIndexer
 
     /**
      * update index with modelResponse
-     * @param modelReponse modelResponse
-     * @throws IOException ioexception
+     * 
+     * @param modelReponse
+     *            modelResponse
+     * @throws IOException
+     *             ioexception
      */
     void update( ModelResponse modelReponse ) throws IOException;
 
     /**
      * delete index with modelResponse
-     * @param modelReponse modelResponse
-     * @throws IOException ioexception
+     * 
+     * @param modelReponse
+     *            modelResponse
+     * @throws IOException
+     *             ioexception
      */
     void delete( ModelResponse modelReponse ) throws IOException;
 
     /**
      * add modelResponse to index
-     * @param modelReponse modelResponse
-     * @throws IOException ioexception
+     * 
+     * @param modelReponse
+     *            modelResponse
+     * @throws IOException
+     *             ioexception
      */
     void add( ModelResponse modelReponse ) throws IOException;
 
     /**
      * add all modelResponse to index
+     * 
      * @return indexation log string
      */
-    String addAll(  );
+    String addAll( );
 
     /**
      * search modelResponse matching query
-     * @param strQuery lucene query
-     * @param strDomain domain label
+     * 
+     * @param strQuery
+     *            lucene query
+     * @param strDomain
+     *            domain label
      * @return list of modelResponse matching query
      */
     List<ModelResponse> searchResponses( String strQuery, String strDomain );

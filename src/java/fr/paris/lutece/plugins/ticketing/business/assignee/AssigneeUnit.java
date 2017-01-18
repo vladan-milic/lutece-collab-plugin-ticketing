@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.ticketing.business.assignee;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 
-
 /**
  * AssigneeUnit
  */
@@ -45,36 +44,42 @@ public class AssigneeUnit implements RBACResource
     public static final String PERMISSION_ASSIGN = "ASSIGN";
     public static final String RESOURCE_TYPE = "assigneeUnit";
 
-    // Variables declarations 
+    // Variables declarations
     private int _nUnitId;
     private String _strName;
 
     /** Constructor */
-    public AssigneeUnit(  )
+    public AssigneeUnit( )
     {
-    }
-
-    /** Constructor
-     * @param unit The unit
-     */
-    public AssigneeUnit( Unit unit )
-    {
-        _nUnitId = unit.getIdUnit(  );
-        _strName = unit.getLabel(  );
     }
 
     /**
-        * Returns the UnitId
-        * @return The UnitId
-        */
-    public int getUnitId(  )
+     * Constructor
+     * 
+     * @param unit
+     *            The unit
+     */
+    public AssigneeUnit( Unit unit )
+    {
+        _nUnitId = unit.getIdUnit( );
+        _strName = unit.getLabel( );
+    }
+
+    /**
+     * Returns the UnitId
+     * 
+     * @return The UnitId
+     */
+    public int getUnitId( )
     {
         return _nUnitId;
     }
 
     /**
      * Sets the UnitId
-     * @param nUnitId The UnitId
+     * 
+     * @param nUnitId
+     *            The UnitId
      */
     public void setUnitId( int nUnitId )
     {
@@ -83,30 +88,33 @@ public class AssigneeUnit implements RBACResource
 
     /**
      * Returns the Name
+     * 
      * @return The Name
      */
-    public String getName(  )
+    public String getName( )
     {
         return _strName;
     }
 
     /**
      * Sets the Name
-     * @param strName The Name
+     * 
+     * @param strName
+     *            The Name
      */
     public void setName( String strName )
     {
         _strName = strName;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////////////
     // RBAC Resource implementation
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public String getResourceTypeCode(  )
+    public String getResourceTypeCode( )
     {
         return RESOURCE_TYPE;
     }
@@ -115,7 +123,7 @@ public class AssigneeUnit implements RBACResource
      * {@inheritDoc }
      */
     @Override
-    public String getResourceId(  )
+    public String getResourceId( )
     {
         return String.valueOf( _nUnitId );
     }

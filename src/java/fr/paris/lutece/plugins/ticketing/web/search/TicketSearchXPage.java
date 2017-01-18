@@ -53,7 +53,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * TicketSearch
  */
@@ -75,33 +74,34 @@ public class TicketSearchXPage extends MVCApplication
 
     /**
      * Search response for tickets
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The view
      */
     @Action( value = ACTION_SEARCH_RESPONSE )
-    @SuppressWarnings( {"rawtypes",
-        "unchecked"
+    @SuppressWarnings( {
+            "rawtypes", "unchecked"
     } )
     public XPage searchResponse( HttpServletRequest request )
     {
         String strQuery = request.getParameter( SearchConstants.PARAMETER_QUERY );
         String strDomain = request.getParameter( SearchConstants.PARAMETER_DOMAIN );
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
 
         if ( StringUtils.isNotEmpty( strQuery ) )
         {
-            List<ModelResponse> listResults = LuceneModelResponseIndexerServices.instance(  )
-                                                                                .searchResponses( strQuery, strDomain );
+            List<ModelResponse> listResults = LuceneModelResponseIndexerServices.instance( ).searchResponses( strQuery, strDomain );
 
             model.put( SearchConstants.MARK_RESULT, listResults );
             model.put( SearchConstants.MARK_QUERY, strQuery );
         }
         else
         {
-            addError( model, SearchConstants.MESSAGE_SEARCH_NO_INPUT, request.getLocale(  ) );
+            addError( model, SearchConstants.MESSAGE_SEARCH_NO_INPUT, request.getLocale( ) );
         }
 
-        XPage page = getXPage( TEMPLATE_SEARCH_RESPONSE_RESULTS, request.getLocale(  ), model );
+        XPage page = getXPage( TEMPLATE_SEARCH_RESPONSE_RESULTS, request.getLocale( ), model );
         page.setStandalone( true );
 
         return page;
@@ -109,20 +109,23 @@ public class TicketSearchXPage extends MVCApplication
 
     /**
      * add error to model
-     * @param model model
-     * @param strMessageKey message key
-     * @param locale locale
+     * 
+     * @param model
+     *            model
+     * @param strMessageKey
+     *            message key
+     * @param locale
+     *            locale
      */
     @SuppressWarnings( "unchecked" )
     protected void addError( Map<String, Object> model, String strMessageKey, Locale locale )
     {
         if ( model.get( SearchConstants.MARK_ERRORS ) == null )
         {
-            List<ErrorMessage> listErrors = new ArrayList<ErrorMessage>(  );
+            List<ErrorMessage> listErrors = new ArrayList<ErrorMessage>( );
             model.put( SearchConstants.MARK_ERRORS, listErrors );
         }
 
-        ( (List<ErrorMessage>) model.get( SearchConstants.MARK_ERRORS ) ).add( new MVCMessage( 
-                I18nService.getLocalizedString( strMessageKey, locale ) ) );
+        ( (List<ErrorMessage>) model.get( SearchConstants.MARK_ERRORS ) ).add( new MVCMessage( I18nService.getLocalizedString( strMessageKey, locale ) ) );
     }
 }

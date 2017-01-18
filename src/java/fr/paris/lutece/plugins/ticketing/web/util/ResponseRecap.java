@@ -38,7 +38,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * class Response
  */
@@ -55,9 +54,9 @@ public class ResponseRecap implements Serializable
     /**
      * Default constructor
      */
-    public ResponseRecap(  )
+    public ResponseRecap( )
     {
-        _listValues = new ArrayList<String>(  );
+        _listValues = new ArrayList<String>( );
     }
 
     /**
@@ -76,7 +75,7 @@ public class ResponseRecap implements Serializable
      *
      * @return the response title
      */
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
@@ -86,7 +85,7 @@ public class ResponseRecap implements Serializable
      *
      * @return the list of value of this response
      */
-    public List<String> getListValues(  )
+    public List<String> getListValues( )
     {
         return _listValues;
     }
@@ -118,15 +117,15 @@ public class ResponseRecap implements Serializable
      *
      * @return the list of value of this response into a string separated by comma
      */
-    public String getValuesToString(  )
+    public String getValuesToString( )
     {
-        StringBuilder bufferValues = new StringBuilder(  );
+        StringBuilder bufferValues = new StringBuilder( );
 
-        if ( ( this._listValues != null ) && ( this._listValues.size(  ) > 0 ) )
+        if ( ( this._listValues != null ) && ( this._listValues.size( ) > 0 ) )
         {
             int i = 0;
 
-            while ( i < ( this._listValues.size(  ) - 1 ) )
+            while ( i < ( this._listValues.size( ) - 1 ) )
             {
                 bufferValues.append( this._listValues.get( i ) ).append( STRING_LIST_SEPARATOR );
                 i++;
@@ -135,6 +134,6 @@ public class ResponseRecap implements Serializable
             bufferValues.append( this._listValues.get( i ) );
         }
 
-        return bufferValues.toString(  );
+        return bufferValues.toString( );
     }
 }

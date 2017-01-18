@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.test.LuteceTestCase;
 
-
 public class TicketDomainBusinessTest extends LuteceTestCase
 {
     private final static int IDTICKETTYPE1 = 1;
@@ -45,34 +44,34 @@ public class TicketDomainBusinessTest extends LuteceTestCase
     private final static String LABEL1 = "Label1";
     private final static String LABEL2 = "Label2";
 
-    public void testBusiness(  )
+    public void testBusiness( )
     {
         // Initialize an object
-        TicketDomain ticketDomain = new TicketDomain(  );
+        TicketDomain ticketDomain = new TicketDomain( );
         ticketDomain.setIdTicketType( IDTICKETTYPE1 );
         ticketDomain.setLabel( LABEL1 );
 
         // Create test
         TicketDomainHome.create( ticketDomain );
 
-        TicketDomain ticketDomainStored = TicketDomainHome.findByPrimaryKey( ticketDomain.getId(  ) );
-        assertEquals( ticketDomainStored.getIdTicketType(  ), ticketDomain.getIdTicketType(  ) );
-        assertEquals( ticketDomainStored.getLabel(  ), ticketDomain.getLabel(  ) );
+        TicketDomain ticketDomainStored = TicketDomainHome.findByPrimaryKey( ticketDomain.getId( ) );
+        assertEquals( ticketDomainStored.getIdTicketType( ), ticketDomain.getIdTicketType( ) );
+        assertEquals( ticketDomainStored.getLabel( ), ticketDomain.getLabel( ) );
 
         // Update test
         ticketDomain.setIdTicketType( IDTICKETTYPE2 );
         ticketDomain.setLabel( LABEL2 );
         TicketDomainHome.update( ticketDomain );
-        ticketDomainStored = TicketDomainHome.findByPrimaryKey( ticketDomain.getId(  ) );
-        assertEquals( ticketDomainStored.getIdTicketType(  ), ticketDomain.getIdTicketType(  ) );
-        assertEquals( ticketDomainStored.getLabel(  ), ticketDomain.getLabel(  ) );
+        ticketDomainStored = TicketDomainHome.findByPrimaryKey( ticketDomain.getId( ) );
+        assertEquals( ticketDomainStored.getIdTicketType( ), ticketDomain.getIdTicketType( ) );
+        assertEquals( ticketDomainStored.getLabel( ), ticketDomain.getLabel( ) );
 
         // List test
-        TicketDomainHome.getTicketDomainsList(  );
+        TicketDomainHome.getTicketDomainsList( );
 
         // Delete test
-        TicketDomainHome.remove( ticketDomain.getId(  ) );
-        ticketDomainStored = TicketDomainHome.findByPrimaryKey( ticketDomain.getId(  ) );
+        TicketDomainHome.remove( ticketDomain.getId( ) );
+        ticketDomainStored = TicketDomainHome.findByPrimaryKey( ticketDomain.getId( ) );
         assertNotNull( ticketDomainStored );
     }
 }

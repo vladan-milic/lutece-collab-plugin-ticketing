@@ -41,7 +41,6 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Size;
 
-
 /**
  * This is the business class for the object TicketDomain
  */
@@ -51,7 +50,7 @@ public class TicketDomain implements Serializable, RBACResource
     public static final String RESOURCE_TYPE = "TICKET_DOMAIN";
     private static final long serialVersionUID = 1L;
 
-    // Variables declarations 
+    // Variables declarations
     private int _nId;
     private int _nIdTicketType;
     private String _strTicketType;
@@ -61,16 +60,19 @@ public class TicketDomain implements Serializable, RBACResource
 
     /**
      * Returns the Id
+     * 
      * @return The Id
      */
-    public int getId(  )
+    public int getId( )
     {
         return _nId;
     }
 
     /**
      * Sets the Id
-     * @param nId The Id
+     * 
+     * @param nId
+     *            The Id
      */
     public void setId( int nId )
     {
@@ -79,16 +81,19 @@ public class TicketDomain implements Serializable, RBACResource
 
     /**
      * Returns the IdTicketType
+     * 
      * @return The IdTicketType
      */
-    public int getIdTicketType(  )
+    public int getIdTicketType( )
     {
         return _nIdTicketType;
     }
 
     /**
      * Sets the IdTicketType
-     * @param nIdTicketType The IdTicketType
+     * 
+     * @param nIdTicketType
+     *            The IdTicketType
      */
     public void setIdTicketType( int nIdTicketType )
     {
@@ -97,16 +102,19 @@ public class TicketDomain implements Serializable, RBACResource
 
     /**
      * Returns the TicketType
+     * 
      * @return The TicketType
      */
-    public String getTicketType(  )
+    public String getTicketType( )
     {
         return _strTicketType;
     }
 
     /**
      * Sets the TicketType
-     * @param strTicketType The TicketType
+     * 
+     * @param strTicketType
+     *            The TicketType
      */
     public void setTicketType( String strTicketType )
     {
@@ -115,16 +123,19 @@ public class TicketDomain implements Serializable, RBACResource
 
     /**
      * Returns the Label
+     * 
      * @return The Label
      */
-    public String getLabel(  )
+    public String getLabel( )
     {
         return _strLabel;
     }
 
     /**
      * Sets the Label
-     * @param strLabel The Label
+     * 
+     * @param strLabel
+     *            The Label
      */
     public void setLabel( String strLabel )
     {
@@ -132,13 +143,13 @@ public class TicketDomain implements Serializable, RBACResource
     }
 
     @Override
-    public String getResourceId(  )
+    public String getResourceId( )
     {
         return String.valueOf( _nId );
     }
 
     @Override
-    public String getResourceTypeCode(  )
+    public String getResourceTypeCode( )
     {
         return RESOURCE_TYPE;
     }

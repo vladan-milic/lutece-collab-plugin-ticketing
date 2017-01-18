@@ -37,7 +37,6 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Size;
 
-
 /**
  * This is the business class for the object UserTitle
  */
@@ -45,23 +44,26 @@ public class UserTitle implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    // Variables declarations 
+    // Variables declarations
     private int _nId;
     @Size( max = 50, message = "#i18n{ticketing.validation.usertitle.Label.size}" )
     private String _strLabel;
 
     /**
      * Returns the Id
+     * 
      * @return The Id
      */
-    public int getId(  )
+    public int getId( )
     {
         return _nId;
     }
 
     /**
      * Sets the Id
-     * @param nId The Id
+     * 
+     * @param nId
+     *            The Id
      */
     public void setId( int nId )
     {
@@ -70,16 +72,19 @@ public class UserTitle implements Serializable
 
     /**
      * Returns the Label
+     * 
      * @return The Label
      */
-    public String getLabel(  )
+    public String getLabel( )
     {
         return _strLabel;
     }
 
     /**
      * Sets the Label
-     * @param strLabel The Label
+     * 
+     * @param strLabel
+     *            The Label
      */
     public void setLabel( String strLabel )
     {

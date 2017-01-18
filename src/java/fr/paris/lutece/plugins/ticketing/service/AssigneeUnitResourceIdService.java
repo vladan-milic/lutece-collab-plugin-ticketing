@@ -45,7 +45,6 @@ import fr.paris.lutece.util.ReferenceList;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  *
  * AssigneeUnitResourceIdService
@@ -60,7 +59,7 @@ public class AssigneeUnitResourceIdService extends ResourceIdService
     /**
      * Constructor
      */
-    public AssigneeUnitResourceIdService(  )
+    public AssigneeUnitResourceIdService( )
     {
         setPluginName( TicketingPlugin.PLUGIN_NAME );
     }
@@ -68,15 +67,15 @@ public class AssigneeUnitResourceIdService extends ResourceIdService
     /**
      * Initializes the service
      */
-    public void register(  )
+    public void register( )
     {
-        ResourceType rt = new ResourceType(  );
-        rt.setResourceIdServiceClass( AssigneeUnitResourceIdService.class.getName(  ) );
+        ResourceType rt = new ResourceType( );
+        rt.setResourceIdServiceClass( AssigneeUnitResourceIdService.class.getName( ) );
         rt.setPluginName( TicketingPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( AssigneeUnit.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
-        Permission p = new Permission(  );
+        Permission p = new Permission( );
         p.setPermissionKey( AssigneeUnit.PERMISSION_ASSIGN );
         p.setPermissionTitleKey( PROPERTY_LABEL_ASSIGN );
         rt.registerPermission( p );
@@ -86,12 +85,14 @@ public class AssigneeUnitResourceIdService extends ResourceIdService
 
     /**
      * Returns a list of resource ids
-     * @param locale The current locale
+     * 
+     * @param locale
+     *            The current locale
      * @return A list of resource ids
      */
     public ReferenceList getResourceIdList( Locale locale )
     {
-        List<Unit> listUnits = UnitHome.findAll(  );
+        List<Unit> listUnits = UnitHome.findAll( );
 
         return ReferenceList.convert( listUnits, "idUnit", "label", true );
     }
@@ -103,6 +104,6 @@ public class AssigneeUnitResourceIdService extends ResourceIdService
     {
         Unit unit = UnitHome.findByPrimaryKey( Integer.parseInt( strId ) );
 
-        return unit.getLabel(  );
+        return unit.getLabel( );
     }
 }

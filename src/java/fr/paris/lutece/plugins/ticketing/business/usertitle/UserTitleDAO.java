@@ -40,7 +40,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This class provides Data Access methods for UserTitle objects
  */
@@ -57,22 +56,24 @@ public final class UserTitleDAO implements IUserTitleDAO
 
     /**
      * Generates a new primary key
-     * @param plugin The Plugin
+     * 
+     * @param plugin
+     *            The Plugin
      * @return The new primary key
      */
     public int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nKey = 1;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             nKey = daoUtil.getInt( 1 ) + 1;
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nKey;
     }
@@ -87,11 +88,11 @@ public final class UserTitleDAO implements IUserTitleDAO
 
         userTitle.setId( newPrimaryKey( plugin ) );
 
-        daoUtil.setInt( 1, userTitle.getId(  ) );
-        daoUtil.setString( 2, userTitle.getLabel(  ) );
+        daoUtil.setInt( 1, userTitle.getId( ) );
+        daoUtil.setString( 2, userTitle.getLabel( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -102,18 +103,18 @@ public final class UserTitleDAO implements IUserTitleDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         UserTitle userTitle = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            userTitle = new UserTitle(  );
+            userTitle = new UserTitle( );
             userTitle.setId( daoUtil.getInt( 1 ) );
             userTitle.setLabel( daoUtil.getString( 2 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return userTitle;
     }
@@ -126,8 +127,8 @@ public final class UserTitleDAO implements IUserTitleDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -138,12 +139,12 @@ public final class UserTitleDAO implements IUserTitleDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-        daoUtil.setInt( 1, userTitle.getId(  ) );
-        daoUtil.setString( 2, userTitle.getLabel(  ) );
-        daoUtil.setInt( 3, userTitle.getId(  ) );
+        daoUtil.setInt( 1, userTitle.getId( ) );
+        daoUtil.setString( 2, userTitle.getLabel( ) );
+        daoUtil.setInt( 3, userTitle.getId( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -152,13 +153,13 @@ public final class UserTitleDAO implements IUserTitleDAO
     @Override
     public List<UserTitle> selectUserTitlesList( Plugin plugin )
     {
-        List<UserTitle> userTitleList = new ArrayList<UserTitle>(  );
+        List<UserTitle> userTitleList = new ArrayList<UserTitle>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            UserTitle userTitle = new UserTitle(  );
+            UserTitle userTitle = new UserTitle( );
 
             userTitle.setId( daoUtil.getInt( 1 ) );
             userTitle.setLabel( daoUtil.getString( 2 ) );
@@ -166,7 +167,7 @@ public final class UserTitleDAO implements IUserTitleDAO
             userTitleList.add( userTitle );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return userTitleList;
     }
@@ -177,16 +178,16 @@ public final class UserTitleDAO implements IUserTitleDAO
     @Override
     public List<Integer> selectIdUserTitlesList( Plugin plugin )
     {
-        List<Integer> userTitleList = new ArrayList<Integer>(  );
+        List<Integer> userTitleList = new ArrayList<Integer>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             userTitleList.add( daoUtil.getInt( 1 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return userTitleList;
     }
@@ -197,16 +198,16 @@ public final class UserTitleDAO implements IUserTitleDAO
     @Override
     public ReferenceList selectReferenceList( Plugin plugin )
     {
-        ReferenceList list = new ReferenceList(  );
+        ReferenceList list = new ReferenceList( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             list.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return list;
     }

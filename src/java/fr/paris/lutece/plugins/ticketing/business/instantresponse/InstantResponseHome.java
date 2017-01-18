@@ -39,7 +39,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
  * This class provides instances management methods (create, find, ...) for InstantResponse objects
  */
@@ -52,14 +51,16 @@ public final class InstantResponseHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private InstantResponseHome(  )
+    private InstantResponseHome( )
     {
     }
 
     /**
      * Create an instance of the instantResponse class
-     * @param instantResponse The instance of the InstantResponse which contains the informations to store
-     * @return The  instance of instantResponse which has been created with its primary key.
+     * 
+     * @param instantResponse
+     *            The instance of the InstantResponse which contains the informations to store
+     * @return The instance of instantResponse which has been created with its primary key.
      */
     public static InstantResponse create( InstantResponse instantResponse )
     {
@@ -70,8 +71,10 @@ public final class InstantResponseHome
 
     /**
      * Update of the instantResponse which is specified in parameter
-     * @param instantResponse The instance of the InstantResponse which contains the data to store
-     * @return The instance of the  instantResponse which has been updated
+     * 
+     * @param instantResponse
+     *            The instance of the InstantResponse which contains the data to store
+     * @return The instance of the instantResponse which has been updated
      */
     public static InstantResponse update( InstantResponse instantResponse )
     {
@@ -82,19 +85,23 @@ public final class InstantResponseHome
 
     /**
      * Remove the instantResponse whose identifier is specified in parameter
-     * @param nKey The instantResponse Id
+     * 
+     * @param nKey
+     *            The instantResponse Id
      */
     public static void remove( int nKey )
     {
         _dao.delete( nKey, _plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Returns an instance of a instantResponse whose identifier is specified in parameter
-     * @param nKey The instantResponse primary key
+     * 
+     * @param nKey
+     *            The instantResponse primary key
      * @return an instance of InstantResponse
      */
     public static InstantResponse findByPrimaryKey( int nKey )
@@ -104,18 +111,20 @@ public final class InstantResponseHome
 
     /**
      * Load the data of all the instantResponse objects and returns them in form of a collection
+     * 
      * @return the collection which contains the data of all the instantResponse objects
      */
-    public static List<InstantResponse> getInstantResponsesList(  )
+    public static List<InstantResponse> getInstantResponsesList( )
     {
         return _dao.selectInstantResponsesList( _plugin );
     }
 
     /**
      * Load the id of all the instantResponse objects and returns them in form of a collection
+     * 
      * @return the collection which contains the id of all the instantResponse objects
      */
-    public static List<Integer> getIdInstantResponsesList(  )
+    public static List<Integer> getIdInstantResponsesList( )
     {
         return _dao.selectIdInstantResponsesList( _plugin );
     }

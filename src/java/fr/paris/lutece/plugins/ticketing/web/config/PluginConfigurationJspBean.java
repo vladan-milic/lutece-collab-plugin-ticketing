@@ -63,22 +63,19 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * This class provides the user interface to manage the plugin configuration
  */
 @Controller( controllerJsp = "ConfigurePlugin.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = PluginConfigurationJspBean.CONTROLLER_RIGHT )
 public class PluginConfigurationJspBean extends MVCAdminJspBean
 {
-    ////////////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////////////
     // Constants
     protected static final String CONTROLLER_RIGHT = "TICKETING_PLUGIN_CONFIGURATION";
 
     // templates
-    private static final String TEMPLATE_CONFIGURE_PLUGIN = TicketingConstants.TEMPLATE_ADMIN_PATH +
-        "config/configure_plugin.html";
-    private static final String TEMPLATE_WORKFLOW_RELATED_PROPERTIES = TicketingConstants.TEMPLATE_ADMIN_PATH +
-        "config/workflow_related_properties.html";
+    private static final String TEMPLATE_CONFIGURE_PLUGIN = TicketingConstants.TEMPLATE_ADMIN_PATH + "config/configure_plugin.html";
+    private static final String TEMPLATE_WORKFLOW_RELATED_PROPERTIES = TicketingConstants.TEMPLATE_ADMIN_PATH + "config/workflow_related_properties.html";
 
     // Parameters
     private static final String PARAMETER_WORKFLOW_ID = "id_workflow";
@@ -130,18 +127,20 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     private static final long serialVersionUID = -1920398324341843326L;
 
     // Services
-    private static WorkflowService _workflowService = WorkflowService.getInstance(  );
+    private static WorkflowService _workflowService = WorkflowService.getInstance( );
     private static IActionService _actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
 
     /**
      * Build the Manage View
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The page
      */
     @View( value = VIEW_MANAGE_CONFIGURATION, defaultView = true )
     public String getManageConfiguration( HttpServletRequest request )
     {
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
 
         manageWorkflowProperties( model );
         manageFrontOfficeProperties( model );
@@ -151,7 +150,9 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Saves the modified configuration
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return the page to redirect when the modification is done
      */
     @Action( ACTION_MODIFIY_CONFIGURATION )
@@ -167,22 +168,24 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
             saveWorkflowProperties( request );
             saveFrontOfficeProperties( request );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             AppLogService.error( e );
-            addError( ERROR_CONFIGURATION_SAVE_ABORTED, getLocale(  ) );
+            addError( ERROR_CONFIGURATION_SAVE_ABORTED, getLocale( ) );
 
             return redirectView( request, VIEW_MANAGE_CONFIGURATION );
         }
 
-        addInfo( INFO_CONFIGURATION_SAVED, getLocale(  ) );
+        addInfo( INFO_CONFIGURATION_SAVED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_CONFIGURATION );
     }
 
     /**
      * Builds the properties related to the workflow
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return the HTML for the properties
      */
     @Action( ACTION_BUILD_WORKFLOW_RELATED_PROPERTIES )
@@ -193,9 +196,9 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
         try
         {
-            strResult = buildWorkflowRelatedProperties( Integer.parseInt( strIdWorkflow ), getLocale(  ) );
+            strResult = buildWorkflowRelatedProperties( Integer.parseInt( strIdWorkflow ), getLocale( ) );
         }
-        catch ( NumberFormatException e )
+        catch( NumberFormatException e )
         {
             AppLogService.error( e );
         }
@@ -205,53 +208,57 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Inserts the properties related to the workflow in the specified model
-     * @param model the model
+     * 
+     * @param model
+     *            the model
      */
     private void manageWorkflowProperties( Map<String, Object> model )
     {
-        int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID,
-                TicketingConstants.PROPERTY_UNSET_INT );
+        int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
 
         model.put( MARK_WORKFLOW_ID, nIdWorkflow );
 
-        if ( WorkflowService.getInstance(  ).isAvailable(  ) )
+        if ( WorkflowService.getInstance( ).isAvailable( ) )
         {
-            ReferenceList listWorkflows = _workflowService.getWorkflowsEnabled( getUser(  ), getLocale(  ) );
+            ReferenceList listWorkflows = _workflowService.getWorkflowsEnabled( getUser( ), getLocale( ) );
             model.put( MARK_LIST_WORKFLOWS, listWorkflows );
-            model.put( MARK_WORKFLOW_RELATED_PROPERTIES, buildWorkflowRelatedProperties( nIdWorkflow, getLocale(  ) ) );
+            model.put( MARK_WORKFLOW_RELATED_PROPERTIES, buildWorkflowRelatedProperties( nIdWorkflow, getLocale( ) ) );
         }
     }
 
     /**
      * Inserts the properties related to the front office in the specified model
-     * @param model the model
+     * 
+     * @param model
+     *            the model
      */
     private void manageFrontOfficeProperties( Map<String, Object> model )
     {
         // Admin user for front office
-        int nIdAdminUser = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_ADMINUSER_ID_FRONT,
-                TicketingConstants.PROPERTY_UNSET_INT );
+        int nIdAdminUser = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_ADMINUSER_ID_FRONT, TicketingConstants.PROPERTY_UNSET_INT );
         model.put( MARK_ADMIN_USER_ID_FRONT, nIdAdminUser );
 
         // All admin users
-        Collection<AdminUser> adminUsers = AdminUserHome.findUserList(  );
+        Collection<AdminUser> adminUsers = AdminUserHome.findUserList( );
         ReferenceList referenceListAdminUser = buildReferenceList( adminUsers, "userId", "accessCode" );
         model.put( MARK_ADMIN_USERS, referenceListAdminUser );
 
         // Channel for front office
-        int nIdChannel = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT,
-                TicketingConstants.PROPERTY_UNSET_INT );
+        int nIdChannel = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT, TicketingConstants.PROPERTY_UNSET_INT );
         model.put( MARK_CHANNEL_ID_FRONT, nIdChannel );
 
         // All channels
-        ReferenceList referenceListChannel = buildReferenceList( ChannelHome.getReferenceList(  ) );
+        ReferenceList referenceListChannel = buildReferenceList( ChannelHome.getReferenceList( ) );
         model.put( MARK_CHANNELS, referenceListChannel );
     }
 
     /**
      * Builds the properties related to the workflow
-     * @param nIdWorkflow the workflow id
-     * @param locale the locale
+     * 
+     * @param nIdWorkflow
+     *            the workflow id
+     * @param locale
+     *            the locale
      * @return the HTML for the properties
      */
     private String buildWorkflowRelatedProperties( int nIdWorkflow, Locale locale )
@@ -260,29 +267,26 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
         if ( TicketingConstants.PROPERTY_UNSET_INT != nIdWorkflow )
         {
-            Map<String, Object> model = getModel(  );
+            Map<String, Object> model = getModel( );
 
             // All states
-            ReferenceList referenceListStates = buildReferenceList( _workflowService.getAllStateByWorkflow( 
-                        nIdWorkflow, getUser(  ) ), "id", "name" );
+            ReferenceList referenceListStates = buildReferenceList( _workflowService.getAllStateByWorkflow( nIdWorkflow, getUser( ) ), "id", "name" );
             model.put( MARK_STATES, referenceListStates );
 
             // Selected states
-            model.put( MARK_STATES_SELECTED,
-                PluginConfigurationService.getStringList( PluginConfigurationService.PROPERTY_STATES_SELECTED, null ) );
+            model.put( MARK_STATES_SELECTED, PluginConfigurationService.getStringList( PluginConfigurationService.PROPERTY_STATES_SELECTED, null ) );
 
             // Selected states for roles
-            Map<String, List<String>> mapStatesForRoles = PluginConfigurationService.getStringListByPrefix( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX,
-                    null );
+            Map<String, List<String>> mapStatesForRoles = PluginConfigurationService.getStringListByPrefix(
+                    PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX, null );
 
             if ( mapStatesForRoles != null )
             {
-                List<SelectedStatesForRole> listStatesSelectedForRole = new ArrayList<SelectedStatesForRole>(  );
+                List<SelectedStatesForRole> listStatesSelectedForRole = new ArrayList<SelectedStatesForRole>( );
 
-                for ( Map.Entry<String, List<String>> entry : mapStatesForRoles.entrySet(  ) )
+                for ( Map.Entry<String, List<String>> entry : mapStatesForRoles.entrySet( ) )
                 {
-                    SelectedStatesForRole selectedStatesFroRole = new SelectedStatesForRole( entry.getKey(  ),
-                            entry.getValue(  ) );
+                    SelectedStatesForRole selectedStatesFroRole = new SelectedStatesForRole( entry.getKey( ), entry.getValue( ) );
 
                     listStatesSelectedForRole.add( selectedStatesFroRole );
                 }
@@ -291,25 +295,22 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
             }
 
             // Closed state
-            model.put( MARK_STATE_CLOSED_ID,
-                PluginConfigurationService.getString( PluginConfigurationService.PROPERTY_STATE_CLOSED_ID, null ) );
+            model.put( MARK_STATE_CLOSED_ID, PluginConfigurationService.getString( PluginConfigurationService.PROPERTY_STATE_CLOSED_ID, null ) );
 
             // All actions
-            ActionFilter actionFilter = new ActionFilter(  );
+            ActionFilter actionFilter = new ActionFilter( );
             actionFilter.setIdWorkflow( nIdWorkflow );
 
-            ReferenceList referenceListActions = buildReferenceList( _actionService.getListActionByFilter( actionFilter ),
-                    "id", "name" );
+            ReferenceList referenceListActions = buildReferenceList( _actionService.getListActionByFilter( actionFilter ), "id", "name" );
             model.put( MARK_ACTIONS, referenceListActions );
 
             // Filtered actions when assigned to me
             model.put( MARK_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME,
-                PluginConfigurationService.getStringList( 
-                    PluginConfigurationService.PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME, null ) );
+                    PluginConfigurationService.getStringList( PluginConfigurationService.PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME, null ) );
 
             HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_WORKFLOW_RELATED_PROPERTIES, locale, model );
 
-            strResult = template.getHtml(  );
+            strResult = template.getHtml( );
         }
 
         return strResult;
@@ -317,14 +318,16 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Saves the properties related to the workflow
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      */
     private static void saveWorkflowProperties( HttpServletRequest request )
     {
         int nIdWorkflow = TicketingConstants.PROPERTY_UNSET_INT;
         int nIdStateClosed = TicketingConstants.PROPERTY_UNSET_INT;
-        List<Integer> listStateSelected = new ArrayList<Integer>(  );
-        List<Integer> listFilteredActionsWhenAssignedToMe = new ArrayList<Integer>(  );
+        List<Integer> listStateSelected = new ArrayList<Integer>( );
+        List<Integer> listFilteredActionsWhenAssignedToMe = new ArrayList<Integer>( );
 
         PluginConfigurationService.removeByPrefix( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX );
 
@@ -340,7 +343,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
                 listStateSelected = RequestUtils.extractIdList( request, PARAMETER_STATES_SELECTED );
 
                 // Manage selected states for roles
-                String[] listStateSelectedForRoleRoles = request.getParameterValues( PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE );
+                String [ ] listStateSelectedForRoleRoles = request.getParameterValues( PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE );
 
                 if ( listStateSelectedForRoleRoles != null )
                 {
@@ -348,11 +351,11 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
                     {
                         if ( !StringUtils.isEmpty( strRole ) )
                         {
-                            List<Integer> listStateSelectedForRoleIds = RequestUtils.extractIdList( request,
-                                    PARAMETER_STATES_SELECTED_FOR_ROLE_STATES_PREFIX + strRole );
+                            List<Integer> listStateSelectedForRoleIds = RequestUtils.extractIdList( request, PARAMETER_STATES_SELECTED_FOR_ROLE_STATES_PREFIX
+                                    + strRole );
 
-                            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX +
-                                strRole, listStateSelectedForRoleIds );
+                            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX + strRole,
+                                    listStateSelectedForRoleIds );
                         }
                     }
                 }
@@ -361,21 +364,21 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
                 nIdStateClosed = RequestUtils.extractId( request, PARAMETER_STATE_CLOSED_ID );
 
                 // Manage filtered actions when assigned to me
-                listFilteredActionsWhenAssignedToMe = RequestUtils.extractIdList( request,
-                        PARAMETER_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME );
+                listFilteredActionsWhenAssignedToMe = RequestUtils.extractIdList( request, PARAMETER_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME );
             }
         }
 
         PluginConfigurationService.set( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, nIdWorkflow );
         PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATE_CLOSED_ID, nIdStateClosed );
         PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATES_SELECTED, listStateSelected );
-        PluginConfigurationService.set( PluginConfigurationService.PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME,
-            listFilteredActionsWhenAssignedToMe );
+        PluginConfigurationService.set( PluginConfigurationService.PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME, listFilteredActionsWhenAssignedToMe );
     }
 
     /**
      * Saves the properties related to the front office
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      */
     private static void saveFrontOfficeProperties( HttpServletRequest request )
     {
@@ -402,16 +405,19 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Builds a ReferenceList from the specified Collection. The ReferenceList is built with an empty value in the first position.
-     * @param collection the Collection used to build the ReferenceList
-     * @param strCode the code of the ReferenceItem
-     * @param strName the name of the ReferenceItem
+     * 
+     * @param collection
+     *            the Collection used to build the ReferenceList
+     * @param strCode
+     *            the code of the ReferenceItem
+     * @param strName
+     *            the name of the ReferenceItem
      * @return the ReferenceList
      */
     @SuppressWarnings( "rawtypes" )
     private static ReferenceList buildReferenceList( Collection collection, String strCode, String strName )
     {
-        ReferenceList referenceList = TicketUtils.createReferenceList( StringUtils.EMPTY,
-                TicketingConstants.PROPERTY_UNSET_INT );
+        ReferenceList referenceList = TicketUtils.createReferenceList( StringUtils.EMPTY, TicketingConstants.PROPERTY_UNSET_INT );
 
         referenceList.addAll( ReferenceList.convert( collection, strCode, strName, true ) );
 
@@ -420,13 +426,14 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Builds a ReferenceList from the specified ReferenceList. The ReferenceList is built with an empty value in the first position.
-     * @param referenceList the ReferenceList used to build the ReferenceList
+     * 
+     * @param referenceList
+     *            the ReferenceList used to build the ReferenceList
      * @return the ReferenceList
      */
     private static ReferenceList buildReferenceList( ReferenceList referenceList )
     {
-        ReferenceList referenceListOneItem = TicketUtils.createReferenceList( StringUtils.EMPTY,
-                TicketingConstants.PROPERTY_UNSET_INT );
+        ReferenceList referenceListOneItem = TicketUtils.createReferenceList( StringUtils.EMPTY, TicketingConstants.PROPERTY_UNSET_INT );
 
         referenceListOneItem.addAll( referenceList );
 
@@ -435,18 +442,20 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Tests whether the form is valid or not.
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return {@code true} if the form is valid, {@code false} otherwise
      */
     private boolean validate( HttpServletRequest request )
     {
         boolean bIsValidated = true;
 
-        String[] listStateSelectedForRoleRoles = request.getParameterValues( PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE );
+        String [ ] listStateSelectedForRoleRoles = request.getParameterValues( PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE );
 
         if ( listStateSelectedForRoleRoles != null )
         {
-            List<String> setRoles = new ArrayList<String>(  );
+            List<String> setRoles = new ArrayList<String>( );
 
             for ( String strRole : listStateSelectedForRoleRoles )
             {
@@ -454,7 +463,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
                 {
                     if ( setRoles.contains( strRole ) )
                     {
-                        addError( ERROR_CONFIGURATION_STATES_SELECTED_FOR_ROLES_DOUBLE, getLocale(  ) );
+                        addError( ERROR_CONFIGURATION_STATES_SELECTED_FOR_ROLES_DOUBLE, getLocale( ) );
                         bIsValidated = false;
 
                         break;
@@ -481,8 +490,11 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
         /**
          * Constructor
-         * @param strRole the role
-         * @param listState the list of states
+         * 
+         * @param strRole
+         *            the role
+         * @param listState
+         *            the list of states
          */
         public SelectedStatesForRole( String strRole, List<String> listState )
         {
@@ -492,18 +504,20 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
         /**
          * Gets the role
+         * 
          * @return the role
          */
-        public String getRole(  )
+        public String getRole( )
         {
             return _strRole;
         }
 
         /**
          * Gets the states
+         * 
          * @return the states
          */
-        public List<String> getStates(  )
+        public List<String> getStates( )
         {
             return _listState;
         }

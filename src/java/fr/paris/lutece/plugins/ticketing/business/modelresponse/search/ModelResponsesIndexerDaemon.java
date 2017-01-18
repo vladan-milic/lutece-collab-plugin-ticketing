@@ -35,9 +35,8 @@ package fr.paris.lutece.plugins.ticketing.business.modelresponse.search;
 
 import fr.paris.lutece.portal.service.daemon.Daemon;
 
-
 /**
- * modelResponse indexation  daemon
+ * modelResponse indexation daemon
  *
  */
 public class ModelResponsesIndexerDaemon extends Daemon
@@ -46,8 +45,8 @@ public class ModelResponsesIndexerDaemon extends Daemon
      * {@inheritDoc }
      */
     @Override
-    public void run(  )
+    public void run( )
     {
-        setLastRunLogs( LuceneModelResponseIndexerServices.instance(  ).addAll(  ) );
+        setLastRunLogs( LuceneModelResponseIndexerServices.instance( ).addAll( ) );
     }
 }

@@ -66,7 +66,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * This class represents a XPage which can use workflow
  *
@@ -77,7 +76,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
     public static final String ERROR_WORKFLOW_ACTION_ABORTED = "ticketing.error.workflow.action.aborted.frontoffice";
 
     // Services
-    private static WorkflowService _workflowService = WorkflowService.getInstance(  );
+    private static WorkflowService _workflowService = WorkflowService.getInstance( );
 
     // Other constants
 
@@ -88,12 +87,15 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
     /**
      * set workflow attributes for displayable tickets
-     * @param request the request
-     * @param paginator paginator of tickets
+     * 
+     * @param request
+     *            the request
+     * @param paginator
+     *            paginator of tickets
      */
     protected void setWorkflowAttributes( HttpServletRequest request, LocalizedPaginator<Ticket> paginator )
     {
-        for ( Ticket ticket : paginator.getPageItems(  ) )
+        for ( Ticket ticket : paginator.getPageItems( ) )
         {
             setWorkflowAttributes( request, ticket );
         }
@@ -101,8 +103,11 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
     /**
      * set workflow attributes for the specified ticket
-     * @param request the request
-     * @param ticket the Ticket
+     * 
+     * @param request
+     *            the request
+     * @param ticket
+     *            the Ticket
      */
     protected void setWorkflowAttributes( HttpServletRequest request, Ticket ticket )
     {
@@ -110,16 +115,15 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
         try
         {
-            if ( _workflowService.isAvailable(  ) )
+            if ( _workflowService.isAvailable( ) )
             {
-                TicketCategory ticketCategory = ticket.getTicketCategory(  );
-                int nIdWorkflow = ticketCategory.getIdWorkflow(  );
+                TicketCategory ticketCategory = ticket.getTicketCategory( );
+                int nIdWorkflow = ticketCategory.getIdWorkflow( );
 
-                StateFilter stateFilter = new StateFilter(  );
+                StateFilter stateFilter = new StateFilter( );
                 stateFilter.setIdWorkflow( nIdWorkflow );
 
-                State state = _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                        ticketCategory.getId(  ) );
+                State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
 
                 if ( state != null )
                 {
@@ -128,8 +132,8 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
                 if ( nIdWorkflow > 0 )
                 {
-                    Collection<Action> listWorkflowActions = _workflowService.getActions( ticket.getId(  ),
-                            Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, AdminUserService.getAdminUser( request ) );
+                    Collection<Action> listWorkflowActions = _workflowService.getActions( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+                            AdminUserService.getAdminUser( request ) );
 
                     ticket.setListWorkflowActions( listWorkflowActions );
                 }
@@ -143,31 +147,31 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
     /**
      * Tests if the ticket is in the state specified by the properties passed as a parameter
-     * @param ticket the ticket
-     * @param strStateProperty the property corresponding to the state id
+     * 
+     * @param ticket
+     *            the ticket
+     * @param strStateProperty
+     *            the property corresponding to the state id
      * @return {@code true} if the ticket is in the specified state, {@code false} otherwise
      */
     protected boolean isInState( Ticket ticket, String strStateProperty )
     {
         int nStateIdInConf = AppPropertiesService.getPropertyInt( strStateProperty, -1 );
-        TicketCategory ticketCategory = ticket.getTicketCategory(  );
-        int nIdWorkflow = ticketCategory.getIdWorkflow(  );
+        TicketCategory ticketCategory = ticket.getTicketCategory( );
+        int nIdWorkflow = ticketCategory.getIdWorkflow( );
 
-        State state = _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                ticketCategory.getId(  ) );
+        State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
 
-        return state.getId(  ) == nStateIdInConf;
+        return state.getId( ) == nStateIdInConf;
     }
 
     /**
-     * Get the workflow action form before processing the action. If the action
-     * does not need to display any form, then redirect the user to the workflow
-     * action processing page.
+     * Get the workflow action form before processing the action. If the action does not need to display any form, then redirect the user to the workflow action
+     * processing page.
      *
      * @param request
      *            The request
-     * @return The HTML content to display, or the next URL to redirect the user
-     *         to
+     * @return The HTML content to display, or the next URL to redirect the user to
      */
     @View( TicketingConstants.VIEW_WORKFLOW_ACTION_FORM )
     public XPage getWorkflowActionForm( HttpServletRequest request )
@@ -179,33 +183,31 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
         try
         {
-            if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
-                    StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
+            if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) && StringUtils.isNotEmpty( strIdTicket )
+                    && StringUtils.isNumeric( strIdTicket ) )
             {
                 int nIdAction = Integer.parseInt( strIdAction );
                 int nIdTicket = Integer.parseInt( strIdTicket );
 
                 if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( request ) ) )
                 {
-                    String strHtmlTasksForm = _workflowService.getDisplayTasksForm( nIdTicket,
-                            Ticket.TICKET_RESOURCE_TYPE, nIdAction, request, getLocale( request ) );
+                    String strHtmlTasksForm = _workflowService.getDisplayTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, request,
+                            getLocale( request ) );
 
-                    Map<String, Object> model = new HashMap<String, Object>(  );
+                    Map<String, Object> model = new HashMap<String, Object>( );
 
                     model.put( TicketingConstants.MARK_TASKS_FORM, strHtmlTasksForm );
                     model.put( TicketingConstants.MARK_WORKFLOW_ID_ACTION, nIdAction );
                     model.put( TicketingConstants.MARK_ID_TICKET, nIdTicket );
 
-                    //used to hide next button (if an error occured in html tasks form generation)
+                    // used to hide next button (if an error occured in html tasks form generation)
                     if ( request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) != null )
                     {
-                        model.put( TicketingConstants.MARK_HIDE_NEXT_STEP_BUTTON,
-                            request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) );
+                        model.put( TicketingConstants.MARK_HIDE_NEXT_STEP_BUTTON, request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) );
                     }
 
-                    model.put( TicketingConstants.MARK_FORM_ACTION,
-                        getActionFullUrl( TicketingConstants.ACTION_DO_PROCESS_WORKFLOW_ACTION ) );
-                    model.put( TicketingConstants.MARK_PAGE, getXPageName(  ) );
+                    model.put( TicketingConstants.MARK_FORM_ACTION, getActionFullUrl( TicketingConstants.ACTION_DO_PROCESS_WORKFLOW_ACTION ) );
+                    model.put( TicketingConstants.MARK_PAGE, getXPageName( ) );
 
                     IActionService actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
                     Action action = actionService.findByPrimaryKey( nIdAction );
@@ -243,8 +245,8 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
         try
         {
-            if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
-                    StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
+            if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) && StringUtils.isNotEmpty( strIdTicket )
+                    && StringUtils.isNumeric( strIdTicket ) )
             {
                 int nIdAction = Integer.parseInt( strIdAction );
                 int nIdTicket = Integer.parseInt( strIdTicket );
@@ -254,12 +256,12 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                     try
                     {
                         Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-                        TicketCategory ticketCategory = ticket.getTicketCategory(  );
+                        TicketCategory ticketCategory = ticket.getTicketCategory( );
 
                         if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( request ) ) )
                         {
-                            strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE,
-                                    nIdAction, ticketCategory.getId(  ), request, getLocale( request ) );
+                            strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, ticketCategory.getId( ), request,
+                                    getLocale( request ) );
 
                             if ( strError != null )
                             {
@@ -268,11 +270,11 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                         }
                         else
                         {
-                            _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
-                                ticketCategory.getId(  ), request, getLocale( request ), false );
+                            _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, ticketCategory.getId( ), request,
+                                    getLocale( request ), false );
                         }
                     }
-                    catch ( Exception e )
+                    catch( Exception e )
                     {
                         addErrorWorkflowAction( request, nIdAction );
                         AppLogService.error( e );
@@ -302,23 +304,21 @@ public abstract class WorkflowCapableXPage extends MVCApplication
      */
     protected void doProcessWorkflowAutomaticAction( Ticket ticket )
     {
-        TicketCategory ticketCategory = ticket.getTicketCategory(  );
+        TicketCategory ticketCategory = ticket.getTicketCategory( );
 
-        int nIdWorkflow = ticketCategory.getIdWorkflow(  );
+        int nIdWorkflow = ticketCategory.getIdWorkflow( );
 
-        if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable(  ) )
+        if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable( ) )
         {
             try
             {
-                _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticketCategory.getId(  ) );
-                _workflowService.executeActionAutomatic( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticketCategory.getId(  ) );
+                _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+                _workflowService.executeActionAutomatic( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
             }
-            catch ( Exception e )
+            catch( Exception e )
             {
-                doRemoveWorkFlowResource( ticket.getId(  ) );
-                TicketHome.remove( ticket.getId(  ) );
+                doRemoveWorkFlowResource( ticket.getId( ) );
+                TicketHome.remove( ticket.getId( ) );
                 throw e;
             }
         }
@@ -329,44 +329,43 @@ public abstract class WorkflowCapableXPage extends MVCApplication
      *
      * @param ticket
      *            The ticket
-     * @param request http request
+     * @param request
+     *            http request
      */
     protected void doProcessNextWorkflowAction( Ticket ticket, HttpServletRequest request )
     {
-        TicketCategory ticketCategory = ticket.getTicketCategory(  );
+        TicketCategory ticketCategory = ticket.getTicketCategory( );
 
         AdminUser userFront = TicketUtils.registerAdminUserFront( request );
 
         try
         {
-            int nIdWorkflow = ticketCategory.getIdWorkflow(  );
+            int nIdWorkflow = ticketCategory.getIdWorkflow( );
 
-            if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable(  ) )
+            if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable( ) )
             {
                 try
                 {
-                    _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                        ticketCategory.getId(  ) );
+                    _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
 
-                    Collection<Action> actions = _workflowService.getActions( ticket.getId(  ),
-                            Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, userFront );
+                    Collection<Action> actions = _workflowService.getActions( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, userFront );
 
-                    if ( actions.size(  ) == 1 )
+                    if ( actions.size( ) == 1 )
                     {
-                        Action action = actions.iterator(  ).next(  );
-                        _workflowService.doProcessAction( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE,
-                            action.getId(  ), ticketCategory.getId(  ), request, request.getLocale(  ), false );
+                        Action action = actions.iterator( ).next( );
+                        _workflowService.doProcessAction( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, action.getId( ), ticketCategory.getId( ), request,
+                                request.getLocale( ), false );
                     }
                     else
                     {
-                        //multiple actions or no action => ambiguous case 
-                        //TODO throw an exception
+                        // multiple actions or no action => ambiguous case
+                        // TODO throw an exception
                     }
                 }
-                catch ( Exception e )
+                catch( Exception e )
                 {
-                    doRemoveWorkFlowResource( ticket.getId(  ) );
-                    TicketHome.remove( ticket.getId(  ) );
+                    doRemoveWorkFlowResource( ticket.getId( ) );
+                    TicketHome.remove( ticket.getId( ) );
                     throw e;
                 }
             }
@@ -379,11 +378,13 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
     /**
      * Do remove a workflow resource
-     * @param nTicketId the ticket id associated to the workflow resource
+     * 
+     * @param nTicketId
+     *            the ticket id associated to the workflow resource
      */
     protected void doRemoveWorkFlowResource( int nTicketId )
     {
-        if ( _workflowService.isAvailable(  ) )
+        if ( _workflowService.isAvailable( ) )
         {
             _workflowService.doRemoveWorkFlowResource( nTicketId, Ticket.TICKET_RESOURCE_TYPE );
         }
@@ -391,36 +392,44 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
     /**
      * Adds error message for workflow action
-     * @param request the request
-     * @param nIdAction the action id
+     * 
+     * @param request
+     *            the request
+     * @param nIdAction
+     *            the action id
      */
     private void addErrorWorkflowAction( HttpServletRequest request, int nIdAction )
     {
         IActionService actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
         Action action = actionService.findByPrimaryKey( nIdAction );
-        String strError = MessageFormat.format( I18nService.getLocalizedString( ERROR_WORKFLOW_ACTION_ABORTED,
-                    Locale.FRENCH ), action.getName(  ) );
+        String strError = MessageFormat.format( I18nService.getLocalizedString( ERROR_WORKFLOW_ACTION_ABORTED, Locale.FRENCH ), action.getName( ) );
         addError( strError );
         ;
     }
 
     /**
      * Redirects to the correct page after workflow action
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return the page to redirect to
      */
     protected abstract XPage redirectAfterWorkflowAction( HttpServletRequest request );
 
     /**
      * Redirects to the correct page after the cancellation of the workflow action
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return the page to redirect to
      */
     protected abstract XPage redirectWorkflowActionCancelled( HttpServletRequest request );
 
     /**
      * Redirects to the default page (if workflow not enabled, if action id not correct, etc.)
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return the page to redirect to
      */
     protected abstract XPage defaultRedirectWorkflowAction( HttpServletRequest request );

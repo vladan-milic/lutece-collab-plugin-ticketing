@@ -44,7 +44,6 @@ import fr.paris.lutece.util.ReferenceList;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  *
  * SupportEntityResourceIdService
@@ -60,7 +59,7 @@ public class SupportEntityResourceIdService extends ResourceIdService
     /**
      * Constructor
      */
-    public SupportEntityResourceIdService(  )
+    public SupportEntityResourceIdService( )
     {
         setPluginName( TicketingPlugin.PLUGIN_NAME );
     }
@@ -68,15 +67,15 @@ public class SupportEntityResourceIdService extends ResourceIdService
     /**
      * Initializes the service
      */
-    public void register(  )
+    public void register( )
     {
-        ResourceType rt = new ResourceType(  );
-        rt.setResourceIdServiceClass( SupportEntityResourceIdService.class.getName(  ) );
+        ResourceType rt = new ResourceType( );
+        rt.setResourceIdServiceClass( SupportEntityResourceIdService.class.getName( ) );
         rt.setPluginName( TicketingPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( SupportEntity.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
-        Permission p = new Permission(  );
+        Permission p = new Permission( );
         p.setPermissionKey( PERMISSION_VIEW );
         p.setPermissionTitleKey( PROPERTY_LABEL_VIEW );
         rt.registerPermission( p );
@@ -86,12 +85,14 @@ public class SupportEntityResourceIdService extends ResourceIdService
 
     /**
      * Returns a list of resource ids
-     * @param locale The current locale
+     * 
+     * @param locale
+     *            The current locale
      * @return A list of resource ids
      */
     public ReferenceList getResourceIdList( Locale locale )
     {
-        List<SupportEntity> listSupportEntities = SupportEntityHome.getSupportEntityList(  );
+        List<SupportEntity> listSupportEntities = SupportEntityHome.getSupportEntityList( );
 
         return ReferenceList.convert( listSupportEntities, "id", "name", true );
     }
@@ -103,6 +104,6 @@ public class SupportEntityResourceIdService extends ResourceIdService
     {
         SupportEntity supportEntity = SupportEntityHome.findByPrimaryKey( Integer.parseInt( strId ) );
 
-        return supportEntity.getName(  );
+        return supportEntity.getName( );
     }
 }

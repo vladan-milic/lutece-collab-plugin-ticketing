@@ -38,7 +38,6 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
 
-
 /**
  * ITicketDomainDAO Interface
  */
@@ -46,76 +45,102 @@ public interface ITicketDomainDAO
 {
     /**
      * Insert a new record in the table.
-     * @param ticketDomain instance of the TicketDomain object to insert
-     * @param plugin the Plugin
+     * 
+     * @param ticketDomain
+     *            instance of the TicketDomain object to insert
+     * @param plugin
+     *            the Plugin
      */
     void insert( TicketDomain ticketDomain, Plugin plugin );
 
     /**
      * Update the record in the table
-     * @param ticketDomain the reference of the TicketDomain
-     * @param plugin the Plugin
+     * 
+     * @param ticketDomain
+     *            the reference of the TicketDomain
+     * @param plugin
+     *            the Plugin
      */
     void store( TicketDomain ticketDomain, Plugin plugin );
 
     /**
      * Delete a record from the table
-     * @param nKey The identifier of the TicketDomain to delete
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the TicketDomain to delete
+     * @param plugin
+     *            the Plugin
      */
     void delete( int nKey, Plugin plugin );
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Load the data from the table
-     * @param nKey The identifier of the ticketDomain
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the ticketDomain
+     * @param plugin
+     *            the Plugin
      * @return The instance of the ticketDomain
      */
     TicketDomain load( int nKey, Plugin plugin );
 
     /**
      * Load the data of all the ticketDomain objects and returns them as a collection
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The collection which contains the data of all the ticketDomain objects
      */
     List<TicketDomain> selectTicketDomainsList( Plugin plugin );
 
     /**
      * Load the id of all the ticketDomain objects and returns them as a collection
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The collection which contains the id of all the ticketDomain objects
      */
     List<Integer> selectIdTicketDomainsList( Plugin plugin );
 
     /**
      * Get a reference list of domains for a given ticket type
-     * @param nTicketTypeId The type id
-     * @param plugin The plugin
+     * 
+     * @param nTicketTypeId
+     *            The type id
+     * @param plugin
+     *            The plugin
      * @return The reference list
      */
     ReferenceList selectReferenceListByType( int nTicketTypeId, Plugin plugin );
 
     /**
      * Get a reference list of domains
-     * @param plugin The plugin
+     * 
+     * @param plugin
+     *            The plugin
      * @return The reference list
      */
     ReferenceList selectReferenceList( Plugin plugin );
 
     /**
-    * Get a simple reference list of domains
-    * @param plugin The plugin
-    * @return The reference list
-    */
+     * Get a simple reference list of domains
+     * 
+     * @param plugin
+     *            The plugin
+     * @return The reference list
+     */
     ReferenceList selectReferenceListSimple( Plugin plugin );
 
     /**
      * check if domain can be removed
-     * @param nKey The identifier of the ticketDomain
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the ticketDomain
+     * @param plugin
+     *            the Plugin
      * @return true if domain can be removed, false otherwise
      */
     boolean canRemoveDomain( int nKey, Plugin plugin );

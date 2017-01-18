@@ -51,10 +51,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
- * This class provides the user interface to manage TicketInputs features (
- * manage, create, modify, remove )
+ * This class provides the user interface to manage TicketInputs features ( manage, create, modify, remove )
  */
 @Controller( controllerJsp = "ManageTicketInputs.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = TicketInputsJspBean.RIGHT_MANAGETICKETINPUTS )
 public class TicketInputsJspBean extends MVCAdminJspBean
@@ -66,8 +64,7 @@ public class TicketInputsJspBean extends MVCAdminJspBean
     private static final long serialVersionUID = 1L;
 
     // templates
-    private static final String TEMPLATE_MANAGE_TICKETINPUTS = TicketingConstants.TEMPLATE_ADMIN_TICKETINPUTS_FEATURE_PATH +
-        "manage_ticketinputs.html";
+    private static final String TEMPLATE_MANAGE_TICKETINPUTS = TicketingConstants.TEMPLATE_ADMIN_TICKETINPUTS_FEATURE_PATH + "manage_ticketinputs.html";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETINPUTS = "ticketing.manage_ticketinputs.pageTitle";
@@ -79,8 +76,7 @@ public class TicketInputsJspBean extends MVCAdminJspBean
     private static final String MARK_LOCALE_TINY = "locale";
 
     // Jsp
-    private static final String JSP_MANAGE_TICKETINPUTS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
-        "ManageTicketInputs.jsp";
+    private static final String JSP_MANAGE_TICKETINPUTS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageTicketInputs.jsp";
 
     // Properties
 
@@ -90,33 +86,34 @@ public class TicketInputsJspBean extends MVCAdminJspBean
     /**
      * Default constructor
      */
-    public TicketInputsJspBean(  )
+    public TicketInputsJspBean( )
     {
     }
 
     /**
      * Returns the form to update info about a ticketing form
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The HTML form to update info
-     * @throws AccessDeniedException If the user is not authorized to modify
-     *             this ticketing form
+     * @throws AccessDeniedException
+     *             If the user is not authorized to modify this ticketing form
      */
     @View( value = VIEW_MANAGE_TICKETINPUTS, defaultView = true )
-    public String getManageTicketInputs( HttpServletRequest request )
-        throws AccessDeniedException
+    public String getManageTicketInputs( HttpServletRequest request ) throws AccessDeniedException
     {
-        EntryFilter entryFilter = new EntryFilter(  );
+        EntryFilter entryFilter = new EntryFilter( );
         entryFilter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
         entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
         List<Entry> listEntry = EntryHome.getEntryList( entryFilter );
 
-        Map<String, Object> model = getModel(  );
-        model.put( MARK_ENTRY_TYPE_LIST, EntryTypeService.getInstance(  ).getEntryTypeReferenceList(  ) );
+        Map<String, Object> model = getModel( );
+        model.put( MARK_ENTRY_TYPE_LIST, EntryTypeService.getInstance( ).getEntryTypeReferenceList( ) );
         model.put( MARK_ENTRY_LIST, listEntry );
-        model.put( MARK_LOCALE, getLocale(  ) );
-        model.put( MARK_LOCALE_TINY, getLocale(  ) );
+        model.put( MARK_LOCALE, getLocale( ) );
+        model.put( MARK_LOCALE_TINY, getLocale( ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETINPUTS, TEMPLATE_MANAGE_TICKETINPUTS, model );
     }
@@ -133,6 +130,6 @@ public class TicketInputsJspBean extends MVCAdminJspBean
         UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request ) + JSP_MANAGE_TICKETINPUTS );
         urlItem.addParameter( MVCUtils.PARAMETER_VIEW, VIEW_MANAGE_TICKETINPUTS );
 
-        return urlItem.getUrl(  );
+        return urlItem.getUrl( );
     }
 }

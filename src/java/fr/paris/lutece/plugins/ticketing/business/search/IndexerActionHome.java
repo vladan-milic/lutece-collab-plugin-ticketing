@@ -40,10 +40,8 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.util.List;
 
-
 /**
- * This class provides instances management methods (create, find, ...) for
- * IndexerAction objects
+ * This class provides instances management methods (create, find, ...) for IndexerAction objects
  */
 public final class IndexerActionHome
 {
@@ -54,54 +52,57 @@ public final class IndexerActionHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private IndexerActionHome(  )
+    private IndexerActionHome( )
     {
     }
 
     /**
      * Creation of an instance of Indexer Action
-     * @param indexerAction The instance of the indexer action which contains
-     *            the informations to store
+     * 
+     * @param indexerAction
+     *            The instance of the indexer action which contains the informations to store
      */
     public static synchronized void create( IndexerAction indexerAction )
     {
         int nOppositeTask = 0;
 
-        if ( indexerAction.getIdTask(  ) == IndexerAction.TASK_CREATE )
+        if ( indexerAction.getIdTask( ) == IndexerAction.TASK_CREATE )
         {
             nOppositeTask = IndexerAction.TASK_DELETE;
         }
-        else if ( indexerAction.getIdTask(  ) == IndexerAction.TASK_DELETE )
-        {
-            nOppositeTask = IndexerAction.TASK_CREATE;
-        }
+        else
+            if ( indexerAction.getIdTask( ) == IndexerAction.TASK_DELETE )
+            {
+                nOppositeTask = IndexerAction.TASK_CREATE;
+            }
 
         boolean bAlreadyFound = false;
 
         if ( nOppositeTask > 0 )
         {
-            IndexerActionFilter filter = new IndexerActionFilter(  );
+            IndexerActionFilter filter = new IndexerActionFilter( );
             filter.setIdTask( nOppositeTask );
 
             List<IndexerAction> listIndexerActions = getList( filter );
 
             for ( IndexerAction action : listIndexerActions )
             {
-                if ( action.getIdTask(  ) == nOppositeTask )
+                if ( action.getIdTask( ) == nOppositeTask )
                 {
-                    remove( action.getIdAction(  ) );
+                    remove( action.getIdAction( ) );
                 }
-                else if ( action.getIdTask(  ) == indexerAction.getIdTask(  ) )
-                {
-                    if ( bAlreadyFound )
+                else
+                    if ( action.getIdTask( ) == indexerAction.getIdTask( ) )
                     {
-                        remove( action.getIdAction(  ) );
+                        if ( bAlreadyFound )
+                        {
+                            remove( action.getIdAction( ) );
+                        }
+                        else
+                        {
+                            bAlreadyFound = true;
+                        }
                     }
-                    else
-                    {
-                        bAlreadyFound = true;
-                    }
-                }
             }
         }
 
@@ -113,20 +114,23 @@ public final class IndexerActionHome
 
     /**
      * Remove the indexerAction whose identifier is specified in parameter
-     * @param nId The IndexerActionId
+     * 
+     * @param nId
+     *            The IndexerActionId
      */
     public static synchronized void remove( int nId )
     {
         _dao.delete( nId, _plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
-     * Returns an instance of a IndexerAction whose identifier is specified in
-     * parameter
-     * @param nKey The indexerAction primary key
+     * Returns an instance of a IndexerAction whose identifier is specified in parameter
+     * 
+     * @param nKey
+     *            The indexerAction primary key
      * @return an instance of IndexerAction
      */
     public static IndexerAction findByPrimaryKey( int nKey )
@@ -135,9 +139,10 @@ public final class IndexerActionHome
     }
 
     /**
-     * Loads the data of all the IndexerAction who verify the filter and returns
-     * them in a list
-     * @param filter the filter
+     * Loads the data of all the IndexerAction who verify the filter and returns them in a list
+     * 
+     * @param filter
+     *            the filter
      * @return the list which contains the data of all the indexerAction
      */
     public static List<IndexerAction> getList( IndexerActionFilter filter )
@@ -146,14 +151,15 @@ public final class IndexerActionHome
     }
 
     /**
-     * Loads the data of all the IndexerAction matching task and returns
-     * them in a list
-     * @param taskId the id of the task
+     * Loads the data of all the IndexerAction matching task and returns them in a list
+     * 
+     * @param taskId
+     *            the id of the task
      * @return the list which contains the data of all the indexerAction
      */
     public static List<IndexerAction> getAllIndexerActionByTask( int taskId )
     {
-        IndexerActionFilter filter = new IndexerActionFilter(  );
+        IndexerActionFilter filter = new IndexerActionFilter( );
         filter.setIdTask( taskId );
 
         return getList( filter );

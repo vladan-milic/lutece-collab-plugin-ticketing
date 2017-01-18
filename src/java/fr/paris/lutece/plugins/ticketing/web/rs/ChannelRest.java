@@ -47,7 +47,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
-
 /**
  * REST service for channel resource
  *
@@ -57,24 +56,25 @@ public class ChannelRest extends TicketingRest
 {
     /**
      * Gives the channels
-     * @param accept the accepted format
-     * @param format the format
+     * 
+     * @param accept
+     *            the accepted format
+     * @param format
+     *            the format
      * @return the list of channels
      */
     @GET
     @Path( Constants.ALL_PATH )
-    public Response getChannels( @HeaderParam( HttpHeaders.ACCEPT )
-    String accept, @QueryParam( Constants.FORMAT_QUERY )
-    String format )
+    public Response getChannels( @HeaderParam( HttpHeaders.ACCEPT ) String accept, @QueryParam( Constants.FORMAT_QUERY ) String format )
     {
         String strMediaType = getMediaType( accept, format );
 
         IFormatterFactory formatterFactory = _formatterFactories.get( strMediaType );
 
-        List<Channel> listUserTitles = ChannelHome.getChannelList(  );
+        List<Channel> listUserTitles = ChannelHome.getChannelList( );
 
         String strResponse = formatterFactory.createFormatter( Channel.class ).format( listUserTitles );
 
-        return Response.ok( strResponse, strMediaType ).build(  );
+        return Response.ok( strResponse, strMediaType ).build( );
     }
 }

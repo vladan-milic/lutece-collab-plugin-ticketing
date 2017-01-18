@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.rest.util.xml.XMLUtil;
 
 import java.util.List;
 
-
 /**
  * XML formatter for REST purpose
  *
@@ -47,7 +46,7 @@ public class RestFormatterXml implements IRestFormatter
     @Override
     public String formatErrors( List<String> errors )
     {
-        StringBuffer sbErrors = new StringBuffer(  );
+        StringBuffer sbErrors = new StringBuffer( );
 
         for ( String error : errors )
         {
@@ -58,6 +57,6 @@ public class RestFormatterXml implements IRestFormatter
             break;
         }
 
-        return sbErrors.toString(  );
+        return sbErrors.toString( );
     }
 }

@@ -33,17 +33,19 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format;
 
-
 /**
  * Interface to format a REST response
  *
- * @param <T> the resource used to format the REST response
+ * @param <T>
+ *            the resource used to format the REST response
  */
 public interface ITicketingFormatter<T> extends fr.paris.lutece.plugins.rest.service.formatters.IFormatter<T>
 {
     /**
      * Formats the REST response by using the specified resource
-     * @param object the resource
+     * 
+     * @param object
+     *            the resource
      * @return the formatting REST response
      */
     String formatResponse( T object );

@@ -72,7 +72,6 @@ import java.util.NoSuchElementException;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * JspBean to manage ticketing form entries
  */
@@ -93,8 +92,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
     private static final String FIELD_ENTRY_CODE = "ticketing.createEntry.labelCode";
 
     // Urls
-    private static final String JSP_URL_MANAGE_TICKETING_INPUT_ENTRY = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
-        "ManageTicketInputEntry.jsp";
+    private static final String JSP_URL_MANAGE_TICKETING_INPUT_ENTRY = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageTicketInputEntry.jsp";
 
     // Messages
     private static final String MESSAGE_CONFIRM_REMOVE_ENTRY = "ticketing.message.confirmRemoveEntry";
@@ -125,11 +123,13 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
     private static final String MARK_ENTRY_TYPE_SERVICE = "entryTypeService";
 
     // Local variables
-    private EntryService _entryService = EntryService.getService(  );
+    private EntryService _entryService = EntryService.getService( );
 
     /**
      * Get the HTML code to create an entry
-     * @param request The request
+     * 
+     * @param request
+     *            The request
      * @return The HTML code to display or the next URL to redirect to
      */
     @View( value = VIEW_GET_CREATE_ENTRY )
@@ -144,7 +144,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
         int nIdType = Integer.parseInt( strIdType );
 
-        Entry entry = new Entry(  );
+        Entry entry = new Entry( );
         entry.setEntryType( EntryTypeHome.findByPrimaryKey( nIdType ) );
 
         String strIdField = request.getParameter( PARAMETER_ID_FIELD );
@@ -154,16 +154,16 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
         {
             nIdField = Integer.parseInt( strIdField );
 
-            Field field = new Field(  );
+            Field field = new Field( );
             field.setIdField( nIdField );
             entry.setFieldDepend( field );
         }
 
-        entry.setIdResource( getNextIdInput(  ) );
+        entry.setIdResource( getNextIdInput( ) );
         entry.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
 
         // Default Values
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         model.put( MARK_ENTRY, entry );
 
         ModelUtils.storeRichText( request, model );
@@ -182,7 +182,9 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Do create an entry
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return The HTML code to display or the next URL to redirect to
      */
     @Action( ACTION_DO_CREATE_ENTRY )
@@ -199,18 +201,16 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
         int nIdInput = Integer.parseInt( strIdInput );
 
-        if ( ( request.getParameter( PARAMETER_CANCEL ) == null ) && StringUtils.isNotEmpty( strIdType ) &&
-                StringUtils.isNumeric( strIdType ) )
+        if ( ( request.getParameter( PARAMETER_CANCEL ) == null ) && StringUtils.isNotEmpty( strIdType ) && StringUtils.isNumeric( strIdType ) )
         {
             int nIdType = Integer.parseInt( strIdType );
-            EntryType entryType = new EntryType(  );
+            EntryType entryType = new EntryType( );
             entryType.setIdType( nIdType );
 
-            Entry entry = new Entry(  );
-            entry.setEntryType( EntryTypeService.getInstance(  ).getEntryType( nIdType ) );
+            Entry entry = new Entry( );
+            entry.setEntryType( EntryTypeService.getInstance( ).getEntryType( nIdType ) );
 
-            String strError = EntryTypeServiceManager.getEntryTypeService( entry )
-                                                     .getRequestData( entry, request, getLocale(  ) );
+            String strError = EntryTypeServiceManager.getEntryTypeService( entry ).getRequestData( entry, request, getLocale( ) );
 
             if ( strError != null )
             {
@@ -222,10 +222,11 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
             if ( StringUtils.isEmpty( strEntryCode ) )
             {
-                String[] tabErr = new String[] { I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale(  ) ) };
+                String [ ] tabErr = new String [ ] {
+                    I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) )
+                };
 
-                return redirect( request,
-                    AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabErr, AdminMessage.TYPE_STOP ) );
+                return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabErr, AdminMessage.TYPE_STOP ) );
             }
 
             entry.setIdResource( nIdInput );
@@ -235,9 +236,9 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
             entry.setPosition( nIdInput );
             EntryHome.update( entry );
 
-            if ( entry.getFields(  ) != null )
+            if ( entry.getFields( ) != null )
             {
-                for ( Field field : entry.getFields(  ) )
+                for ( Field field : entry.getFields( ) )
                 {
                     field.setParentEntry( entry );
                     FieldHome.create( field );
@@ -246,7 +247,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
             if ( request.getParameter( PARAMETER_APPLY ) != null )
             {
-                return redirect( request, VIEW_GET_MODIFY_ENTRY, PARAMETER_ID_ENTRY, entry.getIdEntry(  ) );
+                return redirect( request, VIEW_GET_MODIFY_ENTRY, PARAMETER_ID_ENTRY, entry.getIdEntry( ) );
             }
         }
 
@@ -255,13 +256,15 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Gets the entry modification page
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The entry modification page
      */
     @View( VIEW_GET_MODIFY_ENTRY )
     public String getModifyEntry( HttpServletRequest request )
     {
-        Plugin plugin = getPlugin(  );
+        Plugin plugin = getPlugin( );
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
 
         if ( StringUtils.isNotEmpty( strIdEntry ) && StringUtils.isNumeric( strIdEntry ) )
@@ -275,11 +278,11 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
             Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-            List<Field> listField = new ArrayList<Field>( entry.getFields(  ).size(  ) );
+            List<Field> listField = new ArrayList<Field>( entry.getFields( ).size( ) );
 
-            for ( Field field : entry.getFields(  ) )
+            for ( Field field : entry.getFields( ) )
             {
-                field = FieldHome.findByPrimaryKey( field.getIdField(  ) );
+                field = FieldHome.findByPrimaryKey( field.getIdField( ) );
                 listField.add( field );
             }
 
@@ -287,13 +290,13 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
             IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( entry );
 
-            Map<String, Object> model = new HashMap<String, Object>(  );
+            Map<String, Object> model = new HashMap<String, Object>( );
             model.put( MARK_ENTRY, entry );
 
             UrlItem urlItem = new UrlItem( AppPathService.getBaseUrl( request ) + getViewUrl( VIEW_GET_MODIFY_ENTRY ) );
             urlItem.addParameter( PARAMETER_ID_ENTRY, strIdEntry );
 
-            model.put( MARK_LIST, entry.getFields(  ) );
+            model.put( MARK_LIST, entry.getFields( ) );
 
             ReferenceList refListRegularExpression = entryTypeService.getReferenceListRegularExpression( entry, plugin );
 
@@ -314,7 +317,9 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Perform the entry modification
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The URL to go after performing the action
      */
     @Action( ACTION_DO_MODIFY_ENTRY )
@@ -335,19 +340,18 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
             if ( request.getParameter( PARAMETER_CANCEL ) == null )
             {
-                String strError = EntryTypeServiceManager.getEntryTypeService( entry )
-                                                         .getRequestData( entry, request, getLocale(  ) );
+                String strError = EntryTypeServiceManager.getEntryTypeService( entry ).getRequestData( entry, request, getLocale( ) );
 
                 // entry code is mandatory for ticketing
                 String strEntryCode = request.getParameter( PARAMETER_ENTRY_CODE );
 
                 if ( StringUtils.isEmpty( strEntryCode ) )
                 {
-                    String[] tabErr = new String[] { I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale(  ) ) };
+                    String [ ] tabErr = new String [ ] {
+                        I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) )
+                    };
 
-                    return redirect( request,
-                        AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabErr,
-                            AdminMessage.TYPE_STOP ) );
+                    return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabErr, AdminMessage.TYPE_STOP ) );
                 }
 
                 if ( strError != null )
@@ -357,12 +361,12 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
                 EntryHome.update( entry );
 
-                if ( entry.getFields(  ) != null )
+                if ( entry.getFields( ) != null )
                 {
-                    for ( Field field : entry.getFields(  ) )
+                    for ( Field field : entry.getFields( ) )
                     {
                         // Check if the field already exists in the database
-                        Field fieldStored = FieldHome.findByPrimaryKey( field.getIdField(  ) );
+                        Field fieldStored = FieldHome.findByPrimaryKey( field.getIdField( ) );
 
                         if ( fieldStored != null )
                         {
@@ -389,7 +393,9 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Gets the confirmation page of delete entry
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return the confirmation page of delete entry
      */
     @View( VIEW_CONFIRM_REMOVE_ENTRY )
@@ -397,15 +403,13 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
     {
         String strIdEntry = request.getParameter( PARAMETER_ID_ENTRY );
 
-        if ( StringUtils.isNotEmpty( strIdEntry ) && StringUtils.isNumeric( strIdEntry ) &&
-                ( Integer.parseInt( strIdEntry ) > 0 ) )
+        if ( StringUtils.isNotEmpty( strIdEntry ) && StringUtils.isNumeric( strIdEntry ) && ( Integer.parseInt( strIdEntry ) > 0 ) )
         {
             int nIdEntry = Integer.parseInt( strIdEntry );
 
             if ( checkIfEntryIsLinkedToACategory( nIdEntry ) )
             {
-                return redirect( request,
-                    AdminMessageService.getMessageUrl( request, MESSAGE_CANNOT_REMOVE_ENTRY,
+                return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CANNOT_REMOVE_ENTRY,
                         TicketInputsJspBean.getURLManageTicketInputs( request ), AdminMessage.TYPE_ERROR ) );
             }
             else
@@ -414,8 +418,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
                 url.addParameter( PARAMETER_ID_ENTRY, strIdEntry );
 
                 return redirect( request,
-                    AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ENTRY, url.getUrl(  ),
-                        AdminMessage.TYPE_CONFIRMATION ) );
+                        AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ENTRY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
             }
         }
         else
@@ -426,7 +429,9 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Perform the entry removal
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The URL to go after performing the action
      */
     @Action( ACTION_DO_REMOVE_ENTRY )
@@ -443,15 +448,16 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
                 return redirect( request, TicketInputsJspBean.getURLManageTicketInputs( request ) );
             }
 
-            List<String> listErrors = new ArrayList<String>(  );
+            List<String> listErrors = new ArrayList<String>( );
 
-            if ( !_entryService.checkForRemoval( strIdEntry, listErrors, getLocale(  ) ) )
+            if ( !_entryService.checkForRemoval( strIdEntry, listErrors, getLocale( ) ) )
             {
-                String strCause = AdminMessageService.getFormattedList( listErrors, getLocale(  ) );
-                Object[] args = { strCause };
+                String strCause = AdminMessageService.getFormattedList( listErrors, getLocale( ) );
+                Object [ ] args = {
+                    strCause
+                };
 
-                return AdminMessageService.getMessageUrl( request, MESSAGE_CANT_REMOVE_ENTRY, args,
-                    AdminMessage.TYPE_STOP );
+                return AdminMessageService.getMessageUrl( request, MESSAGE_CANT_REMOVE_ENTRY, args, AdminMessage.TYPE_STOP );
             }
 
             TicketHome.removeResponsesByIdEntry( nIdEntry );
@@ -465,7 +471,9 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Copy the entry whose key is specified in the HTTP request
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The URL to go after performing the action
      */
     @Action( ACTION_DO_COPY_ENTRY )
@@ -484,9 +492,10 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
             Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-            Object[] tabEntryTileCopy = { entry.getTitle(  ) };
-            String strTitleCopyEntry = I18nService.getLocalizedString( PROPERTY_COPY_ENTRY_TITLE, tabEntryTileCopy,
-                    getLocale(  ) );
+            Object [ ] tabEntryTileCopy = {
+                entry.getTitle( )
+            };
+            String strTitleCopyEntry = I18nService.getLocalizedString( PROPERTY_COPY_ENTRY_TITLE, tabEntryTileCopy, getLocale( ) );
 
             if ( strTitleCopyEntry != null )
             {
@@ -495,21 +504,20 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
             EntryHome.copy( entry );
 
-            Entry entryCopy = EntryHome.findByPrimaryKey( entry.getIdEntry(  ) );
-            entryCopy.setIdResource( getNextIdInput(  ) );
-            entryCopy.setPosition( getNextIdInput(  ) );
+            Entry entryCopy = EntryHome.findByPrimaryKey( entry.getIdEntry( ) );
+            entryCopy.setIdResource( getNextIdInput( ) );
+            entryCopy.setPosition( getNextIdInput( ) );
             EntryHome.update( entryCopy );
 
             // If the entry has a parent
-            if ( entry.getParent(  ) != null )
+            if ( entry.getParent( ) != null )
             {
                 // We reload the entry to get the copy and not he original entry
-                // The id of the entry is the id of the copy. It has been set by the create method of EntryDAO 
-                entry = EntryHome.findByPrimaryKey( entry.getIdEntry(  ) );
+                // The id of the entry is the id of the copy. It has been set by the create method of EntryDAO
+                entry = EntryHome.findByPrimaryKey( entry.getIdEntry( ) );
 
-                Entry entryParent = EntryHome.findByPrimaryKey( entry.getParent(  ).getIdEntry(  ) );
-                _entryService.moveUpEntryOrder( entryParent.getPosition(  ) + entryParent.getChildren(  ).size(  ),
-                    entry );
+                Entry entryParent = EntryHome.findByPrimaryKey( entry.getParent( ).getIdEntry( ) );
+                _entryService.moveUpEntryOrder( entryParent.getPosition( ) + entryParent.getChildren( ).size( ), entry );
             }
         }
 
@@ -518,7 +526,9 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Delete the association between a field and and regular expression
-     * @param request the HTTP Request
+     * 
+     * @param request
+     *            the HTTP Request
      * @return The URL to go after performing the action
      */
     @Action( ACTION_DO_REMOVE_REGULAR_EXPRESSION )
@@ -527,8 +537,8 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
         String strIdExpression = request.getParameter( PARAMETER_ID_EXPRESSION );
         String strIdField = request.getParameter( PARAMETER_ID_FIELD );
 
-        if ( StringUtils.isNotEmpty( strIdExpression ) && StringUtils.isNotEmpty( strIdField ) &&
-                StringUtils.isNumeric( strIdExpression ) && StringUtils.isNumeric( strIdField ) )
+        if ( StringUtils.isNotEmpty( strIdExpression ) && StringUtils.isNotEmpty( strIdField ) && StringUtils.isNumeric( strIdExpression )
+                && StringUtils.isNumeric( strIdField ) )
         {
             int nIdField = Integer.parseInt( strIdField );
             int nIdExpression = Integer.parseInt( strIdExpression );
@@ -536,7 +546,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
             Field field = FieldHome.findByPrimaryKey( nIdField );
 
-            return redirect( request, VIEW_GET_MODIFY_ENTRY, PARAMETER_ID_ENTRY, field.getParentEntry(  ).getIdEntry(  ) );
+            return redirect( request, VIEW_GET_MODIFY_ENTRY, PARAMETER_ID_ENTRY, field.getParentEntry( ).getIdEntry( ) );
         }
 
         return redirect( request, TicketInputsJspBean.getURLManageTicketInputs( request ) );
@@ -544,7 +554,9 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Insert an association between a field and a regular expression
-     * @param request the HTTP Request
+     * 
+     * @param request
+     *            the HTTP Request
      * @return The URL to go after performing the action
      */
     @Action( ACTION_DO_INSERT_REGULAR_EXPRESSION )
@@ -553,8 +565,8 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
         String strIdExpression = request.getParameter( PARAMETER_ID_EXPRESSION );
         String strIdField = request.getParameter( PARAMETER_ID_FIELD );
 
-        if ( StringUtils.isNotEmpty( strIdExpression ) && StringUtils.isNotEmpty( strIdField ) &&
-                StringUtils.isNumeric( strIdExpression ) && StringUtils.isNumeric( strIdField ) )
+        if ( StringUtils.isNotEmpty( strIdExpression ) && StringUtils.isNotEmpty( strIdField ) && StringUtils.isNumeric( strIdExpression )
+                && StringUtils.isNumeric( strIdField ) )
         {
             int nIdField = Integer.parseInt( strIdField );
             int nIdExpression = Integer.parseInt( strIdExpression );
@@ -563,7 +575,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
             Field field = FieldHome.findByPrimaryKey( nIdField );
 
-            return redirect( request, VIEW_GET_MODIFY_ENTRY, PARAMETER_ID_ENTRY, field.getParentEntry(  ).getIdEntry(  ) );
+            return redirect( request, VIEW_GET_MODIFY_ENTRY, PARAMETER_ID_ENTRY, field.getParentEntry( ).getIdEntry( ) );
         }
 
         return redirect( request, TicketInputsJspBean.getURLManageTicketInputs( request ) );
@@ -571,8 +583,11 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Get the URL to modify an entry
-     * @param request The request
-     * @param nIdEntry The id of the entry
+     * 
+     * @param request
+     *            The request
+     * @param nIdEntry
+     *            The id of the entry
      * @return The URL to modify the given entry
      */
     public static String getURLModifyEntry( HttpServletRequest request, int nIdEntry )
@@ -581,34 +596,35 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
         urlItem.addParameter( MVCUtils.PARAMETER_VIEW, VIEW_GET_MODIFY_ENTRY );
         urlItem.addParameter( PARAMETER_ID_ENTRY, nIdEntry );
 
-        return urlItem.getUrl(  );
+        return urlItem.getUrl( );
     }
 
     /**
      * Get the next idResource of type TICKET_INPUT
+     * 
      * @return The next id resource of type TICKET_INPUT
      */
-    public int getNextIdInput(  )
+    public int getNextIdInput( )
     {
         int nNextIdInput = 0;
-        EntryFilter entryFilter = new EntryFilter(  );
+        EntryFilter entryFilter = new EntryFilter( );
         entryFilter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
         entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
         List<Entry> listEntry = EntryHome.getEntryList( entryFilter );
-        ArrayList<Integer> listIdInput = new ArrayList<Integer>(  );
+        ArrayList<Integer> listIdInput = new ArrayList<Integer>( );
 
         for ( Entry entry : listEntry )
         {
-            listIdInput.add( entry.getIdResource(  ) );
+            listIdInput.add( entry.getIdResource( ) );
         }
 
         try
         {
             nNextIdInput = (Integer) Collections.max( listIdInput ) + 1;
         }
-        catch ( NoSuchElementException e )
+        catch( NoSuchElementException e )
         {
             nNextIdInput = 1;
         }
@@ -619,9 +635,10 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
     /**
      * Check if an input is already used in a Category form
      *
-     * @param nIdEntry the id of entry
+     * @param nIdEntry
+     *            the id of entry
      *
-     * @return  true if the Entry is linked to 1 or more Categories
+     * @return true if the Entry is linked to 1 or more Categories
      *
      */
     private boolean checkIfEntryIsLinkedToACategory( int nIdEntry )
@@ -629,9 +646,9 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
         boolean bIsUsedInput = false;
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-        if ( ( entry != null ) && ( entry.getIdResource(  ) >= 0 ) )
+        if ( ( entry != null ) && ( entry.getIdResource( ) >= 0 ) )
         {
-            bIsUsedInput = TicketCategoryHome.checkIfInputIsUsedInCategories( entry.getIdResource(  ) );
+            bIsUsedInput = TicketCategoryHome.checkIfInputIsUsedInCategories( entry.getIdResource( ) );
         }
 
         return bIsUsedInput;

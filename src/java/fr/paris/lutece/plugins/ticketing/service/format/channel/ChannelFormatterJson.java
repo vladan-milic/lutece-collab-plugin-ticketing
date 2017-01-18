@@ -44,7 +44,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 
-
 /**
  * JSON formatter for channel resource
  *
@@ -54,13 +53,13 @@ public class ChannelFormatterJson implements ITicketingFormatter<Channel>
     @Override
     public String format( Channel channel )
     {
-        JSONObject json = new JSONObject(  );
+        JSONObject json = new JSONObject( );
         String strJson = StringUtils.EMPTY;
 
         if ( channel != null )
         {
             add( json, channel );
-            strJson = json.toString(  );
+            strJson = json.toString( );
         }
 
         return strJson;
@@ -69,19 +68,19 @@ public class ChannelFormatterJson implements ITicketingFormatter<Channel>
     @Override
     public String format( List<Channel> listChannels )
     {
-        JSONObject json = new JSONObject(  );
-        JSONArray jsonChannels = new JSONArray(  );
+        JSONObject json = new JSONObject( );
+        JSONArray jsonChannels = new JSONArray( );
 
         for ( Channel channel : listChannels )
         {
-            JSONObject jsonChannel = new JSONObject(  );
+            JSONObject jsonChannel = new JSONObject( );
             add( jsonChannel, channel );
             jsonChannels.add( jsonChannel );
         }
 
         json.accumulate( FormatConstants.KEY_CHANNELS, jsonChannels );
 
-        return json.toString(  );
+        return json.toString( );
     }
 
     @Override
@@ -98,12 +97,15 @@ public class ChannelFormatterJson implements ITicketingFormatter<Channel>
 
     /**
      * Write a channel into a JSON Object
-     * @param json The JSON Object
-     * @param channel The channel
+     * 
+     * @param json
+     *            The JSON Object
+     * @param channel
+     *            The channel
      */
     private void add( JSONObject json, Channel channel )
     {
-        json.accumulate( FormatConstants.KEY_ID, channel.getId(  ) );
-        json.accumulate( FormatConstants.KEY_LABEL, channel.getLabel(  ) );
+        json.accumulate( FormatConstants.KEY_ID, channel.getId( ) );
+        json.accumulate( FormatConstants.KEY_LABEL, channel.getLabel( ) );
     }
 }

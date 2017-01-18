@@ -40,7 +40,6 @@ import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.util.List;
 
-
 /**
  * XML formatter for user title resource
  *
@@ -50,7 +49,7 @@ public class UserTitleFormatterXml implements ITicketingFormatter<UserTitle>
     @Override
     public String format( UserTitle userTitle )
     {
-        StringBuffer sbXML = new StringBuffer(  );
+        StringBuffer sbXML = new StringBuffer( );
 
         if ( userTitle != null )
         {
@@ -58,13 +57,13 @@ public class UserTitleFormatterXml implements ITicketingFormatter<UserTitle>
             add( sbXML, userTitle );
         }
 
-        return sbXML.toString(  );
+        return sbXML.toString( );
     }
 
     @Override
     public String format( List<UserTitle> listUserTitles )
     {
-        StringBuffer sbXML = new StringBuffer(  );
+        StringBuffer sbXML = new StringBuffer( );
         sbXML.append( FormatConstants.XML_HEADER );
         XmlUtil.beginElement( sbXML, FormatConstants.KEY_USER_TITLES );
 
@@ -75,7 +74,7 @@ public class UserTitleFormatterXml implements ITicketingFormatter<UserTitle>
 
         XmlUtil.endElement( sbXML, FormatConstants.KEY_USER_TITLES );
 
-        return sbXML.toString(  );
+        return sbXML.toString( );
     }
 
     @Override
@@ -92,15 +91,18 @@ public class UserTitleFormatterXml implements ITicketingFormatter<UserTitle>
 
     /**
      * Write a user title into a buffer
-     * @param sbXML The buffer
-     * @param userTitle The user title
+     * 
+     * @param sbXML
+     *            The buffer
+     * @param userTitle
+     *            The user title
      */
     private void add( StringBuffer sbXML, UserTitle userTitle )
     {
         XmlUtil.beginElement( sbXML, FormatConstants.KEY_USER_TITLE );
 
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_ID, userTitle.getId(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, userTitle.getLabel(  ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_ID, userTitle.getId( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, userTitle.getLabel( ) );
         XmlUtil.endElement( sbXML, FormatConstants.KEY_USER_TITLE );
     }
 }

@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format;
 
-
 /**
  * This class provides constants for formatting
  *
@@ -78,7 +77,7 @@ public final class FormatConstants
     /**
      * Private constructor
      */
-    private FormatConstants(  )
+    private FormatConstants( )
     {
     }
 }

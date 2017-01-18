@@ -44,7 +44,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.Locale;
 
-
 /**
  *
  * TicketResourceIdService
@@ -72,7 +71,7 @@ public class TicketResourceIdService extends ResourceIdService
     /**
      * Constructor
      */
-    public TicketResourceIdService(  )
+    public TicketResourceIdService( )
     {
         setPluginName( TicketingPlugin.PLUGIN_NAME );
     }
@@ -80,30 +79,30 @@ public class TicketResourceIdService extends ResourceIdService
     /**
      * Initializes the service
      */
-    public void register(  )
+    public void register( )
     {
-        ResourceType rt = new ResourceType(  );
-        rt.setResourceIdServiceClass( TicketResourceIdService.class.getName(  ) );
+        ResourceType rt = new ResourceType( );
+        rt.setResourceIdServiceClass( TicketResourceIdService.class.getName( ) );
         rt.setPluginName( TicketingPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( Ticket.TICKET_RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
-        Permission p = new Permission(  );
+        Permission p = new Permission( );
         p.setPermissionKey( PERMISSION_CREATE );
         p.setPermissionTitleKey( PROPERTY_LABEL_CREATE );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_DELETE );
         p.setPermissionTitleKey( PROPERTY_LABEL_DELETE );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_MODIFY );
         p.setPermissionTitleKey( PROPERTY_LABEL_MODIFY );
         rt.registerPermission( p );
 
-        p = new Permission(  );
+        p = new Permission( );
         p.setPermissionKey( PERMISSION_VIEW );
         p.setPermissionTitleKey( PROPERTY_LABEL_VIEW );
         rt.registerPermission( p );
@@ -113,7 +112,9 @@ public class TicketResourceIdService extends ResourceIdService
 
     /**
      * Returns a list of resource ids
-     * @param locale The current locale
+     * 
+     * @param locale
+     *            The current locale
      * @return A list of resource ids
      */
     public ReferenceList getResourceIdList( Locale locale )

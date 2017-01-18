@@ -43,7 +43,6 @@ import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.util.List;
 
-
 /**
  * XML formatter for ticket type resource
  *
@@ -53,7 +52,7 @@ public class TicketTypeFormatterXml implements ITicketingFormatter<TicketType>
     @Override
     public String format( TicketType ticketType )
     {
-        StringBuffer sbXML = new StringBuffer(  );
+        StringBuffer sbXML = new StringBuffer( );
 
         if ( ticketType != null )
         {
@@ -61,13 +60,13 @@ public class TicketTypeFormatterXml implements ITicketingFormatter<TicketType>
             add( sbXML, ticketType );
         }
 
-        return sbXML.toString(  );
+        return sbXML.toString( );
     }
 
     @Override
     public String format( List<TicketType> listTicketTypes )
     {
-        StringBuffer sbXML = new StringBuffer(  );
+        StringBuffer sbXML = new StringBuffer( );
         sbXML.append( FormatConstants.XML_HEADER );
         XmlUtil.beginElement( sbXML, FormatConstants.KEY_TICKET_TYPES );
 
@@ -78,7 +77,7 @@ public class TicketTypeFormatterXml implements ITicketingFormatter<TicketType>
 
         XmlUtil.endElement( sbXML, FormatConstants.KEY_TICKET_TYPES );
 
-        return sbXML.toString(  );
+        return sbXML.toString( );
     }
 
     @Override
@@ -95,30 +94,33 @@ public class TicketTypeFormatterXml implements ITicketingFormatter<TicketType>
 
     /**
      * Write a ticket category into a buffer
-     * @param sbXML The buffer
-     * @param ticketType The ticket type
+     * 
+     * @param sbXML
+     *            The buffer
+     * @param ticketType
+     *            The ticket type
      */
     private void add( StringBuffer sbXML, TicketType ticketType )
     {
         XmlUtil.beginElement( sbXML, FormatConstants.KEY_TICKET_TYPE );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_ID, ticketType.getId(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, ticketType.getLabel(  ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_ID, ticketType.getId( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, ticketType.getLabel( ) );
 
-        for ( ReferenceItem domain : TicketDomainHome.getReferenceListByType( ticketType.getId(  ) ) )
+        for ( ReferenceItem domain : TicketDomainHome.getReferenceListByType( ticketType.getId( ) ) )
         {
             XmlUtil.beginElement( sbXML, FormatConstants.KEY_TICKET_DOMAIN );
 
-            int nDomainId = Integer.parseInt( domain.getCode(  ) );
+            int nDomainId = Integer.parseInt( domain.getCode( ) );
             XmlUtil.addElement( sbXML, FormatConstants.KEY_ID, nDomainId );
-            XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, domain.getName(  ) );
+            XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, domain.getName( ) );
 
             for ( ReferenceItem category : TicketCategoryHome.getReferenceListByDomain( nDomainId ) )
             {
                 XmlUtil.beginElement( sbXML, FormatConstants.KEY_TICKET_CATEGORY );
 
-                int nCategoryId = Integer.parseInt( category.getCode(  ) );
+                int nCategoryId = Integer.parseInt( category.getCode( ) );
                 XmlUtil.addElement( sbXML, FormatConstants.KEY_ID, nCategoryId );
-                XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, category.getName(  ) );
+                XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, category.getName( ) );
                 XmlUtil.endElement( sbXML, FormatConstants.KEY_TICKET_CATEGORY );
             }
 

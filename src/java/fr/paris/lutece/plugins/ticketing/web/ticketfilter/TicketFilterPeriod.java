@@ -44,17 +44,17 @@ import java.util.Locale;
  *
  */
 public enum TicketFilterPeriod
-{NONE( 0 ),
-    DAY( 1 ),
-    WEEK( 2 ),
-    MONTH( 3 );
+{
+    NONE( 0 ), DAY( 1 ), WEEK( 2 ), MONTH( 3 );
 
     private static final String MESSAGE_PREFIX = "ticketing.period.";
     private int _nId;
 
     /**
      * constructor
-     * @param nId id of period
+     * 
+     * @param nId
+     *            id of period
      */
     TicketFilterPeriod( int nId )
     {
@@ -63,35 +63,40 @@ public enum TicketFilterPeriod
 
     /**
      * returns period id
+     * 
      * @return period id
      */
-    public int getId(  )
+    public int getId( )
     {
         return _nId;
     }
 
     /**
      * Gives the localized message
-     * @param locale the locale to use
+     * 
+     * @param locale
+     *            the locale to use
      * @return the message
      */
     public String getLocalizedMessage( Locale locale )
     {
-        return I18nService.getLocalizedString( MESSAGE_PREFIX + this.name(  ).toLowerCase(  ), locale );
+        return I18nService.getLocalizedString( MESSAGE_PREFIX + this.name( ).toLowerCase( ), locale );
     }
 
     /**
      * Builds a RefenrenceList object containing all the TicketPriority objects
-     * @param locale the locale used to retrieve the localized messages
+     * 
+     * @param locale
+     *            the locale used to retrieve the localized messages
      * @return the ReferenceList object
      */
     public static ReferenceList getReferenceList( Locale locale )
     {
-        ReferenceList listPeriod = new ReferenceList(  );
+        ReferenceList listPeriod = new ReferenceList( );
 
-        for ( TicketFilterPeriod filterPeriod : TicketFilterPeriod.values(  ) )
+        for ( TicketFilterPeriod filterPeriod : TicketFilterPeriod.values( ) )
         {
-            listPeriod.addItem( filterPeriod.getId(  ), filterPeriod.getLocalizedMessage( locale ) );
+            listPeriod.addItem( filterPeriod.getId( ), filterPeriod.getLocalizedMessage( locale ) );
         }
 
         return listPeriod;

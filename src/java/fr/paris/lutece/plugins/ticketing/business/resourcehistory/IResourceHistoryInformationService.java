@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 
 import java.util.Map;
 
-
 /**
  * IResourceHistoryInformationService
  */
@@ -46,17 +45,22 @@ public interface IResourceHistoryInformationService
     /**
      * remove all the list of ticketing history resource associated to a ticket resource.
      *
-     * @param nIdResource the resource id
-     * @param strResourceType the resource type
+     * @param nIdResource
+     *            the resource id
+     * @param strResourceType
+     *            the resource type
      */
     void removeByResource( int nIdResource, String strResourceType );
 
     /**
      * returns the list of id_history/channel associated to a ticket resource.
      *
-     * @param nIdResource the resource id
-     * @param strResourceType the resource type
-     * @param nIdWorkflow the workflow id
+     * @param nIdResource
+     *            the resource id
+     * @param strResourceType
+     *            the resource type
+     * @param nIdWorkflow
+     *            the workflow id
      * @return the list of id_history/channel associated to a ticket resource
      */
     Map<String, Channel> getChannelHistoryMap( int nIdResource, String strResourceType, int nIdWorkflow );

@@ -71,7 +71,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Ticket Indexer
  *
@@ -97,7 +96,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
      * {@inheritDoc }
      */
     @Override
-    public String getDescription(  )
+    public String getDescription( )
     {
         return AppPropertiesService.getProperty( PROPERTY_INDEXER_DESCRIPTION );
     }
@@ -106,10 +105,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
      * {@inheritDoc }
      */
     @Override
-    public List<Document> getDocuments( String strDocument )
-        throws IOException, InterruptedException, SiteMessageException
+    public List<Document> getDocuments( String strDocument ) throws IOException, InterruptedException, SiteMessageException
     {
-        List<org.apache.lucene.document.Document> listDocs = new ArrayList<org.apache.lucene.document.Document>(  );
+        List<org.apache.lucene.document.Document> listDocs = new ArrayList<org.apache.lucene.document.Document>( );
         String strPortalUrl = AppPropertiesService.getProperty( PROPERTY_PAGE_BASE_URL );
         Plugin plugin = PluginService.getPlugin( PLUGIN_NAME );
 
@@ -119,9 +117,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             UrlItem urlTicket = new UrlItem( strPortalUrl );
             urlTicket.addParameter( XPageAppService.PARAM_XPAGE_APP, PLUGIN_NAME );
-            urlTicket.addParameter( TicketingConstants.PARAMETER_ID_TICKET, ticket.getId(  ) );
+            urlTicket.addParameter( TicketingConstants.PARAMETER_ID_TICKET, ticket.getId( ) );
 
-            org.apache.lucene.document.Document docSubject = getDocument( ticket, urlTicket.getUrl(  ), plugin );
+            org.apache.lucene.document.Document docSubject = getDocument( ticket, urlTicket.getUrl( ), plugin );
             listDocs.add( docSubject );
         }
 
@@ -132,7 +130,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
      * {@inheritDoc }
      */
     @Override
-    public String getName(  )
+    public String getName( )
     {
         return AppPropertiesService.getProperty( PROPERTY_INDEXER_NAME );
     }
@@ -141,7 +139,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
      * {@inheritDoc }
      */
     @Override
-    public String getVersion(  )
+    public String getVersion( )
     {
         return AppPropertiesService.getProperty( PROPERTY_INDEXER_VERSION );
     }
@@ -150,23 +148,22 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
      * {@inheritDoc }
      */
     @Override
-    public void indexDocuments(  ) throws IOException, InterruptedException, SiteMessageException
+    public void indexDocuments( ) throws IOException, InterruptedException, SiteMessageException
     {
-        TicketSearchService.getInstance(  ).processIndexing( true );
+        TicketSearchService.getInstance( ).processIndexing( true );
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public boolean isEnable(  )
+    public boolean isEnable( )
     {
         boolean bReturn = false;
         String strEnable = AppPropertiesService.getProperty( PROPERTY_INDEXER_ENABLE );
 
-        if ( ( strEnable != null ) &&
-                ( strEnable.equalsIgnoreCase( Boolean.TRUE.toString(  ) ) || strEnable.equals( ENABLE_VALUE_TRUE ) ) &&
-                PluginService.isPluginEnable( PLUGIN_NAME ) )
+        if ( ( strEnable != null ) && ( strEnable.equalsIgnoreCase( Boolean.TRUE.toString( ) ) || strEnable.equals( ENABLE_VALUE_TRUE ) )
+                && PluginService.isPluginEnable( PLUGIN_NAME ) )
         {
             bReturn = true;
         }
@@ -176,27 +173,31 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
     /**
      * Index the ticket
-     * @param indexWriter index writer
-     * @param ticket The ticket
-     * @throws IOException if an IO error occurs
-     * @throws InterruptedException if a Thread error occurs
+     * 
+     * @param indexWriter
+     *            index writer
+     * @param ticket
+     *            The ticket
+     * @throws IOException
+     *             if an IO error occurs
+     * @throws InterruptedException
+     *             if a Thread error occurs
      */
-    public void indexTicket( IndexWriter indexWriter, Ticket ticket )
-        throws IOException, InterruptedException
+    public void indexTicket( IndexWriter indexWriter, Ticket ticket ) throws IOException, InterruptedException
     {
         Plugin plugin = PluginService.getPlugin( PLUGIN_NAME );
         UrlItem urlTicket = new UrlItem( JSP_VIEW_TICKET );
-        urlTicket.addParameter( PARAMETER_TICKET_ID, ticket.getId(  ) );
+        urlTicket.addParameter( PARAMETER_TICKET_ID, ticket.getId( ) );
 
         Document docTicket = null;
 
         try
         {
-            docTicket = getDocument( ticket, urlTicket.getUrl(  ), plugin );
+            docTicket = getDocument( ticket, urlTicket.getUrl( ), plugin );
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
-            String strMessage = "Ticket ID : " + ticket.getId(  );
+            String strMessage = "Ticket ID : " + ticket.getId( );
             IndexationService.error( this, e, strMessage );
         }
 
@@ -208,44 +209,47 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
     /**
      * Get a document for indexing
-     * @param ticket The ticket
-     * @param strUrl The URL
-     * @param plugin The plugin
+     * 
+     * @param ticket
+     *            The ticket
+     * @param strUrl
+     *            The URL
+     * @param plugin
+     *            The plugin
      * @return The document
-     * @throws IOException if an IO error occurs
-     * @throws InterruptedException if a Thread error occurs
+     * @throws IOException
+     *             if an IO error occurs
+     * @throws InterruptedException
+     *             if a Thread error occurs
      */
-    public static Document getDocument( Ticket ticket, String strUrl, Plugin plugin )
-        throws IOException, InterruptedException
+    public static Document getDocument( Ticket ticket, String strUrl, Plugin plugin ) throws IOException, InterruptedException
     {
         // make a new, empty document
-        Document doc = new Document(  );
+        Document doc = new Document( );
 
         // Add the uid as a field, so that index can be incrementally
         // maintained.
         // This field is not stored with question/answer, it is indexed, but it
         // is not
         // tokenized prior to indexing.
-        String strIdTicket = String.valueOf( ticket.getId(  ) );
+        String strIdTicket = String.valueOf( ticket.getId( ) );
         doc.add( new Field( TicketSearchItem.FIELD_UID, strIdTicket + "_" + SHORT_NAME_TICKET, TextField.TYPE_NOT_STORED ) );
         doc.add( new Field( TicketSearchItem.FIELD_TICKET_ID, strIdTicket, TextField.TYPE_STORED ) );
         doc.add( new TextField( TicketSearchItem.FIELD_CONTENTS, getContentForIndexer( ticket ), Store.NO ) );
-        doc.add( new TextField( TicketSearchItem.FIELD_CATEGORY, ticket.getTicketCategory(  ).getLabel(  ), Store.YES ) );
-        doc.add( new TextField( TicketSearchItem.FIELD_DOMAIN, ticket.getTicketDomain(  ), Store.YES ) );
-        doc.add( new TextField( TicketSearchItem.FIELD_REFERENCE, ticket.getReference(  ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_CATEGORY, ticket.getTicketCategory( ).getLabel( ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_DOMAIN, ticket.getTicketDomain( ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_REFERENCE, ticket.getReference( ), Store.YES ) );
 
-        String strDate = DateTools.dateToString( ticket.getDateCreate(  ), DateTools.Resolution.DAY );
+        String strDate = DateTools.dateToString( ticket.getDateCreate( ), DateTools.Resolution.DAY );
         doc.add( new Field( TicketSearchItem.FIELD_DATE, strDate, TextField.TYPE_NOT_STORED ) );
-        doc.add( new TextField( TicketSearchItem.FIELD_COMMENT, ticket.getTicketComment(  ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_COMMENT, ticket.getTicketComment( ), Store.YES ) );
 
-        //add response for closed tickets with response 
-        if ( ( getStateId( ticket ) == PluginConfigurationService.getInt( 
-                    PluginConfigurationService.PROPERTY_STATE_CLOSED_ID, TicketingConstants.PROPERTY_UNSET_INT ) ) &&
-                StringUtils.isNotEmpty( ticket.getUserMessage(  ) ) )
+        // add response for closed tickets with response
+        if ( ( getStateId( ticket ) == PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_STATE_CLOSED_ID,
+                TicketingConstants.PROPERTY_UNSET_INT ) ) && StringUtils.isNotEmpty( ticket.getUserMessage( ) ) )
         {
-            doc.add( new TextField( TicketSearchItem.FIELD_RESPONSE, ticket.getUserMessage(  ), Store.YES ) );
-            doc.add( new TextField( TicketSearchItem.FIELD_TXT_RESPONSE,
-                    Jsoup.parse( ticket.getUserMessage(  ) ).text(  ), Store.NO ) );
+            doc.add( new TextField( TicketSearchItem.FIELD_RESPONSE, ticket.getUserMessage( ), Store.YES ) );
+            doc.add( new TextField( TicketSearchItem.FIELD_TXT_RESPONSE, Jsoup.parse( ticket.getUserMessage( ) ).text( ), Store.NO ) );
         }
         else
         {
@@ -254,11 +258,11 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         doc.add( new TextField( TicketSearchItem.FIELD_SUMMARY, getDisplaySummary( ticket ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_TITLE, getDisplayTitle( ticket ), Store.YES ) );
-        doc.add( new TextField( TicketSearchItem.FIELD_TYPE, getDocumentType(  ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_TYPE, getDocumentType( ), Store.YES ) );
 
-        if ( ticket.getNomenclature(  ) != null )
+        if ( ticket.getNomenclature( ) != null )
         {
-            doc.add( new TextField( TicketSearchItem.FIELD_TICKET_NOMENCLATURE, ticket.getNomenclature(  ), Store.YES ) );
+            doc.add( new TextField( TicketSearchItem.FIELD_TICKET_NOMENCLATURE, ticket.getNomenclature( ), Store.YES ) );
         }
 
         return doc;
@@ -266,28 +270,28 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
     /**
      * return state id of ticket
-     * @param ticket ticket
+     * 
+     * @param ticket
+     *            ticket
      * @return id of ticket state
      */
     private static int getStateId( Ticket ticket )
     {
         int nStateId = 0;
 
-        if ( WorkflowService.getInstance(  ).isAvailable(  ) )
+        if ( WorkflowService.getInstance( ).isAvailable( ) )
         {
-            TicketCategory ticketCategory = ticket.getTicketCategory(  );
-            int nIdWorkflow = ticketCategory.getIdWorkflow(  );
+            TicketCategory ticketCategory = ticket.getTicketCategory( );
+            int nIdWorkflow = ticketCategory.getIdWorkflow( );
 
-            StateFilter stateFilter = new StateFilter(  );
+            StateFilter stateFilter = new StateFilter( );
             stateFilter.setIdWorkflow( nIdWorkflow );
 
-            State state = WorkflowService.getInstance(  )
-                                         .getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticketCategory.getId(  ) );
+            State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
 
             if ( state != null )
             {
-                nStateId = state.getId(  );
+                nStateId = state.getId( );
             }
         }
 
@@ -298,10 +302,10 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
      * {@inheritDoc}
      */
     @Override
-    public List<String> getListType(  )
+    public List<String> getListType( )
     {
-        List<String> listType = new ArrayList<String>(  );
-        listType.add( getDocumentType(  ) );
+        List<String> listType = new ArrayList<String>( );
+        listType.add( getDocumentType( ) );
 
         return listType;
     }
@@ -310,105 +314,119 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
      * {@inheritDoc}
      */
     @Override
-    public String getSpecificSearchAppUrl(  )
+    public String getSpecificSearchAppUrl( )
     {
         return JSP_SEARCH_TICKET;
     }
 
     /**
      * Get Lucene index document type
+     * 
      * @return The document type
      */
-    public static String getDocumentType(  )
+    public static String getDocumentType( )
     {
         return AppPropertiesService.getProperty( PROPERTY_DOCUMENT_TYPE );
     }
 
     /**
      * process indexation
-     * @param indexWriter index writer
-     * @param bCreate true if index must be created (full mode) false if incremental update
-     * @param sbLogs log message
-     * @throws IOException io error when creating/accessing index
-     * @throws InterruptedException interrupted exception
+     * 
+     * @param indexWriter
+     *            index writer
+     * @param bCreate
+     *            true if index must be created (full mode) false if incremental update
+     * @param sbLogs
+     *            log message
+     * @throws IOException
+     *             io error when creating/accessing index
+     * @throws InterruptedException
+     *             interrupted exception
      *
      */
-    public synchronized void processIndexing( IndexWriter indexWriter, boolean bCreate, StringBuffer sbLogs )
-        throws IOException, InterruptedException
+    public synchronized void processIndexing( IndexWriter indexWriter, boolean bCreate, StringBuffer sbLogs ) throws IOException, InterruptedException
     {
-        List<Integer> listIdTicket = new ArrayList<Integer>(  );
+        List<Integer> listIdTicket = new ArrayList<Integer>( );
 
         if ( !bCreate )
         {
-            //incremental indexing
-            //delete all record which must be deleted
+            // incremental indexing
+            // delete all record which must be deleted
             for ( IndexerAction action : IndexerActionHome.getAllIndexerActionByTask( IndexerAction.TASK_DELETE ) )
             {
-                sbLogTicket( sbLogs, action.getIdTicket(  ), IndexerAction.TASK_DELETE );
+                sbLogTicket( sbLogs, action.getIdTicket( ), IndexerAction.TASK_DELETE );
 
-                Term term = new Term( TicketSearchItem.FIELD_TICKET_ID, Integer.toString( action.getIdTicket(  ) ) );
-                Term[] terms = { term };
+                Term term = new Term( TicketSearchItem.FIELD_TICKET_ID, Integer.toString( action.getIdTicket( ) ) );
+                Term [ ] terms = {
+                    term
+                };
 
                 indexWriter.deleteDocuments( terms );
-                IndexerActionHome.remove( action.getIdAction(  ) );
+                IndexerActionHome.remove( action.getIdAction( ) );
             }
 
-            //add all record which must be added
+            // add all record which must be added
             for ( IndexerAction action : IndexerActionHome.getAllIndexerActionByTask( IndexerAction.TASK_CREATE ) )
             {
-                sbLogTicket( sbLogs, action.getIdTicket(  ), IndexerAction.TASK_CREATE );
-                listIdTicket.add( action.getIdTicket(  ) );
+                sbLogTicket( sbLogs, action.getIdTicket( ), IndexerAction.TASK_CREATE );
+                listIdTicket.add( action.getIdTicket( ) );
 
-                Ticket ticket = TicketHome.findByPrimaryKey( action.getIdTicket(  ) );
+                Ticket ticket = TicketHome.findByPrimaryKey( action.getIdTicket( ) );
 
                 if ( ticket != null )
                 {
                     indexTicket( indexWriter, ticket );
-                    IndexerActionHome.remove( action.getIdAction(  ) );
+                    IndexerActionHome.remove( action.getIdAction( ) );
                 }
             }
 
-            //Update all record which must be updated
+            // Update all record which must be updated
             for ( IndexerAction action : IndexerActionHome.getAllIndexerActionByTask( IndexerAction.TASK_MODIFY ) )
             {
-                sbLogTicket( sbLogs, action.getIdTicket(  ), IndexerAction.TASK_MODIFY );
+                sbLogTicket( sbLogs, action.getIdTicket( ), IndexerAction.TASK_MODIFY );
 
-                Ticket ticket = TicketHome.findByPrimaryKey( action.getIdTicket(  ) );
-                Term term = new Term( TicketSearchItem.FIELD_TICKET_ID, Integer.toString( action.getIdTicket(  ) ) );
-                Term[] terms = { term };
+                Ticket ticket = TicketHome.findByPrimaryKey( action.getIdTicket( ) );
+                Term term = new Term( TicketSearchItem.FIELD_TICKET_ID, Integer.toString( action.getIdTicket( ) ) );
+                Term [ ] terms = {
+                    term
+                };
                 indexWriter.deleteDocuments( terms );
 
-                listIdTicket.add( action.getIdTicket(  ) );
+                listIdTicket.add( action.getIdTicket( ) );
                 indexTicket( indexWriter, ticket );
-                IndexerActionHome.remove( action.getIdAction(  ) );
+                IndexerActionHome.remove( action.getIdAction( ) );
             }
         }
         else
         {
-            for ( Integer nIdticket : TicketHome.getIdTicketsList(  ) )
+            for ( Integer nIdticket : TicketHome.getIdTicketsList( ) )
             {
-                Ticket ticket = TicketHome.findByPrimaryKey( nIdticket.intValue(  ) );
+                Ticket ticket = TicketHome.findByPrimaryKey( nIdticket.intValue( ) );
                 sbLogs.append( "Indexing Ticket" );
                 sbLogs.append( "\r\n" );
-                sbLogTicket( sbLogs, ticket.getId(  ), IndexerAction.TASK_CREATE );
+                sbLogTicket( sbLogs, ticket.getId( ), IndexerAction.TASK_CREATE );
                 indexTicket( indexWriter, ticket );
             }
         }
 
-        indexWriter.commit(  );
+        indexWriter.commit( );
     }
 
     /**
      * Indexing action performed on the recording
-     * @param sbLogs the buffer log
-     * @param nIdTicket the id of the ticket
-     * @param nAction the indexer action key performed
+     * 
+     * @param sbLogs
+     *            the buffer log
+     * @param nIdTicket
+     *            the id of the ticket
+     * @param nAction
+     *            the indexer action key performed
      */
     private void sbLogTicket( StringBuffer sbLogs, int nIdTicket, int nAction )
     {
         sbLogs.append( "Indexing ticket:" );
 
-        switch ( nAction )
+        switch( nAction )
         {
             case IndexerAction.TASK_CREATE:
                 sbLogs.append( "Insert " );
@@ -439,226 +457,224 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
     }
 
     /**
-     * @param ticket ticket
-     * returns a string with content fields to be indexed
+     * @param ticket
+     *            ticket returns a string with content fields to be indexed
      * @return string with content fields to be indexed
      */
     private static String getContentForIndexer( Ticket ticket )
     {
-        StringBuilder sb = new StringBuilder(  );
+        StringBuilder sb = new StringBuilder( );
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
-        sb.append( ticket.getId(  ) ).append( SEPARATOR );
+        sb.append( ticket.getId( ) ).append( SEPARATOR );
 
-        if ( StringUtils.isNotEmpty( ticket.getReference(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getReference( ) ) )
         {
-            sb.append( ticket.getReference(  ) ).append( SEPARATOR );
+            sb.append( ticket.getReference( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getFirstname(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getFirstname( ) ) )
         {
-            sb.append( ticket.getFirstname(  ) ).append( SEPARATOR );
+            sb.append( ticket.getFirstname( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getLastname(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getLastname( ) ) )
         {
-            sb.append( ticket.getLastname(  ) ).append( SEPARATOR );
+            sb.append( ticket.getLastname( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getEmail(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getEmail( ) ) )
         {
-            sb.append( ticket.getEmail(  ) ).append( SEPARATOR );
+            sb.append( ticket.getEmail( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getFixedPhoneNumber(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getFixedPhoneNumber( ) ) )
         {
-            sb.append( ticket.getFixedPhoneNumber(  ) ).append( SEPARATOR );
+            sb.append( ticket.getFixedPhoneNumber( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getMobilePhoneNumber(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getMobilePhoneNumber( ) ) )
         {
-            sb.append( ticket.getMobilePhoneNumber(  ) ).append( SEPARATOR );
+            sb.append( ticket.getMobilePhoneNumber( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketType(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getTicketType( ) ) )
         {
-            sb.append( ticket.getTicketType(  ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketType( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketDomain(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getTicketDomain( ) ) )
         {
-            sb.append( ticket.getTicketDomain(  ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketDomain( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ).getLabel(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getTicketCategory( ).getLabel( ) ) )
         {
-            sb.append( ticket.getTicketCategory(  ).getLabel(  ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketCategory( ).getLabel( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getNomenclature(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getNomenclature( ) ) )
         {
-            sb.append( ticket.getNomenclature(  ) ).append( SEPARATOR );
+            sb.append( ticket.getNomenclature( ) ).append( SEPARATOR );
         }
 
-        if ( ticket.getDateCreate(  ) != null )
+        if ( ticket.getDateCreate( ) != null )
         {
-            sb.append( simpleDateFormat.format( ticket.getDateCreate(  ).getTime(  ) ) ).append( SEPARATOR );
+            sb.append( simpleDateFormat.format( ticket.getDateCreate( ).getTime( ) ) ).append( SEPARATOR );
         }
 
-        if ( ticket.getDateUpdate(  ) != null )
+        if ( ticket.getDateUpdate( ) != null )
         {
-            sb.append( simpleDateFormat.format( ticket.getDateUpdate(  ).getTime(  ) ) ).append( SEPARATOR );
+            sb.append( simpleDateFormat.format( ticket.getDateUpdate( ).getTime( ) ) ).append( SEPARATOR );
         }
 
-        if ( ticket.getDateClose(  ) != null )
+        if ( ticket.getDateClose( ) != null )
         {
-            sb.append( simpleDateFormat.format( ticket.getDateClose(  ).getTime(  ) ) ).append( SEPARATOR );
+            sb.append( simpleDateFormat.format( ticket.getDateClose( ).getTime( ) ) ).append( SEPARATOR );
         }
 
-        if ( ticket.getListResponse(  ) != null )
+        if ( ticket.getListResponse( ) != null )
         {
-            for ( Response response : ticket.getListResponse(  ) )
+            for ( Response response : ticket.getListResponse( ) )
             {
-                if ( response.getResponseValue(  ) != null )
+                if ( response.getResponseValue( ) != null )
                 {
-                    sb.append( response.getResponseValue(  ) ).append( SEPARATOR );
+                    sb.append( response.getResponseValue( ) ).append( SEPARATOR );
                 }
             }
         }
 
-        if ( WorkflowService.getInstance(  ).isAvailable(  ) )
+        if ( WorkflowService.getInstance( ).isAvailable( ) )
         {
-            TicketCategory ticketCategory = ticket.getTicketCategory(  );
-            int nIdWorkflow = ticketCategory.getIdWorkflow(  );
+            TicketCategory ticketCategory = ticket.getTicketCategory( );
+            int nIdWorkflow = ticketCategory.getIdWorkflow( );
 
-            StateFilter stateFilter = new StateFilter(  );
+            StateFilter stateFilter = new StateFilter( );
             stateFilter.setIdWorkflow( nIdWorkflow );
 
-            State state = WorkflowService.getInstance(  )
-                                         .getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticket.getTicketCategory(  ).getId(  ) );
-            sb.append( state.getName(  ) ).append( SEPARATOR );
-            sb.append( ticketCategory.getPrecision(  ) ).append( SEPARATOR );
+            State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+                    ticket.getTicketCategory( ).getId( ) );
+            sb.append( state.getName( ) ).append( SEPARATOR );
+            sb.append( ticketCategory.getPrecision( ) ).append( SEPARATOR );
         }
 
-        if ( ticket.getAssigneeUser(  ) != null )
+        if ( ticket.getAssigneeUser( ) != null )
         {
-            sb.append( ticket.getAssigneeUser(  ).getFirstname(  ) ).append( SEPARATOR )
-              .append( ticket.getAssigneeUser(  ).getLastname(  ) ).append( SEPARATOR );
+            sb.append( ticket.getAssigneeUser( ).getFirstname( ) ).append( SEPARATOR ).append( ticket.getAssigneeUser( ).getLastname( ) ).append( SEPARATOR );
         }
 
-        if ( ticket.getChannel(  ) != null )
+        if ( ticket.getChannel( ) != null )
         {
-            sb.append( ticket.getChannel(  ).getLabel(  ) ).append( SEPARATOR );
+            sb.append( ticket.getChannel( ).getLabel( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketComment(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getTicketComment( ) ) )
         {
-            sb.append( ticket.getTicketComment(  ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketComment( ) ).append( SEPARATOR );
         }
 
-        if ( ticket.getAssigneeUnit(  ) != null )
+        if ( ticket.getAssigneeUnit( ) != null )
         {
-            if ( StringUtils.isNotEmpty( ticket.getAssigneeUnit(  ).getName(  ) ) )
+            if ( StringUtils.isNotEmpty( ticket.getAssigneeUnit( ).getName( ) ) )
             {
-                sb.append( ticket.getAssigneeUnit(  ).getName(  ) ).append( SEPARATOR );
+                sb.append( ticket.getAssigneeUnit( ).getName( ) ).append( SEPARATOR );
             }
         }
 
-        return sb.toString(  );
+        return sb.toString( );
     }
 
     /**
-     * @param ticket ticket
-     * @return summary of ticket
-     * returns summary of ticket to be displayed
+     * @param ticket
+     *            ticket
+     * @return summary of ticket returns summary of ticket to be displayed
      */
     private static String getDisplaySummary( Ticket ticket )
     {
-        StringBuilder sb = new StringBuilder(  );
+        StringBuilder sb = new StringBuilder( );
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
 
-        if ( ticket.getDateCreate(  ) != null )
+        if ( ticket.getDateCreate( ) != null )
         {
-            sb.append( simpleDateFormat.format( ticket.getDateCreate(  ).getTime(  ) ) ).append( SEPARATOR );
+            sb.append( simpleDateFormat.format( ticket.getDateCreate( ).getTime( ) ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getReference(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getReference( ) ) )
         {
-            sb.append( ticket.getReference(  ) ).append( SEPARATOR );
+            sb.append( ticket.getReference( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getFirstname(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getFirstname( ) ) )
         {
-            sb.append( ticket.getFirstname(  ) ).append( SEPARATOR );
+            sb.append( ticket.getFirstname( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getLastname(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getLastname( ) ) )
         {
-            sb.append( ticket.getLastname(  ) ).append( SEPARATOR );
+            sb.append( ticket.getLastname( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketType(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getTicketType( ) ) )
         {
-            sb.append( ticket.getTicketType(  ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketType( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketDomain(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getTicketDomain( ) ) )
         {
-            sb.append( ticket.getTicketDomain(  ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketDomain( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ).getLabel(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getTicketCategory( ).getLabel( ) ) )
         {
-            sb.append( ticket.getTicketCategory(  ).getLabel(  ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketCategory( ).getLabel( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ).getPrecision(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getTicketCategory( ).getPrecision( ) ) )
         {
-            sb.append( ticket.getTicketCategory(  ).getPrecision(  ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketCategory( ).getPrecision( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketComment(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getTicketComment( ) ) )
         {
-            sb.append( ticket.getTicketComment(  ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketComment( ) ).append( SEPARATOR );
         }
 
-        return sb.toString(  );
+        return sb.toString( );
     }
 
     /**
-     * @param ticket ticket
-     * @return title of ticket
-     * returns title of ticket to be displayed
+     * @param ticket
+     *            ticket
+     * @return title of ticket returns title of ticket to be displayed
      */
     private static String getDisplayTitle( Ticket ticket )
     {
-        StringBuilder sb = new StringBuilder(  );
+        StringBuilder sb = new StringBuilder( );
 
-        if ( StringUtils.isNotEmpty( ticket.getReference(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getReference( ) ) )
         {
-            sb.append( ticket.getReference(  ) ).append( SEPARATOR );
+            sb.append( ticket.getReference( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getFirstname(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getFirstname( ) ) )
         {
-            sb.append( ticket.getFirstname(  ) ).append( SEPARATOR );
+            sb.append( ticket.getFirstname( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getLastname(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getLastname( ) ) )
         {
-            sb.append( ticket.getLastname(  ) ).append( SEPARATOR );
+            sb.append( ticket.getLastname( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ).getLabel(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getTicketCategory( ).getLabel( ) ) )
         {
-            sb.append( ticket.getTicketCategory(  ).getLabel(  ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketCategory( ).getLabel( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketCategory(  ).getPrecision(  ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getTicketCategory( ).getPrecision( ) ) )
         {
-            sb.append( ticket.getTicketCategory(  ).getPrecision(  ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketCategory( ).getPrecision( ) ).append( SEPARATOR );
         }
 
-        return sb.toString(  );
+        return sb.toString( );
     }
 }

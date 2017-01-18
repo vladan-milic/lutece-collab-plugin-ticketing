@@ -63,25 +63,21 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * This class provides the user interface to manage TicketCategory features ( manage, create, modify, remove )
  */
 @Controller( controllerJsp = "ManageTicketCategories.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
 public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 {
-    ////////////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////////////
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_TICKETCATEGORIES = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
-        "manage_ticket_categories.html";
-    private static final String TEMPLATE_CREATE_TICKETCATEGORY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
-        "create_ticket_category.html";
-    private static final String TEMPLATE_MODIFY_TICKETCATEGORY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
-        "modify_ticket_category.html";
-    private static final String TEMPLATE_MODIFY_TICKETCATEGORY_INPUTS = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
-        "modify_ticket_category_inputs.html";
+    private static final String TEMPLATE_MANAGE_TICKETCATEGORIES = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_ticket_categories.html";
+    private static final String TEMPLATE_CREATE_TICKETCATEGORY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_ticket_category.html";
+    private static final String TEMPLATE_MODIFY_TICKETCATEGORY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_ticket_category.html";
+    private static final String TEMPLATE_MODIFY_TICKETCATEGORY_INPUTS = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH
+            + "modify_ticket_category_inputs.html";
 
     // Parameters
     private static final String PARAMETER_ID_TICKETCATEGORY = "id";
@@ -105,8 +101,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_LOCALE_TINY = "locale";
     private static final String MARK_CATEGORY_INPUTS_LIST = "category_inputs_list";
     private static final String MARK_CATEGORY = "category";
-    private static final String JSP_MANAGE_TICKETCATEGORYS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
-        "ManageTicketCategories.jsp";
+    private static final String JSP_MANAGE_TICKETCATEGORYS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageTicketCategories.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETCATEGORY = "ticketing.message.confirmRemoveTicketCategory";
@@ -146,7 +141,9 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
     /**
      * Build the Manage View
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The page
      */
     @View( value = VIEW_MANAGE_TICKETCATEGORYS, defaultView = true )
@@ -154,10 +151,9 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     {
         _category = null;
 
-        List<TicketCategory> listTicketCategorys = (List<TicketCategory>) TicketCategoryHome.getTicketCategorysList(  );
+        List<TicketCategory> listTicketCategorys = (List<TicketCategory>) TicketCategoryHome.getTicketCategorysList( );
 
-        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKETCATEGORY_LIST, listTicketCategorys,
-                JSP_MANAGE_TICKETCATEGORYS );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKETCATEGORY_LIST, listTicketCategorys, JSP_MANAGE_TICKETCATEGORYS );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETCATEGORIES, TEMPLATE_MANAGE_TICKETCATEGORIES, model );
     }
@@ -165,20 +161,20 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     /**
      * Returns the form to create a ticketcategory
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code of the ticketcategory form
      */
     @View( VIEW_CREATE_TICKETCATEGORY )
     public String getCreateTicketCategory( HttpServletRequest request )
     {
-        _category = ( _category != null ) ? _category : new TicketCategory(  );
+        _category = ( _category != null ) ? _category : new TicketCategory( );
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
         model.put( MARK_TICKETCATEGORY, _category );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
-        model.put( MARK_LIST_WORKFLOWS,
-            WorkflowService.getInstance(  ).getWorkflowsEnabled( getUser(  ), getLocale(  ) ) );
-        model.put( MARK_LIST_UNITS, getUnitsList(  ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList( ) );
+        model.put( MARK_LIST_WORKFLOWS, WorkflowService.getInstance( ).getWorkflowsEnabled( getUser( ), getLocale( ) ) );
+        model.put( MARK_LIST_UNITS, getUnitsList( ) );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKETCATEGORY, TEMPLATE_CREATE_TICKETCATEGORY, model );
     }
@@ -186,7 +182,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     /**
      * Process the data capture form of a new ticketcategory
      *
-     * @param request The Http Request
+     * @param request
+     *            The Http Request
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_CREATE_TICKETCATEGORY )
@@ -201,16 +198,16 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         }
 
         TicketCategoryHome.create( _category );
-        addInfo( INFO_TICKETCATEGORY_CREATED, getLocale(  ) );
+        addInfo( INFO_TICKETCATEGORY_CREATED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETCATEGORYS );
     }
 
     /**
-     * Manages the removal form of a ticketcategory whose identifier is in the http
-     * request
+     * Manages the removal form of a ticketcategory whose identifier is in the http request
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code to confirm
      */
     @Action( ACTION_CONFIRM_REMOVE_TICKETCATEGORY )
@@ -220,8 +217,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_TICKETCATEGORY ) );
         url.addParameter( PARAMETER_ID_TICKETCATEGORY, nId );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TICKETCATEGORY,
-                url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
+        String strMessageUrl = AdminMessageService
+                .getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TICKETCATEGORY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
     }
@@ -229,7 +226,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     /**
      * Handles the removal form of a ticketcategory
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the jsp URL to display the form to manage ticketcategorys
      */
     @Action( ACTION_REMOVE_TICKETCATEGORY )
@@ -237,7 +235,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY ) );
         TicketCategoryHome.remove( nId );
-        addInfo( INFO_TICKETCATEGORY_REMOVED, getLocale(  ) );
+        addInfo( INFO_TICKETCATEGORY_REMOVED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETCATEGORYS );
     }
@@ -245,7 +243,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     /**
      * Returns the form to update info about a ticketcategory
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return The HTML form to update info
      */
     @View( VIEW_MODIFY_TICKETCATEGORY )
@@ -253,18 +252,17 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY ) );
 
-        if ( ( _category == null ) || ( _category.getId(  ) != nId ) )
+        if ( ( _category == null ) || ( _category.getId( ) != nId ) )
         {
             _category = TicketCategoryHome.findByPrimaryKey( nId );
         }
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
         model.put( MARK_TICKETCATEGORY, _category );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
-        model.put( MARK_LIST_WORKFLOWS,
-            WorkflowService.getInstance(  ).getWorkflowsEnabled( getUser(  ), getLocale(  ) ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList( ) );
+        model.put( MARK_LIST_WORKFLOWS, WorkflowService.getInstance( ).getWorkflowsEnabled( getUser( ), getLocale( ) ) );
 
-        model.put( MARK_LIST_UNITS, getUnitsList(  ) );
+        model.put( MARK_LIST_UNITS, getUnitsList( ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKETCATEGORY, TEMPLATE_MODIFY_TICKETCATEGORY, model );
     }
@@ -272,7 +270,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     /**
      * Process the change form of a ticketcategory
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_MODIFY_TICKETCATEGORY )
@@ -283,11 +282,11 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         // Check constraints
         if ( !validateBean( _category, VALIDATION_ATTRIBUTES_PREFIX ) || !validateCode( _category ) )
         {
-            return redirect( request, VIEW_MODIFY_TICKETCATEGORY, PARAMETER_ID_TICKETCATEGORY, _category.getId(  ) );
+            return redirect( request, VIEW_MODIFY_TICKETCATEGORY, PARAMETER_ID_TICKETCATEGORY, _category.getId( ) );
         }
 
         TicketCategoryHome.update( _category );
-        addInfo( INFO_TICKETCATEGORY_UPDATED, getLocale(  ) );
+        addInfo( INFO_TICKETCATEGORY_UPDATED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETCATEGORYS );
     }
@@ -295,7 +294,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     /**
      * Returns the form to update inputs about a ticket category
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return The HTML form to update inputs
      */
     @View( VIEW_MODIFY_TICKETCATEGORY_INPUTS )
@@ -307,12 +307,12 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
         List<Entry> listEntry = getCategoryEntryList( _category );
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
         model.put( MARK_CATEGORY, _category );
         model.put( MARK_ALL_INPUTS_LIST, getFilteredRefListInputs( _category ) );
         model.put( MARK_CATEGORY_INPUTS_LIST, listEntry );
-        model.put( MARK_LOCALE, getLocale(  ) );
-        model.put( MARK_LOCALE_TINY, getLocale(  ) );
+        model.put( MARK_LOCALE, getLocale( ) );
+        model.put( MARK_LOCALE_TINY, getLocale( ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKETCATEGORY_INPUTS, TEMPLATE_MODIFY_TICKETCATEGORY_INPUTS, model );
     }
@@ -320,7 +320,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     /**
      * Handles the add of input to a ticketcategory
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the jsp URL to display the form to manage ticketcategory inputs
      */
     @Action( ACTION_ADD_TICKETCATEGORY_INPUT )
@@ -332,18 +333,20 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         {
             int nIdInput = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY_INPUT ) );
             TicketCategoryHome.createLinkCategoryInputNextPos( nId, nIdInput );
-            addInfo( INFO_TICKETCATEGORY_CREATED, getLocale(  ) );
+            addInfo( INFO_TICKETCATEGORY_CREATED, getLocale( ) );
         }
 
         UrlItem url = new UrlItem( getViewUrl( VIEW_MODIFY_TICKETCATEGORY_INPUTS ) );
         url.addParameter( PARAMETER_ID_TICKETCATEGORY, nId );
 
-        return redirect( request, url.getUrl(  ) );
+        return redirect( request, url.getUrl( ) );
     }
 
     /**
      * Move a field up
-     * @param request The request
+     * 
+     * @param request
+     *            The request
      * @return The next URL to redirect to
      */
     @Action( ACTION_DO_MOVE_FIELD_UP )
@@ -354,7 +357,9 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
     /**
      * Move a field down
-     * @param request The request
+     * 
+     * @param request
+     *            The request
      * @return The next URL to redirect to
      */
     @Action( ACTION_DO_MOVE_FIELD_DOWN )
@@ -365,8 +370,11 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
     /**
      * Move a field up or down
-     * @param request The request
-     * @param bMoveUp True to move the field up, false to move it down
+     * 
+     * @param request
+     *            The request
+     * @param bMoveUp
+     *            True to move the field up, false to move it down
      * @return The next URL to redirect to
      */
     public String doMoveField( HttpServletRequest request, boolean bMoveUp )
@@ -379,23 +387,23 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
         int nInputToInversePosition = TicketCategoryHome.getCategoryInputByPosition( nId, nNewPosition );
 
-        //Update the Input with new Position
+        // Update the Input with new Position
         TicketCategoryHome.updateCategoryInputPosition( nId, nIdInput, nNewPosition );
 
-        //Update the Input that was on that position before
+        // Update the Input that was on that position before
         TicketCategoryHome.updateCategoryInputPosition( nId, nInputToInversePosition, nOldPosition );
 
         UrlItem url = new UrlItem( getViewUrl( VIEW_MODIFY_TICKETCATEGORY_INPUTS ) );
         url.addParameter( PARAMETER_ID_TICKETCATEGORY, nId );
 
-        return redirect( request, url.getUrl(  ) );
+        return redirect( request, url.getUrl( ) );
     }
 
     /**
-     * Manages the removal form of a ticketcategory whose identifier is in the http
-     * request
+     * Manages the removal form of a ticketcategory whose identifier is in the http request
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code to confirm
      */
     @View( ACTION_CONFIRM_REMOVE_TICKETCATEGORY_INPUT )
@@ -407,8 +415,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         url.addParameter( PARAMETER_ID_TICKETCATEGORY, nId );
         url.addParameter( PARAMETER_ID_TICKETCATEGORY_INPUT, nIdInput );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TICKETCATEGORY_INPUT,
-                url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
+        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TICKETCATEGORY_INPUT, url.getUrl( ),
+                AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
     }
@@ -416,7 +424,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     /**
      * Handles the removal of a ticketcategory input
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the jsp URL to display the form to manage ticketcategory inputs
      */
     @Action( ACTION_REMOVE_TICKETCATEGORY_INPUT )
@@ -426,24 +435,24 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         int nIdInput = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY_INPUT ) );
         TicketCategoryHome.removeLinkCategoryInput( nId, nIdInput );
         reorganizeCategoryInputs( nId );
-        addInfo( INFO_TICKETCATEGORY_INPUT_REMOVED, getLocale(  ) );
+        addInfo( INFO_TICKETCATEGORY_INPUT_REMOVED, getLocale( ) );
 
         UrlItem url = new UrlItem( getViewUrl( VIEW_MODIFY_TICKETCATEGORY_INPUTS ) );
         url.addParameter( PARAMETER_ID_TICKETCATEGORY, nId );
 
-        return redirect( request, url.getUrl(  ) );
+        return redirect( request, url.getUrl( ) );
     }
 
     /**
-     * Update the inputs within a given category
-     *  with consecutive position indexes
+     * Update the inputs within a given category with consecutive position indexes
      *
-     * @param nId the category which inputs are being reordered
+     * @param nId
+     *            the category which inputs are being reordered
      */
     private void reorganizeCategoryInputs( int nId )
     {
         TicketCategory _category = TicketCategoryHome.findByPrimaryKey( nId );
-        List<Integer> listInputs = _category.getListIdInput(  );
+        List<Integer> listInputs = _category.getListIdInput( );
         int i = 1;
 
         for ( Integer input : listInputs )
@@ -455,19 +464,20 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     /**
      * Get the reference list of inputs not already linked to a given Category
      *
-     * @param category The ticket category
+     * @param category
+     *            The ticket category
      * @return The reference list of inputs
      */
     private ReferenceList getFilteredRefListInputs( TicketCategory category )
     {
-        EntryFilter entryFilter = new EntryFilter(  );
+        EntryFilter entryFilter = new EntryFilter( );
         entryFilter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
         entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
         List<Entry> listReferenceEntry = EntryHome.getEntryList( entryFilter );
         List<Entry> listExistingEntries = getCategoryEntryList( category );
-        ReferenceList refListInputs = new ReferenceList(  );
+        ReferenceList refListInputs = new ReferenceList( );
 
         for ( Entry entry : listReferenceEntry )
         {
@@ -475,7 +485,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
             for ( Entry existingEntry : listExistingEntries )
             {
-                if ( existingEntry.getIdResource(  ) == entry.getIdResource(  ) )
+                if ( existingEntry.getIdResource( ) == entry.getIdResource( ) )
                 {
                     b_found = true;
                 }
@@ -483,7 +493,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
             if ( !b_found )
             {
-                refListInputs.addItem( entry.getIdResource(  ), buildItemComboInput( entry ) );
+                refListInputs.addItem( entry.getIdResource( ), buildItemComboInput( entry ) );
             }
         }
 
@@ -491,48 +501,52 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     }
 
     /**
-     * Build item present in the inputs list combo for each input with the input title and the input type.
-     * Except for type comment having not title. For it, the item combo is build with the technical id
+     * Build item present in the inputs list combo for each input with the input title and the input type. Except for type comment having not title. For it, the
+     * item combo is build with the technical id
      *
-     * @param entry The current entry
+     * @param entry
+     *            The current entry
      * @return The item present in the input list combo
      */
     private String buildItemComboInput( Entry entry )
     {
         StringBuilder itemComboInput;
 
-        if ( entry.getEntryType(  ).getComment(  ) )
+        if ( entry.getEntryType( ).getComment( ) )
         {
-            itemComboInput = new StringBuilder( entry.getCode(  ) );
+            itemComboInput = new StringBuilder( entry.getCode( ) );
         }
         else
         {
-            itemComboInput = new StringBuilder( entry.getTitle(  ) );
+            itemComboInput = new StringBuilder( entry.getTitle( ) );
         }
 
-        itemComboInput.append( " (" ).append( entry.getEntryType(  ).getTitle(  ) ).append( ")" );
+        itemComboInput.append( " (" ).append( entry.getEntryType( ).getTitle( ) ).append( ")" );
 
-        return itemComboInput.toString(  );
+        return itemComboInput.toString( );
     }
 
     /**
      * Validate Code (uniqueness and format)
-     * @param category The category
+     * 
+     * @param category
+     *            The category
      * @return true if valid otherwise false
      */
     private boolean validateCode( TicketCategory category )
     {
-        String strCode = category.getCode(  );
+        String strCode = category.getCode( );
 
         if ( ( strCode != null ) && !strCode.equals( "" ) )
         {
             TicketCategory existingCategory = TicketCategoryHome.findByCode( strCode );
 
-            if ( ( existingCategory != null ) && ( existingCategory.getId(  ) != category.getId(  ) ) )
+            if ( ( existingCategory != null ) && ( existingCategory.getId( ) != category.getId( ) ) )
             {
-                Object[] args = { strCode, existingCategory.getLabel(  ) };
-                String strMessage = I18nService.getLocalizedString( MESSAGE_ERROR_CODE_ALREADY_EXISTS, args,
-                        getLocale(  ) );
+                Object [ ] args = {
+                        strCode, existingCategory.getLabel( )
+                };
+                String strMessage = I18nService.getLocalizedString( MESSAGE_ERROR_CODE_ALREADY_EXISTS, args, getLocale( ) );
                 addError( strMessage );
 
                 return false;
@@ -540,9 +554,9 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
             Matcher matcher = _pattern.matcher( strCode );
 
-            if ( !matcher.matches(  ) )
+            if ( !matcher.matches( ) )
             {
-                addError( MESSAGE_ERROR_CODE_INVALID_FORMAT, getLocale(  ) );
+                addError( MESSAGE_ERROR_CODE_INVALID_FORMAT, getLocale( ) );
 
                 return false;
             }
@@ -553,8 +567,11 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
     /**
      * Populate the bean ticketCategory using parameters in http request
-     * @param ticketCategory TicketCategory to populate
-     * @param request http request
+     * 
+     * @param ticketCategory
+     *            TicketCategory to populate
+     * @param request
+     *            http request
      */
     protected void populate( TicketCategory ticketCategory, HttpServletRequest request )
     {
@@ -567,27 +584,28 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
     /**
      * Return a list of Entries linked to a category
+     * 
      * @param _category
      * @return
      */
     private List<Entry> getCategoryEntryList( TicketCategory _category )
     {
-        List<Entry> listEntry = new ArrayList<Entry>(  );
+        List<Entry> listEntry = new ArrayList<Entry>( );
 
-        if ( ( _category != null ) && ( _category.getListIdInput(  ) != null ) )
+        if ( ( _category != null ) && ( _category.getListIdInput( ) != null ) )
         {
-            EntryFilter entryFilter = new EntryFilter(  );
+            EntryFilter entryFilter = new EntryFilter( );
             entryFilter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
             entryFilter.setEntryParentNull( EntryFilter.FILTER_TRUE );
             entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
-            for ( Integer nIdInput : _category.getListIdInput(  ) )
+            for ( Integer nIdInput : _category.getListIdInput( ) )
             {
                 entryFilter.setIdResource( nIdInput );
 
                 List<Entry> listEntryFound = EntryHome.getEntryList( entryFilter );
 
-                if ( ( listEntryFound != null ) && ( listEntryFound.size(  ) >= 1 ) )
+                if ( ( listEntryFound != null ) && ( listEntryFound.size( ) >= 1 ) )
                 {
                     listEntry.add( listEntryFound.get( 0 ) );
                 }

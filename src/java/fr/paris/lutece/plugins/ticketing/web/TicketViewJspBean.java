@@ -70,7 +70,6 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.util.url.UrlItem;
 
-
 /**
  * TicketViewJspBean
  */
@@ -78,8 +77,7 @@ import fr.paris.lutece.util.url.UrlItem;
 public class TicketViewJspBean extends WorkflowCapableJspBean
 {
     // Templates
-    private static final String TEMPLATE_VIEW_TICKET_DETAILS = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH +
-        "view_ticket_details.html";
+    private static final String TEMPLATE_VIEW_TICKET_DETAILS = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "view_ticket_details.html";
 
     // Markers
     private static final String MARK_PRIORITY = "priority";
@@ -104,7 +102,9 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
     /**
      * Gets the Details tab of the Ticket View
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The view
      */
     @View( value = VIEW_DETAILS, defaultView = true )
@@ -114,76 +114,71 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         int nIdTicket = Integer.parseInt( strIdTicket );
 
         Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain(  ) );
+        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) );
 
-        //check user rights
-        if ( !RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, getUser(  ) ) ||
-                !RBACService.isAuthorized( ticketDomain, TicketDomainResourceIdService.PERMISSION_VIEW, getUser(  ) ) )
+        // check user rights
+        if ( !RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, getUser( ) )
+                || !RBACService.isAuthorized( ticketDomain, TicketDomainResourceIdService.PERMISSION_VIEW, getUser( ) ) )
         {
-            return redirect( request,
-                AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+            return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
         }
 
         setWorkflowAttributes( ticket );
 
         String strCustomerId = request.getParameter( TicketingConstants.PARAMETER_CUSTOMER_ID );
 
-        if ( !StringUtils.isEmpty( strCustomerId ) && StringUtils.isEmpty( ticket.getCustomerId(  ) ) )
+        if ( !StringUtils.isEmpty( strCustomerId ) && StringUtils.isEmpty( ticket.getCustomerId( ) ) )
         {
             ticket.setCustomerId( strCustomerId );
         }
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
         model.put( TicketingConstants.MARK_TICKET, ticket );
-        model.put( MARK_PRIORITY, TicketPriority.valueOf( ticket.getPriority(  ) ).getLocalizedMessage( getLocale(  ) ) );
-        model.put( MARK_CRITICALITY,
-            TicketCriticality.valueOf( ticket.getCriticality(  ) ).getLocalizedMessage( getLocale(  ) ) );
+        model.put( MARK_PRIORITY, TicketPriority.valueOf( ticket.getPriority( ) ).getLocalizedMessage( getLocale( ) ) );
+        model.put( MARK_CRITICALITY, TicketCriticality.valueOf( ticket.getCriticality( ) ).getLocalizedMessage( getLocale( ) ) );
 
-        List<Response> listResponses = ticket.getListResponse(  );
-        List<String> listReadOnlyResponseHtml = new ArrayList<String>( listResponses.size(  ) );
+        List<Response> listResponses = ticket.getListResponse( );
+        List<String> listReadOnlyResponseHtml = new ArrayList<String>( listResponses.size( ) );
 
         for ( Response response : listResponses )
         {
-            IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( response.getEntry(  ) );
-            listReadOnlyResponseHtml.add( entryTypeService.getResponseValueForRecap( response.getEntry(  ), request,
-                    response, getLocale(  ) ) );
+            IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( response.getEntry( ) );
+            listReadOnlyResponseHtml.add( entryTypeService.getResponseValueForRecap( response.getEntry( ), request, response, getLocale( ) ) );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getCustomerId(  ) ) &&
-                StringUtils.isNotEmpty( AppPropertiesService.getProperty( TicketingConstants.PROPERTY_POCGRU_URL_360 ) ) )
+        if ( StringUtils.isNotEmpty( ticket.getCustomerId( ) )
+                && StringUtils.isNotEmpty( AppPropertiesService.getProperty( TicketingConstants.PROPERTY_POCGRU_URL_360 ) ) )
         {
             UrlItem url = new UrlItem( AppPropertiesService.getProperty( TicketingConstants.PROPERTY_POCGRU_URL_360 ) );
-            url.addParameter( TicketingConstants.PARAMETER_GRU_CUSTOMER_ID, ticket.getCustomerId(  ) );
-            model.put( TicketingConstants.MARK_POCGRU_URL_360, url.getUrl(  ) );
+            url.addParameter( TicketingConstants.PARAMETER_GRU_CUSTOMER_ID, ticket.getCustomerId( ) );
+            model.put( TicketingConstants.MARK_POCGRU_URL_360, url.getUrl( ) );
         }
 
-        //navigation in authorized tickets : next <-> previous
+        // navigation in authorized tickets : next <-> previous
         @SuppressWarnings( "unchecked" )
-        List<Ticket> listTickets = (List<Ticket>) request.getSession(  )
-                                                         .getAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION );
+        List<Ticket> listTickets = (List<Ticket>) request.getSession( ).getAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION );
 
         ModelUtils.storeNavigationBetweenTickets( nIdTicket, listTickets, model );
 
-        //navigation in authorized tickets : next <-> previous
+        // navigation in authorized tickets : next <-> previous
         model.put( TicketingConstants.MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
-        ModelUtils.storeTicketRights( model, getUser(  ) );
+        ModelUtils.storeTicketRights( model, getUser( ) );
 
-        model.put( TicketingConstants.MARK_JSP_CONTROLLER, getControllerJsp(  ) );
+        model.put( TicketingConstants.MARK_JSP_CONTROLLER, getControllerJsp( ) );
 
         String strHistory = getDisplayDocumentHistory( request, ticket );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_HISTORY, strHistory );
         model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
-        model.put( MARK_USER_FACTORY, UserFactory.getInstance(  ) );
-        _ticketFormService.removeTicketFromSession( request.getSession(  ) );
+        model.put( MARK_USER_FACTORY, UserFactory.getInstance( ) );
+        _ticketFormService.removeTicketFromSession( request.getSession( ) );
 
-        if ( TicketUtils.isAssignee( ticket, getUser(  ) ) )
+        if ( TicketUtils.isAssignee( ticket, getUser( ) ) )
         {
             TicketHome.markAsRead( ticket );
         }
 
-        String messageInfo = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION,
-                TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
+        String messageInfo = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
 
         if ( StringUtils.isNotEmpty( messageInfo ) )
         {
@@ -200,12 +195,11 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     @Override
     public String redirectAfterWorkflowAction( HttpServletRequest request )
     {
-        String strRedirect = ( request.getAttribute( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) != null )
-            ? (String) request.getAttribute( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION )
-            : request.getParameter( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION );
+        String strRedirect = ( request.getAttribute( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) != null ) ? (String) request
+                .getAttribute( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) : request
+                .getParameter( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION );
 
-        String strRedirectUrl = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION,
-                TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_RETURN_URL );
 
         if ( StringUtils.isNotEmpty( strRedirect ) && StringUtils.isNotEmpty( strRedirectUrl ) )
         {
@@ -245,14 +239,16 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
     /**
      * Redirects to the default page
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return the default page
      */
     private String defaultRedirect( HttpServletRequest request )
     {
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
 
-        Map<String, String> mapParams = new HashMap<String, String>(  );
+        Map<String, String> mapParams = new HashMap<String, String>( );
         mapParams.put( TicketingConstants.PARAMETER_ID_TICKET, strIdTicket );
 
         return redirect( request, VIEW_DETAILS, mapParams );

@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.ticketing.web;
 
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
-
 /**
  * Class providing constants for Ticketing
  *
@@ -143,8 +142,10 @@ public final class TicketingConstants
     public static final String ATTRIBUTE_IDENTITY_NAME_GIVEN = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_NAME_GIVEN );
     public static final String ATTRIBUTE_IDENTITY_NAME_PREFERRED_NAME = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_PREFERRED_NAME );
     public static final String ATTRIBUTE_IDENTITY_HOMEINFO_ONLINE_EMAIL = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_ONLINE_EMAIL );
-    public static final String ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_TELEPHONE_NUMBER = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_TELEPHONE_NUMBER );
-    public static final String ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_MOBILE_NUMBER = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_MOBILE_NUMBER );
+    public static final String ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_TELEPHONE_NUMBER = AppPropertiesService
+            .getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_TELEPHONE_NUMBER );
+    public static final String ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_MOBILE_NUMBER = AppPropertiesService
+            .getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_MOBILE_NUMBER );
 
     // FIXME : the application code must be provided by the caller
     public static final String APPLICATION_CODE = AppPropertiesService.getProperty( PROPERTIES_APPLICATION_CODE );
@@ -175,7 +176,7 @@ public final class TicketingConstants
     /**
      * Default constructor
      */
-    private TicketingConstants(  )
+    private TicketingConstants( )
     {
     }
 }

@@ -38,7 +38,6 @@ import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 
 import java.util.List;
 
-
 /**
  * This class provide a user for the FactoryUser
  *
@@ -55,16 +54,19 @@ public class User
 
     /**
      * Returns the AdminUserId
+     * 
      * @return The AdminUserId
      */
-    public int getIdUser(  )
+    public int getIdUser( )
     {
         return _nIdUser;
     }
 
     /**
      * Sets the AdminUserId
-     * @param nAdminUserId The AdminUserId
+     * 
+     * @param nAdminUserId
+     *            The AdminUserId
      */
     public void setIdUser( int _niduser )
     {
@@ -73,16 +75,19 @@ public class User
 
     /**
      * Returns the Firstname
+     * 
      * @return The Firstname
      */
-    public String getFirstName(  )
+    public String getFirstName( )
     {
         return _strFirstName;
     }
 
     /**
      * Sets the Firstname
-     * @param strFirstname The Firstname
+     * 
+     * @param strFirstname
+     *            The Firstname
      */
     public void setFirstName( String _strFistname )
     {
@@ -91,16 +96,19 @@ public class User
 
     /**
      * Returns the Lastname
+     * 
      * @return The Lastname
      */
-    public String getLastName(  )
+    public String getLastName( )
     {
         return _strLastName;
     }
 
     /**
      * Sets the Lastname
-     * @param strLastname The Lastname
+     * 
+     * @param strLastname
+     *            The Lastname
      */
     public void setLastName( String _strLastname )
     {
@@ -109,16 +117,19 @@ public class User
 
     /**
      * Returns the Email
+     * 
      * @return The Email
      */
-    public String getEmail(  )
+    public String getEmail( )
     {
         return _strEmail;
     }
 
     /**
      * Sets the Email
-     * @param strEmail The Email
+     * 
+     * @param strEmail
+     *            The Email
      */
     public void setEmail( String _strEmail )
     {
@@ -127,16 +138,19 @@ public class User
 
     /**
      * Returns the TicketDomains
+     * 
      * @return list of TicketDomain
      */
-    public List<TicketDomain> getDomains(  )
+    public List<TicketDomain> getDomains( )
     {
         return _listDomains;
     }
 
     /**
      * Sets the list of TicketDomain
-     * @param list of TicketDomain
+     * 
+     * @param list
+     *            of TicketDomain
      */
     public void setDomain( List<TicketDomain> _listDomains )
     {
@@ -145,16 +159,19 @@ public class User
 
     /**
      * Returns the Units
+     * 
      * @return list of The Unit
      */
-    public List<Unit> getUnits(  )
+    public List<Unit> getUnits( )
     {
         return _listUnits;
     }
 
     /**
      * Sets the Unit
-     * @param list of Unit
+     * 
+     * @param list
+     *            of Unit
      */
     public void setUnit( List<Unit> _listUnit )
     {

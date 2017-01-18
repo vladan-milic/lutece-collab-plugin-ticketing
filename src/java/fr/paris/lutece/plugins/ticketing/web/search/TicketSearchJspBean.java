@@ -61,7 +61,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * TicketSearch
  */
@@ -82,17 +81,19 @@ public class TicketSearchJspBean extends MVCAdminJspBean
 
     /**
      * Search tickets
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The view
      */
     @Action( value = ACTION_SEARCH_TICKET )
-    @SuppressWarnings( {"rawtypes",
-        "unchecked"
+    @SuppressWarnings( {
+            "rawtypes", "unchecked"
     } )
     public String searchTickets( HttpServletRequest request )
     {
         String strQuery = request.getParameter( SearchConstants.PARAMETER_QUERY );
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
 
         if ( StringUtils.isNotEmpty( strQuery ) )
         {
@@ -100,37 +101,33 @@ public class TicketSearchJspBean extends MVCAdminJspBean
             url.addParameter( SearchConstants.PARAMETER_QUERY, strQuery );
 
             _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
-            _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_DEFAULT_RESULT_PER_PAGE,
-                    10 );
-            _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
-                    _nDefaultItemsPerPage );
+            _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_DEFAULT_RESULT_PER_PAGE, 10 );
+            _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, _nDefaultItemsPerPage );
 
             TicketSearchEngine engine = (TicketSearchEngine) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
             List<SearchResult> listResults;
 
             try
             {
-                listResults = engine.searchTickets( strQuery,
-                        TicketDomainHome.getTicketDomainsList( getUser(  ),
-                            TicketDomainResourceIdService.PERMISSION_VIEW ) );
+                listResults = engine
+                        .searchTickets( strQuery, TicketDomainHome.getTicketDomainsList( getUser( ), TicketDomainResourceIdService.PERMISSION_VIEW ) );
 
-                Paginator paginator = new Paginator( listResults, _nItemsPerPage, url.getUrl(  ),
-                        SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
+                Paginator paginator = new Paginator( listResults, _nItemsPerPage, url.getUrl( ), SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
 
-                model.put( SearchConstants.MARK_RESULT, paginator.getPageItems(  ) );
+                model.put( SearchConstants.MARK_RESULT, paginator.getPageItems( ) );
                 model.put( SearchConstants.MARK_QUERY, strQuery );
                 model.put( SearchConstants.MARK_PAGINATOR, paginator );
                 model.put( SearchConstants.MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
             }
-            catch ( ParseException pe )
+            catch( ParseException pe )
             {
                 AppLogService.error( "Error while parsing query " + strQuery, pe );
-                addError( model, SearchConstants.MESSAGE_SEARCH_ERROR, getLocale(  ) );
+                addError( model, SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
             }
         }
         else
         {
-            addError( model, SearchConstants.MESSAGE_SEARCH_NO_INPUT, getLocale(  ) );
+            addError( model, SearchConstants.MESSAGE_SEARCH_NO_INPUT, getLocale( ) );
         }
 
         return getPage( SearchConstants.PROPERTY_PAGE_TITLE_TICKET_SEARCH, TEMPLATE_SEARCH_TICKET, model );
@@ -138,20 +135,23 @@ public class TicketSearchJspBean extends MVCAdminJspBean
 
     /**
      * add error to model
-     * @param model model
-     * @param strMessageKey message key
-     * @param locale locale
+     * 
+     * @param model
+     *            model
+     * @param strMessageKey
+     *            message key
+     * @param locale
+     *            locale
      */
     @SuppressWarnings( "unchecked" )
     protected void addError( Map<String, Object> model, String strMessageKey, Locale locale )
     {
         if ( model.get( SearchConstants.MARK_ERRORS ) == null )
         {
-            List<ErrorMessage> listErrors = new ArrayList<ErrorMessage>(  );
+            List<ErrorMessage> listErrors = new ArrayList<ErrorMessage>( );
             model.put( SearchConstants.MARK_ERRORS, listErrors );
         }
 
-        ( (List<ErrorMessage>) model.get( SearchConstants.MARK_ERRORS ) ).add( new MVCMessage( 
-                I18nService.getLocalizedString( strMessageKey, locale ) ) );
+        ( (List<ErrorMessage>) model.get( SearchConstants.MARK_ERRORS ) ).add( new MVCMessage( I18nService.getLocalizedString( strMessageKey, locale ) ) );
     }
 }

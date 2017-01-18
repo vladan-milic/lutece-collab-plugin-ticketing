@@ -40,7 +40,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This class provides Data Access methods for Channel objects
  */
@@ -57,22 +56,24 @@ public final class ChannelDAO implements IChannelDAO
 
     /**
      * Generates a new primary key
-     * @param plugin The Plugin
+     * 
+     * @param plugin
+     *            The Plugin
      * @return The new primary key
      */
     public int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nKey = 1;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             nKey = daoUtil.getInt( 1 ) + 1;
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nKey;
     }
@@ -87,12 +88,12 @@ public final class ChannelDAO implements IChannelDAO
 
         channel.setId( newPrimaryKey( plugin ) );
 
-        daoUtil.setInt( 1, channel.getId(  ) );
-        daoUtil.setString( 2, channel.getLabel(  ) );
-        daoUtil.setString( 3, channel.getIconFont(  ) );
+        daoUtil.setInt( 1, channel.getId( ) );
+        daoUtil.setString( 2, channel.getLabel( ) );
+        daoUtil.setString( 3, channel.getIconFont( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -103,19 +104,19 @@ public final class ChannelDAO implements IChannelDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         Channel channel = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            channel = new Channel(  );
+            channel = new Channel( );
             channel.setId( daoUtil.getInt( 1 ) );
             channel.setLabel( daoUtil.getString( 2 ) );
             channel.setIconFont( daoUtil.getString( 3 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return channel;
     }
@@ -128,8 +129,8 @@ public final class ChannelDAO implements IChannelDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -140,13 +141,13 @@ public final class ChannelDAO implements IChannelDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-        daoUtil.setInt( 1, channel.getId(  ) );
-        daoUtil.setString( 2, channel.getLabel(  ) );
-        daoUtil.setString( 3, channel.getIconFont(  ) );
-        daoUtil.setInt( 4, channel.getId(  ) );
+        daoUtil.setInt( 1, channel.getId( ) );
+        daoUtil.setString( 2, channel.getLabel( ) );
+        daoUtil.setString( 3, channel.getIconFont( ) );
+        daoUtil.setInt( 4, channel.getId( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -155,13 +156,13 @@ public final class ChannelDAO implements IChannelDAO
     @Override
     public List<Channel> selectChannelList( Plugin plugin )
     {
-        List<Channel> channelList = new ArrayList<Channel>(  );
+        List<Channel> channelList = new ArrayList<Channel>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            Channel channel = new Channel(  );
+            Channel channel = new Channel( );
 
             channel.setId( daoUtil.getInt( 1 ) );
             channel.setLabel( daoUtil.getString( 2 ) );
@@ -170,7 +171,7 @@ public final class ChannelDAO implements IChannelDAO
             channelList.add( channel );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return channelList;
     }
@@ -181,16 +182,16 @@ public final class ChannelDAO implements IChannelDAO
     @Override
     public List<Integer> selectIdChannelList( Plugin plugin )
     {
-        List<Integer> channelList = new ArrayList<Integer>(  );
+        List<Integer> channelList = new ArrayList<Integer>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             channelList.add( daoUtil.getInt( 1 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return channelList;
     }
@@ -201,16 +202,16 @@ public final class ChannelDAO implements IChannelDAO
     @Override
     public ReferenceList selectReferenceList( Plugin plugin )
     {
-        ReferenceList list = new ReferenceList(  );
+        ReferenceList list = new ReferenceList( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             list.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return list;
     }

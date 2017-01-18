@@ -37,11 +37,10 @@ import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
 import fr.paris.lutece.portal.service.daemon.Daemon;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
-
 /**
  * @author s267533
  *
- *  Daemon used to index Tickets in incremental mode
+ *         Daemon used to index Tickets in incremental mode
  */
 public class TicketIndexerDaemon extends Daemon
 {
@@ -50,18 +49,18 @@ public class TicketIndexerDaemon extends Daemon
     /**
      * Constructor
      */
-    public TicketIndexerDaemon(  )
+    public TicketIndexerDaemon( )
     {
-        super(  );
+        super( );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void run(  )
+    public void run( )
     {
         boolean bTotalIndexing = Boolean.valueOf( AppPropertiesService.getProperty( PROPERTY_INDEXER_PARAM_TOTAL, "true" ) );
-        setLastRunLogs( TicketSearchService.getInstance(  ).processIndexing( bTotalIndexing ) );
+        setLastRunLogs( TicketSearchService.getInstance( ).processIndexing( bTotalIndexing ) );
     }
 }

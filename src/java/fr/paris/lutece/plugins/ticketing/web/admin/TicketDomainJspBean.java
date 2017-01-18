@@ -49,23 +49,19 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * This class provides the user interface to manage TicketDomain features ( manage, create, modify, remove )
  */
 @Controller( controllerJsp = "ManageTicketDomains.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
 public class TicketDomainJspBean extends ManageAdminTicketingJspBean
 {
-    ////////////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////////////
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_TICKETDOMAINS = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
-        "manage_ticket_domains.html";
-    private static final String TEMPLATE_CREATE_TICKETDOMAIN = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
-        "create_ticket_domain.html";
-    private static final String TEMPLATE_MODIFY_TICKETDOMAIN = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
-        "modify_ticket_domain.html";
+    private static final String TEMPLATE_MANAGE_TICKETDOMAINS = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_ticket_domains.html";
+    private static final String TEMPLATE_CREATE_TICKETDOMAIN = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_ticket_domain.html";
+    private static final String TEMPLATE_MODIFY_TICKETDOMAIN = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_ticket_domain.html";
 
     // Parameters
     private static final String PARAMETER_ID_TICKETDOMAIN = "id";
@@ -79,8 +75,7 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_TICKETDOMAIN_LIST = "ticketdomain_list";
     private static final String MARK_TICKETDOMAIN = "ticketdomain";
     private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
-    private static final String JSP_MANAGE_TICKETDOMAINS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
-        "ManageTicketDomains.jsp";
+    private static final String JSP_MANAGE_TICKETDOMAINS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageTicketDomains.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETDOMAIN = "ticketing.message.confirmRemoveTicketDomain";
@@ -103,7 +98,7 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     private static final String INFO_TICKETDOMAIN_REMOVED = "ticketing.info.ticketdomain.removed";
     private static final long serialVersionUID = 1L;
 
-    //Messages
+    // Messages
     private static final String MESSAGE_CAN_NOT_REMOVE_DOMAIN_CATEGORIES_ARE_ASSOCIATE = "ticketing.message.canNotRemoveDomainCategoriesAreAssociate";
 
     // Session variable to store working values
@@ -111,7 +106,9 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
 
     /**
      * Build the Manage View
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The page
      */
     @View( value = VIEW_MANAGE_TICKETDOMAINS, defaultView = true )
@@ -119,9 +116,8 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     {
         _ticketdomain = null;
 
-        List<TicketDomain> listTicketDomains = (List<TicketDomain>) TicketDomainHome.getTicketDomainsList(  );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKETDOMAIN_LIST, listTicketDomains,
-                JSP_MANAGE_TICKETDOMAINS );
+        List<TicketDomain> listTicketDomains = (List<TicketDomain>) TicketDomainHome.getTicketDomainsList( );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKETDOMAIN_LIST, listTicketDomains, JSP_MANAGE_TICKETDOMAINS );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETDOMAINS, TEMPLATE_MANAGE_TICKETDOMAINS, model );
     }
@@ -129,17 +125,18 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     /**
      * Returns the form to create a ticketdomain
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code of the ticketdomain form
      */
     @View( VIEW_CREATE_TICKETDOMAIN )
     public String getCreateTicketDomain( HttpServletRequest request )
     {
-        _ticketdomain = ( _ticketdomain != null ) ? _ticketdomain : new TicketDomain(  );
+        _ticketdomain = ( _ticketdomain != null ) ? _ticketdomain : new TicketDomain( );
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
         model.put( MARK_TICKETDOMAIN, _ticketdomain );
-        model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
+        model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList( ) );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKETDOMAIN, TEMPLATE_CREATE_TICKETDOMAIN, model );
     }
@@ -147,7 +144,8 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     /**
      * Process the data capture form of a new ticketdomain
      *
-     * @param request The Http Request
+     * @param request
+     *            The Http Request
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_CREATE_TICKETDOMAIN )
@@ -162,16 +160,16 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
         }
 
         TicketDomainHome.create( _ticketdomain );
-        addInfo( INFO_TICKETDOMAIN_CREATED, getLocale(  ) );
+        addInfo( INFO_TICKETDOMAIN_CREATED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETDOMAINS );
     }
 
     /**
-     * Manages the removal form of a ticketdomain whose identifier is in the http
-     * request
+     * Manages the removal form of a ticketdomain whose identifier is in the http request
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code to confirm
      */
     @Action( ACTION_CONFIRM_REMOVE_TICKETDOMAIN )
@@ -182,15 +180,13 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
         if ( !TicketDomainHome.canRemove( nId ) )
         {
             return redirect( request,
-                AdminMessageService.getMessageUrl( request, MESSAGE_CAN_NOT_REMOVE_DOMAIN_CATEGORIES_ARE_ASSOCIATE,
-                    AdminMessage.TYPE_STOP ) );
+                    AdminMessageService.getMessageUrl( request, MESSAGE_CAN_NOT_REMOVE_DOMAIN_CATEGORIES_ARE_ASSOCIATE, AdminMessage.TYPE_STOP ) );
         }
 
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_TICKETDOMAIN ) );
         url.addParameter( PARAMETER_ID_TICKETDOMAIN, nId );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TICKETDOMAIN,
-                url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
+        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TICKETDOMAIN, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
     }
@@ -198,7 +194,8 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     /**
      * Handles the removal form of a ticketdomain
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the jsp URL to display the form to manage ticketdomains
      */
     @Action( ACTION_REMOVE_TICKETDOMAIN )
@@ -206,7 +203,7 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETDOMAIN ) );
         TicketDomainHome.remove( nId );
-        addInfo( INFO_TICKETDOMAIN_REMOVED, getLocale(  ) );
+        addInfo( INFO_TICKETDOMAIN_REMOVED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETDOMAINS );
     }
@@ -214,7 +211,8 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     /**
      * Returns the form to update info about a ticketdomain
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return The HTML form to update info
      */
     @View( VIEW_MODIFY_TICKETDOMAIN )
@@ -222,14 +220,14 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETDOMAIN ) );
 
-        if ( ( _ticketdomain == null ) || ( _ticketdomain.getId(  ) != nId ) )
+        if ( ( _ticketdomain == null ) || ( _ticketdomain.getId( ) != nId ) )
         {
             _ticketdomain = TicketDomainHome.findByPrimaryKey( nId );
         }
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
         model.put( MARK_TICKETDOMAIN, _ticketdomain );
-        model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList(  ) );
+        model.put( MARK_TICKET_TYPES_LIST, TicketTypeHome.getReferenceList( ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKETDOMAIN, TEMPLATE_MODIFY_TICKETDOMAIN, model );
     }
@@ -237,7 +235,8 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     /**
      * Process the change form of a ticketdomain
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_MODIFY_TICKETDOMAIN )
@@ -248,11 +247,11 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
         // Check constraints
         if ( !validateBean( _ticketdomain, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect( request, VIEW_MODIFY_TICKETDOMAIN, PARAMETER_ID_TICKETDOMAIN, _ticketdomain.getId(  ) );
+            return redirect( request, VIEW_MODIFY_TICKETDOMAIN, PARAMETER_ID_TICKETDOMAIN, _ticketdomain.getId( ) );
         }
 
         TicketDomainHome.update( _ticketdomain );
-        addInfo( INFO_TICKETDOMAIN_UPDATED, getLocale(  ) );
+        addInfo( INFO_TICKETDOMAIN_UPDATED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETDOMAINS );
     }

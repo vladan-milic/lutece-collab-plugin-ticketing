@@ -42,40 +42,41 @@ import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
-
 /**
  * Common method used in REST services for ticketing resources
  *
  */
 public class TicketingRest
 {
-    protected static final Map<String, IFormatterFactory> _formatterFactories = new HashMap<String, IFormatterFactory>(  );
+    protected static final Map<String, IFormatterFactory> _formatterFactories = new HashMap<String, IFormatterFactory>( );
 
     static
     {
-        _formatterFactories.put( MediaType.APPLICATION_JSON, new FormatterJsonFactory(  ) );
-        _formatterFactories.put( MediaType.APPLICATION_XML, new FormatterXmlFactory(  ) );
+        _formatterFactories.put( MediaType.APPLICATION_JSON, new FormatterJsonFactory( ) );
+        _formatterFactories.put( MediaType.APPLICATION_XML, new FormatterXmlFactory( ) );
     }
 
     /**
      * Default constructor
      */
-    public TicketingRest(  )
+    public TicketingRest( )
     {
     }
 
     /**
      * Gives the media type depending on the specified parameters
-     * @param accept the accepted format
-     * @param format the format
+     * 
+     * @param accept
+     *            the accepted format
+     * @param format
+     *            the format
      * @return the media type
      */
     protected String getMediaType( String accept, String format )
     {
         String strMediaType;
 
-        if ( ( ( accept != null ) && accept.contains( MediaType.APPLICATION_JSON ) ) ||
-                ( ( format != null ) && format.equals( Constants.MEDIA_TYPE_JSON ) ) )
+        if ( ( ( accept != null ) && accept.contains( MediaType.APPLICATION_JSON ) ) || ( ( format != null ) && format.equals( Constants.MEDIA_TYPE_JSON ) ) )
         {
             strMediaType = MediaType.APPLICATION_JSON;
         }

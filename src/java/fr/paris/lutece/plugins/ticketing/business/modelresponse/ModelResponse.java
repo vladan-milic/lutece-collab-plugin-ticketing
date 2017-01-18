@@ -39,7 +39,6 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Size;
 
-
 /**
  * This is the business class for the object TypeResponse
  */
@@ -47,7 +46,7 @@ public class ModelResponse implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    // Variables declarations 
+    // Variables declarations
     private int _nId;
     private int _nIdDomain;
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Title.notEmpty}" )
@@ -63,16 +62,19 @@ public class ModelResponse implements Serializable
 
     /**
      * Returns the Id
+     * 
      * @return The Id
      */
-    public int getId(  )
+    public int getId( )
     {
         return _nId;
     }
 
     /**
      * Sets the Id
-     * @param nId The Id
+     * 
+     * @param nId
+     *            The Id
      */
     public void setId( int nId )
     {
@@ -81,16 +83,19 @@ public class ModelResponse implements Serializable
 
     /**
      * Returns the Title
+     * 
      * @return The Title
      */
-    public String getTitle(  )
+    public String getTitle( )
     {
         return _strTitle;
     }
 
     /**
      * Sets the Title
-     * @param strTitle The Title
+     * 
+     * @param strTitle
+     *            The Title
      */
     public void setTitle( String strTitle )
     {
@@ -99,16 +104,19 @@ public class ModelResponse implements Serializable
 
     /**
      * Returns the Reponse
+     * 
      * @return The Reponse
      */
-    public String getReponse(  )
+    public String getReponse( )
     {
         return _strReponse;
     }
 
     /**
      * Sets the Reponse
-     * @param strReponse The Reponse
+     * 
+     * @param strReponse
+     *            The Reponse
      */
     public void setReponse( String strReponse )
     {
@@ -117,16 +125,19 @@ public class ModelResponse implements Serializable
 
     /**
      * Returns the Domain
+     * 
      * @return The Domain
      */
-    public String getDomain(  )
+    public String getDomain( )
     {
         return _strDomain;
     }
 
     /**
      * Sets the Domain
-     * @param strDomain The Domain
+     * 
+     * @param strDomain
+     *            The Domain
      */
     public void setDomain( String strDomain )
     {
@@ -135,16 +146,19 @@ public class ModelResponse implements Serializable
 
     /**
      * Returns the IdDomain
+     * 
      * @return The IdDomain
      */
-    public int getIdDomain(  )
+    public int getIdDomain( )
     {
         return _nIdDomain;
     }
 
     /**
      * Sets the IdDomain
-     * @param nIdDomain The IdDomain
+     * 
+     * @param nIdDomain
+     *            The IdDomain
      */
     public void setIdDomain( int nIdDomain )
     {
@@ -152,17 +166,20 @@ public class ModelResponse implements Serializable
     }
 
     /**
-    * Returns the Keyword
-    * @return The Keyword
-    */
-    public String getKeyword(  )
+     * Returns the Keyword
+     * 
+     * @return The Keyword
+     */
+    public String getKeyword( )
     {
         return _strKeyword;
     }
 
     /**
      * Sets the Keyword
-     * @param strKeyword The Keyword
+     * 
+     * @param strKeyword
+     *            The Keyword
      */
     public void setKeyword( String strKeyword )
     {
@@ -170,7 +187,7 @@ public class ModelResponse implements Serializable
     }
 
     @Override
-    public String toString(  )
+    public String toString( )
     {
         return "ModelResponse{" + "_nId=" + _nId + '}';
     }

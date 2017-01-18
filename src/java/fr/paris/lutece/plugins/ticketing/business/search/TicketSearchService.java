@@ -65,7 +65,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * TicketSearchService
  */
@@ -93,20 +92,18 @@ public final class TicketSearchService
     /**
      * Creates a new instance of DirectorySearchService
      */
-    private TicketSearchService(  )
+    private TicketSearchService( )
     {
         // Read configuration properties
-        String strIndex = getIndex(  );
+        String strIndex = getIndex( );
 
         if ( StringUtils.isEmpty( strIndex ) )
         {
             throw new AppException( "Lucene index path not found in ticketing.properties", null );
         }
 
-        _nWriterMergeFactor = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MERGE_FACTOR,
-                DEFAULT_WRITER_MERGE_FACTOR );
-        _nWriterMaxSectorLength = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MAX_FIELD_LENGTH,
-                DEFAULT_WRITER_MAX_FIELD_LENGTH );
+        _nWriterMergeFactor = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MERGE_FACTOR, DEFAULT_WRITER_MERGE_FACTOR );
+        _nWriterMaxSectorLength = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MAX_FIELD_LENGTH, DEFAULT_WRITER_MAX_FIELD_LENGTH );
 
         String strAnalyserClassName = AppPropertiesService.getProperty( PROPERTY_ANALYSER_CLASS_NAME );
 
@@ -119,18 +116,16 @@ public final class TicketSearchService
 
         try
         {
-            @SuppressWarnings( {"unchecked",
-                "rawtypes"
+            @SuppressWarnings( {
+                    "unchecked", "rawtypes"
             } )
-            java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName )
-                                                              .getConstructor( Version.class, String[].class );
-            _analyzer = (Analyzer) constructeur.newInstance( new Object[]
-                    {
-                        IndexationService.LUCENE_INDEX_VERSION, new String[] {  }
-                    } );
+            java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName ).getConstructor( Version.class, String [ ].class );
+            _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {
+                    IndexationService.LUCENE_INDEX_VERSION, new String [ ] { }
+            } );
         }
 
-        catch ( InstantiationException ie )
+        catch( InstantiationException ie )
         {
             @SuppressWarnings( "rawtypes" )
             Class classAnalyzer;
@@ -139,18 +134,20 @@ public final class TicketSearchService
             {
                 classAnalyzer = Class.forName( strAnalyserClassName );
 
-                @SuppressWarnings( {"unchecked",
-                    "rawtypes"
+                @SuppressWarnings( {
+                        "unchecked", "rawtypes"
                 } )
                 java.lang.reflect.Constructor constructeur = classAnalyzer.getConstructor( Version.class );
-                _analyzer = (Analyzer) constructeur.newInstance( new Object[] { IndexationService.LUCENE_INDEX_VERSION } );
+                _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {
+                    IndexationService.LUCENE_INDEX_VERSION
+                } );
             }
-            catch ( Exception e )
+            catch( Exception e )
             {
                 throw new AppException( "Failed to load Lucene Analyzer class", e );
             }
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             throw new AppException( "Failed to load Lucene Analyzer class", e );
         }
@@ -158,13 +155,14 @@ public final class TicketSearchService
 
     /**
      * Get the HelpdeskSearchService instance
+     * 
      * @return The {@link TicketingSearchService}
      */
-    public static TicketSearchService getInstance(  )
+    public static TicketSearchService getInstance( )
     {
         if ( _singleton == null )
         {
-            _singleton = new TicketSearchService(  );
+            _singleton = new TicketSearchService( );
         }
 
         return _singleton;
@@ -172,20 +170,21 @@ public final class TicketSearchService
 
     /**
      * return searcher
+     * 
      * @return searcher
      */
-    public IndexSearcher getSearcher(  )
+    public IndexSearcher getSearcher( )
     {
         IndexSearcher searcher = null;
 
         try
         {
-            IndexReader ir = DirectoryReader.open( NIOFSDirectory.open( new File( getIndex(  ) ) ) );
+            IndexReader ir = DirectoryReader.open( NIOFSDirectory.open( new File( getIndex( ) ) ) );
             searcher = new IndexSearcher( ir );
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
         }
 
         return searcher;
@@ -193,13 +192,14 @@ public final class TicketSearchService
 
     /**
      * Process indexing
-     * @param bCreate true for start full indexing
-     *            false for begin incremental indexing
+     * 
+     * @param bCreate
+     *            true for start full indexing false for begin incremental indexing
      * @return the log
      */
     public String processIndexing( boolean bCreate )
     {
-        StringBuffer sbLogs = new StringBuffer(  );
+        StringBuffer sbLogs = new StringBuffer( );
         IndexWriter writer = null;
         boolean bCreateIndex = bCreate;
 
@@ -207,11 +207,11 @@ public final class TicketSearchService
         {
             sbLogs.append( "\r\nIndexing all contents ...\r\n" );
 
-            Directory dir = NIOFSDirectory.open( new File( getIndex(  ) ) );
+            Directory dir = NIOFSDirectory.open( new File( getIndex( ) ) );
 
             // new
             if ( !DirectoryReader.indexExists( dir ) )
-            { //init index
+            { // init index
                 bCreateIndex = true;
             }
 
@@ -221,9 +221,7 @@ public final class TicketSearchService
             {
                 _nSkipedIndexations++;
 
-                if ( bCreate ||
-                        ( _nSkipedIndexations >= AppPropertiesService.getPropertyInt( PROPERTY_MAX_SKIPPED_INDEXATION,
-                            10 ) ) )
+                if ( bCreate || ( _nSkipedIndexations >= AppPropertiesService.getPropertyInt( PROPERTY_MAX_SKIPPED_INDEXATION, 10 ) ) )
                 {
                     IndexWriter.unlock( dir );
                     bIsLocked = false;
@@ -237,12 +235,11 @@ public final class TicketSearchService
 
             if ( !bIsLocked )
             {
-                Date start = new Date(  );
+                Date start = new Date( );
 
-                IndexWriterConfig conf = new IndexWriterConfig( Version.LUCENE_46,
-                        new LimitTokenCountAnalyzer( _analyzer, _nWriterMaxSectorLength ) );
+                IndexWriterConfig conf = new IndexWriterConfig( Version.LUCENE_46, new LimitTokenCountAnalyzer( _analyzer, _nWriterMaxSectorLength ) );
 
-                LogMergePolicy mergePolicy = new LogDocMergePolicy(  );
+                LogMergePolicy mergePolicy = new LogDocMergePolicy( );
                 mergePolicy.setMergeFactor( _nWriterMergeFactor );
 
                 conf.setMergePolicy( mergePolicy );
@@ -259,27 +256,27 @@ public final class TicketSearchService
                 writer = new IndexWriter( dir, conf );
 
                 sbLogs.append( "\r\n<strong>Indexer : " );
-                sbLogs.append( _indexer.getName(  ) );
+                sbLogs.append( _indexer.getName( ) );
                 sbLogs.append( " - " );
-                sbLogs.append( _indexer.getDescription(  ) );
+                sbLogs.append( _indexer.getDescription( ) );
                 sbLogs.append( "</strong>\r\n" );
                 _indexer.processIndexing( writer, bCreateIndex, sbLogs );
 
-                Date end = new Date(  );
+                Date end = new Date( );
 
                 sbLogs.append( "Duration of the treatment : " );
-                sbLogs.append( end.getTime(  ) - start.getTime(  ) );
+                sbLogs.append( end.getTime( ) - start.getTime( ) );
                 sbLogs.append( " milliseconds\r\n" );
             }
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             sbLogs.append( " caught a " );
-            sbLogs.append( e.getClass(  ) );
+            sbLogs.append( e.getClass( ) );
             sbLogs.append( "\n with message: " );
-            sbLogs.append( e.getMessage(  ) );
+            sbLogs.append( e.getMessage( ) );
             sbLogs.append( "\r\n" );
-            AppLogService.error( "Indexing error : " + e.getMessage(  ), e );
+            AppLogService.error( "Indexing error : " + e.getMessage( ), e );
         }
         finally
         {
@@ -287,27 +284,31 @@ public final class TicketSearchService
             {
                 if ( writer != null )
                 {
-                    writer.close(  );
+                    writer.close( );
                 }
             }
-            catch ( IOException e )
+            catch( IOException e )
             {
-                AppLogService.error( e.getMessage(  ), e );
+                AppLogService.error( e.getMessage( ), e );
             }
         }
 
-        return sbLogs.toString(  );
+        return sbLogs.toString( );
     }
 
     /**
      * Add Indexer Action to perform on a record
-     * @param nIdTicket ticket id
-     * @param nIdTask the key of the action to do
-     * @param plugin the plugin
+     * 
+     * @param nIdTicket
+     *            ticket id
+     * @param nIdTask
+     *            the key of the action to do
+     * @param plugin
+     *            the plugin
      */
     public void addIndexerAction( int nIdTicket, int nIdTask, Plugin plugin )
     {
-        IndexerAction indexerAction = new IndexerAction(  );
+        IndexerAction indexerAction = new IndexerAction( );
         indexerAction.setIdTicket( nIdTicket );
         indexerAction.setIdTask( nIdTask );
         IndexerActionHome.create( indexerAction );
@@ -315,8 +316,11 @@ public final class TicketSearchService
 
     /**
      * Remove a Indexer Action
-     * @param nIdAction the key of the action to remove
-     * @param plugin the plugin
+     * 
+     * @param nIdAction
+     *            the key of the action to remove
+     * @param plugin
+     *            the plugin
      */
     public void removeIndexerAction( int nIdAction, Plugin plugin )
     {
@@ -325,13 +329,16 @@ public final class TicketSearchService
 
     /**
      * return a list of IndexerAction by task key
-     * @param nIdTask the task key
-     * @param plugin the plugin
+     * 
+     * @param nIdTask
+     *            the task key
+     * @param plugin
+     *            the plugin
      * @return a list of IndexerAction
      */
     public List<IndexerAction> getAllIndexerActionByTask( int nIdTask, Plugin plugin )
     {
-        IndexerActionFilter filter = new IndexerActionFilter(  );
+        IndexerActionFilter filter = new IndexerActionFilter( );
         filter.setIdTask( nIdTask );
 
         return IndexerActionHome.getList( filter );
@@ -339,9 +346,10 @@ public final class TicketSearchService
 
     /**
      * Get the path to the index of the search service
+     * 
      * @return The path to the index of the search service
      */
-    private String getIndex(  )
+    private String getIndex( )
     {
         if ( _strIndex == null )
         {
@@ -353,9 +361,10 @@ public final class TicketSearchService
 
     /**
      * Get the analyzed of this search service
+     * 
      * @return The analyzer of this search service
      */
-    public Analyzer getAnalyzer(  )
+    public Analyzer getAnalyzer( )
     {
         return _analyzer;
     }

@@ -44,7 +44,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 
-
 /**
  * JSON formatter for user title resource
  *
@@ -54,13 +53,13 @@ public class UserTitleFormatterJson implements ITicketingFormatter<UserTitle>
     @Override
     public String format( UserTitle userTitle )
     {
-        JSONObject json = new JSONObject(  );
+        JSONObject json = new JSONObject( );
         String strJson = StringUtils.EMPTY;
 
         if ( userTitle != null )
         {
             add( json, userTitle );
-            strJson = json.toString(  );
+            strJson = json.toString( );
         }
 
         return strJson;
@@ -69,19 +68,19 @@ public class UserTitleFormatterJson implements ITicketingFormatter<UserTitle>
     @Override
     public String format( List<UserTitle> listUserTitles )
     {
-        JSONObject json = new JSONObject(  );
-        JSONArray jsonUserTitles = new JSONArray(  );
+        JSONObject json = new JSONObject( );
+        JSONArray jsonUserTitles = new JSONArray( );
 
         for ( UserTitle userTitle : listUserTitles )
         {
-            JSONObject jsonUserTitle = new JSONObject(  );
+            JSONObject jsonUserTitle = new JSONObject( );
             add( jsonUserTitle, userTitle );
             jsonUserTitles.add( jsonUserTitle );
         }
 
         json.accumulate( FormatConstants.KEY_USER_TITLES, jsonUserTitles );
 
-        return json.toString(  );
+        return json.toString( );
     }
 
     @Override
@@ -98,12 +97,15 @@ public class UserTitleFormatterJson implements ITicketingFormatter<UserTitle>
 
     /**
      * Write a user title into a JSON Object
-     * @param json The JSON Object
-     * @param userTitle The user title
+     * 
+     * @param json
+     *            The JSON Object
+     * @param userTitle
+     *            The user title
      */
     private void add( JSONObject json, UserTitle userTitle )
     {
-        json.accumulate( FormatConstants.KEY_ID, userTitle.getId(  ) );
-        json.accumulate( FormatConstants.KEY_LABEL, userTitle.getLabel(  ) );
+        json.accumulate( FormatConstants.KEY_ID, userTitle.getId( ) );
+        json.accumulate( FormatConstants.KEY_LABEL, userTitle.getLabel( ) );
     }
 }

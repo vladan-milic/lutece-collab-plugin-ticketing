@@ -44,7 +44,6 @@ import fr.paris.lutece.util.ReferenceList;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This class provides instances management methods (create, find, ...) for TicketDomain objects
  */
@@ -57,13 +56,15 @@ public final class TicketDomainHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private TicketDomainHome(  )
+    private TicketDomainHome( )
     {
     }
 
     /**
      * Create an instance of the ticketDomain class
-     * @param ticketDomain The instance of the TicketDomain which contains the informations to store
+     * 
+     * @param ticketDomain
+     *            The instance of the TicketDomain which contains the informations to store
      */
     public static void create( TicketDomain ticketDomain )
     {
@@ -72,7 +73,9 @@ public final class TicketDomainHome
 
     /**
      * Update of the ticketDomain which is specified in parameter
-     * @param ticketDomain The instance of the TicketDomain which contains the data to store
+     * 
+     * @param ticketDomain
+     *            The instance of the TicketDomain which contains the data to store
      */
     public static void update( TicketDomain ticketDomain )
     {
@@ -81,7 +84,9 @@ public final class TicketDomainHome
 
     /**
      * Remove the ticketDomain whose identifier is specified in parameter
-     * @param nKey The ticketDomain Id
+     * 
+     * @param nKey
+     *            The ticketDomain Id
      */
     public static void remove( int nKey )
     {
@@ -97,7 +102,9 @@ public final class TicketDomainHome
 
     /**
      * return true if domain can be removed false otherwise
-     * @param nKey The ticketDomain Id
+     * 
+     * @param nKey
+     *            The ticketDomain Id
      * @return true if type can be removed false otherwise
      */
     public static boolean canRemove( int nKey )
@@ -105,12 +112,14 @@ public final class TicketDomainHome
         return _dao.canRemoveDomain( nKey, _plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Returns an instance of a ticketDomain whose identifier is specified in parameter
-     * @param nKey The ticketDomain primary key
+     * 
+     * @param nKey
+     *            The ticketDomain primary key
      * @return an instance of TicketDomain
      */
     public static TicketDomain findByPrimaryKey( int nKey )
@@ -120,25 +129,29 @@ public final class TicketDomainHome
 
     /**
      * Load the data of all the ticketDomain objects and returns them in form of a collection
+     * 
      * @return the collection which contains the data of all the ticketDomain objects
      */
-    public static List<TicketDomain> getTicketDomainsList(  )
+    public static List<TicketDomain> getTicketDomainsList( )
     {
         return _dao.selectTicketDomainsList( _plugin );
     }
 
     /**
      * Load the id of all the ticketDomain objects and returns them in form of a collection
+     * 
      * @return the collection which contains the id of all the ticketDomain objects
      */
-    public static List<Integer> getIdTicketDomainsList(  )
+    public static List<Integer> getIdTicketDomainsList( )
     {
         return _dao.selectIdTicketDomainsList( _plugin );
     }
 
     /**
      * returns referenceList by type of input typeId
-     * @param nTicketTypeId id of type
+     * 
+     * @param nTicketTypeId
+     *            id of type
      * @return ReferenceList of typeId
      */
     public static ReferenceList getReferenceListByType( int nTicketTypeId )
@@ -148,33 +161,38 @@ public final class TicketDomainHome
 
     /**
      * returns referenceList
+     * 
      * @return ReferenceList
      */
-    public static ReferenceList getReferenceList(  )
+    public static ReferenceList getReferenceList( )
     {
         return _dao.selectReferenceList( _plugin );
     }
 
     /**
-    * returns referenceList
-    * @return ReferenceList
-    */
-    public static ReferenceList getReferenceListSimple(  )
+     * returns referenceList
+     * 
+     * @return ReferenceList
+     */
+    public static ReferenceList getReferenceListSimple( )
     {
         return _dao.selectReferenceListSimple( _plugin );
     }
 
     /**
      * returns ticketDomains allowed for an admin user according to RBAC provided permission
-     * @param adminUser admin user
-     * @param strPermission TicketDomainResourceIdService permission
+     * 
+     * @param adminUser
+     *            admin user
+     * @param strPermission
+     *            TicketDomainResourceIdService permission
      * @return domains list filtered by RBAC permission
      */
     public static List<TicketDomain> getTicketDomainsList( AdminUser adminUser, String strPermission )
     {
-        List<TicketDomain> listDomains = new ArrayList<TicketDomain>(  );
+        List<TicketDomain> listDomains = new ArrayList<TicketDomain>( );
 
-        for ( TicketDomain domain : getTicketDomainsList(  ) )
+        for ( TicketDomain domain : getTicketDomainsList( ) )
         {
             if ( RBACService.isAuthorized( domain, strPermission, adminUser ) )
             {

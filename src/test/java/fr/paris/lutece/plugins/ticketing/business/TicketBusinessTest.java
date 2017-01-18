@@ -38,7 +38,6 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.test.LuteceTestCase;
 
-
 public class TicketBusinessTest extends LuteceTestCase
 {
     private final static String REFERENCE1 = "INF20000100001";
@@ -69,10 +68,10 @@ public class TicketBusinessTest extends LuteceTestCase
     private final static String TICKETSTATUSTEXT1 = "TicketStatusText1";
     private final static String TICKETSTATUSTEXT2 = "TicketStatusText2";
 
-    public void testBusiness(  )
+    public void testBusiness( )
     {
         // Initialize an object
-        Ticket ticket = new Ticket(  );
+        Ticket ticket = new Ticket( );
         ticket.setReference( REFERENCE1 );
         ticket.setGuid( GUID1 );
         ticket.setIdUserTitle( IDUSERTITLE1 );
@@ -82,7 +81,7 @@ public class TicketBusinessTest extends LuteceTestCase
         ticket.setFixedPhoneNumber( FIXEDPHONENUMBER1 );
         ticket.setMobilePhoneNumber( MOBILEPHONENUMBER1 );
 
-        TicketCategory ticketCategory = new TicketCategory(  );
+        TicketCategory ticketCategory = new TicketCategory( );
         ticketCategory.setId( IDTICKETCATEGORY1 );
         ticket.setTicketCategory( ticketCategory );
 
@@ -94,20 +93,20 @@ public class TicketBusinessTest extends LuteceTestCase
         // Create test
         TicketHome.create( ticket );
 
-        Ticket ticketStored = TicketHome.findByPrimaryKey( ticket.getId(  ) );
-        assertEquals( ticketStored.getReference(  ), ticket.getReference(  ) );
-        assertEquals( ticketStored.getGuid(  ), ticket.getGuid(  ) );
-        assertEquals( ticketStored.getIdUserTitle(  ), ticket.getIdUserTitle(  ) );
-        assertEquals( ticketStored.getFirstname(  ), ticket.getFirstname(  ) );
-        assertEquals( ticketStored.getLastname(  ), ticket.getLastname(  ) );
-        assertEquals( ticketStored.getEmail(  ), ticket.getEmail(  ) );
-        assertEquals( ticketStored.getFixedPhoneNumber(  ), ticket.getFixedPhoneNumber(  ) );
-        assertEquals( ticketStored.getMobilePhoneNumber(  ), ticket.getMobilePhoneNumber(  ) );
-        assertEquals( ticketStored.getTicketCategory(  ).getId(  ), ticket.getTicketCategory(  ).getId(  ) );
-        assertEquals( ticketStored.getIdContactMode(  ), ticket.getIdContactMode(  ) );
-        assertEquals( ticketStored.getTicketComment(  ), ticket.getTicketComment(  ) );
-        assertEquals( ticketStored.getTicketStatus(  ), ticket.getTicketStatus(  ) );
-        assertEquals( ticketStored.getTicketStatusText(  ), ticket.getTicketStatusText(  ) );
+        Ticket ticketStored = TicketHome.findByPrimaryKey( ticket.getId( ) );
+        assertEquals( ticketStored.getReference( ), ticket.getReference( ) );
+        assertEquals( ticketStored.getGuid( ), ticket.getGuid( ) );
+        assertEquals( ticketStored.getIdUserTitle( ), ticket.getIdUserTitle( ) );
+        assertEquals( ticketStored.getFirstname( ), ticket.getFirstname( ) );
+        assertEquals( ticketStored.getLastname( ), ticket.getLastname( ) );
+        assertEquals( ticketStored.getEmail( ), ticket.getEmail( ) );
+        assertEquals( ticketStored.getFixedPhoneNumber( ), ticket.getFixedPhoneNumber( ) );
+        assertEquals( ticketStored.getMobilePhoneNumber( ), ticket.getMobilePhoneNumber( ) );
+        assertEquals( ticketStored.getTicketCategory( ).getId( ), ticket.getTicketCategory( ).getId( ) );
+        assertEquals( ticketStored.getIdContactMode( ), ticket.getIdContactMode( ) );
+        assertEquals( ticketStored.getTicketComment( ), ticket.getTicketComment( ) );
+        assertEquals( ticketStored.getTicketStatus( ), ticket.getTicketStatus( ) );
+        assertEquals( ticketStored.getTicketStatusText( ), ticket.getTicketStatusText( ) );
 
         // Update test
         ticket.setIdUserTitle( IDUSERTITLE2 );
@@ -120,7 +119,7 @@ public class TicketBusinessTest extends LuteceTestCase
         ticket.setFixedPhoneNumber( FIXEDPHONENUMBER2 );
         ticket.setMobilePhoneNumber( MOBILEPHONENUMBER2 );
 
-        ticketCategory = new TicketCategory(  );
+        ticketCategory = new TicketCategory( );
         ticketCategory.setId( IDTICKETCATEGORY2 );
         ticket.setTicketCategory( ticketCategory );
 
@@ -129,27 +128,27 @@ public class TicketBusinessTest extends LuteceTestCase
         ticket.setTicketStatus( TICKETSTATUS2 );
         ticket.setTicketStatusText( TICKETSTATUSTEXT2 );
         TicketHome.update( ticket );
-        ticketStored = TicketHome.findByPrimaryKey( ticket.getId(  ) );
-        assertEquals( ticketStored.getReference(  ), ticket.getReference(  ) );
-        assertEquals( ticketStored.getGuid(  ), ticket.getGuid(  ) );
-        assertEquals( ticketStored.getIdUserTitle(  ), ticket.getIdUserTitle(  ) );
-        assertEquals( ticketStored.getFirstname(  ), ticket.getFirstname(  ) );
-        assertEquals( ticketStored.getLastname(  ), ticket.getLastname(  ) );
-        assertEquals( ticketStored.getEmail(  ), ticket.getEmail(  ) );
-        assertEquals( ticketStored.getFixedPhoneNumber(  ), ticket.getFixedPhoneNumber(  ) );
-        assertEquals( ticketStored.getMobilePhoneNumber(  ), ticket.getMobilePhoneNumber(  ) );
-        assertEquals( ticketStored.getTicketCategory(  ).getId(  ), ticket.getTicketCategory(  ).getId(  ) );
-        assertEquals( ticketStored.getIdContactMode(  ), ticket.getIdContactMode(  ) );
-        assertEquals( ticketStored.getTicketComment(  ), ticket.getTicketComment(  ) );
-        assertEquals( ticketStored.getTicketStatus(  ), ticket.getTicketStatus(  ) );
-        assertEquals( ticketStored.getTicketStatusText(  ), ticket.getTicketStatusText(  ) );
+        ticketStored = TicketHome.findByPrimaryKey( ticket.getId( ) );
+        assertEquals( ticketStored.getReference( ), ticket.getReference( ) );
+        assertEquals( ticketStored.getGuid( ), ticket.getGuid( ) );
+        assertEquals( ticketStored.getIdUserTitle( ), ticket.getIdUserTitle( ) );
+        assertEquals( ticketStored.getFirstname( ), ticket.getFirstname( ) );
+        assertEquals( ticketStored.getLastname( ), ticket.getLastname( ) );
+        assertEquals( ticketStored.getEmail( ), ticket.getEmail( ) );
+        assertEquals( ticketStored.getFixedPhoneNumber( ), ticket.getFixedPhoneNumber( ) );
+        assertEquals( ticketStored.getMobilePhoneNumber( ), ticket.getMobilePhoneNumber( ) );
+        assertEquals( ticketStored.getTicketCategory( ).getId( ), ticket.getTicketCategory( ).getId( ) );
+        assertEquals( ticketStored.getIdContactMode( ), ticket.getIdContactMode( ) );
+        assertEquals( ticketStored.getTicketComment( ), ticket.getTicketComment( ) );
+        assertEquals( ticketStored.getTicketStatus( ), ticket.getTicketStatus( ) );
+        assertEquals( ticketStored.getTicketStatusText( ), ticket.getTicketStatusText( ) );
 
         // List test
-        TicketHome.getTicketsList(  );
+        TicketHome.getTicketsList( );
 
         // Delete test
-        TicketHome.remove( ticket.getId(  ) );
-        ticketStored = TicketHome.findByPrimaryKey( ticket.getId(  ) );
+        TicketHome.remove( ticket.getId( ) );
+        ticketStored = TicketHome.findByPrimaryKey( ticket.getId( ) );
         assertNull( ticketStored );
     }
 }

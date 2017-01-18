@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.search.SearchItem;
 
 import org.apache.lucene.document.Document;
 
-
 /**
  * Ticket Search Item
  */
@@ -86,7 +85,7 @@ public class TicketSearchItem extends SearchItem
     /**
      * @return the _strReference
      */
-    public String getReference(  )
+    public String getReference( )
     {
         return _strReference;
     }
@@ -103,7 +102,7 @@ public class TicketSearchItem extends SearchItem
     /**
      * @return the _strTicketId
      */
-    public String getTicketId(  )
+    public String getTicketId( )
     {
         return _strTicketId;
     }
@@ -120,7 +119,7 @@ public class TicketSearchItem extends SearchItem
     /**
      * @return the _strCategory
      */
-    public String getCategory(  )
+    public String getCategory( )
     {
         return _strCategory;
     }
@@ -134,7 +133,7 @@ public class TicketSearchItem extends SearchItem
         this._strCategory = strCategory;
     }
 
-    public String get_strPrecision(  )
+    public String get_strPrecision( )
     {
         return _strPrecision;
     }
@@ -145,9 +144,9 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-    * @return the _strDomain
-    */
-    public String getDomain(  )
+     * @return the _strDomain
+     */
+    public String getDomain( )
     {
         return _strDomain;
     }
@@ -164,7 +163,7 @@ public class TicketSearchItem extends SearchItem
     /**
      * @return the _strResponse
      */
-    public String getResponse(  )
+    public String getResponse( )
     {
         return _strResponse;
     }
@@ -181,7 +180,7 @@ public class TicketSearchItem extends SearchItem
     /**
      * @return the _strComment
      */
-    public String getComment(  )
+    public String getComment( )
     {
         return _strComment;
     }
@@ -198,7 +197,7 @@ public class TicketSearchItem extends SearchItem
     /**
      * @return the _strNomenclature
      */
-    public String getNomenclature(  )
+    public String getNomenclature( )
     {
         return _strNomenclature;
     }

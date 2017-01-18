@@ -40,7 +40,6 @@ import fr.paris.lutece.plugins.workflowcore.business.workflow.Workflow;
 
 import java.util.Collection;
 
-
 /**
  * This class is a decorator of the class {@link fr.paris.lutece.plugins.workflowcore.business.action.Action} for Ticketing
  *
@@ -52,8 +51,11 @@ public class TicketingAction extends Action
 
     /**
      * Constructor
-     * @param action the action
-     * @param bIsDisplayTasksForm {@code true} if the task form must be displayed, {@code false} otherwise
+     * 
+     * @param action
+     *            the action
+     * @param bIsDisplayTasksForm
+     *            {@code true} if the task form must be displayed, {@code false} otherwise
      */
     public TicketingAction( Action action, boolean bIsDisplayTasksForm )
     {
@@ -64,9 +66,9 @@ public class TicketingAction extends Action
     /**
      * {@inheritDoc }
      */
-    public int getId(  )
+    public int getId( )
     {
-        return _action.getId(  );
+        return _action.getId( );
     }
 
     /**
@@ -80,9 +82,9 @@ public class TicketingAction extends Action
     /**
      * {@inheritDoc }
      */
-    public String getName(  )
+    public String getName( )
     {
-        return _action.getName(  );
+        return _action.getName( );
     }
 
     /**
@@ -96,9 +98,9 @@ public class TicketingAction extends Action
     /**
      * {@inheritDoc }
      */
-    public String getDescription(  )
+    public String getDescription( )
     {
-        return _action.getDescription(  );
+        return _action.getDescription( );
     }
 
     /**
@@ -112,9 +114,9 @@ public class TicketingAction extends Action
     /**
      * {@inheritDoc }
      */
-    public Icon getIcon(  )
+    public Icon getIcon( )
     {
-        return _action.getIcon(  );
+        return _action.getIcon( );
     }
 
     /**
@@ -128,9 +130,9 @@ public class TicketingAction extends Action
     /**
      * {@inheritDoc }
      */
-    public State getStateBefore(  )
+    public State getStateBefore( )
     {
-        return _action.getStateBefore(  );
+        return _action.getStateBefore( );
     }
 
     /**
@@ -144,9 +146,9 @@ public class TicketingAction extends Action
     /**
      * {@inheritDoc }
      */
-    public State getStateAfter(  )
+    public State getStateAfter( )
     {
-        return _action.getStateAfter(  );
+        return _action.getStateAfter( );
     }
 
     /**
@@ -160,7 +162,7 @@ public class TicketingAction extends Action
     /**
      * {@inheritDoc }
      */
-    public String getResourceTypeCode(  )
+    public String getResourceTypeCode( )
     {
         return RESOURCE_TYPE;
     }
@@ -168,17 +170,17 @@ public class TicketingAction extends Action
     /**
      * {@inheritDoc }
      */
-    public String getResourceId(  )
+    public String getResourceId( )
     {
-        return Integer.toString( _action.getId(  ) );
+        return Integer.toString( _action.getId( ) );
     }
 
     /**
      * {@inheritDoc }
      */
-    public Workflow getWorkflow(  )
+    public Workflow getWorkflow( )
     {
-        return _action.getWorkflow(  );
+        return _action.getWorkflow( );
     }
 
     /**
@@ -192,9 +194,9 @@ public class TicketingAction extends Action
     /**
      * {@inheritDoc }
      */
-    public boolean isAutomaticState(  )
+    public boolean isAutomaticState( )
     {
-        return _action.isAutomaticState(  );
+        return _action.isAutomaticState( );
     }
 
     /**
@@ -216,9 +218,9 @@ public class TicketingAction extends Action
     /**
      * {@inheritDoc }
      */
-    public boolean isMassAction(  )
+    public boolean isMassAction( )
     {
-        return _action.isMassAction(  );
+        return _action.isMassAction( );
     }
 
     /**
@@ -232,17 +234,17 @@ public class TicketingAction extends Action
     /**
      * {@inheritDoc }
      */
-    public Collection<Integer> getListIdsLinkedAction(  )
+    public Collection<Integer> getListIdsLinkedAction( )
     {
-        return _action.getListIdsLinkedAction(  );
+        return _action.getListIdsLinkedAction( );
     }
 
     /**
      * {@inheritDoc }
      */
-    public int getOrder(  )
+    public int getOrder( )
     {
-        return _action.getOrder(  );
+        return _action.getOrder( );
     }
 
     /**
@@ -256,9 +258,9 @@ public class TicketingAction extends Action
     /**
      * {@inheritDoc }
      */
-    public boolean isAutomaticReflexiveAction(  )
+    public boolean isAutomaticReflexiveAction( )
     {
-        return _action.isAutomaticReflexiveAction(  );
+        return _action.isAutomaticReflexiveAction( );
     }
 
     /**
@@ -271,9 +273,10 @@ public class TicketingAction extends Action
 
     /**
      * Checks if the task form must be displayed or not
+     * 
      * @return {@code true} if the task form must be displayed, {@code false} otherwise
      */
-    public boolean isDisplayTasksForm(  )
+    public boolean isDisplayTasksForm( )
     {
         return _bDisplayTasksForm;
     }

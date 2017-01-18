@@ -43,7 +43,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * class EntryTypePhone
  */
@@ -89,6 +88,6 @@ public class EntryTypePhone extends EntryTypeText
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_READ_ONLY_HTML, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 }

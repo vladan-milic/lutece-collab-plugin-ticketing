@@ -54,7 +54,6 @@ import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.constants.Messages;
 
-
 /**
  * This class is a controller for Ajax calls
  *
@@ -74,7 +73,6 @@ public class StandaloneJspBean extends WorkflowCapableJspBean
 
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
 
-
     /**
      * returns form linked to the selected category
      *
@@ -85,39 +83,35 @@ public class StandaloneJspBean extends WorkflowCapableJspBean
     @View( VIEW_TICKET_FORM )
     public String getTicketForm( HttpServletRequest request )
     {
-        //Check user rights
-        if ( !RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_VIEW, getUser(  ) ) )
+        // Check user rights
+        if ( !RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_VIEW, getUser( ) ) )
         {
-            return redirect( request,
-                AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+            return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
         }
 
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         String strResetResponse = request.getParameter( PARAMETER_RESET_RESPONSE );
 
-        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession(  ) );
+        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
 
-        if ( StringUtils.isNotEmpty( strResetResponse ) &&
-                strResetResponse.equalsIgnoreCase( Boolean.TRUE.toString(  ) ) )
+        if ( StringUtils.isNotEmpty( strResetResponse ) && strResetResponse.equalsIgnoreCase( Boolean.TRUE.toString( ) ) )
         {
-            TicketAsynchronousUploadHandler.getHandler(  ).removeSessionFiles( request.getSession(  ).getId(  ) );
+            TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( request.getSession( ).getId( ) );
 
             if ( ticket != null )
             {
-                ticket.setListResponse( new ArrayList<Response>(  ) );
+                ticket.setListResponse( new ArrayList<Response>( ) );
             }
         }
 
         if ( !StringUtils.isEmpty( strIdCategory ) && StringUtils.isNumeric( strIdCategory ) )
         {
             int nIdCategory = Integer.parseInt( strIdCategory );
-            return _ticketFormService.getHtmlFormInputs( getLocale(  ), false, nIdCategory, null, request );
+            return _ticketFormService.getHtmlFormInputs( getLocale( ), false, nIdCategory, null, request );
         }
 
         return StringUtils.EMPTY;
     }
-
-
 
     @Override
     public String redirectAfterWorkflowAction( HttpServletRequest request )

@@ -38,7 +38,6 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
 
-
 /**
  * IChannelDAO Interface
  */
@@ -74,7 +73,7 @@ public interface IChannelDAO
      */
     void delete( int nKey, Plugin plugin );
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
@@ -89,30 +88,25 @@ public interface IChannelDAO
     Channel load( int nKey, Plugin plugin );
 
     /**
-     * Load the data of all the channel objects and returns them as a
-     * collection
+     * Load the data of all the channel objects and returns them as a collection
      *
      * @param plugin
      *            the Plugin
-     * @return The collection which contains the data of all the channel
-     *         objects
+     * @return The collection which contains the data of all the channel objects
      */
     List<Channel> selectChannelList( Plugin plugin );
 
     /**
-     * Load the id of all the channel objects and returns them as a
-     * collection
+     * Load the id of all the channel objects and returns them as a collection
      *
      * @param plugin
      *            the Plugin
-     * @return The collection which contains the id of all the channel
-     *         objects
+     * @return The collection which contains the id of all the channel objects
      */
     List<Integer> selectIdChannelList( Plugin plugin );
 
     /**
-     * Load the data of all the channel objects and returns them as a
-     * reference list
+     * Load the data of all the channel objects and returns them as a reference list
      *
      * @param plugin
      *            the Plugin

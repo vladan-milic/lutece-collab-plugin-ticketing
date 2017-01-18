@@ -47,7 +47,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
-
 /**
  * REST service for user title resource
  *
@@ -57,24 +56,25 @@ public class UserTitleRest extends TicketingRest
 {
     /**
      * Gives the user titles
-     * @param accept the accepted format
-     * @param format the format
+     * 
+     * @param accept
+     *            the accepted format
+     * @param format
+     *            the format
      * @return the list of user titles
      */
     @GET
     @Path( Constants.ALL_PATH )
-    public Response getUserTitles( @HeaderParam( HttpHeaders.ACCEPT )
-    String accept, @QueryParam( Constants.FORMAT_QUERY )
-    String format )
+    public Response getUserTitles( @HeaderParam( HttpHeaders.ACCEPT ) String accept, @QueryParam( Constants.FORMAT_QUERY ) String format )
     {
         String strMediaType = getMediaType( accept, format );
 
         IFormatterFactory formatterFactory = _formatterFactories.get( strMediaType );
 
-        List<UserTitle> listUserTitles = UserTitleHome.getUserTitlesList(  );
+        List<UserTitle> listUserTitles = UserTitleHome.getUserTitlesList( );
 
         String strResponse = formatterFactory.createFormatter( UserTitle.class ).format( listUserTitles );
 
-        return Response.ok( strResponse, strMediaType ).build(  );
+        return Response.ok( strResponse, strMediaType ).build( );
     }
 }

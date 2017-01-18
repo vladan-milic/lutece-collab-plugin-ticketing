@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  * IInstantResponseDAO Interface
  */
@@ -45,46 +44,62 @@ public interface IInstantResponseDAO
 {
     /**
      * Insert a new record in the table.
-     * @param instantResponse instance of the InstantResponse object to insert
-     * @param plugin the Plugin
+     * 
+     * @param instantResponse
+     *            instance of the InstantResponse object to insert
+     * @param plugin
+     *            the Plugin
      */
     void insert( InstantResponse instantResponse, Plugin plugin );
 
     /**
      * Update the record in the table
-     * @param instantResponse the reference of the InstantResponse
-     * @param plugin the Plugin
+     * 
+     * @param instantResponse
+     *            the reference of the InstantResponse
+     * @param plugin
+     *            the Plugin
      */
     void store( InstantResponse instantResponse, Plugin plugin );
 
     /**
      * Delete a record from the table
-     * @param nKey The identifier of the InstantResponse to delete
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the InstantResponse to delete
+     * @param plugin
+     *            the Plugin
      */
     void delete( int nKey, Plugin plugin );
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Load the data from the table
-     * @param nKey The identifier of the instantResponse
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the instantResponse
+     * @param plugin
+     *            the Plugin
      * @return The instance of the instantResponse
      */
     InstantResponse load( int nKey, Plugin plugin );
 
     /**
      * Load the data of all the instantResponse objects and returns them as a collection
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The collection which contains the data of all the instantResponse objects
      */
     List<InstantResponse> selectInstantResponsesList( Plugin plugin );
 
     /**
      * Load the id of all the instantResponse objects and returns them as a collection
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The collection which contains the id of all the instantResponse objects
      */
     List<Integer> selectIdInstantResponsesList( Plugin plugin );

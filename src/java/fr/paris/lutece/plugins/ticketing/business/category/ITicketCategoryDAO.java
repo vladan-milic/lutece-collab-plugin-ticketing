@@ -38,7 +38,6 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
 
-
 /**
  * ITicketCategoryDAO Interface
  */
@@ -46,146 +45,203 @@ public interface ITicketCategoryDAO
 {
     /**
      * Insert a new record in the table.
-     * @param ticketCategory instance of the TicketCategory object to insert
-     * @param plugin the Plugin
+     * 
+     * @param ticketCategory
+     *            instance of the TicketCategory object to insert
+     * @param plugin
+     *            the Plugin
      */
     void insert( TicketCategory ticketCategory, Plugin plugin );
 
     /**
      * Insert a new record in the table linking category with input.
-     * @param nIdCategory id Category
-     * @param nIdInput id Input
-     * @param nPos input position
-     * @param plugin the Plugin
+     * 
+     * @param nIdCategory
+     *            id Category
+     * @param nIdInput
+     *            id Input
+     * @param nPos
+     *            input position
+     * @param plugin
+     *            the Plugin
      */
     void insertLinkCategoryInput( int nIdCategory, int nIdInput, int nPos, Plugin plugin );
 
     /**
      * Update the record in the table
-     * @param ticketCategory the reference of the TicketCategory
-     * @param plugin the Plugin
+     * 
+     * @param ticketCategory
+     *            the reference of the TicketCategory
+     * @param plugin
+     *            the Plugin
      */
     void store( TicketCategory ticketCategory, Plugin plugin );
 
     /**
      * Delete a record from the table
-     * @param nKey The identifier of the TicketCategory to delete
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the TicketCategory to delete
+     * @param plugin
+     *            the Plugin
      */
     void delete( int nKey, Plugin plugin );
 
     /**
      * Delete a record in the table linking category with input.
-     * @param nIdCategory id Category
-     * @param nIdInput id Input
-     * @param plugin the Plugin
+     * 
+     * @param nIdCategory
+     *            id Category
+     * @param nIdInput
+     *            id Input
+     * @param plugin
+     *            the Plugin
      */
     void deleteLinkCategoryInput( int nIdCategory, int nIdInput, Plugin plugin );
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Load the data from the table
-     * @param nKey The identifier of the ticketCategory
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the ticketCategory
+     * @param plugin
+     *            the Plugin
      * @return The instance of the ticketCategory
      */
     TicketCategory load( int nKey, Plugin plugin );
 
     /**
      * Load the data from the table
-     * @param strCode The code of the category
-     * @param plugin the Plugin
+     * 
+     * @param strCode
+     *            The code of the category
+     * @param plugin
+     *            the Plugin
      * @return The instance of the ticketCategory
      */
     TicketCategory loadByCode( String strCode, Plugin plugin );
 
     /**
      * Load the data from the table
-     * @param nDomainId The domain id of the category
-     * @param plugin the Plugin
+     * 
+     * @param nDomainId
+     *            The domain id of the category
+     * @param plugin
+     *            the Plugin
      * @return The instance of the ticketCategory
      */
     List<TicketCategory> loadByDomainId( int nDomainId, Plugin plugin );
 
     /**
      * Load the data of all the ticketCategory objects and returns them as a collection
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The collection which contains the data of all the ticketCategory objects
      */
     List<TicketCategory> selectTicketCategorysList( Plugin plugin );
 
     /**
      * Load the id of all the ticketCategory objects and returns them as a collection
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The collection which contains the id of all the ticketCategory objects
      */
     List<Integer> selectIdTicketCategorysList( Plugin plugin );
 
     /**
      * Create a reference list of categories for a given domain
-     * @param nDomainId The domain ID
-     * @param plugin The plugin
+     * 
+     * @param nDomainId
+     *            The domain ID
+     * @param plugin
+     *            The plugin
      * @return The reference list
      */
     ReferenceList selectReferenceListByDomain( int nDomainId, Plugin plugin );
 
     /**
-     * Insert a new record in the table linking category with input
-     * Using the next available value for pos
-     * @param nIdCategory id Category
-     * @param nIdInput id Input
-     * @param plugin the Plugin
+     * Insert a new record in the table linking category with input Using the next available value for pos
+     * 
+     * @param nIdCategory
+     *            id Category
+     * @param nIdInput
+     *            id Input
+     * @param plugin
+     *            the Plugin
      */
     void insertLinkCategoryInputNextPos( int nIdCategory, int nIdInput, Plugin plugin );
 
     /**
      * Update pos field in the table linking category with input
-     * @param nIdCategory id Category
-     * @param nIdInput id Input
-     * @param nPos the position to update
-     * @param plugin the Plugin
+     * 
+     * @param nIdCategory
+     *            id Category
+     * @param nIdInput
+     *            id Input
+     * @param nPos
+     *            the position to update
+     * @param plugin
+     *            the Plugin
      */
     void updateLinkCategoryInputPos( int nIdCategory, int nIdInput, int nPos, Plugin plugin );
 
     /**
      * returns the position of an input for a given category
-     * @param nId id of category
-     * @param nIdInput id of input
+     * 
+     * @param nId
+     *            id of category
+     * @param nIdInput
+     *            id of input
      * @return the position as an integer
      */
     int selectCategoryInputPosition( int nId, int nIdInput, Plugin _plugin );
 
     /**
      * returns the iD of an input for a given category and position
-     * @param nId id of category
-     * @param nIdInput the position
+     * 
+     * @param nId
+     *            id of category
+     * @param nIdInput
+     *            the position
      * @return the input id
      */
     int selectCategoryInputByPosition( int nId, int nPos, Plugin plugin );
 
     /**
      * Create a reference list of categories for a given domain for a given category name
-     * @param nDomainId The domain ID
-     * @param labelCategory The label category
-     * @param plugin The plugin
+     * 
+     * @param nDomainId
+     *            The domain ID
+     * @param labelCategory
+     *            The label category
+     * @param plugin
+     *            The plugin
      * @return The reference list
      */
     ReferenceList selectReferenceListByCategory( int nDomainId, String labelCategory, Plugin _plugin );
 
     /**
-    * Load the id of all inputs related to the ticketCategory id and returns them as a collection
-    * @param nCategoryId The Category ID
-    * @param plugin The plugin
-    * @return The collection which contains the id of all the ticketCategory objects
-    */
+     * Load the id of all inputs related to the ticketCategory id and returns them as a collection
+     * 
+     * @param nCategoryId
+     *            The Category ID
+     * @param plugin
+     *            The plugin
+     * @return The collection which contains the id of all the ticketCategory objects
+     */
     List<Integer> selectIdInputListByCategory( int nCategoryId, Plugin _plugin );
 
     /**
      * Check if an input is already used in a Category form
-     * @param nIdResource the id_resource of the input to be checked
-     * @return  true if the input is linked to 1 or more Categories
+     * 
+     * @param nIdResource
+     *            the id_resource of the input to be checked
+     * @return true if the input is linked to 1 or more Categories
      */
     boolean checkIfInputIsUsedInCategories( int nIdResource, Plugin _plugin );
 }

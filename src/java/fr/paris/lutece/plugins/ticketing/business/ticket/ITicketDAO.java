@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 
 import java.util.List;
 
-
 /**
  * ITicketDAO Interface
  */
@@ -45,46 +44,59 @@ public interface ITicketDAO
 {
     /**
      * Insert a new record in the table.
-     * @param ticket instance of the Ticket object to insert
-     * @param plugin the Plugin
+     * 
+     * @param ticket
+     *            instance of the Ticket object to insert
+     * @param plugin
+     *            the Plugin
      */
     void insert( Ticket ticket, Plugin plugin );
 
     /**
      * Update the record in the table
-     * @param ticket the reference of the Ticket
-     * @param plugin the Plugin
+     * 
+     * @param ticket
+     *            the reference of the Ticket
+     * @param plugin
+     *            the Plugin
      */
     void store( Ticket ticket, Plugin plugin );
 
     /**
      * Delete a record from the table
-     * @param nKey The identifier of the Ticket to delete
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the Ticket to delete
+     * @param plugin
+     *            the Plugin
      */
     void delete( int nKey, Plugin plugin );
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Load the data from the table
-     * @param nKey The identifier of the ticket
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the ticket
+     * @param plugin
+     *            the Plugin
      * @return The instance of the ticket
      */
     Ticket load( int nKey, Plugin plugin );
 
     /**
      * Load the data of all the ticket objects and returns them as a collection
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The collection which contains the data of all the ticket objects
      */
     List<Ticket> selectTicketsList( Plugin plugin );
 
     /**
-     * Load the data of all the ticket objects matching input filter and returns
-     * them as a collection
+     * Load the data of all the ticket objects matching input filter and returns them as a collection
      *
      * @param filter
      *            search filter
@@ -105,9 +117,13 @@ public interface ITicketDAO
 
     /**
      * Stores the flag to know if the ticket has been read (by the assignee user)
-     * @param nIdTicket the ticket id
-     * @param bIsRead {@code true} if the ticket has been read, {@code false} otherwise
-     * @param plugin the plugin
+     * 
+     * @param nIdTicket
+     *            the ticket id
+     * @param bIsRead
+     *            {@code true} if the ticket has been read, {@code false} otherwise
+     * @param plugin
+     *            the plugin
      */
     void storeIsRead( int nIdTicket, boolean bIsRead, Plugin plugin );
 
@@ -117,40 +133,55 @@ public interface ITicketDAO
 
     /**
      * Associates a response to a ticket
-     * @param nIdTicket The id of the ticket
-     * @param nIdResponse The id of the response
-     * @param plugin The plugin
+     * 
+     * @param nIdTicket
+     *            The id of the ticket
+     * @param nIdResponse
+     *            The id of the response
+     * @param plugin
+     *            The plugin
      */
     void insertTicketResponse( int nIdTicket, int nIdResponse, Plugin plugin );
 
     /**
      * Get the list of id of responses associated with an ticket
-     * @param nIdTicket the id of the ticket
-     * @param plugin the plugin
+     * 
+     * @param nIdTicket
+     *            the id of the ticket
+     * @param plugin
+     *            the plugin
      * @return the list of responses, or an empty list if no response was found
      */
     List<Integer> findListIdResponse( int nIdTicket, Plugin plugin );
 
     /**
      * Remove the association between an ticket and responses
-     * @param nIdTicket The id of the ticket
-     * @param plugin The plugin
+     * 
+     * @param nIdTicket
+     *            The id of the ticket
+     * @param plugin
+     *            The plugin
      */
     void deleteTicketResponse( int nIdTicket, Plugin plugin );
 
     /**
-    * Remove an ticket responses from the id of a response.
-    * @param nIdResponse The id of the response
-    * @param plugin The plugin
-    */
+     * Remove an ticket responses from the id of a response.
+     * 
+     * @param nIdResponse
+     *            The id of the response
+     * @param plugin
+     *            The plugin
+     */
     void removeTicketResponsesByIdResponse( int nIdResponse, Plugin plugin );
 
     /**
      * Find the id of the ticket associated with a given response
-     * @param nIdResponse The id of the response
-     * @param plugin The plugin
-     * @return The id of the ticket, or 0 if no ticket is associated
-     *         with he given response.
+     * 
+     * @param nIdResponse
+     *            The id of the response
+     * @param plugin
+     *            The plugin
+     * @return The id of the ticket, or 0 if no ticket is associated with he given response.
      */
     int findIdTicketByIdResponse( int nIdResponse, Plugin plugin );
 }

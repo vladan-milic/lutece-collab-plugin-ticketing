@@ -47,7 +47,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
-
 /**
  * REST service for ticket type resource
  */
@@ -56,24 +55,25 @@ public class TypeRest extends TicketingRest
 {
     /**
      * Gives the ticket types
-     * @param accept the accepted format
-     * @param format the format
+     * 
+     * @param accept
+     *            the accepted format
+     * @param format
+     *            the format
      * @return the list of ticket types
      */
     @GET
     @Path( Constants.ALL_PATH )
-    public Response getTypes( @HeaderParam( HttpHeaders.ACCEPT )
-    String accept, @QueryParam( Constants.FORMAT_QUERY )
-    String format )
+    public Response getTypes( @HeaderParam( HttpHeaders.ACCEPT ) String accept, @QueryParam( Constants.FORMAT_QUERY ) String format )
     {
         String strMediaType = getMediaType( accept, format );
 
         IFormatterFactory formatterFactory = _formatterFactories.get( strMediaType );
 
-        List<TicketType> listTicketTypes = TicketTypeHome.getTicketTypesList(  );
+        List<TicketType> listTicketTypes = TicketTypeHome.getTicketTypesList( );
 
         String strResponse = formatterFactory.createFormatter( TicketType.class ).format( listTicketTypes );
 
-        return Response.ok( strResponse, strMediaType ).build(  );
+        return Response.ok( strResponse, strMediaType ).build( );
     }
 }

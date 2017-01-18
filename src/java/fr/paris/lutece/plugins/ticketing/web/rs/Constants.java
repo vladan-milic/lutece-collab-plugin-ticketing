@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
-
 /**
  * This class provides constants for REST services
  *
@@ -54,7 +53,7 @@ public final class Constants
     /**
      * Default constructor
      */
-    private Constants(  )
+    private Constants( )
     {
     }
 }

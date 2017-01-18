@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.search;
 
-
 /**
  *
  * IndexerAction
@@ -61,16 +60,19 @@ public class IndexerAction
 
     /**
      * gets the action id
+     * 
      * @return the action id
      */
-    public int getIdAction(  )
+    public int getIdAction( )
     {
         return _nIdAction;
     }
 
     /**
      * set the action id
-     * @param nIdAction idAction
+     * 
+     * @param nIdAction
+     *            idAction
      */
     public void setIdAction( int nIdAction )
     {
@@ -79,16 +81,19 @@ public class IndexerAction
 
     /**
      * gets ticket id
+     * 
      * @return the record Id
      */
-    public int getIdTicket(  )
+    public int getIdTicket( )
     {
         return _nIdTicket;
     }
 
     /**
      * set the recordId
-     * @param nIdTicket record if
+     * 
+     * @param nIdTicket
+     *            record if
      */
     public void setIdTicket( int nIdTicket )
     {
@@ -97,16 +102,19 @@ public class IndexerAction
 
     /**
      * get the task id
+     * 
      * @return the task id
      */
-    public int getIdTask(  )
+    public int getIdTask( )
     {
         return _nIdTask;
     }
 
     /**
      * set the task id
-     * @param nIdTask the task id
+     * 
+     * @param nIdTask
+     *            the task id
      */
     public void setIdTask( int nIdTask )
     {

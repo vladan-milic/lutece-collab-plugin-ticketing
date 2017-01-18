@@ -56,23 +56,19 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * This class provides the user interface to manage SupportEntity features ( manage, create, modify, remove )
  */
 @Controller( controllerJsp = "ManageSupportEntities.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
 public class SupportEntityJspBean extends ManageAdminTicketingJspBean
 {
-    ////////////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////////////
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_SUPPORT_ENTITIES = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
-        "manage_support_entities.html";
-    private static final String TEMPLATE_CREATE_SUPPORT_ENTITY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
-        "create_support_entity.html";
-    private static final String TEMPLATE_MODIFY_SUPPORT_ENTITY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH +
-        "modify_support_entity.html";
+    private static final String TEMPLATE_MANAGE_SUPPORT_ENTITIES = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_support_entities.html";
+    private static final String TEMPLATE_CREATE_SUPPORT_ENTITY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_support_entity.html";
+    private static final String TEMPLATE_MODIFY_SUPPORT_ENTITY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_support_entity.html";
 
     // Parameters
     private static final String PARAMETER_ID_SUPPORT_ENTITY = "id";
@@ -91,8 +87,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_UNIT_LIST = "unit_list";
     private static final String MARK_LEVEL_LIST = "level_list";
-    private static final String JSP_MANAGE_SUPPORT_ENTITIES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH +
-        "ManageSupportEntities.jsp";
+    private static final String JSP_MANAGE_SUPPORT_ENTITIES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageSupportEntities.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_SUPPORT_ENTITY = "ticketing.message.confirmRemoveSupportEntity";
@@ -120,7 +115,9 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
 
     /**
      * Build the Manage View
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The page
      */
     @View( value = VIEW_MANAGE_SUPPORT_ENTITIES, defaultView = true )
@@ -128,9 +125,8 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     {
         _supportEntity = null;
 
-        List<SupportEntity> listSupportEntities = (List<SupportEntity>) SupportEntityHome.getSupportEntityList(  );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_SUPPORT_ENTITY_LIST, listSupportEntities,
-                JSP_MANAGE_SUPPORT_ENTITIES );
+        List<SupportEntity> listSupportEntities = (List<SupportEntity>) SupportEntityHome.getSupportEntityList( );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_SUPPORT_ENTITY_LIST, listSupportEntities, JSP_MANAGE_SUPPORT_ENTITIES );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_SUPPORT_ENTITIES, TEMPLATE_MANAGE_SUPPORT_ENTITIES, model );
     }
@@ -138,19 +134,20 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     /**
      * Returns the form to create a supportentity
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code of the supportentity form
      */
     @View( VIEW_CREATE_SUPPORT_ENTITY )
     public String getCreateSupportEntity( HttpServletRequest request )
     {
-        _supportEntity = ( _supportEntity != null ) ? _supportEntity : new SupportEntity(  );
+        _supportEntity = ( _supportEntity != null ) ? _supportEntity : new SupportEntity( );
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
         model.put( MARK_SUPPORT_ENTITY, _supportEntity );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
-        model.put( MARK_LEVEL_LIST, SupportLevel.getReferenceList( request.getLocale(  ) ) );
-        model.put( MARK_UNIT_LIST, getUnitsList(  ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList( ) );
+        model.put( MARK_LEVEL_LIST, SupportLevel.getReferenceList( request.getLocale( ) ) );
+        model.put( MARK_UNIT_LIST, getUnitsList( ) );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_SUPPORT_ENTITY, TEMPLATE_CREATE_SUPPORT_ENTITY, model );
     }
@@ -158,7 +155,8 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     /**
      * Process the data capture form of a new supportentity
      *
-     * @param request The Http Request
+     * @param request
+     *            The Http Request
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_CREATE_SUPPORT_ENTITY )
@@ -173,7 +171,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
         }
 
         SupportEntityHome.create( _supportEntity );
-        addInfo( INFO_SUPPORT_ENTITY_CREATED, getLocale(  ) );
+        addInfo( INFO_SUPPORT_ENTITY_CREATED, getLocale( ) );
         _supportEntity = null;
 
         return redirectView( request, VIEW_MANAGE_SUPPORT_ENTITIES );
@@ -213,10 +211,10 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     }
 
     /**
-     * Manages the removal form of a supportentity whose identifier is in the http
-     * request
+     * Manages the removal form of a supportentity whose identifier is in the http request
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code to confirm
      */
     @Action( ACTION_CONFIRM_REMOVE_SUPPORT_ENTITY )
@@ -226,8 +224,8 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_SUPPORT_ENTITY ) );
         url.addParameter( PARAMETER_ID_SUPPORT_ENTITY, nId );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_SUPPORT_ENTITY,
-                url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
+        String strMessageUrl = AdminMessageService
+                .getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_SUPPORT_ENTITY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
     }
@@ -235,7 +233,8 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     /**
      * Handles the removal form of a supportentity
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the jsp URL to display the form to manage supportentities
      */
     @Action( ACTION_REMOVE_SUPPORT_ENTITY )
@@ -243,7 +242,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_SUPPORT_ENTITY ) );
         SupportEntityHome.remove( nId );
-        addInfo( INFO_SUPPORT_ENTITY_REMOVED, getLocale(  ) );
+        addInfo( INFO_SUPPORT_ENTITY_REMOVED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_SUPPORT_ENTITIES );
     }
@@ -251,7 +250,8 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     /**
      * Returns the form to update info about a supportentity
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return The HTML form to update info
      */
     @View( VIEW_MODIFY_SUPPORT_ENTITY )
@@ -259,16 +259,16 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_SUPPORT_ENTITY ) );
 
-        if ( ( _supportEntity == null ) || ( _supportEntity.getId(  ) != nId ) )
+        if ( ( _supportEntity == null ) || ( _supportEntity.getId( ) != nId ) )
         {
             _supportEntity = SupportEntityHome.findByPrimaryKey( nId );
         }
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
         model.put( MARK_SUPPORT_ENTITY, _supportEntity );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList(  ) );
-        model.put( MARK_LEVEL_LIST, SupportLevel.getReferenceList( request.getLocale(  ) ) );
-        model.put( MARK_UNIT_LIST, getUnitsList(  ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList( ) );
+        model.put( MARK_LEVEL_LIST, SupportLevel.getReferenceList( request.getLocale( ) ) );
+        model.put( MARK_UNIT_LIST, getUnitsList( ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_SUPPORT_ENTITY, TEMPLATE_MODIFY_SUPPORT_ENTITY, model );
     }
@@ -276,7 +276,8 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     /**
      * Process the change form of a supportentity
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_MODIFY_SUPPORT_ENTITY )
@@ -287,11 +288,11 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
         // Check constraints
         if ( !validateBean( _supportEntity, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect( request, VIEW_MODIFY_SUPPORT_ENTITY, PARAMETER_ID_SUPPORT_ENTITY, _supportEntity.getId(  ) );
+            return redirect( request, VIEW_MODIFY_SUPPORT_ENTITY, PARAMETER_ID_SUPPORT_ENTITY, _supportEntity.getId( ) );
         }
 
         SupportEntityHome.update( _supportEntity );
-        addInfo( INFO_SUPPORT_ENTITY_UPDATED, getLocale(  ) );
+        addInfo( INFO_SUPPORT_ENTITY_UPDATED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_SUPPORT_ENTITIES );
     }

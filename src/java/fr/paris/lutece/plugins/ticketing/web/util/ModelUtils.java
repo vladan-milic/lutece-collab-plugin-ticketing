@@ -54,7 +54,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Class providing utility methods for for Model
  *
@@ -64,28 +63,31 @@ public final class ModelUtils
     /**
      * Default constructor
      */
-    private ModelUtils(  )
+    private ModelUtils( )
     {
     }
 
     /**
      * Completes the specified model for user rights
-     * @param model the model to complete
-     * @param adminUser user the user
+     * 
+     * @param model
+     *            the model to complete
+     * @param adminUser
+     *            user the user
      */
     public static void storeTicketRights( Map<String, Object> model, AdminUser adminUser )
     {
-        if ( RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_CREATE, adminUser ) )
+        if ( RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_CREATE, adminUser ) )
         {
             model.put( TicketingConstants.MARK_TICKET_CREATION_RIGHT, Boolean.TRUE );
         }
 
-        if ( RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_DELETE, adminUser ) )
+        if ( RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_DELETE, adminUser ) )
         {
             model.put( TicketingConstants.MARK_TICKET_DELETION_RIGHT, Boolean.TRUE );
         }
 
-        if ( RBACService.isAuthorized( new Ticket(  ), TicketResourceIdService.PERMISSION_MODIFY, adminUser ) )
+        if ( RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_MODIFY, adminUser ) )
         {
             model.put( TicketingConstants.MARK_TICKET_MODIFICATION_RIGHT, Boolean.TRUE );
         }
@@ -93,20 +95,23 @@ public final class ModelUtils
 
     /**
      * Completes the specified model for the read-only HTML of the ticket responses
-     * @param request the request
-     * @param model the model to complete
-     * @param ticket the ticket
+     * 
+     * @param request
+     *            the request
+     * @param model
+     *            the model to complete
+     * @param ticket
+     *            the ticket
      */
     public static void storeReadOnlyHtmlResponses( HttpServletRequest request, Map<String, Object> model, Ticket ticket )
     {
-        List<Response> listResponses = ticket.getListResponse(  );
-        List<String> listReadOnlyResponseHtml = new ArrayList<String>( listResponses.size(  ) );
+        List<Response> listResponses = ticket.getListResponse( );
+        List<String> listReadOnlyResponseHtml = new ArrayList<String>( listResponses.size( ) );
 
         for ( Response response : listResponses )
         {
-            IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( response.getEntry(  ) );
-            listReadOnlyResponseHtml.add( entryTypeService.getResponseValueForRecap( response.getEntry(  ), request,
-                    response, request.getLocale(  ) ) );
+            IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( response.getEntry( ) );
+            listReadOnlyResponseHtml.add( entryTypeService.getResponseValueForRecap( response.getEntry( ), request, response, request.getLocale( ) ) );
         }
 
         model.put( TicketingConstants.MARK_LIST_READ_ONLY_HTML_RESPONSES, listReadOnlyResponseHtml );
@@ -114,42 +119,47 @@ public final class ModelUtils
 
     /**
      * Completes the specified model for rich text
-     * @param request the request
-     * @param model the model to complete
+     * 
+     * @param request
+     *            the request
+     * @param model
+     *            the model to complete
      */
     public static void storeRichText( HttpServletRequest request, Map<String, Object> model )
     {
         model.put( TicketingConstants.MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-        model.put( TicketingConstants.MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage(  ) );
+        model.put( TicketingConstants.MARK_LOCALE, AdminUserService.getLocale( request ).getLanguage( ) );
     }
 
     /**
      * Completes the specified model for channels selection
-     * @param request the request
-     * @param model the model to complete
+     * 
+     * @param request
+     *            the request
+     * @param model
+     *            the model to complete
      */
     public static void storeChannels( HttpServletRequest request, Map<String, Object> model )
     {
-        model.put( TicketingConstants.MARK_CHANNELS_LIST, ChannelHome.getReferenceList(  ) );
+        model.put( TicketingConstants.MARK_CHANNELS_LIST, ChannelHome.getReferenceList( ) );
         model.put( TicketingConstants.MARK_SELECTABLE_CHANNELS_LIST, TicketUtils.getSelectableChannelsList( request ) );
 
-        String strPreferredIdChannel = AdminUserPreferencesService.instance(  )
-                                                                  .get( String.valueOf( 
-                    AdminUserService.getAdminUser( request ).getUserId(  ) ),
+        String strPreferredIdChannel = AdminUserPreferencesService.instance( ).get( String.valueOf( AdminUserService.getAdminUser( request ).getUserId( ) ),
                 TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_PREFERRED_ID_CHANNEL, strPreferredIdChannel );
     }
 
     /**
      * Completes the specified model for the user signature
-     * @param request the request
-     * @param model the model to complete
+     * 
+     * @param request
+     *            the request
+     * @param model
+     *            the model to complete
      */
     public static void storeUserSignature( HttpServletRequest request, Map<String, Object> model )
     {
-        String strUserSignature = AdminUserPreferencesService.instance(  )
-                                                             .get( String.valueOf( 
-                    AdminUserService.getAdminUser( request ).getUserId(  ) ),
+        String strUserSignature = AdminUserPreferencesService.instance( ).get( String.valueOf( AdminUserService.getAdminUser( request ).getUserId( ) ),
                 TicketingConstants.USER_PREFERENCE_SIGNATURE, StringUtils.EMPTY );
 
         model.put( TicketingConstants.MARK_USER_SIGNATURE, strUserSignature );
@@ -158,30 +168,32 @@ public final class ModelUtils
     /**
      * Completes the specified model with the navigation between tickets.
      *
-     * @param nIdCurrentTicket the id of the current ticket
-     * @param listTickets the tickets list
-     * @param model the model
+     * @param nIdCurrentTicket
+     *            the id of the current ticket
+     * @param listTickets
+     *            the tickets list
+     * @param model
+     *            the model
      */
-    public static void storeNavigationBetweenTickets( int nIdCurrentTicket, List<Ticket> listTickets,
-        Map<String, Object> model )
+    public static void storeNavigationBetweenTickets( int nIdCurrentTicket, List<Ticket> listTickets, Map<String, Object> model )
     {
         Ticket ticketNext = null;
         Ticket ticketPrevious = null;
 
         if ( listTickets != null )
         {
-            for ( int i = 0; i < listTickets.size(  ); i++ )
+            for ( int i = 0; i < listTickets.size( ); i++ )
             {
                 Ticket ticket = listTickets.get( i );
 
-                if ( nIdCurrentTicket == ticket.getId(  ) )
+                if ( nIdCurrentTicket == ticket.getId( ) )
                 {
                     if ( i > 0 )
                     {
                         ticketPrevious = listTickets.get( i - 1 );
                     }
 
-                    if ( i < ( listTickets.size(  ) - 1 ) )
+                    if ( i < ( listTickets.size( ) - 1 ) )
                     {
                         ticketNext = listTickets.get( i + 1 );
                     }

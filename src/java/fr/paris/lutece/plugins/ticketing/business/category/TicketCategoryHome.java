@@ -40,7 +40,6 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
 
-
 /**
  * This class provides instances management methods (create, find, ...) for TicketCategory objects
  */
@@ -58,13 +57,15 @@ public final class TicketCategoryHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private TicketCategoryHome(  )
+    private TicketCategoryHome( )
     {
     }
 
     /**
      * Create an instance of the ticketCategory class
-     * @param ticketCategory The instance of the TicketCategory which contains the informations to store
+     * 
+     * @param ticketCategory
+     *            The instance of the TicketCategory which contains the informations to store
      */
     public static void create( TicketCategory ticketCategory )
     {
@@ -73,9 +74,13 @@ public final class TicketCategoryHome
 
     /**
      * Create a link between a category and an input
-     * @param nIdCategory id Category
-     * @param nIdInput id Input
-     * @param nPos id Input position
+     * 
+     * @param nIdCategory
+     *            id Category
+     * @param nIdInput
+     *            id Input
+     * @param nPos
+     *            id Input position
      */
     public static void createLinkCategoryInput( int nIdCategory, int nIdInput, int nPos )
     {
@@ -84,9 +89,13 @@ public final class TicketCategoryHome
 
     /**
      * Create a link between a category and an input
-     * @param nIdCategory id Category
-     * @param nIdInput id Input
-     * @param nPos id Input position
+     * 
+     * @param nIdCategory
+     *            id Category
+     * @param nIdInput
+     *            id Input
+     * @param nPos
+     *            id Input position
      */
     public static void createLinkCategoryInputNextPos( int nIdCategory, int nIdInput )
     {
@@ -95,7 +104,9 @@ public final class TicketCategoryHome
 
     /**
      * Update of the ticketCategory which is specified in parameter
-     * @param ticketCategory The instance of the TicketCategory which contains the data to store
+     * 
+     * @param ticketCategory
+     *            The instance of the TicketCategory which contains the data to store
      */
     public static void update( TicketCategory ticketCategory )
     {
@@ -104,7 +115,9 @@ public final class TicketCategoryHome
 
     /**
      * Remove the ticketCategory whose identifier is specified in parameter
-     * @param nKey The ticketCategory Id
+     * 
+     * @param nKey
+     *            The ticketCategory Id
      */
     public static void remove( int nKey )
     {
@@ -113,8 +126,11 @@ public final class TicketCategoryHome
 
     /**
      * Remove a link between a category and an input
-     * @param nIdCategory id Category
-     * @param nIdInput id Input
+     * 
+     * @param nIdCategory
+     *            id Category
+     * @param nIdInput
+     *            id Input
      */
     public static void removeLinkCategoryInput( int nIdCategory, int nIdInput )
     {
@@ -123,21 +139,27 @@ public final class TicketCategoryHome
 
     /**
      * Update the Position field in a link between a category and an input
-     * @param nIdCategory id Category
-     * @param nIdInput id Input
-     * @param nPosition the position value
+     * 
+     * @param nIdCategory
+     *            id Category
+     * @param nIdInput
+     *            id Input
+     * @param nPosition
+     *            the position value
      */
     public static void updateCategoryInputPosition( int nIdCategory, int nIdInput, int nPosition )
     {
         _dao.updateLinkCategoryInputPos( nIdCategory, nIdInput, nPosition, _plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
      * Returns an instance of a ticketCategory whose identifier is specified in parameter
-     * @param nKey The ticketCategory primary key
+     * 
+     * @param nKey
+     *            The ticketCategory primary key
      * @return an instance of TicketCategory
      */
     public static TicketCategory findByPrimaryKey( int nKey )
@@ -147,7 +169,9 @@ public final class TicketCategoryHome
 
     /**
      * Find a category by its code
-     * @param strCode The code
+     * 
+     * @param strCode
+     *            The code
      * @return The category
      */
     public static TicketCategory findByCode( String strCode )
@@ -157,7 +181,9 @@ public final class TicketCategoryHome
 
     /**
      * Find a category by its domain id
-     * @param nDomainId The domain id
+     * 
+     * @param nDomainId
+     *            The domain id
      * @return The category
      */
     public static List<TicketCategory> findByDomainId( int nDomainId )
@@ -167,25 +193,29 @@ public final class TicketCategoryHome
 
     /**
      * Load the data of all the ticketCategory objects and returns them in form of a collection
+     * 
      * @return the collection which contains the data of all the ticketCategory objects
      */
-    public static List<TicketCategory> getTicketCategorysList(  )
+    public static List<TicketCategory> getTicketCategorysList( )
     {
         return _dao.selectTicketCategorysList( _plugin );
     }
 
     /**
      * Load the id of all the ticketCategory objects and returns them in form of a collection
+     * 
      * @return the collection which contains the id of all the ticketCategory objects
      */
-    public static List<Integer> getIdTicketCategorysList(  )
+    public static List<Integer> getIdTicketCategorysList( )
     {
         return _dao.selectIdTicketCategorysList( _plugin );
     }
 
     /**
      * returns referenceList of input domainId
-     * @param nDomainId id of domain
+     * 
+     * @param nDomainId
+     *            id of domain
      * @return ReferenceList of domainId
      */
     public static ReferenceList getReferenceListByDomain( int nDomainId )
@@ -195,8 +225,11 @@ public final class TicketCategoryHome
 
     /**
      * returns the position of an input for a given category
-     * @param nId id of category
-     * @param nIdInput id of input
+     * 
+     * @param nId
+     *            id of category
+     * @param nIdInput
+     *            id of input
      * @return the position as an integer
      */
     public static int getCategoryInputPosition( int nId, int nIdInput )
@@ -206,8 +239,11 @@ public final class TicketCategoryHome
 
     /**
      * returns the iD of an input for a given category and position
-     * @param nId id of category
-     * @param nPos the position
+     * 
+     * @param nId
+     *            id of category
+     * @param nPos
+     *            the position
      * @return the input id
      */
     public static int getCategoryInputByPosition( int nId, int nPos )
@@ -217,8 +253,11 @@ public final class TicketCategoryHome
 
     /**
      * returns referenceList of precision of category by a given category label for a given domain
-     * @param nDomainId id of domain
-     * @param labelCategory the label category
+     * 
+     * @param nDomainId
+     *            id of domain
+     * @param labelCategory
+     *            the label category
      * @return ReferenceList of domainId
      */
     public static ReferenceList getReferenceListByCategory( int nDomainId, String labelCategory )
@@ -228,8 +267,11 @@ public final class TicketCategoryHome
 
     /**
      * Load the id of all inputs related to the ticketCategory id and returns them as a collection
-     * @param nCategoryId The Category ID
-     * @param plugin The plugin
+     * 
+     * @param nCategoryId
+     *            The Category ID
+     * @param plugin
+     *            The plugin
      * @return The collection which contains the id of all the ticketCategory objects
      */
     public static List<Integer> getIdInputListByCategory( int nCategoryId )
@@ -239,8 +281,10 @@ public final class TicketCategoryHome
 
     /**
      * Check if an input is already used in a Category form
-     * @param nIdResource the id_resource of the input to be checked
-     * @return  true if the input is linked to 1 or more Categories
+     * 
+     * @param nIdResource
+     *            the id_resource of the input to be checked
+     * @return true if the input is linked to 1 or more Categories
      */
     public static boolean checkIfInputIsUsedInCategories( int nIdResource )
     {

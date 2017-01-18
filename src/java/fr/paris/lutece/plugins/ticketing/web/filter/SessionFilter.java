@@ -54,7 +54,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
 /**
  * Filter which manages session for Ticketing plugin
  *
@@ -65,8 +64,7 @@ public class SessionFilter implements Filter
     private static final String PROPERTY_RETURN_URL_PARAMETER_NAME = "ticketing.workflow.redirect.parameterName";
 
     // Parameters
-    private static final String PARAM_RETURN_URL = AppPropertiesService.getProperty( PROPERTY_RETURN_URL_PARAMETER_NAME,
-            "return_url" );
+    private static final String PARAM_RETURN_URL = AppPropertiesService.getProperty( PROPERTY_RETURN_URL_PARAMETER_NAME, "return_url" );
     private static final String PARAMETER_XPAGE = "page";
 
     @Override
@@ -75,8 +73,7 @@ public class SessionFilter implements Filter
     }
 
     @Override
-    public void doFilter( ServletRequest request, ServletResponse response, FilterChain filterChain )
-        throws IOException, ServletException
+    public void doFilter( ServletRequest request, ServletResponse response, FilterChain filterChain ) throws IOException, ServletException
     {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
@@ -84,15 +81,13 @@ public class SessionFilter implements Filter
         {
             if ( StringUtils.isNotEmpty( (String) request.getParameter( PARAM_RETURN_URL ) ) )
             {
-                httpRequest.getSession( true )
-                           .setAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL,
-                    request.getParameter( PARAM_RETURN_URL ) );
+                httpRequest.getSession( true ).setAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL, request.getParameter( PARAM_RETURN_URL ) );
             }
         }
         else
         {
             // Clean the session
-            HttpSession session = httpRequest.getSession(  );
+            HttpSession session = httpRequest.getSession( );
             session.removeAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL );
             session.removeAttribute( TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
             session.removeAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET );
@@ -106,36 +101,40 @@ public class SessionFilter implements Filter
     }
 
     @Override
-    public void destroy(  )
+    public void destroy( )
     {
     }
 
     /**
      * Tests if the request is for the back office of Ticketing plugin
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return {@code true} if the request is for the back office of Ticketing, {@code false} otherwise
      */
     private static boolean isTicketingBackOfficeUrl( HttpServletRequest request )
     {
-        String url = request.getRequestURL(  ).toString(  );
+        String url = request.getRequestURL( ).toString( );
 
         return url.contains( TicketingConstants.ADMIN_CONTROLLLER_PATH );
     }
 
     /**
      * Tests if the request is for the front office of Ticketing plugin
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return {@code true} if the request is for the front office of Ticketing, {@code false} otherwise
      */
     private static boolean isTicketingFrontOfficeUrl( HttpServletRequest request )
     {
         boolean bFound = false;
         String strXPage = request.getParameter( PARAMETER_XPAGE );
-        List<XPageApplicationEntry> listXPages = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME ).getApplications(  );
+        List<XPageApplicationEntry> listXPages = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME ).getApplications( );
 
         for ( XPageApplicationEntry entry : listXPages )
         {
-            if ( entry.getId(  ).equals( strXPage ) )
+            if ( entry.getId( ).equals( strXPage ) )
             {
                 bFound = true;
 

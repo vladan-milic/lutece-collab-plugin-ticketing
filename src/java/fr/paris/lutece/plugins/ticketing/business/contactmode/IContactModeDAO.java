@@ -38,7 +38,6 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
 
-
 /**
  * IContactModeDAO Interface
  */
@@ -74,7 +73,7 @@ public interface IContactModeDAO
      */
     void delete( int nKey, Plugin plugin );
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
@@ -89,30 +88,25 @@ public interface IContactModeDAO
     ContactMode load( int nKey, Plugin plugin );
 
     /**
-     * Load the data of all the contactMode objects and returns them as a
-     * collection
+     * Load the data of all the contactMode objects and returns them as a collection
      *
      * @param plugin
      *            the Plugin
-     * @return The collection which contains the data of all the contactMode
-     *         objects
+     * @return The collection which contains the data of all the contactMode objects
      */
     List<ContactMode> selectContactModesList( Plugin plugin );
 
     /**
-     * Load the id of all the contactMode objects and returns them as a
-     * collection
+     * Load the id of all the contactMode objects and returns them as a collection
      *
      * @param plugin
      *            the Plugin
-     * @return The collection which contains the id of all the contactMode
-     *         objects
+     * @return The collection which contains the id of all the contactMode objects
      */
     List<Integer> selectIdContactModesList( Plugin plugin );
 
     /**
-     * Load the data of all the contactMode objects and returns them as a
-     * reference list
+     * Load the data of all the contactMode objects and returns them as a reference list
      *
      * @param plugin
      *            the Plugin

@@ -39,7 +39,6 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Size;
 
-
 /**
  * This is the business class for the object TicketType
  */
@@ -47,7 +46,7 @@ public class TicketType implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    // Variables declarations 
+    // Variables declarations
     private int _nId;
     @NotEmpty( message = "#i18n{ticketing.validation.tickettype.Label.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.tickettype.Label.size}" )
@@ -57,16 +56,19 @@ public class TicketType implements Serializable
 
     /**
      * Returns the Id
+     * 
      * @return The Id
      */
-    public int getId(  )
+    public int getId( )
     {
         return _nId;
     }
 
     /**
      * Sets the Id
-     * @param nId The Id
+     * 
+     * @param nId
+     *            The Id
      */
     public void setId( int nId )
     {
@@ -75,16 +77,19 @@ public class TicketType implements Serializable
 
     /**
      * Returns the Label
+     * 
      * @return The Label
      */
-    public String getLabel(  )
+    public String getLabel( )
     {
         return _strLabel;
     }
 
     /**
      * Sets the Label
-     * @param strLabel The Label
+     * 
+     * @param strLabel
+     *            The Label
      */
     public void setLabel( String strLabel )
     {
@@ -93,16 +98,19 @@ public class TicketType implements Serializable
 
     /**
      * Returns the reference prefix
+     * 
      * @return The reference prefix
      */
-    public String getReferencePrefix(  )
+    public String getReferencePrefix( )
     {
         return _strReferencePrefix;
     }
 
     /**
      * Sets the reference prefix
-     * @param strReferencePrefix The reference prefix
+     * 
+     * @param strReferencePrefix
+     *            The reference prefix
      */
     public void setReferencePrefix( String strReferencePrefix )
     {
@@ -111,16 +119,19 @@ public class TicketType implements Serializable
 
     /**
      * Returns the DemandTypeId
+     * 
      * @return The DemandTypeId
      */
-    public int getDemandTypeId(  )
+    public int getDemandTypeId( )
     {
         return _nDemandTypeId;
     }
 
     /**
      * Sets the DemandTypeId
-     * @param nDemandTypeId The DemandTypeId
+     * 
+     * @param nDemandTypeId
+     *            The DemandTypeId
      */
     public void setDemandTypeId( int nDemandTypeId )
     {

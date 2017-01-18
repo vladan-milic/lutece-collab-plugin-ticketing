@@ -47,7 +47,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
-
 /**
  * REST service for contact mode resource
  *
@@ -57,24 +56,25 @@ public class ContactModeRest extends TicketingRest
 {
     /**
      * Gives the contact modes
-     * @param accept the accepted format
-     * @param format the format
+     * 
+     * @param accept
+     *            the accepted format
+     * @param format
+     *            the format
      * @return the list of contact modes
      */
     @GET
     @Path( Constants.ALL_PATH )
-    public Response getContactModes( @HeaderParam( HttpHeaders.ACCEPT )
-    String accept, @QueryParam( Constants.FORMAT_QUERY )
-    String format )
+    public Response getContactModes( @HeaderParam( HttpHeaders.ACCEPT ) String accept, @QueryParam( Constants.FORMAT_QUERY ) String format )
     {
         String strMediaType = getMediaType( accept, format );
 
         IFormatterFactory formatterFactory = _formatterFactories.get( strMediaType );
 
-        List<ContactMode> listUserTitles = ContactModeHome.getContactModesList(  );
+        List<ContactMode> listUserTitles = ContactModeHome.getContactModesList( );
 
         String strResponse = formatterFactory.createFormatter( ContactMode.class ).format( listUserTitles );
 
-        return Response.ok( strResponse, strMediaType ).build(  );
+        return Response.ok( strResponse, strMediaType ).build( );
     }
 }

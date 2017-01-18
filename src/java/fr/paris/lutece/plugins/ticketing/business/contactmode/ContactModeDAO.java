@@ -42,7 +42,6 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This class provides Data Access methods for ContactMode objects
  */
@@ -59,22 +58,24 @@ public final class ContactModeDAO implements IContactModeDAO
 
     /**
      * Generates a new primary key
-     * @param plugin The Plugin
+     * 
+     * @param plugin
+     *            The Plugin
      * @return The new primary key
      */
     public int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nKey = 1;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             nKey = daoUtil.getInt( 1 ) + 1;
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nKey;
     }
@@ -89,12 +90,12 @@ public final class ContactModeDAO implements IContactModeDAO
 
         contactMode.setId( newPrimaryKey( plugin ) );
 
-        daoUtil.setInt( 1, contactMode.getId(  ) );
-        daoUtil.setString( 2, contactMode.getCode(  ) );
-        daoUtil.setString( 3, contactMode.getConfirmationMsg(  ) );
+        daoUtil.setInt( 1, contactMode.getId( ) );
+        daoUtil.setString( 2, contactMode.getCode( ) );
+        daoUtil.setString( 3, contactMode.getConfirmationMsg( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -105,20 +106,19 @@ public final class ContactModeDAO implements IContactModeDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         ContactMode contactMode = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            contactMode = new ContactMode(  );
+            contactMode = new ContactMode( );
             contactMode.setId( daoUtil.getInt( 1 ) );
             contactMode.setCode( daoUtil.getString( 2 ) );
-            contactMode.setConfirmationMsg( ( daoUtil.getString( 3 ) == null ) ? StringUtils.EMPTY
-                                                                               : daoUtil.getString( 3 ) );
+            contactMode.setConfirmationMsg( ( daoUtil.getString( 3 ) == null ) ? StringUtils.EMPTY : daoUtil.getString( 3 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return contactMode;
     }
@@ -131,8 +131,8 @@ public final class ContactModeDAO implements IContactModeDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -143,13 +143,13 @@ public final class ContactModeDAO implements IContactModeDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-        daoUtil.setInt( 1, contactMode.getId(  ) );
-        daoUtil.setString( 2, contactMode.getCode(  ) );
-        daoUtil.setString( 3, contactMode.getConfirmationMsg(  ) );
-        daoUtil.setInt( 4, contactMode.getId(  ) );
+        daoUtil.setInt( 1, contactMode.getId( ) );
+        daoUtil.setString( 2, contactMode.getCode( ) );
+        daoUtil.setString( 3, contactMode.getConfirmationMsg( ) );
+        daoUtil.setInt( 4, contactMode.getId( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -158,23 +158,22 @@ public final class ContactModeDAO implements IContactModeDAO
     @Override
     public List<ContactMode> selectContactModesList( Plugin plugin )
     {
-        List<ContactMode> contactModeList = new ArrayList<ContactMode>(  );
+        List<ContactMode> contactModeList = new ArrayList<ContactMode>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            ContactMode contactMode = new ContactMode(  );
+            ContactMode contactMode = new ContactMode( );
 
             contactMode.setId( daoUtil.getInt( 1 ) );
             contactMode.setCode( daoUtil.getString( 2 ) );
-            contactMode.setConfirmationMsg( ( daoUtil.getString( 3 ) == null ) ? StringUtils.EMPTY
-                                                                               : daoUtil.getString( 3 ) );
+            contactMode.setConfirmationMsg( ( daoUtil.getString( 3 ) == null ) ? StringUtils.EMPTY : daoUtil.getString( 3 ) );
 
             contactModeList.add( contactMode );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return contactModeList;
     }
@@ -185,16 +184,16 @@ public final class ContactModeDAO implements IContactModeDAO
     @Override
     public List<Integer> selectIdContactModesList( Plugin plugin )
     {
-        List<Integer> contactModeList = new ArrayList<Integer>(  );
+        List<Integer> contactModeList = new ArrayList<Integer>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             contactModeList.add( daoUtil.getInt( 1 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return contactModeList;
     }
@@ -205,16 +204,16 @@ public final class ContactModeDAO implements IContactModeDAO
     @Override
     public ReferenceList selectReferenceList( Plugin plugin )
     {
-        ReferenceList list = new ReferenceList(  );
+        ReferenceList list = new ReferenceList( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             list.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return list;
     }

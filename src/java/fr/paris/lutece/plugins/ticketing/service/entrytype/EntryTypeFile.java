@@ -56,7 +56,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  * class EntryTypeImage
@@ -114,25 +113,24 @@ public class EntryTypeFile extends AbstractEntryTypeFile
     {
         Map<String, Object> model = EntryTypeUtils.initModel( entry, response );
 
-        if ( ( response.getFile(  ) != null ) && StringUtils.isNotBlank( response.getFile(  ).getTitle(  ) ) )
+        if ( ( response.getFile( ) != null ) && StringUtils.isNotBlank( response.getFile( ).getTitle( ) ) )
         {
-            if ( response.getIdResponse(  ) > 0 )
+            if ( response.getIdResponse( ) > 0 )
             {
-                model.put( MARK_FILE_URL,
-                    getUrlDownloadFile( response.getIdResponse(  ), AppPathService.getBaseUrl( request ) ) );
+                model.put( MARK_FILE_URL, getUrlDownloadFile( response.getIdResponse( ), AppPathService.getBaseUrl( request ) ) );
             }
         }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_READ_ONLY_HTML, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected boolean checkForImages(  )
+    protected boolean checkForImages( )
     {
         return false;
     }
@@ -141,9 +139,9 @@ public class EntryTypeFile extends AbstractEntryTypeFile
      * {@inheritDoc}
      */
     @Override
-    public AbstractGenAttUploadHandler getAsynchronousUploadHandler(  )
+    public AbstractGenAttUploadHandler getAsynchronousUploadHandler( )
     {
-        return TicketAsynchronousUploadHandler.getHandler(  );
+        return TicketAsynchronousUploadHandler.getHandler( );
     }
 
     /**
@@ -152,18 +150,17 @@ public class EntryTypeFile extends AbstractEntryTypeFile
     @Override
     public String getUrlDownloadFile( int nResponseId, String strBaseUrl )
     {
-        List<String> listElements = new ArrayList<String>(  );
+        List<String> listElements = new ArrayList<String>( );
         listElements.add( Integer.toString( nResponseId ) );
 
-        String strTimestamp = Long.toString( new Date(  ).getTime(  ) );
-        String strSignature = RequestAuthenticationService.getRequestAuthenticator(  )
-                                                          .buildSignature( listElements, strTimestamp );
+        String strTimestamp = Long.toString( new Date( ).getTime( ) );
+        String strSignature = RequestAuthenticationService.getRequestAuthenticator( ).buildSignature( listElements, strTimestamp );
 
         UrlItem url = new UrlItem( strBaseUrl + TicketingFileServlet.URL_SERVLET );
         url.addParameter( TicketingFileServlet.PARAMETER_ID_RESPONSE, nResponseId );
         url.addParameter( TicketingConstants.PARAMETER_SIGNATURE, strSignature );
         url.addParameter( TicketingConstants.PARAMETER_TIMESTAMP, strTimestamp );
 
-        return url.getUrl(  );
+        return url.getUrl( );
     }
 }

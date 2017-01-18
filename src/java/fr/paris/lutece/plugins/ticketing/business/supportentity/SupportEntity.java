@@ -43,7 +43,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
 /**
  * SupportEntity
  */
@@ -52,7 +51,7 @@ public class SupportEntity implements RBACResource
     // RBAC management
     public static final String RESOURCE_TYPE = "SUPPORT_ENTITY";
 
-    // Variables declarations 
+    // Variables declarations
     private int _nId;
     private AssigneeUser _user;
     @NotNull( message = "#i18n{ticketing.validation.supportentity.unit.notNull}" )
@@ -65,16 +64,19 @@ public class SupportEntity implements RBACResource
 
     /**
      * Returns the Id
+     * 
      * @return The Id
      */
-    public int getId(  )
+    public int getId( )
     {
         return _nId;
     }
 
     /**
      * Sets the Id
-     * @param nId The Id
+     * 
+     * @param nId
+     *            The Id
      */
     public void setId( int nId )
     {
@@ -84,13 +86,14 @@ public class SupportEntity implements RBACResource
     /**
      * @return the _user
      */
-    public AssigneeUser getUser(  )
+    public AssigneeUser getUser( )
     {
         return _user;
     }
 
     /**
-     * @param user the _user to set
+     * @param user
+     *            the _user to set
      */
     public void setUser( AssigneeUser user )
     {
@@ -100,13 +103,14 @@ public class SupportEntity implements RBACResource
     /**
      * @return the _unit
      */
-    public AssigneeUnit getUnit(  )
+    public AssigneeUnit getUnit( )
     {
         return _unit;
     }
 
     /**
-     * @param unit the unit to set
+     * @param unit
+     *            the unit to set
      */
     public void setUnit( AssigneeUnit unit )
     {
@@ -116,13 +120,14 @@ public class SupportEntity implements RBACResource
     /**
      * @return the ticketDomain
      */
-    public TicketDomain getTicketDomain(  )
+    public TicketDomain getTicketDomain( )
     {
         return _ticketDomain;
     }
 
     /**
-     * @param ticketDomain the _ticketDomain to set
+     * @param ticketDomain
+     *            the _ticketDomain to set
      */
     public void setTicketDomain( TicketDomain ticketDomain )
     {
@@ -132,13 +137,14 @@ public class SupportEntity implements RBACResource
     /**
      * @return the supportLevel
      */
-    public SupportLevel getSupportLevel(  )
+    public SupportLevel getSupportLevel( )
     {
         return _supportLevel;
     }
 
     /**
-     * @param supportLevel the _supportLevel to set
+     * @param supportLevel
+     *            the _supportLevel to set
      */
     public void setSupportLevel( SupportLevel supportLevel )
     {
@@ -147,16 +153,19 @@ public class SupportEntity implements RBACResource
 
     /**
      * Returns the Name
+     * 
      * @return The Name
      */
-    public String getName(  )
+    public String getName( )
     {
         return _strName;
     }
 
     /**
      * Sets the Name
-     * @param strName The Name
+     * 
+     * @param strName
+     *            The Name
      */
     public void setName( String strName )
     {
@@ -164,13 +173,13 @@ public class SupportEntity implements RBACResource
     }
 
     @Override
-    public String getResourceId(  )
+    public String getResourceId( )
     {
         return String.valueOf( _nId );
     }
 
     @Override
-    public String getResourceTypeCode(  )
+    public String getResourceTypeCode( )
     {
         return RESOURCE_TYPE;
     }

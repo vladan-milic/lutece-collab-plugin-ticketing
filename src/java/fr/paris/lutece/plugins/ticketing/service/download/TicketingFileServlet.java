@@ -52,7 +52,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  * Servlet serving ticketing files
  */
@@ -69,20 +68,22 @@ public class TicketingFileServlet extends HttpServlet
     // Other constants
     public static final String URL_SERVLET = "servlet/plugins/ticketing/file";
     private static final String LOG_UNKNOWN_ID_RESPONSE = "Calling Ticketing file servlet with unknown id response : ";
-    private static final String LOG_WRONG_ID_RESPONSE = "Calling Ticketing file servlet with wrong format for parameter " +
-        PARAMETER_ID_RESPONSE + " : ";
+    private static final String LOG_WRONG_ID_RESPONSE = "Calling Ticketing file servlet with wrong format for parameter " + PARAMETER_ID_RESPONSE + " : ";
     private static final String LOG_UNAUTHENTICATED_REQUEST = "Calling Ticketing file servlet with unauthenticated request";
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     * @param request servlet request
-     * @param httpResponse servlet response
-     * @throws ServletException the servlet Exception
-     * @throws IOException the io exception
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * 
+     * @param request
+     *            servlet request
+     * @param httpResponse
+     *            servlet response
+     * @throws ServletException
+     *             the servlet Exception
+     * @throws IOException
+     *             the io exception
      */
-    protected void processRequest( HttpServletRequest request, HttpServletResponse httpResponse )
-        throws ServletException, IOException
+    protected void processRequest( HttpServletRequest request, HttpServletResponse httpResponse ) throws ServletException, IOException
     {
         String strIdResponse = request.getParameter( PARAMETER_ID_RESPONSE );
 
@@ -104,11 +105,11 @@ public class TicketingFileServlet extends HttpServlet
                 throw new ServletException( LOG_UNAUTHENTICATED_REQUEST );
             }
 
-            File file = FileHome.findByPrimaryKey( response.getFile(  ).getIdFile(  ) );
-            PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile(  ).getIdPhysicalFile(  ) );
+            File file = FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) );
+            PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) );
 
-            httpResponse.setHeader( "Content-Disposition", "attachment; filename=\"" + file.getTitle(  ) + "\";" );
-            httpResponse.setHeader( "Content-type", file.getMimeType(  ) );
+            httpResponse.setHeader( "Content-Disposition", "attachment; filename=\"" + file.getTitle( ) + "\";" );
+            httpResponse.setHeader( "Content-type", file.getMimeType( ) );
             httpResponse.addHeader( "Content-Encoding", "UTF-8" );
             httpResponse.addHeader( "Pragma", "public" );
             httpResponse.addHeader( "Expires", "0" );
@@ -116,70 +117,81 @@ public class TicketingFileServlet extends HttpServlet
 
             try
             {
-                OutputStream os = httpResponse.getOutputStream(  );
-                os.write( physicalFile.getValue(  ) );
+                OutputStream os = httpResponse.getOutputStream( );
+                os.write( physicalFile.getValue( ) );
                 // We do not close the output stream in finaly clause because it is
                 // the response stream,
                 // and an error message needs to be displayed if an exception occurs
-                os.close(  );
+                os.close( );
             }
-            catch ( IOException e )
+            catch( IOException e )
             {
-                AppLogService.error( e.getStackTrace(  ), e );
+                AppLogService.error( e.getStackTrace( ), e );
             }
         }
         else
         {
             AppLogService.error( LOG_WRONG_ID_RESPONSE + strIdResponse );
-            throw new ServletException(  );
+            throw new ServletException( );
         }
     }
 
     /**
      * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException the servlet Exception
-     * @throws IOException the io exception
+     * 
+     * @param request
+     *            servlet request
+     * @param response
+     *            servlet response
+     * @throws ServletException
+     *             the servlet Exception
+     * @throws IOException
+     *             the io exception
      */
     @Override
-    protected void doGet( HttpServletRequest request, HttpServletResponse response )
-        throws ServletException, IOException
+    protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
         processRequest( request, response );
     }
 
     /**
      * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException the servlet Exception
-     * @throws IOException the io exception
+     * 
+     * @param request
+     *            servlet request
+     * @param response
+     *            servlet response
+     * @throws ServletException
+     *             the servlet Exception
+     * @throws IOException
+     *             the io exception
      */
     @Override
-    protected void doPost( HttpServletRequest request, HttpServletResponse response )
-        throws ServletException, IOException
+    protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
         processRequest( request, response );
     }
 
     /**
      * Returns a short description of the servlet.
+     * 
      * @return message
      */
     @Override
-    public String getServletInfo(  )
+    public String getServletInfo( )
     {
         return "Servlet serving file content";
     }
 
     /**
      * Checks if the request is authenticated or not
-     * @param request the HTTP request
+     * 
+     * @param request
+     *            the HTTP request
      * @return {@code true} if the request is authenticated, {@code false} otherwise
      */
     private boolean isRequestAuthenticated( HttpServletRequest request )
     {
-        return RequestAuthenticationService.getRequestAuthenticator(  ).isRequestAuthenticated( request );
+        return RequestAuthenticationService.getRequestAuthenticator( ).isRequestAuthenticated( request );
     }
 }

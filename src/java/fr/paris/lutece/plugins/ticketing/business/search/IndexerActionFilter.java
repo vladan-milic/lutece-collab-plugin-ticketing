@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.search;
 
-
 /**
  *
  * class IndexerActionFilter
@@ -50,16 +49,19 @@ public class IndexerActionFilter
 
     /**
      * gets the id of task
+     * 
      * @return the task id insert in the filter
      */
-    public int getIdTask(  )
+    public int getIdTask( )
     {
         return _nIdTask;
     }
 
     /**
      * set the task id in the filter
-     * @param idTask the task id to insert in the filter
+     * 
+     * @param idTask
+     *            the task id to insert in the filter
      */
     public void setIdTask( int idTask )
     {
@@ -68,25 +70,29 @@ public class IndexerActionFilter
 
     /**
      * weather or not it contains the task
+     * 
      * @return true if the filter contain a task id
      */
-    public boolean containsIdTask(  )
+    public boolean containsIdTask( )
     {
         return ( _nIdTask != ALL_INT );
     }
 
     /**
      * Get the id of the Ticket
+     * 
      * @return The id of the Ticket
      */
-    public int getIdTicket(  )
+    public int getIdTicket( )
     {
         return _nIdTicket;
     }
 
     /**
      * Set the id of the Ticket
-     * @param nIdTicket The id of the Ticket
+     * 
+     * @param nIdTicket
+     *            The id of the Ticket
      */
     public void setIdTicket( int nIdTicket )
     {
@@ -95,9 +101,10 @@ public class IndexerActionFilter
 
     /**
      * Check if this filter contains an Ticket id
+     * 
      * @return True if this filter contains an Ticket id, false otherwise
      */
-    public boolean containsIdTicket(  )
+    public boolean containsIdTicket( )
     {
         return ( _nIdTicket != ALL_INT );
     }

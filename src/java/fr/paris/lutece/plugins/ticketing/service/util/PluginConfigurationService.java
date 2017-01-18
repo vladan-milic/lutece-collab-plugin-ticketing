@@ -46,7 +46,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * This class provides utility methods to use plugin configuration
  *
@@ -57,10 +56,8 @@ public final class PluginConfigurationService
     public static final String PROPERTY_TICKET_WORKFLOW_ID = PROPERTY_PREFIX + "workflow.id";
     public static final String PROPERTY_STATE_CLOSED_ID = PROPERTY_PREFIX + "state.id.closed";
     public static final String PROPERTY_STATES_SELECTED = PROPERTY_PREFIX + "states.selected";
-    public static final String PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX = PROPERTY_PREFIX +
-        "states.selected.for.role.";
-    public static final String PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME = PROPERTY_PREFIX +
-        "actions.filtered.when.assigned.to.me";
+    public static final String PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX = PROPERTY_PREFIX + "states.selected.for.role.";
+    public static final String PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME = PROPERTY_PREFIX + "actions.filtered.when.assigned.to.me";
     public static final String PROPERTY_ADMINUSER_ID_FRONT = PROPERTY_PREFIX + "adminUser.id.front";
     public static final String PROPERTY_CHANNEL_ID_FRONT = PROPERTY_PREFIX + "channel.id.front";
     private static final String LIST_SEPARATOR = ";";
@@ -68,14 +65,17 @@ public final class PluginConfigurationService
     /**
      * Default constructor
      */
-    private PluginConfigurationService(  )
+    private PluginConfigurationService( )
     {
     }
 
     /**
      * Sets a property of type {@code String}
-     * @param strProperty the property key
-     * @param strValue the value
+     * 
+     * @param strProperty
+     *            the property key
+     * @param strValue
+     *            the value
      */
     public static void set( String strProperty, String strValue )
     {
@@ -84,8 +84,11 @@ public final class PluginConfigurationService
 
     /**
      * Sets a property of type {@code int}
-     * @param strProperty the property key
-     * @param nValue the value
+     * 
+     * @param strProperty
+     *            the property key
+     * @param nValue
+     *            the value
      */
     public static void set( String strProperty, int nValue )
     {
@@ -96,8 +99,11 @@ public final class PluginConfigurationService
 
     /**
      * Sets a property of type {@code List<String>}
-     * @param strProperty the property key
-     * @param listValues the value
+     * 
+     * @param strProperty
+     *            the property key
+     * @param listValues
+     *            the value
      */
     public static void set( String strProperty, List<Integer> listValues )
     {
@@ -108,8 +114,11 @@ public final class PluginConfigurationService
 
     /**
      * Gets a property of type {@code String}. If the property is not found, the specified default value is returned.
-     * @param strProperty the property key
-     * @param strDefaultValue the default value
+     * 
+     * @param strProperty
+     *            the property key
+     * @param strDefaultValue
+     *            the default value
      * @return the property or the default value if not found
      */
     public static String getString( String strProperty, String strDefaultValue )
@@ -121,8 +130,11 @@ public final class PluginConfigurationService
 
     /**
      * Gets a property of type {@code List<String>}. If the property is not found, the specified default values is returned.
-     * @param strProperty the property key
-     * @param listDefaultValues the default values
+     * 
+     * @param strProperty
+     *            the property key
+     * @param listDefaultValues
+     *            the default values
      * @return the property or the default values if not found
      */
     public static List<String> getStringList( String strProperty, List<String> listDefaultValues )
@@ -136,29 +148,29 @@ public final class PluginConfigurationService
 
     /**
      * Gets the properties of type {@code List<String>} which have the specified prefix. If no property is found, the specified default values is returned.
-     * @param strPropertyPrefix the prefix of the property keys
-     * @param mapDefaultValues the default values
+     * 
+     * @param strPropertyPrefix
+     *            the prefix of the property keys
+     * @param mapDefaultValues
+     *            the default values
      * @return a Map which contains the property keys as keys and the property values as values. Or the default values if not found.
      */
-    public static Map<String, List<String>> getStringListByPrefix( String strPropertyPrefix,
-        Map<String, List<String>> mapDefaultValues )
+    public static Map<String, List<String>> getStringListByPrefix( String strPropertyPrefix, Map<String, List<String>> mapDefaultValues )
     {
         Map<String, List<String>> result = mapDefaultValues;
         ReferenceList referenceListValues = DatastoreService.getDataByPrefix( strPropertyPrefix );
 
         if ( referenceListValues != null )
         {
-            result = new HashMap<String, List<String>>(  );
+            result = new HashMap<String, List<String>>( );
 
             for ( ReferenceItem item : referenceListValues )
             {
-                List<String> listValues = stringToStringList( item.getName(  ) );
+                List<String> listValues = stringToStringList( item.getName( ) );
 
                 if ( listValues != null )
                 {
-                    result.put( item.getCode(  )
-                                    .replace( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX,
-                            StringUtils.EMPTY ), listValues );
+                    result.put( item.getCode( ).replace( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX, StringUtils.EMPTY ), listValues );
                 }
             }
         }
@@ -168,8 +180,11 @@ public final class PluginConfigurationService
 
     /**
      * Gets a property of type {@code int}. If the property is not found, the specified default value is returned.
-     * @param strProperty the property key
-     * @param nDefaultValue the default value
+     * 
+     * @param strProperty
+     *            the property key
+     * @param nDefaultValue
+     *            the default value
      * @return the property or the default value if not found
      */
     public static int getInt( String strProperty, int nDefaultValue )
@@ -181,8 +196,11 @@ public final class PluginConfigurationService
 
     /**
      * Gets a property of type {@code List<Integer>}. If the property is not found, the specified default values is returned.
-     * @param strProperty the property key
-     * @param listDefaultValues the default values
+     * 
+     * @param strProperty
+     *            the property key
+     * @param listDefaultValues
+     *            the default values
      * @return the property or the default values if not found
      */
     public static List<Integer> getIntegerList( String strProperty, List<Integer> listDefaultValues )
@@ -196,29 +214,29 @@ public final class PluginConfigurationService
 
     /**
      * Gets the properties of type {@code List<Integer>} which have the specified prefix. If no property is found, the specified default values is returned.
-     * @param strProperty the prefix of the property keys
-     * @param mapDefaultValues the default values
+     * 
+     * @param strProperty
+     *            the prefix of the property keys
+     * @param mapDefaultValues
+     *            the default values
      * @return a Map which contains the property keys as keys and the property values as values. Or the default values if not found.
      */
-    public static Map<String, List<Integer>> getIntegerListByPrefix( String strProperty,
-        Map<String, List<Integer>> mapDefaultValues )
+    public static Map<String, List<Integer>> getIntegerListByPrefix( String strProperty, Map<String, List<Integer>> mapDefaultValues )
     {
         Map<String, List<Integer>> result = mapDefaultValues;
         ReferenceList referenceListValues = DatastoreService.getDataByPrefix( strProperty );
 
         if ( referenceListValues != null )
         {
-            result = new HashMap<String, List<Integer>>(  );
+            result = new HashMap<String, List<Integer>>( );
 
             for ( ReferenceItem item : referenceListValues )
             {
-                List<Integer> listValues = stringToIntegerList( item.getName(  ) );
+                List<Integer> listValues = stringToIntegerList( item.getName( ) );
 
                 if ( listValues != null )
                 {
-                    result.put( item.getCode(  )
-                                    .replace( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX,
-                            StringUtils.EMPTY ), listValues );
+                    result.put( item.getCode( ).replace( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX, StringUtils.EMPTY ), listValues );
                 }
             }
         }
@@ -228,7 +246,9 @@ public final class PluginConfigurationService
 
     /**
      * Removes all the properties which have the specified prefix.
-     * @param strPropertyPrefix the prefix of the property keys
+     * 
+     * @param strPropertyPrefix
+     *            the prefix of the property keys
      */
     public static void removeByPrefix( String strPropertyPrefix )
     {
@@ -237,37 +257,41 @@ public final class PluginConfigurationService
 
     /**
      * Converts a list to a String. Uses the {@code toString(  )} to build the String.
-     * @param listValues the list to convert
+     * 
+     * @param listValues
+     *            the list to convert
      * @return a String, representation of the list
      */
-    private static String listToString( List<?extends Object> listValues )
+    private static String listToString( List<? extends Object> listValues )
     {
-        if ( ( listValues == null ) || listValues.isEmpty(  ) )
+        if ( ( listValues == null ) || listValues.isEmpty( ) )
         {
             return null;
         }
 
-        StringBuilder sb = new StringBuilder(  );
+        StringBuilder sb = new StringBuilder( );
 
         for ( Object objValue : listValues )
         {
-            if ( ( objValue != null ) && !StringUtils.isEmpty( objValue.toString(  ) ) )
+            if ( ( objValue != null ) && !StringUtils.isEmpty( objValue.toString( ) ) )
             {
-                sb.append( objValue.toString(  ) ).append( LIST_SEPARATOR );
+                sb.append( objValue.toString( ) ).append( LIST_SEPARATOR );
             }
         }
 
-        if ( sb.length(  ) != 0 )
+        if ( sb.length( ) != 0 )
         {
-            sb.deleteCharAt( sb.length(  ) - 1 );
+            sb.deleteCharAt( sb.length( ) - 1 );
         }
 
-        return ( sb.length(  ) == 0 ) ? null : sb.toString(  );
+        return ( sb.length( ) == 0 ) ? null : sb.toString( );
     }
 
     /**
      * Converts a String to a List<String>
-     * @param strValue the String to convert
+     * 
+     * @param strValue
+     *            the String to convert
      * @return the List<String> from the String
      */
     private static List<String> stringToStringList( String strValue )
@@ -276,7 +300,7 @@ public final class PluginConfigurationService
 
         if ( strValue != null )
         {
-            String[] listValues = strValue.split( LIST_SEPARATOR );
+            String [ ] listValues = strValue.split( LIST_SEPARATOR );
 
             result = Arrays.asList( listValues );
         }
@@ -286,7 +310,9 @@ public final class PluginConfigurationService
 
     /**
      * Converts a String to a List<Integer>
-     * @param strValue the String to convert
+     * 
+     * @param strValue
+     *            the String to convert
      * @return the List<integer> from the String
      */
     private static List<Integer> stringToIntegerList( String strValue )
@@ -295,7 +321,7 @@ public final class PluginConfigurationService
 
         if ( strValue != null )
         {
-            String[] listValues = strValue.split( LIST_SEPARATOR );
+            String [ ] listValues = strValue.split( LIST_SEPARATOR );
             result = new ArrayList<Integer>( listValues.length );
 
             for ( String strValueItem : listValues )

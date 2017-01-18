@@ -55,10 +55,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
- * Ticketing Dashboard Component
- * This component displays summary tickets associated to the connected user
+ * Ticketing Dashboard Component This component displays summary tickets associated to the connected user
  */
 public class TicketingDashboardComponent extends DashboardComponent
 {
@@ -82,31 +80,30 @@ public class TicketingDashboardComponent extends DashboardComponent
     @Override
     public String getDashboardData( AdminUser user, HttpServletRequest request )
     {
-        Right right = RightHome.findByPrimaryKey( getRight(  ) );
-        Plugin plugin = PluginService.getPlugin( right.getPluginName(  ) );
+        Right right = RightHome.findByPrimaryKey( getRight( ) );
+        Plugin plugin = PluginService.getPlugin( right.getPluginName( ) );
 
-        UrlItem url = new UrlItem( right.getUrl(  ) );
-        url.addParameter( PARAMETER_PLUGIN_NAME, right.getPluginName(  ) );
+        UrlItem url = new UrlItem( right.getUrl( ) );
+        url.addParameter( PARAMETER_PLUGIN_NAME, right.getPluginName( ) );
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( MARK_URL, url.getUrl(  ) );
-        model.put( MARK_ICON, plugin.getIconUrl(  ) );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        model.put( MARK_URL, url.getUrl( ) );
+        model.put( MARK_ICON, plugin.getIconUrl( ) );
 
-        if ( WorkflowService.getInstance(  ).isAvailable(  ) )
+        if ( WorkflowService.getInstance( ).isAvailable( ) )
         {
             TicketFilter filter = TicketFilterHelper.getFilter( request, user );
 
-            List<Ticket> listAgentTickets = new ArrayList<Ticket>(  );
-            List<Ticket> listGroupTickets = new ArrayList<Ticket>(  );
-            List<Ticket> listDomainTickets = new ArrayList<Ticket>(  );
+            List<Ticket> listAgentTickets = new ArrayList<Ticket>( );
+            List<Ticket> listGroupTickets = new ArrayList<Ticket>( );
+            List<Ticket> listDomainTickets = new ArrayList<Ticket>( );
 
-            TicketUtils.setTicketsListByPerimeter( user, filter, request, listAgentTickets, listGroupTickets,
-                listDomainTickets );
+            TicketUtils.setTicketsListByPerimeter( user, filter, request, listAgentTickets, listGroupTickets, listDomainTickets );
 
-            model.put( MARK_TICKET_ASSIGNED_TO_ME_COUNTER, listAgentTickets.size(  ) );
-            model.put( MARK_TICKET_ASSIGNED_TO_MY_GROUP_COUNTER, listGroupTickets.size(  ) );
-            model.put( MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER, listDomainTickets.size(  ) );
-            model.put( MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER, listDomainTickets.size(  ) );
+            model.put( MARK_TICKET_ASSIGNED_TO_ME_COUNTER, listAgentTickets.size( ) );
+            model.put( MARK_TICKET_ASSIGNED_TO_MY_GROUP_COUNTER, listGroupTickets.size( ) );
+            model.put( MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER, listDomainTickets.size( ) );
+            model.put( MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER, listDomainTickets.size( ) );
             model.put( MARK_WORFLOWSERVICE_UNAVAILABLE, false );
         }
         else
@@ -114,8 +111,8 @@ public class TicketingDashboardComponent extends DashboardComponent
             model.put( MARK_WORFLOWSERVICE_UNAVAILABLE, true );
         }
 
-        HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_DASHBOARD, user.getLocale(  ), model );
+        HtmlTemplate t = AppTemplateService.getTemplate( TEMPLATE_DASHBOARD, user.getLocale( ), model );
 
-        return t.getHtml(  );
+        return t.getHtml( );
     }
 }

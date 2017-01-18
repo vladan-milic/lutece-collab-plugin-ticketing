@@ -37,7 +37,6 @@ import java.io.Serializable;
 
 import java.sql.Timestamp;
 
-
 /**
  * This is the business class for the object InstantResponse
  */
@@ -45,7 +44,7 @@ public class InstantResponse implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    // Variables declarations 
+    // Variables declarations
     private int _nId;
     private int _nIdTicketCategory;
     private String _strSubject;
@@ -62,16 +61,19 @@ public class InstantResponse implements Serializable
 
     /**
      * Returns the Id
+     * 
      * @return The Id
      */
-    public int getId(  )
+    public int getId( )
     {
         return _nId;
     }
 
     /**
      * Sets the Id
-     * @param nId The Id
+     * 
+     * @param nId
+     *            The Id
      */
     public void setId( int nId )
     {
@@ -80,16 +82,19 @@ public class InstantResponse implements Serializable
 
     /**
      * Returns the IdTicketCategory
+     * 
      * @return The IdTicketCategory
      */
-    public int getIdTicketCategory(  )
+    public int getIdTicketCategory( )
     {
         return _nIdTicketCategory;
     }
 
     /**
      * Sets the IdTicketCategory
-     * @param nIdTicketCategory The IdTicketCategory
+     * 
+     * @param nIdTicketCategory
+     *            The IdTicketCategory
      */
     public void setIdTicketCategory( int nIdTicketCategory )
     {
@@ -98,16 +103,19 @@ public class InstantResponse implements Serializable
 
     /**
      * Returns the Subject
+     * 
      * @return The Subject
      */
-    public String getSubject(  )
+    public String getSubject( )
     {
         return _strSubject;
     }
 
     /**
      * Sets the Subject
-     * @param strSubject The Subject
+     * 
+     * @param strSubject
+     *            The Subject
      */
     public void setSubject( String strSubject )
     {
@@ -116,16 +124,19 @@ public class InstantResponse implements Serializable
 
     /**
      * Returns the IdAdminUser
+     * 
      * @return The IdAdminUser
      */
-    public int getIdAdminUser(  )
+    public int getIdAdminUser( )
     {
         return _nIdAdminUser;
     }
 
     /**
      * Sets the IdAdminUser
-     * @param nIdAdminUser The IdAdminUser
+     * 
+     * @param nIdAdminUser
+     *            The IdAdminUser
      */
     public void setIdAdminUser( int nIdAdminUser )
     {
@@ -134,16 +145,19 @@ public class InstantResponse implements Serializable
 
     /**
      * Returns the Type
+     * 
      * @return The Type
      */
-    public String getType(  )
+    public String getType( )
     {
         return _strType;
     }
 
     /**
      * Sets the Type
-     * @param strType The Type
+     * 
+     * @param strType
+     *            The Type
      */
     public void setType( String strType )
     {
@@ -152,16 +166,19 @@ public class InstantResponse implements Serializable
 
     /**
      * Returns the Domain
+     * 
      * @return The Domain
      */
-    public String getDomain(  )
+    public String getDomain( )
     {
         return _strDomain;
     }
 
     /**
      * Sets the Domain
-     * @param strDomain The Domain
+     * 
+     * @param strDomain
+     *            The Domain
      */
     public void setDomain( String strDomain )
     {
@@ -170,16 +187,19 @@ public class InstantResponse implements Serializable
 
     /**
      * Returns the Category
+     * 
      * @return The Category
      */
-    public String getCategory(  )
+    public String getCategory( )
     {
         return _strCategory;
     }
 
     /**
      * Sets the Category
-     * @param strCategory The Category
+     * 
+     * @param strCategory
+     *            The Category
      */
     public void setCategory( String strCategory )
     {
@@ -188,16 +208,19 @@ public class InstantResponse implements Serializable
 
     /**
      * Returns the UserFirstname
+     * 
      * @return The UserFirstname
      */
-    public String getUserFirstname(  )
+    public String getUserFirstname( )
     {
         return _strUserFirstname;
     }
 
     /**
      * Sets the UserFirstname
-     * @param strUserFirstname The UserFirstname
+     * 
+     * @param strUserFirstname
+     *            The UserFirstname
      */
     public void setUserFirstname( String strUserFirstname )
     {
@@ -206,16 +229,19 @@ public class InstantResponse implements Serializable
 
     /**
      * Returns the UserLastname
+     * 
      * @return The UserLastname
      */
-    public String getUserLastname(  )
+    public String getUserLastname( )
     {
         return _strUserLastname;
     }
 
     /**
      * Sets the UserLastname
-     * @param strUserLastname The UserLastname
+     * 
+     * @param strUserLastname
+     *            The UserLastname
      */
     public void setUserLastname( String strUserLastname )
     {
@@ -224,16 +250,19 @@ public class InstantResponse implements Serializable
 
     /**
      * Returns the IdUnit
+     * 
      * @return The IdUnit
      */
-    public int getIdUnit(  )
+    public int getIdUnit( )
     {
         return _nIdUnit;
     }
 
     /**
      * Sets the IdUnit
-     * @param nIdUnit The IdUnit
+     * 
+     * @param nIdUnit
+     *            The IdUnit
      */
     public void setIdUnit( int nIdUnit )
     {
@@ -242,16 +271,19 @@ public class InstantResponse implements Serializable
 
     /**
      * Returns the Unit
+     * 
      * @return The Unit
      */
-    public String getUnit(  )
+    public String getUnit( )
     {
         return _strUnit;
     }
 
     /**
      * Sets the Unit
-     * @param strUnit The Unit
+     * 
+     * @param strUnit
+     *            The Unit
      */
     public void setUnit( String strUnit )
     {
@@ -260,16 +292,19 @@ public class InstantResponse implements Serializable
 
     /**
      * Gets the create date
+     * 
      * @return the create date
      */
-    public Timestamp getDateCreate(  )
+    public Timestamp getDateCreate( )
     {
         return _dDateCreate;
     }
 
     /**
      * Sets the create date
-     * @param dDateCreate the create date
+     * 
+     * @param dDateCreate
+     *            the create date
      */
     public void setDateCreate( Timestamp dDateCreate )
     {
@@ -278,16 +313,19 @@ public class InstantResponse implements Serializable
 
     /**
      * Returns the IdChannel
+     * 
      * @return The IdChannel
      */
-    public int getIdChannel(  )
+    public int getIdChannel( )
     {
         return _nIdChannel;
     }
 
     /**
      * Sets the IdChannel
-     * @param nIdChannel The IdChannel
+     * 
+     * @param nIdChannel
+     *            The IdChannel
      */
     public void setIdChannel( int nIdChannel )
     {

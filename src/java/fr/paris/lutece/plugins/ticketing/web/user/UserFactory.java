@@ -43,10 +43,8 @@ import fr.paris.lutece.portal.business.user.AdminUserHome;
 
 import java.util.List;
 
-
 /**
- * Factory of User.
- * Designed as a singleton
+ * Factory of User. Designed as a singleton
  *
  */
 public class UserFactory
@@ -56,35 +54,36 @@ public class UserFactory
     /**
      * Default constructor
      */
-    private UserFactory(  )
+    private UserFactory( )
     {
     }
 
     /**
      * Creates a User
-     * @param IdAdminUser the idUser used to select the correct AdminUser
+     * 
+     * @param IdAdminUser
+     *            the idUser used to select the correct AdminUser
      * @return the User
      */
     public User create( int nIdUser )
     {
-        User user = new User(  );
+        User user = new User( );
 
         AdminUser adminUser = AdminUserHome.findByPrimaryKey( nIdUser );
 
-        adminUser.setRoles( AdminUserHome.getRolesListForUser( adminUser.getUserId(  ) ) );
+        adminUser.setRoles( AdminUserHome.getRolesListForUser( adminUser.getUserId( ) ) );
 
-        List<TicketDomain> listDomains = TicketDomainHome.getTicketDomainsList( adminUser,
-                TicketDomainResourceIdService.PERMISSION_BELONG_TO );
+        List<TicketDomain> listDomains = TicketDomainHome.getTicketDomainsList( adminUser, TicketDomainResourceIdService.PERMISSION_BELONG_TO );
 
         List<Unit> listUnits = UnitHome.findByIdUser( nIdUser );
 
-        user.setIdUser( adminUser.getUserId(  ) );
+        user.setIdUser( adminUser.getUserId( ) );
 
-        user.setFirstName( adminUser.getFirstName(  ) );
+        user.setFirstName( adminUser.getFirstName( ) );
 
-        user.setLastName( adminUser.getLastName(  ) );
+        user.setLastName( adminUser.getLastName( ) );
 
-        user.setEmail( adminUser.getEmail(  ) );
+        user.setEmail( adminUser.getEmail( ) );
 
         user.setUnit( listUnits );
 
@@ -95,14 +94,16 @@ public class UserFactory
 
     /**
      * Creates a User
-     * @param id of user
+     * 
+     * @param id
+     *            of user
      * @return The User
      */
-    public static UserFactory getInstance(  )
+    public static UserFactory getInstance( )
     {
         if ( _instance == null )
         {
-            _instance = new UserFactory(  );
+            _instance = new UserFactory( );
         }
 
         return _instance;

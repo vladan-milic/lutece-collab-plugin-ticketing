@@ -67,7 +67,6 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Class providing helper for Ticket web management
  *
@@ -77,33 +76,35 @@ public final class TicketUtils
     /**
      * Default constructor
      */
-    private TicketUtils(  )
+    private TicketUtils( )
     {
     }
 
     /**
      * Registers the admin user for front office
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      */
     public static AdminUser registerAdminUserFront( HttpServletRequest request )
     {
-        AdminUser userFront = AdminUserHome.findByPrimaryKey( PluginConfigurationService.getInt( 
-                    PluginConfigurationService.PROPERTY_ADMINUSER_ID_FRONT, TicketingConstants.PROPERTY_UNSET_INT ) );
+        AdminUser userFront = AdminUserHome.findByPrimaryKey( PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_ADMINUSER_ID_FRONT,
+                TicketingConstants.PROPERTY_UNSET_INT ) );
 
         try
         {
-            AdminAuthenticationService.getInstance(  ).registerUser( request, userFront );
+            AdminAuthenticationService.getInstance( ).registerUser( request, userFront );
 
             // Gets the user from request because registerUser initializes roles, etc.
-            userFront = AdminAuthenticationService.getInstance(  ).getRegisteredUser( request );
+            userFront = AdminAuthenticationService.getInstance( ).getRegisteredUser( request );
         }
-        catch ( AccessDeniedException e )
+        catch( AccessDeniedException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
         }
-        catch ( UserNotSignedException e )
+        catch( UserNotSignedException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
         }
 
         return userFront;
@@ -111,17 +112,22 @@ public final class TicketUtils
 
     /**
      * Unregisters the admin user for front office
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      */
     public static void unregisterAdminUserFront( HttpServletRequest request )
     {
-        AdminAuthenticationService.getInstance(  ).unregisterUser( request );
+        AdminAuthenticationService.getInstance( ).unregisterUser( request );
     }
 
     /**
      * Creates a ReferenceList object initialized with one item
-     * @param strLabel the label for the item
-     * @param nCode the int used as a code for the item
+     * 
+     * @param strLabel
+     *            the label for the item
+     * @param nCode
+     *            the int used as a code for the item
      * @return a ReferenceList object initialized with one item
      */
     public static ReferenceList createReferenceList( String strLabel, int nCode )
@@ -131,17 +137,20 @@ public final class TicketUtils
 
     /**
      * Creates a ReferenceList object initialized with one item
-     * @param strLabel the label for the item
-     * @param strCode the code for the item
+     * 
+     * @param strLabel
+     *            the label for the item
+     * @param strCode
+     *            the code for the item
      * @return a ReferenceList object initialized with one item
      */
     public static ReferenceList createReferenceList( String strLabel, String strCode )
     {
-        ReferenceItem refItemEmpty = new ReferenceItem(  );
+        ReferenceItem refItemEmpty = new ReferenceItem( );
         refItemEmpty.setCode( strCode );
         refItemEmpty.setName( strLabel );
 
-        ReferenceList listRefEmpty = new ReferenceList(  );
+        ReferenceList listRefEmpty = new ReferenceList( );
         listRefEmpty.add( refItemEmpty );
 
         return listRefEmpty;
@@ -149,8 +158,11 @@ public final class TicketUtils
 
     /**
      * returns true if ticket is assign to user's group
-     * @param ticket ticket
-     * @param lstUserUnits user's units
+     * 
+     * @param ticket
+     *            ticket
+     * @param lstUserUnits
+     *            user's units
      * @return true if ticket belongs to user's group
      */
     public static boolean isTicketAssignedToUserGroup( Ticket ticket, List<Unit> lstUserUnits )
@@ -159,8 +171,7 @@ public final class TicketUtils
 
         for ( Unit unit : lstUserUnits )
         {
-            if ( ( ticket.getAssigneeUnit(  ) != null ) &&
-                    ( unit.getIdUnit(  ) == ticket.getAssigneeUnit(  ).getUnitId(  ) ) )
+            if ( ( ticket.getAssigneeUnit( ) != null ) && ( unit.getIdUnit( ) == ticket.getAssigneeUnit( ).getUnitId( ) ) )
             {
                 result = true;
 
@@ -173,8 +184,11 @@ public final class TicketUtils
 
     /**
      * returns true if ticket is assigned to a child unit of user's group
-     * @param ticket ticket
-     * @param lstUserUnits user's units
+     * 
+     * @param ticket
+     *            ticket
+     * @param lstUserUnits
+     *            user's units
      * @return true if ticket is assigned to a child unit of user's group
      */
     public static boolean isTicketAssignedToChildUnitUserGroup( Ticket ticket, List<Unit> lstUserUnits )
@@ -183,9 +197,9 @@ public final class TicketUtils
 
         for ( Unit unit : lstUserUnits )
         {
-            if ( ticket.getAssigneeUnit(  ) != null )
+            if ( ticket.getAssigneeUnit( ) != null )
             {
-                Unit currentUnit = UnitHome.findByPrimaryKey( ticket.getAssigneeUnit(  ).getUnitId(  ) );
+                Unit currentUnit = UnitHome.findByPrimaryKey( ticket.getAssigneeUnit( ).getUnitId( ) );
 
                 result = isParentUnit( unit, currentUnit );
 
@@ -201,8 +215,11 @@ public final class TicketUtils
 
     /**
      * returns true if the current unit is the parent unit
-     * @param parentUnit parent unit
-     * @param currentUnit current unit
+     * 
+     * @param parentUnit
+     *            parent unit
+     * @param currentUnit
+     *            current unit
      * @return true if the current unit is the parent unit
      */
     public static boolean isParentUnit( Unit parentUnit, Unit currentUnit )
@@ -215,15 +232,15 @@ public final class TicketUtils
         }
         else
         {
-            if ( parentUnit.getIdUnit(  ) == currentUnit.getIdParent(  ) )
+            if ( parentUnit.getIdUnit( ) == currentUnit.getIdParent( ) )
             {
                 result = true;
             }
             else
             {
-                if ( TicketingConstants.NO_PARENT_ID != currentUnit.getIdParent(  ) )
+                if ( TicketingConstants.NO_PARENT_ID != currentUnit.getIdParent( ) )
                 {
-                    Unit currentParentUnit = UnitHome.findByPrimaryKey( currentUnit.getIdParent(  ) );
+                    Unit currentParentUnit = UnitHome.findByPrimaryKey( currentUnit.getIdParent( ) );
                     result = isParentUnit( parentUnit, currentParentUnit );
                 }
             }
@@ -234,8 +251,11 @@ public final class TicketUtils
 
     /**
      * returns true if ticket is assign up from user's group
-     * @param ticket ticket
-     * @param lstUserUnits user's units
+     * 
+     * @param ticket
+     *            ticket
+     * @param lstUserUnits
+     *            user's units
      * @return true if ticket belongs to user's group
      */
     public static boolean isTicketAssignedUpFromUserGroup( Ticket ticket, List<Unit> lstUserUnits )
@@ -244,8 +264,7 @@ public final class TicketUtils
 
         for ( Unit unit : lstUserUnits )
         {
-            if ( ( ticket.getAssignerUnit(  ) != null ) &&
-                    ( unit.getIdUnit(  ) == ticket.getAssignerUnit(  ).getUnitId(  ) ) )
+            if ( ( ticket.getAssignerUnit( ) != null ) && ( unit.getIdUnit( ) == ticket.getAssignerUnit( ).getUnitId( ) ) )
             {
                 result = true;
 
@@ -257,75 +276,85 @@ public final class TicketUtils
     }
 
     /**
-     * @param user admin user
-     * @param filter ticket filter
-     * @param request http request
-     * @param listAgentTickets user's ticket
-     * @param listGroupTickets group's ticket
-     * @param listDomainTickets domain's ticket
+     * @param user
+     *            admin user
+     * @param filter
+     *            ticket filter
+     * @param request
+     *            http request
+     * @param listAgentTickets
+     *            user's ticket
+     * @param listGroupTickets
+     *            group's ticket
+     * @param listDomainTickets
+     *            domain's ticket
      */
-    public static void setTicketsListByPerimeter( AdminUser user, TicketFilter filter, HttpServletRequest request,
-        List<Ticket> listAgentTickets, List<Ticket> listGroupTickets, List<Ticket> listDomainTickets )
+    public static void setTicketsListByPerimeter( AdminUser user, TicketFilter filter, HttpServletRequest request, List<Ticket> listAgentTickets,
+            List<Ticket> listGroupTickets, List<Ticket> listDomainTickets )
     {
         List<Ticket> listTickets = (List<Ticket>) TicketHome.getTicketsList( filter );
 
-        List<Unit> lstUserUnits = UnitHome.findByIdUser( user.getUserId(  ) );
+        List<Unit> lstUserUnits = UnitHome.findByIdUser( user.getUserId( ) );
 
-        //Filtering results
+        // Filtering results
         for ( Ticket ticket : listTickets )
         {
-            TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain(  ) );
+            TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) );
 
-            if ( RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, user ) &&
-                    RBACService.isAuthorized( ticketDomain, TicketDomainResourceIdService.PERMISSION_VIEW, user ) )
+            if ( RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, user )
+                    && RBACService.isAuthorized( ticketDomain, TicketDomainResourceIdService.PERMISSION_VIEW, user ) )
             {
                 if ( ( isAssignee( ticket, user ) ) || ( isAssigner( ticket, user ) ) )
                 {
-                    //ticket assign to agent
+                    // ticket assign to agent
                     listAgentTickets.add( ticket );
                 }
-                else if ( isTicketAssignedToUserGroup( ticket, lstUserUnits ) ||
-                        isTicketAssignedToChildUnitUserGroup( ticket, lstUserUnits ) ||
-                        isTicketAssignedUpFromUserGroup( ticket, lstUserUnits ) )
-                {
-                    //ticket assign to agent group
-                    listGroupTickets.add( ticket );
-                }
                 else
-                {
-                    //ticket assign to domain
-                    listDomainTickets.add( ticket );
-                }
+                    if ( isTicketAssignedToUserGroup( ticket, lstUserUnits ) || isTicketAssignedToChildUnitUserGroup( ticket, lstUserUnits )
+                            || isTicketAssignedUpFromUserGroup( ticket, lstUserUnits ) )
+                    {
+                        // ticket assign to agent group
+                        listGroupTickets.add( ticket );
+                    }
+                    else
+                    {
+                        // ticket assign to domain
+                        listDomainTickets.add( ticket );
+                    }
             }
         }
     }
 
     /**
      * returns true if ticket is assign to user or group, false otherwise
-     * @param user adminUser
-     * @param ticket ticket
+     * 
+     * @param user
+     *            adminUser
+     * @param ticket
+     *            ticket
      * @return true if ticket is assign to user or group
      */
     public static boolean isTicketAssignToUserOrGroup( AdminUser user, Ticket ticket )
     {
         boolean bAssignToUserOrGroup = false;
 
-        if ( ( ticket.getAssigneeUser(  ) != null ) &&
-                ( ticket.getAssigneeUser(  ).getAdminUserId(  ) == user.getUserId(  ) ) )
+        if ( ( ticket.getAssigneeUser( ) != null ) && ( ticket.getAssigneeUser( ).getAdminUserId( ) == user.getUserId( ) ) )
         {
-            //ticket assign to agent
+            // ticket assign to agent
             bAssignToUserOrGroup = true;
         }
-        else if ( isTicketAssignedToUserGroup( ticket, UnitHome.findByIdUser( user.getUserId(  ) ) ) )
-        {
-            //ticket assign to agent group
-            bAssignToUserOrGroup = true;
-        }
-        else if ( isTicketAssignedToChildUnitUserGroup( ticket, UnitHome.findByIdUser( user.getUserId(  ) ) ) )
-        {
-            //ticket assign to child unit of agent group
-            bAssignToUserOrGroup = true;
-        }
+        else
+            if ( isTicketAssignedToUserGroup( ticket, UnitHome.findByIdUser( user.getUserId( ) ) ) )
+            {
+                // ticket assign to agent group
+                bAssignToUserOrGroup = true;
+            }
+            else
+                if ( isTicketAssignedToChildUnitUserGroup( ticket, UnitHome.findByIdUser( user.getUserId( ) ) ) )
+                {
+                    // ticket assign to child unit of agent group
+                    bAssignToUserOrGroup = true;
+                }
 
         return bAssignToUserOrGroup;
     }
@@ -339,15 +368,15 @@ public final class TicketUtils
      */
     public static List<Integer> extractListIdFromString( String strIdList )
     {
-        List<Integer> listId = new ArrayList<Integer>(  );
+        List<Integer> listId = new ArrayList<Integer>( );
 
         if ( StringUtils.isNotEmpty( strIdList ) )
         {
             StringTokenizer st = new StringTokenizer( strIdList, TicketingConstants.FIELD_ID_SEPARATOR );
 
-            while ( st.hasMoreElements(  ) )
+            while ( st.hasMoreElements( ) )
             {
-                listId.add( Integer.parseInt( st.nextToken(  ) ) );
+                listId.add( Integer.parseInt( st.nextToken( ) ) );
             }
         }
 
@@ -363,16 +392,14 @@ public final class TicketUtils
      */
     public static ReferenceList getSelectableChannelsList( HttpServletRequest request )
     {
-        ReferenceList channelList = ChannelHome.getReferenceList(  );
+        ReferenceList channelList = ChannelHome.getReferenceList( );
 
-        String strIdSelectableChannelList = AdminUserPreferencesService.instance(  )
-                                                                       .get( String.valueOf( 
-                    AdminUserService.getAdminUser( request ).getUserId(  ) ),
-                TicketingConstants.USER_PREFERENCE_CHANNELS_LIST, StringUtils.EMPTY );
+        String strIdSelectableChannelList = AdminUserPreferencesService.instance( ).get(
+                String.valueOf( AdminUserService.getAdminUser( request ).getUserId( ) ), TicketingConstants.USER_PREFERENCE_CHANNELS_LIST, StringUtils.EMPTY );
 
         List<Integer> idSelectableChannelList = extractListIdFromString( strIdSelectableChannelList );
-        Map<String, String> selectableChannelsMap = new HashMap<String, String>(  );
-        Map<String, String> channelsMap = channelList.toMap(  );
+        Map<String, String> selectableChannelsMap = new HashMap<String, String>( );
+        Map<String, String> channelsMap = channelList.toMap( );
 
         for ( Integer channelId : idSelectableChannelList )
         {
@@ -388,7 +415,9 @@ public final class TicketUtils
 
     /**
      * Tests whether the id is set or not
-     * @param nId the id to test
+     * 
+     * @param nId
+     *            the id to test
      * @return {@code true} if the id is set, {@code false} otherwise
      */
     public static boolean isIdSet( int nId )
@@ -398,25 +427,29 @@ public final class TicketUtils
 
     /**
      * Tests if the specified ticket is assigned to the specified user
-     * @param ticket the ticket
-     * @param user the user
+     * 
+     * @param ticket
+     *            the ticket
+     * @param user
+     *            the user
      * @return {@code true} if the ticket is assigned to the user, {@code false} otherwise
      */
     public static boolean isAssignee( Ticket ticket, AdminUser user )
     {
-        return ( ticket.getAssigneeUser(  ) != null ) &&
-        ( ticket.getAssigneeUser(  ).getAdminUserId(  ) == user.getUserId(  ) );
+        return ( ticket.getAssigneeUser( ) != null ) && ( ticket.getAssigneeUser( ).getAdminUserId( ) == user.getUserId( ) );
     }
 
     /**
      * Tests if the specified user is the assigner of the specified ticket
-     * @param ticket the ticket
-     * @param user the user
+     * 
+     * @param ticket
+     *            the ticket
+     * @param user
+     *            the user
      * @return {@code true} if the user is the assigner of the ticket, {@code false} otherwise
      */
     public static boolean isAssigner( Ticket ticket, AdminUser user )
     {
-        return ( ticket.getAssignerUser(  ) != null ) &&
-        ( ticket.getAssignerUser(  ).getAdminUserId(  ) == user.getUserId(  ) );
+        return ( ticket.getAssignerUser( ) != null ) && ( ticket.getAssignerUser( ).getAdminUserId( ) == user.getUserId( ) );
     }
 }

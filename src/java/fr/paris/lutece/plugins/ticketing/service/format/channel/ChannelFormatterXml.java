@@ -40,7 +40,6 @@ import fr.paris.lutece.util.xml.XmlUtil;
 
 import java.util.List;
 
-
 /**
  * XML formatter for channel resource
  *
@@ -50,7 +49,7 @@ public class ChannelFormatterXml implements ITicketingFormatter<Channel>
     @Override
     public String format( Channel channel )
     {
-        StringBuffer sbXML = new StringBuffer(  );
+        StringBuffer sbXML = new StringBuffer( );
 
         if ( channel != null )
         {
@@ -58,13 +57,13 @@ public class ChannelFormatterXml implements ITicketingFormatter<Channel>
             add( sbXML, channel );
         }
 
-        return sbXML.toString(  );
+        return sbXML.toString( );
     }
 
     @Override
     public String format( List<Channel> listChannels )
     {
-        StringBuffer sbXML = new StringBuffer(  );
+        StringBuffer sbXML = new StringBuffer( );
         sbXML.append( FormatConstants.XML_HEADER );
         XmlUtil.beginElement( sbXML, FormatConstants.KEY_CHANNELS );
 
@@ -75,7 +74,7 @@ public class ChannelFormatterXml implements ITicketingFormatter<Channel>
 
         XmlUtil.endElement( sbXML, FormatConstants.KEY_CHANNELS );
 
-        return sbXML.toString(  );
+        return sbXML.toString( );
     }
 
     @Override
@@ -92,15 +91,18 @@ public class ChannelFormatterXml implements ITicketingFormatter<Channel>
 
     /**
      * Write a channel into a buffer
-     * @param sbXML The buffer
-     * @param channel The channel
+     * 
+     * @param sbXML
+     *            The buffer
+     * @param channel
+     *            The channel
      */
     private void add( StringBuffer sbXML, Channel channel )
     {
         XmlUtil.beginElement( sbXML, FormatConstants.KEY_CHANNEL );
 
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_ID, channel.getId(  ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, channel.getLabel(  ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_ID, channel.getId( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, channel.getLabel( ) );
 
         XmlUtil.endElement( sbXML, FormatConstants.KEY_CHANNEL );
     }

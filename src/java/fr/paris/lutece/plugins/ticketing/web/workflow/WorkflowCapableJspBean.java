@@ -71,7 +71,6 @@ import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 
-
 /**
  * This class represents a JSP bean which can use workflow
  *
@@ -102,25 +101,25 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     static
     {
-        _mapRedirectUrl = new HashMap<String, String>(  );
+        _mapRedirectUrl = new HashMap<String, String>( );
 
-        Enumeration<?> enumPropNames = AppPropertiesService.getProperties(  ).propertyNames(  );
+        Enumeration<?> enumPropNames = AppPropertiesService.getProperties( ).propertyNames( );
 
-        while ( enumPropNames.hasMoreElements(  ) )
+        while ( enumPropNames.hasMoreElements( ) )
         {
-            String key = (String) enumPropNames.nextElement(  );
+            String key = (String) enumPropNames.nextElement( );
 
             if ( key.startsWith( TicketingConstants.PROPERTY_REDIRECT_PREFIX ) )
             {
-                _mapRedirectUrl.put( ( key ).substring( TicketingConstants.PROPERTY_REDIRECT_PREFIX.length(  ) ),
-                    AppPropertiesService.getProperty( key ) );
+                _mapRedirectUrl.put( ( key ).substring( TicketingConstants.PROPERTY_REDIRECT_PREFIX.length( ) ), AppPropertiesService.getProperty( key ) );
             }
         }
     }
 
     // Services
-    private static WorkflowService _workflowService = WorkflowService.getInstance(  );
-    private static IResourceHistoryInformationService _resourceHistoryTicketingInformationService = SpringContextService.getBean( BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE );
+    private static WorkflowService _workflowService = WorkflowService.getInstance( );
+    private static IResourceHistoryInformationService _resourceHistoryTicketingInformationService = SpringContextService
+            .getBean( BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE );
 
     /**
      * Generated serial id
@@ -129,11 +128,13 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * set workflow attributes for displayable tickets
-     * @param paginator paginator of tickets
+     * 
+     * @param paginator
+     *            paginator of tickets
      */
     protected void setWorkflowAttributes( LocalizedPaginator<Ticket> paginator )
     {
-        for ( Ticket ticket : paginator.getPageItems(  ) )
+        for ( Ticket ticket : paginator.getPageItems( ) )
         {
             setWorkflowAttributes( ticket );
         }
@@ -141,20 +142,21 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * set workflow attributes for the specified ticket
-     * @param ticket the Ticket
+     * 
+     * @param ticket
+     *            the Ticket
      */
     protected void setWorkflowAttributes( Ticket ticket )
     {
-        if ( _workflowService.isAvailable(  ) )
+        if ( _workflowService.isAvailable( ) )
         {
-            TicketCategory ticketCategory = ticket.getTicketCategory(  );
-            int nIdWorkflow = ticketCategory.getIdWorkflow(  );
+            TicketCategory ticketCategory = ticket.getTicketCategory( );
+            int nIdWorkflow = ticketCategory.getIdWorkflow( );
 
-            StateFilter stateFilter = new StateFilter(  );
+            StateFilter stateFilter = new StateFilter( );
             stateFilter.setIdWorkflow( nIdWorkflow );
 
-            State state = _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticketCategory.getId(  ) );
+            State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
 
             if ( state != null )
             {
@@ -163,21 +165,20 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
             if ( nIdWorkflow > 0 )
             {
-                Collection<Action> fullListWorkflowActions = getActions( ticket.getId(  ), nIdWorkflow );
+                Collection<Action> fullListWorkflowActions = getActions( ticket.getId( ), nIdWorkflow );
                 Collection<Action> filteredListWorkflowActions = new ArrayList<Action>( fullListWorkflowActions );
 
-                if ( TicketUtils.isTicketAssignToUserOrGroup( getUser(  ), ticket ) ||
-                        RBACService.isUserInRole( getUser(  ), TicketingConstants.ROLE_GRU_ADMIN ) )
+                if ( TicketUtils.isTicketAssignToUserOrGroup( getUser( ), ticket ) || RBACService.isUserInRole( getUser( ), TicketingConstants.ROLE_GRU_ADMIN ) )
                 {
-                    //if ticket is assign to agent or to its group 
+                    // if ticket is assign to agent or to its group
                     for ( Action action : fullListWorkflowActions )
                     {
-                        List<Integer> listActionFiltered = PluginConfigurationService.getIntegerList( PluginConfigurationService.PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME,
-                                new ArrayList<Integer>(  ) );
+                        List<Integer> listActionFiltered = PluginConfigurationService.getIntegerList(
+                                PluginConfigurationService.PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME, new ArrayList<Integer>( ) );
 
                         for ( Integer nActionId : listActionFiltered )
                         {
-                            if ( ( action.getId(  ) == nActionId ) && TicketUtils.isAssignee( ticket, getUser(  ) ) )
+                            if ( ( action.getId( ) == nActionId ) && TicketUtils.isAssignee( ticket, getUser( ) ) )
                             {
                                 // ticket already assign to the agent => removing action from list
                                 filteredListWorkflowActions.remove( action );
@@ -187,8 +188,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 }
                 else
                 {
-                    //ticket is not assign to agent or its group => no Workflow actions shown
-                    filteredListWorkflowActions = new ArrayList<Action>(  );
+                    // ticket is not assign to agent or its group => no Workflow actions shown
+                    filteredListWorkflowActions = new ArrayList<Action>( );
                 }
 
                 ticket.setListWorkflowActions( filteredListWorkflowActions );
@@ -198,8 +199,11 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Gives a list of actions possible for a given ticket based on its status in the workflow and the user role
-     * @param nTicketId the ticket id
-     * @param nIdWorkflow the workflow id
+     * 
+     * @param nTicketId
+     *            the ticket id
+     * @param nIdWorkflow
+     *            the workflow id
      * @return the list of possible actions
      */
     private Collection<Action> getActions( int nTicketId, int nIdWorkflow )
@@ -208,35 +212,31 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
         if ( nIdWorkflow > 0 )
         {
-            listTicketingActions = new ArrayList<Action>(  );
+            listTicketingActions = new ArrayList<Action>( );
 
-            Collection<Action> listWorkflowActions = _workflowService.getActions( nTicketId,
-                    Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, getUser(  ) );
+            Collection<Action> listWorkflowActions = _workflowService.getActions( nTicketId, Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, getUser( ) );
 
             for ( Action workflowAction : listWorkflowActions )
             {
-                Action ticketingAction = new TicketingAction( workflowAction,
-                        _workflowService.isDisplayTasksForm( workflowAction.getId(  ), getLocale(  ) ) );
+                Action ticketingAction = new TicketingAction( workflowAction, _workflowService.isDisplayTasksForm( workflowAction.getId( ), getLocale( ) ) );
                 listTicketingActions.add( ticketingAction );
             }
         }
         else
         {
-            listTicketingActions = Collections.emptyList(  );
+            listTicketingActions = Collections.emptyList( );
         }
 
         return listTicketingActions;
     }
 
     /**
-     * Get the workflow action form before processing the action. If the action
-     * does not need to display any form, then redirect the user to the workflow
-     * action processing page.
+     * Get the workflow action form before processing the action. If the action does not need to display any form, then redirect the user to the workflow action
+     * processing page.
      *
      * @param request
      *            The request
-     * @return The HTML content to display, or the next URL to redirect the user
-     *         to
+     * @return The HTML content to display, or the next URL to redirect the user to
      */
     @View( TicketingConstants.VIEW_WORKFLOW_ACTION_FORM )
     public String getWorkflowActionForm( HttpServletRequest request )
@@ -244,28 +244,26 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
 
-        if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
-                StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
+        if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) && StringUtils.isNotEmpty( strIdTicket )
+                && StringUtils.isNumeric( strIdTicket ) )
         {
             int nIdAction = Integer.parseInt( strIdAction );
             int nIdTicket = Integer.parseInt( strIdTicket );
 
-            if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale(  ) ) )
+            if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( ) ) )
             {
-                String strHtmlTasksForm = _workflowService.getDisplayTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE,
-                        nIdAction, request, getLocale(  ) );
+                String strHtmlTasksForm = _workflowService.getDisplayTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, request, getLocale( ) );
 
-                Map<String, Object> model = new HashMap<String, Object>(  );
+                Map<String, Object> model = new HashMap<String, Object>( );
 
                 model.put( TicketingConstants.MARK_TASKS_FORM, strHtmlTasksForm );
                 model.put( TicketingConstants.MARK_WORKFLOW_ID_ACTION, nIdAction );
                 model.put( TicketingConstants.MARK_ID_TICKET, nIdTicket );
 
-                //used to hide next button (if an error occured in html tasks form generation)
+                // used to hide next button (if an error occured in html tasks form generation)
                 if ( request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) != null )
                 {
-                    model.put( TicketingConstants.MARK_HIDE_NEXT_STEP_BUTTON,
-                        request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) );
+                    model.put( TicketingConstants.MARK_HIDE_NEXT_STEP_BUTTON, request.getAttribute( TicketingConstants.ATTRIBUTE_HIDE_NEXT_STEP_BUTTON ) );
                 }
 
                 String strFormAction = getActionUrl( TicketingConstants.ACTION_DO_PROCESS_WORKFLOW_ACTION );
@@ -283,8 +281,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 Action action = actionService.findByPrimaryKey( nIdAction );
                 model.put( TicketingConstants.MARK_WORKFLOW_ACTION, action );
 
-                return getPage( PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW,
-                    TicketingConstants.TEMPLATE_TASKS_FORM_WORKFLOW, model );
+                return getPage( PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW, TicketingConstants.TEMPLATE_TASKS_FORM_WORKFLOW, model );
             }
 
             return doProcessWorkflowAction( request );
@@ -307,8 +304,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
 
-        if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) &&
-                StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
+        if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) && StringUtils.isNotEmpty( strIdTicket )
+                && StringUtils.isNumeric( strIdTicket ) )
         {
             int nIdAction = Integer.parseInt( strIdAction );
             int nIdTicket = Integer.parseInt( strIdTicket );
@@ -318,12 +315,12 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 try
                 {
                     Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-                    TicketCategory ticketCategory = ticket.getTicketCategory(  );
+                    TicketCategory ticketCategory = ticket.getTicketCategory( );
 
-                    if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale(  ) ) )
+                    if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( ) ) )
                     {
-                        strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
-                                ticketCategory.getId(  ), request, getLocale(  ) );
+                        strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, ticketCategory.getId( ), request,
+                                getLocale( ) );
 
                         if ( strError != null )
                         {
@@ -334,13 +331,13 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                     }
                     else
                     {
-                        _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction,
-                            ticketCategory.getId(  ), request, getLocale(  ), false );
+                        _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, ticketCategory.getId( ), request, getLocale( ),
+                                false );
 
                         addInfoWorkflowAction( request, nIdAction );
                     }
                 }
-                catch ( Exception e )
+                catch( Exception e )
                 {
                     addErrorWorkflowAction( request, nIdAction );
                     AppLogService.error( e );
@@ -365,23 +362,21 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
      */
     protected void doProcessWorkflowAutomaticAction( Ticket ticket )
     {
-        TicketCategory ticketCategory = ticket.getTicketCategory(  );
+        TicketCategory ticketCategory = ticket.getTicketCategory( );
 
-        int nIdWorkflow = ticketCategory.getIdWorkflow(  );
+        int nIdWorkflow = ticketCategory.getIdWorkflow( );
 
-        if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable(  ) )
+        if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable( ) )
         {
             try
             {
-                _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticketCategory.getId(  ) );
-                _workflowService.executeActionAutomatic( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticketCategory.getId(  ) );
+                _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+                _workflowService.executeActionAutomatic( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
             }
-            catch ( Exception e )
+            catch( Exception e )
             {
-                doRemoveWorkFlowResource( ticket.getId(  ) );
-                TicketHome.remove( ticket.getId(  ) );
+                doRemoveWorkFlowResource( ticket.getId( ) );
+                TicketHome.remove( ticket.getId( ) );
                 throw e;
             }
         }
@@ -392,40 +387,39 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
      *
      * @param ticket
      *            The ticket
-     * @param request http request
+     * @param request
+     *            http request
      */
     protected void doProcessNextWorkflowAction( Ticket ticket, HttpServletRequest request )
     {
-        TicketCategory ticketCategory = ticket.getTicketCategory(  );
+        TicketCategory ticketCategory = ticket.getTicketCategory( );
 
-        int nIdWorkflow = ticketCategory.getIdWorkflow(  );
+        int nIdWorkflow = ticketCategory.getIdWorkflow( );
 
-        if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable(  ) )
+        if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable( ) )
         {
             try
             {
-                _workflowService.getState( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticketCategory.getId(  ) );
+                _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
 
-                Collection<Action> actions = _workflowService.getActions( ticket.getId(  ),
-                        Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, getUser(  ) );
+                Collection<Action> actions = _workflowService.getActions( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, getUser( ) );
 
-                if ( actions.size(  ) == 1 )
+                if ( actions.size( ) == 1 )
                 {
-                    Action action = actions.iterator(  ).next(  );
-                    _workflowService.doProcessAction( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, action.getId(  ),
-                        ticketCategory.getId(  ), request, request.getLocale(  ), false );
+                    Action action = actions.iterator( ).next( );
+                    _workflowService.doProcessAction( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, action.getId( ), ticketCategory.getId( ), request,
+                            request.getLocale( ), false );
                 }
                 else
                 {
-                    //multiple actions or no action => ambiguous case 
-                    //TODO throw an exception
+                    // multiple actions or no action => ambiguous case
+                    // TODO throw an exception
                 }
             }
-            catch ( Exception e )
+            catch( Exception e )
             {
-                doRemoveWorkFlowResource( ticket.getId(  ) );
-                TicketHome.remove( ticket.getId(  ) );
+                doRemoveWorkFlowResource( ticket.getId( ) );
+                TicketHome.remove( ticket.getId( ) );
                 throw e;
             }
         }
@@ -433,11 +427,13 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Do remove a workflow resource
-     * @param nTicketId the ticket id associated to the workflow resource
+     * 
+     * @param nTicketId
+     *            the ticket id associated to the workflow resource
      */
     protected void doRemoveWorkFlowResource( int nTicketId )
     {
-        if ( _workflowService.isAvailable(  ) )
+        if ( _workflowService.isAvailable( ) )
         {
             _resourceHistoryTicketingInformationService.removeByResource( nTicketId, Ticket.TICKET_RESOURCE_TYPE );
 
@@ -447,73 +443,85 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * returns the actions history performed on the specified ticket
-     * @param request the request
-     * @param ticket the ticket
+     * 
+     * @param request
+     *            the request
+     * @param ticket
+     *            the ticket
      * @return the actions history
      */
     protected String getDisplayDocumentHistory( HttpServletRequest request, Ticket ticket )
     {
-        TicketCategory category = ticket.getTicketCategory(  );
-        int nWorkflowId = category.getIdWorkflow(  );
+        TicketCategory category = ticket.getTicketCategory( );
+        int nWorkflowId = category.getIdWorkflow( );
 
-        Map<String, Channel> mapHistoryChannel = _resourceHistoryTicketingInformationService.getChannelHistoryMap( ticket.getId(  ),
+        Map<String, Channel> mapHistoryChannel = _resourceHistoryTicketingInformationService.getChannelHistoryMap( ticket.getId( ),
                 Ticket.TICKET_RESOURCE_TYPE, nWorkflowId );
 
-        Map<String, Object> modelToAdd = new HashMap<String, Object>(  );
+        Map<String, Object> modelToAdd = new HashMap<String, Object>( );
 
         modelToAdd.put( MARK_RESOURCE_HISTORY_CHANNEL, mapHistoryChannel );
-        modelToAdd.put( MARK_USER_FACTORY, UserFactory.getInstance(  ) );
+        modelToAdd.put( MARK_USER_FACTORY, UserFactory.getInstance( ) );
 
-        return _workflowService.getDisplayDocumentHistory( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE, nWorkflowId,
-            request, getLocale(  ), modelToAdd, TEMPLATE_RESOURCE_HISTORY );
+        return _workflowService.getDisplayDocumentHistory( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nWorkflowId, request, getLocale( ), modelToAdd,
+                TEMPLATE_RESOURCE_HISTORY );
     }
 
     /**
      * Adds information message for workflow action
-     * @param request the request
-     * @param nIdAction the action id
+     * 
+     * @param request
+     *            the request
+     * @param nIdAction
+     *            the action id
      */
     private void addInfoWorkflowAction( HttpServletRequest request, int nIdAction )
     {
         IActionService actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
         Action action = actionService.findByPrimaryKey( nIdAction );
-        String strMessage = MessageFormat.format( I18nService.getLocalizedString( INFO_WORKFLOW_ACTION_EXECUTED,
-                    Locale.FRENCH ), action.getName(  ) );
-        RequestUtils.setParameter( request, RequestUtils.SCOPE_SESSION,
-            TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO, strMessage );
+        String strMessage = MessageFormat.format( I18nService.getLocalizedString( INFO_WORKFLOW_ACTION_EXECUTED, Locale.FRENCH ), action.getName( ) );
+        RequestUtils.setParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO, strMessage );
     }
 
     /**
      * Adds error message for workflow action
-     * @param request the request
-     * @param nIdAction the action id
+     * 
+     * @param request
+     *            the request
+     * @param nIdAction
+     *            the action id
      */
     private void addErrorWorkflowAction( HttpServletRequest request, int nIdAction )
     {
         IActionService actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
         Action action = actionService.findByPrimaryKey( nIdAction );
-        String strError = MessageFormat.format( I18nService.getLocalizedString( ERROR_WORKFLOW_ACTION_ABORTED,
-                    Locale.FRENCH ), action.getName(  ) );
+        String strError = MessageFormat.format( I18nService.getLocalizedString( ERROR_WORKFLOW_ACTION_ABORTED, Locale.FRENCH ), action.getName( ) );
         addError( strError );
     }
 
     /**
      * Redirects to the correct page after workflow action
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return the page to redirect to
      */
     protected abstract String redirectAfterWorkflowAction( HttpServletRequest request );
 
     /**
      * Redirects to the correct page after the cancellation of the workflow action
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return the page to redirect to
      */
     protected abstract String redirectWorkflowActionCancelled( HttpServletRequest request );
 
     /**
      * Redirects to the default page (if workflow not enabled, if action id not correct, etc.)
-     * @param request the request
+     * 
+     * @param request
+     *            the request
      * @return the page to redirect to
      */
     protected abstract String defaultRedirectWorkflowAction( HttpServletRequest request );

@@ -44,7 +44,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 
-
 /**
  * JSON formatter for contact mode resource
  *
@@ -54,13 +53,13 @@ public class ContactModeFormatterJson implements ITicketingFormatter<ContactMode
     @Override
     public String format( ContactMode contactMode )
     {
-        JSONObject json = new JSONObject(  );
+        JSONObject json = new JSONObject( );
         String strJson = StringUtils.EMPTY;
 
         if ( contactMode != null )
         {
             add( json, contactMode );
-            strJson = json.toString(  );
+            strJson = json.toString( );
         }
 
         return strJson;
@@ -69,19 +68,19 @@ public class ContactModeFormatterJson implements ITicketingFormatter<ContactMode
     @Override
     public String format( List<ContactMode> listContactModes )
     {
-        JSONObject json = new JSONObject(  );
-        JSONArray jsonContactModes = new JSONArray(  );
+        JSONObject json = new JSONObject( );
+        JSONArray jsonContactModes = new JSONArray( );
 
         for ( ContactMode contactMode : listContactModes )
         {
-            JSONObject jsonContactMode = new JSONObject(  );
+            JSONObject jsonContactMode = new JSONObject( );
             add( jsonContactMode, contactMode );
             jsonContactModes.add( jsonContactMode );
         }
 
         json.accumulate( FormatConstants.KEY_CONTACT_MODES, jsonContactModes );
 
-        return json.toString(  );
+        return json.toString( );
     }
 
     @Override
@@ -98,12 +97,15 @@ public class ContactModeFormatterJson implements ITicketingFormatter<ContactMode
 
     /**
      * Write a contact mode into a JSON Object
-     * @param json The JSON Object
-     * @param contactMode The contact mode
+     * 
+     * @param json
+     *            The JSON Object
+     * @param contactMode
+     *            The contact mode
      */
     private void add( JSONObject json, ContactMode contactMode )
     {
-        json.accumulate( FormatConstants.KEY_ID, contactMode.getId(  ) );
-        json.accumulate( FormatConstants.KEY_LABEL, contactMode.getCode(  ) );
+        json.accumulate( FormatConstants.KEY_ID, contactMode.getId( ) );
+        json.accumulate( FormatConstants.KEY_LABEL, contactMode.getCode( ) );
     }
 }

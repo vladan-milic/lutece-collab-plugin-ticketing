@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.rest.util.json.JSONUtil;
 
 import java.util.List;
 
-
 /**
  * JSON formatter for REST purpose
  *
@@ -47,13 +46,13 @@ public class RestFormatterJson implements IRestFormatter
     @Override
     public String formatErrors( List<String> errors )
     {
-        StringBuffer sbErrors = new StringBuffer(  );
+        StringBuffer sbErrors = new StringBuffer( );
 
         for ( String error : errors )
         {
             sbErrors.append( JSONUtil.formatError( error, 3 ) );
         }
 
-        return sbErrors.toString(  );
+        return sbErrors.toString( );
     }
 }

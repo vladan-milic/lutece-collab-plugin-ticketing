@@ -35,13 +35,12 @@ package fr.paris.lutece.plugins.ticketing.business.assignee;
 
 import fr.paris.lutece.portal.business.user.AdminUser;
 
-
 /**
  * AssigneeUser
  */
 public class AssigneeUser
 {
-    // Variables declarations 
+    // Variables declarations
     private int _nAdminUserId;
     private String _strFirstname;
     private String _strLastname;
@@ -50,34 +49,39 @@ public class AssigneeUser
     /**
      * Constructor
      */
-    public AssigneeUser(  )
+    public AssigneeUser( )
     {
     }
 
     /**
      * Constructor
-     * @param user The Admin User
+     * 
+     * @param user
+     *            The Admin User
      */
     public AssigneeUser( AdminUser user )
     {
-        _nAdminUserId = user.getUserId(  );
-        _strFirstname = user.getFirstName(  );
-        _strLastname = user.getLastName(  );
-        _strEmail = user.getEmail(  );
+        _nAdminUserId = user.getUserId( );
+        _strFirstname = user.getFirstName( );
+        _strLastname = user.getLastName( );
+        _strEmail = user.getEmail( );
     }
 
     /**
      * Returns the AdminUserId
+     * 
      * @return The AdminUserId
      */
-    public int getAdminUserId(  )
+    public int getAdminUserId( )
     {
         return _nAdminUserId;
     }
 
     /**
      * Sets the AdminUserId
-     * @param nAdminUserId The AdminUserId
+     * 
+     * @param nAdminUserId
+     *            The AdminUserId
      */
     public void setAdminUserId( int nAdminUserId )
     {
@@ -86,16 +90,19 @@ public class AssigneeUser
 
     /**
      * Returns the Firstname
+     * 
      * @return The Firstname
      */
-    public String getFirstname(  )
+    public String getFirstname( )
     {
         return _strFirstname;
     }
 
     /**
      * Sets the Firstname
-     * @param strFirstname The Firstname
+     * 
+     * @param strFirstname
+     *            The Firstname
      */
     public void setFirstname( String strFirstname )
     {
@@ -104,16 +111,19 @@ public class AssigneeUser
 
     /**
      * Returns the Lastname
+     * 
      * @return The Lastname
      */
-    public String getLastname(  )
+    public String getLastname( )
     {
         return _strLastname;
     }
 
     /**
      * Sets the Lastname
-     * @param strLastname The Lastname
+     * 
+     * @param strLastname
+     *            The Lastname
      */
     public void setLastname( String strLastname )
     {
@@ -122,16 +132,19 @@ public class AssigneeUser
 
     /**
      * Returns the Email
+     * 
      * @return The Email
      */
-    public String getEmail(  )
+    public String getEmail( )
     {
         return _strEmail;
     }
 
     /**
      * Sets the Email
-     * @param strEmail The Email
+     * 
+     * @param strEmail
+     *            The Email
      */
     public void setEmail( String strEmail )
     {

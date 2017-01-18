@@ -54,7 +54,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-
 /**
  * JSON formatter for ticket category resource
  *
@@ -64,13 +63,13 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
     @Override
     public String format( TicketType ticketType )
     {
-        JSONObject json = new JSONObject(  );
+        JSONObject json = new JSONObject( );
         String strJson = StringUtils.EMPTY;
 
         if ( ticketType != null )
         {
             add( json, ticketType );
-            strJson = json.toString(  );
+            strJson = json.toString( );
         }
 
         return strJson;
@@ -79,19 +78,19 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
     @Override
     public String format( List<TicketType> listTicketTypes )
     {
-        JSONObject json = new JSONObject(  );
-        JSONArray jsonTypes = new JSONArray(  );
+        JSONObject json = new JSONObject( );
+        JSONArray jsonTypes = new JSONArray( );
 
         for ( TicketType ticketType : listTicketTypes )
         {
-            JSONObject jsonType = new JSONObject(  );
+            JSONObject jsonType = new JSONObject( );
             add( jsonType, ticketType );
             jsonTypes.add( jsonType );
         }
 
         json.accumulate( FormatConstants.KEY_TICKET_TYPES, jsonTypes );
 
-        return json.toString(  );
+        return json.toString( );
     }
 
     @Override
@@ -108,90 +107,93 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
 
     /**
      * Write a ticket type into a JSON Object
-     * @param json The JSON Object
-     * @param ticketType The ticket type
+     * 
+     * @param json
+     *            The JSON Object
+     * @param ticketType
+     *            The ticket type
      */
     @SuppressWarnings( "unchecked" )
     private void add( JSONObject json, TicketType ticketType )
     {
-        json.accumulate( FormatConstants.KEY_ID, ticketType.getId(  ) );
-        json.accumulate( FormatConstants.KEY_LABEL, ticketType.getLabel(  ) );
+        json.accumulate( FormatConstants.KEY_ID, ticketType.getId( ) );
+        json.accumulate( FormatConstants.KEY_LABEL, ticketType.getLabel( ) );
 
-        JSONArray jsonDomains = new JSONArray(  );
+        JSONArray jsonDomains = new JSONArray( );
 
-        for ( ReferenceItem refItemDomain : TicketDomainHome.getReferenceListByType( ticketType.getId(  ) ) )
+        for ( ReferenceItem refItemDomain : TicketDomainHome.getReferenceListByType( ticketType.getId( ) ) )
         {
-            int nDomainId = Integer.parseInt( refItemDomain.getCode(  ) );
-            JSONObject jsonDomain = new JSONObject(  );
+            int nDomainId = Integer.parseInt( refItemDomain.getCode( ) );
+            JSONObject jsonDomain = new JSONObject( );
             jsonDomain.accumulate( FormatConstants.KEY_ID, nDomainId );
-            jsonDomain.accumulate( FormatConstants.KEY_LABEL, refItemDomain.getName(  ) );
+            jsonDomain.accumulate( FormatConstants.KEY_LABEL, refItemDomain.getName( ) );
 
-            TreeMap<String, List<TicketCategory>> mapTicketCategories = new TreeMap<String, List<TicketCategory>>(  );
+            TreeMap<String, List<TicketCategory>> mapTicketCategories = new TreeMap<String, List<TicketCategory>>( );
 
             for ( TicketCategory ticketCategory : TicketCategoryHome.findByDomainId( nDomainId ) )
             {
-                if ( mapTicketCategories.containsKey( ticketCategory.getLabel(  ) ) )
+                if ( mapTicketCategories.containsKey( ticketCategory.getLabel( ) ) )
                 { // Precision
-                    mapTicketCategories.get( ticketCategory.getLabel(  ) ).add( ticketCategory );
+                    mapTicketCategories.get( ticketCategory.getLabel( ) ).add( ticketCategory );
                 }
                 else
                 {
-                    mapTicketCategories.put( ticketCategory.getLabel(  ), new ArrayList<TicketCategory>(  ) );
-                    mapTicketCategories.get( ticketCategory.getLabel(  ) ).add( ticketCategory );
+                    mapTicketCategories.put( ticketCategory.getLabel( ), new ArrayList<TicketCategory>( ) );
+                    mapTicketCategories.get( ticketCategory.getLabel( ) ).add( ticketCategory );
                 }
             }
 
-            JSONArray jsonCategories = new JSONArray(  );
+            JSONArray jsonCategories = new JSONArray( );
 
-            for ( Map.Entry<String, List<TicketCategory>> mapEntryCategoryByLabel : mapTicketCategories.entrySet(  ) )
+            for ( Map.Entry<String, List<TicketCategory>> mapEntryCategoryByLabel : mapTicketCategories.entrySet( ) )
             {
-                List<TicketCategory> listCategoryByLabel = mapEntryCategoryByLabel.getValue(  );
-                Iterator<TicketCategory> itListCategoryByLabel = listCategoryByLabel.iterator(  );
-                TicketCategory category = new TicketCategory(  );
+                List<TicketCategory> listCategoryByLabel = mapEntryCategoryByLabel.getValue( );
+                Iterator<TicketCategory> itListCategoryByLabel = listCategoryByLabel.iterator( );
+                TicketCategory category = new TicketCategory( );
 
-                JSONObject jsonCategory = new JSONObject(  );
-                JSONArray jsonPrecisions = new JSONArray(  );
-                JSONObject jsonPrecision = new JSONObject(  );
+                JSONObject jsonCategory = new JSONObject( );
+                JSONArray jsonPrecisions = new JSONArray( );
+                JSONObject jsonPrecision = new JSONObject( );
 
-                while ( itListCategoryByLabel.hasNext(  ) )
+                while ( itListCategoryByLabel.hasNext( ) )
                 {
                     category = null;
-                    category = (TicketCategory) itListCategoryByLabel.next(  );
-                    jsonCategory = new JSONObject(  );
+                    category = (TicketCategory) itListCategoryByLabel.next( );
+                    jsonCategory = new JSONObject( );
 
-                    if ( StringUtils.isNotEmpty( category.getPrecision(  ) ) )
+                    if ( StringUtils.isNotEmpty( category.getPrecision( ) ) )
                     {
-                        jsonPrecision = new JSONObject(  );
-                        jsonPrecision.accumulate( FormatConstants.KEY_ID, category.getId(  ) );
-                        jsonPrecision.accumulate( FormatConstants.KEY_LABEL, category.getPrecision(  ) );
+                        jsonPrecision = new JSONObject( );
+                        jsonPrecision.accumulate( FormatConstants.KEY_ID, category.getId( ) );
+                        jsonPrecision.accumulate( FormatConstants.KEY_LABEL, category.getPrecision( ) );
 
-                        if ( StringUtils.isNotEmpty( category.getHelpMessage(  ) ) )
+                        if ( StringUtils.isNotEmpty( category.getHelpMessage( ) ) )
                         {
-                            jsonPrecision.accumulate( FormatConstants.KEY_HELP, category.getHelpMessage(  ) );
+                            jsonPrecision.accumulate( FormatConstants.KEY_HELP, category.getHelpMessage( ) );
                         }
 
                         jsonPrecisions.add( jsonPrecision );
                     }
                     else
                     {
-                        jsonCategory.accumulate( FormatConstants.KEY_ID, category.getId(  ) );
-                        jsonCategory.accumulate( FormatConstants.KEY_LABEL, category.getLabel(  ) );
+                        jsonCategory.accumulate( FormatConstants.KEY_ID, category.getId( ) );
+                        jsonCategory.accumulate( FormatConstants.KEY_LABEL, category.getLabel( ) );
 
-                        if ( StringUtils.isNotEmpty( category.getHelpMessage(  ) ) )
+                        if ( StringUtils.isNotEmpty( category.getHelpMessage( ) ) )
                         {
-                            jsonCategory.accumulate( FormatConstants.KEY_HELP, category.getHelpMessage(  ) );
+                            jsonCategory.accumulate( FormatConstants.KEY_HELP, category.getHelpMessage( ) );
                         }
 
                         jsonCategories.add( jsonCategory );
                     }
                 }
 
-                if ( !jsonPrecisions.isEmpty(  ) )
+                if ( !jsonPrecisions.isEmpty( ) )
                 {
-                    Collections.sort( jsonPrecisions, new JsonLabelFormatter(  ) );
+                    Collections.sort( jsonPrecisions, new JsonLabelFormatter( ) );
 
-                    jsonCategory.accumulate( FormatConstants.KEY_ID, category.getId(  ) );
-                    jsonCategory.accumulate( FormatConstants.KEY_LABEL, category.getLabel(  ) );
+                    jsonCategory.accumulate( FormatConstants.KEY_ID, category.getId( ) );
+                    jsonCategory.accumulate( FormatConstants.KEY_LABEL, category.getLabel( ) );
                     jsonCategory.accumulate( FormatConstants.KEY_TICKET_PRECISIONS, jsonPrecisions );
                     jsonCategories.add( jsonCategory );
                 }
@@ -205,8 +207,7 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
     }
 
     /**
-     * Comparator for JSONArray.
-     * The comparison is based on the label element which composed each JSONObject of the Array.
+     * Comparator for JSONArray. The comparison is based on the label element which composed each JSONObject of the Array.
      */
     private class JsonLabelFormatter implements Comparator<JSONObject>
     {

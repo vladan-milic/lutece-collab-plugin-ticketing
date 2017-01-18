@@ -43,7 +43,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-
 /**
  *
  * class TicketFilter
@@ -66,7 +65,7 @@ public class TicketFilter extends OrderByFilter
      * Default order by
      */
     public static final String CONSTANT_DEFAULT_ORDER_BY = "date_create";
-    public static final String CONSTANT_DEFAULT_ORDER_SORT = OrderSortAllowed.DESC.name(  );
+    public static final String CONSTANT_DEFAULT_ORDER_SORT = OrderSortAllowed.DESC.name( );
     private int _nIdTicket = CONSTANT_ID_NULL;
     private Date _dateLastUpdateDate;
     private Date _dateLastUpdateStartDate;
@@ -90,14 +89,14 @@ public class TicketFilter extends OrderByFilter
     private String _strMobilePhoneNumber;
     private String _strNomenclature;
     private int _nUrgency = CONSTANT_ID_NULL;
-    private List<Integer> _listIdWorkflowState = new ArrayList<Integer>(  );
+    private List<Integer> _listIdWorkflowState = new ArrayList<Integer>( );
 
     /**
      * Check if this filter contains a idUser
      *
      * @return true if the filter contain an id of ticket
      */
-    public boolean containsIdUser(  )
+    public boolean containsIdUser( )
     {
         return ( _nIdUser != CONSTANT_ID_NULL );
     }
@@ -105,7 +104,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _nIdUser
      */
-    public int getIdUser(  )
+    public int getIdUser( )
     {
         return _nIdUser;
     }
@@ -124,15 +123,15 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contain an id of ticket
      */
-    public boolean containsListIdWorkflowState(  )
+    public boolean containsListIdWorkflowState( )
     {
-        return ( ( _listIdWorkflowState != null ) && ( _listIdWorkflowState.size(  ) > 0 ) );
+        return ( ( _listIdWorkflowState != null ) && ( _listIdWorkflowState.size( ) > 0 ) );
     }
 
     /**
      * @return the _nIdWorkflowState
      */
-    public List<Integer> getListIdWorkflowState(  )
+    public List<Integer> getListIdWorkflowState( )
     {
         return _listIdWorkflowState;
     }
@@ -150,9 +149,9 @@ public class TicketFilter extends OrderByFilter
      * @param tabIdWorkflowState
      *            the tabIdWorkflowState to set
      */
-    public void setListIdWorkflowState( String[] tabIdWorkflowState )
+    public void setListIdWorkflowState( String [ ] tabIdWorkflowState )
     {
-        this._listIdWorkflowState = new ArrayList<Integer>(  );
+        this._listIdWorkflowState = new ArrayList<Integer>( );
 
         for ( String strId : tabIdWorkflowState )
         {
@@ -163,7 +162,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _nIdTicket
      */
-    public int getIdTicket(  )
+    public int getIdTicket( )
     {
         return _nIdTicket;
     }
@@ -182,7 +181,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contain an id of ticket
      */
-    public boolean containsIdTicket(  )
+    public boolean containsIdTicket( )
     {
         return ( _nIdTicket != CONSTANT_ID_NULL );
     }
@@ -190,7 +189,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _dateLastUpdateDate
      */
-    public Date getLastUpdateDate(  )
+    public Date getLastUpdateDate( )
     {
         return _dateLastUpdateDate;
     }
@@ -209,7 +208,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contain _dateLastUpdateDate
      */
-    public boolean containsLastUpdateDate(  )
+    public boolean containsLastUpdateDate( )
     {
         return _dateLastUpdateDate != null;
     }
@@ -217,7 +216,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _dateLastUpdateStartDate
      */
-    public Date getLastUpdateStartDate(  )
+    public Date getLastUpdateStartDate( )
     {
         return _dateLastUpdateStartDate;
     }
@@ -236,7 +235,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contains _dateLastUpdateStartDate
      */
-    public boolean containsLastUpdateStartDate(  )
+    public boolean containsLastUpdateStartDate( )
     {
         return _dateLastUpdateStartDate != null;
     }
@@ -244,7 +243,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _dateLastUpdateEndDate
      */
-    public Date getLastUpdateEndDate(  )
+    public Date getLastUpdateEndDate( )
     {
         return _dateLastUpdateEndDate;
     }
@@ -263,7 +262,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contains _dateLastUpdateEndDate
      */
-    public boolean containsLastUpdateEndDate(  )
+    public boolean containsLastUpdateEndDate( )
     {
         return _dateLastUpdateEndDate != null;
     }
@@ -271,7 +270,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _strCloseDate
      */
-    public Date getCloseDate(  )
+    public Date getCloseDate( )
     {
         return _dateCloseDate;
     }
@@ -290,7 +289,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contain _dateCloseDate
      */
-    public boolean containsCloseDate(  )
+    public boolean containsCloseDate( )
     {
         return _dateCloseDate != null;
     }
@@ -298,7 +297,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _strCreationDate
      */
-    public Date getCreationDate(  )
+    public Date getCreationDate( )
     {
         return _dateCreationDate;
     }
@@ -317,7 +316,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contain _dateCreationDate
      */
-    public boolean containsCreationDate(  )
+    public boolean containsCreationDate( )
     {
         return _dateCreationDate != null;
     }
@@ -325,7 +324,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _dateCreationStartDate
      */
-    public Date getCreationStartDate(  )
+    public Date getCreationStartDate( )
     {
         return _dateCreationStartDate;
     }
@@ -344,7 +343,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contains _dateCreationStartDate
      */
-    public boolean containsCreationStartDate(  )
+    public boolean containsCreationStartDate( )
     {
         return _dateCreationStartDate != null;
     }
@@ -352,7 +351,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _dateCreationEndDate
      */
-    public Date getCreationEndDate(  )
+    public Date getCreationEndDate( )
     {
         return _dateCreationEndDate;
     }
@@ -371,7 +370,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contains _dateCreationEndDate
      */
-    public boolean containsCreationEndDate(  )
+    public boolean containsCreationEndDate( )
     {
         return _dateCreationEndDate != null;
     }
@@ -379,7 +378,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _nIdCategory
      */
-    public int getIdCategory(  )
+    public int getIdCategory( )
     {
         return _nIdCategory;
     }
@@ -398,7 +397,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contain an id of category
      */
-    public boolean containsIdCategory(  )
+    public boolean containsIdCategory( )
     {
         return ( _nIdCategory != CONSTANT_ID_NULL );
     }
@@ -406,7 +405,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _nIdDomain
      */
-    public int getIdDomain(  )
+    public int getIdDomain( )
     {
         return _nIdDomain;
     }
@@ -425,7 +424,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contain an id of domain
      */
-    public boolean containsIdDomain(  )
+    public boolean containsIdDomain( )
     {
         return ( _nIdDomain != CONSTANT_ID_NULL );
     }
@@ -433,7 +432,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _nIdType
      */
-    public int getIdType(  )
+    public int getIdType( )
     {
         return _nIdType;
     }
@@ -452,7 +451,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contain an id of domain
      */
-    public boolean containsIdType(  )
+    public boolean containsIdType( )
     {
         return ( _nIdType != CONSTANT_ID_NULL );
     }
@@ -460,7 +459,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _strStatus
      */
-    public String getStatus(  )
+    public String getStatus( )
     {
         return _strStatus;
     }
@@ -479,7 +478,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contain an id of status
      */
-    public boolean containsStatus(  )
+    public boolean containsStatus( )
     {
         return StringUtils.isNotEmpty( _strStatus );
     }
@@ -487,7 +486,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _strEmail
      */
-    public String getEmail(  )
+    public String getEmail( )
     {
         return _strEmail;
     }
@@ -506,7 +505,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contain an id of Email
      */
-    public boolean containsEmail(  )
+    public boolean containsEmail( )
     {
         return StringUtils.isNotEmpty( _strEmail );
     }
@@ -514,7 +513,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _strLastName
      */
-    public String getLastName(  )
+    public String getLastName( )
     {
         return _strLastName;
     }
@@ -533,7 +532,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contain an id of LastName
      */
-    public boolean containsLastName(  )
+    public boolean containsLastName( )
     {
         return StringUtils.isNotEmpty( _strLastName );
     }
@@ -541,7 +540,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _strFirstName
      */
-    public String getFirstName(  )
+    public String getFirstName( )
     {
         return _strFirstName;
     }
@@ -560,7 +559,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contain an id of FirstName
      */
-    public boolean containsFirstName(  )
+    public boolean containsFirstName( )
     {
         return StringUtils.isNotEmpty( _strFirstName );
     }
@@ -568,7 +567,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _strFixedPhoneNumber
      */
-    public String getFixedPhoneNumber(  )
+    public String getFixedPhoneNumber( )
     {
         return _strFixedPhoneNumber;
     }
@@ -587,7 +586,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contain an id of FixedPhoneNumber
      */
-    public boolean containsFixedPhoneNumber(  )
+    public boolean containsFixedPhoneNumber( )
     {
         return StringUtils.isNotEmpty( _strFixedPhoneNumber );
     }
@@ -595,7 +594,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _strMobilePhoneNumber
      */
-    public String getMobilePhoneNumber(  )
+    public String getMobilePhoneNumber( )
     {
         return _strMobilePhoneNumber;
     }
@@ -614,7 +613,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contain an id of MobilePhoneNumber
      */
-    public boolean containsMobilePhoneNumber(  )
+    public boolean containsMobilePhoneNumber( )
     {
         return StringUtils.isNotEmpty( _strMobilePhoneNumber );
     }
@@ -622,7 +621,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _nIdChannel
      */
-    public int getIdChannel(  )
+    public int getIdChannel( )
     {
         return _nIdChannel;
     }
@@ -637,11 +636,11 @@ public class TicketFilter extends OrderByFilter
     }
 
     /**
-    * Check if this filter contains a ChannelID
-    *
-    * @return true if the filter contain an id of Channel
-    */
-    public boolean containsChannel(  )
+     * Check if this filter contains a ChannelID
+     *
+     * @return true if the filter contain an id of Channel
+     */
+    public boolean containsChannel( )
     {
         return ( _nIdChannel != CONSTANT_ID_NULL );
     }
@@ -649,7 +648,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _strReference
      */
-    public String getReference(  )
+    public String getReference( )
     {
         return _strReference;
     }
@@ -668,7 +667,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contains a reference
      */
-    public boolean containsReference(  )
+    public boolean containsReference( )
     {
         return StringUtils.isNotEmpty( _strReference );
     }
@@ -676,7 +675,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _strNomenclature
      */
-    public String getNomenclature(  )
+    public String getNomenclature( )
     {
         return _strNomenclature;
     }
@@ -695,7 +694,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contains a Nomenclature
      */
-    public boolean containsNomenclature(  )
+    public boolean containsNomenclature( )
     {
         return StringUtils.isNotEmpty( _strNomenclature );
     }
@@ -703,7 +702,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _strOpenSincePeriod
      */
-    public int getOpenSincePeriod(  )
+    public int getOpenSincePeriod( )
     {
         return _nOpenSincePeriod;
     }
@@ -722,7 +721,7 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contains a OpenSincePeriod
      */
-    public boolean containsOpenSincePeriod(  )
+    public boolean containsOpenSincePeriod( )
     {
         return _nOpenSincePeriod != CONSTANT_ID_NULL;
     }
@@ -730,7 +729,7 @@ public class TicketFilter extends OrderByFilter
     /**
      * @return the _nUrgency
      */
-    public int getUrgency(  )
+    public int getUrgency( )
     {
         return _nUrgency;
     }
@@ -749,15 +748,15 @@ public class TicketFilter extends OrderByFilter
      *
      * @return true if the filter contains a Urgency
      */
-    public boolean containsUrgency(  )
+    public boolean containsUrgency( )
     {
         return _nUrgency != CONSTANT_ID_NULL;
     }
 
     @Override
-    protected void initOrderNameToColumnNameMap(  )
+    protected void initOrderNameToColumnNameMap( )
     {
-        _mapOrderNameToColumnName = new HashMap<String, List<String>>(  );
+        _mapOrderNameToColumnName = new HashMap<String, List<String>>( );
         _mapOrderNameToColumnName.put( "category_label", Arrays.asList( "e.label" ) );
         _mapOrderNameToColumnName.put( "reference", Arrays.asList( "ticket_reference", "id_ticket" ) );
         _mapOrderNameToColumnName.put( "ticket_status", Arrays.asList( "ticket_status" ) );
@@ -775,13 +774,13 @@ public class TicketFilter extends OrderByFilter
     }
 
     @Override
-    public List<String> getDefaultOrderBySqlColumns(  )
+    public List<String> getDefaultOrderBySqlColumns( )
     {
         return _mapOrderNameToColumnName.get( CONSTANT_DEFAULT_ORDER_BY );
     }
 
     @Override
-    public String getDefaultOrderSort(  )
+    public String getDefaultOrderSort( )
     {
         return CONSTANT_DEFAULT_ORDER_SORT;
     }

@@ -40,9 +40,9 @@ import org.apache.lucene.queryparser.classic.ParseException;
 
 import java.util.List;
 
-
 /**
  * SearchEngine for tickets document
+ * 
  * @author s267533
  *
  */
@@ -52,11 +52,14 @@ public interface ITicketSearchEngine
 
     /**
      * search tickets which contains strQuery in lucene contents field
-     * @param strQuery query to search
-     * @param listTicketDomain list domains authorized for admin user
+     * 
+     * @param strQuery
+     *            query to search
+     * @param listTicketDomain
+     *            list domains authorized for admin user
      * @return Results as a collection of SearchResult
-     * @throws ParseException exception occurs while parsing input query
+     * @throws ParseException
+     *             exception occurs while parsing input query
      */
-    List<SearchResult> searchTickets( String strQuery, List<TicketDomain> listTicketDomain )
-        throws ParseException;
+    List<SearchResult> searchTickets( String strQuery, List<TicketDomain> listTicketDomain ) throws ParseException;
 }

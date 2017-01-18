@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.ticketing.service.format;
 
 import java.util.List;
 
-
 /**
  * Formatter for REST purpose
  *
@@ -44,7 +43,9 @@ public interface IRestFormatter
 {
     /**
      * Formats the errors
-     * @param errors the errors to format
+     * 
+     * @param errors
+     *            the errors to format
      * @return the formated message
      */
     String formatErrors( List<String> errors );

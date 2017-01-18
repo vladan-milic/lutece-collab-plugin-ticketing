@@ -37,36 +37,35 @@ import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.test.LuteceTestCase;
 
-
 public class UserTitleBusinessTest extends LuteceTestCase
 {
     private final static String LABEL1 = "Label1";
     private final static String LABEL2 = "Label2";
 
-    public void testBusiness(  )
+    public void testBusiness( )
     {
         // Initialize an object
-        UserTitle userTitle = new UserTitle(  );
+        UserTitle userTitle = new UserTitle( );
         userTitle.setLabel( LABEL1 );
 
         // Create test
         UserTitleHome.create( userTitle );
 
-        UserTitle userTitleStored = UserTitleHome.findByPrimaryKey( userTitle.getId(  ) );
-        assertEquals( userTitleStored.getLabel(  ), userTitle.getLabel(  ) );
+        UserTitle userTitleStored = UserTitleHome.findByPrimaryKey( userTitle.getId( ) );
+        assertEquals( userTitleStored.getLabel( ), userTitle.getLabel( ) );
 
         // Update test
         userTitle.setLabel( LABEL2 );
         UserTitleHome.update( userTitle );
-        userTitleStored = UserTitleHome.findByPrimaryKey( userTitle.getId(  ) );
-        assertEquals( userTitleStored.getLabel(  ), userTitle.getLabel(  ) );
+        userTitleStored = UserTitleHome.findByPrimaryKey( userTitle.getId( ) );
+        assertEquals( userTitleStored.getLabel( ), userTitle.getLabel( ) );
 
         // List test
-        UserTitleHome.getUserTitlesList(  );
+        UserTitleHome.getUserTitlesList( );
 
         // Delete test
-        UserTitleHome.remove( userTitle.getId(  ) );
-        userTitleStored = UserTitleHome.findByPrimaryKey( userTitle.getId(  ) );
+        UserTitleHome.remove( userTitle.getId( ) );
+        userTitleStored = UserTitleHome.findByPrimaryKey( userTitle.getId( ) );
         assertNotNull( userTitleStored );
     }
 }

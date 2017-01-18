@@ -42,7 +42,6 @@ import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * This class provides utility methods to validatea form
  *
@@ -58,7 +57,9 @@ public class FormValidator
 
     /**
      * Constructor
-     * @param request the request containing the parameter to validate
+     * 
+     * @param request
+     *            the request containing the parameter to validate
      */
     public FormValidator( HttpServletRequest request )
     {
@@ -70,7 +71,7 @@ public class FormValidator
      *
      * @return the localized error message if the contact mode is not filled, {@code null} otherwise
      */
-    public String isContactModeFilled(  )
+    public String isContactModeFilled( )
     {
         boolean bIsValid = false;
         String strError = null;
@@ -83,19 +84,19 @@ public class FormValidator
             {
                 ContactMode contactMode = ContactModeHome.findByPrimaryKey( Integer.parseInt( strContactMode ) );
 
-                String strContactModeValue = _request.getParameter( contactMode.getCode(  ) );
+                String strContactModeValue = _request.getParameter( contactMode.getCode( ) );
 
                 bIsValid = !StringUtils.isEmpty( strContactModeValue );
             }
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             AppLogService.error( "Unabled to retrieve contact mode" );
         }
 
         if ( !bIsValid )
         {
-            strError = I18nService.getLocalizedString( ERROR_CONTACT_MODE_NOT_FILLED, _request.getLocale(  ) );
+            strError = I18nService.getLocalizedString( ERROR_CONTACT_MODE_NOT_FILLED, _request.getLocale( ) );
         }
 
         return strError;

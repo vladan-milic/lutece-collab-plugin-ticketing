@@ -68,7 +68,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
 /**
  * Service for ticketing forms
  */
@@ -110,9 +109,9 @@ public class TicketFormService implements Serializable
     {
         List<Integer> listInputs = TicketCategoryHome.getIdInputListByCategory( idCategory );
         List<Entry> listEntryFirstLevel;
-        List<Entry> listEntry = new ArrayList<Entry>(  );
+        List<Entry> listEntry = new ArrayList<Entry>( );
 
-        EntryFilter filter = new EntryFilter(  );
+        EntryFilter filter = new EntryFilter( );
         filter.setResourceType( TicketingConstants.RESOURCE_TYPE_INPUT );
         filter.setEntryParentNull( EntryFilter.FILTER_TRUE );
         filter.setFieldDependNull( EntryFilter.FILTER_TRUE );
@@ -122,9 +121,9 @@ public class TicketFormService implements Serializable
             filter.setIdResource( nInput );
             listEntryFirstLevel = EntryHome.getEntryList( filter );
 
-            if ( ( listEntryFirstLevel != null ) && ( listEntryFirstLevel.size(  ) > 0 ) )
+            if ( ( listEntryFirstLevel != null ) && ( listEntryFirstLevel.size( ) > 0 ) )
             {
-                if ( listEntryId == null || listEntryId.contains( listEntryFirstLevel.get( 0 ).getIdEntry(  ) ) )
+                if ( listEntryId == null || listEntryId.contains( listEntryFirstLevel.get( 0 ).getIdEntry( ) ) )
                 {
                     listEntry.add( listEntryFirstLevel.get( 0 ) );
                 }
@@ -136,130 +135,138 @@ public class TicketFormService implements Serializable
 
     /**
      * Return the HTML code of the form
-     * @param category The category associated with the form
-     * @param locale the locale
-     * @param bDisplayFront True if the entry will be displayed in Front Office,
-     *            false if it will be displayed in Back Office.
-     * @param listEntryId list of EntryId which have to be retrieved. If list is null no filtering is done
-     * @param request HttpServletRequest
+     * 
+     * @param category
+     *            The category associated with the form
+     * @param locale
+     *            the locale
+     * @param bDisplayFront
+     *            True if the entry will be displayed in Front Office, false if it will be displayed in Back Office.
+     * @param listEntryId
+     *            list of EntryId which have to be retrieved. If list is null no filtering is done
+     * @param request
+     *            HttpServletRequest
      * @return the HTML code of the form
      */
     public String getHtmlFormInputs( Locale locale, boolean bDisplayFront, int nIdcategory, List<Integer> listEntryId, HttpServletRequest request )
     {
-        StringBuffer strBuffer = new StringBuffer(  );
+        StringBuffer strBuffer = new StringBuffer( );
 
         List<Entry> listEntryFirstLevel = getFilterInputs( nIdcategory, listEntryId );
-        
+
         for ( Entry entry : listEntryFirstLevel )
         {
-    		getHtmlEntry( entry.getIdEntry(  ), strBuffer, locale, bDisplayFront, request );
+            getHtmlEntry( entry.getIdEntry( ), strBuffer, locale, bDisplayFront, request );
         }
 
-        return strBuffer.toString(  );
+        return strBuffer.toString( );
     }
 
     /**
      * Return the HTML code of the form for the specified list of entries
-     * @param listEntryFirstLevel the list of entries
-     * @param locale the locale
-     * @param bDisplayFront True if the entry will be displayed in Front Office,
-     *            false if it will be displayed in Back Office.
-     * @param request HttpServletRequest
+     * 
+     * @param listEntryFirstLevel
+     *            the list of entries
+     * @param locale
+     *            the locale
+     * @param bDisplayFront
+     *            True if the entry will be displayed in Front Office, false if it will be displayed in Back Office.
+     * @param request
+     *            HttpServletRequest
      * @return the HTML code of the form
      */
-    public String getHtmlForm( List<Entry> listEntryFirstLevel, Locale locale, boolean bDisplayFront,
-        HttpServletRequest request )
+    public String getHtmlForm( List<Entry> listEntryFirstLevel, Locale locale, boolean bDisplayFront, HttpServletRequest request )
     {
-        StringBuffer strBuffer = new StringBuffer(  );
+        StringBuffer strBuffer = new StringBuffer( );
 
         for ( Entry entry : listEntryFirstLevel )
         {
-            getHtmlEntry( entry.getIdEntry(  ), strBuffer, locale, bDisplayFront, request );
+            getHtmlEntry( entry.getIdEntry( ), strBuffer, locale, bDisplayFront, request );
         }
 
-        return strBuffer.toString(  );
+        return strBuffer.toString( );
     }
 
     /**
      * Insert in the string buffer the content of the HTML code of the entry
-     * @param nIdEntry the key of the entry which HTML code must be insert in
-     *            the stringBuffer
-     * @param stringBuffer the buffer which contains the HTML code
-     * @param locale the locale
-     * @param bDisplayFront True if the entry will be displayed in Front Office,
-     *            false if it will be displayed in Back Office.
-     * @param request HttpServletRequest
+     * 
+     * @param nIdEntry
+     *            the key of the entry which HTML code must be insert in the stringBuffer
+     * @param stringBuffer
+     *            the buffer which contains the HTML code
+     * @param locale
+     *            the locale
+     * @param bDisplayFront
+     *            True if the entry will be displayed in Front Office, false if it will be displayed in Back Office.
+     * @param request
+     *            HttpServletRequest
      */
-    public void getHtmlEntry( int nIdEntry, StringBuffer stringBuffer, Locale locale, boolean bDisplayFront,
-        HttpServletRequest request )
+    public void getHtmlEntry( int nIdEntry, StringBuffer stringBuffer, Locale locale, boolean bDisplayFront, HttpServletRequest request )
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         StringBuffer strConditionalQuestionStringBuffer = null;
         HtmlTemplate template;
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-        if ( entry.getEntryType(  ).getGroup(  ) )
+        if ( entry.getEntryType( ).getGroup( ) )
         {
-            StringBuffer strGroupStringBuffer = new StringBuffer(  );
+            StringBuffer strGroupStringBuffer = new StringBuffer( );
 
-            for ( Entry entryChild : entry.getChildren(  ) )
+            for ( Entry entryChild : entry.getChildren( ) )
             {
-                getHtmlEntry( entryChild.getIdEntry(  ), strGroupStringBuffer, locale, bDisplayFront, request );
+                getHtmlEntry( entryChild.getIdEntry( ), strGroupStringBuffer, locale, bDisplayFront, request );
             }
 
-            model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString(  ) );
+            model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
         }
         else
         {
-            if ( entry.getNumberConditionalQuestion(  ) != 0 )
+            if ( entry.getNumberConditionalQuestion( ) != 0 )
             {
-                for ( Field field : entry.getFields(  ) )
+                for ( Field field : entry.getFields( ) )
                 {
-                    field.setConditionalQuestions( FieldHome.findByPrimaryKey( field.getIdField(  ) )
-                                                            .getConditionalQuestions(  ) );
+                    field.setConditionalQuestions( FieldHome.findByPrimaryKey( field.getIdField( ) ).getConditionalQuestions( ) );
                 }
             }
         }
 
-        if ( entry.getNumberConditionalQuestion(  ) != 0 )
+        if ( entry.getNumberConditionalQuestion( ) != 0 )
         {
-            strConditionalQuestionStringBuffer = new StringBuffer(  );
+            strConditionalQuestionStringBuffer = new StringBuffer( );
 
-            for ( Field field : entry.getFields(  ) )
+            for ( Field field : entry.getFields( ) )
             {
-                if ( field.getConditionalQuestions(  ).size(  ) != 0 )
+                if ( field.getConditionalQuestions( ).size( ) != 0 )
                 {
-                    StringBuffer strGroupStringBuffer = new StringBuffer(  );
+                    StringBuffer strGroupStringBuffer = new StringBuffer( );
 
-                    for ( Entry entryConditional : field.getConditionalQuestions(  ) )
+                    for ( Entry entryConditional : field.getConditionalQuestions( ) )
                     {
-                        getHtmlEntry( entryConditional.getIdEntry(  ), strGroupStringBuffer, locale, bDisplayFront,
-                            request );
+                        getHtmlEntry( entryConditional.getIdEntry( ), strGroupStringBuffer, locale, bDisplayFront, request );
                     }
 
-                    model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString(  ) );
+                    model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
                     model.put( MARK_FIELD, field );
                     template = AppTemplateService.getTemplate( TEMPLATE_DIV_CONDITIONAL_ENTRY, locale, model );
-                    strConditionalQuestionStringBuffer.append( template.getHtml(  ) );
+                    strConditionalQuestionStringBuffer.append( template.getHtml( ) );
                 }
             }
 
-            model.put( MARK_STR_LIST_CHILDREN, strConditionalQuestionStringBuffer.toString(  ) );
+            model.put( MARK_STR_LIST_CHILDREN, strConditionalQuestionStringBuffer.toString( ) );
         }
 
         model.put( MARK_ENTRY, entry );
         model.put( MARK_LOCALE, locale );
 
-        LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
-        if ( ( user == null ) && SecurityService.isAuthenticationEnable(  ) &&
-                SecurityService.getInstance(  ).isExternalAuthentication(  ) )
+        if ( ( user == null ) && SecurityService.isAuthenticationEnable( ) && SecurityService.getInstance( ).isExternalAuthentication( ) )
         {
             try
             {
-                user = SecurityService.getInstance(  ).getRemoteUser( request );
+                user = SecurityService.getInstance( ).getRemoteUser( request );
             }
-            catch ( UserNotSignedException e )
+            catch( UserNotSignedException e )
             {
                 // Nothing to do : lutece user is not mandatory
             }
@@ -269,33 +276,30 @@ public class TicketFormService implements Serializable
 
         if ( request != null )
         {
-            Ticket ticket = getTicketFromSession( request.getSession(  ) );
+            Ticket ticket = getTicketFromSession( request.getSession( ) );
 
             if ( ticket != null )
             {
-                model.put( MARK_LIST_RESPONSES, ticket.getListResponse(  ) );
+                model.put( MARK_LIST_RESPONSES, ticket.getListResponse( ) );
             }
         }
 
         IEntryTypeService entryTypeService = EntryTypeServiceManager.getEntryTypeService( entry );
 
-        // If the entry type is a file, we add the 
+        // If the entry type is a file, we add the
         if ( entryTypeService instanceof AbstractEntryTypeUpload )
         {
-            model.put( MARK_UPLOAD_HANDLER,
-                ( (AbstractEntryTypeUpload) entryTypeService ).getAsynchronousUploadHandler(  ) );
+            model.put( MARK_UPLOAD_HANDLER, ( (AbstractEntryTypeUpload) entryTypeService ).getAsynchronousUploadHandler( ) );
         }
 
-        template = AppTemplateService.getTemplate( entryTypeService.getTemplateHtmlForm( entry, bDisplayFront ),
-                locale, model );
-        stringBuffer.append( template.getHtml(  ) );
+        template = AppTemplateService.getTemplate( entryTypeService.getTemplateHtmlForm( entry, bDisplayFront ), locale, model );
+        stringBuffer.append( template.getHtml( ) );
     }
 
     /**
      * Get the responses associated with an entry.<br />
-     * Return null if there is no error in the response, or return the list of
-     * errors Response created are stored the map of {@link Ticket}. The key of
-     * the map is this id of the entry, and the value the list of responses
+     * Return null if there is no error in the response, or return the list of errors Response created are stored the map of {@link Ticket}. The key of the map
+     * is this id of the entry, and the value the list of responses
      *
      * @param request
      *            the request
@@ -305,118 +309,123 @@ public class TicketFormService implements Serializable
      *            the locale
      * @param ticket
      *            The ticket
-     * @return null if there is no error in the response or the list of errors
-     *         found
+     * @return null if there is no error in the response or the list of errors found
      */
-    public List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry, Locale locale,
-        Ticket ticket )
+    public List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry, Locale locale, Ticket ticket )
     {
-        if ( ticket.getListResponse(  ) == null )
+        if ( ticket.getListResponse( ) == null )
         {
-            List<Response> listResponse = new ArrayList<Response>(  );
+            List<Response> listResponse = new ArrayList<Response>( );
             ticket.setListResponse( listResponse );
         }
 
-        return getResponseEntry( request, nIdEntry, ticket.getListResponse(  ), false, locale, ticket );
+        return getResponseEntry( request, nIdEntry, ticket.getListResponse( ), false, locale, ticket );
     }
 
     /**
      * Get the responses associated with an entry.<br />
-     * Return null if there is no error in the response, or return the list of
-     * errors
-     * @param request the request
-     * @param nIdEntry the key of the entry
-     * @param listResponse The list of response to add responses found in
-     * @param bResponseNull true if the response created must be null
-     * @param locale the locale
-     * @param ticket The ticket
-     * @return null if there is no error in the response or the list of errors
-     *         found
+     * Return null if there is no error in the response, or return the list of errors
+     * 
+     * @param request
+     *            the request
+     * @param nIdEntry
+     *            the key of the entry
+     * @param listResponse
+     *            The list of response to add responses found in
+     * @param bResponseNull
+     *            true if the response created must be null
+     * @param locale
+     *            the locale
+     * @param ticket
+     *            The ticket
+     * @return null if there is no error in the response or the list of errors found
      */
-    private List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry,
-        List<Response> listResponse, boolean bResponseNull, Locale locale, Ticket ticket )
+    private List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry, List<Response> listResponse, boolean bResponseNull,
+            Locale locale, Ticket ticket )
     {
-        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>(  );
+        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-        List<Field> listField = new ArrayList<Field>(  );
+        List<Field> listField = new ArrayList<Field>( );
 
-        for ( Field field : entry.getFields(  ) )
+        for ( Field field : entry.getFields( ) )
         {
-            field = FieldHome.findByPrimaryKey( field.getIdField(  ) );
+            field = FieldHome.findByPrimaryKey( field.getIdField( ) );
             listField.add( field );
         }
 
         entry.setFields( listField );
 
-        if ( entry.getEntryType(  ).getGroup(  ) )
+        if ( entry.getEntryType( ).getGroup( ) )
         {
-            for ( Entry entryChild : entry.getChildren(  ) )
+            for ( Entry entryChild : entry.getChildren( ) )
             {
-                List<Response> listResponseChild = new ArrayList<Response>(  );
-                ticket.getListResponse(  ).addAll( listResponseChild );
+                List<Response> listResponseChild = new ArrayList<Response>( );
+                ticket.getListResponse( ).addAll( listResponseChild );
 
-                listFormErrors.addAll( getResponseEntry( request, entryChild.getIdEntry(  ), listResponseChild, false,
-                        locale, ticket ) );
+                listFormErrors.addAll( getResponseEntry( request, entryChild.getIdEntry( ), listResponseChild, false, locale, ticket ) );
             }
         }
-        else if ( !entry.getEntryType(  ).getComment(  ) )
-        {
-            GenericAttributeError formError = null;
-
-            if ( !bResponseNull )
+        else
+            if ( !entry.getEntryType( ).getComment( ) )
             {
-                formError = EntryTypeServiceManager.getEntryTypeService( entry )
-                                                   .getResponseData( entry, request, listResponse, locale );
+                GenericAttributeError formError = null;
+
+                if ( !bResponseNull )
+                {
+                    formError = EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request, listResponse, locale );
+
+                    if ( formError != null )
+                    {
+                        formError.setUrl( getEntryUrl( entry, ticket.getTicketCategory( ).getId( ) ) );
+                    }
+                }
+                else
+                {
+                    Response response = new Response( );
+                    response.setEntry( entry );
+                    listResponse.add( response );
+                }
 
                 if ( formError != null )
                 {
-                    formError.setUrl( getEntryUrl( entry, ticket.getTicketCategory(  ).getId(  ) ) );
+                    entry.setError( formError );
+                    listFormErrors.add( formError );
                 }
-            }
-            else
-            {
-                Response response = new Response(  );
-                response.setEntry( entry );
-                listResponse.add( response );
-            }
 
-            if ( formError != null )
-            {
-                entry.setError( formError );
-                listFormErrors.add( formError );
-            }
-
-            if ( entry.getNumberConditionalQuestion(  ) != 0 )
-            {
-                for ( Field field : entry.getFields(  ) )
+                if ( entry.getNumberConditionalQuestion( ) != 0 )
                 {
-                    boolean bIsFieldInResponseList = isFieldInTheResponseList( field.getIdField(  ), listResponse );
-
-                    for ( Entry conditionalEntry : field.getConditionalQuestions(  ) )
+                    for ( Field field : entry.getFields( ) )
                     {
-                        List<Response> listResponseChild = new ArrayList<Response>(  );
-                        listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry(  ),
-                                listResponseChild, !bIsFieldInResponseList, locale, ticket ) );
+                        boolean bIsFieldInResponseList = isFieldInTheResponseList( field.getIdField( ), listResponse );
+
+                        for ( Entry conditionalEntry : field.getConditionalQuestions( ) )
+                        {
+                            List<Response> listResponseChild = new ArrayList<Response>( );
+                            listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry( ), listResponseChild, !bIsFieldInResponseList,
+                                    locale, ticket ) );
+                        }
                     }
                 }
             }
-        }
 
         return listFormErrors;
     }
 
     /**
      * Check if a field is in a response list
-     * @param nIdField the id of the field to search
-     * @param listResponse the list of responses
+     * 
+     * @param nIdField
+     *            the id of the field to search
+     * @param listResponse
+     *            the list of responses
      * @return true if the field is in the response list, false otherwise
      */
     public Boolean isFieldInTheResponseList( int nIdField, List<Response> listResponse )
     {
         for ( Response response : listResponse )
         {
-            if ( ( response.getField(  ) != null ) && ( response.getField(  ).getIdField(  ) == nIdField ) )
+            if ( ( response.getField( ) != null ) && ( response.getField( ).getIdField( ) == nIdField ) )
             {
                 return true;
             }
@@ -427,27 +436,29 @@ public class TicketFormService implements Serializable
 
     /**
      * Get the URL of the anchor of an entry
-     * @param entry the entry
-     * @param nIdform id of form
+     * 
+     * @param entry
+     *            the entry
+     * @param nIdform
+     *            id of form
      * @return The URL of the anchor of an entry
      */
     public String getEntryUrl( Entry entry, int nIdform )
     {
-        UrlItem url = new UrlItem( AppPathService.getPortalUrl(  ) );
+        UrlItem url = new UrlItem( AppPathService.getPortalUrl( ) );
         url.addParameter( XPageAppService.PARAM_XPAGE_APP, TicketingPlugin.PLUGIN_NAME );
 
-        if ( ( entry != null ) && ( entry.getIdResource(  ) > 0 ) )
+        if ( ( entry != null ) && ( entry.getIdResource( ) > 0 ) )
         {
-            url.addParameter( PARAMETER_ID_FORM, entry.getIdResource(  ) );
-            url.setAnchor( PREFIX_ATTRIBUTE + entry.getIdEntry(  ) );
+            url.addParameter( PARAMETER_ID_FORM, entry.getIdResource( ) );
+            url.setAnchor( PREFIX_ATTRIBUTE + entry.getIdEntry( ) );
         }
 
-        return url.getUrl(  );
+        return url.getUrl( );
     }
 
     /**
-     * Get list of response from the list of generic attributs response
-     * listResponse of the current ticket for the recap_ticket view
+     * Get list of response from the list of generic attributs response listResponse of the current ticket for the recap_ticket view
      *
      * @param listResponse
      *            The listReponse of the ticket
@@ -455,36 +466,35 @@ public class TicketFormService implements Serializable
      */
     public List<ResponseRecap> getListResponseRecap( List<Response> listResponse )
     {
-        Map<Integer, ResponseRecap> mapResponseRecap = new LinkedHashMap<Integer, ResponseRecap>(  );
+        Map<Integer, ResponseRecap> mapResponseRecap = new LinkedHashMap<Integer, ResponseRecap>( );
 
         if ( listResponse != null )
         {
             for ( Response response : listResponse )
             {
-                ResponseRecap responseRecap = mapResponseRecap.get( Integer.valueOf( 
-                            response.getEntry(  ).getIdEntry(  ) ) );
+                ResponseRecap responseRecap = mapResponseRecap.get( Integer.valueOf( response.getEntry( ).getIdEntry( ) ) );
 
                 if ( responseRecap == null )
                 {
-                    responseRecap = new ResponseRecap(  );
-                    responseRecap.setTitle( response.getEntry(  ).getTitle(  ) );
+                    responseRecap = new ResponseRecap( );
+                    responseRecap.setTitle( response.getEntry( ).getTitle( ) );
                 }
 
-                if ( response.getField(  ) != null )
+                if ( response.getField( ) != null )
                 {
-                    responseRecap.addValue( response.getField(  ).getTitle(  ) );
+                    responseRecap.addValue( response.getField( ).getTitle( ) );
                 }
                 else
                 {
-                    if ( response.getFile(  ) != null )
+                    if ( response.getFile( ) != null )
                     {
-                        responseRecap.addValue( response.getFile(  ).getTitle(  ) );
+                        responseRecap.addValue( response.getFile( ).getTitle( ) );
                     }
                     else
                     {
-                        if ( response.getResponseValue(  ) != null )
+                        if ( response.getResponseValue( ) != null )
                         {
-                            responseRecap.addValue( response.getResponseValue(  ) );
+                            responseRecap.addValue( response.getResponseValue( ) );
                         }
                         else
                         {
@@ -493,11 +503,11 @@ public class TicketFormService implements Serializable
                     }
                 }
 
-                mapResponseRecap.put( Integer.valueOf( response.getEntry(  ).getIdEntry(  ) ), responseRecap );
+                mapResponseRecap.put( Integer.valueOf( response.getEntry( ).getIdEntry( ) ), responseRecap );
             }
         }
 
-        List<ResponseRecap> listResponseRecap = new ArrayList<ResponseRecap>( mapResponseRecap.values(  ) );
+        List<ResponseRecap> listResponseRecap = new ArrayList<ResponseRecap>( mapResponseRecap.values( ) );
 
         return listResponseRecap;
     }
@@ -517,7 +527,9 @@ public class TicketFormService implements Serializable
 
     /**
      * Get the current ticketing form from the session
-     * @param session The session of the user
+     * 
+     * @param session
+     *            The session of the user
      * @return The ticketing form
      */
     public Ticket getTicketFromSession( HttpSession session )
@@ -527,7 +539,9 @@ public class TicketFormService implements Serializable
 
     /**
      * Remove any ticketing form responses stored in the session of the user
-     * @param session The session
+     * 
+     * @param session
+     *            The session
      */
     public void removeTicketFromSession( HttpSession session )
     {
@@ -536,8 +550,11 @@ public class TicketFormService implements Serializable
 
     /**
      * Save a validated ticketing into the session of the user
-     * @param session The session
-     * @param ticketing The ticketing to save
+     * 
+     * @param session
+     *            The session
+     * @param ticketing
+     *            The ticketing to save
      */
     public void saveValidatedTicketForm( HttpSession session, Ticket ticketing )
     {
@@ -547,7 +564,9 @@ public class TicketFormService implements Serializable
 
     /**
      * Get a validated ticketing from the session
-     * @param session The session of the user
+     * 
+     * @param session
+     *            The session of the user
      * @return The ticketing
      */
     public Ticket getValidatedTicketFromSession( HttpSession session )
@@ -557,7 +576,9 @@ public class TicketFormService implements Serializable
 
     /**
      * Remove a validated ticketing stored in the session of the user
-     * @param session The session
+     * 
+     * @param session
+     *            The session
      */
     public void removeValidatedTicketFromSession( HttpSession session )
     {

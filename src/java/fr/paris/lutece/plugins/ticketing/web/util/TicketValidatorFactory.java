@@ -37,10 +37,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-
 /**
- * Factory of TicketValidator.
- * Designed as a singleton
+ * Factory of TicketValidator. Designed as a singleton
  *
  */
 public final class TicketValidatorFactory
@@ -51,14 +49,16 @@ public final class TicketValidatorFactory
     /**
      * Default constructor
      */
-    private TicketValidatorFactory(  )
+    private TicketValidatorFactory( )
     {
-        _validators = new HashMap<Locale, TicketValidator>(  );
+        _validators = new HashMap<Locale, TicketValidator>( );
     }
 
     /**
      * Creates a TicketValidator
-     * @param locale the locale used to select the correct validation error messages
+     * 
+     * @param locale
+     *            the locale used to select the correct validation error messages
      * @return the TicketValidator
      */
     public TicketValidator create( Locale locale )
@@ -76,17 +76,18 @@ public final class TicketValidatorFactory
 
     /**
      * Gives the instance
+     * 
      * @return the instance
      */
-    public static TicketValidatorFactory getInstance(  )
+    public static TicketValidatorFactory getInstance( )
     {
         if ( _instance == null )
         {
-            synchronized ( TicketValidatorFactory.class )
+            synchronized( TicketValidatorFactory.class )
             {
                 if ( _instance == null )
                 {
-                    _instance = new TicketValidatorFactory(  );
+                    _instance = new TicketValidatorFactory( );
                 }
             }
         }

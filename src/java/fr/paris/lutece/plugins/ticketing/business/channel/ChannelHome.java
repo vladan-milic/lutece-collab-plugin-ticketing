@@ -40,10 +40,8 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
 
-
 /**
- * This class provides instances management methods (create, find, ...) for
- * Channel objects
+ * This class provides instances management methods (create, find, ...) for Channel objects
  */
 public final class ChannelHome
 {
@@ -54,7 +52,7 @@ public final class ChannelHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private ChannelHome(  )
+    private ChannelHome( )
     {
     }
 
@@ -62,8 +60,7 @@ public final class ChannelHome
      * Create an instance of the channel class
      *
      * @param channel
-     *            The instance of the Channel which contains the
-     *            informations to store
+     *            The instance of the Channel which contains the informations to store
      */
     public static void create( Channel channel )
     {
@@ -74,8 +71,7 @@ public final class ChannelHome
      * Update of the channel which is specified in parameter
      *
      * @param channel
-     *            The instance of the Channel which contains the data to
-     *            store
+     *            The instance of the Channel which contains the data to store
      */
     public static void update( Channel channel )
     {
@@ -93,12 +89,11 @@ public final class ChannelHome
         _dao.delete( nKey, _plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
-     * Returns an instance of a channel whose identifier is specified in
-     * parameter
+     * Returns an instance of a channel whose identifier is specified in parameter
      *
      * @param nKey
      *            The channel primary key
@@ -110,36 +105,31 @@ public final class ChannelHome
     }
 
     /**
-     * Load the data of all the channel objects and returns them in form of
-     * a collection
+     * Load the data of all the channel objects and returns them in form of a collection
      *
-     * @return the collection which contains the data of all the channel
-     *         objects
+     * @return the collection which contains the data of all the channel objects
      */
-    public static List<Channel> getChannelList(  )
+    public static List<Channel> getChannelList( )
     {
         return _dao.selectChannelList( _plugin );
     }
 
     /**
-     * Load the id of all the channel objects and returns them in form of a
-     * collection
+     * Load the id of all the channel objects and returns them in form of a collection
      *
-     * @return the collection which contains the id of all the channel
-     *         objects
+     * @return the collection which contains the id of all the channel objects
      */
-    public static List<Integer> getIdChannelList(  )
+    public static List<Integer> getIdChannelList( )
     {
         return _dao.selectIdChannelList( _plugin );
     }
 
     /**
-     * Load the data of all the channel objects and returns them as a
-     * reference list
+     * Load the data of all the channel objects and returns them as a reference list
      *
      * @return The reference list
      */
-    public static ReferenceList getReferenceList(  )
+    public static ReferenceList getReferenceList( )
     {
         return _dao.selectReferenceList( _plugin );
     }

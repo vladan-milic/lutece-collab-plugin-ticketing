@@ -39,7 +39,6 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Size;
 
-
 /**
  * This is the business class for the object ContactMode
  */
@@ -52,7 +51,7 @@ public class ContactMode implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    // Variables declarations 
+    // Variables declarations
     private int _nId;
     @NotEmpty( message = "#i18n{ticketing.validation.contactmode.code.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.contactmode.code.size}" )
@@ -61,16 +60,19 @@ public class ContactMode implements Serializable
 
     /**
      * Returns the Id
+     * 
      * @return The Id
      */
-    public int getId(  )
+    public int getId( )
     {
         return _nId;
     }
 
     /**
      * Sets the Id
-     * @param nId The Id
+     * 
+     * @param nId
+     *            The Id
      */
     public void setId( int nId )
     {
@@ -79,16 +81,19 @@ public class ContactMode implements Serializable
 
     /**
      * Returns the code
+     * 
      * @return The code
      */
-    public String getCode(  )
+    public String getCode( )
     {
         return _strCode;
     }
 
     /**
      * Sets the code
-     * @param strCode The code
+     * 
+     * @param strCode
+     *            The code
      */
     public void setCode( String strCode )
     {
@@ -100,7 +105,7 @@ public class ContactMode implements Serializable
      *
      * @return The confirmation message
      */
-    public String getConfirmationMsg(  )
+    public String getConfirmationMsg( )
     {
         return _strConfirmationMsg;
     }

@@ -58,7 +58,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * This class provides the user interface to manage ModelResponse features ( manage, create, modify, remove )
  */
@@ -121,7 +120,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     private static final String INFO_MODELRESPONSE_UPDATED = "ticketing.info.modelresponse.updated";
     private static final String INFO_MODELRESPONSE_REMOVED = "ticketing.info.modelresponse.removed";
 
-    //Variables
+    // Variables
     private int _nDefaultItemsPerPage;
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
@@ -131,39 +130,43 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
     /**
      * Return a model that contains the list and paginator infos
-     * @param request The HTTP request
-     * @param strBookmark The bookmark
-     * @param list The list of item
-     * @param strManageJsp The JSP
+     * 
+     * @param request
+     *            The HTTP request
+     * @param strBookmark
+     *            The bookmark
+     * @param list
+     *            The list of item
+     * @param strManageJsp
+     *            The JSP
      * @return The model
      */
-    protected Map<String, Object> getPaginatedListModel( HttpServletRequest request, String strBookmark, List list,
-        String strManageJsp )
+    protected Map<String, Object> getPaginatedListModel( HttpServletRequest request, String strBookmark, List list, String strManageJsp )
     {
         _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
-        _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
-                _nDefaultItemsPerPage );
+        _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, _nDefaultItemsPerPage );
 
         UrlItem url = new UrlItem( strManageJsp );
-        String strUrl = url.getUrl(  );
+        String strUrl = url.getUrl( );
 
         // PAGINATOR
-        LocalizedPaginator paginator = new LocalizedPaginator( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
-                _strCurrentPageIndex, getLocale(  ) );
+        LocalizedPaginator paginator = new LocalizedPaginator( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
 
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
         model.put( MARK_PAGINATOR, paginator );
-        model.put( strBookmark, paginator.getPageItems(  ) );
+        model.put( strBookmark, paginator.getPageItems( ) );
 
         return model;
     }
 
     /**
      * Build the Manage View
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The page
      */
     @View( value = VIEW_MANAGE_MODELRESPONSES, defaultView = true )
@@ -171,9 +174,8 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     {
         _modelResponse = null;
 
-        List<ModelResponse> listModelResponses = ModelResponseHome.getModelResponsesList(  );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_MODELRESPONSE_LIST, listModelResponses,
-                JSP_MANAGE_MODELRESPONSES );
+        List<ModelResponse> listModelResponses = ModelResponseHome.getModelResponsesList( );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_MODELRESPONSE_LIST, listModelResponses, JSP_MANAGE_MODELRESPONSES );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_MODELRESPONSES, TEMPLATE_MANAGE_MODELRESPONSES, model );
     }
@@ -181,17 +183,18 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     /**
      * Returns the form to create a modelresponse
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code of the modelresponse form
      */
     @View( VIEW_CREATE_MODELRESPONSE )
     public String getCreateModelResponse( HttpServletRequest request )
     {
-        _modelResponse = new ModelResponse(  );
+        _modelResponse = new ModelResponse( );
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
         model.put( MARK_MODELRESPONSE, _modelResponse );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceListSimple(  ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceListSimple( ) );
 
         ModelUtils.storeRichText( request, model );
 
@@ -201,7 +204,8 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     /**
      * Process the data capture form of a new modelresponse
      *
-     * @param request The Http Request
+     * @param request
+     *            The Http Request
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_CREATE_MODELRESPONSE )
@@ -220,14 +224,14 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         try
         {
-            LuceneModelResponseIndexerServices.instance(  ).add( _modelResponse );
+            LuceneModelResponseIndexerServices.instance( ).add( _modelResponse );
         }
-        catch ( IOException ex )
+        catch( IOException ex )
         {
             AppLogService.error( "\n Ticketing - TypicalResponseJspBean : can't add index odel response", ex );
         }
 
-        addInfo( INFO_MODELRESPONSE_CREATED, getLocale(  ) );
+        addInfo( INFO_MODELRESPONSE_CREATED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
     }
@@ -235,19 +239,20 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     /**
      * Populate label.
      *
-     * @param modelResponse the model response
+     * @param modelResponse
+     *            the model response
      */
     private void populateLabel( ModelResponse modelResponse )
     {
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain(  ) );
-        modelResponse.setDomain( ticketDomain.getLabel(  ) );
+        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain( ) );
+        modelResponse.setDomain( ticketDomain.getLabel( ) );
     }
 
     /**
-     * Manages the removal form of a modelresponse whose identifier is in the http
-     * request
+     * Manages the removal form of a modelresponse whose identifier is in the http request
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code to confirm
      */
     @Action( ACTION_CONFIRM_REMOVE_MODELRESPONSE )
@@ -257,8 +262,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_MODELRESPONSE ) );
         url.addParameter( PARAMETER_ID_MODELRESPONSE, nId );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_MODELRESPONSE,
-                url.getUrl(  ), AdminMessage.TYPE_CONFIRMATION );
+        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_MODELRESPONSE, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
     }
@@ -266,7 +270,8 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     /**
      * Handles the removal form of a modelresponse
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the jsp URL to display the form to manage modelresponses
      */
     @Action( ACTION_REMOVE_MODELRESPONSE )
@@ -276,15 +281,15 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         try
         {
-            LuceneModelResponseIndexerServices.instance(  ).delete( ModelResponseHome.findByPrimaryKey( nId ) );
+            LuceneModelResponseIndexerServices.instance( ).delete( ModelResponseHome.findByPrimaryKey( nId ) );
         }
-        catch ( IOException ex )
+        catch( IOException ex )
         {
             AppLogService.error( "\n Ticketing - TypicalResponseJspBean : can't delete index model response", ex );
         }
 
         ModelResponseHome.remove( nId );
-        addInfo( INFO_MODELRESPONSE_REMOVED, getLocale(  ) );
+        addInfo( INFO_MODELRESPONSE_REMOVED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
     }
@@ -292,7 +297,8 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     /**
      * Returns the form to update info about a modelresponse
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return The HTML form to update info
      */
     @View( VIEW_MODIFY_MODELRESPONSE )
@@ -300,15 +306,15 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_MODELRESPONSE ) );
 
-        if ( ( _modelResponse == null ) || ( _modelResponse.getId(  ) != nId ) )
+        if ( ( _modelResponse == null ) || ( _modelResponse.getId( ) != nId ) )
         {
             _modelResponse = ModelResponseHome.findByPrimaryKey( nId );
         }
 
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
         model.put( MARK_MODELRESPONSE, _modelResponse );
 
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceListSimple(  ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceListSimple( ) );
 
         ModelUtils.storeRichText( request, model );
 
@@ -318,7 +324,8 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     /**
      * Process the change form of a modelresponse
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_MODIFY_MODELRESPONSE )
@@ -330,17 +337,17 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         // Check constraints
         if ( !validateBean( _modelResponse, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-            return redirect( request, VIEW_MODIFY_MODELRESPONSE, PARAMETER_ID_MODELRESPONSE, _modelResponse.getId(  ) );
+            return redirect( request, VIEW_MODIFY_MODELRESPONSE, PARAMETER_ID_MODELRESPONSE, _modelResponse.getId( ) );
         }
 
         ModelResponseHome.update( _modelResponse );
-        addInfo( INFO_MODELRESPONSE_UPDATED, getLocale(  ) );
+        addInfo( INFO_MODELRESPONSE_UPDATED, getLocale( ) );
 
         try
         {
-            LuceneModelResponseIndexerServices.instance(  ).update( _modelResponse );
+            LuceneModelResponseIndexerServices.instance( ).update( _modelResponse );
         }
-        catch ( IOException ex )
+        catch( IOException ex )
         {
             AppLogService.error( "\n Ticketing - TypicalResponseJspBean : can't update index model response", ex );
         }

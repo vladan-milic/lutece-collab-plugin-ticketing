@@ -45,10 +45,8 @@ import org.apache.commons.lang.StringUtils;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
- * This class provides instances management methods (create, find, ...) for
- * ContactMode objects
+ * This class provides instances management methods (create, find, ...) for ContactMode objects
  */
 public final class ContactModeHome
 {
@@ -61,7 +59,7 @@ public final class ContactModeHome
     /**
      * Private constructor - this class need not be instantiated
      */
-    private ContactModeHome(  )
+    private ContactModeHome( )
     {
     }
 
@@ -69,8 +67,7 @@ public final class ContactModeHome
      * Create an instance of the contactMode class
      *
      * @param contactMode
-     *            The instance of the ContactMode which contains the
-     *            informations to store
+     *            The instance of the ContactMode which contains the informations to store
      */
     public static void create( ContactMode contactMode )
     {
@@ -81,8 +78,7 @@ public final class ContactModeHome
      * Update of the contactMode which is specified in parameter
      *
      * @param contactMode
-     *            The instance of the ContactMode which contains the data to
-     *            store
+     *            The instance of the ContactMode which contains the data to store
      */
     public static void update( ContactMode contactMode )
     {
@@ -100,12 +96,11 @@ public final class ContactModeHome
         _dao.delete( nKey, _plugin );
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     // Finders
 
     /**
-     * Returns an instance of a contactMode whose identifier is specified in
-     * parameter
+     * Returns an instance of a contactMode whose identifier is specified in parameter
      *
      * @param nKey
      *            The contactMode primary key
@@ -117,43 +112,37 @@ public final class ContactModeHome
     }
 
     /**
-     * Load the data of all the contactMode objects and returns them in form of
-     * a collection
+     * Load the data of all the contactMode objects and returns them in form of a collection
      *
-     * @return the collection which contains the data of all the contactMode
-     *         objects
+     * @return the collection which contains the data of all the contactMode objects
      */
-    public static List<ContactMode> getContactModesList(  )
+    public static List<ContactMode> getContactModesList( )
     {
         return _dao.selectContactModesList( _plugin );
     }
 
     /**
-     * Load the id of all the contactMode objects and returns them in form of a
-     * collection
+     * Load the id of all the contactMode objects and returns them in form of a collection
      *
-     * @return the collection which contains the id of all the contactMode
-     *         objects
+     * @return the collection which contains the id of all the contactMode objects
      */
-    public static List<Integer> getIdContactModesList(  )
+    public static List<Integer> getIdContactModesList( )
     {
         return _dao.selectIdContactModesList( _plugin );
     }
 
     /**
-     * Load the data of all the contactMode objects and returns them as a
-     * reference list
+     * Load the data of all the contactMode objects and returns them as a reference list
      *
      * @return The reference list
      */
-    public static ReferenceList getReferenceList(  )
+    public static ReferenceList getReferenceList( )
     {
         return _dao.selectReferenceList( _plugin );
     }
 
     /**
-     * Load the data of all the contactMode objects and returns them as a
-     * localized reference list
+     * Load the data of all the contactMode objects and returns them as a localized reference list
      *
      * @return The reference list
      */
@@ -163,7 +152,7 @@ public final class ContactModeHome
 
         for ( ReferenceItem item : referenceList )
         {
-            String strLocalizedName = I18nService.getLocalizedString( MESSAGE_PREFIX + item.getName(  ), locale );
+            String strLocalizedName = I18nService.getLocalizedString( MESSAGE_PREFIX + item.getName( ), locale );
 
             if ( !StringUtils.isEmpty( strLocalizedName ) )
             {

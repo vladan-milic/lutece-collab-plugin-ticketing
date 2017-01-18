@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.search;
 
-
 /***
  * Constants for Ticket searching
+ * 
  * @author s267533
  *
  */
@@ -71,7 +71,7 @@ public final class SearchConstants
     /**
      * constructor
      */
-    private SearchConstants(  )
+    private SearchConstants( )
     {
     }
 }
