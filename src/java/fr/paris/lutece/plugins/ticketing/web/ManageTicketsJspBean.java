@@ -118,7 +118,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String PARAMETER_USER_TITLE = "ut";
     private static final String PARAMETER_FIRSTNAME = "fn";
     private static final String PARAMETER_LASTNAME = "ln";
-    private static final String PARAMETER_PHONE = "ph";
+    private static final String PARAMETER_FIXED_PHONE = "fph";
+    private static final String PARAMETER_MOBILE_PHONE = "mph";
     private static final String PARAMETER_EMAIL = "em";
     private static final String PARAMETER_CATEGORY = "cat";
     private static final String PARAMETER_PAGE_INDEX = "page_index";
@@ -361,11 +362,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         String strIdUserTitle = request.getParameter( PARAMETER_USER_TITLE );
         String strFirstname = request.getParameter( PARAMETER_FIRSTNAME );
         String strLastname = request.getParameter( PARAMETER_LASTNAME );
-        String strMobilePhoneNumber = request.getParameter( PARAMETER_PHONE );
+        String strFixedPhoneNumber = request.getParameter( PARAMETER_FIXED_PHONE );
+        String strMobilePhoneNumber = request.getParameter( PARAMETER_MOBILE_PHONE );
         String strEmail = request.getParameter( PARAMETER_EMAIL );
         String strCategoryCode = request.getParameter( PARAMETER_CATEGORY );
         String strNomenclature = request.getParameter( PARAMETER_NOMENCLATURE );
-        ticket.enrich( strIdUserTitle, strFirstname, strLastname, null, strMobilePhoneNumber, strEmail, strCategoryCode, null, null, null, strGuid,
+        ticket.enrich( strIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber, strEmail, strCategoryCode, null, null, null, strGuid,
                 strIdCustomer, strNomenclature );
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
