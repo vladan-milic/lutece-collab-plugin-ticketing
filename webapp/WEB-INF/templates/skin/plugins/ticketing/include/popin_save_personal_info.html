@@ -1,0 +1,88 @@
+<#-- required Jquery to work -->
+<#macro addPopinSavePersonalInfo i18nTitleKey i18nMessageKey i18nYesKey i18nNoKey prefix="" yesActionUrl="jsp/site/plugins/ticketing/personaldata/SavePersonalData.jsp" noActionUrl="" yesBtnClass="btn-success"  noBtnClass="btn-danger" >
+
+<script type='text/javascript'>
+var ${prefix}popinCallback;
+
+function ${prefix}openPopinSavePersonalInfo( callback, onhide ) {
+	${prefix}popinCallback = callback;
+	$.ajax({
+		url : "jsp/site/plugins/ticketing/personaldata/DeltaPersonalData.jsp",
+		type: 'GET',
+		dataType: 'json',
+		async: false,
+	    cache:false,
+	    success: function(data) {
+	    	if(!jQuery.isEmptyObject(data)) {
+	    		$("#${prefix}popin-save-personal-info").modal('show');
+	    		if(onhide) {
+	    			$("#${prefix}popin-save-personal-info").on('hidden.bs.modal', onhide);
+	    		}
+	    	}
+	    }
+	});
+}
+
+function ${prefix}callPopinCallback(result) {
+	<#if yesActionUrl?has_content>
+	if(result) {
+		$.ajax({
+			url : "${yesActionUrl}",
+			type: 'POST',
+			async: false,
+		    cache:false
+		});
+	}
+	</#if>
+	<#if noActionUrl?has_content>
+	if(!result) {
+		$.ajax({
+			url : "${noActionUrl}",
+			type: 'POST',
+			async: false,
+		    cache:false
+		});		
+	}
+	</#if>
+	if(${prefix}popinCallback) { ${prefix}popinCallback(result); }
+}
+
+$(document).on("click", "#${prefix}popin-save-personal-info-yes", function(event){
+	$("#${prefix}popin-save-personal-info").modal('hide');
+	${prefix}callPopinCallback(true);
+});
+$(document).on("click", "#${prefix}popin-save-personal-info-no", function(event){
+	$("#${prefix}popin-save-personal-info").modal('hide');
+	${prefix}callPopinCallback(false);
+});
+
+</script>
+
+<div class="modal modal-static fade modal-save-personal-info" id="${prefix}popin-save-personal-info" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+       <div class="modal-content">
+		  <div class="modal-header">
+			<h3 class="modal-title" id="myModalLabel">#i18n{${i18nTitleKey}}</h3>
+		  </div>
+		  <div class="modal-body">
+			<div class="row">
+				<div style="font-size:1.8rem" class="col-xs-12">
+				#i18n{${i18nMessageKey}}
+				<br/>
+				<br/>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<span id="${prefix}popin-save-personal-info-yes" class="btn ${yesBtnClass} btn-block">#i18n{${i18nYesKey}}</span>
+				</div>
+				<div class="col-xs-6">
+					<span id="${prefix}popin-save-personal-info-no" class="btn ${noBtnClass} btn-block">#i18n{${i18nNoKey}}</span>
+				</div>
+			</div>
+		  </div>
+	  </div>
+	</div>
+</div>
+
+</#macro>
