@@ -65,166 +65,172 @@ public class PersonalDataApp extends MVCApplication
     // Session keys
     private static final String SESSION_INIT_PERSONAL_DATA = "ticketing.personal.data.init";
     private static final String SESSION_DELTA_PERSONAL_DATA = "ticketing.personal.data.delta";
-    
-    //map properties
-    private static final String[] MAP_ATTRIBUTES_IDENTITY_TOSAVE = AppPropertiesService.getProperty( "ticketing.identity.attribute.tosave" ).split( "," );
-    
-    //IDS service
+
+    // map properties
+    private static final String [ ] MAP_ATTRIBUTES_IDENTITY_TOSAVE = AppPropertiesService.getProperty( "ticketing.identity.attribute.tosave" ).split( "," );
+
+    // IDS service
     private static final String IDS_SERVICE_BEAN_NAME = AppPropertiesService.getProperty( "ticketing.identity.service.beanname" );
     private IdentityService _identityService;
-    
+
     public PersonalDataApp( )
     {
-    	_identityService = SpringContextService.getBean( IDS_SERVICE_BEAN_NAME );
+        _identityService = SpringContextService.getBean( IDS_SERVICE_BEAN_NAME );
     }
 
     /**
      * Init personal data in session
+     * 
      * @param request
      */
     public void doInitPersonalData( HttpServletRequest request )
     {
-    	LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
-    	
-    	if( user!=null && StringUtils.isNotEmpty( user.getName( ) ) )
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
+
+        if ( user != null && StringUtils.isNotEmpty( user.getName( ) ) )
         {
-	        Map<String, String> mapAttributes = new HashMap<String, String>( );
-	        
-	        for ( String strAttrKeyToSave : MAP_ATTRIBUTES_IDENTITY_TOSAVE )
-	        {		        
-		        if ( request.getParameter( strAttrKeyToSave ) != null )
-		        {
-			        mapAttributes.put( strAttrKeyToSave, request.getParameter( strAttrKeyToSave ) );
-		        }	            
-	        }
-	    	request.getSession(  ).setAttribute( SESSION_INIT_PERSONAL_DATA, mapAttributes );
-	    	request.getSession(  ).removeAttribute( SESSION_DELTA_PERSONAL_DATA );
+            Map<String, String> mapAttributes = new HashMap<String, String>( );
+
+            for ( String strAttrKeyToSave : MAP_ATTRIBUTES_IDENTITY_TOSAVE )
+            {
+                if ( request.getParameter( strAttrKeyToSave ) != null )
+                {
+                    mapAttributes.put( strAttrKeyToSave, request.getParameter( strAttrKeyToSave ) );
+                }
+            }
+            request.getSession( ).setAttribute( SESSION_INIT_PERSONAL_DATA, mapAttributes );
+            request.getSession( ).removeAttribute( SESSION_DELTA_PERSONAL_DATA );
         }
     }
-    
+
     /**
-     * Calculate personal data delta between init and the current
-     * Store the delta map in session
+     * Calculate personal data delta between init and the current Store the delta map in session
+     * 
      * @param request
      */
     public void doDeltaPersonalData( HttpServletRequest request )
     {
-    	LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
-    	Map<String, String> mapAttributes = new HashMap<String, String>( );
-    	
-    	if( user!=null && StringUtils.isNotEmpty( user.getName( ) ) )
-        { 
-    		try
-	    	{
-    			Map<String, String> mapInitPersonalData = (Map<String, String>) (Map<String, String>) request.getSession(  ).getAttribute( SESSION_INIT_PERSONAL_DATA );
-	        	if( mapInitPersonalData!=null )
-	        	{
-		        	for ( String strAttrKeyToSave : MAP_ATTRIBUTES_IDENTITY_TOSAVE )
-		            {		        
-		    	        if ( StringUtils.isNotEmpty( request.getParameter( strAttrKeyToSave ) ) && !StringUtils.equals( request.getParameter( strAttrKeyToSave ), mapInitPersonalData.get( strAttrKeyToSave ) ) )
-		    	        {
-		    	        	mapAttributes.put( strAttrKeyToSave, request.getParameter( strAttrKeyToSave ) );
-		    	        }	            
-		            }
-	        	}
-	    	}
-	    	catch ( ClassCastException e )
-	    	{
-	    		//do nothing, object in session should be map<string,string>
-	    		AppLogService.error("error while convert session object " + SESSION_INIT_PERSONAL_DATA + " to map", e);
-	    	}
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
+        Map<String, String> mapAttributes = new HashMap<String, String>( );
+
+        if ( user != null && StringUtils.isNotEmpty( user.getName( ) ) )
+        {
+            try
+            {
+                Map<String, String> mapInitPersonalData = (Map<String, String>) (Map<String, String>) request.getSession( ).getAttribute(
+                        SESSION_INIT_PERSONAL_DATA );
+                if ( mapInitPersonalData != null )
+                {
+                    for ( String strAttrKeyToSave : MAP_ATTRIBUTES_IDENTITY_TOSAVE )
+                    {
+                        if ( StringUtils.isNotEmpty( request.getParameter( strAttrKeyToSave ) )
+                                && !StringUtils.equals( request.getParameter( strAttrKeyToSave ), mapInitPersonalData.get( strAttrKeyToSave ) ) )
+                        {
+                            mapAttributes.put( strAttrKeyToSave, request.getParameter( strAttrKeyToSave ) );
+                        }
+                    }
+                }
+            }
+            catch( ClassCastException e )
+            {
+                // do nothing, object in session should be map<string,string>
+                AppLogService.error( "error while convert session object " + SESSION_INIT_PERSONAL_DATA + " to map", e );
+            }
         }
-    	request.getSession(  ).setAttribute( SESSION_DELTA_PERSONAL_DATA, mapAttributes );
+        request.getSession( ).setAttribute( SESSION_DELTA_PERSONAL_DATA, mapAttributes );
     }
-    
+
     /**
      * Return a json {"delta":true} if there is a calculated delta in session, empty json elsewhere
+     * 
      * @param request
      * @return json string
      */
     public String getDeltaPersonalData( HttpServletRequest request )
     {
-    	ObjectNode jsonMap = JsonNodeFactory.instance.objectNode( );
-    	LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
-    	
-    	if( user!=null && StringUtils.isNotEmpty( user.getName( ) ) )
+        ObjectNode jsonMap = JsonNodeFactory.instance.objectNode( );
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
+
+        if ( user != null && StringUtils.isNotEmpty( user.getName( ) ) )
         {
-	    	try
-	    	{
-	    		Map<String, String> mapDeltaPersonalData = (Map<String, String>) (Map<String, String>) request.getSession(  ).getAttribute( SESSION_DELTA_PERSONAL_DATA );
-	        	if( mapDeltaPersonalData!=null && mapDeltaPersonalData.size()>0 )
-	        	{
-	        		jsonMap.put("delta", true);
-	        	}
-	    	}
-	    	catch ( ClassCastException e )
-	    	{
-	    		//do nothing, object in session should be map<string,string>
-	    		AppLogService.error("error while convert session object " + SESSION_DELTA_PERSONAL_DATA + " to map", e);
-	    	}
+            try
+            {
+                Map<String, String> mapDeltaPersonalData = (Map<String, String>) (Map<String, String>) request.getSession( ).getAttribute(
+                        SESSION_DELTA_PERSONAL_DATA );
+                if ( mapDeltaPersonalData != null && mapDeltaPersonalData.size( ) > 0 )
+                {
+                    jsonMap.put( "delta", true );
+                }
+            }
+            catch( ClassCastException e )
+            {
+                // do nothing, object in session should be map<string,string>
+                AppLogService.error( "error while convert session object " + SESSION_DELTA_PERSONAL_DATA + " to map", e );
+            }
         }
-    	return jsonMap.toString( );
+        return jsonMap.toString( );
     }
-    
+
     /**
      * Save personal data difference in identitystore
+     * 
      * @param request
      */
     public void doSavePersonalData( HttpServletRequest request )
     {
-    	LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
-    	
-    	if( user!=null && StringUtils.isNotEmpty( user.getName( ) ) )
+        LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
+
+        if ( user != null && StringUtils.isNotEmpty( user.getName( ) ) )
         {
-    		Map<String, String> mapDeltaPersonalData = new HashMap<String, String>( );
-    		try
-	    	{
-	    		mapDeltaPersonalData = (Map<String, String>) (Map<String, String>) request.getSession(  ).getAttribute( SESSION_DELTA_PERSONAL_DATA );
-	    	}
-	    	catch ( ClassCastException e )
-	    	{
-	    		//do nothing, object in session should be map<string,string>
-	    		AppLogService.error("error while convert session object " + SESSION_DELTA_PERSONAL_DATA + " to map", e);
-	    	}
-	    	IdentityDto identityDto = new IdentityDto( );
-	        identityDto.setConnectionId( user.getName( ) );
-	        Map<String, AttributeDto> mapAttributes = new HashMap<String, AttributeDto>( );
-	        AttributeDto attribute;
-	        
-	        for ( String strAttrKeyToSave : MAP_ATTRIBUTES_IDENTITY_TOSAVE )
-            {		        
-		        if ( mapDeltaPersonalData.containsKey( strAttrKeyToSave ) )
-		        {
-		        	attribute = new AttributeDto(  );
-			        attribute.setKey( strAttrKeyToSave );
-			        attribute.setValue( mapDeltaPersonalData.get( strAttrKeyToSave ) );
-			        mapAttributes.put( attribute.getKey(  ), attribute );
-		        }	            
+            Map<String, String> mapDeltaPersonalData = new HashMap<String, String>( );
+            try
+            {
+                mapDeltaPersonalData = (Map<String, String>) (Map<String, String>) request.getSession( ).getAttribute( SESSION_DELTA_PERSONAL_DATA );
             }
-	        
-	        if( mapAttributes.size(  )>0 )
-	        {
-	            identityDto.setAttributes( mapAttributes );
-		        
-		        AuthorDto author = new AuthorDto( );
-		        //FIXME application code must be in conf
-		        author.setApplicationCode( TicketingConstants.APPLICATION_CODE );
-		        author.setType( AuthorType.TYPE_USER_OWNER.getTypeValue( ) );
-		
-				IdentityChangeDto identityChangeDto = new IdentityChangeDto( );
-		        identityChangeDto.setIdentity( identityDto );
-		        identityChangeDto.setAuthor( author );
-		        
-		        try
-		        {
-		        	_identityService.updateIdentity( identityChangeDto, null );
-		        }
-		        catch ( Exception e )
-		        {
-		        	//do nothing, just log
-		        	AppLogService.error( "Error occur while save data to identityStore", e );
-		        }
-	        }
+            catch( ClassCastException e )
+            {
+                // do nothing, object in session should be map<string,string>
+                AppLogService.error( "error while convert session object " + SESSION_DELTA_PERSONAL_DATA + " to map", e );
+            }
+            IdentityDto identityDto = new IdentityDto( );
+            identityDto.setConnectionId( user.getName( ) );
+            Map<String, AttributeDto> mapAttributes = new HashMap<String, AttributeDto>( );
+            AttributeDto attribute;
+
+            for ( String strAttrKeyToSave : MAP_ATTRIBUTES_IDENTITY_TOSAVE )
+            {
+                if ( mapDeltaPersonalData.containsKey( strAttrKeyToSave ) )
+                {
+                    attribute = new AttributeDto( );
+                    attribute.setKey( strAttrKeyToSave );
+                    attribute.setValue( mapDeltaPersonalData.get( strAttrKeyToSave ) );
+                    mapAttributes.put( attribute.getKey( ), attribute );
+                }
+            }
+
+            if ( mapAttributes.size( ) > 0 )
+            {
+                identityDto.setAttributes( mapAttributes );
+
+                AuthorDto author = new AuthorDto( );
+                // FIXME application code must be in conf
+                author.setApplicationCode( TicketingConstants.APPLICATION_CODE );
+                author.setType( AuthorType.TYPE_USER_OWNER.getTypeValue( ) );
+
+                IdentityChangeDto identityChangeDto = new IdentityChangeDto( );
+                identityChangeDto.setIdentity( identityDto );
+                identityChangeDto.setAuthor( author );
+
+                try
+                {
+                    _identityService.updateIdentity( identityChangeDto, null );
+                }
+                catch( Exception e )
+                {
+                    // do nothing, just log
+                    AppLogService.error( "Error occur while save data to identityStore", e );
+                }
+            }
         }
     }
 }

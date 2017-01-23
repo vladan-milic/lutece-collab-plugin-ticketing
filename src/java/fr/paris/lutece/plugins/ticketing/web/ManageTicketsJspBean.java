@@ -367,8 +367,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         String strEmail = request.getParameter( PARAMETER_EMAIL );
         String strCategoryCode = request.getParameter( PARAMETER_CATEGORY );
         String strNomenclature = request.getParameter( PARAMETER_NOMENCLATURE );
-        ticket.enrich( strIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber, strEmail, strCategoryCode, null, null, null, strGuid,
-                strIdCustomer, strNomenclature );
+        ticket.enrich( strIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber, strEmail, strCategoryCode, null, null, null,
+                strGuid, strIdCustomer, strNomenclature );
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
         model.put( MARK_TICKET_TYPES_LIST, new ReferenceList( ) );
