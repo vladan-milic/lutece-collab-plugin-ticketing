@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.ticketing.business.category;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
@@ -289,5 +290,42 @@ public final class TicketCategoryHome
     public static boolean checkIfInputIsUsedInCategories( int nIdResource )
     {
         return _dao.checkIfInputIsUsedInCategories( nIdResource, _plugin );
+    }
+
+    /**
+     * Change the position of a category by switching with the next or previous one
+     *
+     * @param nId
+     *            the if of category to move
+     * @param nNewPosition
+     *            the target position of the Category
+     */
+    public static void updateCategoryOrder( int nId, int nCurrentPostion, int nNewPosition )
+    {
+        int nIdCategoryWhichPlaceIsTaken = _dao.selectCategoryIdByOrder( nNewPosition, _plugin );
+
+        if ( nIdCategoryWhichPlaceIsTaken != -1 )
+        {
+            _dao.updateCategoryOrder( nId, nNewPosition, _plugin );
+            _dao.updateCategoryOrder( nIdCategoryWhichPlaceIsTaken, nCurrentPostion, _plugin );
+        }
+        else
+        {
+            AppLogService
+                    .error( "Could not move Category " + nId + " to position " + nNewPosition + " : no category to replace on position " + nCurrentPostion );
+
+        }
+
+    }
+
+    /**
+     * Rebuild the order sequence of active categories, by substracting 1 to all orders larger than a given value
+     * 
+     * @param nfromId
+     *            the order to rebuild sequence from
+     */
+    public static void rebuildCategoryOrders( int nOrderFrom )
+    {
+        _dao.rebuildCategoryOrders( nOrderFrom, _plugin );
     }
 }

@@ -81,6 +81,7 @@ id_unit int(6) NOT NULL default '0',
 inactive int(1)  NOT NULL default '0',
 category_precision VARCHAR(150) NULL,
 help_message VARCHAR(500) NULL,
+category_order INT(6) DEFAULT 0 NOT NULL; 
 PRIMARY KEY (id_ticket_category)
 );
 
@@ -203,7 +204,7 @@ DROP TABLE IF EXISTS ticketing_ticket_category_input;
 CREATE TABLE ticketing_ticket_category_input (
     id_ticket_category int(6) NOT NULL,
     id_input int(6) NOT NULL,
-    pos int(1) NOT NULL default '0',
+    pos int(6) NOT NULL default '0',
     PRIMARY KEY (id_ticket_category, id_input)
 );
 

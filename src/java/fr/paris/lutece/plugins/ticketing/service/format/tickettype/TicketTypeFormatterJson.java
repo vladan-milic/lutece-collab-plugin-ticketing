@@ -47,12 +47,10 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * JSON formatter for ticket category resource
@@ -128,9 +126,10 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
             jsonDomain.accumulate( FormatConstants.KEY_ID, nDomainId );
             jsonDomain.accumulate( FormatConstants.KEY_LABEL, refItemDomain.getName( ) );
 
-            TreeMap<String, List<TicketCategory>> mapTicketCategories = new TreeMap<String, List<TicketCategory>>( );
+            LinkedHashMap<String, List<TicketCategory>> mapTicketCategories = new LinkedHashMap<String, List<TicketCategory>>( );
 
-            for ( TicketCategory ticketCategory : TicketCategoryHome.findByDomainId( nDomainId ) )
+            List<TicketCategory> domainCategoryList = TicketCategoryHome.findByDomainId( nDomainId );
+            for ( TicketCategory ticketCategory : domainCategoryList )
             {
                 if ( mapTicketCategories.containsKey( ticketCategory.getLabel( ) ) )
                 { // Precision
@@ -190,7 +189,6 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
 
                 if ( !jsonPrecisions.isEmpty( ) )
                 {
-                    Collections.sort( jsonPrecisions, new JsonLabelFormatter( ) );
 
                     jsonCategory.accumulate( FormatConstants.KEY_ID, category.getId( ) );
                     jsonCategory.accumulate( FormatConstants.KEY_LABEL, category.getLabel( ) );
@@ -206,18 +204,4 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
         json.accumulate( FormatConstants.KEY_TICKET_DOMAINS, jsonDomains );
     }
 
-    /**
-     * Comparator for JSONArray. The comparison is based on the label element which composed each JSONObject of the Array.
-     */
-    private class JsonLabelFormatter implements Comparator<JSONObject>
-    {
-        @Override
-        public int compare( JSONObject jsonObjectA, JSONObject jsonObjectB )
-        {
-            String strLabelObjectA = (String) jsonObjectA.get( FormatConstants.KEY_LABEL );
-            String strLabelObjectB = (String) jsonObjectB.get( FormatConstants.KEY_LABEL );
-
-            return strLabelObjectA.compareTo( strLabelObjectB );
-        }
-    }
 }

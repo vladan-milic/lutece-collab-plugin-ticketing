@@ -46,6 +46,7 @@ import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
@@ -83,6 +84,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String PARAMETER_ID_TICKETCATEGORY = "id";
     private static final String PARAMETER_ID_TICKETCATEGORY_INPUT = "id_input";
     private static final String PARAMETER_ID_UNIT = "idUnit";
+    private static final String PARAMETER_TICKETCATEGORY_ORDER = "category_order";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETCATEGORIES = "ticketing.manage_ticketcategories.pageTitle";
@@ -126,6 +128,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private static final String ACTION_CONFIRM_REMOVE_TICKETCATEGORY_INPUT = "confirmRemoveTicketCategoryInput";
     private static final String ACTION_DO_MOVE_FIELD_UP = "doMoveFieldUp";
     private static final String ACTION_DO_MOVE_FIELD_DOWN = "doMoveFieldDown";
+    private static final String ACTION_DO_MOVE_CATEGORY_UP = "doMoveCategoryUp";
+    private static final String ACTION_DO_MOVE_CATEGORY_DOWN = "doMoveCategoryDown";
 
     // Infos
     private static final String INFO_TICKETCATEGORY_CREATED = "ticketing.info.ticketcategory.created";
@@ -214,8 +218,10 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     public String getConfirmRemoveTicketCategory( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY ) );
+        int nOrder = Integer.parseInt( request.getParameter( PARAMETER_TICKETCATEGORY_ORDER ) );
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_TICKETCATEGORY ) );
         url.addParameter( PARAMETER_ID_TICKETCATEGORY, nId );
+        url.addParameter( PARAMETER_TICKETCATEGORY_ORDER, nOrder );
 
         String strMessageUrl = AdminMessageService
                 .getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TICKETCATEGORY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
@@ -234,7 +240,9 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     public String doRemoveTicketCategory( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY ) );
+        int nOrder = Integer.parseInt( request.getParameter( PARAMETER_TICKETCATEGORY_ORDER ) );
         TicketCategoryHome.remove( nId );
+        TicketCategoryHome.rebuildCategoryOrders( nOrder );
         addInfo( INFO_TICKETCATEGORY_REMOVED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETCATEGORYS );
@@ -287,6 +295,55 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
         TicketCategoryHome.update( _category );
         addInfo( INFO_TICKETCATEGORY_UPDATED, getLocale( ) );
+
+        return redirectView( request, VIEW_MANAGE_TICKETCATEGORYS );
+    }
+
+    /**
+     * Move a field up
+     * 
+     * @param request
+     *            The request
+     * @return The next URL to redirect to
+     */
+    @Action( ACTION_DO_MOVE_CATEGORY_UP )
+    public String doMoveCategoryUp( HttpServletRequest request )
+    {
+        return doMoveCategory( request, true );
+    }
+
+    /**
+     * Move a field down
+     * 
+     * @param request
+     *            The request
+     * @return The next URL to redirect to
+     */
+    @Action( ACTION_DO_MOVE_CATEGORY_DOWN )
+    public String doMoveCategoryDown( HttpServletRequest request )
+    {
+        return doMoveCategory( request, false );
+    }
+
+    /**
+     * Move a field up or down
+     * 
+     * @param request
+     *            The request
+     * @param bMoveUp
+     *            True to move the field up, false to move it down
+     * @return The next URL to redirect to
+     */
+    private String doMoveCategory( HttpServletRequest request, boolean bMoveUp )
+    {
+        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY ) );
+        int nCategoryCurrentPosition = Integer.parseInt( request.getParameter( PARAMETER_TICKETCATEGORY_ORDER ) );
+
+        int nNewPosition = bMoveUp ? ( nCategoryCurrentPosition - 1 ) : ( nCategoryCurrentPosition + 1 );
+
+        // Update the Category with new Position
+        TicketCategoryHome.updateCategoryOrder( nId, nCategoryCurrentPosition, nNewPosition );
+        AppLogService.debug( "Ticketing - Category "+nId+" moved from position "+ nCategoryCurrentPosition + " to "+nNewPosition );
 
         return redirectView( request, VIEW_MANAGE_TICKETCATEGORYS );
     }
