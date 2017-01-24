@@ -418,15 +418,19 @@ public class TicketXPage extends WorkflowCapableXPage
     @View( value = VIEW_CONFIRM_TICKET )
     public XPage getConfirmTicket( HttpServletRequest request )
     {
-        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
-
         Map<String, Object> model = getModel( );
-        String strContent = fillTemplate( request, ticket );
-        model.put( MARK_MESSAGE, strContent );
+        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
+        String strContent = (String) request.getSession( ).getAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE );
 
-        _ticketFormService.removeTicketFromSession( request.getSession( ) );
-        removeActionTypeFromSession( request.getSession( ) );
+        if ( ticket != null )
+        {
+            strContent = fillTemplate( request, ticket );
+            _ticketFormService.removeTicketFromSession( request.getSession( ) );
+            removeActionTypeFromSession( request.getSession( ) );
+        }
+        model.put( MARK_MESSAGE, strContent );
+        request.getSession( ).setAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE, strContent );
 
         return getXPage( TEMPLATE_CONFIRM_TICKET, request.getLocale( ), model );
     }

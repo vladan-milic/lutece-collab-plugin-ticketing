@@ -224,6 +224,7 @@ public class PersonalDataApp extends MVCApplication
                 try
                 {
                     _identityService.updateIdentity( identityChangeDto, null );
+                    request.getSession( ).removeAttribute( SESSION_DELTA_PERSONAL_DATA );
                 }
                 catch( Exception e )
                 {

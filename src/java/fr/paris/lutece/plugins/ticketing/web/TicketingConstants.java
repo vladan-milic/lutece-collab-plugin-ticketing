@@ -110,6 +110,7 @@ public final class TicketingConstants
     // Session keys
     public static final String SESSION_NOT_VALIDATED_TICKET = "ticketing.ticketFormService.notValidatedTicket";
     public static final String SESSION_VALIDATED_TICKET_FORM = "ticketing.ticketFormService.validatedTicket";
+    public static final String SESSION_TICKET_CONFIRM_MESSAGE = "ticketing.session.confirmMessage";
     public static final String SESSION_TICKET_FORM_ERRORS = "ticketing.session.formErrors";
     public static final String SESSION_TICKET_FILTER = "ticketing.ticket_filter";
     public static final String SESSION_INSTANTRESPONSE_FILTER = "ticketing.instantresponse_filter";
