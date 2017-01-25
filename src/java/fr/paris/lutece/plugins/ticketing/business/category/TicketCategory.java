@@ -40,7 +40,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.io.Serializable;
 
 import java.util.List;
-import java.util.List;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -69,6 +68,7 @@ public class TicketCategory implements Serializable
     @Size( max = 150, message = "#i18n{ticketing.validation.ticketcategory.precision.size}" )
     private String _strPrecision;
     private String _strHelpMessage;
+    private int _nOrder;
 
     /**
      * Returns the Id
@@ -308,5 +308,26 @@ public class TicketCategory implements Serializable
     public void setHelpMessage( String _strHelpMessage )
     {
         this._strHelpMessage = _strHelpMessage;
+    }
+
+    /**
+     * Returns the category order
+     * 
+     * @return the category_order
+     */
+    public int getOrder( )
+    {
+        return _nOrder;
+
+    }
+
+    /**
+     * @param _nOrder
+     *            the category to set
+     */
+    public void setOrder( int _nOrder )
+    {
+        this._nOrder = _nOrder;
+
     }
 }

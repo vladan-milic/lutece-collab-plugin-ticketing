@@ -244,4 +244,35 @@ public interface ITicketCategoryDAO
      * @return true if the input is linked to 1 or more Categories
      */
     boolean checkIfInputIsUsedInCategories( int nIdResource, Plugin _plugin );
+
+    /**
+     * Update order of a Category
+     * 
+     * @param nIdCategory
+     *            id Category to move
+     * @param nIdInput
+     *            id Input
+     * @param nNewPosition
+     *            the order value to update
+     * @param plugin
+     *            the Plugin
+     */
+    void updateCategoryOrder( int nId, int nNewPosition, Plugin _plugin );
+
+    /**
+     * returns the Id of a Category for a given position
+     * 
+     * @param nOrder
+     *            Position of the input
+     * @return the id of Category as an integer
+     */
+    int selectCategoryIdByOrder( int nOrder, Plugin _plugin );
+
+    /**
+     * Rebuild the order sequence of active categories, by substracting 1 to all orders larger than a given value
+     * 
+     * @param nfromId
+     *            the order to rebuild sequence from
+     */
+    void rebuildCategoryOrders( int nfromOrder, Plugin _plugin );
 }
