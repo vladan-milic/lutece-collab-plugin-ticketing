@@ -135,12 +135,12 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_FILTER_VIEW_DOMAIN_UNIT_ASSIGNEE = " a.id_unit NOT IN ( ";
     private static final String SQL_FILTER_VIEW_DOMAIN_UNIT_ASSIGNER = " a.id_assigner_unit NOT IN ( ";
     private static final String SQL_FILTER_LIMIT = " LIMIT ?,? ";
-    private static final String SQL_FILTER_RBAC_JOIN_CLAUSE = " LEFT JOIN core_admin_role_resource k ON k.role_key IN ( ";
-    private static final String SQL_FILTER_RBAC_WHERE_CLAUSE = " AND ( ( k.resource_type = '" + Ticket.TICKET_RESOURCE_TYPE + "' " + " AND (k.permission = '"
-            + TicketResourceIdService.PERMISSION_VIEW + "' OR k.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY + "' )" + " AND (k.resource_id = '"
-            + RBAC.WILDCARD_RESOURCES_ID + "' OR k.resource_id = a.id_ticket ) ) OR " + " ( k.resource_type = '" + TicketDomain.RESOURCE_TYPE + "' "
-            + " AND (k.permission = '" + TicketDomainResourceIdService.PERMISSION_VIEW + "' OR k.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY + "' )"
-            + " AND (k.resource_id = '" + RBAC.WILDCARD_RESOURCES_ID + "' OR k.resource_id = d.id_ticket_domain ) ) )";
+    private static final String SQL_FILTER_RBAC_TICKET_JOIN_CLAUSE = " JOIN core_admin_role_resource k ON k.resource_type = '" + Ticket.TICKET_RESOURCE_TYPE
+            + "' " + " AND (k.permission = '" + TicketResourceIdService.PERMISSION_VIEW + "' OR k.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY + "' )"
+            + " AND (k.resource_id = '" + RBAC.WILDCARD_RESOURCES_ID + "' OR k.resource_id = a.id_ticket ) AND k.role_key IN ( ";
+    private static final String SQL_FILTER_RBAC_DOMAIN_JOIN_CLAUSE = " JOIN core_admin_role_resource l ON l.resource_type = '" + TicketDomain.RESOURCE_TYPE
+            + "' " + " AND (l.permission = '" + TicketDomainResourceIdService.PERMISSION_VIEW + "' OR l.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY + "' )"
+            + " AND (l.resource_id = '" + RBAC.WILDCARD_RESOURCES_ID + "' OR l.resource_id = d.id_ticket_domain ) AND l.role_key IN ( ";
 
     private static final String SQL_SELECT_ALL_WORKFLOW_JOIN_CLAUSE = " LEFT JOIN  workflow_resource_workflow i ON i.id_resource=a.id_ticket"
             + " LEFT JOIN workflow_state j ON j.id_state=i.id_state";
@@ -347,7 +347,10 @@ public final class TicketDAO implements ITicketDAO
         if ( filter != null && TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) )
         {
             sqlQuery.append( strBaseQuery.replace( "SELECT", "SELECT DISTINCT" ) );
-            sqlQuery.append( SQL_FILTER_RBAC_JOIN_CLAUSE );
+            sqlQuery.append( SQL_FILTER_RBAC_TICKET_JOIN_CLAUSE );
+            sqlQuery.append( getInCriteriaClause( filter.getAdminUserRoles( ).size( ) ) );
+            sqlQuery.append( CONSTANT_CLOSE_PARENTHESIS );
+            sqlQuery.append( SQL_FILTER_RBAC_DOMAIN_JOIN_CLAUSE );
             sqlQuery.append( getInCriteriaClause( filter.getAdminUserRoles( ).size( ) ) );
             sqlQuery.append( CONSTANT_CLOSE_PARENTHESIS );
         }
@@ -739,7 +742,6 @@ public final class TicketDAO implements ITicketDAO
                     sbSQL.append( getInCriteriaClause( filter.getFilterIdAssignerUnit( ).size( ) ) );
                     sbSQL.append( CONSTANT_CLOSE_PARENTHESIS );
                 }
-                sbSQL.append( SQL_FILTER_RBAC_WHERE_CLAUSE );
 
                 break;
 
@@ -794,12 +796,18 @@ public final class TicketDAO implements ITicketDAO
         int nIndex = 1;
 
         // RBAC values are in JOIN !
-        if ( TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) )
+        int nRoleCount = filter.getAdminUserRoles( ).size( );
+        if ( TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) && filter.getAdminUserRoles( ).size( ) > 0 )
         {
             for ( String strUserRole : filter.getAdminUserRoles( ) )
             {
-                daoUtil.setString( nIndex++, strUserRole );
+                // RBAC Ticket
+                daoUtil.setString( nIndex, strUserRole );
+                // RBAC Domain
+                daoUtil.setString( nIndex + nRoleCount, strUserRole );
+                nIndex++;
             }
+            nIndex = nIndex + nRoleCount;
         }
 
         if ( filter.containsCreationDate( ) )
