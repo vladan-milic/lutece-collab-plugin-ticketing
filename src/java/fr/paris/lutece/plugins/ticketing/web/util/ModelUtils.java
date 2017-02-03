@@ -182,18 +182,18 @@ public final class ModelUtils
 
         if ( listTickets != null )
         {
-        	int nIdxCurrent = listTickets.indexOf( nIdCurrentTicket );
-        	if( nIdxCurrent > -1 )
-        	{
-        		if( nIdxCurrent > 0 )
-        		{
-        			nTicketPrevious = listTickets.get( nIdxCurrent - 1 );
-        		}
-        		if( nIdxCurrent < ( listTickets.size( ) - 1 ) )
-        		{
-        			nTicketNext = listTickets.get( nIdxCurrent + 1 );
-        		}
-        	}
+            int nIdxCurrent = listTickets.indexOf( nIdCurrentTicket );
+            if ( nIdxCurrent > -1 )
+            {
+                if ( nIdxCurrent > 0 )
+                {
+                    nTicketPrevious = listTickets.get( nIdxCurrent - 1 );
+                }
+                if ( nIdxCurrent < ( listTickets.size( ) - 1 ) )
+                {
+                    nTicketNext = listTickets.get( nIdxCurrent + 1 );
+                }
+            }
         }
 
         model.put( TicketingConstants.MARK_NEXT_TICKET, nTicketNext );

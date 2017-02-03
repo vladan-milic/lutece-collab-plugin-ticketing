@@ -343,7 +343,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
         // Update the Category with new Position
         TicketCategoryHome.updateCategoryOrder( nId, nCategoryCurrentPosition, nNewPosition );
-        AppLogService.debug( "Ticketing - Category "+nId+" moved from position "+ nCategoryCurrentPosition + " to "+nNewPosition );
+        AppLogService.debug( "Ticketing - Category " + nId + " moved from position " + nCategoryCurrentPosition + " to " + nNewPosition );
 
         return redirectView( request, VIEW_MANAGE_TICKETCATEGORYS );
     }

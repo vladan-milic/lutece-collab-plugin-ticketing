@@ -109,8 +109,8 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
     @Override
     public synchronized void insert( TicketCategory ticketCategory, Plugin plugin )
     {
-    	int nPrimaryKey = newPrimaryKey( plugin );
-    	int nOrder = newCategoryOrder( plugin );
+        int nPrimaryKey = newPrimaryKey( plugin );
+        int nOrder = newCategoryOrder( plugin );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
 
         ticketCategory.setId( nPrimaryKey );

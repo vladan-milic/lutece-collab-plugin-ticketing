@@ -92,14 +92,14 @@ public class TicketingDashboardComponent extends DashboardComponent
         {
             TicketFilter filter = TicketFilterHelper.getFilter( request, user );
             TicketFilterHelper.setFilterUserAndUnitIds( filter, user );
-            
-            filter.setFilterView(TicketFilterViewEnum.AGENT);
+
+            filter.setFilterView( TicketFilterViewEnum.AGENT );
             model.put( MARK_TICKET_ASSIGNED_TO_ME_COUNTER, TicketUtils.getIdTickets( filter ).size( ) );
-            filter.setFilterView(TicketFilterViewEnum.GROUP);
+            filter.setFilterView( TicketFilterViewEnum.GROUP );
             model.put( MARK_TICKET_ASSIGNED_TO_MY_GROUP_COUNTER, TicketUtils.getIdTickets( filter ).size( ) );
-            filter.setFilterView(TicketFilterViewEnum.DOMAIN);
+            filter.setFilterView( TicketFilterViewEnum.DOMAIN );
             model.put( MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER, TicketUtils.getIdTickets( filter ).size( ) );
-            
+
             model.put( MARK_WORFLOWSERVICE_UNAVAILABLE, false );
         }
         else

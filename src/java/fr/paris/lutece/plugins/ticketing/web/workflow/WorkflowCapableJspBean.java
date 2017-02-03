@@ -129,15 +129,16 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
      * set workflow attributes needed for display a list of ticket
      * 
      * 
-     * @param list of ticket to update
+     * @param list
+     *            of ticket to update
      */
     protected void setWorkflowAttributes( List<Ticket> listTicket )
     {
-    	if ( _workflowService.isAvailable( ) )
+        if ( _workflowService.isAvailable( ) )
         {
-	        for ( Ticket ticket : listTicket )
-	        {
-	        	TicketCategory ticketCategory = ticket.getTicketCategory( );
+            for ( Ticket ticket : listTicket )
+            {
+                TicketCategory ticketCategory = ticket.getTicketCategory( );
                 int nIdWorkflow = ticketCategory.getIdWorkflow( );
 
                 StateFilter stateFilter = new StateFilter( );

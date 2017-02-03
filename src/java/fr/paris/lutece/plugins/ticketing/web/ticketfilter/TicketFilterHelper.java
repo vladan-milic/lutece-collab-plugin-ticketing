@@ -484,13 +484,14 @@ public final class TicketFilterHelper
 
         return date;
     }
-    
+
     /**
      * Update ids of user and units in a given filter
+     * 
      * @param filter
      * @param user
      */
-    
+
     public static void setFilterUserAndUnitIds( TicketFilter filter, AdminUser user )
     {
         List<Unit> lstUserUnits = UnitHome.findByIdUser( user.getUserId( ) );
@@ -498,15 +499,15 @@ public final class TicketFilterHelper
         Set<Integer> setAssignerUnitId = new HashSet<Integer>( );
         for ( Unit unit : lstUserUnits )
         {
-        	setAssignerUnitId.add( unit.getIdUnit( ) );
-        	setAssigneeUnitId.add( unit.getIdUnit( ) );
-        	setAssigneeUnitId.addAll( UnitHome.getAllSubUnitsId( unit.getIdUnit( ) ) );
+            setAssignerUnitId.add( unit.getIdUnit( ) );
+            setAssigneeUnitId.add( unit.getIdUnit( ) );
+            setAssigneeUnitId.addAll( UnitHome.getAllSubUnitsId( unit.getIdUnit( ) ) );
         }
-        
+
         filter.setFilterIdAdminUser( user.getUserId( ) );
         filter.setFilterIdAssigneeUnit( setAssigneeUnitId );
         filter.setFilterIdAssignerUnit( setAssignerUnitId );
-        
+
         filter.setAdminUserRoles( user.getRoles( ).keySet( ) );
     }
 }

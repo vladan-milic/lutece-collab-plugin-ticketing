@@ -195,7 +195,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     public String getManageTickets( HttpServletRequest request )
     {
         // Check user rights
-    	AdminUser userCurrent = getUser( );
+        AdminUser userCurrent = getUser( );
         if ( !RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_VIEW, userCurrent ) )
         {
             return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
@@ -224,50 +224,52 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 PARAMETER_SELECTED_TAB ) : TabulationEnum.AGENT.getLabel( );
         String strSelectedTab = getSelectedTab( request );
 
-        if ( !strPreviousSelectedTab.equals( strSelectedTab ) || StringUtils.isEmpty( _strCurrentPageIndex ))
+        if ( !strPreviousSelectedTab.equals( strSelectedTab ) || StringUtils.isEmpty( _strCurrentPageIndex ) )
         {
             // tab changes we reset index
             _strCurrentPageIndex = "1";
         }
         int nCurrentPageIndex = Integer.parseInt( _strCurrentPageIndex );
 
-        filter.setFilterView(TicketFilterViewEnum.AGENT);
+        filter.setFilterView( TicketFilterViewEnum.AGENT );
         List<Integer> listAgentIdTickets = TicketUtils.getIdTickets( filter );
         Integer nAgentTickets = listAgentIdTickets.size( );
-        filter.setFilterView(TicketFilterViewEnum.GROUP);
+        filter.setFilterView( TicketFilterViewEnum.GROUP );
         List<Integer> listGroupIdTickets = TicketUtils.getIdTickets( filter );
         Integer nGroupTickets = listGroupIdTickets.size( );
-        //DomainTickets is not done for perf purpose unless user select the domain tab
+        // DomainTickets is not done for perf purpose unless user select the domain tab
         Integer nDomainTickets = null;
 
         List<Ticket> listTickets = null;
         List<Integer> listIdTickets = null;
-        
-        filter.setTicketsLimitStart( (nCurrentPageIndex-1) * _nItemsPerPage );
+
+        filter.setTicketsLimitStart( ( nCurrentPageIndex - 1 ) * _nItemsPerPage );
         filter.setTicketsLimitCount( _nItemsPerPage );
 
         if ( strSelectedTab.equals( TabulationEnum.AGENT.getLabel( ) ) )
         {
-        	filter.setFilterView(TicketFilterViewEnum.AGENT);
-        	listIdTickets = listAgentIdTickets;
+            filter.setFilterView( TicketFilterViewEnum.AGENT );
+            listIdTickets = listAgentIdTickets;
             listTickets = TicketUtils.getTickets( filter );
         }
-        else if ( strSelectedTab.equals( TabulationEnum.GROUP.getLabel( ) ) )
-        {
-            filter.setFilterView(TicketFilterViewEnum.GROUP);
-        	listIdTickets = listGroupIdTickets;
-            listTickets = TicketUtils.getTickets( filter );
-        }
-        else if ( strSelectedTab.equals( TabulationEnum.DOMAIN.getLabel( ) ) )
-        {
-            filter.setFilterView(TicketFilterViewEnum.DOMAIN);
-            listTickets = TicketUtils.getTickets( filter );
-            filter.setTicketsLimitStart( TicketFilter.CONSTANT_ID_NULL );
-            filter.setTicketsLimitCount( TicketFilter.CONSTANT_ID_NULL );
-            listIdTickets = TicketUtils.getIdTickets( filter );
-            nDomainTickets = listIdTickets.size( );
-        }
-        //clean filter view for save in session
+        else
+            if ( strSelectedTab.equals( TabulationEnum.GROUP.getLabel( ) ) )
+            {
+                filter.setFilterView( TicketFilterViewEnum.GROUP );
+                listIdTickets = listGroupIdTickets;
+                listTickets = TicketUtils.getTickets( filter );
+            }
+            else
+                if ( strSelectedTab.equals( TabulationEnum.DOMAIN.getLabel( ) ) )
+                {
+                    filter.setFilterView( TicketFilterViewEnum.DOMAIN );
+                    listTickets = TicketUtils.getTickets( filter );
+                    filter.setTicketsLimitStart( TicketFilter.CONSTANT_ID_NULL );
+                    filter.setTicketsLimitCount( TicketFilter.CONSTANT_ID_NULL );
+                    listIdTickets = TicketUtils.getIdTickets( filter );
+                    nDomainTickets = listIdTickets.size( );
+                }
+        // clean filter view for save in session
         filter.setTicketsLimitStart( TicketFilter.CONSTANT_ID_NULL );
         filter.setTicketsLimitCount( TicketFilter.CONSTANT_ID_NULL );
         filter.setFilterView( TicketFilterViewEnum.ALL );
@@ -279,7 +281,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         LocalizedPaginator<Integer> paginatorTickets = new LocalizedPaginator<Integer>( listIdTickets, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndex, getLocale( ) );
         setWorkflowAttributes( listTickets );
-
 
         Map<String, Object> model = getModel( );
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );

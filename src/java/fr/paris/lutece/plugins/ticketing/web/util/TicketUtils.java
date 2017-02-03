@@ -272,6 +272,7 @@ public final class TicketUtils
 
     /**
      * get list of ticket id according to filter
+     * 
      * @param user
      *            admin user
      * @param filter
@@ -295,7 +296,7 @@ public final class TicketUtils
      *            http request
      */
     public static List<Ticket> getTickets( TicketFilter filter )
-    {        
+    {
         return TicketHome.getTicketsList( filter );
     }
 

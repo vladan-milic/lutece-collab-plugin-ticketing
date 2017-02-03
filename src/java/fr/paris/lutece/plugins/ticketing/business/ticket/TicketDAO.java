@@ -77,18 +77,14 @@ public final class TicketDAO implements ITicketDAO
             + " JOIN ticketing_ticket_category e ON a.id_ticket_category = e.id_ticket_category"
             + " JOIN ticketing_ticket_domain d ON e.id_ticket_domain = d.id_ticket_domain"
             + " JOIN ticketing_ticket_type c ON d.id_ticket_type = c.id_ticket_type"
-            + " JOIN ticketing_contact_mode f ON a.id_contact_mode = f.id_contact_mode"
-            + " JOIN ticketing_channel x ON a.id_channel = x.id_channel";
-    private static final String SQL_SELECT_ALL_ID_TICKET =  "SELECT a.id_ticket "
-            + " FROM ticketing_ticket a"
-            + " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user"
-            + " LEFT JOIN unittree_unit h ON h.id_unit=a.id_unit"
+            + " JOIN ticketing_contact_mode f ON a.id_contact_mode = f.id_contact_mode" + " JOIN ticketing_channel x ON a.id_channel = x.id_channel";
+    private static final String SQL_SELECT_ALL_ID_TICKET = "SELECT a.id_ticket " + " FROM ticketing_ticket a"
+            + " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user" + " LEFT JOIN unittree_unit h ON h.id_unit=a.id_unit"
             + " JOIN ticketing_user_title b ON a.id_user_title = b.id_user_title"
             + " JOIN ticketing_ticket_category e ON a.id_ticket_category = e.id_ticket_category"
             + " JOIN ticketing_ticket_domain d ON e.id_ticket_domain = d.id_ticket_domain"
             + " JOIN ticketing_ticket_type c ON d.id_ticket_type = c.id_ticket_type"
-            + " JOIN ticketing_contact_mode f ON a.id_contact_mode = f.id_contact_mode"
-            + " JOIN ticketing_channel x ON a.id_channel = x.id_channel";
+            + " JOIN ticketing_contact_mode f ON a.id_contact_mode = f.id_contact_mode" + " JOIN ticketing_channel x ON a.id_channel = x.id_channel";
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket ) FROM ticketing_ticket";
     private static final String SQL_QUERY_SELECT = SQL_SELECT_WITH_JOIN_DATA_TICKET + " WHERE a.id_ticket = ?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket ( id_ticket, ticket_reference , guid, id_user_title, firstname, lastname, email, "
@@ -140,13 +136,12 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_FILTER_VIEW_DOMAIN_UNIT_ASSIGNER = " a.id_assigner_unit NOT IN ( ";
     private static final String SQL_FILTER_LIMIT = " LIMIT ?,? ";
     private static final String SQL_FILTER_RBAC_JOIN_CLAUSE = " LEFT JOIN core_admin_role_resource k ON k.role_key IN ( ";
-    private static final String SQL_FILTER_RBAC_WHERE_CLAUSE = " AND ( ( k.resource_type = '"+Ticket.TICKET_RESOURCE_TYPE+"' "
-    		+ " AND (k.permission = '"+TicketResourceIdService.PERMISSION_VIEW+"' OR k.permission = '"+RBAC.WILDCARD_PERMISSIONS_KEY+"' )"
-    		+ " AND (k.resource_id = '"+RBAC.WILDCARD_RESOURCES_ID+"' OR k.resource_id = a.id_ticket ) ) OR "
-    		+ " ( k.resource_type = '"+TicketDomain.RESOURCE_TYPE+"' "
-    		+ " AND (k.permission = '"+TicketDomainResourceIdService.PERMISSION_VIEW+"' OR k.permission = '"+RBAC.WILDCARD_PERMISSIONS_KEY+"' )"
-    		+ " AND (k.resource_id = '"+RBAC.WILDCARD_RESOURCES_ID+"' OR k.resource_id = d.id_ticket_domain ) ) )";
-    
+    private static final String SQL_FILTER_RBAC_WHERE_CLAUSE = " AND ( ( k.resource_type = '" + Ticket.TICKET_RESOURCE_TYPE + "' " + " AND (k.permission = '"
+            + TicketResourceIdService.PERMISSION_VIEW + "' OR k.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY + "' )" + " AND (k.resource_id = '"
+            + RBAC.WILDCARD_RESOURCES_ID + "' OR k.resource_id = a.id_ticket ) ) OR " + " ( k.resource_type = '" + TicketDomain.RESOURCE_TYPE + "' "
+            + " AND (k.permission = '" + TicketDomainResourceIdService.PERMISSION_VIEW + "' OR k.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY + "' )"
+            + " AND (k.resource_id = '" + RBAC.WILDCARD_RESOURCES_ID + "' OR k.resource_id = d.id_ticket_domain ) ) )";
+
     private static final String SQL_SELECT_ALL_WORKFLOW_JOIN_CLAUSE = " LEFT JOIN  workflow_resource_workflow i ON i.id_resource=a.id_ticket"
             + " LEFT JOIN workflow_state j ON j.id_state=i.id_state";
     private static final String SQL_SELECT_ALL_WORKFLOW_WHERE_CLAUSE = " WHERE (i.id_resource IS NULL OR i.resource_type='" + TICKET_RESOURCE_TYPE + "')";
@@ -337,8 +332,10 @@ public final class TicketDAO implements ITicketDAO
     /**
      * returns baseQuery query built from workflow and filter dependencies
      * 
-     * @param strBaseQuery base select query to update
-     * @param filter filter use for the query
+     * @param strBaseQuery
+     *            base select query to update
+     * @param filter
+     *            filter use for the query
      * 
      * @return select all query
      */
@@ -346,17 +343,17 @@ public final class TicketDAO implements ITicketDAO
     {
         StringBuilder sqlQuery = new StringBuilder( );
         boolean bWorkflowAvail = WorkflowService.getInstance( ).isAvailable( );
-        
-        if ( filter!=null && TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) )
+
+        if ( filter != null && TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) )
         {
-        	sqlQuery.append( strBaseQuery.replace("SELECT", "SELECT DISTINCT") );
-        	sqlQuery.append( SQL_FILTER_RBAC_JOIN_CLAUSE );
-        	sqlQuery.append( getInCriteriaClause( filter.getAdminUserRoles( ).size( ) ) );
-        	sqlQuery.append( CONSTANT_CLOSE_PARENTHESIS );
+            sqlQuery.append( strBaseQuery.replace( "SELECT", "SELECT DISTINCT" ) );
+            sqlQuery.append( SQL_FILTER_RBAC_JOIN_CLAUSE );
+            sqlQuery.append( getInCriteriaClause( filter.getAdminUserRoles( ).size( ) ) );
+            sqlQuery.append( CONSTANT_CLOSE_PARENTHESIS );
         }
         else
         {
-        	sqlQuery.append( strBaseQuery );
+            sqlQuery.append( strBaseQuery );
         }
 
         if ( bWorkflowAvail )
@@ -365,19 +362,18 @@ public final class TicketDAO implements ITicketDAO
             sqlQuery.append( SQL_SELECT_ALL_WORKFLOW_WHERE_CLAUSE );
         }
 
-
         if ( filter != null )
         {
-        	String strFilterClause = getFilterCriteriaClauses( filter );
-        	if( StringUtils.isNotEmpty(strFilterClause) )
-        	{
-        		if( ! bWorkflowAvail )
-        		{
-        			sqlQuery.append( " WHERE " );
-        			strFilterClause = strFilterClause.substring( 5 );
-        		}
-        		sqlQuery.append( strFilterClause );
-        	}
+            String strFilterClause = getFilterCriteriaClauses( filter );
+            if ( StringUtils.isNotEmpty( strFilterClause ) )
+            {
+                if ( !bWorkflowAvail )
+                {
+                    sqlQuery.append( " WHERE " );
+                    strFilterClause = strFilterClause.substring( 5 );
+                }
+                sqlQuery.append( strFilterClause );
+            }
         }
 
         return sqlQuery.toString( );
@@ -555,7 +551,7 @@ public final class TicketDAO implements ITicketDAO
         ticket.setTicketType( daoUtil.getString( nIndex++ ) );
         ticket.setIdTicketDomain( daoUtil.getInt( nIndex++ ) );
         ticket.setTicketDomain( daoUtil.getString( nIndex++ ) );
-        
+
         TicketCategory ticketCategory = new TicketCategory( );
         ticketCategory.setId( daoUtil.getInt( nIndex++ ) );
         ticketCategory.setLabel( daoUtil.getString( nIndex++ ) );
@@ -644,7 +640,7 @@ public final class TicketDAO implements ITicketDAO
      */
     private String getFilterCriteriaClauses( TicketFilter filter )
     {
-    	StringBuilder sbSQL = new StringBuilder( );
+        StringBuilder sbSQL = new StringBuilder( );
         sbSQL.append( filter.containsCreationDate( ) ? SQL_FILTER_CREATION_DATE : StringUtils.EMPTY );
         sbSQL.append( filter.containsCreationStartDate( ) ? SQL_FILTER_CREATION_START_DATE : StringUtils.EMPTY );
         sbSQL.append( filter.containsCreationEndDate( ) ? SQL_FILTER_CREATION_END_DATE : StringUtils.EMPTY );
@@ -691,67 +687,67 @@ public final class TicketDAO implements ITicketDAO
                 sbSQL.append( CONSTANT_CLOSE_PARENTHESIS );
             }
         }
-        
-        // specific filter for tickets view
-		boolean bNotEmptyAssigneeUnit = CollectionUtils.isNotEmpty( filter.getFilterIdAssigneeUnit( ) );
-		boolean bNotEmptyAssignerUnit = CollectionUtils.isNotEmpty( filter.getFilterIdAssignerUnit( ) );
-        switch ( filter.getFilterView( ) )
-        {
-			case AGENT:
-				sbSQL.append( SQL_FILTER_VIEW_AGENT );
-			break;
-			
-			case GROUP:
-				sbSQL.append( SQL_FILTER_VIEW_GROUP );
-				if( bNotEmptyAssigneeUnit || bNotEmptyAssignerUnit )
-				{
-					sbSQL.append( CONSTANT_AND );
-					sbSQL.append( CONSTANT_OPEN_PARENTHESIS );
-					if( bNotEmptyAssigneeUnit )
-					{
-						sbSQL.append( SQL_FILTER_VIEW_GROUP_UNIT_ASSIGNEE );
-						sbSQL.append( getInCriteriaClause( filter.getFilterIdAssigneeUnit( ).size( ) ) );
-						sbSQL.append( CONSTANT_CLOSE_PARENTHESIS );
-						if( bNotEmptyAssignerUnit )
-						{
-							sbSQL.append( CONSTANT_OR );
-						}
-					}
-					if( bNotEmptyAssignerUnit )
-					{
-						sbSQL.append( SQL_FILTER_VIEW_GROUP_UNIT_ASSIGNER );
-						sbSQL.append( getInCriteriaClause( filter.getFilterIdAssignerUnit( ).size( ) ) );
-						sbSQL.append( CONSTANT_CLOSE_PARENTHESIS );
-					}
-					sbSQL.append( CONSTANT_CLOSE_PARENTHESIS );
-				}
-			break;
-			
-			case DOMAIN:
-				sbSQL.append( SQL_FILTER_VIEW_DOMAIN );
-				if( bNotEmptyAssigneeUnit )
-				{
-					sbSQL.append( CONSTANT_AND );
-					sbSQL.append( SQL_FILTER_VIEW_DOMAIN_UNIT_ASSIGNEE );
-					sbSQL.append( getInCriteriaClause( filter.getFilterIdAssigneeUnit( ).size( ) ) );
-					sbSQL.append( CONSTANT_CLOSE_PARENTHESIS );
-				}
-				if( bNotEmptyAssignerUnit )
-				{
-					sbSQL.append( CONSTANT_AND );
-					sbSQL.append( SQL_FILTER_VIEW_DOMAIN_UNIT_ASSIGNER );
-					sbSQL.append( getInCriteriaClause( filter.getFilterIdAssignerUnit( ).size( ) ) );
-					sbSQL.append( CONSTANT_CLOSE_PARENTHESIS );
-				}
-				sbSQL.append( SQL_FILTER_RBAC_WHERE_CLAUSE );
-				
-			break;
 
-			case ALL:
-			default:
-				//nothing
-			break;
-		}
+        // specific filter for tickets view
+        boolean bNotEmptyAssigneeUnit = CollectionUtils.isNotEmpty( filter.getFilterIdAssigneeUnit( ) );
+        boolean bNotEmptyAssignerUnit = CollectionUtils.isNotEmpty( filter.getFilterIdAssignerUnit( ) );
+        switch( filter.getFilterView( ) )
+        {
+            case AGENT:
+                sbSQL.append( SQL_FILTER_VIEW_AGENT );
+                break;
+
+            case GROUP:
+                sbSQL.append( SQL_FILTER_VIEW_GROUP );
+                if ( bNotEmptyAssigneeUnit || bNotEmptyAssignerUnit )
+                {
+                    sbSQL.append( CONSTANT_AND );
+                    sbSQL.append( CONSTANT_OPEN_PARENTHESIS );
+                    if ( bNotEmptyAssigneeUnit )
+                    {
+                        sbSQL.append( SQL_FILTER_VIEW_GROUP_UNIT_ASSIGNEE );
+                        sbSQL.append( getInCriteriaClause( filter.getFilterIdAssigneeUnit( ).size( ) ) );
+                        sbSQL.append( CONSTANT_CLOSE_PARENTHESIS );
+                        if ( bNotEmptyAssignerUnit )
+                        {
+                            sbSQL.append( CONSTANT_OR );
+                        }
+                    }
+                    if ( bNotEmptyAssignerUnit )
+                    {
+                        sbSQL.append( SQL_FILTER_VIEW_GROUP_UNIT_ASSIGNER );
+                        sbSQL.append( getInCriteriaClause( filter.getFilterIdAssignerUnit( ).size( ) ) );
+                        sbSQL.append( CONSTANT_CLOSE_PARENTHESIS );
+                    }
+                    sbSQL.append( CONSTANT_CLOSE_PARENTHESIS );
+                }
+                break;
+
+            case DOMAIN:
+                sbSQL.append( SQL_FILTER_VIEW_DOMAIN );
+                if ( bNotEmptyAssigneeUnit )
+                {
+                    sbSQL.append( CONSTANT_AND );
+                    sbSQL.append( SQL_FILTER_VIEW_DOMAIN_UNIT_ASSIGNEE );
+                    sbSQL.append( getInCriteriaClause( filter.getFilterIdAssigneeUnit( ).size( ) ) );
+                    sbSQL.append( CONSTANT_CLOSE_PARENTHESIS );
+                }
+                if ( bNotEmptyAssignerUnit )
+                {
+                    sbSQL.append( CONSTANT_AND );
+                    sbSQL.append( SQL_FILTER_VIEW_DOMAIN_UNIT_ASSIGNER );
+                    sbSQL.append( getInCriteriaClause( filter.getFilterIdAssignerUnit( ).size( ) ) );
+                    sbSQL.append( CONSTANT_CLOSE_PARENTHESIS );
+                }
+                sbSQL.append( SQL_FILTER_RBAC_WHERE_CLAUSE );
+
+                break;
+
+            case ALL:
+            default:
+                // nothing
+                break;
+        }
 
         if ( filter.containsOrderBy( ) )
         {
@@ -762,28 +758,29 @@ public final class TicketDAO implements ITicketDAO
             // always apply default sorting
             sbSQL.append( filter.getDefaultOrderBySqlClause( filter.isOrderASC( ) ) );
         }
-        
+
         if ( filter.containsLimit( ) )
         {
-        	sbSQL.append( SQL_FILTER_LIMIT );
+            sbSQL.append( SQL_FILTER_LIMIT );
         }
-        
-        return sbSQL.toString();
+
+        return sbSQL.toString( );
     }
-    
+
     private String getInCriteriaClause( int nSize )
     {
-    	StringBuilder sbInClause = new StringBuilder( );
-    	if( nSize > 0 )
-    	{
-    		sbInClause.append( "?" );
-    		for(int nIdx=1; nIdx<nSize; nIdx++ )
-    		{
-    			sbInClause.append( ", ?" );
-    		}
-    	}
-    	return sbInClause.toString( );
+        StringBuilder sbInClause = new StringBuilder( );
+        if ( nSize > 0 )
+        {
+            sbInClause.append( "?" );
+            for ( int nIdx = 1; nIdx < nSize; nIdx++ )
+            {
+                sbInClause.append( ", ?" );
+            }
+        }
+        return sbInClause.toString( );
     }
+
     /**
      * add filter values to request
      *
@@ -795,13 +792,13 @@ public final class TicketDAO implements ITicketDAO
     private void addFilterCriteriaValues( DAOUtil daoUtil, TicketFilter filter )
     {
         int nIndex = 1;
-        
-        //RBAC values are in JOIN !
+
+        // RBAC values are in JOIN !
         if ( TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) )
         {
-        	for ( String strUserRole : filter.getAdminUserRoles( ) )
+            for ( String strUserRole : filter.getAdminUserRoles( ) )
             {
-	            daoUtil.setString( nIndex++, strUserRole );
+                daoUtil.setString( nIndex++, strUserRole );
             }
         }
 
@@ -916,65 +913,65 @@ public final class TicketDAO implements ITicketDAO
                 daoUtil.setInt( nIndex++, nId );
             }
         }
-        
-        // specific filter for tickets view
-		boolean bNotEmptyAssigneeUnit = CollectionUtils.isNotEmpty( filter.getFilterIdAssigneeUnit( ) );
-		boolean bNotEmptyAssignerUnit = CollectionUtils.isNotEmpty( filter.getFilterIdAssignerUnit( ) );
-        switch ( filter.getFilterView( ) )
-        {
-			case AGENT:
-				daoUtil.setInt( nIndex++, filter.getFilterIdAdminUser( ) );
-				daoUtil.setInt( nIndex++, filter.getFilterIdAdminUser( ) );
-			break;
-			
-			case GROUP:
-				daoUtil.setInt( nIndex++, filter.getFilterIdAdminUser( ) );
-				daoUtil.setInt( nIndex++, filter.getFilterIdAdminUser( ) );
-				if( bNotEmptyAssigneeUnit )
-				{
-					for( Integer nIdUnit : filter.getFilterIdAssigneeUnit( ) )
-					{
-						daoUtil.setInt( nIndex++, nIdUnit );
-					}
-				}
-				if( bNotEmptyAssignerUnit )
-				{
-					for( Integer nIdUnit : filter.getFilterIdAssignerUnit( ) )
-					{
-						daoUtil.setInt( nIndex++, nIdUnit );
-					}
-				}
-			break;
-			
-			case DOMAIN:
-				daoUtil.setInt( nIndex++, filter.getFilterIdAdminUser( ) );
-				daoUtil.setInt( nIndex++, filter.getFilterIdAdminUser( ) );
-				if( bNotEmptyAssigneeUnit )
-				{
-					for( Integer nIdUnit : filter.getFilterIdAssigneeUnit( ) )
-					{
-						daoUtil.setInt( nIndex++, nIdUnit );
-					}
-				}
-				if( bNotEmptyAssignerUnit )
-				{
-					for( Integer nIdUnit : filter.getFilterIdAssignerUnit( ) )
-					{
-						daoUtil.setInt( nIndex++, nIdUnit );
-					}
-				}
-			break;
 
-			case ALL:
-			default:
-				//nothing
-			break;
-		}
-        
+        // specific filter for tickets view
+        boolean bNotEmptyAssigneeUnit = CollectionUtils.isNotEmpty( filter.getFilterIdAssigneeUnit( ) );
+        boolean bNotEmptyAssignerUnit = CollectionUtils.isNotEmpty( filter.getFilterIdAssignerUnit( ) );
+        switch( filter.getFilterView( ) )
+        {
+            case AGENT:
+                daoUtil.setInt( nIndex++, filter.getFilterIdAdminUser( ) );
+                daoUtil.setInt( nIndex++, filter.getFilterIdAdminUser( ) );
+                break;
+
+            case GROUP:
+                daoUtil.setInt( nIndex++, filter.getFilterIdAdminUser( ) );
+                daoUtil.setInt( nIndex++, filter.getFilterIdAdminUser( ) );
+                if ( bNotEmptyAssigneeUnit )
+                {
+                    for ( Integer nIdUnit : filter.getFilterIdAssigneeUnit( ) )
+                    {
+                        daoUtil.setInt( nIndex++, nIdUnit );
+                    }
+                }
+                if ( bNotEmptyAssignerUnit )
+                {
+                    for ( Integer nIdUnit : filter.getFilterIdAssignerUnit( ) )
+                    {
+                        daoUtil.setInt( nIndex++, nIdUnit );
+                    }
+                }
+                break;
+
+            case DOMAIN:
+                daoUtil.setInt( nIndex++, filter.getFilterIdAdminUser( ) );
+                daoUtil.setInt( nIndex++, filter.getFilterIdAdminUser( ) );
+                if ( bNotEmptyAssigneeUnit )
+                {
+                    for ( Integer nIdUnit : filter.getFilterIdAssigneeUnit( ) )
+                    {
+                        daoUtil.setInt( nIndex++, nIdUnit );
+                    }
+                }
+                if ( bNotEmptyAssignerUnit )
+                {
+                    for ( Integer nIdUnit : filter.getFilterIdAssignerUnit( ) )
+                    {
+                        daoUtil.setInt( nIndex++, nIdUnit );
+                    }
+                }
+                break;
+
+            case ALL:
+            default:
+                // nothing
+                break;
+        }
+
         if ( filter.containsLimit( ) )
         {
-        	daoUtil.setInt( nIndex++, filter.getTicketsLimitStart( ) );
-        	daoUtil.setInt( nIndex++, filter.getTicketsLimitCount( ) );
+            daoUtil.setInt( nIndex++, filter.getTicketsLimitStart( ) );
+            daoUtil.setInt( nIndex++, filter.getTicketsLimitCount( ) );
         }
     }
 
@@ -985,12 +982,12 @@ public final class TicketDAO implements ITicketDAO
     public List<Ticket> selectTicketsList( TicketFilter filter, Plugin plugin )
     {
         List<Ticket> ticketList = new ArrayList<Ticket>( );
-    	
-    	if ( filter!=null && TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) && CollectionUtils.isEmpty( filter.getAdminUserRoles( ) ) )
-    	{
-    		//domain case with no rbac role on user, empty return
-    		return ticketList;
-    	}
+
+        if ( filter != null && TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) && CollectionUtils.isEmpty( filter.getAdminUserRoles( ) ) )
+        {
+            // domain case with no rbac role on user, empty return
+            return ticketList;
+        }
 
         StringBuilder sbSQL = new StringBuilder( getSelectAllQuery( SQL_QUERY_SELECTALL_SELECT_CLAUSE, filter ) );
         DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ), plugin );
@@ -1015,18 +1012,18 @@ public final class TicketDAO implements ITicketDAO
     }
 
     /**
-	 * {@inheritDoc}
-	 */
+     * {@inheritDoc}
+     */
     @Override
     public List<Integer> selectIdTicketsList( TicketFilter filter, Plugin plugin )
     {
-    	List<Integer> listIdTickets = new ArrayList<Integer>( );
-    	
-    	if ( filter!=null && TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) && CollectionUtils.isEmpty( filter.getAdminUserRoles( ) ) )
-    	{
-    		//domain case with no rbac role on user, empty return
-    		return listIdTickets;
-    	}
+        List<Integer> listIdTickets = new ArrayList<Integer>( );
+
+        if ( filter != null && TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) && CollectionUtils.isEmpty( filter.getAdminUserRoles( ) ) )
+        {
+            // domain case with no rbac role on user, empty return
+            return listIdTickets;
+        }
 
         StringBuilder sbSQL = new StringBuilder( getSelectAllQuery( SQL_SELECT_ALL_ID_TICKET, filter ) );
         DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ), plugin );
@@ -1040,7 +1037,7 @@ public final class TicketDAO implements ITicketDAO
 
         while ( daoUtil.next( ) )
         {
-        	listIdTickets.add( daoUtil.getInt( 1 ) );
+            listIdTickets.add( daoUtil.getInt( 1 ) );
         }
 
         daoUtil.free( );

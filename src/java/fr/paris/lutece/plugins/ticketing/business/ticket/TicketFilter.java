@@ -762,139 +762,144 @@ public class TicketFilter extends OrderByFilter
     }
 
     /**
-	 * @return the _enumFilterView
-	 */
-	public TicketFilterViewEnum getFilterView()
-	{
-		return _enumFilterView;
-	}
+     * @return the _enumFilterView
+     */
+    public TicketFilterViewEnum getFilterView( )
+    {
+        return _enumFilterView;
+    }
 
-	/**
-	 * @param enumFilterView the enumFilterView to set
-	 */
-	public void setFilterView( TicketFilterViewEnum enumFilterView )
-	{
-		this._enumFilterView = enumFilterView;
-	}
-	
-	/**
+    /**
+     * @param enumFilterView
+     *            the enumFilterView to set
+     */
+    public void setFilterView( TicketFilterViewEnum enumFilterView )
+    {
+        this._enumFilterView = enumFilterView;
+    }
+
+    /**
      * Check if this filter contains a TicketFilterViewEnum
      *
      * @return true if the filter contains a TicketFilterViewEnum
-	 */
+     */
     public boolean containsFilterView( )
     {
-        return (this._enumFilterView != null && this._enumFilterView != TicketFilterViewEnum.ALL);
+        return ( this._enumFilterView != null && this._enumFilterView != TicketFilterViewEnum.ALL );
     }
-    
-    
 
-	/**
-	 * @return the nFilterIdAdminUser
-	 */
-	public int getFilterIdAdminUser()
-	{
-		return _nFilterIdAdminUser;
-	}
+    /**
+     * @return the nFilterIdAdminUser
+     */
+    public int getFilterIdAdminUser( )
+    {
+        return _nFilterIdAdminUser;
+    }
 
-	/**
-	 * @param nFilterIdAdminUser the nFilterIdAdminUser to set
-	 */
-	public void setFilterIdAdminUser( int nFilterIdAdminUser )
-	{
-		this._nFilterIdAdminUser = nFilterIdAdminUser;
-	}
+    /**
+     * @param nFilterIdAdminUser
+     *            the nFilterIdAdminUser to set
+     */
+    public void setFilterIdAdminUser( int nFilterIdAdminUser )
+    {
+        this._nFilterIdAdminUser = nFilterIdAdminUser;
+    }
 
-	/**
-	 * @return the setFilterIdUAssigneeUnit
-	 */
-	public Set<Integer> getFilterIdAssigneeUnit()
-	{
-		return _setFilterIdAssigneeUnit;
-	}
+    /**
+     * @return the setFilterIdUAssigneeUnit
+     */
+    public Set<Integer> getFilterIdAssigneeUnit( )
+    {
+        return _setFilterIdAssigneeUnit;
+    }
 
-	/**
-	 * @param setFilterIdAssigneeUnit the setFilterIdAssigneeUnit to set
-	 */
-	public void setFilterIdAssigneeUnit( Set<Integer> setFilterIdAssigneeUnit )
-	{
-		this._setFilterIdAssigneeUnit = setFilterIdAssigneeUnit;
-	}
+    /**
+     * @param setFilterIdAssigneeUnit
+     *            the setFilterIdAssigneeUnit to set
+     */
+    public void setFilterIdAssigneeUnit( Set<Integer> setFilterIdAssigneeUnit )
+    {
+        this._setFilterIdAssigneeUnit = setFilterIdAssigneeUnit;
+    }
 
-	/**
-	 * @return the setFilterIdUAssignerUnit
-	 */
-	public Set<Integer> getFilterIdAssignerUnit()
-	{
-		return _setFilterIdAssignerUnit;
-	}
+    /**
+     * @return the setFilterIdUAssignerUnit
+     */
+    public Set<Integer> getFilterIdAssignerUnit( )
+    {
+        return _setFilterIdAssignerUnit;
+    }
 
-	/**
-	 * @param setFilterIdAssignerUnit the setFilterIdAssignerUnit to set
-	 */
-	public void setFilterIdAssignerUnit( Set<Integer> setFilterIdAssignerUnit )
-	{
-		this._setFilterIdAssignerUnit = setFilterIdAssignerUnit;
-	}
-	
-	/**
-	 * @return the setAdminUserRoles
-	 */
-	public Set<String> getAdminUserRoles()
-	{
-		return _setAdminUserRoles;
-	}
+    /**
+     * @param setFilterIdAssignerUnit
+     *            the setFilterIdAssignerUnit to set
+     */
+    public void setFilterIdAssignerUnit( Set<Integer> setFilterIdAssignerUnit )
+    {
+        this._setFilterIdAssignerUnit = setFilterIdAssignerUnit;
+    }
 
-	/**
-	 * @param setAdminUserRoles the setAdminUserRoles to set
-	 */
-	public void setAdminUserRoles( Set<String> setAdminUserRoles )
-	{
-		this._setAdminUserRoles = setAdminUserRoles;
-	}
+    /**
+     * @return the setAdminUserRoles
+     */
+    public Set<String> getAdminUserRoles( )
+    {
+        return _setAdminUserRoles;
+    }
 
-	/**
-	 * 
-	 * @return true if query limit is enabled
-	 */
-	public boolean containsLimit( )
-	{
-		return ( ( _nTicketsLimitStart>-1 ) && ( _nTicketsLimitCount > 0 ) ); 
-	}
+    /**
+     * @param setAdminUserRoles
+     *            the setAdminUserRoles to set
+     */
+    public void setAdminUserRoles( Set<String> setAdminUserRoles )
+    {
+        this._setAdminUserRoles = setAdminUserRoles;
+    }
 
-	/**
-	 * @return the nTicketsLimitStart
-	 */
-	public int getTicketsLimitStart()
-	{
-		return _nTicketsLimitStart;
-	}
+    /**
+     * 
+     * @return true if query limit is enabled
+     */
+    public boolean containsLimit( )
+    {
+        return ( ( _nTicketsLimitStart > -1 ) && ( _nTicketsLimitCount > 0 ) );
+    }
 
-	/**
-	 * @param nTicketsLimitStart the nTicketsLimitStart to set
-	 */
-	public void setTicketsLimitStart( int nTicketsLimitStart )
-	{
-		this._nTicketsLimitStart = nTicketsLimitStart;
-	}
+    /**
+     * @return the nTicketsLimitStart
+     */
+    public int getTicketsLimitStart( )
+    {
+        return _nTicketsLimitStart;
+    }
 
-	/**
-	 * @return the nTicketsLimitCount
-	 */
-	public int getTicketsLimitCount()
-	{
-		return _nTicketsLimitCount;
-	}
+    /**
+     * @param nTicketsLimitStart
+     *            the nTicketsLimitStart to set
+     */
+    public void setTicketsLimitStart( int nTicketsLimitStart )
+    {
+        this._nTicketsLimitStart = nTicketsLimitStart;
+    }
 
-	/**
-	 * @param nTicketsLimitCount the nTicketsLimitCount to set
-	 */
-	public void setTicketsLimitCount( int nTicketsLimitCount )
-	{
-		this._nTicketsLimitCount = nTicketsLimitCount;
-	}
+    /**
+     * @return the nTicketsLimitCount
+     */
+    public int getTicketsLimitCount( )
+    {
+        return _nTicketsLimitCount;
+    }
 
-	@Override
+    /**
+     * @param nTicketsLimitCount
+     *            the nTicketsLimitCount to set
+     */
+    public void setTicketsLimitCount( int nTicketsLimitCount )
+    {
+        this._nTicketsLimitCount = nTicketsLimitCount;
+    }
+
+    @Override
     protected void initOrderNameToColumnNameMap( )
     {
         _mapOrderNameToColumnName = new HashMap<String, List<String>>( );
