@@ -191,7 +191,7 @@ public class Ticket implements Serializable, RBACResource
             setEmail( strEmail );
         }
 
-        if ( !StringUtils.isEmpty( strCategoryCode ) && ( ( _ticketCategory != null ) && ( _ticketCategory.getId( ) == 0 ) ) )
+        if ( !StringUtils.isEmpty( strCategoryCode ) && ( ( _ticketCategory == null ) || ( _ticketCategory.getId( ) == 0 ) ) )
         {
             TicketCategory category = TicketCategoryHome.findByCode( strCategoryCode );
 

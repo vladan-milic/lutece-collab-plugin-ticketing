@@ -175,35 +175,28 @@ public final class ModelUtils
      * @param model
      *            the model
      */
-    public static void storeNavigationBetweenTickets( int nIdCurrentTicket, List<Ticket> listTickets, Map<String, Object> model )
+    public static void storeNavigationBetweenTickets( int nIdCurrentTicket, List<Integer> listTickets, Map<String, Object> model )
     {
-        Ticket ticketNext = null;
-        Ticket ticketPrevious = null;
+        Integer nTicketNext = null;
+        Integer nTicketPrevious = null;
 
         if ( listTickets != null )
         {
-            for ( int i = 0; i < listTickets.size( ); i++ )
-            {
-                Ticket ticket = listTickets.get( i );
-
-                if ( nIdCurrentTicket == ticket.getId( ) )
-                {
-                    if ( i > 0 )
-                    {
-                        ticketPrevious = listTickets.get( i - 1 );
-                    }
-
-                    if ( i < ( listTickets.size( ) - 1 ) )
-                    {
-                        ticketNext = listTickets.get( i + 1 );
-                    }
-
-                    break;
-                }
-            }
+        	int nIdxCurrent = listTickets.indexOf( nIdCurrentTicket );
+        	if( nIdxCurrent > -1 )
+        	{
+        		if( nIdxCurrent > 0 )
+        		{
+        			nTicketPrevious = listTickets.get( nIdxCurrent - 1 );
+        		}
+        		if( nIdxCurrent < ( listTickets.size( ) - 1 ) )
+        		{
+        			nTicketNext = listTickets.get( nIdxCurrent + 1 );
+        		}
+        	}
         }
 
-        model.put( TicketingConstants.MARK_NEXT_TICKET, ticketNext );
-        model.put( TicketingConstants.MARK_PREVIOUS_TICKET, ticketPrevious );
+        model.put( TicketingConstants.MARK_NEXT_TICKET, nTicketNext );
+        model.put( TicketingConstants.MARK_PREVIOUS_TICKET, nTicketPrevious );
     }
 }

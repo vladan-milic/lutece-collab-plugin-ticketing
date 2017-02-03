@@ -39,6 +39,8 @@ import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
+import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.business.rbac.AdminRole;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -58,8 +60,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -479,5 +483,30 @@ public final class TicketFilterHelper
         }
 
         return date;
+    }
+    
+    /**
+     * Update ids of user and units in a given filter
+     * @param filter
+     * @param user
+     */
+    
+    public static void setFilterUserAndUnitIds( TicketFilter filter, AdminUser user )
+    {
+        List<Unit> lstUserUnits = UnitHome.findByIdUser( user.getUserId( ) );
+        Set<Integer> setAssigneeUnitId = new HashSet<Integer>( );
+        Set<Integer> setAssignerUnitId = new HashSet<Integer>( );
+        for ( Unit unit : lstUserUnits )
+        {
+        	setAssignerUnitId.add( unit.getIdUnit( ) );
+        	setAssigneeUnitId.add( unit.getIdUnit( ) );
+        	setAssigneeUnitId.addAll( UnitHome.getAllSubUnitsId( unit.getIdUnit( ) ) );
+        }
+        
+        filter.setFilterIdAdminUser( user.getUserId( ) );
+        filter.setFilterIdAssigneeUnit( setAssigneeUnitId );
+        filter.setFilterIdAssignerUnit( setAssignerUnitId );
+        
+        filter.setAdminUserRoles( user.getRoles( ).keySet( ) );
     }
 }

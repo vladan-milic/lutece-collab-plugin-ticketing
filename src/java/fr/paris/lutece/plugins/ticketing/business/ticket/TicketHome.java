@@ -215,15 +215,7 @@ public final class TicketHome
      */
     public static List<Ticket> getTicketsList( )
     {
-        List<Ticket> listTicket = _dao.selectTicketsList( _plugin );
-
-        for ( Ticket ticket : listTicket )
-        {
-            TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory( ).getId( ), _plugin );
-            ticket.setTicketCategory( ticketCategory );
-        }
-
-        return listTicket;
+        return _dao.selectTicketsList( _plugin );
     }
 
     /**
@@ -235,15 +227,7 @@ public final class TicketHome
      */
     public static List<Ticket> getTicketsList( TicketFilter filter )
     {
-        List<Ticket> listTicket = _dao.selectTicketsList( filter, _plugin );
-
-        for ( Ticket ticket : listTicket )
-        {
-            TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory( ).getId( ), _plugin );
-            ticket.setTicketCategory( ticketCategory );
-        }
-
-        return listTicket;
+        return _dao.selectTicketsList( filter, _plugin );
     }
 
     /**
@@ -254,6 +238,19 @@ public final class TicketHome
     public static List<Integer> getIdTicketsList( )
     {
         return _dao.selectIdTicketsList( _plugin );
+    }
+
+    /**
+     * Load the id of all the ticket objects and returns them in form of a collection
+     *
+     * @param filter
+     *            filter to apply to ticket search
+     * 
+     * @return the collection which contains the id of all the ticket objects
+     */
+    public static List<Integer> getIdTicketsList( TicketFilter filter )
+    {
+        return _dao.selectIdTicketsList( filter, _plugin );
     }
 
     // -----------------------------------------------

@@ -69,7 +69,6 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
-import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 
 /**
  * This class represents a JSP bean which can use workflow
@@ -127,16 +126,30 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     private static final long serialVersionUID = -249042695023346133L;
 
     /**
-     * set workflow attributes for displayable tickets
+     * set workflow attributes needed for display a list of ticket
      * 
-     * @param paginator
-     *            paginator of tickets
+     * 
+     * @param list of ticket to update
      */
-    protected void setWorkflowAttributes( LocalizedPaginator<Ticket> paginator )
+    protected void setWorkflowAttributes( List<Ticket> listTicket )
     {
-        for ( Ticket ticket : paginator.getPageItems( ) )
+    	if ( _workflowService.isAvailable( ) )
         {
-            setWorkflowAttributes( ticket );
+	        for ( Ticket ticket : listTicket )
+	        {
+	        	TicketCategory ticketCategory = ticket.getTicketCategory( );
+                int nIdWorkflow = ticketCategory.getIdWorkflow( );
+
+                StateFilter stateFilter = new StateFilter( );
+                stateFilter.setIdWorkflow( nIdWorkflow );
+
+                State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+
+                if ( state != null )
+                {
+                    ticket.setState( state );
+                }
+            }
         }
     }
 

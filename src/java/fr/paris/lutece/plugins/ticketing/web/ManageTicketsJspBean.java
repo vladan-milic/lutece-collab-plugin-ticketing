@@ -57,6 +57,7 @@ import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
+import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilterViewEnum;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
@@ -73,6 +74,7 @@ import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
+import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -193,7 +195,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     public String getManageTickets( HttpServletRequest request )
     {
         // Check user rights
-        if ( !RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_VIEW, getUser( ) ) )
+    	AdminUser userCurrent = getUser( );
+        if ( !RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_VIEW, userCurrent ) )
         {
             return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
         }
@@ -207,8 +210,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             return redirect( request, strRedirectUrl );
         }
-
-        TicketFilter filter = TicketFilterHelper.getFilter( request, getUser( ) );
+        TicketFilter filter = TicketFilterHelper.getFilter( request, userCurrent );
+        TicketFilterHelper.setFilterUserAndUnitIds( filter, userCurrent );
 
         _strCurrentPageIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
@@ -217,61 +220,81 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         UrlItem url = new UrlItem( JSP_MANAGE_TICKETS );
         String strUrl = url.getUrl( );
 
-        List<Ticket> listAgentTickets = new ArrayList<Ticket>( );
-        List<Ticket> listGroupTickets = new ArrayList<Ticket>( );
-        List<Ticket> listDomainTickets = new ArrayList<Ticket>( );
-
-        TicketUtils.setTicketsListByPerimeter( getUser( ), filter, request, listAgentTickets, listGroupTickets, listDomainTickets );
-
         String strPreviousSelectedTab = ( request.getSession( ).getAttribute( PARAMETER_SELECTED_TAB ) != null ) ? (String) request.getSession( ).getAttribute(
                 PARAMETER_SELECTED_TAB ) : TabulationEnum.AGENT.getLabel( );
         String strSelectedTab = getSelectedTab( request );
 
-        if ( !strPreviousSelectedTab.equals( strSelectedTab ) )
+        if ( !strPreviousSelectedTab.equals( strSelectedTab ) || StringUtils.isEmpty( _strCurrentPageIndex ))
         {
             // tab changes we reset index
             _strCurrentPageIndex = "1";
         }
+        int nCurrentPageIndex = Integer.parseInt( _strCurrentPageIndex );
+
+        filter.setFilterView(TicketFilterViewEnum.AGENT);
+        List<Integer> listAgentIdTickets = TicketUtils.getIdTickets( filter );
+        Integer nAgentTickets = listAgentIdTickets.size( );
+        filter.setFilterView(TicketFilterViewEnum.GROUP);
+        List<Integer> listGroupIdTickets = TicketUtils.getIdTickets( filter );
+        Integer nGroupTickets = listGroupIdTickets.size( );
+        //DomainTickets is not done for perf purpose unless user select the domain tab
+        Integer nDomainTickets = null;
 
         List<Ticket> listTickets = null;
+        List<Integer> listIdTickets = null;
+        
+        filter.setTicketsLimitStart( (nCurrentPageIndex-1) * _nItemsPerPage );
+        filter.setTicketsLimitCount( _nItemsPerPage );
 
         if ( strSelectedTab.equals( TabulationEnum.AGENT.getLabel( ) ) )
         {
-            listTickets = listAgentTickets;
+        	filter.setFilterView(TicketFilterViewEnum.AGENT);
+        	listIdTickets = listAgentIdTickets;
+            listTickets = TicketUtils.getTickets( filter );
         }
-        else
-            if ( strSelectedTab.equals( TabulationEnum.GROUP.getLabel( ) ) )
-            {
-                listTickets = listGroupTickets;
-            }
-            else
-                if ( strSelectedTab.equals( TabulationEnum.DOMAIN.getLabel( ) ) )
-                {
-                    listTickets = listDomainTickets;
-                }
+        else if ( strSelectedTab.equals( TabulationEnum.GROUP.getLabel( ) ) )
+        {
+            filter.setFilterView(TicketFilterViewEnum.GROUP);
+        	listIdTickets = listGroupIdTickets;
+            listTickets = TicketUtils.getTickets( filter );
+        }
+        else if ( strSelectedTab.equals( TabulationEnum.DOMAIN.getLabel( ) ) )
+        {
+            filter.setFilterView(TicketFilterViewEnum.DOMAIN);
+            listTickets = TicketUtils.getTickets( filter );
+            filter.setTicketsLimitStart( TicketFilter.CONSTANT_ID_NULL );
+            filter.setTicketsLimitCount( TicketFilter.CONSTANT_ID_NULL );
+            listIdTickets = TicketUtils.getIdTickets( filter );
+            nDomainTickets = listIdTickets.size( );
+        }
+        //clean filter view for save in session
+        filter.setTicketsLimitStart( TicketFilter.CONSTANT_ID_NULL );
+        filter.setTicketsLimitCount( TicketFilter.CONSTANT_ID_NULL );
+        filter.setFilterView( TicketFilterViewEnum.ALL );
 
         // store list tickets for navigation in view details
-        request.getSession( ).setAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION, listTickets );
+        request.getSession( ).setAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION, listIdTickets );
 
         // PAGINATORS
-        LocalizedPaginator<Ticket> paginatorTickets = new LocalizedPaginator<Ticket>( listTickets, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
+        LocalizedPaginator<Integer> paginatorTickets = new LocalizedPaginator<Integer>( listIdTickets, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndex, getLocale( ) );
-        setWorkflowAttributes( paginatorTickets );
+        setWorkflowAttributes( listTickets );
+
 
         Map<String, Object> model = getModel( );
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
-        model.put( MARK_TICKET_LIST, paginatorTickets.getPageItems( ) );
+        model.put( MARK_TICKET_LIST, listTickets );
         model.put( MARK_PAGINATOR, paginatorTickets );
-        model.put( MARK_NB_TICKET_AGENT, listAgentTickets.size( ) );
-        model.put( MARK_NB_TICKET_GROUP, listGroupTickets.size( ) );
-        model.put( MARK_NB_TICKET_DOMAIN, listDomainTickets.size( ) );
+        model.put( MARK_NB_TICKET_AGENT, nAgentTickets );
+        model.put( MARK_NB_TICKET_GROUP, nGroupTickets );
+        model.put( MARK_NB_TICKET_DOMAIN, nDomainTickets );
         model.put( MARK_SELECTED_TAB, strSelectedTab );
         model.put( MARK_USER_FACTORY, UserFactory.getInstance( ) );
         model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
-        TicketFilterHelper.setModel( model, filter, request, getUser( ) );
-        ModelUtils.storeTicketRights( model, getUser( ) );
+        TicketFilterHelper.setModel( model, filter, request, userCurrent );
+        ModelUtils.storeTicketRights( model, userCurrent );
 
-        String strCreationDateDisplay = AdminUserPreferencesService.instance( ).get( String.valueOf( getUser( ).getUserId( ) ),
+        String strCreationDateDisplay = AdminUserPreferencesService.instance( ).get( String.valueOf( userCurrent.getUserId( ) ),
                 TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY, StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_CREATION_DATE_AS_DATE, TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY_DATE.equals( strCreationDateDisplay ) );
 

@@ -72,14 +72,14 @@
          <ul class="pager">
             <#if previous_ticket ??   >
             <li class="previous">
-               <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${previous_ticket.id}" title="#i18n{ticketing.navigation.ticket.view.details.previous.title}">
+               <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${previous_ticket}" title="#i18n{ticketing.navigation.ticket.view.details.previous.title}">
                <i class="fa fa-arrow-left"></i> #i18n{ticketing.navigation.ticket.view.details.previous}
                </a>
             </li>
             </#if>
             <#if next_ticket ??  >
             <li class="next">
-               <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${next_ticket.id}" title="#i18n{ticketing.navigation.ticket.view.details.next.title}">
+               <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${next_ticket}" title="#i18n{ticketing.navigation.ticket.view.details.next.title}">
                #i18n{ticketing.navigation.ticket.view.details.next} <i class="fa fa-arrow-right"></i>
                </a>
             </li>

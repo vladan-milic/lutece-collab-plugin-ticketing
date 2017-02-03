@@ -116,6 +116,15 @@ public interface ITicketDAO
     List<Integer> selectIdTicketsList( Plugin plugin );
 
     /**
+     * Load the id of all the ticket objects matching input filter and returns them as a collection
+     *
+     * @param plugin
+     *            the Plugin
+     * @return The collection which contains the id of all the ticket objects
+     */
+    List<Integer> selectIdTicketsList( TicketFilter filter, Plugin plugin );
+
+    /**
      * Stores the flag to know if the ticket has been read (by the assignee user)
      * 
      * @param nIdTicket

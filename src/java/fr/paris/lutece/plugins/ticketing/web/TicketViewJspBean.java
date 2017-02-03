@@ -156,7 +156,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
         // navigation in authorized tickets : next <-> previous
         @SuppressWarnings( "unchecked" )
-        List<Ticket> listTickets = (List<Ticket>) request.getSession( ).getAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION );
+        List<Integer> listTickets = (List<Integer>) request.getSession( ).getAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION );
 
         ModelUtils.storeNavigationBetweenTickets( nIdTicket, listTickets, model );
 

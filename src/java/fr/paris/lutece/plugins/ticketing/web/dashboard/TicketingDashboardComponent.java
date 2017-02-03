@@ -33,8 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.dashboard;
 
-import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
+import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilterViewEnum;
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.portal.business.right.Right;
@@ -48,9 +48,7 @@ import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -93,17 +91,15 @@ public class TicketingDashboardComponent extends DashboardComponent
         if ( WorkflowService.getInstance( ).isAvailable( ) )
         {
             TicketFilter filter = TicketFilterHelper.getFilter( request, user );
-
-            List<Ticket> listAgentTickets = new ArrayList<Ticket>( );
-            List<Ticket> listGroupTickets = new ArrayList<Ticket>( );
-            List<Ticket> listDomainTickets = new ArrayList<Ticket>( );
-
-            TicketUtils.setTicketsListByPerimeter( user, filter, request, listAgentTickets, listGroupTickets, listDomainTickets );
-
-            model.put( MARK_TICKET_ASSIGNED_TO_ME_COUNTER, listAgentTickets.size( ) );
-            model.put( MARK_TICKET_ASSIGNED_TO_MY_GROUP_COUNTER, listGroupTickets.size( ) );
-            model.put( MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER, listDomainTickets.size( ) );
-            model.put( MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER, listDomainTickets.size( ) );
+            TicketFilterHelper.setFilterUserAndUnitIds( filter, user );
+            
+            filter.setFilterView(TicketFilterViewEnum.AGENT);
+            model.put( MARK_TICKET_ASSIGNED_TO_ME_COUNTER, TicketUtils.getIdTickets( filter ).size( ) );
+            filter.setFilterView(TicketFilterViewEnum.GROUP);
+            model.put( MARK_TICKET_ASSIGNED_TO_MY_GROUP_COUNTER, TicketUtils.getIdTickets( filter ).size( ) );
+            filter.setFilterView(TicketFilterViewEnum.DOMAIN);
+            model.put( MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER, TicketUtils.getIdTickets( filter ).size( ) );
+            
             model.put( MARK_WORFLOWSERVICE_UNAVAILABLE, false );
         }
         else

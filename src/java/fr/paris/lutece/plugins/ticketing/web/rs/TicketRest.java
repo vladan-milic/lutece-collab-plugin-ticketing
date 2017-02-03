@@ -138,7 +138,7 @@ public class TicketRest extends TicketingRest
             @FormParam( PARAMETER_USER_FIXED_PHONE_NUMBER ) String strFixedPhoneNumber,
             @FormParam( PARAMETER_USER_MOBILE_PHONE_NUMBER ) String strMobilePhoneNumber, @FormParam( PARAMETER_TICKET_CATEGORY_CODE ) String strCategoryCode,
             @FormParam( PARAMETER_TICKET_CONTACT_MODE_ID ) String strIdContactMode, @FormParam( PARAMETER_TICKET_CHANNEL_ID ) String strIdChannel,
-            @FormParam( PARAMETER_TICKET_COMMENT ) String strNomenclature, @FormParam( PARAMETER_TICKET_NOMENCLATURE ) String strComment,
+            @FormParam( PARAMETER_TICKET_COMMENT ) String strComment, @FormParam( PARAMETER_TICKET_NOMENCLATURE ) String strNomenclature,
             @FormParam( TicketingConstants.PARAMETER_GUID ) String strGuid, @FormParam( TicketingConstants.PARAMETER_CUSTOMER_ID ) String strIdCustomer,
             @HeaderParam( HttpHeaders.ACCEPT ) String accept, @QueryParam( Constants.FORMAT_QUERY ) String format, @Context HttpServletRequest request )
     {

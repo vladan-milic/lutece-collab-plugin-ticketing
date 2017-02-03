@@ -34,13 +34,9 @@
 package fr.paris.lutece.plugins.ticketing.web.util;
 
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
-import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
-import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
@@ -51,7 +47,6 @@ import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.admin.AdminAuthenticationService;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.prefs.AdminUserPreferencesService;
-import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceItem;
@@ -276,53 +271,32 @@ public final class TicketUtils
     }
 
     /**
+     * get list of ticket id according to filter
      * @param user
      *            admin user
      * @param filter
      *            ticket filter
      * @param request
      *            http request
-     * @param listAgentTickets
-     *            user's ticket
-     * @param listGroupTickets
-     *            group's ticket
-     * @param listDomainTickets
-     *            domain's ticket
      */
-    public static void setTicketsListByPerimeter( AdminUser user, TicketFilter filter, HttpServletRequest request, List<Ticket> listAgentTickets,
-            List<Ticket> listGroupTickets, List<Ticket> listDomainTickets )
+    public static List<Integer> getIdTickets( TicketFilter filter )
     {
-        List<Ticket> listTickets = (List<Ticket>) TicketHome.getTicketsList( filter );
+        return TicketHome.getIdTicketsList( filter );
+    }
 
-        List<Unit> lstUserUnits = UnitHome.findByIdUser( user.getUserId( ) );
-
-        // Filtering results
-        for ( Ticket ticket : listTickets )
-        {
-            TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) );
-
-            if ( RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, user )
-                    && RBACService.isAuthorized( ticketDomain, TicketDomainResourceIdService.PERMISSION_VIEW, user ) )
-            {
-                if ( ( isAssignee( ticket, user ) ) || ( isAssigner( ticket, user ) ) )
-                {
-                    // ticket assign to agent
-                    listAgentTickets.add( ticket );
-                }
-                else
-                    if ( isTicketAssignedToUserGroup( ticket, lstUserUnits ) || isTicketAssignedToChildUnitUserGroup( ticket, lstUserUnits )
-                            || isTicketAssignedUpFromUserGroup( ticket, lstUserUnits ) )
-                    {
-                        // ticket assign to agent group
-                        listGroupTickets.add( ticket );
-                    }
-                    else
-                    {
-                        // ticket assign to domain
-                        listDomainTickets.add( ticket );
-                    }
-            }
-        }
+    /**
+     * get list of ticket according to filter
+     * 
+     * @param user
+     *            admin user
+     * @param filter
+     *            ticket filter
+     * @param request
+     *            http request
+     */
+    public static List<Ticket> getTickets( TicketFilter filter )
+    {        
+        return TicketHome.getTicketsList( filter );
     }
 
     /**
