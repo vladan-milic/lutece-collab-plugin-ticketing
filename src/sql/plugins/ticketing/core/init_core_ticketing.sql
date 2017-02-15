@@ -40,7 +40,7 @@ INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is
 
 DELETE FROM core_admin_right WHERE id_right = 'TICKETING_USER_PREFERENCES_MANAGEMENT';  
 INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is_updatable,plugin_name,id_feature_group,icon_url,documentation_url, id_order ) VALUES 
-('TICKETING_USER_PREFERENCES_MANAGEMENT','ticketing.adminFeature.ManageUserPreferences.name',1,'jsp/admin/plugins/ticketing/UserPreferences.jsp','ticketing.adminFeature.ManageUserPreferences.description',0,'ticketing','TICKETING',NULL,NULL,3);
+('TICKETING_USER_PREFERENCES_MANAGEMENT','ticketing.adminFeature.ManageUserPreferences.name',3,'jsp/admin/plugins/ticketing/UserPreferences.jsp','ticketing.adminFeature.ManageUserPreferences.description',0,'ticketing','TICKETING',NULL,NULL,3);
 
 --
 -- Data for table core_user_right
