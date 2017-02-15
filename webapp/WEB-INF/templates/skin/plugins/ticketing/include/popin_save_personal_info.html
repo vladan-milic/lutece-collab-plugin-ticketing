@@ -1,5 +1,5 @@
 <#-- required Jquery to work -->
-<#macro addPopinSavePersonalInfo i18nTitleKey i18nMessageKey i18nYesKey i18nNoKey prefix="" yesActionUrl="jsp/site/plugins/ticketing/personaldata/SavePersonalData.jsp" noActionUrl="" yesBtnClass="btn-success"  noBtnClass="btn-danger" >
+<#macro addPopinSavePersonalInfo i18nTitleKey i18nMessageKey i18nYesKey i18nNoKey prefix="" yesActionUrl="jsp/site/plugins/ticketing/personaldata/SavePersonalData.jsp" noActionUrl="" yesBtnClass="btn-primary" noBtnClass="btn-default">
 
 <script type='text/javascript'>
 var ${prefix}popinCallback;
@@ -60,9 +60,9 @@ $(document).on("click", "#${prefix}popin-save-personal-info-no", function(event)
 
 <div class="modal modal-static fade modal-save-personal-info" id="${prefix}popin-save-personal-info" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
-       <div class="modal-content">
+       <div class="modal-content color-secondary-background-variant">
 		  <div class="modal-header">
-			<h3 class="modal-title" id="myModalLabel">#i18n{${i18nTitleKey}}</h3>
+			<h3 class="modal-title text-center text-uppercase" id="myModalLabel">#i18n{${i18nTitleKey}}</h3>
 		  </div>
 		  <div class="modal-body">
 			<div class="row">

@@ -71,6 +71,11 @@ public class UserFactory
 
         AdminUser adminUser = AdminUserHome.findByPrimaryKey( nIdUser );
 
+        if ( adminUser == null )
+        {
+            return null;
+        }
+
         adminUser.setRoles( AdminUserHome.getRolesListForUser( adminUser.getUserId( ) ) );
 
         List<TicketDomain> listDomains = TicketDomainHome.getTicketDomainsList( adminUser, TicketDomainResourceIdService.PERMISSION_BELONG_TO );
