@@ -17,7 +17,7 @@
             <#if history_information.admin_user_history?exists>
               <#if adminAvatar>
                 <#if history_information.admin_user_history.userId?string != "${defaultUserFrontId}">
-                <#assign user=user_factory.create(history_information.admin_user_history.userId)>
+                <#assign user=user_factory.create(history_information.admin_user_history.userId)!>
                  <#if user?has_content>
                     <img class="info_user fa direct-chat-img" data-key-id="${user.idUser}" data-container="body" data-toggle="popover" data-placement="top"
                     	src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}">
@@ -36,7 +36,7 @@
               <h4 class="timeline-header">
                 <#if history_information.admin_user_history?exists>
                   <#if history_information.admin_user_history.userId?string != "${defaultUserFrontId}">
-                  <#assign user=user_factory.create(history_information.admin_user_history.userId)>
+                  <#assign user=user_factory.create(history_information.admin_user_history.userId)!>
                     <#if user?has_content>
                       <em  class="info_user" data-key-id="${user.idUser}" data-container="body" data-toggle="popover" data-placement="top">
 	                    &nbsp; ${history_information.admin_user_history.firstName} ${history_information.admin_user_history.lastName}</em>
