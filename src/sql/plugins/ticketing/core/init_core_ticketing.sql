@@ -33,7 +33,7 @@ INSERT INTO core_feature_group (id_feature_group, feature_group_description, fea
 --
 DELETE FROM core_admin_right WHERE id_right = 'TICKETING_TICKETS_MANAGEMENT';
 INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is_updatable,plugin_name,id_feature_group,icon_url,documentation_url, id_order ) VALUES 
-('TICKETING_TICKETS_MANAGEMENT','ticketing.adminFeature.ManageTickets.name',1,'jsp/admin/plugins/ticketing/ManageTickets.jsp','ticketing.adminFeature.ManageTickets.description',0,'ticketing','TICKETING',NULL,NULL,1);
+('TICKETING_TICKETS_MANAGEMENT','ticketing.adminFeature.ManageTickets.name',3,'jsp/admin/plugins/ticketing/ManageTickets.jsp','ticketing.adminFeature.ManageTickets.description',0,'ticketing','TICKETING',NULL,NULL,1);
 
 DELETE FROM core_admin_right WHERE id_right = 'TICKETING_INSTANT_RESPONSE_MANAGEMENT';
 INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is_updatable,plugin_name,id_feature_group,icon_url,documentation_url, id_order ) VALUES 
