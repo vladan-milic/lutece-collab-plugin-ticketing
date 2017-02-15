@@ -70,10 +70,10 @@ public class UserFactory
         User user = new User( );
 
         AdminUser adminUser = AdminUserHome.findByPrimaryKey( nIdUser );
-        
+
         if ( adminUser == null )
         {
-        	return null;
+            return null;
         }
 
         adminUser.setRoles( AdminUserHome.getRolesListForUser( adminUser.getUserId( ) ) );
