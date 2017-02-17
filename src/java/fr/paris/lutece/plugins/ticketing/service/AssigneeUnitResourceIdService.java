@@ -44,6 +44,7 @@ import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
 import java.util.Locale;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -102,8 +103,16 @@ public class AssigneeUnitResourceIdService extends ResourceIdService
      */
     public String getTitle( String strId, Locale locale )
     {
-        Unit unit = UnitHome.findByPrimaryKey( Integer.parseInt( strId ) );
+        
+        if ( StringUtils.isNotBlank( strId ) && StringUtils.isNumeric( strId ) )
+        {
+            Unit unit = UnitHome.findByPrimaryKey( Integer.parseInt( strId ) );
+            if ( unit != null )
+            {
+                return unit.getLabel(  );
+            }
+        }
 
-        return unit.getLabel( );
+        return StringUtils.EMPTY;
     }
 }
