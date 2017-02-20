@@ -26,3 +26,8 @@ textarea.ticketing {
     padding-right:0;
     padding-left:0;
 }
+
+.wordwrap-ticket-comment {
+	word-wrap:break-word;
+	height:100%;
+}

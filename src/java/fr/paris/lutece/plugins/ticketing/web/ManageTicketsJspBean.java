@@ -156,6 +156,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
+    private static final String MESSAGE_ERROR_COMMENT_VALIDATION = "ticketing.validation.ticket.TicketComment.size";
 
     // Views
     private static final String VIEW_MANAGE_TICKETS = "manageTickets";
@@ -551,16 +552,19 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
         }
 
-        for ( Response response : ticket.getListResponse( ) )
+        if ( ticket.getListResponse( ) != null )
         {
-            if ( response.getFile( ) != null )
+            for ( Response response : ticket.getListResponse( ) )
             {
-                String strIdEntry = Integer.toString( response.getEntry( ).getIdEntry( ) );
+                if ( response.getFile( ) != null )
+                {
+                    String strIdEntry = Integer.toString( response.getEntry( ).getIdEntry( ) );
 
-                FileItem fileItem = new GenAttFileItem( response.getFile( ).getPhysicalFile( ).getValue( ), response.getFile( ).getTitle( ),
+                    FileItem fileItem = new GenAttFileItem( response.getFile( ).getPhysicalFile( ).getValue( ), response.getFile( ).getTitle( ),
                         IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry, response.getIdResponse( ) );
-                TicketAsynchronousUploadHandler.getHandler( ).addFileItemToUploadedFilesList( fileItem, IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry,
+                    TicketAsynchronousUploadHandler.getHandler( ).addFileItemToUploadedFilesList( fileItem, IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry,
                         request );
+                }
             }
         }
 
@@ -722,6 +726,16 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
 
         // Check constraints
+        // Count the number of characters in the ticket comment
+        int iNbCharcount = 0;
+        String[] strTabUnescapeComment = ticket.getTicketComment( ).split( System.lineSeparator( ) );
+        for ( String string : strTabUnescapeComment )
+        {
+            iNbCharcount += string.length( );
+        }
+        int iNbReturn = StringUtils.countMatches( ticket.getTicketComment( ), System.lineSeparator( ) );
+        iNbCharcount +=  iNbReturn;
+
         bIsFormValid = validateBean( ticket, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
 
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
@@ -730,6 +744,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         FormValidator formValidator = new FormValidator( request );
         listValidationErrors.add( formValidator.isContactModeFilled( ) );
 
+        // The validation for the ticket comment size is made here because the validation doesn't work for this field
+        if( iNbCharcount > 5000 )
+        {
+            addError( MESSAGE_ERROR_COMMENT_VALIDATION, getLocale( ) );
+            bIsFormValid = false;
+        }
+        
         for ( String error : listValidationErrors )
         {
             if ( !StringUtils.isEmpty( error ) )

@@ -67,7 +67,8 @@
           </div>
           <div class="form-group">
             <label for="ticket_comment">#i18n{ticketing.create_ticket.labelTicketComment}</label>
-            <textarea type="text" name="ticket_comment" id="ticket_comment" class="ticketing form-control" >${ticket.ticketComment!''}</textarea>
+            <textarea type="text" name="ticket_comment" id="ticket_comment" class="ticketing form-control" maxlength="5000">${ticket.ticketComment!''}</textarea>
+            <span class="help-block">#i18n{ticketing.create_ticket.labelTicketComment.help}</span>
           </div>
         </div>
       </div>
