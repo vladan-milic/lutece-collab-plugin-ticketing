@@ -369,14 +369,14 @@ public class TicketXPage extends WorkflowCapableXPage
         // Check constraints
         // Count the number of characters in the ticket comment
         int iNbCharcount = 0;
-        String[] strTabUnescapeComment = ticket.getTicketComment( ).split( System.lineSeparator( ) );
+        String [ ] strTabUnescapeComment = ticket.getTicketComment( ).split( System.lineSeparator( ) );
         for ( String string : strTabUnescapeComment )
         {
             iNbCharcount += string.length( );
         }
         int iNbReturn = StringUtils.countMatches( ticket.getTicketComment( ), System.lineSeparator( ) );
-        iNbCharcount +=  iNbReturn;
-        
+        iNbCharcount += iNbReturn;
+
         bIsFormValid = validateBean( ticket );
 
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
@@ -386,12 +386,12 @@ public class TicketXPage extends WorkflowCapableXPage
         listValidationErrors.add( formValidator.isContactModeFilled( ) );
 
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
-        if( iNbCharcount > 5000 )
+        if ( iNbCharcount > 5000 )
         {
             addError( MESSAGE_ERROR_COMMENT_VALIDATION, getLocale( request ) );
             bIsFormValid = false;
         }
-        
+
         for ( String error : listValidationErrors )
         {
             if ( !StringUtils.isEmpty( error ) )

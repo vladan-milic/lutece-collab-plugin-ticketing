@@ -561,9 +561,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                     String strIdEntry = Integer.toString( response.getEntry( ).getIdEntry( ) );
 
                     FileItem fileItem = new GenAttFileItem( response.getFile( ).getPhysicalFile( ).getValue( ), response.getFile( ).getTitle( ),
-                        IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry, response.getIdResponse( ) );
+                            IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry, response.getIdResponse( ) );
                     TicketAsynchronousUploadHandler.getHandler( ).addFileItemToUploadedFilesList( fileItem, IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry,
-                        request );
+                            request );
                 }
             }
         }
@@ -728,13 +728,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // Check constraints
         // Count the number of characters in the ticket comment
         int iNbCharcount = 0;
-        String[] strTabUnescapeComment = ticket.getTicketComment( ).split( System.lineSeparator( ) );
+        String [ ] strTabUnescapeComment = ticket.getTicketComment( ).split( System.lineSeparator( ) );
         for ( String string : strTabUnescapeComment )
         {
             iNbCharcount += string.length( );
         }
         int iNbReturn = StringUtils.countMatches( ticket.getTicketComment( ), System.lineSeparator( ) );
-        iNbCharcount +=  iNbReturn;
+        iNbCharcount += iNbReturn;
 
         bIsFormValid = validateBean( ticket, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
 
@@ -745,12 +745,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         listValidationErrors.add( formValidator.isContactModeFilled( ) );
 
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
-        if( iNbCharcount > 5000 )
+        if ( iNbCharcount > 5000 )
         {
             addError( MESSAGE_ERROR_COMMENT_VALIDATION, getLocale( ) );
             bIsFormValid = false;
         }
-        
+
         for ( String error : listValidationErrors )
         {
             if ( !StringUtils.isEmpty( error ) )
