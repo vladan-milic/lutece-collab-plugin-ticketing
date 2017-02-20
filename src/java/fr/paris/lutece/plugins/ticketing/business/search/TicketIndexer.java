@@ -86,6 +86,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
     private static final String PROPERTY_INDEXER_DESCRIPTION = "ticketing.indexer.description";
     private static final String PROPERTY_INDEXER_VERSION = "ticketing.indexer.version";
     private static final String PROPERTY_INDEXER_ENABLE = "ticketing.indexer.enable";
+    private static final String PROPERTY_INDEXER_DEFAULT_DATE_PATTERN = "ticketing.indexer.date.pattern";
     private static final String ENABLE_VALUE_TRUE = "1";
     private static final String JSP_VIEW_TICKET = "jsp/admin/plugins/ticketing/TicketView.jsp";
     private static final String JSP_SEARCH_TICKET = "jsp/admin/plugins/ticketing/TicketSearch.jsp?action=search";
@@ -591,7 +592,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
     private static String getDisplaySummary( Ticket ticket )
     {
         StringBuilder sb = new StringBuilder( );
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( AppPropertiesService.getProperty( PROPERTY_INDEXER_DEFAULT_DATE_PATTERN ) );
 
         if ( ticket.getDateCreate( ) != null )
         {
