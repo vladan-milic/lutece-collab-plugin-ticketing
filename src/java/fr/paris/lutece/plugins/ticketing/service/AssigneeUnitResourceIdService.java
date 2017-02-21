@@ -103,13 +103,13 @@ public class AssigneeUnitResourceIdService extends ResourceIdService
      */
     public String getTitle( String strId, Locale locale )
     {
-        
+
         if ( StringUtils.isNotBlank( strId ) && StringUtils.isNumeric( strId ) )
         {
             Unit unit = UnitHome.findByPrimaryKey( Integer.parseInt( strId ) );
             if ( unit != null )
             {
-                return unit.getLabel(  );
+                return unit.getLabel( );
             }
         }
 
