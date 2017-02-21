@@ -904,16 +904,16 @@ public class TicketFilter extends OrderByFilter
     {
         _mapOrderNameToColumnName = new HashMap<String, List<String>>( );
         _mapOrderNameToColumnName.put( "category_label", Arrays.asList( "e.label" ) );
-        _mapOrderNameToColumnName.put( "reference", Arrays.asList( "ticket_reference", "id_ticket" ) );
-        _mapOrderNameToColumnName.put( "ticket_status", Arrays.asList( "ticket_status" ) );
-        _mapOrderNameToColumnName.put( "date_create", Arrays.asList( "date_create" ) );
-        _mapOrderNameToColumnName.put( "date_update", Arrays.asList( "date_update" ) );
-        _mapOrderNameToColumnName.put( "id_user", Arrays.asList( "id_user" ) );
+        _mapOrderNameToColumnName.put( "reference", Arrays.asList( "a.ticket_reference", "a.id_ticket" ) );
+        _mapOrderNameToColumnName.put( "ticket_status", Arrays.asList( "a.ticket_status" ) );
+        _mapOrderNameToColumnName.put( "date_create", Arrays.asList( "a.date_create" ) );
+        _mapOrderNameToColumnName.put( "date_update", Arrays.asList( "a.date_update" ) );
+        _mapOrderNameToColumnName.put( "id_user", Arrays.asList( "g.id_user" ) ); // Tri sur id_user utile ?
         _mapOrderNameToColumnName.put( "channel", Arrays.asList( "x.label" ) );
-        _mapOrderNameToColumnName.put( "email", Arrays.asList( "email" ) );
-        _mapOrderNameToColumnName.put( "lastname", Arrays.asList( "lastname", "firstname", "email" ) );
-        _mapOrderNameToColumnName.put( "date_close", Arrays.asList( "date_close" ) );
-        _mapOrderNameToColumnName.put( "ticket_status_text", Arrays.asList( "ticket_status_text" ) );
+        _mapOrderNameToColumnName.put( "email", Arrays.asList( "a.email" ) );
+        _mapOrderNameToColumnName.put( "lastname", Arrays.asList( "a.lastname", "a.firstname", "a.email" ) );
+        _mapOrderNameToColumnName.put( "date_close", Arrays.asList( "a.date_close" ) );
+        _mapOrderNameToColumnName.put( "ticket_status_text", Arrays.asList( "a.ticket_status_text" ) );
         _mapOrderNameToColumnName.put( "assignee", Arrays.asList( "h.label", "g.last_name" ) );
         _mapOrderNameToColumnName.put( "state", Arrays.asList( "j.name" ) );
         _mapOrderNameToColumnName.put( "nomenclature", Arrays.asList( "a.nomenclature" ) );
