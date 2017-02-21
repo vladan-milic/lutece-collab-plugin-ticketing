@@ -30,8 +30,14 @@
         <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketDomain">${ticket.ticketDomain!''}</@fieldStaticText>
         <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketCategory"><@categoryFormated ticket.ticketCategory/></@fieldStaticText>
 		<@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketPrecision">${ticket.ticketCategory.precision!''}</@fieldStaticText>
-
-        <@fieldStaticText i18nLabelKey="ticketing.xpage.view_ticket_details.labelTicketComment">${convertNewLineToHtml(ticket.ticketComment!'')}</@fieldStaticText>
+        <div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">#i18n{ticketing.xpage.view_ticket_details.labelTicketComment}&nbsp; :</label>
+			<div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+                   <p class="form-control-static wordwrap-ticket-comment">
+					${convertNewLineToHtml(ticket.ticketComment!'')}
+                   </p>
+			</div>
+		</div>
         
         <#if read_only_reponses_html_list?? && read_only_reponses_html_list?size &gt; 0>
             <div class="form-group">

@@ -137,6 +137,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
     // Errors
     private static final String ERROR_TICKET_CREATION_ABORTED = "ticketing.error.ticket.creation.aborted.frontoffice";
+    private static final String MESSAGE_ERROR_COMMENT_VALIDATION = "ticketing.validation.ticket.TicketComment.size";
 
     // Session keys
     private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
@@ -366,6 +367,16 @@ public class TicketXPage extends WorkflowCapableXPage
         }
 
         // Check constraints
+        // Count the number of characters in the ticket comment
+        int iNbCharcount = 0;
+        String [ ] strTabUnescapeComment = ticket.getTicketComment( ).split( System.lineSeparator( ) );
+        for ( String string : strTabUnescapeComment )
+        {
+            iNbCharcount += string.length( );
+        }
+        int iNbReturn = StringUtils.countMatches( ticket.getTicketComment( ), System.lineSeparator( ) );
+        iNbCharcount += iNbReturn;
+
         bIsFormValid = validateBean( ticket );
 
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
@@ -373,6 +384,13 @@ public class TicketXPage extends WorkflowCapableXPage
 
         FormValidator formValidator = new FormValidator( request );
         listValidationErrors.add( formValidator.isContactModeFilled( ) );
+
+        // The validation for the ticket comment size is made here because the validation doesn't work for this field
+        if ( iNbCharcount > 5000 )
+        {
+            addError( MESSAGE_ERROR_COMMENT_VALIDATION, getLocale( request ) );
+            bIsFormValid = false;
+        }
 
         for ( String error : listValidationErrors )
         {

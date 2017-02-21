@@ -56,7 +56,7 @@
         <h3>#i18n{ticketing.search_ticket.title}</h3>
         <ul class="list-group">
           <#list result as ticket>
-            <li class="list-group-item">
+            <li class="list-group-item wordwrap-ticket-comment">
               <a class="btn btn-link" href="jsp/admin/plugins/ticketing/TicketView.jsp?page=ticketView&view=ticketDetails&id=${ticket.id!}">
                 ${ticket.title!}
               </a>  
