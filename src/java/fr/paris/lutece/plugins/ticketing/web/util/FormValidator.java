@@ -114,16 +114,16 @@ public class FormValidator
      * @return the number of character of a ticket comment
      */
     public static int countCharTicketComment( String strTicketComment )
-    {   
+    {
         // Count the number of carriage return to avoid problem with javascript counter
         int iNbCarriageReturn = 0;
         Pattern pattern = Pattern.compile( PATTERN_CARRIAGE_RETURN );
         Matcher matcher = pattern.matcher( strTicketComment );
-        while( matcher.find( ) )
+        while ( matcher.find( ) )
         {
             iNbCarriageReturn++;
         }
-        
+
         // Count the number of character
         int iNbCharcount = 0;
         String [ ] strArrayTicketComment = StringUtils.splitPreserveAllTokens( strTicketComment, PATTERN_CARRIAGE_RETURN );
