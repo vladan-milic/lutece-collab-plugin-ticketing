@@ -54,6 +54,9 @@ public class FormValidator
     // Errors
     private static final String ERROR_CONTACT_MODE_NOT_FILLED = "ticketing.error.contactmode.not.filled";
     private HttpServletRequest _request;
+    
+    // Pattern
+    private static final String PATTERN_CARRIAGE_RETURN = "\r\n|\r|\n";
 
     /**
      * Constructor
@@ -100,5 +103,29 @@ public class FormValidator
         }
 
         return strError;
+    }
+    
+    /**
+     * Return the number of character of a ticket comment for validation
+     * 
+     * @param strTicketComment
+     * @return the number of character of a ticket comment
+     */
+    public static int countCharTicketComment( String strTicketComment ){
+        int iNbCharcount = 0;
+        String [ ] strArrayTicketComment = StringUtils.splitPreserveAllTokens( strTicketComment, PATTERN_CARRIAGE_RETURN );
+        for ( String strCommentSplittedPart : strArrayTicketComment )
+        {
+            // We count the carriage return as one character to agree with the javascript
+            if ( strCommentSplittedPart.length( ) == 0 )
+            {
+                iNbCharcount++;
+            }
+            else
+            {
+                iNbCharcount += strCommentSplittedPart.length( );
+            }
+        }
+        return iNbCharcount;
     }
 }

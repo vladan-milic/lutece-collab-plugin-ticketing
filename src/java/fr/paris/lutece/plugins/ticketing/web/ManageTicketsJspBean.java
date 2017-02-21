@@ -727,14 +727,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         // Check constraints
         // Count the number of characters in the ticket comment
-        int iNbCharcount = 0;
-        String [ ] strTabUnescapeComment = ticket.getTicketComment( ).split( System.lineSeparator( ) );
-        for ( String string : strTabUnescapeComment )
-        {
-            iNbCharcount += string.length( );
-        }
-        int iNbReturn = StringUtils.countMatches( ticket.getTicketComment( ), System.lineSeparator( ) );
-        iNbCharcount += iNbReturn;
+        int iNbCharcount = FormValidator.countCharTicketComment( ticket.getTicketComment( ) );
 
         bIsFormValid = validateBean( ticket, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
 
