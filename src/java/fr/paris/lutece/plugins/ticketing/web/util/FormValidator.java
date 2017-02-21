@@ -39,6 +39,8 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import org.apache.commons.lang.StringUtils;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -112,21 +114,23 @@ public class FormValidator
      * @return the number of character of a ticket comment
      */
     public static int countCharTicketComment( String strTicketComment )
-    {
+    {   
+        // Count the number of carriage return to avoid problem with javascript counter
+        int iNbCarriageReturn = 0;
+        Pattern pattern = Pattern.compile( PATTERN_CARRIAGE_RETURN );
+        Matcher matcher = pattern.matcher( strTicketComment );
+        while( matcher.find( ) )
+        {
+            iNbCarriageReturn++;
+        }
+        
+        // Count the number of character
         int iNbCharcount = 0;
         String [ ] strArrayTicketComment = StringUtils.splitPreserveAllTokens( strTicketComment, PATTERN_CARRIAGE_RETURN );
         for ( String strCommentSplittedPart : strArrayTicketComment )
         {
-            // We count the carriage return as one character to agree with the javascript
-            if ( strCommentSplittedPart.length( ) == 0 )
-            {
-                iNbCharcount++;
-            }
-            else
-            {
-                iNbCharcount += strCommentSplittedPart.length( );
-            }
+            iNbCharcount += strCommentSplittedPart.length( );
         }
-        return iNbCharcount;
+        return ( iNbCharcount + iNbCarriageReturn );
     }
 }
