@@ -287,4 +287,29 @@ public final class TicketDomainDAO implements ITicketDomainDAO
 
         return list;
     }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public ReferenceList selectReferenceListModelResponse( Plugin plugin )
+    {
+        ReferenceList list = new ReferenceList( );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
+        daoUtil.executeQuery( );
+
+        while ( daoUtil.next( ) )
+        {
+            StringBuilder strBuilderTypeDomainName = new StringBuilder( );
+            strBuilderTypeDomainName.append( daoUtil.getString( 4 ) );
+            strBuilderTypeDomainName.append( " - " );
+            strBuilderTypeDomainName.append( daoUtil.getString( 3 ) );
+            
+            list.addItem( daoUtil.getInt( 1 ), strBuilderTypeDomainName.toString( ) );
+        }
+
+        daoUtil.free( );
+
+        return list;
+    }
 }

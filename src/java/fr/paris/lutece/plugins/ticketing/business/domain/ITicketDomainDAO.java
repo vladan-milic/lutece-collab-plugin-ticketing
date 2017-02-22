@@ -144,4 +144,13 @@ public interface ITicketDomainDAO
      * @return true if domain can be removed, false otherwise
      */
     boolean canRemoveDomain( int nKey, Plugin plugin );
+
+    /**
+     * Get a reference list of all domains with the name composed of the concatenation
+     * of the type name and the domain name
+     * 
+     * @param _plugin
+     * @return the reference list
+     */
+    ReferenceList selectReferenceListModelResponse( Plugin _plugin );
 }

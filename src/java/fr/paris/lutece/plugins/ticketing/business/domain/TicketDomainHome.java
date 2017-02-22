@@ -202,4 +202,14 @@ public final class TicketDomainHome
 
         return listDomains;
     }
+
+    /**
+     * Returns the ReferenceList of all domains with the concatenation of the name of the type and the domain
+     * 
+     * @return the ReferenceList of all domains with the concatenation of the name of the type and the domain
+     */
+    public static ReferenceList getReferenceListModelResponse( )
+    {
+        return _dao.selectReferenceListModelResponse( _plugin );
+    }
 }

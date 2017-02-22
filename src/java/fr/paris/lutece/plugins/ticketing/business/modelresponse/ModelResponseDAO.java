@@ -35,6 +35,8 @@ package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -180,6 +182,7 @@ public final class ModelResponseDAO implements IModelResponseDAO
         daoUtil.executeQuery( );
 
         TicketDomain ticketDomain;
+        TicketType ticketType;
 
         while ( daoUtil.next( ) )
         {
@@ -192,14 +195,24 @@ public final class ModelResponseDAO implements IModelResponseDAO
             modelResponse.setReponse( daoUtil.getString( nIndex++ ) );
             modelResponse.setKeyword( daoUtil.getString( nIndex++ ) );
 
-            // populate label category, domain and type
-            ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain( ) );
-            modelResponse.setDomain( ( ticketDomain != null ) ? ticketDomain.getLabel( ) : "" );
-
             typeResponseList.add( modelResponse );
         }
 
         daoUtil.free( );
+        
+        for ( ModelResponse modelResponse : typeResponseList )
+        {
+            // populate label category, domain and type
+            ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain( ) );
+            ticketType = TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType( ) );
+            
+            StringBuilder strBuilderDomainName = new StringBuilder( );
+            strBuilderDomainName.append( ticketType.getLabel( ) );
+            strBuilderDomainName.append( " - " );
+            strBuilderDomainName.append( ticketDomain.getLabel( ) );
+            
+            modelResponse.setDomain( strBuilderDomainName.toString( ) );
+        }
 
         return typeResponseList;
     }
