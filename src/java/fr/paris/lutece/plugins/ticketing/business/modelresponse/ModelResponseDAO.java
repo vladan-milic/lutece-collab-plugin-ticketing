@@ -199,18 +199,18 @@ public final class ModelResponseDAO implements IModelResponseDAO
         }
 
         daoUtil.free( );
-        
+
         for ( ModelResponse modelResponse : typeResponseList )
         {
             // populate label category, domain and type
             ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain( ) );
             ticketType = TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType( ) );
-            
+
             StringBuilder strBuilderDomainName = new StringBuilder( );
             strBuilderDomainName.append( ticketType.getLabel( ) );
             strBuilderDomainName.append( " - " );
             strBuilderDomainName.append( ticketDomain.getLabel( ) );
-            
+
             modelResponse.setDomain( strBuilderDomainName.toString( ) );
         }
 

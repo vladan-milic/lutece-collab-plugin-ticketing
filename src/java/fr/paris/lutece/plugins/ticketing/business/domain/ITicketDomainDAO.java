@@ -146,8 +146,7 @@ public interface ITicketDomainDAO
     boolean canRemoveDomain( int nKey, Plugin plugin );
 
     /**
-     * Get a reference list of all domains with the name composed of the concatenation
-     * of the type name and the domain name
+     * Get a reference list of all domains with the name composed of the concatenation of the type name and the domain name
      * 
      * @param _plugin
      * @return the reference list

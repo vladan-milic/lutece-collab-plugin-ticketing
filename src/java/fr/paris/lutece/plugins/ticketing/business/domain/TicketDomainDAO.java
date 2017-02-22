@@ -304,7 +304,7 @@ public final class TicketDomainDAO implements ITicketDomainDAO
             strBuilderTypeDomainName.append( daoUtil.getString( 4 ) );
             strBuilderTypeDomainName.append( " - " );
             strBuilderTypeDomainName.append( daoUtil.getString( 3 ) );
-            
+
             list.addItem( daoUtil.getInt( 1 ), strBuilderTypeDomainName.toString( ) );
         }
 
