@@ -249,11 +249,11 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
             IndexReader reader = DirectoryReader.open( FSDirectory.open( getIndexPath( ) ) );
 
             IndexSearcher searcher = new IndexSearcher( reader );
-            
+
             BooleanQuery booleanQueryMain = new BooleanQuery( );
             TermQuery termQueryDomainId = new TermQuery( new Term( FIELD_DOMAIN_ID, strIdDomain ) );
             booleanQueryMain.add( new BooleanClause( termQueryDomainId, Occur.MUST ) );
-            
+
             Query query = new QueryParser( Version.LUCENE_4_9, FIELD_SEARCH_CONTENT, getAnalyzer( ) ).parse( strQuery );
             booleanQueryMain.add( new BooleanClause( query, Occur.MUST ) );
 
