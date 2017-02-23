@@ -97,9 +97,9 @@ interface IModelResponseIndexer
      * 
      * @param strQuery
      *            lucene query
-     * @param strDomain
-     *            domain label
+     * @param strIdDomain
+     *            domain id
      * @return list of modelResponse matching query
      */
-    List<ModelResponse> searchResponses( String strQuery, String strDomain );
+    List<ModelResponse> searchResponses( String strQuery, String strIdDomain );
 }

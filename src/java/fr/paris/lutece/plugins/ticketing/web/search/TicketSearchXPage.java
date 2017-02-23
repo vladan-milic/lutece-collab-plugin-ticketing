@@ -86,12 +86,12 @@ public class TicketSearchXPage extends MVCApplication
     public XPage searchResponse( HttpServletRequest request )
     {
         String strQuery = request.getParameter( SearchConstants.PARAMETER_QUERY );
-        String strDomain = request.getParameter( SearchConstants.PARAMETER_DOMAIN );
+        String strIdDomain = request.getParameter( SearchConstants.PARAMETER_DOMAIN );
         Map<String, Object> model = new HashMap<String, Object>( );
 
         if ( StringUtils.isNotEmpty( strQuery ) )
         {
-            List<ModelResponse> listResults = LuceneModelResponseIndexerServices.instance( ).searchResponses( strQuery, strDomain );
+            List<ModelResponse> listResults = LuceneModelResponseIndexerServices.instance( ).searchResponses( strQuery, strIdDomain );
 
             model.put( SearchConstants.MARK_RESULT, listResults );
             model.put( SearchConstants.MARK_QUERY, strQuery );
