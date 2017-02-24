@@ -83,12 +83,6 @@ public class StandaloneJspBean extends WorkflowCapableJspBean
     @View( VIEW_TICKET_FORM )
     public String getTicketForm( HttpServletRequest request )
     {
-        // Check user rights
-        if ( !RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_VIEW, getUser( ) ) )
-        {
-            return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
-        }
-
         String strIdCategory = request.getParameter( PARAMETER_ID_CATEGORY );
         String strResetResponse = request.getParameter( PARAMETER_RESET_RESPONSE );
 
