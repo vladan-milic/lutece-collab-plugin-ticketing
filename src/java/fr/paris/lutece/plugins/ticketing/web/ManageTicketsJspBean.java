@@ -446,6 +446,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             return redirectView( request, VIEW_MANAGE_TICKETS );
         }
 
+        _ticketFormService.removeTicketFromSession( request.getSession() );
         return redirectAfterCreateAction( request );
     }
 
