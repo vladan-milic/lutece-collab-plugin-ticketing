@@ -185,7 +185,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
-    
+
     /**
      * Build the Manage View
      * 
@@ -200,13 +200,14 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         AdminUser userCurrent = getUser( );
         if ( RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_VIEW, userCurrent ) )
         {
-           return getManageTickets(request);
+            return getManageTickets( request );
         }
-        else if ( RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_CREATE, getUser( ) ) )
-        {
-        	return getCreateTicket(request);
-        }
-        
+        else
+            if ( RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_CREATE, getUser( ) ) )
+            {
+                return getCreateTicket( request );
+            }
+
         return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
     }
 
@@ -471,7 +472,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             return redirectView( request, VIEW_TICKET_PAGE );
         }
 
-        _ticketFormService.removeTicketFromSession( request.getSession() );
+        _ticketFormService.removeTicketFromSession( request.getSession( ) );
         return redirectAfterCreateAction( request );
     }
 
