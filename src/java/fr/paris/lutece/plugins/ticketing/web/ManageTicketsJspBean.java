@@ -160,6 +160,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
     // Views
     private static final String VIEW_MANAGE_TICKETS = "manageTickets";
+    private static final String VIEW_TICKET_PAGE = "ticketPage";
     private static final String VIEW_CREATE_TICKET = "createTicket";
     private static final String VIEW_MODIFY_TICKET = "modifyTicket";
     private static final String VIEW_RECAP_TICKET = "recapTicket";
@@ -184,6 +185,30 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
+    
+    /**
+     * Build the Manage View
+     * 
+     * @param request
+     *            The HTTP request
+     * @return The page
+     */
+    @View( value = VIEW_TICKET_PAGE, defaultView = true )
+    public String getTicketPage( HttpServletRequest request )
+    {
+        // Check user rights
+        AdminUser userCurrent = getUser( );
+        if ( RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_VIEW, userCurrent ) )
+        {
+           return getManageTickets(request);
+        }
+        else if ( RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_CREATE, getUser( ) ) )
+        {
+        	return getCreateTicket(request);
+        }
+        
+        return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+    }
 
     /**
      * Build the Manage View
@@ -192,7 +217,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      *            The HTTP request
      * @return The page
      */
-    @View( value = VIEW_MANAGE_TICKETS, defaultView = true )
+    @View( value = VIEW_MANAGE_TICKETS )
     public String getManageTickets( HttpServletRequest request )
     {
         // Check user rights
@@ -443,7 +468,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             addError( TicketingConstants.ERROR_TICKET_CREATION_ABORTED, getLocale( ) );
             AppLogService.error( e );
 
-            return redirectView( request, VIEW_MANAGE_TICKETS );
+            return redirectView( request, VIEW_TICKET_PAGE );
         }
 
         _ticketFormService.removeTicketFromSession( request.getSession() );
@@ -468,7 +493,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         addInfo( INFO_TICKET_CREATED, getLocale( ) );
 
-        return redirectView( request, VIEW_MANAGE_TICKETS );
+        return redirectView( request, VIEW_TICKET_PAGE );
     }
 
     /**
@@ -519,7 +544,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         TicketHome.remove( nId );
         addInfo( INFO_TICKET_REMOVED, getLocale( ) );
 
-        return redirectView( request, VIEW_MANAGE_TICKETS );
+        return redirectView( request, VIEW_TICKET_PAGE );
     }
 
     /**
@@ -765,7 +790,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @Override
     public String redirectAfterWorkflowAction( HttpServletRequest request )
     {
-        return redirectView( request, VIEW_MANAGE_TICKETS );
+        return redirectView( request, VIEW_TICKET_PAGE );
     }
 
     /**
@@ -774,7 +799,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @Override
     public String redirectWorkflowActionCancelled( HttpServletRequest request )
     {
-        return redirectView( request, VIEW_MANAGE_TICKETS );
+        return redirectView( request, VIEW_TICKET_PAGE );
     }
 
     /**
@@ -783,7 +808,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @Override
     public String defaultRedirectWorkflowAction( HttpServletRequest request )
     {
-        return redirectView( request, VIEW_MANAGE_TICKETS );
+        return redirectView( request, VIEW_TICKET_PAGE );
     }
 
     /**
