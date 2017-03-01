@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2016, Mairie de Paris
+ * Copyright (c) 2002-2017, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,18 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.search;
 
-import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
-import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
-import fr.paris.lutece.portal.util.mvc.utils.MVCMessage;
-import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
-import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
-import fr.paris.lutece.portal.web.xpages.XPage;
-import fr.paris.lutece.util.ErrorMessage;
-
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,16 +41,26 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * TicketSearch
- */
-@Controller( xpageName = TicketSearchXPage.XPAGE_NAME, pageTitleI18nKey = TicketSearchXPage.MESSAGE_PAGE_TITLE, pagePathI18nKey = TicketSearchXPage.MESSAGE_PATH )
-public class TicketSearchXPage extends MVCApplication
-{
-    protected static final String XPAGE_NAME = "ticketSearch";
-    protected static final String MESSAGE_PAGE_TITLE = "ticketing.xpage.ticketsearch.pageTitle";
-    protected static final String MESSAGE_PATH = "ticketing.xpage.ticketsearch.pagePathLabel";
+import org.apache.commons.lang.StringUtils;
 
+import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
+import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
+import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
+import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
+import fr.paris.lutece.portal.util.mvc.utils.MVCMessage;
+import fr.paris.lutece.util.ErrorMessage;
+import fr.paris.lutece.util.html.HtmlTemplate;
+
+/**
+ * ModelResponseSearch
+ */
+@Controller( controllerJsp = "ModelResponseSearch.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_TICKETS_MANAGEMENT" )
+public class ModelResponseSearchJspBean extends MVCAdminJspBean
+{
     // Templates
     private static final String TEMPLATE_SEARCH_RESPONSE_RESULTS = "/admin/plugins/ticketing/search/search_response_results.html";
 
@@ -80,10 +78,7 @@ public class TicketSearchXPage extends MVCApplication
      * @return The view
      */
     @Action( value = ACTION_SEARCH_RESPONSE )
-    @SuppressWarnings( {
-            "rawtypes", "unchecked"
-    } )
-    public XPage searchResponse( HttpServletRequest request )
+    public String searchResponse( HttpServletRequest request )
     {
         String strQuery = request.getParameter( SearchConstants.PARAMETER_QUERY );
         String strIdDomain = request.getParameter( SearchConstants.PARAMETER_DOMAIN );
@@ -100,11 +95,8 @@ public class TicketSearchXPage extends MVCApplication
         {
             addError( model, SearchConstants.MESSAGE_SEARCH_NO_INPUT, request.getLocale( ) );
         }
-
-        XPage page = getXPage( TEMPLATE_SEARCH_RESPONSE_RESULTS, request.getLocale( ), model );
-        page.setStandalone( true );
-
-        return page;
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_SEARCH_RESPONSE_RESULTS, getLocale( ), model );
+        return template.getHtml( );
     }
 
     /**
@@ -128,4 +120,5 @@ public class TicketSearchXPage extends MVCApplication
 
         ( (List<ErrorMessage>) model.get( SearchConstants.MARK_ERRORS ) ).add( new MVCMessage( I18nService.getLocalizedString( strMessageKey, locale ) ) );
     }
+
 }
