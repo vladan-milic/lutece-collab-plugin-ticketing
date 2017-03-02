@@ -127,8 +127,18 @@ function loadGenericAttributesForm(url, is_response_reseted, category_selector, 
 				
 				if(is_first_call && $('.alert.alert-danger').length > 0)
 				{
+					var positionToScroll = 0;
+					if($('.alert.alert-danger').prev('.form-group').length)
+					{
+						positionToScroll = $('.alert.alert-danger').prev('.form-group').offset().top;
+					}
+					else if($('.alert.alert-danger').parent('.form-group').length)
+					{
+						positionToScroll = $('.alert.alert-danger').parent('.form-group').offset().top;
+					}
+					
 					$('html,body').animate({
-						  scrollTop: $('.alert.alert-danger').prev().offset().top
+						  scrollTop: positionToScroll
 						}, 1000);
 				}
 			}
