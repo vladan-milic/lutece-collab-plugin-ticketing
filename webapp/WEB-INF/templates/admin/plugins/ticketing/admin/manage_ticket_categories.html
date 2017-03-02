@@ -34,7 +34,9 @@
               </#if>
             </td>
             <td>
-              ${ticketcategory.assigneeUnit.name!''}
+		<#if ticketcategory.assigneeUnit??>
+              		${ticketcategory.assigneeUnit.name!''}
+		</#if>
             </td>
             <td>
               <a href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?view=modifyTicketCategoryInputs&id=${ticketcategory.id}" class="btn btn-primary btn-sm" title="#i18n{ticketing.manage_ticketcategories.labelModifyInputs}">

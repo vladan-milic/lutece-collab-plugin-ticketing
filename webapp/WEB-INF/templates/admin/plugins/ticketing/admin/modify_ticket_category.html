@@ -15,7 +15,7 @@
   		<@fieldInputCombo i18nLabelKey='ticketing.modify_ticketcategory.labelWorkflow' inputName='idWorkflow' items=listWorkflows value="${ticketcategory.idWorkflow!}" i18nHelpBlockKey="ticketing.modify_ticketcategory.labelWorkflow.help" cssClass="form-control" />
 		</#if>
     <#if units_list??>
-      <@fieldInputCombo i18nLabelKey='ticketing.modify_ticketcategory.labelUnit' inputName='idUnit' mandatory=true items=units_list value="${ticketcategory.assigneeUnit.unitId!}" i18nHelpBlockKey="ticketing.modify_ticketcategory.labelUnit.help" cssClass="form-control" />
+      <@fieldInputCombo i18nLabelKey='ticketing.modify_ticketcategory.labelUnit' inputName='idUnit' mandatory=true items=units_list value="${(ticketcategory.assigneeUnit.unitId)!''}" i18nHelpBlockKey="ticketing.modify_ticketcategory.labelUnit.help" cssClass="form-control" />
     </#if>
     <@actionButtons button1Name="action_modifyTicketCategory" button2Name="view_manageTicketCategories"/>
   </form>
