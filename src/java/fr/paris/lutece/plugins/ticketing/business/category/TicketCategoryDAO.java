@@ -239,8 +239,11 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
 
             int nUnitId = daoUtil.getInt( nIndex++ );
             Unit unit = UnitHome.findByPrimaryKey( nUnitId );
-            AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
-            category.setAssigneeUnit( assigneeUnit );
+            if (unit != null)
+            {
+                AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
+                category.setAssigneeUnit( assigneeUnit );
+            }
             category.setPrecision( daoUtil.getString( nIndex++ ) );
             category.setHelpMessage( daoUtil.getString( nIndex++ ) );
             category.setOrder( daoUtil.getInt( nIndex++ ) );
@@ -286,8 +289,11 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
 
             int nUnitId = daoUtil.getInt( nIndex++ );
             Unit unit = UnitHome.findByPrimaryKey( nUnitId );
-            AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
-            category.setAssigneeUnit( assigneeUnit );
+            if (unit != null)
+            {
+                AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
+                category.setAssigneeUnit( assigneeUnit );
+            }
             category.setPrecision( daoUtil.getString( nIndex++ ) );
             category.setHelpMessage( daoUtil.getString( nIndex++ ) );
             category.setOrder( daoUtil.getInt( nIndex++ ) );
@@ -422,8 +428,11 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
 
             int nUnitId = daoUtil.getInt( nIndex++ );
             Unit unit = UnitHome.findByPrimaryKey( nUnitId );
-            AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
-            category.setAssigneeUnit( assigneeUnit );
+            if ( unit != null )
+            {
+                AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
+                category.setAssigneeUnit( assigneeUnit );
+            }         
             category.setPrecision( daoUtil.getString( nIndex++ ) );
             category.setHelpMessage( daoUtil.getString( nIndex++ ) );
             category.setOrder( daoUtil.getInt( nIndex++ ) );
