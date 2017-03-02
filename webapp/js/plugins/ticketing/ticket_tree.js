@@ -128,7 +128,7 @@ function loadGenericAttributesForm(url, is_response_reseted, category_selector, 
 				if(is_first_call && $('.alert.alert-danger').length > 0)
 				{
 					$('html,body').animate({
-						  scrollTop: $('.alert.alert-danger').prev('form-group').offset().top
+						  scrollTop: $('.alert.alert-danger').prev().offset().top
 						}, 1000);
 				}
 			}
