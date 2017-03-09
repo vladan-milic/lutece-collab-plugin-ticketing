@@ -83,7 +83,7 @@ public class TicketDomainResourceIdService extends ResourceIdService
         p.setPermissionKey( PERMISSION_VIEW_LIST );
         p.setPermissionTitleKey( PROPERTY_LABEL_VIEW_LIST );
         rt.registerPermission( p );
-        
+
         p = new Permission( );
         p.setPermissionKey( PERMISSION_VIEW_DETAIL );
         p.setPermissionTitleKey( PROPERTY_LABEL_VIEW_DETAIL );

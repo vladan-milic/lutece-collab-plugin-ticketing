@@ -139,8 +139,8 @@ public final class TicketDAO implements ITicketDAO
             + "' " + " AND (k.permission = '" + TicketResourceIdService.PERMISSION_VIEW + "' OR k.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY + "' )"
             + " AND (k.resource_id = '" + RBAC.WILDCARD_RESOURCES_ID + "' OR k.resource_id = a.id_ticket ) AND k.role_key IN ( ";
     private static final String SQL_FILTER_RBAC_DOMAIN_JOIN_CLAUSE = " JOIN core_admin_role_resource l ON l.resource_type = '" + TicketDomain.RESOURCE_TYPE
-            + "' " + " AND (l.permission = '" + TicketDomainResourceIdService.PERMISSION_VIEW_LIST + "' OR l.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY + "' )"
-            + " AND (l.resource_id = '" + RBAC.WILDCARD_RESOURCES_ID + "' OR l.resource_id = d.id_ticket_domain ) AND l.role_key IN ( ";
+            + "' " + " AND (l.permission = '" + TicketDomainResourceIdService.PERMISSION_VIEW_LIST + "' OR l.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY
+            + "' )" + " AND (l.resource_id = '" + RBAC.WILDCARD_RESOURCES_ID + "' OR l.resource_id = d.id_ticket_domain ) AND l.role_key IN ( ";
 
     private static final String SQL_SELECT_ALL_WORKFLOW_JOIN_CLAUSE = " LEFT JOIN  workflow_resource_workflow i ON i.id_resource=a.id_ticket"
             + " LEFT JOIN workflow_state j ON j.id_state=i.id_state";
@@ -346,13 +346,15 @@ public final class TicketDAO implements ITicketDAO
 
         if ( filter != null )
         {
-            if( TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) )
+            if ( TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) )
             {
                 sqlQuery.append( strBaseQuery.replace( "SELECT", "SELECT DISTINCT" ) );
                 sqlQuery.append( SQL_FILTER_RBAC_TICKET_JOIN_CLAUSE );
                 sqlQuery.append( getInCriteriaClause( filter.getAdminUserRoles( ).size( ) ) );
                 sqlQuery.append( CONSTANT_CLOSE_PARENTHESIS );
-            } else {
+            }
+            else
+            {
                 sqlQuery.append( strBaseQuery );
             }
             sqlQuery.append( SQL_FILTER_RBAC_DOMAIN_JOIN_CLAUSE );
@@ -811,7 +813,9 @@ public final class TicketDAO implements ITicketDAO
                     nIndex++;
                 }
                 nIndex = nIndex + nRoleCount;
-            } else {
+            }
+            else
+            {
                 for ( String strUserRole : filter.getAdminUserRoles( ) )
                 {
                     // RBAC Domain
