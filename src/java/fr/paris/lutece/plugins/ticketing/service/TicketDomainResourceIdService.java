@@ -52,10 +52,12 @@ import java.util.Locale;
 public class TicketDomainResourceIdService extends ResourceIdService
 {
     /** Permission for viewing a ticket domain */
-    public static final String PERMISSION_VIEW = "VIEW";
+    public static final String PERMISSION_VIEW_LIST = "VIEW_LIST";
+    public static final String PERMISSION_VIEW_DETAIL = "VIEW_DETAIL";
     public static final String PERMISSION_BELONG_TO = "BELONG_TO";
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "ticketing.ticketdomain.resourceType";
-    private static final String PROPERTY_LABEL_VIEW = "ticketing.ticketdomain.permission.label.view";
+    private static final String PROPERTY_LABEL_VIEW_LIST = "ticketing.ticketdomain.permission.label.viewList";
+    private static final String PROPERTY_LABEL_VIEW_DETAIL = "ticketing.ticketdomain.permission.label.viewDetail";
     private static final String PROPERTY_LABEL_BELONG_TO = "ticketing.ticketdomain.permission.label.belongTo";
 
     /**
@@ -78,8 +80,13 @@ public class TicketDomainResourceIdService extends ResourceIdService
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
         Permission p = new Permission( );
-        p.setPermissionKey( PERMISSION_VIEW );
-        p.setPermissionTitleKey( PROPERTY_LABEL_VIEW );
+        p.setPermissionKey( PERMISSION_VIEW_LIST );
+        p.setPermissionTitleKey( PROPERTY_LABEL_VIEW_LIST );
+        rt.registerPermission( p );
+        
+        p = new Permission( );
+        p.setPermissionKey( PERMISSION_VIEW_DETAIL );
+        p.setPermissionTitleKey( PROPERTY_LABEL_VIEW_DETAIL );
         rt.registerPermission( p );
 
         p = new Permission( );

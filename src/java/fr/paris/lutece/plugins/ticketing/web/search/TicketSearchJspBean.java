@@ -110,7 +110,7 @@ public class TicketSearchJspBean extends MVCAdminJspBean
             try
             {
                 listResults = engine
-                        .searchTickets( strQuery, TicketDomainHome.getTicketDomainsList( getUser( ), TicketDomainResourceIdService.PERMISSION_VIEW ) );
+                        .searchTickets( strQuery, TicketDomainHome.getTicketDomainsList( getUser( ), TicketDomainResourceIdService.PERMISSION_VIEW_LIST ) );
 
                 Paginator paginator = new Paginator( listResults, _nItemsPerPage, url.getUrl( ), SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
 
