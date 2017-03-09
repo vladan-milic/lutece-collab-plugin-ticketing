@@ -761,6 +761,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validate( ticket, false );
 
+//        FormValidator formValidator = new FormValidator( request );
+//        listValidationErrors.add( formValidator.isContactModeFilled( ) );
+
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
         if ( iNbCharcount > 5000 )
         {

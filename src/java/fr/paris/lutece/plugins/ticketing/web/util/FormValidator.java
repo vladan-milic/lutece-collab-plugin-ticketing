@@ -52,9 +52,11 @@ public class FormValidator
 {
     // Parameters
     private static final String PARAMETER_CONTACT_MODE_ID = "id_contact_mode";
+    private static final String PARAMETER_EMAIL = "email";
 
     // Errors
     private static final String ERROR_CONTACT_MODE_NOT_FILLED = "ticketing.error.contactmode.not.filled";
+    private static final String ERROR_EMAIL_NOT_FILLED = "ticketing.validation.ticket.Email.notEmpty";
     private HttpServletRequest _request;
 
     // Pattern
@@ -102,6 +104,23 @@ public class FormValidator
         if ( !bIsValid )
         {
             strError = I18nService.getLocalizedString( ERROR_CONTACT_MODE_NOT_FILLED, _request.getLocale( ) );
+        }
+
+        return strError;
+    }
+
+    /**
+     * Tests if the email is filled
+     *
+     * @return the localized error message if the email is not filled, {@code null} otherwise
+     */
+    public String isEmailFilled( )
+    {
+        String strError = null;
+
+        if ( StringUtils.isBlank( _request.getParameter( PARAMETER_EMAIL ) ) )
+        {
+            strError = I18nService.getLocalizedString( ERROR_EMAIL_NOT_FILLED, _request.getLocale( ) );
         }
 
         return strError;
