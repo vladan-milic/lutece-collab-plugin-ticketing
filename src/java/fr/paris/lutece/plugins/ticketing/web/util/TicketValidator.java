@@ -126,11 +126,6 @@ public class TicketValidator
     {
         List<String> listErrors = new ArrayList<String>( );
 
-        if ( !hasPhoneNumber( ticket ) )
-        {
-            listErrors.add( I18nService.getLocalizedString( ERROR_PHONE_NUMBER_MISSING, _locale ) );
-        }
-
         if ( bValidateReferenceData )
         {
             UserTitle userTitle = UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle( ) );
@@ -165,15 +160,4 @@ public class TicketValidator
         return listErrors;
     }
 
-    /**
-     * Tests whether the specified ticket has a phone number or not
-     *
-     * @param ticket
-     *            the ticket to test
-     * @return {@code true} if neither the fixed phone number nor the mobile phone number are filled, {@code false} otherwise
-     */
-    private boolean hasPhoneNumber( Ticket ticket )
-    {
-        return !StringUtils.isBlank( ticket.getFixedPhoneNumber( ) ) || !StringUtils.isBlank( ticket.getMobilePhoneNumber( ) );
-    }
 }

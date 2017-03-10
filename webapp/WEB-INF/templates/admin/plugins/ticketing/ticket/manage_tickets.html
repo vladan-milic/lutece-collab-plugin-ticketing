@@ -94,7 +94,7 @@
             </p>
             <!-- <p class="text-left"> -->
             <p>
-    				<#if ticket.email ??>
+    				<#if ticket.email ?? && ticket.email?length &gt; 1>
     				  <small>
     					  <i class="fa fa-envelope"></i> ${ticket.email}
     				  </small>
