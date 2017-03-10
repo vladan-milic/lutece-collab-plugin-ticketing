@@ -263,7 +263,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new IntField( TicketSearchItem.FIELD_PRIORITY, ticket.getPriority( ), Store.YES ) );
         doc.add( new IntField( TicketSearchItem.FIELD_ID_STATUS, ticket.getTicketStatus( ), Store.YES ) );
         doc.add( new StringField( TicketSearchItem.FIELD_TICKET_TYPE, manageNullValue( ticket.getTicketType( ) ), Store.YES ) );
-        
+
         if ( ticket.getTicketCategory( ) != null )
         {
             doc.add( new StringField( TicketSearchItem.FIELD_PRECISION, manageNullValue( ticket.getTicketCategory( ).getPrecision( ) ), Store.YES ) );
@@ -272,14 +272,14 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             doc.add( new StringField( TicketSearchItem.FIELD_PRECISION, StringUtils.EMPTY, Store.YES ) );
         }
-        
+
         doc.add( new StringField( TicketSearchItem.FIELD_USER_TITLE, manageNullValue( ticket.getUserTitle( ) ), Store.YES ) );
         doc.add( new StringField( TicketSearchItem.FIELD_FIRSTNAME, manageNullValue( ticket.getFirstname( ) ), Store.YES ) );
         doc.add( new StringField( TicketSearchItem.FIELD_LASTNAME, manageNullValue( ticket.getLastname( ) ), Store.YES ) );
         doc.add( new StringField( TicketSearchItem.FIELD_EMAIL, manageNullValue( ticket.getEmail( ) ), Store.YES ) );
         doc.add( new StringField( TicketSearchItem.FIELD_MOBILE_PHONE_NUMBER, manageNullValue( ticket.getMobilePhoneNumber( ) ), Store.YES ) );
         doc.add( new StringField( TicketSearchItem.FIELD_FIXED_PHONE_NUMBER, manageNullValue( ticket.getFixedPhoneNumber( ) ), Store.YES ) );
-        
+
         if ( ticket.getState( ) != null )
         {
             doc.add( new StringField( TicketSearchItem.FIELD_STATE, manageNullValue( ticket.getState( ).getName( ) ), Store.YES ) );
@@ -299,7 +299,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             doc.add( new StringField( TicketSearchItem.FIELD_CHANNEL_ICONFONT, StringUtils.EMPTY, Store.YES ) );
             doc.add( new StringField( TicketSearchItem.FIELD_CHANNEL_LABEL, StringUtils.EMPTY, Store.YES ) );
         }
-        
+
         if ( ticket.getAssigneeUnit( ) != null )
         {
             doc.add( new StringField( TicketSearchItem.FIELD_ASSIGNEE_UNIT_NAME, manageNullValue( ticket.getAssigneeUnit( ).getName( ) ), Store.YES ) );
@@ -308,7 +308,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             doc.add( new StringField( TicketSearchItem.FIELD_ASSIGNEE_UNIT_NAME, StringUtils.EMPTY, Store.YES ) );
         }
-        
+
         if ( ticket.getAssigneeUser( ) != null )
         {
             doc.add( new IntField( TicketSearchItem.FIELD_ASSIGNEE_USER_ADMIN_ID, ticket.getAssigneeUser( ).getAdminUserId( ), Store.YES ) );
@@ -321,9 +321,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             doc.add( new StringField( TicketSearchItem.FIELD_ASSIGNEE_USER_FIRSTNAME, StringUtils.EMPTY, Store.YES ) );
             doc.add( new StringField( TicketSearchItem.FIELD_ASSIGNEE_USER_LASTNAME, StringUtils.EMPTY, Store.YES ) );
         }
-        
+
         doc.add( new IntField( TicketSearchItem.FIELD_TICKET_READ, BooleanUtils.toInteger( ticket.isRead( ) ), Store.YES ) );
-        
+
         return doc;
     }
 
@@ -736,7 +736,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         return sb.toString( );
     }
-    
+
     /**
      * Manages the case the specified String is {@code null}
      * 

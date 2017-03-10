@@ -118,7 +118,7 @@ public class TicketSearchItem extends SearchItem
         _strResponse = document.get( FIELD_RESPONSE );
         _strComment = document.get( FIELD_COMMENT );
         _strDomain = document.get( FIELD_DOMAIN );
-        _strNomenclature = document.get( FIELD_TICKET_NOMENCLATURE );       
+        _strNomenclature = document.get( FIELD_TICKET_NOMENCLATURE );
         _lDateCreation = document.getField( FIELD_DATE_CREATION ).numericValue( ).longValue( );
         _nCriticality = document.getField( FIELD_CRITICALITY ).numericValue( ).intValue( );
         _nPriority = document.getField( FIELD_PRIORITY ).numericValue( ).intValue( );
@@ -149,7 +149,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param reference the reference to set
+     * @param reference
+     *            the reference to set
      */
     public void setReference( String reference )
     {
@@ -165,7 +166,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param ticketId the ticketId to set
+     * @param ticketId
+     *            the ticketId to set
      */
     public void setTicketId( int ticketId )
     {
@@ -181,7 +183,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param category the category to set
+     * @param category
+     *            the category to set
      */
     public void setCategory( String category )
     {
@@ -197,7 +200,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param response the response to set
+     * @param response
+     *            the response to set
      */
     public void setResponse( String response )
     {
@@ -213,7 +217,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param comment the comment to set
+     * @param comment
+     *            the comment to set
      */
     public void setComment( String comment )
     {
@@ -229,7 +234,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param domain the domain to set
+     * @param domain
+     *            the domain to set
      */
     public void setDomain( String domain )
     {
@@ -245,7 +251,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param nomenclature the nomenclature to set
+     * @param nomenclature
+     *            the nomenclature to set
      */
     public void setNomenclature( String nomenclature )
     {
@@ -261,7 +268,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param dateCreation the dateCreation to set
+     * @param dateCreation
+     *            the dateCreation to set
      */
     public void setDateCreation( long dateCreation )
     {
@@ -277,7 +285,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param criticality the criticality to set
+     * @param criticality
+     *            the criticality to set
      */
     public void setCriticality( int criticality )
     {
@@ -293,7 +302,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param priority the priority to set
+     * @param priority
+     *            the priority to set
      */
     public void setPriority( int priority )
     {
@@ -309,7 +319,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param ticketstatusId the ticketstatusId to set
+     * @param ticketstatusId
+     *            the ticketstatusId to set
      */
     public void setTicketstatusId( int ticketstatusId )
     {
@@ -325,7 +336,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param ticketTypeLabel the ticketTypeLabel to set
+     * @param ticketTypeLabel
+     *            the ticketTypeLabel to set
      */
     public void setTicketTypeLabel( String ticketTypeLabel )
     {
@@ -341,7 +353,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param userTitle the userTitle to set
+     * @param userTitle
+     *            the userTitle to set
      */
     public void setUserTitle( String userTitle )
     {
@@ -357,7 +370,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param firstName the firstName to set
+     * @param firstName
+     *            the firstName to set
      */
     public void setFirstName( String firstName )
     {
@@ -373,7 +387,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param lastName the lastName to set
+     * @param lastName
+     *            the lastName to set
      */
     public void setLastName( String lastName )
     {
@@ -389,7 +404,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param email the email to set
+     * @param email
+     *            the email to set
      */
     public void setEmail( String email )
     {
@@ -405,7 +421,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param mobilePhoneNumber the mobilePhoneNumber to set
+     * @param mobilePhoneNumber
+     *            the mobilePhoneNumber to set
      */
     public void setMobilePhoneNumber( String mobilePhoneNumber )
     {
@@ -421,7 +438,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param fixedPhonenumber the fixedPhonenumber to set
+     * @param fixedPhonenumber
+     *            the fixedPhonenumber to set
      */
     public void setFixedPhonenumber( String fixedPhonenumber )
     {
@@ -437,7 +455,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param stateName the stateName to set
+     * @param stateName
+     *            the stateName to set
      */
     public void setStateName( String stateName )
     {
@@ -453,7 +472,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param channelIconFont the channelIconFont to set
+     * @param channelIconFont
+     *            the channelIconFont to set
      */
     public void setChannelIconFont( String channelIconFont )
     {
@@ -469,7 +489,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param channelLabel the channelLabel to set
+     * @param channelLabel
+     *            the channelLabel to set
      */
     public void setChannelLabel( String channelLabel )
     {
@@ -485,7 +506,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param assigneeUnitName the assigneeUnitName to set
+     * @param assigneeUnitName
+     *            the assigneeUnitName to set
      */
     public void setAssigneeUnitName( String assigneeUnitName )
     {
@@ -501,7 +523,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param assigneeUserAdminId the assigneeUserAdminId to set
+     * @param assigneeUserAdminId
+     *            the assigneeUserAdminId to set
      */
     public void setAssigneeUserAdminId( int assigneeUserAdminId )
     {
@@ -517,7 +540,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param assigneUserFirstName the assigneUserFirstName to set
+     * @param assigneUserFirstName
+     *            the assigneUserFirstName to set
      */
     public void setAssigneUserFirstName( String assigneUserFirstName )
     {
@@ -533,7 +557,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param assigneUserLastName the assigneUserLastName to set
+     * @param assigneUserLastName
+     *            the assigneUserLastName to set
      */
     public void setAssigneUserLastName( String assigneUserLastName )
     {
@@ -566,7 +591,8 @@ public class TicketSearchItem extends SearchItem
     }
 
     /**
-     * @param read the _bRead to set
+     * @param read
+     *            the _bRead to set
      */
     public void setRead( boolean read )
     {
