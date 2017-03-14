@@ -33,9 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.contactmode;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.validation.constraints.Size;
 
@@ -50,12 +54,15 @@ import javax.validation.constraints.Size;
 public class ContactMode implements Serializable
 {
     private static final long serialVersionUID = 1L;
+    private static final char COMMA = ',';
 
     // Variables declarations
     private int _nId;
     @NotEmpty( message = "#i18n{ticketing.validation.contactmode.code.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.contactmode.code.size}" )
     private String _strCode;
+    @Size( max = 150, message = "#i18n{ticketing.validation.contactmode.required_inputs.size}" )
+    private String _strRequiredInputs;
     private String _strConfirmationMsg;
 
     /**
@@ -101,6 +108,27 @@ public class ContactMode implements Serializable
     }
 
     /**
+     * Returns the required inputs
+     * 
+     * @return The required inputs
+     */
+    public String getRequiredInputs( )
+    {
+        return _strRequiredInputs;
+    }
+
+    /**
+     * Sets the required inputs
+     * 
+     * @param strRequiredInputs
+     *            The RequiredInputs
+     */
+    public void setRequiredInputs( String strRequiredInputs )
+    {
+        _strRequiredInputs = strRequiredInputs;
+    }
+
+    /**
      * Returns the confirmation message
      *
      * @return The confirmation message
@@ -120,4 +148,15 @@ public class ContactMode implements Serializable
     {
         _strConfirmationMsg = strConfirmationMsg;
     }
+    
+    /**
+     * Returns the required inputs list
+     * 
+     * @return The required inputs list
+     */
+    public List<String> getRequiredInputsList( )
+    {
+        return new ArrayList<String>( Arrays.asList( StringUtils.split( _strRequiredInputs, COMMA ) ) );
+    }
+    
 }

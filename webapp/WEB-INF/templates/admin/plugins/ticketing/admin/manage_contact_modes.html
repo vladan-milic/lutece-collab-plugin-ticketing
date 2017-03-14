@@ -8,6 +8,7 @@
         <tr>
           <input type="hidden" id="id" name="id"/>
           <th>#i18n{ticketing.manage_contactmodes.columnCode}</th>
+          <th>#i18n{ticketing.manage_contactmodes.columnRequiredInputs}</th>
           <th>#i18n{ticketing.manage_contactmodes.columnLabel}</th>
           <th>#i18n{portal.util.labelActions}</th>
         </tr>
@@ -17,6 +18,7 @@
         <tr>
           <input type="hidden" id="id" name="id"/>
           <td>${contactmode.code}</td>
+          <td>${contactmode.requiredInputs}</td>
           <td>${getContactModeLabel(contactmode.code)}</td>
           <td>
             <a href="jsp/admin/plugins/ticketing/admin/ManageContactModes.jsp?view=modifyContactMode&id=${contactmode.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
