@@ -49,6 +49,7 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.plugins.ticketing.business.address.TicketAddress;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
@@ -153,7 +154,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
     private static final String MARK_SELECTED_TAB = "selected_tab";
     private static final String JSP_MANAGE_TICKETS = TicketingConstants.ADMIN_CONTROLLLER_PATH + "ManageTickets.jsp";
-
+    private static final String MARK_TICKET_ADDRESS = "address";
+    private static final String MARK_TICKET_ADDRESS_DETAIL = "address_detail";
+    private static final String MARK_TICKET_POSTAL_CODE = "postal_code";
+    private static final String MARK_TICKET_CITY = "city";
+    
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
     private static final String MESSAGE_ERROR_COMMENT_VALIDATION = "ticketing.validation.ticket.TicketComment.size";
@@ -737,6 +742,18 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         int nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
         ticket.setTicketCategory( ticketCategory );
+
+        String _strAddress = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS ) );
+        String _strAddressDetail = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS_DETAIL ) );
+        String _strPostalCode = String.valueOf( request.getParameter( MARK_TICKET_POSTAL_CODE ) );
+        String _strCity = String.valueOf( request.getParameter( MARK_TICKET_CITY) );
+
+        TicketAddress _ticketAddress = new TicketAddress( );
+        _ticketAddress.setAddress( _strAddress );
+        _ticketAddress.setAddressDetail( _strAddressDetail );
+        _ticketAddress.setPostalCode( _strPostalCode );
+        _ticketAddress.setCity( _strCity );
+        ticket.setTicketAddress( _ticketAddress );
 
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
 
