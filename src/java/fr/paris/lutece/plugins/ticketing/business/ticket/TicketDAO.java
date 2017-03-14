@@ -142,8 +142,8 @@ public final class TicketDAO implements ITicketDAO
             + "' " + " AND (k.permission = '" + TicketResourceIdService.PERMISSION_VIEW + "' OR k.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY + "' )"
             + " AND (k.resource_id = '" + RBAC.WILDCARD_RESOURCES_ID + "' OR k.resource_id = a.id_ticket ) AND k.role_key IN ( ";
     private static final String SQL_FILTER_RBAC_DOMAIN_JOIN_CLAUSE = " JOIN core_admin_role_resource l ON l.resource_type = '" + TicketDomain.RESOURCE_TYPE
-            + "' " + " AND (l.permission = '" + TicketDomainResourceIdService.PERMISSION_VIEW + "' OR l.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY + "' )"
-            + " AND (l.resource_id = '" + RBAC.WILDCARD_RESOURCES_ID + "' OR l.resource_id = d.id_ticket_domain ) AND l.role_key IN ( ";
+            + "' " + " AND (l.permission = '" + TicketDomainResourceIdService.PERMISSION_VIEW_LIST + "' OR l.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY
+            + "' )" + " AND (l.resource_id = '" + RBAC.WILDCARD_RESOURCES_ID + "' OR l.resource_id = d.id_ticket_domain ) AND l.role_key IN ( ";
 
     private static final String SQL_SELECT_ALL_WORKFLOW_JOIN_CLAUSE = " LEFT JOIN  workflow_resource_workflow i ON i.id_resource=a.id_ticket"
             + " LEFT JOIN workflow_state j ON j.id_state=i.id_state";
@@ -415,19 +415,22 @@ public final class TicketDAO implements ITicketDAO
         StringBuilder sqlQuery = new StringBuilder( );
         boolean bWorkflowAvail = WorkflowService.getInstance( ).isAvailable( );
 
-        if ( filter != null && TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) )
+        if ( filter != null )
         {
-            sqlQuery.append( strBaseQuery.replace( "SELECT", "SELECT DISTINCT" ) );
-            sqlQuery.append( SQL_FILTER_RBAC_TICKET_JOIN_CLAUSE );
-            sqlQuery.append( getInCriteriaClause( filter.getAdminUserRoles( ).size( ) ) );
-            sqlQuery.append( CONSTANT_CLOSE_PARENTHESIS );
+            if ( TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) )
+            {
+                sqlQuery.append( strBaseQuery.replace( "SELECT", "SELECT DISTINCT" ) );
+                sqlQuery.append( SQL_FILTER_RBAC_TICKET_JOIN_CLAUSE );
+                sqlQuery.append( getInCriteriaClause( filter.getAdminUserRoles( ).size( ) ) );
+                sqlQuery.append( CONSTANT_CLOSE_PARENTHESIS );
+            }
+            else
+            {
+                sqlQuery.append( strBaseQuery );
+            }
             sqlQuery.append( SQL_FILTER_RBAC_DOMAIN_JOIN_CLAUSE );
             sqlQuery.append( getInCriteriaClause( filter.getAdminUserRoles( ).size( ) ) );
             sqlQuery.append( CONSTANT_CLOSE_PARENTHESIS );
-        }
-        else
-        {
-            sqlQuery.append( strBaseQuery );
         }
 
         if ( bWorkflowAvail )
@@ -881,17 +884,29 @@ public final class TicketDAO implements ITicketDAO
 
         // RBAC values are in JOIN !
         int nRoleCount = filter.getAdminUserRoles( ).size( );
-        if ( TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) && filter.getAdminUserRoles( ).size( ) > 0 )
+        if ( filter.getAdminUserRoles( ).size( ) > 0 )
         {
-            for ( String strUserRole : filter.getAdminUserRoles( ) )
+            if ( TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) )
             {
-                // RBAC Ticket
-                daoUtil.setString( nIndex, strUserRole );
-                // RBAC Domain
-                daoUtil.setString( nIndex + nRoleCount, strUserRole );
-                nIndex++;
+                for ( String strUserRole : filter.getAdminUserRoles( ) )
+                {
+                    // RBAC Ticket
+                    daoUtil.setString( nIndex, strUserRole );
+                    // RBAC Domain
+                    daoUtil.setString( nIndex + nRoleCount, strUserRole );
+                    nIndex++;
+                }
+                nIndex = nIndex + nRoleCount;
             }
-            nIndex = nIndex + nRoleCount;
+            else
+            {
+                for ( String strUserRole : filter.getAdminUserRoles( ) )
+                {
+                    // RBAC Domain
+                    daoUtil.setString( nIndex, strUserRole );
+                    nIndex++;
+                }
+            }
         }
 
         if ( filter.containsCreationDate( ) )

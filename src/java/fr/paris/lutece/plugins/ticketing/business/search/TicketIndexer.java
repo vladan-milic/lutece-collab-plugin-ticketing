@@ -33,6 +33,24 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.search;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.IntField;
+import org.apache.lucene.document.LongField;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
+import org.jsoup.Jsoup;
+
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
@@ -51,25 +69,6 @@ import fr.paris.lutece.portal.service.search.SearchIndexer;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.url.UrlItem;
-
-import org.apache.commons.lang.StringUtils;
-
-import org.apache.lucene.document.DateTools;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.Term;
-
-import org.jsoup.Jsoup;
-
-import java.io.IOException;
-
-import java.text.SimpleDateFormat;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Ticket Indexer
@@ -233,16 +232,14 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         // This field is not stored with question/answer, it is indexed, but it
         // is not
         // tokenized prior to indexing.
-        String strIdTicket = String.valueOf( ticket.getId( ) );
-        doc.add( new Field( TicketSearchItem.FIELD_UID, strIdTicket + "_" + SHORT_NAME_TICKET, TextField.TYPE_NOT_STORED ) );
-        doc.add( new Field( TicketSearchItem.FIELD_TICKET_ID, strIdTicket, TextField.TYPE_STORED ) );
+        doc.add( new Field( TicketSearchItem.FIELD_UID, String.valueOf( ticket.getId( ) ) + "_" + SHORT_NAME_TICKET, TextField.TYPE_NOT_STORED ) );
+        doc.add( new IntField( TicketSearchItem.FIELD_TICKET_ID, ticket.getId( ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_CONTENTS, getContentForIndexer( ticket ), Store.NO ) );
         doc.add( new TextField( TicketSearchItem.FIELD_CATEGORY, ticket.getTicketCategory( ).getLabel( ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_DOMAIN, ticket.getTicketDomain( ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_REFERENCE, ticket.getReference( ), Store.YES ) );
 
-        String strDate = DateTools.dateToString( ticket.getDateCreate( ), DateTools.Resolution.DAY );
-        doc.add( new Field( TicketSearchItem.FIELD_DATE, strDate, TextField.TYPE_NOT_STORED ) );
+        doc.add( new LongField( TicketSearchItem.FIELD_DATE_CREATION, ( ticket.getDateCreate( ) == null ? 0 : ticket.getDateCreate( ).getTime( ) ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_COMMENT, ticket.getTicketComment( ), Store.YES ) );
 
         // add response for closed tickets with response
@@ -254,17 +251,78 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         }
         else
         {
+            doc.add( new TextField( TicketSearchItem.FIELD_RESPONSE, StringUtils.EMPTY, Store.YES ) );
             doc.add( new TextField( TicketSearchItem.FIELD_TXT_RESPONSE, StringUtils.EMPTY, Store.NO ) );
         }
 
         doc.add( new TextField( TicketSearchItem.FIELD_SUMMARY, getDisplaySummary( ticket ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_TITLE, getDisplayTitle( ticket ), Store.YES ) );
         doc.add( new TextField( TicketSearchItem.FIELD_TYPE, getDocumentType( ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItem.FIELD_TICKET_NOMENCLATURE, manageNullValue( ticket.getNomenclature( ) ), Store.YES ) );
+        doc.add( new IntField( TicketSearchItem.FIELD_CRITICALITY, ticket.getCriticality( ), Store.YES ) );
+        doc.add( new IntField( TicketSearchItem.FIELD_PRIORITY, ticket.getPriority( ), Store.YES ) );
+        doc.add( new IntField( TicketSearchItem.FIELD_ID_STATUS, ticket.getTicketStatus( ), Store.YES ) );
+        doc.add( new StringField( TicketSearchItem.FIELD_TICKET_TYPE, manageNullValue( ticket.getTicketType( ) ), Store.YES ) );
 
-        if ( ticket.getNomenclature( ) != null )
+        if ( ticket.getTicketCategory( ) != null )
         {
-            doc.add( new TextField( TicketSearchItem.FIELD_TICKET_NOMENCLATURE, ticket.getNomenclature( ), Store.YES ) );
+            doc.add( new StringField( TicketSearchItem.FIELD_PRECISION, manageNullValue( ticket.getTicketCategory( ).getPrecision( ) ), Store.YES ) );
         }
+        else
+        {
+            doc.add( new StringField( TicketSearchItem.FIELD_PRECISION, StringUtils.EMPTY, Store.YES ) );
+        }
+
+        doc.add( new StringField( TicketSearchItem.FIELD_USER_TITLE, manageNullValue( ticket.getUserTitle( ) ), Store.YES ) );
+        doc.add( new StringField( TicketSearchItem.FIELD_FIRSTNAME, manageNullValue( ticket.getFirstname( ) ), Store.YES ) );
+        doc.add( new StringField( TicketSearchItem.FIELD_LASTNAME, manageNullValue( ticket.getLastname( ) ), Store.YES ) );
+        doc.add( new StringField( TicketSearchItem.FIELD_EMAIL, manageNullValue( ticket.getEmail( ) ), Store.YES ) );
+        doc.add( new StringField( TicketSearchItem.FIELD_MOBILE_PHONE_NUMBER, manageNullValue( ticket.getMobilePhoneNumber( ) ), Store.YES ) );
+        doc.add( new StringField( TicketSearchItem.FIELD_FIXED_PHONE_NUMBER, manageNullValue( ticket.getFixedPhoneNumber( ) ), Store.YES ) );
+
+        if ( ticket.getState( ) != null )
+        {
+            doc.add( new StringField( TicketSearchItem.FIELD_STATE, manageNullValue( ticket.getState( ).getName( ) ), Store.YES ) );
+        }
+        else
+        {
+            doc.add( new StringField( TicketSearchItem.FIELD_STATE, StringUtils.EMPTY, Store.YES ) );
+        }
+
+        if ( ticket.getChannel( ) != null )
+        {
+            doc.add( new StringField( TicketSearchItem.FIELD_CHANNEL_ICONFONT, manageNullValue( ticket.getChannel( ).getIconFont( ) ), Store.YES ) );
+            doc.add( new StringField( TicketSearchItem.FIELD_CHANNEL_LABEL, manageNullValue( ticket.getChannel( ).getLabel( ) ), Store.YES ) );
+        }
+        else
+        {
+            doc.add( new StringField( TicketSearchItem.FIELD_CHANNEL_ICONFONT, StringUtils.EMPTY, Store.YES ) );
+            doc.add( new StringField( TicketSearchItem.FIELD_CHANNEL_LABEL, StringUtils.EMPTY, Store.YES ) );
+        }
+
+        if ( ticket.getAssigneeUnit( ) != null )
+        {
+            doc.add( new StringField( TicketSearchItem.FIELD_ASSIGNEE_UNIT_NAME, manageNullValue( ticket.getAssigneeUnit( ).getName( ) ), Store.YES ) );
+        }
+        else
+        {
+            doc.add( new StringField( TicketSearchItem.FIELD_ASSIGNEE_UNIT_NAME, StringUtils.EMPTY, Store.YES ) );
+        }
+
+        if ( ticket.getAssigneeUser( ) != null )
+        {
+            doc.add( new IntField( TicketSearchItem.FIELD_ASSIGNEE_USER_ADMIN_ID, ticket.getAssigneeUser( ).getAdminUserId( ), Store.YES ) );
+            doc.add( new StringField( TicketSearchItem.FIELD_ASSIGNEE_USER_FIRSTNAME, manageNullValue( ticket.getAssigneeUser( ).getFirstname( ) ), Store.YES ) );
+            doc.add( new StringField( TicketSearchItem.FIELD_ASSIGNEE_USER_LASTNAME, manageNullValue( ticket.getAssigneeUser( ).getLastname( ) ), Store.YES ) );
+        }
+        else
+        {
+            doc.add( new IntField( TicketSearchItem.FIELD_ASSIGNEE_USER_ADMIN_ID, -1, Store.YES ) );
+            doc.add( new StringField( TicketSearchItem.FIELD_ASSIGNEE_USER_FIRSTNAME, StringUtils.EMPTY, Store.YES ) );
+            doc.add( new StringField( TicketSearchItem.FIELD_ASSIGNEE_USER_LASTNAME, StringUtils.EMPTY, Store.YES ) );
+        }
+
+        doc.add( new IntField( TicketSearchItem.FIELD_TICKET_READ, BooleanUtils.toInteger( ticket.isRead( ) ), Store.YES ) );
 
         return doc;
     }
@@ -677,5 +735,17 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         }
 
         return sb.toString( );
+    }
+
+    /**
+     * Manages the case the specified String is {@code null}
+     * 
+     * @param strValue
+     *            the String to manage
+     * @return the correct String when the specified String is {@code null}, {@code strValue} otherwise
+     */
+    private static String manageNullValue( String strValue )
+    {
+        return ( strValue == null ) ? StringUtils.EMPTY : strValue;
     }
 }

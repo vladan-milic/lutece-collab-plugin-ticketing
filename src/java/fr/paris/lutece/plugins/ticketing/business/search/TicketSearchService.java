@@ -117,7 +117,7 @@ public final class TicketSearchService
         try
         {
             @SuppressWarnings( {
-                    "unchecked", "rawtypes"
+                "rawtypes"
             } )
             java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName ).getConstructor( Version.class, String [ ].class );
             _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {
@@ -237,7 +237,7 @@ public final class TicketSearchService
             {
                 Date start = new Date( );
 
-                IndexWriterConfig conf = new IndexWriterConfig( Version.LUCENE_46, new LimitTokenCountAnalyzer( _analyzer, _nWriterMaxSectorLength ) );
+                IndexWriterConfig conf = new IndexWriterConfig( Version.LUCENE_4_9, new LimitTokenCountAnalyzer( _analyzer, _nWriterMaxSectorLength ) );
 
                 LogMergePolicy mergePolicy = new LogDocMergePolicy( );
                 mergePolicy.setMergeFactor( _nWriterMergeFactor );

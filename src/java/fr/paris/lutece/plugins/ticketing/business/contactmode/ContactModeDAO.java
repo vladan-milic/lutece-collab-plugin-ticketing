@@ -49,11 +49,11 @@ public final class ContactModeDAO implements IContactModeDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_contact_mode ) FROM ticketing_contact_mode";
-    private static final String SQL_QUERY_SELECT = "SELECT id_contact_mode, code, confirmation_msg FROM ticketing_contact_mode WHERE id_contact_mode = ? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_contact_mode ( id_contact_mode, code, confirmation_msg, inactive ) VALUES ( ?, ?, ?, 0 ) ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_contact_mode, code, required_inputs, confirmation_msg FROM ticketing_contact_mode WHERE id_contact_mode = ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_contact_mode ( id_contact_mode, code, required_inputs, confirmation_msg, inactive ) VALUES ( ?, ?, ?, ?, 0 ) ";
     private static final String SQL_QUERY_DELETE = "UPDATE ticketing_contact_mode SET inactive = 1 WHERE id_contact_mode = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_contact_mode SET id_contact_mode = ?, code = ?, confirmation_msg = ? WHERE id_contact_mode = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_contact_mode, code, confirmation_msg FROM ticketing_contact_mode WHERE inactive <> 1 ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_contact_mode SET id_contact_mode = ?, code = ?, required_inputs = ?, confirmation_msg = ? WHERE id_contact_mode = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_contact_mode, code, required_inputs, confirmation_msg FROM ticketing_contact_mode WHERE inactive <> 1 ";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_contact_mode FROM ticketing_contact_mode WHERE inactive <> 1 ";
 
     /**
@@ -92,7 +92,8 @@ public final class ContactModeDAO implements IContactModeDAO
 
         daoUtil.setInt( 1, contactMode.getId( ) );
         daoUtil.setString( 2, contactMode.getCode( ) );
-        daoUtil.setString( 3, contactMode.getConfirmationMsg( ) );
+        daoUtil.setString( 3, contactMode.getRequiredInputs( ) );
+        daoUtil.setString( 4, contactMode.getConfirmationMsg( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -115,7 +116,8 @@ public final class ContactModeDAO implements IContactModeDAO
             contactMode = new ContactMode( );
             contactMode.setId( daoUtil.getInt( 1 ) );
             contactMode.setCode( daoUtil.getString( 2 ) );
-            contactMode.setConfirmationMsg( ( daoUtil.getString( 3 ) == null ) ? StringUtils.EMPTY : daoUtil.getString( 3 ) );
+            contactMode.setRequiredInputs( daoUtil.getString( 3 ) );
+            contactMode.setConfirmationMsg( ( daoUtil.getString( 4 ) == null ) ? StringUtils.EMPTY : daoUtil.getString( 4 ) );
         }
 
         daoUtil.free( );
@@ -145,8 +147,9 @@ public final class ContactModeDAO implements IContactModeDAO
 
         daoUtil.setInt( 1, contactMode.getId( ) );
         daoUtil.setString( 2, contactMode.getCode( ) );
-        daoUtil.setString( 3, contactMode.getConfirmationMsg( ) );
-        daoUtil.setInt( 4, contactMode.getId( ) );
+        daoUtil.setString( 3, contactMode.getRequiredInputs( ) );
+        daoUtil.setString( 4, contactMode.getConfirmationMsg( ) );
+        daoUtil.setInt( 5, contactMode.getId( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -168,7 +171,8 @@ public final class ContactModeDAO implements IContactModeDAO
 
             contactMode.setId( daoUtil.getInt( 1 ) );
             contactMode.setCode( daoUtil.getString( 2 ) );
-            contactMode.setConfirmationMsg( ( daoUtil.getString( 3 ) == null ) ? StringUtils.EMPTY : daoUtil.getString( 3 ) );
+            contactMode.setRequiredInputs( daoUtil.getString( 3 ) );
+            contactMode.setConfirmationMsg( ( daoUtil.getString( 4 ) == null ) ? StringUtils.EMPTY : daoUtil.getString( 4 ) );
 
             contactModeList.add( contactMode );
         }

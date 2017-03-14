@@ -33,17 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.search;
 
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
-import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
-import fr.paris.lutece.portal.service.search.IndexationService;
-import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
-import fr.paris.lutece.portal.service.search.SearchResult;
-import fr.paris.lutece.portal.service.util.AppLogService;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
-import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -56,10 +50,13 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 
-import java.io.IOException;
-
-import java.util.ArrayList;
-import java.util.List;
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
+import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
+import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
+import fr.paris.lutece.portal.service.search.IndexationService;
+import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
+import fr.paris.lutece.portal.service.search.SearchResult;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 /**
  * TicketSearchEngine
@@ -80,20 +77,8 @@ public class TicketSearchEngine implements ITicketSearchEngine
         for ( TicketSearchItem item : listSource )
         {
             TicketSearchResult result = new TicketSearchResult( );
-            result.setId( item.getTicketId( ) );
-
-            try
-            {
-                if ( StringUtils.isNotEmpty( item.getDate( ) ) )
-                {
-                    result.setDate( DateTools.stringToDate( item.getDate( ) ) );
-                }
-            }
-            catch( java.text.ParseException e )
-            {
-                AppLogService.error( "Bad Date Format for indexed item \"" + item.getTitle( ) + "\" : " + e.getMessage( ) );
-            }
-
+            result.setId( String.valueOf( item.getTicketId( ) ) );
+            result.setDate( new Date( item.getDateCreation( ) ) );
             result.setUrl( item.getUrl( ) );
             result.setTitle( item.getTitle( ) );
             result.setSummary( item.getSummary( ) );

@@ -39,22 +39,26 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 import org.apache.commons.lang.StringUtils;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * This class provides utility methods to validatea form
+ * This class provides utility methods to validate a form
  *
  */
 public class FormValidator
 {
     // Parameters
     private static final String PARAMETER_CONTACT_MODE_ID = "id_contact_mode";
+    private static final String PARAMETER_EMAIL = "email";
 
     // Errors
     private static final String ERROR_CONTACT_MODE_NOT_FILLED = "ticketing.error.contactmode.not.filled";
+    private static final String ERROR_EMAIL_NOT_FILLED = "ticketing.validation.ticket.Email.notEmpty";
+    private static final String CONTACT_MODE_LABEL_I18N = "ticketing.contactmodes.label.";
     private HttpServletRequest _request;
 
     // Pattern
@@ -78,20 +82,29 @@ public class FormValidator
      */
     public String isContactModeFilled( )
     {
-        boolean bIsValid = false;
+        boolean bIsValid = true;
         String strError = null;
-
+        ContactMode contactMode = new ContactMode( );
         String strContactMode = _request.getParameter( PARAMETER_CONTACT_MODE_ID );
 
         try
         {
             if ( !StringUtils.isEmpty( strContactMode ) )
             {
-                ContactMode contactMode = ContactModeHome.findByPrimaryKey( Integer.parseInt( strContactMode ) );
-
-                String strContactModeValue = _request.getParameter( contactMode.getCode( ) );
-
-                bIsValid = !StringUtils.isEmpty( strContactModeValue );
+                contactMode = ContactModeHome.findByPrimaryKey( Integer.parseInt( strContactMode ) );
+                
+                for ( String strRequiredInput : contactMode.getRequiredInputsList( ) )
+                {
+                    String strRequiredInputValue = _request.getParameter( strRequiredInput.trim( ) );
+                    
+                    if ( strRequiredInputValue != null )
+                    {
+                        if ( StringUtils.isBlank( strRequiredInputValue ) )
+                        {
+                            bIsValid = false;
+                        }
+                    }
+                }
             }
         }
         catch( Exception e )
@@ -101,7 +114,27 @@ public class FormValidator
 
         if ( !bIsValid )
         {
-            strError = I18nService.getLocalizedString( ERROR_CONTACT_MODE_NOT_FILLED, _request.getLocale( ) );
+            Object [ ] args = {
+                    I18nService.getLocalizedString( CONTACT_MODE_LABEL_I18N + contactMode.getCode( ), _request.getLocale( ) )
+            };
+            strError = I18nService.getLocalizedString( ERROR_CONTACT_MODE_NOT_FILLED, args, _request.getLocale( ) );
+        }
+
+        return strError;
+    }
+
+    /**
+     * Tests if the email is filled
+     *
+     * @return the localized error message if the email is not filled, {@code null} otherwise
+     */
+    public String isEmailFilled( )
+    {
+        String strError = null;
+
+        if ( StringUtils.isBlank( _request.getParameter( PARAMETER_EMAIL ) ) )
+        {
+            strError = I18nService.getLocalizedString( ERROR_EMAIL_NOT_FILLED, _request.getLocale( ) );
         }
 
         return strError;

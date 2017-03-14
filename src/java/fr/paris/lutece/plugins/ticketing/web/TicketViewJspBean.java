@@ -118,7 +118,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
         // check user rights
         if ( !RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, getUser( ) )
-                || !RBACService.isAuthorized( ticketDomain, TicketDomainResourceIdService.PERMISSION_VIEW, getUser( ) ) )
+                || !RBACService.isAuthorized( ticketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, getUser( ) ) )
         {
             return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
         }
