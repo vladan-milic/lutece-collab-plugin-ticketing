@@ -624,7 +624,14 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
         }
 
+        int nId = Integer.parseInt( request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ) );
+        
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
+        
+        if ( ticket == null )
+        {
+            ticket = TicketHome.findByPrimaryKey( nId );
+        }
 
         boolean bIsFormValid = populateAndValidateFormTicket( ticket, request );
 

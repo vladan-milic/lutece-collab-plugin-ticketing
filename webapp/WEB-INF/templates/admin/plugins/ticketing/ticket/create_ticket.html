@@ -1,5 +1,6 @@
 <script>$(".content-header").hide();</script>
 <#include "/skin/plugins/asynchronousupload/upload_commons.html" />
+
 <link rel="stylesheet" href="css/plugins/ticketing/ticketing.css" type="text/css"/>
 <div class="gru-wrapper">
   <div id="customer-panel" class="row ticket-head bg-gru-light">
@@ -140,25 +141,6 @@
             $(this).val(result);
         });
     });
-</script>
-
-<script type="text/javascript" src="jsp/site/plugins/address/modules/autocomplete/SetupSuggestPOI.js.jsp"></script>
-<script type="text/javascript" src="js/plugins/address/modules/autocomplete/jQuery.suggestPOI.js"></script>
-<script type="text/javascript" src="js/jquery/plugins/ui/jquery.ui.custom-autocomplete.min.js"></script>
-
-<script type="text/javascript">
-  $(window).load(function() {
-   var jAdresse = $('#address');
-   var jAdressePostalcode =  $('#postal_code');
-   var jAdresseCity = $('#city');
-   jAdresse.suggestPOI();
-   jAdresse.bind($.suggestPOI.EVT_SELECT, function(event) {
-   //Use properties from BAN apiinput type. Would not work with suggestPOI.
-   jAdresse.val(event.poi.sourcePOI.properties.name);
-   jAdressePostalcode.val(event.poi.sourcePOI.properties.postcode);
-   jAdresseCity.val(event.poi.sourcePOI.properties.city);
-   });
-  });
 </script>
 
 <@addRequiredJsFiles />
