@@ -38,7 +38,7 @@ INSERT INTO ticketing_contact_mode (id_contact_mode, code, required_inputs, conf
  <p>Nous restons &agrave; votre enti&egrave;re disposition pour toute information compl&eacute;mentaire.</p>
  <p>Cordialement,</p>
  <p>Mairie de Paris.</p>"),
-(2, "courier", "address, address_detail, postal_code, city", "<p>Bonjour&nbsp;${userTitle} ${lastName},</p>
+(2, "courier", "address, postal_code, city", "<p>Bonjour&nbsp;${userTitle} ${lastName},</p>
  <p>Nous avons bien re&ccedil;u votre demande et nous vous remercions de votre confiance.</p>
  <p>Un courrier de confirmation vous a &eacute;t&eacute; envoy&eacute; &agrave; l'adresse suivante&nbsp;A COMPLETER. Il contient un num&eacute;ro de suivi qui vous sera demand&eacute; au 3975 pour suivre son &eacute;tat d'avancement. Il est &eacute;galement disponible dans votre espace Compte Parisien.</p>
  <p>Nous restons &agrave; votre enti&egrave;re disposition pour toute information compl&eacute;mentaire.</p>
