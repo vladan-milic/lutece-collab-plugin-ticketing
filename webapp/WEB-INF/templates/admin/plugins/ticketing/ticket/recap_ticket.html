@@ -44,6 +44,22 @@
             <label for="mobile_phone_number">#i18n{ticketing.create_ticket.labelMobilePhoneNumber}</label>
             <p class="form-control-static">${ticket.mobilePhoneNumber!''}</p>
           </div>
+          <div class="form-group">
+            <label for="address">#i18n{ticketing.create_ticket.labelAddress}</label>
+            <p class="form-control-static">${ticket.ticketAddress.address!''}</p> 
+          </div>
+		  <div class="form-group">
+            <label for="address_detail">#i18n{ticketing.create_ticket.labelAddressDetail}</label>
+            <p class="form-control-static">${ticket.ticketAddress.addressDetail!''}</p>
+          </div>
+		  <div class="form-group">
+            <label for="postal_code">#i18n{ticketing.create_ticket.labelPostalCode}</label>
+            <p class="form-control-static">${ticket.ticketAddress.postalCode!''}</p>
+          </div>
+		  <div class="form-group">
+            <label for="city">#i18n{ticketing.create_ticket.labelCity}</label>
+            <p class="form-control-static">${ticket.ticketAddress.city!''}</p>
+          </div>
           <#list response_recap_list as response>
             <div class="form-group">
               <label for="title" >${response.title}</label>

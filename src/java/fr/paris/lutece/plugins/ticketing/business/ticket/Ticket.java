@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.ticketing.business.ticket;
 
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.ticketing.business.address.TicketAddress;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
@@ -103,6 +104,7 @@ public class Ticket implements Serializable, RBACResource
     private int _nIdContactMode;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.ContactMode.size}" )
     private String _strContactMode;
+    private TicketAddress _ticketAddress;
     private String _strTicketComment;
     private String _strConfirmationMsg;
     private String _strGuid;
@@ -1094,4 +1096,22 @@ public class Ticket implements Serializable, RBACResource
 
         return sb.toString( );
     }
+
+    /**
+     * @return the ticketAddress
+     */
+    public TicketAddress getTicketAddress( )
+    {
+        return _ticketAddress;
+    }
+
+    /**
+     * @param _ticketAddress
+     *            the ticket Address to set
+     */
+    public void setTicketAddress( TicketAddress _ticketAddress )
+    {
+        this._ticketAddress = _ticketAddress;
+    }
+
 }

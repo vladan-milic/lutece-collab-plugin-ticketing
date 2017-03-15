@@ -57,12 +57,14 @@ table.table-hover tbody tr:hover{ cursor: pointer }
 .border-orange{border:1px solid orange !important;}
 .border-red{border:1px solid red !important;}
 
-#info-head-right{ border-left: 1px solid #fff; height:215px; margin-top:0; padding-top:0 }
+#info-head-right{ border-left: 1px solid #fff; min-height:200px; margin-top:0; padding-top:0; margin-bottom: -9999px; padding-bottom: 9999px; }
 #info-head-right .fa { width: 40px; }
 .nav-ticket{ padding-left: 140px }
 
-.ticket-head{ height: 200px !important }
+.ticket-head{ min-height: 200px !important; max-height: 270px !important  }
 .ticket-content{ margin-left: 0 }
+.ticket-contact-row{ min-height:135px }
+.ticket-contact-block{ padding-top:10px }
 
 #ticketing-history-panel{ padding: 15px 0; }
 #ticketing-history-panel .panel{ padding: 15px; background-color: #EEE; margin-bottom: 0; margin-top: 15px }
