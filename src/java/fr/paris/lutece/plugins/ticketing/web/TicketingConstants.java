@@ -59,6 +59,10 @@ public final class TicketingConstants
     public static final String PARAMETER_SELECTED_ID_CHANNEL = "selected_channel";
     public static final String PARAMETER_SIGNATURE = "signature";
     public static final String PARAMETER_TIMESTAMP = "timestamp";
+    public static final String PARAMETER_FILTER_URGENCY = "fltr_new_urgency";
+    public static final String PARAMETER_FILTER_TYPE_ID = "fltr_id_type";
+    public static final String PARAMETER_FILTER_OPEN_SINCE = "fltr_open_since";
+    public static final String PARAMETER_FILTER_STATE_ID = "fltr_state_ids";
 
     // Attributes
     public static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON = "hide_next_button";
@@ -127,6 +131,8 @@ public final class TicketingConstants
 
     // Errors
     public static final String ERROR_TICKET_CREATION_ABORTED = "ticketing.error.ticket.creation.aborted.backoffice";
+    public static final String ERROR_INDEX_TICKET_FAILED_BACK = "ticketing.error.ticket.indexing.failed.backoffice";
+    public static final String ERROR_INDEX_TICKET_FAILED_FRONT = "ticketing.error.ticket.indexing.failed.frontoffice";
 
     // User preferences
     public static final String USER_PREFERENCE_CREATION_DATE_DISPLAY = "creationDateDisplay";

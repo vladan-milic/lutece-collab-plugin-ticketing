@@ -33,14 +33,27 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.workflow;
 
+import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
+import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
+import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerException;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexerActionUtil;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
-import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
 import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
@@ -53,17 +66,6 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.portal.web.xpages.XPage;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.text.MessageFormat;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * This class represents a XPage which can use workflow
@@ -118,9 +120,6 @@ public abstract class WorkflowCapableXPage extends MVCApplication
             {
                 TicketCategory ticketCategory = ticket.getTicketCategory( );
                 int nIdWorkflow = ticketCategory.getIdWorkflow( );
-
-                StateFilter stateFilter = new StateFilter( );
-                stateFilter.setIdWorkflow( nIdWorkflow );
 
                 State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
 
@@ -272,6 +271,9 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                             _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, ticketCategory.getId( ), request,
                                     getLocale( request ), false );
                         }
+                        
+                        // Immediate indexation of the Ticket
+                        immediateTicketIndexing( ticket.getId( ), false, request );
                     }
                     catch( Exception e )
                     {
@@ -279,7 +281,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                         AppLogService.error( e );
 
                         return redirectWorkflowActionCancelled( request );
-                    }
+                    }                 
                 }
                 else
                 {
@@ -360,6 +362,9 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                         // multiple actions or no action => ambiguous case
                         // TODO throw an exception
                     }
+                    
+                    // Immediate indexation of the Ticket
+                    immediateTicketIndexing( ticket.getId( ), false, request );
                 }
                 catch( Exception e )
                 {
@@ -389,6 +394,31 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         }
     }
 
+    /**
+     * Immediate indexation of a Ticket for the Backoffice
+     * 
+     * @param idTicket the id of the Ticket to index
+     * @param bCreate true for indexing all directory false for use incremental indexing
+     */
+    protected void immediateTicketIndexing( int idTicket, boolean bCreate, HttpServletRequest request )
+    {
+        Ticket ticket = TicketHome.findByPrimaryKey( idTicket );
+        if ( ticket != null ){
+            try
+            {
+                TicketIndexer ticketIndexer = new TicketIndexer( );
+                ticketIndexer.indexTicket( ticket, bCreate );
+            }
+            catch ( TicketIndexerException ticketIndexerException )
+            {
+                addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_FRONT, getLocale( request ) );
+            
+                // The indexation of the Ticket fail, we will store the Ticket in the table for the daemon
+                IndexerActionHome.create( TicketIndexerActionUtil.createIndexerActionFromTicket( ticket ) );
+            }
+        }
+    }
+    
     /**
      * Adds error message for workflow action
      * 

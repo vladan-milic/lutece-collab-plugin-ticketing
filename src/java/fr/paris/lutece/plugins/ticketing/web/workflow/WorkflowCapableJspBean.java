@@ -50,12 +50,16 @@ import org.apache.commons.lang.StringUtils;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.resourcehistory.IResourceHistoryInformationService;
+import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
+import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
+import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerException;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.user.UserFactory;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexerActionUtil;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
@@ -350,6 +354,9 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
                         addInfoWorkflowAction( request, nIdAction );
                     }
+                    
+                    // Immediate indexation of the Ticket
+                    immediateTicketIndexing( ticket.getId( ), false );
                 }
                 catch( Exception e )
                 {
@@ -362,7 +369,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
             else
             {
                 return redirectWorkflowActionCancelled( request );
-            }
+            }           
         }
 
         return redirectAfterWorkflowAction( request );
@@ -479,6 +486,32 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
         return _workflowService.getDisplayDocumentHistory( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nWorkflowId, request, getLocale( ), modelToAdd,
                 TEMPLATE_RESOURCE_HISTORY );
+    }
+    
+    /**
+     * Immediate indexation of a Ticket for the Backoffice
+     * 
+     * @param idTicket the id of the Ticket to index
+     * @param bCreate true for indexing all directory false for use incremental indexing
+     */
+    protected void immediateTicketIndexing( int idTicket, boolean bCreate )
+    {
+        Ticket ticket = TicketHome.findByPrimaryKey( idTicket );
+        if ( ticket != null )
+        {
+            try
+            {
+                TicketIndexer ticketIndexer = new TicketIndexer( );
+                ticketIndexer.indexTicket( ticket, bCreate );
+            }
+            catch ( TicketIndexerException ticketIndexerException )
+            {
+                addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
+            
+                // The indexation of the Ticket fail, we will store the Ticket in the table for the daemon
+                IndexerActionHome.create( TicketIndexerActionUtil.createIndexerActionFromTicket( ticket ) );
+            }
+        }
     }
 
     /**

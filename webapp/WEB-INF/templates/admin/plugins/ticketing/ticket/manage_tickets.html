@@ -189,7 +189,7 @@
     </div>
 	<div id="filter-ticket" class="row">
 	  <div class="col-xs-12 col-sm-offset-1 col-sm-3">
-	    <h3 style="margin-top:0px;">#i18n{ticketing.manage_tickets.title}</h3>
+	    <h3 style="margin-top:0px;">${manage_ticket_page_title}</h3>
 	  </div>
 	  <div class="col-xs-12 col-sm-5">
 	    <form id="filter_form" class="form-inline" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
@@ -233,10 +233,10 @@
 	    </form>
 	  </div>
 	  <div class="col-xs-12 col-sm-3">
-	<form class="form-inline" method="post" action="jsp/admin/plugins/ticketing/TicketSearch.jsp?action=search&page_index=1">
+	<form class="form-inline" method="post" action="jsp/admin/plugins/ticketing/ManageTickets.jsp?page_index=1">
 		<input type="hidden" id="searched_field" name="searched_field" value="contents">
 		<div class="input-group">
-			<label class="sr-only">#i18n{ticketing.manage_tickets.searchDefaultTxt}</label>
+			<label class="sr-only">#i18n{ticketing.manage_tickets.searchDefaultTxt}</label>			
 			<input class="form-control input-xs btn-group" type="text" name="query" placeholder="#i18n{ticketing.manage_tickets.searchDefaultTxt}" value="">
 			<div class="input-group-btn">
 				<button class="btn btn-xs" type="submit" >
@@ -356,6 +356,7 @@ function setSelectedTab(tab){
 <script type="text/javascript">
  // initialization functions for multiselect state list
     $(document).ready(function() {
+    	
         var orderCount = 0;
         $('#fltr_state_ids').multiselect({
             buttonText: function(options) {

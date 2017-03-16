@@ -49,14 +49,13 @@ public class TicketSearchItem extends SearchItem
     public static final String FIELD_REFERENCE = "reference";
     public static final String FIELD_TICKET_ID = "ticket_id";
     public static final String FIELD_DATE_CREATION = "ticket_creation_date";
-    public static final String FIELD_RESPONSE = "ticket_response";
-    public static final String FIELD_TXT_RESPONSE = "ticket_txt_response";
     public static final String FIELD_COMMENT = "ticket_comment";
     public static final String FIELD_TXT_COMMENT = "ticket_txt_comment";
     public static final String FIELD_TICKET_NOMENCLATURE = "ticket_nomenclature";
     public static final String FIELD_PRIORITY = "ticket_priority";
     public static final String FIELD_CRITICALITY = "ticket_criticality";
     public static final String FIELD_ID_STATUS = "ticket_id_status";
+    public static final String FIELD_TICKET_TYPE_ID = "ticket_type_Id";
     public static final String FIELD_TICKET_TYPE = "ticket_type";
     public static final String FIELD_USER_TITLE = "user_title";
     public static final String FIELD_FIRSTNAME = "firstname";
@@ -64,13 +63,17 @@ public class TicketSearchItem extends SearchItem
     public static final String FIELD_EMAIL = "email";
     public static final String FIELD_MOBILE_PHONE_NUMBER = "mobile_phone_number";
     public static final String FIELD_FIXED_PHONE_NUMBER = "fixed_phone_number";
+    public static final String FIELD_STATE_ID = "ticket_state_id";
     public static final String FIELD_STATE = "ticket_state";
     public static final String FIELD_CHANNEL_ICONFONT = "ticket_channel_iconfont";
     public static final String FIELD_CHANNEL_LABEL = "ticket_channel_label";
+    public static final String FIELD_ASSIGNEE_UNIT_ID = "ticket_assignee_unit_id";
     public static final String FIELD_ASSIGNEE_UNIT_NAME = "ticket_assignee_unit_name";
     public static final String FIELD_ASSIGNEE_USER_ADMIN_ID = "ticket_assignee_user_admin_id";
     public static final String FIELD_ASSIGNEE_USER_FIRSTNAME = "ticket_assignee_user_firstname";
     public static final String FIELD_ASSIGNEE_USER_LASTNAME = "ticket_assignee_user_lastname";
+    public static final String FIELD_ASSIGNER_UNIT_ID = "ticket_assigner_unit_id";
+    public static final String FIELD_ASSIGNER_USER_ID = "ticket_asigner_user_id";
     public static final String FIELD_TICKET_READ = "ticket_read";
 
     // Variables declarations
@@ -78,7 +81,6 @@ public class TicketSearchItem extends SearchItem
     private int _nTicketId;
     private String _strCategory;
     private String _strPrecision;
-    private String _strResponse;
     private String _strComment;
     private String _strDomain;
     private String _strNomenclature;
@@ -86,6 +88,7 @@ public class TicketSearchItem extends SearchItem
     private int _nCriticality;
     private int _nPriority;
     private int _nTicketstatusId;
+    private int _nTicketTypeId;
     private String _strTicketTypeLabel;
     private String _strUserTitle;
     private String _strFirstName;
@@ -93,13 +96,17 @@ public class TicketSearchItem extends SearchItem
     private String _strEmail;
     private String _strMobilePhoneNumber;
     private String _strFixedPhonenumber;
+    private int _nStateId;
     private String _strStateName;
     private String _strChannelIconFont;
     private String _strChannelLabel;
+    private int _nAssigneeUnitId;
     private String _strAssigneeUnitName;
     private int _nAssigneeUserAdminId;
     private String _strAssigneUserFirstName;
     private String _strAssigneUserLastName;
+    private int _nAssignerUnitId;
+    private int _nAssignerUserId;
     private boolean _bRead;
 
     /**
@@ -115,7 +122,6 @@ public class TicketSearchItem extends SearchItem
         _nTicketId = document.getField( FIELD_TICKET_ID ).numericValue( ).intValue( );
         _strCategory = document.get( FIELD_CATEGORY );
         _strPrecision = document.get( FIELD_PRECISION );
-        _strResponse = document.get( FIELD_RESPONSE );
         _strComment = document.get( FIELD_COMMENT );
         _strDomain = document.get( FIELD_DOMAIN );
         _strNomenclature = document.get( FIELD_TICKET_NOMENCLATURE );
@@ -123,6 +129,7 @@ public class TicketSearchItem extends SearchItem
         _nCriticality = document.getField( FIELD_CRITICALITY ).numericValue( ).intValue( );
         _nPriority = document.getField( FIELD_PRIORITY ).numericValue( ).intValue( );
         _nTicketstatusId = document.getField( FIELD_ID_STATUS ).numericValue( ).intValue( );
+        _nTicketTypeId = document.getField( FIELD_TICKET_TYPE_ID ).numericValue( ).intValue( );
         _strTicketTypeLabel = document.get( FIELD_TICKET_TYPE );
         _strUserTitle = document.get( FIELD_USER_TITLE );
         _strFirstName = document.get( FIELD_FIRSTNAME );
@@ -130,13 +137,17 @@ public class TicketSearchItem extends SearchItem
         _strEmail = document.get( FIELD_EMAIL );
         _strMobilePhoneNumber = document.get( FIELD_MOBILE_PHONE_NUMBER );
         _strFixedPhonenumber = document.get( FIELD_FIXED_PHONE_NUMBER );
+        _nStateId = document.getField( FIELD_STATE_ID ).numericValue( ).intValue( );
         _strStateName = document.get( FIELD_STATE );
         _strChannelIconFont = document.get( FIELD_CHANNEL_ICONFONT );
         _strChannelLabel = document.get( FIELD_CHANNEL_LABEL );
+        _nAssigneeUnitId = document.getField( FIELD_ASSIGNEE_UNIT_ID ).numericValue( ).intValue( );
         _strAssigneeUnitName = document.get( FIELD_ASSIGNEE_UNIT_NAME );
         _nAssigneeUserAdminId = document.getField( FIELD_ASSIGNEE_USER_ADMIN_ID ).numericValue( ).intValue( );
         _strAssigneUserFirstName = document.get( FIELD_ASSIGNEE_USER_FIRSTNAME );
         _strAssigneUserLastName = document.get( FIELD_ASSIGNEE_USER_LASTNAME );
+        _nAssignerUnitId = document.getField( FIELD_ASSIGNER_UNIT_ID ).numericValue( ).intValue( );
+        _nAssignerUserId = document.getField( FIELD_ASSIGNER_USER_ID ).numericValue( ).intValue( );
         _bRead = BooleanUtils.toBoolean( document.getField( FIELD_TICKET_READ ).numericValue( ).intValue( ) );
     }
 
@@ -189,23 +200,6 @@ public class TicketSearchItem extends SearchItem
     public void setCategory( String category )
     {
         this._strCategory = category;
-    }
-
-    /**
-     * @return the Response
-     */
-    public String getResponse( )
-    {
-        return _strResponse;
-    }
-
-    /**
-     * @param response
-     *            the response to set
-     */
-    public void setResponse( String response )
-    {
-        this._strResponse = response;
     }
 
     /**
@@ -597,5 +591,85 @@ public class TicketSearchItem extends SearchItem
     public void setRead( boolean read )
     {
         this._bRead = read;
+    }
+
+    /**
+     * @return the AssigneeUnitId
+     */
+    public int getAssigneeUnitId( )
+    {
+        return _nAssigneeUnitId;
+    }
+
+    /**
+     * @param ssigneeUnitId the AssigneeUnitId to set
+     */
+    public void setAssigneeUnitId( int assigneeUnitId )
+    {
+        this._nAssigneeUnitId = assigneeUnitId;
+    }
+
+    /**
+     * @return the _nAssignerUnitId
+     */
+    public int getAssignerUnitId( )
+    {
+        return _nAssignerUnitId;
+    }
+
+    /**
+     * @param assignerUnitId the assignerUnitId to set
+     */
+    public void setAssignerUnitId( int assignerUnitId )
+    {
+        this._nAssignerUnitId = assignerUnitId;
+    }
+
+    /**
+     * @return the _nAssignerUserId
+     */
+    public int getAssignerUserId( )
+    {
+        return _nAssignerUserId;
+    }
+
+    /**
+     * @param assignerUserId the assignerUserId to set
+     */
+    public void setAssignerUserId( int assignerUserId )
+    {
+        this._nAssignerUserId = assignerUserId;
+    }
+
+    /**
+     * @return the _nTicketTypeId
+     */
+    public int getTicketTypeId( )
+    {
+        return _nTicketTypeId;
+    }
+
+    /**
+     * @param ticketTypeId the _nTicketTypeId to set
+     */
+    public void setTicketTypeId( int ticketTypeId )
+    {
+        this._nTicketTypeId = ticketTypeId;
+    }
+
+    /**
+     * @return the _nStateId
+     */
+    public int getStateId( )
+    {
+        return _nStateId;
+    }
+
+    /**
+     * @param stateId the _nStateId to set
+     */
+    public void setStateId( int stateId )
+    {
+        this._nStateId = stateId;
     }
 }
