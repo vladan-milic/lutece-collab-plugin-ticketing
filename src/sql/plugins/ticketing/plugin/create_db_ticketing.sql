@@ -145,6 +145,7 @@ DROP TABLE IF EXISTS ticketing_contact_mode;
 CREATE TABLE ticketing_contact_mode (
 id_contact_mode int(6) NOT NULL,
 code varchar(50) NOT NULL default '',
+required_inputs varchar(150) NULL,
 confirmation_msg long varchar NULL,
 inactive int(1)  NOT NULL default '0',
 PRIMARY KEY (id_contact_mode)
@@ -209,6 +210,22 @@ CREATE TABLE ticketing_ticket_category_input (
 );
 
 
+
+--
+-- Structure for table ticketing_instant_response
+--
+
+DROP TABLE IF EXISTS ticketing_ticket_address;
+CREATE TABLE ticketing_ticket_address (
+id_ticket int(6) NOT NULL,
+address varchar(255) NULL,
+address_detail varchar(255) NULL,
+postal_code varchar(5) NULL,
+city varchar(255) NULL,
+PRIMARY KEY (id_ticket)
+);
+
+
 ALTER TABLE ticketing_ticket ADD CONSTRAINT fk_ticketing_ticket_user_title FOREIGN KEY (id_user_title)
       REFERENCES ticketing_user_title (id_user_title) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE ticketing_ticket ADD CONSTRAINT fk_ticketing_ticket_category FOREIGN KEY (id_ticket_category)
@@ -225,5 +242,7 @@ ALTER TABLE ticketing_instant_response ADD CONSTRAINT fk_ticketing_instant_respo
       REFERENCES ticketing_ticket_category (id_ticket_category) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE ticketing_indexer_action ADD CONSTRAINT fk_ticketing_indexer_action_ticket FOREIGN KEY (id_ticket)
       REFERENCES ticketing_ticket (id_ticket) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE ticketing_ticket_address ADD CONSTRAINT fk_ticketing_ticket_address FOREIGN KEY (id_ticket)
+      REFERENCES ticketing_ticket (id_ticket) ON DELETE CASCADE;
 
       

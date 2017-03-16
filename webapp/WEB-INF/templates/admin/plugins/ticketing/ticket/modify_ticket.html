@@ -1,5 +1,6 @@
 <script>$(".content-header").hide();</script>
 <#include "/skin/plugins/asynchronousupload/upload_commons.html" />
+
 <div class="gru-wrapper">
   <div id="customer-panel" class="row ticket-head bg-gru-light">
     <div class="col-xs-12 col-sm-offset-1 col-sm-10">
@@ -39,6 +40,26 @@
           <div class="form-group">
             <label for="mobile_phone_number">#i18n{ticketing.create_ticket.labelMobilePhoneNumber}</label>
             <input type="text" name="mobile_phone_number" id="mobile_phone_number" class="form-control input-lg input-phone" value="${ticket.mobilePhoneNumber!''}">
+          </div>
+          <div class="form-group">
+            <label for="address">#i18n{ticketing.create_ticket.labelAddress}</label>
+            <input type="text" name="address" id="address" class="form-control input-lg" 
+            	value="${(ticket.ticketAddress.address)!''}">
+          </div>
+		  <div class="form-group">
+            <label for="address_detail">#i18n{ticketing.create_ticket.labelAddressDetail}</label>
+            <input type="text" name="address_detail" id="address_detail" class="form-control input-lg" 
+            	value="${(ticket.ticketAddress.addressDetail)!''}">
+          </div>
+		  <div class="form-group">
+            <label for="postal_code">#i18n{ticketing.create_ticket.labelPostalCode}</label>
+            <input type="text" name="postal_code" id="postal_code" class="form-control input-lg" 
+            	value="${(ticket.ticketAddress.postalCode)!''}">
+          </div>
+		  <div class="form-group">
+            <label for="city">#i18n{ticketing.create_ticket.labelCity}</label>
+            <input type="text" name="city" id="city" class="form-control input-lg"
+            	value="${(ticket.ticketAddress.city)!''}">          
           </div>
           <div class="form-group" id="generic_attributes">
           </div>
@@ -102,5 +123,6 @@
         });
     });
 </script>
+
 <@addRequiredJsFiles />
 <script type="text/javascript" src="jsp/site/plugins/asynchronousupload/GetMainUploadJs.jsp?handler=ticketAsynchronousUploadHandler" ></script>

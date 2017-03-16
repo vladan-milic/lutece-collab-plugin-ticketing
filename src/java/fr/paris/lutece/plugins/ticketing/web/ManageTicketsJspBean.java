@@ -50,6 +50,7 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.plugins.ticketing.business.address.TicketAddress;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
@@ -160,7 +161,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String MARK_SELECTED_TAB = "selected_tab";
     private static final String JSP_MANAGE_TICKETS = TicketingConstants.ADMIN_CONTROLLLER_PATH + "ManageTickets.jsp";
     private static final String MARK_MANAGE_PAGE_TITLE = "manage_ticket_page_title";
-
+    private static final String MARK_TICKET_ADDRESS = "address";
+    private static final String MARK_TICKET_ADDRESS_DETAIL = "address_detail";
+    private static final String MARK_TICKET_POSTAL_CODE = "postal_code";
+    private static final String MARK_TICKET_CITY = "city";
+    
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
     private static final String MESSAGE_ERROR_COMMENT_VALIDATION = "ticketing.validation.ticket.TicketComment.size";
@@ -662,7 +667,14 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
         }
 
+        int nId = Integer.parseInt( request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ) );
+        
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
+        
+        if ( ticket == null )
+        {
+            ticket = TicketHome.findByPrimaryKey( nId );
+        }
 
         boolean bIsFormValid = populateAndValidateFormTicket( ticket, request );
 
@@ -784,6 +796,18 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
         ticket.setTicketCategory( ticketCategory );
 
+        String _strAddress = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS ) );
+        String _strAddressDetail = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS_DETAIL ) );
+        String _strPostalCode = String.valueOf( request.getParameter( MARK_TICKET_POSTAL_CODE ) );
+        String _strCity = String.valueOf( request.getParameter( MARK_TICKET_CITY) );
+
+        TicketAddress _ticketAddress = new TicketAddress( );
+        _ticketAddress.setAddress( _strAddress );
+        _ticketAddress.setAddressDetail( _strAddressDetail );
+        _ticketAddress.setPostalCode( _strPostalCode );
+        _ticketAddress.setCity( _strCity );
+        ticket.setTicketAddress( _ticketAddress );
+
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
 
         if ( ticket.getTicketCategory( ).getId( ) > 0 )
@@ -807,8 +831,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validate( ticket, false );
 
-        // FormValidator formValidator = new FormValidator( request );
-        // listValidationErrors.add( formValidator.isContactModeFilled( ) );
+         FormValidator formValidator = new FormValidator( request );
+         listValidationErrors.add( formValidator.isContactModeFilled( ) );
 
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
         if ( iNbCharcount > 5000 )

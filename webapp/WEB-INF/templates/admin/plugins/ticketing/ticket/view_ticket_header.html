@@ -2,9 +2,10 @@
 <#macro ticketHeader tab ticket navigation_next=-1 navigation_previous=-1>
 <div class="gru-wrapper">
 <div id="customer-panel" class="row ticket-head bg-gru-light">
-   <div class="col-xs-8 col-sm-offset-1 col-sm-3">
+<div class="col-sm-offset-1 col-sm-7">
+<div class="row ticket-contact-block">
+   <div class="col-xs-8 col-sm-4">
       <h2>${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}</h2>
-      <h2 class="hidden-xs">&nbsp;</h2>
       <div class="visible-xs">
          <p><i class="fa fa-envelope"></i> ${ticket.email!""}</p>
          <#if ticket.fixedPhoneNumber?has_content>
@@ -28,6 +29,67 @@
          </p>
          </#if>
       </div>
+
+   </div>
+   
+   <div class="hidden-xs col-sm-8 ticket-contact-block">
+   <div class=" hidden-xs no-padding wordwrap-ticket-comment <#if ticket.ticketAddress?has_content> col-sm-7 <#else> col-sm-12 </#if>">
+      
+	  <h4><i class="fa fa-at"></i> ${ticket.email!""}</h4>
+      <#if ticket.fixedPhoneNumber?has_content>
+      <h4>
+         <i class="fa fa-phone" ></i>
+         <#if ticket.fixedPhoneNumber?length == 10>
+         ${ticket.fixedPhoneNumber[0..1]} ${ticket.fixedPhoneNumber[2..3]} ${ticket.fixedPhoneNumber[4..5]} ${ticket.fixedPhoneNumber[6..7]} ${ticket.fixedPhoneNumber[8..9]}
+         <#else>
+         ${ticket.fixedPhoneNumber!}
+         </#if>
+      </h4>
+      </#if>
+      <#if ticket.mobilePhoneNumber?has_content>
+      <h4>
+         <i class="fa fa-mobile" ></i>
+         <#if ticket.mobilePhoneNumber?length == 10>
+         ${ticket.mobilePhoneNumber[0..1]} ${ticket.mobilePhoneNumber[2..3]} ${ticket.mobilePhoneNumber[4..5]} ${ticket.mobilePhoneNumber[6..7]} ${ticket.mobilePhoneNumber[8..9]}
+         <#else>
+         ${ticket.mobilePhoneNumber!}
+         </#if>
+      </h4>
+      </#if>
+      <!-- FIXME -->
+      <!--
+         <p id="info">Pour me contacter privil&eacute;gier le mail</p>
+         -->
+
+	</div>
+
+	<#if ticket.ticketAddress?has_content>
+	<div class=" hidden-xs col-sm-5">
+
+      <h4><i class="fa fa-envelope"></i>
+         <#if ticket.ticketAddress.address?has_content>
+         ${ticket.ticketAddress.address!''}
+         </#if>
+      </h4>
+      <h4>
+         <#if ticket.ticketAddress.addressDetail?has_content>
+         ${ticket.ticketAddress.addressDetail!''}
+         </#if>
+      </h4>
+	  <h4>
+         <#if ticket.ticketAddress.postalCode?has_content>
+         ${ticket.ticketAddress.postalCode!''}
+         </#if>
+         <#if ticket.ticketAddress.city?has_content>
+         ${ticket.ticketAddress.city!''}
+         </#if>
+      </h4>
+	</div>
+	</#if>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-4">
       <h2>
          <a class="btn btn-border" href="jsp/admin/plugins/ticketing/ManageTickets.jsp?plugin_name=ticketing" >
          <i class="fa fa-arrow-left"></i> #i18n{ticketing.view_ticket_header.labelReturn}
@@ -38,35 +100,9 @@
          </a>
          </#if>
       </h2>
-   </div>
-   <div class="hidden-xs col-sm-4">
-      <p><i class="fa fa-envelope"></i> ${ticket.email!""}</p>
-      <#if ticket.fixedPhoneNumber?has_content>
-      <p>
-         <i class="fa fa-phone" ></i>
-         <#if ticket.fixedPhoneNumber?length == 10>
-         ${ticket.fixedPhoneNumber[0..1]} ${ticket.fixedPhoneNumber[2..3]} ${ticket.fixedPhoneNumber[4..5]} ${ticket.fixedPhoneNumber[6..7]} ${ticket.fixedPhoneNumber[8..9]}
-         <#else>
-         ${ticket.fixedPhoneNumber!}
-         </#if>
-      </p>
-      </#if>
-      <#if ticket.mobilePhoneNumber?has_content>
-      <p>
-         <i class="fa fa-mobile" ></i>
-         <#if ticket.mobilePhoneNumber?length == 10>
-         ${ticket.mobilePhoneNumber[0..1]} ${ticket.mobilePhoneNumber[2..3]} ${ticket.mobilePhoneNumber[4..5]} ${ticket.mobilePhoneNumber[6..7]} ${ticket.mobilePhoneNumber[8..9]}
-         <#else>
-         ${ticket.mobilePhoneNumber!}
-         </#if>
-      </p>
-      </#if>
-      <!-- FIXME -->
-      <!--
-         <p id="info">Pour me contacter privil&eacute;gier le mail</p>
-         -->
-
-      <!-- NAVIGATION -->
+	</div>
+	<div class="col-sm-7">
+ <!-- NAVIGATION -->
       <#if next_ticket ?? || previous_ticket ?? >
       <nav id="item-navigator">
          <ul class="pager">
@@ -88,8 +124,9 @@
       </nav>
       </#if>    
       <!-- END NAVIGATION -->
-
+	  </div>
    </div>
+</div>
    <div class="col-xs-4 col-sm-3" id="info-head-right">
       <#assign textColor="green"/>
       <#if ticket.urgency==1 >
