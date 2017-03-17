@@ -73,7 +73,7 @@ public interface ITicketSearchIndexer
      * @param bCreate true for indexing all directory false for use incremental indexing
      * @throws TicketIndexerException 
      */
-    void indexTicket( Ticket ticket, boolean bCreate ) throws TicketIndexerException;
+    void indexTicket( Ticket ticket ) throws TicketIndexerException;
 
     /**
      * Returns the indexer service name

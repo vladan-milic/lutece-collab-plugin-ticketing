@@ -356,7 +356,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                     }
                     
                     // Immediate indexation of the Ticket
-                    immediateTicketIndexing( ticket.getId( ), false );
+                    immediateTicketIndexing( ticket.getId( ) );
                 }
                 catch( Exception e )
                 {
@@ -492,9 +492,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
      * Immediate indexation of a Ticket for the Backoffice
      * 
      * @param idTicket the id of the Ticket to index
-     * @param bCreate true for indexing all directory false for use incremental indexing
      */
-    protected void immediateTicketIndexing( int idTicket, boolean bCreate )
+    protected void immediateTicketIndexing( int idTicket )
     {
         Ticket ticket = TicketHome.findByPrimaryKey( idTicket );
         if ( ticket != null )
@@ -502,7 +501,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
             try
             {
                 TicketIndexer ticketIndexer = new TicketIndexer( );
-                ticketIndexer.indexTicket( ticket, bCreate );
+                ticketIndexer.indexTicket( ticket );
             }
             catch ( TicketIndexerException ticketIndexerException )
             {

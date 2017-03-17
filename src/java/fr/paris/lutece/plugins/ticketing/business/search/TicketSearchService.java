@@ -64,14 +64,8 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 public final class TicketSearchService
 {
     private static final String PATH_INDEX = "ticketing.internalIndexer.lucene.indexPath";
-    private static final String PROPERTY_WRITER_MERGE_FACTOR = "ticketing.internalIndexer.lucene.writer.mergeFactor";
-    private static final String PROPERTY_WRITER_MAX_FIELD_LENGTH = "ticketing.internalIndexer.lucene.writer.maxSectorLength";
     private static final String PROPERTY_ANALYSER_CLASS_NAME = "ticketing.internalIndexer.lucene.analyser.className";
     private static final String PROPERTY_MAX_SKIPPED_INDEXATION = "ticketing.indexer.maxSkipedIndexation";
-
-    // Default values
-    private static final int DEFAULT_WRITER_MERGE_FACTOR = 20;
-    private static final int DEFAULT_WRITER_MAX_FIELD_LENGTH = 1000000;
 
     // Constants corresponding to the variables defined in the lutece.properties file
     private static volatile TicketSearchService _singleton;
@@ -79,8 +73,6 @@ public final class TicketSearchService
     private volatile String _strIndex;
     private Analyzer _analyzer;
     private ITicketSearchIndexer _indexer;
-    private int _nWriterMergeFactor;
-    private int _nWriterMaxSectorLength;
 
     /**
      * Creates a new instance of DirectorySearchService
@@ -94,9 +86,6 @@ public final class TicketSearchService
         {
             throw new AppException( "Lucene index path not found in ticketing.properties", null );
         }
-
-        _nWriterMergeFactor = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MERGE_FACTOR, DEFAULT_WRITER_MERGE_FACTOR );
-        _nWriterMaxSectorLength = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MAX_FIELD_LENGTH, DEFAULT_WRITER_MAX_FIELD_LENGTH );
 
         String strAnalyserClassName = AppPropertiesService.getProperty( PROPERTY_ANALYSER_CLASS_NAME );
 
@@ -196,10 +185,9 @@ public final class TicketSearchService
         try
         {
             Directory directory = NIOFSDirectory.open( new File( getIndex( ) ) );
-            boolean bCreateIndex = TicketIndexWriterUtil.isIndexExists( directory, bCreate );
             if ( !isDirectoryLocked( directory, bCreate ) )
             {
-                return new IndexWriter( directory, TicketIndexWriterUtil.getIndexWriterConfig( _analyzer, _nWriterMaxSectorLength, _nWriterMergeFactor, bCreateIndex ) );
+                return new IndexWriter( directory, TicketIndexWriterUtil.getIndexWriterConfig( _analyzer ) );
             }
         }
         catch ( IOException e )
@@ -257,21 +245,19 @@ public final class TicketSearchService
             sbLogs.append( "\r\nIndexing all contents ...\r\n" );
 
             Directory dir = NIOFSDirectory.open( new File( getIndex( ) ) );
-            
-            boolean bCreateIndex = TicketIndexWriterUtil.isIndexExists( dir, bCreate );
 
             if ( !isDirectoryLocked( dir, bCreate ) )
             {
                 Date start = new Date( );
 
-                writer = new IndexWriter( dir, TicketIndexWriterUtil.getIndexWriterConfig( _analyzer, _nWriterMaxSectorLength, _nWriterMergeFactor, bCreateIndex ) );
+                writer = new IndexWriter( dir, TicketIndexWriterUtil.getIndexWriterConfig( _analyzer ) );
 
                 sbLogs.append( "\r\n<strong>Indexer : " );
                 sbLogs.append( _indexer.getName( ) );
                 sbLogs.append( " - " );
                 sbLogs.append( _indexer.getDescription( ) );
                 sbLogs.append( "</strong>\r\n" );
-                _indexer.processIndexing( writer, bCreateIndex, sbLogs );
+                _indexer.processIndexing( writer, TicketIndexWriterUtil.isIndexExists( dir, bCreate ), sbLogs );
 
                 Date end = new Date( );
 

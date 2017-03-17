@@ -47,36 +47,39 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.util.Version;
 
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 /**
  * Util class to manage an IndexWriter
  */
 public class TicketIndexWriterUtil
 {
+    // Properties
+    private static final String PROPERTY_WRITER_MERGE_FACTOR = "ticketing.internalIndexer.lucene.writer.mergeFactor";
+    private static final String PROPERTY_WRITER_MAX_FIELD_LENGTH = "ticketing.internalIndexer.lucene.writer.maxSectorLength";
+    
+    // Default values
+    private static final int DEFAULT_WRITER_MERGE_FACTOR = 20;
+    private static final int DEFAULT_WRITER_MAX_FIELD_LENGTH = 1000000;
     
     /**
      * Return the IndexWriterConfig for an IndexWriter
      * 
-     * @param bCreateIndex the boolean for the creation of the index
+     * @param analyzer the analyzer to use for the config
      * @return
      */
-    public static IndexWriterConfig getIndexWriterConfig( Analyzer analyzer, int maxTokenCount, int mergeFactor,  boolean bCreateIndex )
+    public static IndexWriterConfig getIndexWriterConfig( Analyzer analyzer )
     {
-        IndexWriterConfig indexWriterConfig = new IndexWriterConfig( Version.LUCENE_4_9, new LimitTokenCountAnalyzer( analyzer, maxTokenCount ) );
+        int nWriterMergeFactor = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MERGE_FACTOR, DEFAULT_WRITER_MERGE_FACTOR );
+        int nWriterMaxSectorLength = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MAX_FIELD_LENGTH, DEFAULT_WRITER_MAX_FIELD_LENGTH );
+        
+        IndexWriterConfig indexWriterConfig = new IndexWriterConfig( Version.LUCENE_4_9, new LimitTokenCountAnalyzer( analyzer, nWriterMaxSectorLength ) );
 
         LogMergePolicy mergePolicy = new LogDocMergePolicy( );
-        mergePolicy.setMergeFactor( mergeFactor );
+        mergePolicy.setMergeFactor( nWriterMergeFactor );
 
         indexWriterConfig.setMergePolicy( mergePolicy );
-
-        if ( bCreateIndex )
-        {
-            indexWriterConfig.setOpenMode( OpenMode.CREATE );
-        }
-        else
-        {
-            indexWriterConfig.setOpenMode( OpenMode.APPEND );
-        }
+        indexWriterConfig.setOpenMode( OpenMode.CREATE_OR_APPEND );
         
         return indexWriterConfig;
     }

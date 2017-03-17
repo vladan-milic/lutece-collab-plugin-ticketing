@@ -273,7 +273,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                         }
                         
                         // Immediate indexation of the Ticket
-                        immediateTicketIndexing( ticket.getId( ), false, request );
+                        immediateTicketIndexing( ticket.getId( ), request );
                     }
                     catch( Exception e )
                     {
@@ -364,7 +364,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                     }
                     
                     // Immediate indexation of the Ticket
-                    immediateTicketIndexing( ticket.getId( ), false, request );
+                    immediateTicketIndexing( ticket.getId( ), request );
                 }
                 catch( Exception e )
                 {
@@ -395,19 +395,19 @@ public abstract class WorkflowCapableXPage extends MVCApplication
     }
 
     /**
-     * Immediate indexation of a Ticket for the Backoffice
+     * Immediate indexation of a Ticket for the Frontoffice
      * 
      * @param idTicket the id of the Ticket to index
-     * @param bCreate true for indexing all directory false for use incremental indexing
+     * @param request the HttpServletRequest
      */
-    protected void immediateTicketIndexing( int idTicket, boolean bCreate, HttpServletRequest request )
+    protected void immediateTicketIndexing( int idTicket, HttpServletRequest request )
     {
         Ticket ticket = TicketHome.findByPrimaryKey( idTicket );
         if ( ticket != null ){
             try
             {
                 TicketIndexer ticketIndexer = new TicketIndexer( );
-                ticketIndexer.indexTicket( ticket, bCreate );
+                ticketIndexer.indexTicket( ticket );
             }
             catch ( TicketIndexerException ticketIndexerException )
             {

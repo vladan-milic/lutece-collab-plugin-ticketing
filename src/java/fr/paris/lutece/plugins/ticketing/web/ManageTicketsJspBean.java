@@ -347,14 +347,14 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         request.getSession( ).setAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION, listIdTickets );
 
         // PAGINATORS
-        LocalizedPaginator<Integer> paginatorTickets = new LocalizedPaginator<Integer>( listIdTickets, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
+        LocalizedPaginator<Ticket> paginatorTickets = new LocalizedPaginator<Ticket>( listTickets, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndex, getLocale( ) );
         setWorkflowAttributes( listTickets );
 
         Map<String, Object> model = getModel( );
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
         model.put( SearchConstants.MARK_QUERY, strQuery );
-        model.put( MARK_TICKET_LIST, listTickets );
+        model.put( MARK_TICKET_LIST, paginatorTickets.getPageItems( ) );
         model.put( MARK_PAGINATOR, paginatorTickets );
         model.put( MARK_NB_TICKET_AGENT, nAgentTickets );
         model.put( MARK_NB_TICKET_GROUP, nGroupTickets );
@@ -509,7 +509,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             doProcessNextWorkflowAction( ticket, request );
             
             // Immediate indexation of the Ticket
-            immediateTicketIndexing( ticket.getId( ), false );
+            immediateTicketIndexing( ticket.getId( ) );
             
         }
         catch( Exception e )
@@ -698,7 +698,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
         
         // Immediate indexation of the Ticket
-        immediateTicketIndexing( ticket.getId( ), false );
+        immediateTicketIndexing( ticket.getId( ) );
 
         addInfo( INFO_TICKET_UPDATED, getLocale( ) );
 
@@ -830,9 +830,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validate( ticket, false );
-
-         FormValidator formValidator = new FormValidator( request );
-         listValidationErrors.add( formValidator.isContactModeFilled( ) );
+        
+        FormValidator formValidator = new FormValidator( request );
+        listValidationErrors.add( formValidator.isContactModeFilled( ) );
 
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
         if ( iNbCharcount > 5000 )
