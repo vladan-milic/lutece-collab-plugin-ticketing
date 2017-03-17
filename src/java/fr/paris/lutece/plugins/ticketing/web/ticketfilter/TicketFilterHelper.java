@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.ticketing.web.ticketfilter;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
+import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
@@ -46,6 +47,7 @@ import fr.paris.lutece.portal.business.rbac.AdminRole;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.ReferenceItem;
@@ -55,7 +57,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -144,17 +145,10 @@ public final class TicketFilterHelper
         }
         else
         {
-            if ( PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT ) != TicketingConstants.PROPERTY_UNSET_INT )
-            {
-                // no state selected => we put a dummy one
-                fltrFiltre.setListIdWorkflowState( new String [ ] {
-                    NO_SELECTED_FIELD_ID
-                } );
-            }
-            else
-            {
-                fltrFiltre.setListIdWorkflowState( new String [ ] { } );
-            }
+            // no state selected => we put a dummy one
+            fltrFiltre.setListIdWorkflowState( new String [ ] {
+                NO_SELECTED_FIELD_ID
+            } );
         }
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_DOMAIN ) )
@@ -372,22 +366,34 @@ public final class TicketFilterHelper
 
         for ( String strRole : listUserRole.keySet( ) )
         {
-            if ( mapStatesForRoles.containsKey( strRole ) )
+            if ( mapStatesForRoles != null && mapStatesForRoles.containsKey( strRole ) )
             {
                 lstIdWorkflowState = mapStatesForRoles.get( strRole );
 
                 break;
             }
         }
-
-        if ( lstIdWorkflowState == null )
+        
+        if ( lstIdWorkflowState != null && !lstIdWorkflowState.isEmpty( ) )
+        {
+            List<Integer> lstIdWorkflowStateTemp = new ArrayList<Integer>( );
+            for ( Integer idState : lstIdWorkflowState )
+            {
+                State state = new State( );
+                state.setId( idState );
+                if ( RBACService.isAuthorized( state, TicketResourceIdService.PERMISSION_VIEW, adminUser ) )
+                {
+                    lstIdWorkflowStateTemp.add( state.getId( ) );
+                }
+            }
+            lstIdWorkflowState.clear( );
+            lstIdWorkflowState.addAll( lstIdWorkflowStateTemp );
+        }
+        
+        if ( lstIdWorkflowState == null || lstIdWorkflowState.isEmpty( ) )
         {
             lstIdWorkflowState = new ArrayList<Integer>( );
-
-            if ( PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT ) != TicketingConstants.PROPERTY_UNSET_INT )
-            {
-                lstIdWorkflowState.add( Integer.valueOf( NO_SELECTED_FIELD_ID ) );
-            }
+            lstIdWorkflowState.add( Integer.valueOf( NO_SELECTED_FIELD_ID ) );
         }
 
         filter.setListIdWorkflowState( lstIdWorkflowState );
