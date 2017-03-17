@@ -57,22 +57,23 @@ public class TicketIndexWriterUtil
     // Properties
     private static final String PROPERTY_WRITER_MERGE_FACTOR = "ticketing.internalIndexer.lucene.writer.mergeFactor";
     private static final String PROPERTY_WRITER_MAX_FIELD_LENGTH = "ticketing.internalIndexer.lucene.writer.maxSectorLength";
-    
+
     // Default values
     private static final int DEFAULT_WRITER_MERGE_FACTOR = 20;
     private static final int DEFAULT_WRITER_MAX_FIELD_LENGTH = 1000000;
-    
+
     /**
      * Return the IndexWriterConfig for an IndexWriter
      * 
-     * @param analyzer the analyzer to use for the config
+     * @param analyzer
+     *            the analyzer to use for the config
      * @return
      */
     public static IndexWriterConfig getIndexWriterConfig( Analyzer analyzer )
     {
         int nWriterMergeFactor = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MERGE_FACTOR, DEFAULT_WRITER_MERGE_FACTOR );
         int nWriterMaxSectorLength = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MAX_FIELD_LENGTH, DEFAULT_WRITER_MAX_FIELD_LENGTH );
-        
+
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig( Version.LUCENE_4_9, new LimitTokenCountAnalyzer( analyzer, nWriterMaxSectorLength ) );
 
         LogMergePolicy mergePolicy = new LogDocMergePolicy( );
@@ -80,14 +81,15 @@ public class TicketIndexWriterUtil
 
         indexWriterConfig.setMergePolicy( mergePolicy );
         indexWriterConfig.setOpenMode( OpenMode.CREATE_OR_APPEND );
-        
+
         return indexWriterConfig;
     }
-    
+
     /**
      * Close an IndexWriter
      * 
-     * @param indexWriter the indexWriter to close
+     * @param indexWriter
+     *            the indexWriter to close
      */
     public static void manageCloseWriter( IndexWriter indexWriter )
     {
@@ -103,12 +105,14 @@ public class TicketIndexWriterUtil
             AppLogService.error( e.getMessage( ), e );
         }
     }
-    
+
     /**
      * Method which tell if a directory exists or if it's necessary to create a new one and a new index
      * 
-     * @param directory the directory to test
-     * @param bCreate the value used if the directory doesn't exist
+     * @param directory
+     *            the directory to test
+     * @param bCreate
+     *            the value used if the directory doesn't exist
      * @return
      * @throws IOException
      */

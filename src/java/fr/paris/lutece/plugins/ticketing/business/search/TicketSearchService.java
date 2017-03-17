@@ -171,12 +171,12 @@ public final class TicketSearchService
 
         return searcher;
     }
-    
+
     /**
      * Create an IndexWriter with the default config
      * 
-     * @param bCreate the boolean use to know if we must create a new index
-     *         if it doesn't exist
+     * @param bCreate
+     *            the boolean use to know if we must create a new index if it doesn't exist
      * @return
      * @throws IOException
      */
@@ -190,18 +190,20 @@ public final class TicketSearchService
                 return new IndexWriter( directory, TicketIndexWriterUtil.getIndexWriterConfig( _analyzer ) );
             }
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
             throw new IOException( );
         }
         return null;
     }
-    
+
     /**
      * Determine if the directory is lock or not
      * 
-     * @param directory the directory to analyze if is lock or not
-     * @param bCreate the boolean of the creation of the index
+     * @param directory
+     *            the directory to analyze if is lock or not
+     * @param bCreate
+     *            the boolean of the creation of the index
      * @return true if the directory is lock false otherwise
      * @throws IOException
      */
@@ -224,7 +226,7 @@ public final class TicketSearchService
                 _nSkipedIndexations = 0;
             }
         }
-        
+
         return bIsLocked;
     }
 

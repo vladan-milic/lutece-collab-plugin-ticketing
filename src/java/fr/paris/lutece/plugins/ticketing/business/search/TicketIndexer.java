@@ -172,12 +172,14 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         return bReturn;
     }
-    
+
     /**
      * Index or update a Ticket in the index
      * 
-     * @param indexWriter the indexWriter Lucene
-     * @param ticket the ticket to index or update
+     * @param indexWriter
+     *            the indexWriter Lucene
+     * @param ticket
+     *            the ticket to index or update
      * @throws TicketIndexerException
      * @throws IOException
      */
@@ -202,8 +204,8 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         if ( docTicket != null )
         {
-            BytesRef bytesRefTicketId = new BytesRef(NumericUtils.BUF_SIZE_INT);
-            NumericUtils.intToPrefixCoded(ticket.getId( ), 0, bytesRefTicketId);
+            BytesRef bytesRefTicketId = new BytesRef( NumericUtils.BUF_SIZE_INT );
+            NumericUtils.intToPrefixCoded( ticket.getId( ), 0, bytesRefTicketId );
             indexWriter.updateDocument( new Term( TicketSearchItemConstant.FIELD_TICKET_ID, bytesRefTicketId ), docTicket );
         }
     }
@@ -234,7 +236,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             ticketState = stateService.findByResource( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, ticketCategory.getIdWorkflow( ) );
             ticket.setState( ticketState );
         }
-        
+
         // make a new, empty document
         Document doc = new Document( );
 
@@ -242,7 +244,8 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new TextField( TicketSearchItemConstant.FIELD_CONTENTS, getContentForIndexer( ticket ), Store.NO ) );
         doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN, ticket.getTicketDomain( ), Store.YES ) );
         doc.add( new StringField( TicketSearchItemConstant.FIELD_REFERENCE, ticket.getReference( ), Store.YES ) );
-        doc.add( new LongField( TicketSearchItemConstant.FIELD_DATE_CREATION, ( ticket.getDateCreate( ) == null ? 0 : ticket.getDateCreate( ).getTime( ) ), Store.YES ) );
+        doc.add( new LongField( TicketSearchItemConstant.FIELD_DATE_CREATION, ( ticket.getDateCreate( ) == null ? 0 : ticket.getDateCreate( ).getTime( ) ),
+                Store.YES ) );
         doc.add( new StringField( TicketSearchItemConstant.FIELD_COMMENT, ticket.getTicketComment( ), Store.YES ) );
         doc.add( new StringField( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE, manageNullValue( ticket.getNomenclature( ) ), Store.YES ) );
         doc.add( new IntField( TicketSearchItemConstant.FIELD_CRITICALITY, ticket.getCriticality( ), Store.YES ) );
@@ -305,8 +308,10 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         if ( ticket.getAssigneeUser( ) != null )
         {
             doc.add( new IntField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_ADMIN_ID, ticket.getAssigneeUser( ).getAdminUserId( ), Store.YES ) );
-            doc.add( new StringField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_FIRSTNAME, manageNullValue( ticket.getAssigneeUser( ).getFirstname( ) ), Store.YES ) );
-            doc.add( new StringField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, manageNullValue( ticket.getAssigneeUser( ).getLastname( ) ), Store.YES ) );
+            doc.add( new StringField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_FIRSTNAME, manageNullValue( ticket.getAssigneeUser( ).getFirstname( ) ),
+                    Store.YES ) );
+            doc.add( new StringField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, manageNullValue( ticket.getAssigneeUser( ).getLastname( ) ),
+                    Store.YES ) );
         }
         else
         {
@@ -314,7 +319,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             doc.add( new StringField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_FIRSTNAME, StringUtils.EMPTY, Store.YES ) );
             doc.add( new StringField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, StringUtils.EMPTY, Store.YES ) );
         }
-        
+
         if ( ticket.getAssignerUnit( ) != null )
         {
             doc.add( new IntField( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, ticket.getAssignerUnit( ).getUnitId( ), Store.YES ) );
@@ -323,7 +328,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             doc.add( new IntField( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, -1, Store.YES ) );
         }
-        
+
         if ( ticket.getAssignerUser( ) != null )
         {
             doc.add( new IntField( TicketSearchItemConstant.FIELD_ASSIGNER_USER_ID, ticket.getAssignerUser( ).getAdminUserId( ), Store.YES ) );
@@ -371,7 +376,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             indexWriter = TicketSearchService.getInstance( ).getTicketIndexWriter( false );
             indexTicket( indexWriter, ticket );
         }
-        catch ( IOException | TicketIndexerException e )
+        catch( IOException | TicketIndexerException e )
         {
             AppLogService.error( "Error during the indexation of the ticket : " + e.getMessage( ), e );
             throw new TicketIndexerException( );
@@ -379,9 +384,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         finally
         {
             TicketIndexWriterUtil.manageCloseWriter( indexWriter );
-        } 
+        }
     }
-    
+
     /**
      * Get Lucene index document type
      * 
@@ -405,7 +410,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
      *             io error when creating/accessing index
      * @throws InterruptedException
      *             interrupted exception
-     * @throws TicketIndexerException 
+     * @throws TicketIndexerException
      *
      */
     public synchronized void processIndexing( IndexWriter indexWriter, boolean bCreate, StringBuffer sbLogs ) throws TicketIndexerException
@@ -420,13 +425,13 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
                 try
                 {
-                    BytesRef bytesRefTicketId = new BytesRef(NumericUtils.BUF_SIZE_INT);
+                    BytesRef bytesRefTicketId = new BytesRef( NumericUtils.BUF_SIZE_INT );
                     NumericUtils.intToPrefixCoded( action.getIdTicket( ), 0, bytesRefTicketId );
 
                     indexWriter.deleteDocuments( new Term( TicketSearchItemConstant.FIELD_TICKET_ID, bytesRefTicketId ) );
                     IndexerActionHome.remove( action.getIdAction( ) );
                 }
-                catch ( IOException e )
+                catch( IOException e )
                 {
                     throw new TicketIndexerException( e.getMessage( ) );
                 }
@@ -446,7 +451,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
                         indexTicket( indexWriter, ticket );
                         IndexerActionHome.remove( action.getIdAction( ) );
                     }
-                    catch ( IOException e )
+                    catch( IOException e )
                     {
                         throw new TicketIndexerException( e.getMessage( ) );
                     }
@@ -459,13 +464,13 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
                 sbLogTicket( sbLogs, action.getIdTicket( ), IndexerAction.TASK_MODIFY );
 
                 Ticket ticket = TicketHome.findByPrimaryKey( action.getIdTicket( ) );
-                
+
                 try
                 {
                     indexTicket( indexWriter, ticket );
                     IndexerActionHome.remove( action.getIdAction( ) );
                 }
-                catch ( IOException e )
+                catch( IOException e )
                 {
                     throw new TicketIndexerException( e.getMessage( ) );
                 }
@@ -475,7 +480,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             for ( Integer nIdticket : TicketHome.getIdTicketsList( ) )
             {
-                try 
+                try
                 {
                     Ticket ticket = TicketHome.findByPrimaryKey( nIdticket.intValue( ) );
                     sbLogs.append( "Indexing Ticket" );
@@ -483,7 +488,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
                     sbLogTicket( sbLogs, ticket.getId( ), IndexerAction.TASK_CREATE );
                     indexTicket( indexWriter, ticket );
                 }
-                catch ( IOException e )
+                catch( IOException e )
                 {
                     throw new TicketIndexerException( e.getMessage( ) );
                 }
@@ -494,7 +499,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             indexWriter.commit( );
         }
-        catch ( IOException e )
+        catch( IOException e )
         {
             throw new TicketIndexerException( );
         }

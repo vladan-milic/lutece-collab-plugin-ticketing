@@ -38,7 +38,7 @@ package fr.paris.lutece.plugins.ticketing.business.search;
  */
 public class TicketIndexerException extends Exception
 {
-    
+
     private static final long serialVersionUID = -6568901932340963760L;
 
     /**

@@ -92,11 +92,11 @@ public class FormValidator
             if ( !StringUtils.isEmpty( strContactMode ) )
             {
                 contactMode = ContactModeHome.findByPrimaryKey( Integer.parseInt( strContactMode ) );
-                
+
                 for ( String strRequiredInput : contactMode.getRequiredInputsList( ) )
                 {
                     String strRequiredInputValue = _request.getParameter( strRequiredInput.trim( ) );
-                    
+
                     if ( strRequiredInputValue != null )
                     {
                         if ( StringUtils.isBlank( strRequiredInputValue ) )
@@ -115,7 +115,7 @@ public class FormValidator
         if ( !bIsValid )
         {
             Object [ ] args = {
-                    I18nService.getLocalizedString( CONTACT_MODE_LABEL_I18N + contactMode.getCode( ), _request.getLocale( ) )
+                I18nService.getLocalizedString( CONTACT_MODE_LABEL_I18N + contactMode.getCode( ), _request.getLocale( ) )
             };
             strError = I18nService.getLocalizedString( ERROR_CONTACT_MODE_NOT_FILLED, args, _request.getLocale( ) );
         }

@@ -58,7 +58,8 @@ public class TicketIndexerActionUtil
         IndexerAction indexerAction = null;
         if ( ticket != null )
         {
-            State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, ticket.getTicketCategory( ).getIdWorkflow( ), null );
+            State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, ticket.getTicketCategory( ).getIdWorkflow( ),
+                    null );
 
             indexerAction = new IndexerAction( );
             indexerAction.setIdTicket( ticket.getId( ) );

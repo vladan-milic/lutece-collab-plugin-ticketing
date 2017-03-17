@@ -62,16 +62,19 @@ public interface ITicketSearchIndexer
      *             If a thread error occured
      * @throws SiteMessageException
      *             occurs when a site message need to be displayed
-     * @throws TicketIndexerException 
+     * @throws TicketIndexerException
      */
-    void processIndexing( IndexWriter indexWriter, boolean bCreate, StringBuffer sbLog ) throws IOException, InterruptedException, SiteMessageException, TicketIndexerException;
-    
+    void processIndexing( IndexWriter indexWriter, boolean bCreate, StringBuffer sbLog ) throws IOException, InterruptedException, SiteMessageException,
+            TicketIndexerException;
+
     /**
      * Index a ticket
      * 
-     * @param ticket the ticket to index
-     * @param bCreate true for indexing all directory false for use incremental indexing
-     * @throws TicketIndexerException 
+     * @param ticket
+     *            the ticket to index
+     * @param bCreate
+     *            true for indexing all directory false for use incremental indexing
+     * @throws TicketIndexerException
      */
     void indexTicket( Ticket ticket ) throws TicketIndexerException;
 

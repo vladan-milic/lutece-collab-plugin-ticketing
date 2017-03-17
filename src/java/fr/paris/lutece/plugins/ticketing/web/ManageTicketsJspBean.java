@@ -165,7 +165,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String MARK_TICKET_ADDRESS_DETAIL = "address_detail";
     private static final String MARK_TICKET_POSTAL_CODE = "postal_code";
     private static final String MARK_TICKET_CITY = "city";
-    
+
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
     private static final String MESSAGE_ERROR_COMMENT_VALIDATION = "ticketing.validation.ticket.TicketComment.size";
@@ -251,11 +251,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             return redirect( request, strRedirectUrl );
         }
-        
+
         // Determine if we are in Search Ticket mode or in Manage Ticket mode
         String strQuery = request.getParameter( SearchConstants.PARAMETER_QUERY );
         _bSearchMode = StringUtils.isNotBlank( strQuery ) ? true : false;
-        
+
         TicketFilter filter = TicketFilterHelper.getFilter( request, userCurrent );
         TicketFilterHelper.setFilterUserAndUnitIds( filter, userCurrent );
 
@@ -284,33 +284,35 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // Set the limit for the number of ticket to display
         filter.setTicketsLimitStart( ( nCurrentPageIndex - 1 ) * _nItemsPerPage );
         filter.setTicketsLimitCount( _nItemsPerPage );
-        
+
         // The number of tickets for AGENT and GROUP category
         int nAgentTickets = 0;
         int nGroupTickets = 0;
-        
+
         // Get the seleted tab name
-        String strUpperSelectedTab = StringUtils.isBlank( StringUtils.upperCase( strSelectedTab ) ) ? StringUtils.EMPTY : StringUtils.upperCase( strSelectedTab );
-        try {
+        String strUpperSelectedTab = StringUtils.isBlank( StringUtils.upperCase( strSelectedTab ) ) ? StringUtils.EMPTY : StringUtils
+                .upperCase( strSelectedTab );
+        try
+        {
             filter.setFilterView( TicketFilterViewEnum.valueOf( strUpperSelectedTab ) );
         }
-        catch ( IllegalArgumentException e )
+        catch( IllegalArgumentException e )
         {
             // The default view
             filter.setFilterView( TicketFilterViewEnum.AGENT );
         }
-        
+
         try
         {
             listTickets = _engine.searchTickets( strQuery, listTicketDomain, filter );
-            if ( listTickets!= null && !listTickets.isEmpty( ) )
+            if ( listTickets != null && !listTickets.isEmpty( ) )
             {
                 for ( Ticket ticket : listTickets )
                 {
                     listIdTickets.add( ticket.getId( ) );
                 }
             }
-            
+
             // Compute the number of ticket for the AGENT and GROUP filter
             if ( strUpperSelectedTab.equals( TicketFilterViewEnum.AGENT.toString( ) ) )
             {
@@ -318,26 +320,27 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 filter.setFilterView( TicketFilterViewEnum.GROUP );
                 nGroupTickets = getIdTicketsWithLucene( strQuery, listTicketDomain, filter );
             }
-            else if ( strUpperSelectedTab.equals( TicketFilterViewEnum.GROUP.toString( ) ) )
-            {
-                nGroupTickets = listIdTickets.size( );
-                filter.setFilterView( TicketFilterViewEnum.AGENT );       
-                nAgentTickets = getIdTicketsWithLucene( strQuery, listTicketDomain, filter );                
-            }
             else
-            {
-                filter.setFilterView( TicketFilterViewEnum.AGENT );       
-                nAgentTickets = getIdTicketsWithLucene( strQuery, listTicketDomain, filter );
-                filter.setFilterView( TicketFilterViewEnum.GROUP );
-                nGroupTickets = getIdTicketsWithLucene( strQuery, listTicketDomain, filter );                
-            }
+                if ( strUpperSelectedTab.equals( TicketFilterViewEnum.GROUP.toString( ) ) )
+                {
+                    nGroupTickets = listIdTickets.size( );
+                    filter.setFilterView( TicketFilterViewEnum.AGENT );
+                    nAgentTickets = getIdTicketsWithLucene( strQuery, listTicketDomain, filter );
+                }
+                else
+                {
+                    filter.setFilterView( TicketFilterViewEnum.AGENT );
+                    nAgentTickets = getIdTicketsWithLucene( strQuery, listTicketDomain, filter );
+                    filter.setFilterView( TicketFilterViewEnum.GROUP );
+                    nGroupTickets = getIdTicketsWithLucene( strQuery, listTicketDomain, filter );
+                }
         }
-        catch ( ParseException e )
+        catch( ParseException e )
         {
             AppLogService.error( "Error while parsing query " + strQuery, e );
             addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
         }
-        
+
         // Clean filter view for save in session
         filter.setTicketsLimitStart( TicketFilter.CONSTANT_ID_NULL );
         filter.setTicketsLimitCount( TicketFilter.CONSTANT_ID_NULL );
@@ -362,7 +365,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_SELECTED_TAB, strSelectedTab );
         model.put( MARK_USER_FACTORY, UserFactory.getInstance( ) );
         model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
-        model.put( MARK_MANAGE_PAGE_TITLE, ( _bSearchMode ? I18nService.getLocalizedString( PROPERTY_PAGE_SEARCH_TILE, getLocale( ) ) : I18nService.getLocalizedString( PROPERTY_PAGE_MANAGE_TITLE, getLocale( ) ) ) );
+        model.put(
+                MARK_MANAGE_PAGE_TITLE,
+                ( _bSearchMode ? I18nService.getLocalizedString( PROPERTY_PAGE_SEARCH_TILE, getLocale( ) ) : I18nService.getLocalizedString(
+                        PROPERTY_PAGE_MANAGE_TITLE, getLocale( ) ) ) );
         TicketFilterHelper.setModel( model, filter, request, userCurrent );
         ModelUtils.storeTicketRights( model, userCurrent );
 
@@ -507,10 +513,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             }
 
             doProcessNextWorkflowAction( ticket, request );
-            
+
             // Immediate indexation of the Ticket
             immediateTicketIndexing( ticket.getId( ) );
-            
+
         }
         catch( Exception e )
         {
@@ -668,9 +674,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
 
         int nId = Integer.parseInt( request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ) );
-        
+
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
-        
+
         if ( ticket == null )
         {
             ticket = TicketHome.findByPrimaryKey( nId );
@@ -696,7 +702,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
             }
         }
-        
+
         // Immediate indexation of the Ticket
         immediateTicketIndexing( ticket.getId( ) );
 
@@ -799,7 +805,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         String _strAddress = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS ) );
         String _strAddressDetail = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS_DETAIL ) );
         String _strPostalCode = String.valueOf( request.getParameter( MARK_TICKET_POSTAL_CODE ) );
-        String _strCity = String.valueOf( request.getParameter( MARK_TICKET_CITY) );
+        String _strCity = String.valueOf( request.getParameter( MARK_TICKET_CITY ) );
 
         TicketAddress _ticketAddress = new TicketAddress( );
         _ticketAddress.setAddress( _strAddress );
@@ -830,7 +836,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validate( ticket, false );
-        
+
         FormValidator formValidator = new FormValidator( request );
         listValidationErrors.add( formValidator.isContactModeFilled( ) );
 
@@ -916,7 +922,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( session.getId( ) );
         }
     }
-    
+
     /**
      * Return the list of id tickets from Lucene index with filter
      * 
@@ -925,13 +931,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * @param filter
      * @return
      */
-    private int getIdTicketsWithLucene( String strQuery, List<TicketDomain> listTicketDomain, TicketFilter filter ) 
+    private int getIdTicketsWithLucene( String strQuery, List<TicketDomain> listTicketDomain, TicketFilter filter )
     {
         try
         {
             return _engine.searchCountTickets( strQuery, listTicketDomain, filter );
         }
-        catch ( ParseException e )
+        catch( ParseException e )
         {
             AppLogService.error( "Error while parsing query " + strQuery, e );
             addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );

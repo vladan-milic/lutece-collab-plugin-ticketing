@@ -43,7 +43,7 @@ public class TicketSearchItemConstant
     public static final String FIELD_TITLE = "title";
     public static final String FIELD_SUMMARY = "summary";
     public static final String FIELD_METADATA = "metadata";
-    
+
     public static final String FIELD_CATEGORY = "category";
     public static final String FIELD_PRECISION = "precision";
     public static final String FIELD_DOMAIN = "domain";

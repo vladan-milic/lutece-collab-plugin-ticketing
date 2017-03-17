@@ -354,7 +354,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
                         addInfoWorkflowAction( request, nIdAction );
                     }
-                    
+
                     // Immediate indexation of the Ticket
                     immediateTicketIndexing( ticket.getId( ) );
                 }
@@ -369,7 +369,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
             else
             {
                 return redirectWorkflowActionCancelled( request );
-            }           
+            }
         }
 
         return redirectAfterWorkflowAction( request );
@@ -487,11 +487,12 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         return _workflowService.getDisplayDocumentHistory( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nWorkflowId, request, getLocale( ), modelToAdd,
                 TEMPLATE_RESOURCE_HISTORY );
     }
-    
+
     /**
      * Immediate indexation of a Ticket for the Backoffice
      * 
-     * @param idTicket the id of the Ticket to index
+     * @param idTicket
+     *            the id of the Ticket to index
      */
     protected void immediateTicketIndexing( int idTicket )
     {
@@ -503,10 +504,10 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 TicketIndexer ticketIndexer = new TicketIndexer( );
                 ticketIndexer.indexTicket( ticket );
             }
-            catch ( TicketIndexerException ticketIndexerException )
+            catch( TicketIndexerException ticketIndexerException )
             {
                 addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
-            
+
                 // The indexation of the Ticket fail, we will store the Ticket in the table for the daemon
                 IndexerActionHome.create( TicketIndexerActionUtil.createIndexerActionFromTicket( ticket ) );
             }

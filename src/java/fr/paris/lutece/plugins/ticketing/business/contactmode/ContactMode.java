@@ -148,7 +148,7 @@ public class ContactMode implements Serializable
     {
         _strConfirmationMsg = strConfirmationMsg;
     }
-    
+
     /**
      * Returns the required inputs list
      * 
@@ -158,5 +158,5 @@ public class ContactMode implements Serializable
     {
         return new ArrayList<String>( Arrays.asList( StringUtils.split( _strRequiredInputs, COMMA ) ) );
     }
-    
+
 }

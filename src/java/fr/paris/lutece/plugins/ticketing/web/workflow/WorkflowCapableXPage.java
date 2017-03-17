@@ -271,7 +271,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                             _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, ticketCategory.getId( ), request,
                                     getLocale( request ), false );
                         }
-                        
+
                         // Immediate indexation of the Ticket
                         immediateTicketIndexing( ticket.getId( ), request );
                     }
@@ -281,7 +281,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                         AppLogService.error( e );
 
                         return redirectWorkflowActionCancelled( request );
-                    }                 
+                    }
                 }
                 else
                 {
@@ -362,7 +362,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                         // multiple actions or no action => ambiguous case
                         // TODO throw an exception
                     }
-                    
+
                     // Immediate indexation of the Ticket
                     immediateTicketIndexing( ticket.getId( ), request );
                 }
@@ -397,28 +397,31 @@ public abstract class WorkflowCapableXPage extends MVCApplication
     /**
      * Immediate indexation of a Ticket for the Frontoffice
      * 
-     * @param idTicket the id of the Ticket to index
-     * @param request the HttpServletRequest
+     * @param idTicket
+     *            the id of the Ticket to index
+     * @param request
+     *            the HttpServletRequest
      */
     protected void immediateTicketIndexing( int idTicket, HttpServletRequest request )
     {
         Ticket ticket = TicketHome.findByPrimaryKey( idTicket );
-        if ( ticket != null ){
+        if ( ticket != null )
+        {
             try
             {
                 TicketIndexer ticketIndexer = new TicketIndexer( );
                 ticketIndexer.indexTicket( ticket );
             }
-            catch ( TicketIndexerException ticketIndexerException )
+            catch( TicketIndexerException ticketIndexerException )
             {
                 addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_FRONT, getLocale( request ) );
-            
+
                 // The indexation of the Ticket fail, we will store the Ticket in the table for the daemon
                 IndexerActionHome.create( TicketIndexerActionUtil.createIndexerActionFromTicket( ticket ) );
             }
         }
     }
-    
+
     /**
      * Adds error message for workflow action
      * 
