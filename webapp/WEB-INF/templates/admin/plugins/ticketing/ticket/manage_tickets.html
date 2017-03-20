@@ -198,6 +198,7 @@
 		<input type="hidden" name="selected_tab" value="<#if selected_tab?? && selected_tab?has_content>${selected_tab}<#else>agent</#if>">
 		<input type="hidden" name="fltr_order_sort" value="${ticket_filter.orderSort!}">
 		<input type="hidden" name="fltr_order_by" value="${ticket_filter.orderBy!}">
+		<input type="hidden" id="hidden_query_value" name="query" value="${query!}">
 		<div class="row">
 			<div class="col-xs-12">
 				<button type="submit" name="fltr_new_urgency" value="-1" class="btn btn-link btn-xs <#if ticket_filter.urgency==-1>btn-primary border-gru<#else>border-gru text-gru btn-default</#if>">#i18n{ticketing.manage_tickets.urgency.all}</button>
@@ -237,7 +238,12 @@
 		<input type="hidden" id="searched_field" name="searched_field" value="contents">
 		<div class="input-group">
 			<label class="sr-only">#i18n{ticketing.manage_tickets.searchDefaultTxt}</label>			
-			<input class="form-control input-xs btn-group" type="text" name="query" placeholder="#i18n{ticketing.manage_tickets.searchDefaultTxt}" value="">
+			<div class="input-group-btn">				
+				<input id="search_input" class="form-control input-xs btn-group" type="text" name="query" placeholder="#i18n{ticketing.manage_tickets.searchDefaultTxt}" value="<#if query?has_content>${query}</#if>">
+				<#if query?has_content>
+					<span id="search_clear" class="glyphicon glyphicon-remove-circle"></span>
+				</#if>
+			</div>
 			<div class="input-group-btn">
 				<button class="btn btn-xs" type="submit" >
 					<span class="fa fa-search"></span>
@@ -357,6 +363,12 @@ function setSelectedTab(tab){
  // initialization functions for multiselect state list
     $(document).ready(function() {
     	
+    	$("#search_clear").click(function(){
+    	    $("#search_input").val('');
+    	    $("#hidden_query_value").val('');
+    	    $("#filter_form").submit( );
+    	});
+    	  
         var orderCount = 0;
         $('#fltr_state_ids').multiselect({
             buttonText: function(options) {

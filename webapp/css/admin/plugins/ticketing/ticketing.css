@@ -114,6 +114,23 @@ textarea.ticketing.richtext {
 	height:100%;
 }
 
+#search_input {
+    width: 200px;
+}
+
+#search_clear {
+    position: absolute;
+    z-index: 1000;
+    right: 5px;
+    top: 0;
+    bottom: 0;
+    height: 14px;
+    margin: auto;
+    font-size: 14px;
+    cursor: pointer;
+    color: #ccc;
+}
+
 /* FILTERS */
 #filter-ticket{ font-size: 1rem; color:#000 }
 #filter-ticket h3 { color: #FFF }
