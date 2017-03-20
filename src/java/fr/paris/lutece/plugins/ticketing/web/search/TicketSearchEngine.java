@@ -87,6 +87,8 @@ public class TicketSearchEngine implements ITicketSearchEngine
 {
     // Constants
     private static final String DESC_CONSTANT = "DESC";
+    private static final int TRUE_VALUE_CONSTANT = 1;
+    private static final int FALSE_VALUE_CONSTANT = 0;
 
     // The map for the association on the filter selected by the user and the Lucene field
     private final Map<String, List<AbstractMap.SimpleEntry<String, Type>>> _mapSortField = TicketSearchUtil.initMapSortField( );
@@ -112,7 +114,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             result.setCriticality( document.getField( TicketSearchItemConstant.FIELD_CRITICALITY ).numericValue( ).intValue( ) );
             result.setPriority( document.getField( TicketSearchItemConstant.FIELD_PRIORITY ).numericValue( ).intValue( ) );
             result.setReference( document.get( TicketSearchItemConstant.FIELD_REFERENCE ) );
-            result.setTicketStatus( document.getField( TicketSearchItemConstant.FIELD_ID_STATUS ).numericValue( ).intValue( ) );
+            result.setTicketStatus( Integer.parseInt( document.get( TicketSearchItemConstant.FIELD_STATUS ) ) );
             result.setTicketDomain( document.get( TicketSearchItemConstant.FIELD_DOMAIN ) );
             result.setUserTitle( document.get( TicketSearchItemConstant.FIELD_USER_TITLE ) );
             result.setFirstname( document.get( TicketSearchItemConstant.FIELD_FIRSTNAME ) );
@@ -121,7 +123,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             result.setMobilePhoneNumber( document.get( TicketSearchItemConstant.FIELD_MOBILE_PHONE_NUMBER ) );
             result.setFixedPhoneNumber( document.get( TicketSearchItemConstant.FIELD_FIXED_PHONE_NUMBER ) );
             result.setNomenclature( document.get( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE ) );
-            result.setRead( BooleanUtils.toBoolean( document.getField( TicketSearchItemConstant.FIELD_TICKET_READ ).numericValue( ).intValue( ) ) );
+            result.setRead( BooleanUtils.toBoolean( Integer.parseInt( document.get( TicketSearchItemConstant.FIELD_TICKET_READ ) ), TRUE_VALUE_CONSTANT , FALSE_VALUE_CONSTANT ) );
 
             // TicketCategory
             TicketCategory ticketCategory = new TicketCategory( );
@@ -187,10 +189,10 @@ public class TicketSearchEngine implements ITicketSearchEngine
                 // Get results documents
                 TopDocs topDocs = searcher.search( query, addQueryFilterTabClause( filter ), LuceneSearchEngine.MAX_RESPONSES, getSortQuery( filter ) );
                 ScoreDoc [ ] hits = topDocs.scoreDocs;
-
+                
                 for ( int i = 0; i < hits.length; i++ )
                 {
-                    int docId = hits [i].doc;
+                    int docId = hits [i].doc;                    
                     Document document = searcher.doc( docId );
                     listResults.add( createTicketFromDocument( document ) );
                 }

@@ -68,12 +68,12 @@ public class TicketSearchUtil
      *            the set which contains all values to filter
      * @return the TermsFilter object
      */
-    public static TermsFilter createTermsFilter( String strFieldForTerm, Collection<Integer> setInteger )
+    public static TermsFilter createTermsFilter( String strFieldForTerm, Collection<Integer> collectionInteger )
     {
         List<Term> listTermIdAssignUnit = new ArrayList<Term>( );
-        if ( setInteger != null && !setInteger.isEmpty( ) )
+        if ( collectionInteger != null && !collectionInteger.isEmpty( ) )
         {
-            for ( Integer currentId : setInteger )
+            for ( Integer currentId : collectionInteger )
             {
                 BytesRef bytesRefId = getBytesRef( currentId );
                 listTermIdAssignUnit.add( new Term( strFieldForTerm, bytesRefId ) );

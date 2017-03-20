@@ -55,7 +55,7 @@ public class TicketSearchItemConstant
     public static final String FIELD_TICKET_NOMENCLATURE = "ticket_nomenclature";
     public static final String FIELD_PRIORITY = "ticket_priority";
     public static final String FIELD_CRITICALITY = "ticket_criticality";
-    public static final String FIELD_ID_STATUS = "ticket_id_status";
+    public static final String FIELD_STATUS = "ticket_status";
     public static final String FIELD_TICKET_TYPE_ID = "ticket_type_Id";
     public static final String FIELD_TICKET_TYPE = "ticket_type";
     public static final String FIELD_USER_TITLE = "user_title";
