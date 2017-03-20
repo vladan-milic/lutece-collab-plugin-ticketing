@@ -153,7 +153,7 @@ public class FormValidator
     {
         String strError = null;
 
-        if ( StringUtils.isBlank( _request.getParameter( PARAMETER_FIXED_PHONE_NUMBER ) ) 
+        if ( StringUtils.isBlank( _request.getParameter( PARAMETER_FIXED_PHONE_NUMBER ) )
                 && StringUtils.isBlank( _request.getParameter( PARAMETER_MOBILE_PHONE_NUMBER ) ) )
         {
             strError = I18nService.getLocalizedString( ERROR_PHONE_NUMBER_MISSING, _request.getLocale( ) );

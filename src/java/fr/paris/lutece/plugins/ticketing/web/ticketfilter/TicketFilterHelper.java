@@ -373,7 +373,7 @@ public final class TicketFilterHelper
                 break;
             }
         }
-        
+
         if ( lstIdWorkflowState != null && !lstIdWorkflowState.isEmpty( ) )
         {
             List<Integer> lstIdWorkflowStateTemp = new ArrayList<Integer>( );
@@ -389,7 +389,7 @@ public final class TicketFilterHelper
             lstIdWorkflowState.clear( );
             lstIdWorkflowState.addAll( lstIdWorkflowStateTemp );
         }
-        
+
         if ( lstIdWorkflowState == null || lstIdWorkflowState.isEmpty( ) )
         {
             lstIdWorkflowState = new ArrayList<Integer>( );

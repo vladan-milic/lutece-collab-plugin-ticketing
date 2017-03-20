@@ -310,7 +310,8 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             doc.add( new IntField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_ADMIN_ID, ticket.getAssigneeUser( ).getAdminUserId( ), Store.YES ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_FIRSTNAME, manageNullValue( ticket.getAssigneeUser( ).getFirstname( ) ) ) );
-            doc.add( new StringField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, manageNullValue( ticket.getAssigneeUser( ).getLastname( ) ), Store.YES ) );
+            doc.add( new StringField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, manageNullValue( ticket.getAssigneeUser( ).getLastname( ) ),
+                    Store.YES ) );
         }
         else
         {

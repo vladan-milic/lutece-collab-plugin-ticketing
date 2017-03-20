@@ -123,7 +123,8 @@ public class TicketSearchEngine implements ITicketSearchEngine
             result.setMobilePhoneNumber( document.get( TicketSearchItemConstant.FIELD_MOBILE_PHONE_NUMBER ) );
             result.setFixedPhoneNumber( document.get( TicketSearchItemConstant.FIELD_FIXED_PHONE_NUMBER ) );
             result.setNomenclature( document.get( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE ) );
-            result.setRead( BooleanUtils.toBoolean( Integer.parseInt( document.get( TicketSearchItemConstant.FIELD_TICKET_READ ) ), TRUE_VALUE_CONSTANT , FALSE_VALUE_CONSTANT ) );
+            result.setRead( BooleanUtils.toBoolean( Integer.parseInt( document.get( TicketSearchItemConstant.FIELD_TICKET_READ ) ), TRUE_VALUE_CONSTANT,
+                    FALSE_VALUE_CONSTANT ) );
 
             // TicketCategory
             TicketCategory ticketCategory = new TicketCategory( );
@@ -189,10 +190,10 @@ public class TicketSearchEngine implements ITicketSearchEngine
                 // Get results documents
                 TopDocs topDocs = searcher.search( query, addQueryFilterTabClause( filter ), LuceneSearchEngine.MAX_RESPONSES, getSortQuery( filter ) );
                 ScoreDoc [ ] hits = topDocs.scoreDocs;
-                
+
                 for ( int i = 0; i < hits.length; i++ )
                 {
-                    int docId = hits [i].doc;                    
+                    int docId = hits [i].doc;
                     Document document = searcher.doc( docId );
                     listResults.add( createTicketFromDocument( document ) );
                 }
