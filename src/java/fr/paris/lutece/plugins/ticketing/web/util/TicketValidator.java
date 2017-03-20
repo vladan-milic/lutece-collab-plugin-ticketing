@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.ticketing.web.util;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
@@ -47,8 +46,6 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.util.beanvalidation.BeanValidationUtil;
 import fr.paris.lutece.util.beanvalidation.ValidationError;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -60,7 +57,6 @@ import java.util.Locale;
 public class TicketValidator
 {
     // Errors
-    private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
     private static final String ERROR_USER_TITLE_UNKNOWN = "ticketing.error.userTitle.unknown";
     private static final String ERROR_TICKET_CATEGORY_UNKNOWN = "ticketing.error.ticketCategory.unknown";
     private static final String ERROR_CONTACT_MODE_UNKNOWN = "ticketing.error.contactMode.unknown";
@@ -159,5 +155,4 @@ public class TicketValidator
 
         return listErrors;
     }
-
 }
