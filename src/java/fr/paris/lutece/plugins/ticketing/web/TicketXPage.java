@@ -377,6 +377,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
         FormValidator formValidator = new FormValidator( request );
         listValidationErrors.add( formValidator.isEmailFilled( ) );
+        listValidationErrors.add( formValidator.isPhoneNumberFilled( ) );
 
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
         if ( iNbCharcount > 5000 )

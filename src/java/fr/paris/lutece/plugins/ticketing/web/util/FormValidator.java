@@ -54,10 +54,13 @@ public class FormValidator
     // Parameters
     private static final String PARAMETER_CONTACT_MODE_ID = "id_contact_mode";
     private static final String PARAMETER_EMAIL = "email";
+    private static final String PARAMETER_FIXED_PHONE_NUMBER = "fixed_phone_number";
+    private static final String PARAMETER_MOBILE_PHONE_NUMBER = "mobile_phone_number";
 
     // Errors
     private static final String ERROR_CONTACT_MODE_NOT_FILLED = "ticketing.error.contactmode.not.filled";
     private static final String ERROR_EMAIL_NOT_FILLED = "ticketing.validation.ticket.Email.notEmpty";
+    private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
     private static final String CONTACT_MODE_LABEL_I18N = "ticketing.contactmodes.label.";
     private HttpServletRequest _request;
 
@@ -135,6 +138,25 @@ public class FormValidator
         if ( StringUtils.isBlank( _request.getParameter( PARAMETER_EMAIL ) ) )
         {
             strError = I18nService.getLocalizedString( ERROR_EMAIL_NOT_FILLED, _request.getLocale( ) );
+        }
+
+        return strError;
+    }
+
+    /**
+     * Tests whether the specified ticket has a phone number or not
+     *
+     * @return the localized error message if neither the fixed phone number nor the mobile phone number are filled, {@code null} otherwise
+     * @return {@code true} if neither the fixed phone number nor the mobile phone number are filled, {@code false} otherwise
+     */
+    public String isPhoneNumberFilled( )
+    {
+        String strError = null;
+
+        if ( StringUtils.isBlank( _request.getParameter( PARAMETER_FIXED_PHONE_NUMBER ) ) 
+                && StringUtils.isBlank( _request.getParameter( PARAMETER_MOBILE_PHONE_NUMBER ) ) )
+        {
+            strError = I18nService.getLocalizedString( ERROR_PHONE_NUMBER_MISSING, _request.getLocale( ) );
         }
 
         return strError;
