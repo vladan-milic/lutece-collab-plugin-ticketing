@@ -13,6 +13,20 @@ CREATE TABLE ticketing_indexer_action (
 CREATE INDEX ticketing_id_indexer_task ON ticketing_indexer_action (id_task);
 
 --
+-- Structure for table ticketing_ticket_address
+--
+
+DROP TABLE IF EXISTS ticketing_ticket_address;
+CREATE TABLE ticketing_ticket_address (
+id_ticket int(6) NOT NULL,
+address varchar(255) NULL,
+address_detail varchar(255) NULL,
+postal_code varchar(5) NULL,
+city varchar(255) NULL,
+PRIMARY KEY (id_ticket)
+);
+
+--
 -- Structure for table ticketing_ticket
 --
 
@@ -207,22 +221,6 @@ CREATE TABLE ticketing_ticket_category_input (
     id_input int(6) NOT NULL,
     pos int(6) NOT NULL default '0',
     PRIMARY KEY (id_ticket_category, id_input)
-);
-
-
-
---
--- Structure for table ticketing_instant_response
---
-
-DROP TABLE IF EXISTS ticketing_ticket_address;
-CREATE TABLE ticketing_ticket_address (
-id_ticket int(6) NOT NULL,
-address varchar(255) NULL,
-address_detail varchar(255) NULL,
-postal_code varchar(5) NULL,
-city varchar(255) NULL,
-PRIMARY KEY (id_ticket)
 );
 
 
