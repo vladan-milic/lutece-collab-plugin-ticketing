@@ -125,7 +125,7 @@ function loadGenericAttributesForm(url, is_response_reseted, category_selector, 
 			success: function( response ) {
 				$('#generic_attributes').replaceWith('<div id="generic_attributes">' + response + '</div>');
 				
-				if(is_first_call && $('.alert.alert-danger').length > 0)
+				if(is_first_call && $('.alert.alert-danger').length > 0 && $('#messages_errors_div').length == 0)
 				{
 					var positionToScroll = 0;
 					if($('.alert.alert-danger').prev('.form-group').length)

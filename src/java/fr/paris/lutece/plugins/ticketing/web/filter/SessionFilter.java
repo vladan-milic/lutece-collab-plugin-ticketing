@@ -42,7 +42,8 @@ import fr.paris.lutece.portal.web.xpages.XPageApplicationEntry;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
-
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -62,10 +63,16 @@ public class SessionFilter implements Filter
 {
     // Properties
     private static final String PROPERTY_RETURN_URL_PARAMETER_NAME = "ticketing.workflow.redirect.parameterName";
+    private static final String PROPERTY_LIST_TICKETING_BACKOFFICE_URL = "ticketing.backoffice.url.list";
 
     // Parameters
     private static final String PARAM_RETURN_URL = AppPropertiesService.getProperty( PROPERTY_RETURN_URL_PARAMETER_NAME, "return_url" );
     private static final String PARAMETER_XPAGE = "page";
+
+    // Other
+    private static final char COMMA = ',';
+    private static final List<String> LIST_TICKETING_BACKOFFICE_URL = new ArrayList<String>( Arrays.asList( StringUtils.split(
+            AppPropertiesService.getProperty( PROPERTY_LIST_TICKETING_BACKOFFICE_URL, TicketingConstants.ADMIN_CONTROLLLER_PATH ), COMMA ) ) );
 
     @Override
     public void init( FilterConfig filterConfig ) throws ServletException
@@ -116,7 +123,18 @@ public class SessionFilter implements Filter
     {
         String url = request.getRequestURL( ).toString( );
 
-        return url.contains( TicketingConstants.ADMIN_CONTROLLLER_PATH );
+        Boolean bIsTicketingBackOfficeUrl = false;
+
+        for ( String backOfficeUrl : LIST_TICKETING_BACKOFFICE_URL )
+        {
+            if ( url.contains( backOfficeUrl ) )
+            {
+                bIsTicketingBackOfficeUrl = true;
+                break;
+            }
+        }
+
+        return bIsTicketingBackOfficeUrl;
     }
 
     /**
