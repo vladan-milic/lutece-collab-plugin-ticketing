@@ -34,18 +34,22 @@
 package fr.paris.lutece.plugins.ticketing.web.util;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.miscellaneous.LimitTokenCountAnalyzer;
+import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.LogDocMergePolicy;
 import org.apache.lucene.index.LogMergePolicy;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.util.Version;
 
+import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchItemConstant;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
@@ -61,6 +65,9 @@ public class TicketIndexWriterUtil
     // Default values
     private static final int DEFAULT_WRITER_MERGE_FACTOR = 20;
     private static final int DEFAULT_WRITER_MAX_FIELD_LENGTH = 1000000;
+    
+    // Variables
+    public static final Map<String, Analyzer> _mapAnalyzerPerField = initPerFieldAnalyzerMap( );
 
     /**
      * Return the IndexWriterConfig for an IndexWriter
@@ -74,7 +81,8 @@ public class TicketIndexWriterUtil
         int nWriterMergeFactor = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MERGE_FACTOR, DEFAULT_WRITER_MERGE_FACTOR );
         int nWriterMaxSectorLength = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MAX_FIELD_LENGTH, DEFAULT_WRITER_MAX_FIELD_LENGTH );
 
-        IndexWriterConfig indexWriterConfig = new IndexWriterConfig( Version.LUCENE_4_9, new LimitTokenCountAnalyzer( analyzer, nWriterMaxSectorLength ) );
+        PerFieldAnalyzerWrapper perFieldAnalyzerWrapper = new PerFieldAnalyzerWrapper( analyzer, getPerFieldAnalyzerMap( ) );
+        IndexWriterConfig indexWriterConfig = new IndexWriterConfig( Version.LUCENE_4_9, new LimitTokenCountAnalyzer( perFieldAnalyzerWrapper, nWriterMaxSectorLength ) );
 
         LogMergePolicy mergePolicy = new LogDocMergePolicy( );
         mergePolicy.setMergeFactor( nWriterMergeFactor );
@@ -120,5 +128,35 @@ public class TicketIndexWriterUtil
     {
         return !DirectoryReader.indexExists( directory ) ? true : bCreate;
     }
+    
+    /**
+     * Create the map which specify specific Analyzer to use for some field
+     * 
+     * @return the map which associate an analyzer to the name of a field
+     */
+    public static final Map<String, Analyzer> initPerFieldAnalyzerMap(  )
+    {
+        TicketSortAnalyzer ticketSortAnalyzer = new TicketSortAnalyzer( );
+        Map<String, Analyzer> mapAnalyzerPerField = new LinkedHashMap<>( );
+        mapAnalyzerPerField.put( TicketSearchItemConstant.FIELD_LASTNAME, ticketSortAnalyzer );
+        mapAnalyzerPerField.put( TicketSearchItemConstant.FIELD_FIRSTNAME, ticketSortAnalyzer );
+        mapAnalyzerPerField.put( TicketSearchItemConstant.FIELD_CATEGORY, ticketSortAnalyzer );
+        mapAnalyzerPerField.put( TicketSearchItemConstant.FIELD_STATE, ticketSortAnalyzer );
+        mapAnalyzerPerField.put( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE, ticketSortAnalyzer );
+        mapAnalyzerPerField.put( TicketSearchItemConstant.FIELD_CHANNEL_LABEL, ticketSortAnalyzer );
+        mapAnalyzerPerField.put( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, ticketSortAnalyzer );
+        mapAnalyzerPerField.put( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, ticketSortAnalyzer );
+        
+        return mapAnalyzerPerField;
+    }
 
+    /**
+     * Return the map which specify specific Analyzer to use for some field
+     * 
+     * @return the map which specify specific Analyzer to use for some field
+     */
+    public static Map<String, Analyzer> getPerFieldAnalyzerMap(  )
+    {
+        return _mapAnalyzerPerField;
+    }
 }

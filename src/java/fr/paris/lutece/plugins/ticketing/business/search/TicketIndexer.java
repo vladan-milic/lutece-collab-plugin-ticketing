@@ -248,7 +248,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new LongField( TicketSearchItemConstant.FIELD_DATE_CREATION, ( ticket.getDateCreate( ) == null ? 0 : ticket.getDateCreate( ).getTime( ) ),
                 Store.YES ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_COMMENT, ticket.getTicketComment( ) ) );
-        doc.add( new StringField( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE, manageNullValue( ticket.getNomenclature( ) ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE, manageNullValue( ticket.getNomenclature( ) ), Store.YES ) );
         doc.add( new IntField( TicketSearchItemConstant.FIELD_CRITICALITY, ticket.getCriticality( ), Store.YES ) );
         doc.add( new IntField( TicketSearchItemConstant.FIELD_PRIORITY, ticket.getPriority( ), Store.YES ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_STATUS, ticket.getTicketStatus( ) ) );
@@ -257,18 +257,18 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         if ( ticket.getTicketCategory( ) != null )
         {
-            doc.add( new StringField( TicketSearchItemConstant.FIELD_CATEGORY, ticket.getTicketCategory( ).getLabel( ), Store.YES ) );
+            doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY, ticket.getTicketCategory( ).getLabel( ), Store.YES ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_PRECISION, manageNullValue( ticket.getTicketCategory( ).getPrecision( ) ) ) );
         }
         else
         {
-            doc.add( new StringField( TicketSearchItemConstant.FIELD_CATEGORY, StringUtils.EMPTY, Store.YES ) );
+            doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY, StringUtils.EMPTY, Store.YES ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_PRECISION, StringUtils.EMPTY ) );
         }
 
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_USER_TITLE, manageNullValue( ticket.getUserTitle( ) ) ) );
-        doc.add( new StringField( TicketSearchItemConstant.FIELD_FIRSTNAME, manageNullValue( ticket.getFirstname( ) ), Store.YES ) );
-        doc.add( new StringField( TicketSearchItemConstant.FIELD_LASTNAME, manageNullValue( ticket.getLastname( ) ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItemConstant.FIELD_FIRSTNAME, manageNullValue( ticket.getFirstname( ) ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItemConstant.FIELD_LASTNAME, manageNullValue( ticket.getLastname( ) ), Store.YES ) );
         doc.add( new StringField( TicketSearchItemConstant.FIELD_EMAIL, manageNullValue( ticket.getEmail( ) ), Store.YES ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_MOBILE_PHONE_NUMBER, manageNullValue( ticket.getMobilePhoneNumber( ) ) ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_FIXED_PHONE_NUMBER, manageNullValue( ticket.getFixedPhoneNumber( ) ) ) );
@@ -276,48 +276,48 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         if ( ticket.getState( ) != null )
         {
             doc.add( new IntField( TicketSearchItemConstant.FIELD_STATE_ID, ticket.getState( ).getId( ), Store.YES ) );
-            doc.add( new StringField( TicketSearchItemConstant.FIELD_STATE, manageNullValue( ticket.getState( ).getName( ) ), Store.YES ) );
+            doc.add( new TextField( TicketSearchItemConstant.FIELD_STATE, manageNullValue( ticket.getState( ).getName( ) ), Store.YES ) );
         }
         else
         {
             doc.add( new IntField( TicketSearchItemConstant.FIELD_STATE_ID, CONSTANT_ID_NULL, Store.YES ) );
-            doc.add( new StringField( TicketSearchItemConstant.FIELD_STATE, StringUtils.EMPTY, Store.YES ) );
+            doc.add( new TextField( TicketSearchItemConstant.FIELD_STATE, StringUtils.EMPTY, Store.YES ) );
         }
 
         if ( ticket.getChannel( ) != null )
         {
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_CHANNEL_ICONFONT, manageNullValue( ticket.getChannel( ).getIconFont( ) ) ) );
-            doc.add( new StringField( TicketSearchItemConstant.FIELD_CHANNEL_LABEL, manageNullValue( ticket.getChannel( ).getLabel( ) ), Store.YES ) );
+            doc.add( new TextField( TicketSearchItemConstant.FIELD_CHANNEL_LABEL, manageNullValue( ticket.getChannel( ).getLabel( ) ), Store.YES ) );
         }
         else
         {
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_CHANNEL_ICONFONT, StringUtils.EMPTY ) );
-            doc.add( new StringField( TicketSearchItemConstant.FIELD_CHANNEL_LABEL, StringUtils.EMPTY, Store.YES ) );
+            doc.add( new TextField( TicketSearchItemConstant.FIELD_CHANNEL_LABEL, StringUtils.EMPTY, Store.YES ) );
         }
 
         if ( ticket.getAssigneeUnit( ) != null )
         {
             doc.add( new IntField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, ticket.getAssigneeUnit( ).getUnitId( ), Store.YES ) );
-            doc.add( new StringField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, manageNullValue( ticket.getAssigneeUnit( ).getName( ) ), Store.YES ) );
+            doc.add( new TextField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, manageNullValue( ticket.getAssigneeUnit( ).getName( ) ), Store.YES ) );
         }
         else
         {
             doc.add( new IntField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, CONSTANT_ID_NULL, Store.YES ) );
-            doc.add( new StringField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, StringUtils.EMPTY, Store.YES ) );
+            doc.add( new TextField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, StringUtils.EMPTY, Store.YES ) );
         }
 
         if ( ticket.getAssigneeUser( ) != null )
         {
             doc.add( new IntField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_ADMIN_ID, ticket.getAssigneeUser( ).getAdminUserId( ), Store.YES ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_FIRSTNAME, manageNullValue( ticket.getAssigneeUser( ).getFirstname( ) ) ) );
-            doc.add( new StringField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, manageNullValue( ticket.getAssigneeUser( ).getLastname( ) ),
+            doc.add( new TextField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, manageNullValue( ticket.getAssigneeUser( ).getLastname( ) ),
                     Store.YES ) );
         }
         else
         {
             doc.add( new IntField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_ADMIN_ID, CONSTANT_ID_NULL, Store.YES ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_FIRSTNAME, StringUtils.EMPTY ) );
-            doc.add( new StringField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, StringUtils.EMPTY, Store.YES ) );
+            doc.add( new TextField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, StringUtils.EMPTY, Store.YES ) );
         }
 
         if ( ticket.getAssignerUnit( ) != null )

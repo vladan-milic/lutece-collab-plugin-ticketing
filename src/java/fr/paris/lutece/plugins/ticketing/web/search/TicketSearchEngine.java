@@ -44,6 +44,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queries.BooleanFilter;
@@ -74,6 +75,7 @@ import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexWriterUtil;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketSearchUtil;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.service.search.IndexationService;
@@ -190,7 +192,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
                 // Get results documents
                 TopDocs topDocs = searcher.search( query, addQueryFilterTabClause( filter ), LuceneSearchEngine.MAX_RESPONSES, getSortQuery( filter ) );
                 ScoreDoc [ ] hits = topDocs.scoreDocs;
-
+                
                 for ( int i = 0; i < hits.length; i++ )
                 {
                     int docId = hits [i].doc;
@@ -270,8 +272,10 @@ public class TicketSearchEngine implements ITicketSearchEngine
         BooleanQuery mainQuery = new BooleanQuery( );
         if ( StringUtils.isNotBlank( strQuery ) )
         {
-            Query queryTicket = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, TicketSearchItemConstant.FIELD_CONTENTS, TicketSearchService
-                    .getInstance( ).getAnalyzer( ) ).parse( strQuery );
+            PerFieldAnalyzerWrapper perFieldAnalyzerWrapper = new PerFieldAnalyzerWrapper( TicketSearchService.getInstance( ).getAnalyzer( ), 
+                    TicketIndexWriterUtil.getPerFieldAnalyzerMap( ) );
+            Query queryTicket = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, TicketSearchItemConstant.FIELD_CONTENTS, 
+                    perFieldAnalyzerWrapper ).parse( strQuery );
             mainQuery.add( queryTicket, BooleanClause.Occur.MUST );
         }
         addQueryDomainClause( mainQuery, listTicketDomain );
