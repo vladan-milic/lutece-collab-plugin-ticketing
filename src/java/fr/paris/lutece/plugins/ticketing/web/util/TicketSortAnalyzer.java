@@ -53,7 +53,7 @@ public class TicketSortAnalyzer extends Analyzer
     protected TokenStreamComponents createComponents( String fieldName, Reader reader )
     {
         final Tokenizer source = new KeywordTokenizer( reader );
-        
+
         TokenStream tokenStream = source;
         tokenStream = new LowerCaseFilter( Version.LUCENE_4_9, source );
         tokenStream = new ASCIIFoldingFilter( tokenStream );

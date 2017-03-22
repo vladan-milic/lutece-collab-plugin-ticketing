@@ -192,7 +192,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
                 // Get results documents
                 TopDocs topDocs = searcher.search( query, addQueryFilterTabClause( filter ), LuceneSearchEngine.MAX_RESPONSES, getSortQuery( filter ) );
                 ScoreDoc [ ] hits = topDocs.scoreDocs;
-                
+
                 for ( int i = 0; i < hits.length; i++ )
                 {
                     int docId = hits [i].doc;
@@ -272,10 +272,10 @@ public class TicketSearchEngine implements ITicketSearchEngine
         BooleanQuery mainQuery = new BooleanQuery( );
         if ( StringUtils.isNotBlank( strQuery ) )
         {
-            PerFieldAnalyzerWrapper perFieldAnalyzerWrapper = new PerFieldAnalyzerWrapper( TicketSearchService.getInstance( ).getAnalyzer( ), 
+            PerFieldAnalyzerWrapper perFieldAnalyzerWrapper = new PerFieldAnalyzerWrapper( TicketSearchService.getInstance( ).getAnalyzer( ),
                     TicketIndexWriterUtil.getPerFieldAnalyzerMap( ) );
-            Query queryTicket = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, TicketSearchItemConstant.FIELD_CONTENTS, 
-                    perFieldAnalyzerWrapper ).parse( strQuery );
+            Query queryTicket = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, TicketSearchItemConstant.FIELD_CONTENTS, perFieldAnalyzerWrapper )
+                    .parse( strQuery );
             mainQuery.add( queryTicket, BooleanClause.Occur.MUST );
         }
         addQueryDomainClause( mainQuery, listTicketDomain );

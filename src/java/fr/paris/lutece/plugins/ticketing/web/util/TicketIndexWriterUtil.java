@@ -65,7 +65,7 @@ public class TicketIndexWriterUtil
     // Default values
     private static final int DEFAULT_WRITER_MERGE_FACTOR = 20;
     private static final int DEFAULT_WRITER_MAX_FIELD_LENGTH = 1000000;
-    
+
     // Variables
     public static final Map<String, Analyzer> _mapAnalyzerPerField = initPerFieldAnalyzerMap( );
 
@@ -82,7 +82,8 @@ public class TicketIndexWriterUtil
         int nWriterMaxSectorLength = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MAX_FIELD_LENGTH, DEFAULT_WRITER_MAX_FIELD_LENGTH );
 
         PerFieldAnalyzerWrapper perFieldAnalyzerWrapper = new PerFieldAnalyzerWrapper( analyzer, getPerFieldAnalyzerMap( ) );
-        IndexWriterConfig indexWriterConfig = new IndexWriterConfig( Version.LUCENE_4_9, new LimitTokenCountAnalyzer( perFieldAnalyzerWrapper, nWriterMaxSectorLength ) );
+        IndexWriterConfig indexWriterConfig = new IndexWriterConfig( Version.LUCENE_4_9, new LimitTokenCountAnalyzer( perFieldAnalyzerWrapper,
+                nWriterMaxSectorLength ) );
 
         LogMergePolicy mergePolicy = new LogDocMergePolicy( );
         mergePolicy.setMergeFactor( nWriterMergeFactor );
@@ -128,13 +129,13 @@ public class TicketIndexWriterUtil
     {
         return !DirectoryReader.indexExists( directory ) ? true : bCreate;
     }
-    
+
     /**
      * Create the map which specify specific Analyzer to use for some field
      * 
      * @return the map which associate an analyzer to the name of a field
      */
-    public static final Map<String, Analyzer> initPerFieldAnalyzerMap(  )
+    public static final Map<String, Analyzer> initPerFieldAnalyzerMap( )
     {
         TicketSortAnalyzer ticketSortAnalyzer = new TicketSortAnalyzer( );
         Map<String, Analyzer> mapAnalyzerPerField = new LinkedHashMap<>( );
@@ -146,7 +147,7 @@ public class TicketIndexWriterUtil
         mapAnalyzerPerField.put( TicketSearchItemConstant.FIELD_CHANNEL_LABEL, ticketSortAnalyzer );
         mapAnalyzerPerField.put( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, ticketSortAnalyzer );
         mapAnalyzerPerField.put( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, ticketSortAnalyzer );
-        
+
         return mapAnalyzerPerField;
     }
 
@@ -155,7 +156,7 @@ public class TicketIndexWriterUtil
      * 
      * @return the map which specify specific Analyzer to use for some field
      */
-    public static Map<String, Analyzer> getPerFieldAnalyzerMap(  )
+    public static Map<String, Analyzer> getPerFieldAnalyzerMap( )
     {
         return _mapAnalyzerPerField;
     }
