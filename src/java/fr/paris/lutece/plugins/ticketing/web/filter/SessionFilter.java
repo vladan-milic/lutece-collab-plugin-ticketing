@@ -64,15 +64,16 @@ public class SessionFilter implements Filter
     // Properties
     private static final String PROPERTY_RETURN_URL_PARAMETER_NAME = "ticketing.workflow.redirect.parameterName";
     private static final String PROPERTY_LIST_TICKETING_BACKOFFICE_URL = "ticketing.backoffice.url.list";
-    
+
     // Parameters
     private static final String PARAM_RETURN_URL = AppPropertiesService.getProperty( PROPERTY_RETURN_URL_PARAMETER_NAME, "return_url" );
     private static final String PARAMETER_XPAGE = "page";
 
     // Other
     private static final char COMMA = ',';
-    private static final List<String> LIST_TICKETING_BACKOFFICE_URL = new ArrayList<String>( Arrays.asList( StringUtils.split( AppPropertiesService.getProperty( PROPERTY_LIST_TICKETING_BACKOFFICE_URL, TicketingConstants.ADMIN_CONTROLLLER_PATH ), COMMA ) ) );
-    
+    private static final List<String> LIST_TICKETING_BACKOFFICE_URL = new ArrayList<String>( Arrays.asList( StringUtils.split(
+            AppPropertiesService.getProperty( PROPERTY_LIST_TICKETING_BACKOFFICE_URL, TicketingConstants.ADMIN_CONTROLLLER_PATH ), COMMA ) ) );
+
     @Override
     public void init( FilterConfig filterConfig ) throws ServletException
     {
@@ -121,9 +122,9 @@ public class SessionFilter implements Filter
     private static boolean isTicketingBackOfficeUrl( HttpServletRequest request )
     {
         String url = request.getRequestURL( ).toString( );
-        
+
         Boolean bIsTicketingBackOfficeUrl = false;
-        
+
         for ( String backOfficeUrl : LIST_TICKETING_BACKOFFICE_URL )
         {
             if ( url.contains( backOfficeUrl ) )
