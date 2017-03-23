@@ -246,7 +246,7 @@ public class TicketRest extends TicketingRest
             {
                 _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
                 _workflowService.executeActionAutomatic( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
-                
+
                 // Immediate indexation of the Ticket
                 immediateTicketIndexing( ticket.getId( ), errors );
             }
@@ -261,7 +261,7 @@ public class TicketRest extends TicketingRest
 
         return errors;
     }
-    
+
     protected void immediateTicketIndexing( int idTicket, List<String> errors )
     {
         Ticket ticket = TicketHome.findByPrimaryKey( idTicket );

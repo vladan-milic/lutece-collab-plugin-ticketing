@@ -294,7 +294,7 @@ public class TicketXPage extends WorkflowCapableXPage
                 }
             }
 
-            doProcessNextWorkflowAction( ticket, request );            
+            doProcessNextWorkflowAction( ticket, request );
 
             // Immediate indexation of the Ticket
             immediateTicketIndexing( ticket.getId( ), request );
