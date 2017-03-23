@@ -362,9 +362,6 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                         // multiple actions or no action => ambiguous case
                         // TODO throw an exception
                     }
-
-                    // Immediate indexation of the Ticket
-                    immediateTicketIndexing( ticket.getId( ), request );
                 }
                 catch( Exception e )
                 {
