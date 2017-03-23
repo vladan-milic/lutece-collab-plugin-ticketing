@@ -33,31 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
-import fr.paris.lutece.plugins.rest.service.RestConstants;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
-import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
-import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
-import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
-import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
-import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
-import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
-import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
-import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
-import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
-import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.portal.service.workflow.WorkflowService;
-
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-
 import javax.ws.rs.FormParam;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PUT;
@@ -66,6 +47,27 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
+
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.rest.service.RestConstants;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
+import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
+import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
+import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
+import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerException;
+import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
+import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexerActionUtil;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.workflow.WorkflowService;
 
 /**
  * REST service for ticket resource
@@ -244,6 +246,9 @@ public class TicketRest extends TicketingRest
             {
                 _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
                 _workflowService.executeActionAutomatic( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+
+                // Immediate indexation of the Ticket
+                immediateTicketIndexing( ticket.getId( ), errors );
             }
             catch( Exception e )
             {
@@ -255,5 +260,25 @@ public class TicketRest extends TicketingRest
         }
 
         return errors;
+    }
+
+    protected void immediateTicketIndexing( int idTicket, List<String> errors )
+    {
+        Ticket ticket = TicketHome.findByPrimaryKey( idTicket );
+        if ( ticket != null )
+        {
+            try
+            {
+                TicketIndexer ticketIndexer = new TicketIndexer( );
+                ticketIndexer.indexTicket( ticket );
+            }
+            catch( TicketIndexerException ticketIndexerException )
+            {
+                errors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, Locale.FRENCH ) );
+
+                // The indexation of the Ticket fail, we will store the Ticket in the table for the daemon
+                IndexerActionHome.create( TicketIndexerActionUtil.createIndexerActionFromTicket( ticket ) );
+            }
+        }
     }
 }
