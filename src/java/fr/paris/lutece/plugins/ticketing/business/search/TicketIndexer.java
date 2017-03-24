@@ -242,12 +242,12 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         Document doc = new Document( );
 
         doc.add( new IntField( TicketSearchItemConstant.FIELD_TICKET_ID, ticket.getId( ), Store.YES ) );
-        doc.add( new TextField( TicketSearchItemConstant.FIELD_CONTENTS, getContentForIndexer( ticket ), Store.NO ) );
-        doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN, ticket.getTicketDomain( ), Store.YES ) );
-        doc.add( new StringField( TicketSearchItemConstant.FIELD_REFERENCE, ticket.getReference( ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItemConstant.FIELD_CONTENTS, manageNullValue( getContentForIndexer( ticket ) ), Store.NO ) );
+        doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN, manageNullValue( ticket.getTicketDomain( ) ), Store.YES ) );
+        doc.add( new StringField( TicketSearchItemConstant.FIELD_REFERENCE, manageNullValue( ticket.getReference( ) ), Store.YES ) );
         doc.add( new LongField( TicketSearchItemConstant.FIELD_DATE_CREATION, ( ticket.getDateCreate( ) == null ? 0 : ticket.getDateCreate( ).getTime( ) ),
                 Store.YES ) );
-        doc.add( new StoredField( TicketSearchItemConstant.FIELD_COMMENT, ticket.getTicketComment( ) ) );
+        doc.add( new StoredField( TicketSearchItemConstant.FIELD_COMMENT, manageNullValue( ticket.getTicketComment( ) ) ) );
         doc.add( new TextField( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE, manageNullValue( ticket.getNomenclature( ) ), Store.YES ) );
         doc.add( new IntField( TicketSearchItemConstant.FIELD_CRITICALITY, ticket.getCriticality( ), Store.YES ) );
         doc.add( new IntField( TicketSearchItemConstant.FIELD_PRIORITY, ticket.getPriority( ), Store.YES ) );
@@ -257,7 +257,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         if ( ticket.getTicketCategory( ) != null )
         {
-            doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY, ticket.getTicketCategory( ).getLabel( ), Store.YES ) );
+            doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY, manageNullValue( ticket.getTicketCategory( ).getLabel( ) ), Store.YES ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_PRECISION, manageNullValue( ticket.getTicketCategory( ).getPrecision( ) ) ) );
         }
         else
