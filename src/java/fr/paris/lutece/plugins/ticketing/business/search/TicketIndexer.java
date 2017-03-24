@@ -636,17 +636,17 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             }
         }
 
-        if ( WorkflowService.getInstance( ).isAvailable( )  && ticket.getTicketCategory( ) != null )
+        if ( WorkflowService.getInstance( ).isAvailable( ) && ticket.getTicketCategory( ) != null )
         {
             TicketCategory ticketCategory = ticket.getTicketCategory( );
             State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, ticketCategory.getIdWorkflow( ),
                     ticketCategory.getId( ) );
-            
+
             if ( state != null && StringUtils.isNotBlank( state.getName( ) ) )
             {
                 sb.append( state.getName( ) ).append( SEPARATOR );
             }
-            
+
             if ( StringUtils.isNotBlank( ticketCategory.getPrecision( ) ) )
             {
                 sb.append( ticketCategory.getPrecision( ) ).append( SEPARATOR );
@@ -656,12 +656,12 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         if ( ticket.getAssigneeUser( ) != null )
         {
             AssigneeUser assigneeUser = ticket.getAssigneeUser( );
-            
+
             if ( StringUtils.isNotBlank( assigneeUser.getFirstname( ) ) )
             {
                 sb.append( assigneeUser.getFirstname( ) ).append( SEPARATOR );
             }
-            
+
             if ( StringUtils.isNotBlank( assigneeUser.getLastname( ) ) )
             {
                 sb.append( assigneeUser.getLastname( ) ).append( SEPARATOR );
