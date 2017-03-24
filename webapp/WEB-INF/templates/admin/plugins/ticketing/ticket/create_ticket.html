@@ -46,25 +46,25 @@
           </div>
 		  <div class="form-group">
             <label for="address">#i18n{ticketing.create_ticket.labelAddress}</label>
-            <input type="text" name="address" id="address" class="form-control input-lg" 
+            <input type="text" name="address" id="address" class="form-control input-lg" maxlength="76"
             	value="${(ticket.ticketAddress.address)!''}">
             <span class="help-block">#i18n{ticketing.create_ticket.labelAddress.help}</span>
           </div>
 		  <div class="form-group">
             <label for="address_detail">#i18n{ticketing.create_ticket.labelAddressDetail}</label>
-            <input type="text" name="address_detail" id="address_detail" class="form-control input-lg" 
+            <input type="text" name="address_detail" id="address_detail" class="form-control input-lg" maxlength="76"
             	value="${(ticket.ticketAddress.addressDetail)!''}">
             <span class="help-block">#i18n{ticketing.create_ticket.labelAddressDetail.help}</span>
           </div>
 		  <div class="form-group">
             <label for="postal_code">#i18n{ticketing.create_ticket.labelPostalCode}</label>
-            <input type="text" name="postal_code" id="postal_code" class="form-control input-lg" 
+            <input type="text" name="postal_code" id="postal_code" class="form-control input-lg" maxlength="5"
             	value="${(ticket.ticketAddress.postalCode)!''}">       
             <span class="help-block">#i18n{ticketing.create_ticket.labelPostalCode.help}</span>
           </div>
 		  <div class="form-group">
             <label for="city">#i18n{ticketing.create_ticket.labelCity}</label>
-            <input type="text" name="city" id="city" class="form-control input-lg"
+            <input type="text" name="city" id="city" class="form-control input-lg" maxlength="76"
             	value="${(ticket.ticketAddress.city)!''}">           
             <span class="help-block">#i18n{ticketing.create_ticket.labelCity.help}</span>
           </div>

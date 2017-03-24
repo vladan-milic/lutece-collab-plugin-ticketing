@@ -61,7 +61,7 @@ table.table-hover tbody tr:hover{ cursor: pointer }
 #info-head-right .fa { width: 40px; }
 .nav-ticket{ padding-left: 140px }
 
-.ticket-head{ min-height: 200px !important; max-height: 270px !important  }
+.ticket-head{ min-height: 200px !important;}
 .ticket-content{ margin-left: 0 }
 .ticket-contact-row{ min-height:135px }
 .ticket-contact-block{ padding-top:10px }
