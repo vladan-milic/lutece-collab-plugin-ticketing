@@ -837,7 +837,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // Count the number of characters in the ticket comment
         int iNbCharcount = FormValidator.countCharTicketComment( ticket.getTicketComment( ) );
 
-        bIsFormValid = validateBean( ticket, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
+        bIsFormValid = validateBean( ticket, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX )
+        		&& validateBean( _ticketAddress, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );;
 
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validate( ticket, false );
