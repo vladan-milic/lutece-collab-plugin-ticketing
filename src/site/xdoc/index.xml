@@ -11,15 +11,19 @@
             </p>
             -->
             <subsection name="Introduction">
-                <p></p>
+                <p>This plugin allows a user to create tickets of differents types (e.g. request informations, claims) through a front office ticket creation form and allows a target organization to manage these tickets through a back office interface.</p>
+                <p>The tickets can be classified by type, category and domain. This classification allows to assign automatically a ticket to the right entity in the target organization.</p>
             </subsection>
             <subsection name="Configuration">
-                <p></p>
             </subsection>
             <subsection name="Usage">
-                <p></p>
+                <p>
+                   The front office URL web page to access to the ticket creation form : <em>/jsp/site/Portal.jsp?page=ticket&#38;view=createTicket</em>
+                </p>
+                <p>
+                   The back office URL web page to manage tickets : <em>/jsp/admin/plugins/ticketing/ManageTickets.jsp?plugin_name=ticketing</em>
+                </p>
             </subsection>
         </section>
     </body>
 </document>
-

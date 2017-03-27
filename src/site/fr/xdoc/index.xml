@@ -11,15 +11,19 @@
             </p>
             -->
             <subsection name="Introduction">
-                <p></p>
+                <p>Ce plugin permet&#160;&#224;&#160;un utilisateur de cr&#233;er des sollicitations de diff&#233;rents types (ex : demande d'information, r&#233;clamation) via un formulaire de cr&#233;ation de ticket en front office et permet aussi&#160;&#224;&#160;une organisation cible de g&#233;rer ces tickets via une interface en back office.</p>
+                <p>Ces tickets peuven &#234;tre classifi&#233; par type, probl&#233;matique et domaine. Cette classification permet d'assigner automatiquement le ticket&#160;&#224;&#160;la bonne entit&#233; au sein de l'organisation.</p>
             </subsection>
             <subsection name="Configuration">
-                <p></p>
             </subsection>
             <subsection name="Usage">
-                <p></p>
+                <p>
+                   Page web front office pour acc&#233;der au formulaire de cr&#233;ation de ticket : <em>/jsp/site/Portal.jsp?page=ticket&#38;view=createTicket</em>
+                </p>
+                <p>
+                   Page web back office pour acc&#233;der&#160;&#224;&#160;l'interface pour g&#233;rer les sollicitations : <em>/jsp/admin/plugins/ticketing/ManageTickets.jsp?plugin_name=ticketing</em>
+                </p>
             </subsection>
         </section>
     </body>
 </document>
-
