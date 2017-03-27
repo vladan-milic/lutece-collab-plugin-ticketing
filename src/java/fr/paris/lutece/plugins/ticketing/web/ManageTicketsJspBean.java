@@ -265,7 +265,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, _nDefaultItemsPerPage );
 
         UrlItem url = new UrlItem( JSP_MANAGE_TICKETS );
-        url.addParameter( SearchConstants.PARAMETER_QUERY, strQuery );
+        if ( StringUtils.isNotBlank( strQuery ) )
+        {
+            url.addParameter( SearchConstants.PARAMETER_QUERY, strQuery );
+        }
         String strUrl = url.getUrl( );
 
         String strPreviousSelectedTab = ( request.getSession( ).getAttribute( PARAMETER_SELECTED_TAB ) != null ) ? (String) request.getSession( ).getAttribute(
@@ -837,7 +840,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // Count the number of characters in the ticket comment
         int iNbCharcount = FormValidator.countCharTicketComment( ticket.getTicketComment( ) );
 
-        bIsFormValid = validateBean( ticket, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
+        bIsFormValid = validateBean( ticket, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX )
+                && validateBean( _ticketAddress, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
 
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validate( ticket, false );

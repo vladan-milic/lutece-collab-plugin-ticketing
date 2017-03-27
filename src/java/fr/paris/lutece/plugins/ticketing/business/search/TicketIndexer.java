@@ -53,6 +53,7 @@ import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.NumericUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
@@ -60,7 +61,6 @@ import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchItemConstant;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexWriterUtil;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
-import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
 import fr.paris.lutece.plugins.workflowcore.service.state.IStateService;
 import fr.paris.lutece.plugins.workflowcore.service.state.StateService;
 import fr.paris.lutece.portal.service.content.XPageAppService;
@@ -242,12 +242,12 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         Document doc = new Document( );
 
         doc.add( new IntField( TicketSearchItemConstant.FIELD_TICKET_ID, ticket.getId( ), Store.YES ) );
-        doc.add( new TextField( TicketSearchItemConstant.FIELD_CONTENTS, getContentForIndexer( ticket ), Store.NO ) );
-        doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN, ticket.getTicketDomain( ), Store.YES ) );
-        doc.add( new StringField( TicketSearchItemConstant.FIELD_REFERENCE, ticket.getReference( ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItemConstant.FIELD_CONTENTS, manageNullValue( getContentForIndexer( ticket ) ), Store.NO ) );
+        doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN, manageNullValue( ticket.getTicketDomain( ) ), Store.YES ) );
+        doc.add( new StringField( TicketSearchItemConstant.FIELD_REFERENCE, manageNullValue( ticket.getReference( ) ), Store.YES ) );
         doc.add( new LongField( TicketSearchItemConstant.FIELD_DATE_CREATION, ( ticket.getDateCreate( ) == null ? 0 : ticket.getDateCreate( ).getTime( ) ),
                 Store.YES ) );
-        doc.add( new StoredField( TicketSearchItemConstant.FIELD_COMMENT, ticket.getTicketComment( ) ) );
+        doc.add( new StoredField( TicketSearchItemConstant.FIELD_COMMENT, manageNullValue( ticket.getTicketComment( ) ) ) );
         doc.add( new TextField( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE, manageNullValue( ticket.getNomenclature( ) ), Store.YES ) );
         doc.add( new IntField( TicketSearchItemConstant.FIELD_CRITICALITY, ticket.getCriticality( ), Store.YES ) );
         doc.add( new IntField( TicketSearchItemConstant.FIELD_PRIORITY, ticket.getPriority( ), Store.YES ) );
@@ -257,7 +257,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         if ( ticket.getTicketCategory( ) != null )
         {
-            doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY, ticket.getTicketCategory( ).getLabel( ), Store.YES ) );
+            doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY, manageNullValue( ticket.getTicketCategory( ).getLabel( ) ), Store.YES ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_PRECISION, manageNullValue( ticket.getTicketCategory( ).getPrecision( ) ) ) );
         }
         else
@@ -560,52 +560,52 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "dd/MM/yyyy" );
         sb.append( ticket.getId( ) ).append( SEPARATOR );
 
-        if ( StringUtils.isNotEmpty( ticket.getReference( ) ) )
+        if ( StringUtils.isNotBlank( ticket.getReference( ) ) )
         {
             sb.append( ticket.getReference( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getFirstname( ) ) )
+        if ( StringUtils.isNotBlank( ticket.getFirstname( ) ) )
         {
             sb.append( ticket.getFirstname( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getLastname( ) ) )
+        if ( StringUtils.isNotBlank( ticket.getLastname( ) ) )
         {
             sb.append( ticket.getLastname( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getEmail( ) ) )
+        if ( StringUtils.isNotBlank( ticket.getEmail( ) ) )
         {
             sb.append( ticket.getEmail( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getFixedPhoneNumber( ) ) )
+        if ( StringUtils.isNotBlank( ticket.getFixedPhoneNumber( ) ) )
         {
             sb.append( ticket.getFixedPhoneNumber( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getMobilePhoneNumber( ) ) )
+        if ( StringUtils.isNotBlank( ticket.getMobilePhoneNumber( ) ) )
         {
             sb.append( ticket.getMobilePhoneNumber( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketType( ) ) )
+        if ( StringUtils.isNotBlank( ticket.getTicketType( ) ) )
         {
             sb.append( ticket.getTicketType( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketDomain( ) ) )
+        if ( StringUtils.isNotBlank( ticket.getTicketDomain( ) ) )
         {
             sb.append( ticket.getTicketDomain( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketCategory( ).getLabel( ) ) )
+        if ( ticket.getTicketCategory( ) != null && StringUtils.isNotBlank( ticket.getTicketCategory( ).getLabel( ) ) )
         {
             sb.append( ticket.getTicketCategory( ).getLabel( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getNomenclature( ) ) )
+        if ( StringUtils.isNotBlank( ticket.getNomenclature( ) ) )
         {
             sb.append( ticket.getNomenclature( ) ).append( SEPARATOR );
         }
@@ -629,48 +629,58 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             for ( Response response : ticket.getListResponse( ) )
             {
-                if ( response.getResponseValue( ) != null )
+                if ( StringUtils.isNotBlank( response.getResponseValue( ) ) )
                 {
                     sb.append( response.getResponseValue( ) ).append( SEPARATOR );
                 }
             }
         }
 
-        if ( WorkflowService.getInstance( ).isAvailable( ) )
+        if ( WorkflowService.getInstance( ).isAvailable( ) && ticket.getTicketCategory( ) != null )
         {
             TicketCategory ticketCategory = ticket.getTicketCategory( );
-            int nIdWorkflow = ticketCategory.getIdWorkflow( );
+            State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, ticketCategory.getIdWorkflow( ),
+                    ticketCategory.getId( ) );
 
-            StateFilter stateFilter = new StateFilter( );
-            stateFilter.setIdWorkflow( nIdWorkflow );
+            if ( state != null && StringUtils.isNotBlank( state.getName( ) ) )
+            {
+                sb.append( state.getName( ) ).append( SEPARATOR );
+            }
 
-            State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
-                    ticket.getTicketCategory( ).getId( ) );
-            sb.append( state.getName( ) ).append( SEPARATOR );
-            sb.append( ticketCategory.getPrecision( ) ).append( SEPARATOR );
+            if ( StringUtils.isNotBlank( ticketCategory.getPrecision( ) ) )
+            {
+                sb.append( ticketCategory.getPrecision( ) ).append( SEPARATOR );
+            }
         }
 
         if ( ticket.getAssigneeUser( ) != null )
         {
-            sb.append( ticket.getAssigneeUser( ).getFirstname( ) ).append( SEPARATOR ).append( ticket.getAssigneeUser( ).getLastname( ) ).append( SEPARATOR );
+            AssigneeUser assigneeUser = ticket.getAssigneeUser( );
+
+            if ( StringUtils.isNotBlank( assigneeUser.getFirstname( ) ) )
+            {
+                sb.append( assigneeUser.getFirstname( ) ).append( SEPARATOR );
+            }
+
+            if ( StringUtils.isNotBlank( assigneeUser.getLastname( ) ) )
+            {
+                sb.append( assigneeUser.getLastname( ) ).append( SEPARATOR );
+            }
         }
 
-        if ( ticket.getChannel( ) != null )
+        if ( ticket.getChannel( ) != null && StringUtils.isNotBlank( ticket.getChannel( ).getLabel( ) ) )
         {
             sb.append( ticket.getChannel( ).getLabel( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotEmpty( ticket.getTicketComment( ) ) )
+        if ( StringUtils.isNotBlank( ticket.getTicketComment( ) ) )
         {
             sb.append( ticket.getTicketComment( ) ).append( SEPARATOR );
         }
 
-        if ( ticket.getAssigneeUnit( ) != null )
+        if ( ticket.getAssigneeUnit( ) != null && StringUtils.isNotBlank( ticket.getAssigneeUnit( ).getName( ) ) )
         {
-            if ( StringUtils.isNotEmpty( ticket.getAssigneeUnit( ).getName( ) ) )
-            {
-                sb.append( ticket.getAssigneeUnit( ).getName( ) ).append( SEPARATOR );
-            }
+            sb.append( ticket.getAssigneeUnit( ).getName( ) ).append( SEPARATOR );
         }
 
         return sb.toString( );
