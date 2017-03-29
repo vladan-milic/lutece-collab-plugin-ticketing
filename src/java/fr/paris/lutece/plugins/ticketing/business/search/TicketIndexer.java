@@ -243,6 +243,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         doc.add( new IntField( TicketSearchItemConstant.FIELD_TICKET_ID, ticket.getId( ), Store.YES ) );
         doc.add( new TextField( TicketSearchItemConstant.FIELD_CONTENTS, manageNullValue( getContentForIndexer( ticket ) ), Store.NO ) );
+        doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN_ID, Integer.toString( ticket.getIdTicketDomain( ) ), Store.YES ) );
         doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN, manageNullValue( ticket.getTicketDomain( ) ), Store.YES ) );
         doc.add( new StringField( TicketSearchItemConstant.FIELD_REFERENCE, manageNullValue( ticket.getReference( ) ), Store.YES ) );
         doc.add( new LongField( TicketSearchItemConstant.FIELD_DATE_CREATION, ( ticket.getDateCreate( ) == null ? 0 : ticket.getDateCreate( ).getTime( ) ),

@@ -117,6 +117,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             result.setPriority( document.getField( TicketSearchItemConstant.FIELD_PRIORITY ).numericValue( ).intValue( ) );
             result.setReference( document.get( TicketSearchItemConstant.FIELD_REFERENCE ) );
             result.setTicketStatus( Integer.parseInt( document.get( TicketSearchItemConstant.FIELD_STATUS ) ) );
+            result.setIdTicketDomain( Integer.parseInt( document.get( TicketSearchItemConstant.FIELD_DOMAIN_ID ) ) );
             result.setTicketDomain( document.get( TicketSearchItemConstant.FIELD_DOMAIN ) );
             result.setUserTitle( document.get( TicketSearchItemConstant.FIELD_USER_TITLE ) );
             result.setFirstname( document.get( TicketSearchItemConstant.FIELD_FIRSTNAME ) );
@@ -299,7 +300,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
         for ( TicketDomain domain : listUserDomain )
         {
-            TermQuery domQuery = new TermQuery( new Term( TicketSearchItemConstant.FIELD_DOMAIN, domain.getLabel( ) ) );
+            TermQuery domQuery = new TermQuery( new Term( TicketSearchItemConstant.FIELD_DOMAIN_ID, Integer.toString( domain.getId( ) ) ) );
             domainsQuery.add( new BooleanClause( domQuery, BooleanClause.Occur.SHOULD ) );
         }
 

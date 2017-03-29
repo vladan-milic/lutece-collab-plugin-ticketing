@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.ticketing.web;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -287,7 +288,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         if ( _lstTicketDomain == null )
         {
-            _lstTicketDomain = TicketDomainHome.getTicketDomainsList( getUser( ), TicketDomainResourceIdService.PERMISSION_VIEW_LIST );
+            Map<Integer, TicketDomain> mapIdDomainTicketDomain = new LinkedHashMap<>( );
+            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST ); 
+            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL );
+            
+            _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
         }
 
         // Set the limit for the number of ticket to display
@@ -952,5 +957,23 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
         }
         return 0;
+    }
+    
+    /**
+     * Add the list of ticket domain associated to the given permission
+     * 
+     * @param mapIntegerTicketDomain
+     * @param permission
+     */
+    private void addTicketDomainToMapFromPermission( Map<Integer, TicketDomain> mapIntegerTicketDomain, String permission )
+    {
+        List<TicketDomain> listDomain = TicketDomainHome.getTicketDomainsList( getUser( ), permission );
+        if ( mapIntegerTicketDomain != null && listDomain != null && !listDomain.isEmpty( ) )
+        {
+            for ( TicketDomain ticketDomain : listDomain )
+            {
+                mapIntegerTicketDomain.put( ticketDomain.getId( ), ticketDomain );
+            }
+        }
     }
 }
