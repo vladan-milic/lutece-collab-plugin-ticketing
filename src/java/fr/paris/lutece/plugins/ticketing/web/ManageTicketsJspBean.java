@@ -289,9 +289,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         if ( _lstTicketDomain == null )
         {
             Map<Integer, TicketDomain> mapIdDomainTicketDomain = new LinkedHashMap<>( );
-            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST ); 
+            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST );
             addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL );
-            
+
             _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
         }
 
@@ -958,7 +958,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
         return 0;
     }
-    
+
     /**
      * Add the list of ticket domain associated to the given permission
      * 
