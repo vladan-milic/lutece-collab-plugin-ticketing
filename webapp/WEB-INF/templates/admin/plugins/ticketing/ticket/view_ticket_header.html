@@ -7,7 +7,9 @@
    <div class="col-xs-8 col-sm-4">
       <h2>${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}</h2>
       <div class="visible-xs">
-         <p><i class="fa fa-envelope"></i> ${ticket.email!""}</p>
+		 <#if ticket.email?has_content && ticket.email!="">
+         <p><i class="fa fa-at"></i> ${ticket.email}</p>
+		 </#if>
          <#if ticket.fixedPhoneNumber?has_content>
          <p>
             <i class="fa fa-phone" ></i>
@@ -35,7 +37,9 @@
    <div class="hidden-xs col-sm-8 ticket-contact-block">
    <div class=" hidden-xs no-padding wordwrap-ticket-comment <#if ticket.ticketAddress?has_content> col-sm-7 <#else> col-sm-12 </#if>">
       
-	  <h4><i class="fa fa-at"></i> ${ticket.email!""}</h4>
+	  <#if ticket.email?has_content && ticket.email!="">
+      <h4><i class="fa fa-at"></i> ${ticket.email}</h4>
+      </#if>
       <#if ticket.fixedPhoneNumber?has_content>
       <h4>
          <i class="fa fa-phone" ></i>
@@ -65,8 +69,8 @@
 
 	<#if ticket.ticketAddress?has_content>
 	<div class=" hidden-xs col-sm-5">
-
-      <h4><i class="fa fa-envelope"></i>
+      <h4>
+		 <i class="fa fa-envelope" style="margin-left:-21px"></i>
          <#if ticket.ticketAddress.address?has_content>
          ${ticket.ticketAddress.address!''}
          </#if>
