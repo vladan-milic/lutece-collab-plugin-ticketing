@@ -15,6 +15,10 @@
       <input type="hidden" id="id" name="id" value="${ticket.id}">
       <input type="hidden" id="guid" name="guid" value="">
       <input type="hidden" id="label_category" name="label_category" value="${ticket.ticketCategory.label!''}">
+      <input type="hidden" id="ticket_type_id" name="ticket_type_id" value="${ticket.idTicketType!''}"/>
+      <input type="hidden" id="ticket_domain_id" name="ticket_domain_id" value="${ticket.idTicketDomain!''}"/>
+      <input type="hidden" id="ticket_category_id" name="ticket_category_id" value="${(ticket.ticketCategory.id)!''}"/>
+      <input type="hidden" id="ticket_precision" name="ticket_precision" value="${(ticket.ticketCategory.precision)!''}"/>
       <div class="row">
         <div class="col-xs-12 col-sm-6">
           <div class="form-group">

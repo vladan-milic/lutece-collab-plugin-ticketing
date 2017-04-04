@@ -13,6 +13,8 @@
 			<input name="action" value="recapTicket" type="hidden">
             <input type="hidden" id="id" name="id"/>  
             <input type="hidden" id="guid" name="guid" value="${ticket.guid!}"/>
+            <input type="hidden" id="ticket_type_id" name="ticket_type_id" value="${ticket.idTicketType!''}"/>
+      		<input type="hidden" id="ticket_domain_id" name="ticket_domain_id" value="${ticket.idTicketDomain!''}"/>
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="id_user_title" >#i18n{ticketing.xpage.create_ticket.labelIdUserTitle}&#8239;*&#8239;:</label>
                 <div class="col-sm-9">

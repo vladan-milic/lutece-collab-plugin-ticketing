@@ -63,6 +63,8 @@ public final class TicketingConstants
     public static final String PARAMETER_FILTER_TYPE_ID = "fltr_id_type";
     public static final String PARAMETER_FILTER_OPEN_SINCE = "fltr_open_since";
     public static final String PARAMETER_FILTER_STATE_ID = "fltr_state_ids";
+    public static final String PARAMETER_TICKET_PRECISION_ID = "id_ticket_precision";
+    public static final String PARAMETER_TICKET_CATEGORY_ID = "id_ticket_category";
 
     // Attributes
     public static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON = "hide_next_button";
@@ -133,6 +135,8 @@ public final class TicketingConstants
     public static final String ERROR_TICKET_CREATION_ABORTED = "ticketing.error.ticket.creation.aborted.backoffice";
     public static final String ERROR_INDEX_TICKET_FAILED_BACK = "ticketing.error.ticket.indexing.failed.backoffice";
     public static final String ERROR_INDEX_TICKET_FAILED_FRONT = "ticketing.error.ticket.indexing.failed.frontoffice";
+    public static final String MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED = "ticketing.error.ticketCategory.notSelected";
+    public static final String MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED = "ticketing.error.ticketCategory.precision.notSelected";
 
     // User preferences
     public static final String USER_PREFERENCE_CREATION_DATE_DISPLAY = "creationDateDisplay";
@@ -178,6 +182,7 @@ public final class TicketingConstants
     public static final int TICKET_STATUS_CLOSED = 1;
     public static final int PROPERTY_UNSET_INT = -1;
     public static final int NO_PARENT_ID = -1;
+    public static final String NO_ID_STRING = "-1";
     public static final String RESOURCE_TYPE_INPUT = "TICKET_INPUT";
 
     /**

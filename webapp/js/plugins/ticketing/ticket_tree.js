@@ -2,6 +2,7 @@
 var msg_select_type = "-- Choisir une nature --";
 var msg_select_domain = "-- Choisir un domaine --";
 var msg_select_category = "-- Choisir une probl\u00e9matique --";
+var msg_select_precision = "-- Choisir une pr\u00e9cision --";
 
 // Turns the 3 combos identified by the jquery selectors into dynamic combos
 function lutece_ticket_tree(type_selector, domain_selector, category_selector, precision_selector, selected_category_id, url) {
@@ -12,6 +13,10 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
         var selectedDomain = undefined;
         var selectedCategory = undefined;
         var selectedPrecision = undefined;
+        var idTypeSelected = $("#ticket_type_id").val();
+        var idDomainSelected = $("#ticket_domain_id").val();
+        var idTicketCategorySelected = $("#ticket_category_id").val();
+        var precisionSelected = $("#ticket_precision").val();
 
         for (var i = 0; i<data.types.length; i++) {
             var type = data.types[i];
@@ -34,13 +39,18 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
                     		category.precisions_map[precision.id] = precision;
                     		domain.categories_map[precision.id] = category;
                     		                    		
-							if (selected_category_id == precision.id) {
+							if (selected_category_id == precision.id && precisionSelected != "-1") {
 								selectedType = type;
 								selectedDomain = domain;
 								selectedCategory = category;
 								selectedPrecision = precision;
 							}
                     	}
+                        // Add the default message for precision when no selection has been made
+                        if ( selectedPrecision == undefined )
+                        {
+                        	addDefaultValueInList(category.precisions, msg_select_precision);
+                        }
                 	} else {
 						if (selected_category_id == category.id) {
 							selectedType = type;
@@ -50,27 +60,96 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
 						}
                     }
                 }
-                var emptyCategory = {};
-                emptyCategory['id'] = -1;
-                emptyCategory['label'] = msg_select_category;
-                domain.categories.unshift(emptyCategory);
+                // Add the default message for category when no selection has been made
+                if ( selectedCategory == undefined && (!idTicketCategorySelected || idTicketCategorySelected < 1) )
+                {
+                	addDefaultValueInList(domain.categories, msg_select_category);
+                }
             }
-            var emptyDomain = {};
-            emptyDomain['id'] = -1;
-            emptyDomain['label'] = msg_select_domain;
-            type.domains.unshift(emptyDomain);
+            // Add the default message for domain when no selection has been made
+            if ( selectedDomain == undefined && (!idDomainSelected || idDomainSelected < 1) )
+            {
+            	addDefaultValueInList(type.domains, msg_select_domain);
+            }
         }
-        var emptyType = {};
-        emptyType['id'] = -1;
-        emptyType['label'] = msg_select_type;
-        data.types.unshift(emptyType);
+        // Add the default message for type when no selection has been made
+        if ( selectedType == undefined && (!idTypeSelected || idTypeSelected < 1) )
+        {
+        	addDefaultValueInList(data.types, msg_select_type);
+        }
         
 		if (selectedType == undefined) {
-			selectedType = data.types[0];
-			selectedDomain = data.types[1].domains[0];
-			selectedCategory = data.types[1].domains[1].categories[0];
-			if (selectedCategory.precisions != undefined) {
-				selectedPrecision = selectedCategory.precisions[0];
+			if (idTypeSelected && idTypeSelected > 0)
+			{
+				// Return from errors during validation case
+				// --- retrieve type selected
+		        for (var i = 0; i<data.types.length; i++)
+		        {
+		            if (data.types[i].id == idTypeSelected)
+		            {
+		            	selectedType = data.types[i];
+		            	break;
+		            }
+		        }
+		        // --- retrieve domain selected
+		        if(selectedType != undefined)
+		        {
+		        	if(idDomainSelected && idDomainSelected > 0)
+		        	{
+		        		// one domain has beeen selected
+		        		for (var j = 0; j<selectedType.domains.length; j++)
+			        	{
+			            	if (selectedType.domains[j].id == idDomainSelected)
+			            	{
+			            		selectedDomain = selectedType.domains[j];
+			            		if(idTicketCategorySelected && idTicketCategorySelected > 0)
+			            		{
+									for(var k = 0; k<selectedDomain.categories.length; k++)
+									{
+										if(selectedDomain.categories[k].id == idTicketCategorySelected)
+										{
+											selectedCategory = selectedDomain.categories[k];
+											break;
+										}
+									}
+			            		}
+			            		else
+			            		{
+			            			selectedCategory = selectedDomain.categories[0];
+			            		}
+								if (selectedCategory != undefined && selectedCategory.precisions != undefined)
+								{
+									selectedPrecision = selectedCategory.precisions[0];
+								}
+			            		break;
+			            	}
+			        	}
+		        	}
+		        	else
+		        	{
+		        		// no domain has been selected
+		        		selectedDomain = selectedType.domains[0];
+						selectedCategory = selectedType.domains[1].categories[0];
+						if (selectedCategory.precisions != undefined) {
+							selectedPrecision = selectedCategory.precisions[0];
+						}
+		        	}
+		        }
+		        // reset the preselected value
+		        $("#ticket_type_id").val("");
+		        $("#ticket_domain_id").val("");
+		        $("#ticket_category_id").val("");
+		        $("#ticket_precision").val("");
+			}
+			else
+			{
+				// Initialisation case
+				selectedType = data.types[0];
+				selectedDomain = data.types[1].domains[0];
+				selectedCategory = data.types[1].domains[1].categories[0];
+				if (selectedCategory.precisions != undefined) {
+					selectedPrecision = selectedCategory.precisions[0];
+				}
 			}
 		}
 
@@ -95,50 +174,57 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
         	}
         }
 
-
+        // Load all lists (type/domain/category)
 		load_combo(type_selector, data.types, selectedType);
 		load_combo(domain_selector, selectedType.domains, selectedDomain);
 		load_combo(category_selector, selectedDomain.categories, selectedCategory);
-		load_combo(precision_selector, selectedCategory.precisions, selectedPrecision);
+		if(selectedCategory != undefined)
+		{
+			load_combo(precision_selector, selectedCategory.precisions, selectedPrecision);
+		}
+		else
+		{
+			load_combo(precision_selector, undefined, -1, msg_select_precision);
+		}
 		load_messages();
 		setSelectedCategoryId();
 		loadGenericAttributesForm(url, false, category_selector, true);
 
+		// Change the selected type
 		$(type_selector).change(function() {
-			if($(type_selector).val() != '-1' && $(type_selector).find('option[value="-1"]').length > 0 )
-			{
-				document.getElementById("id_ticket_type").remove(0);
-			}
+			removeDefaultValue(type_selector, "id_ticket_type");
 			selectedType = types_map[$(type_selector).val()];
 			load_combo(domain_selector, selectedType.domains);
-			$(domain_selector).change();
+			$(domain_selector).trigger("change", true);
         });
 
-        $(domain_selector).change(function() {
-			if($(domain_selector).val() != '-1' && $(domain_selector).find('option[value="-1"]').length > 0 )
-			{
-				document.getElementById("id_ticket_domain").remove(0);
-			}
+		// Change the selected domain
+        $(domain_selector).on("change", function(event, fromParent) {
+			manageDefaultValueInList(fromParent, domain_selector, "id_ticket_domain", msg_select_domain);
 			selectedDomain = selectedType.domains_map[$(domain_selector).val()];
 			load_combo(category_selector, (selectedDomain == undefined ? selectedDomain : selectedDomain.categories), -1, msg_select_category);
-			$(category_selector).change();
+			$(category_selector).trigger("change", true);
         });
 
-        $(category_selector).change(function() {
-			if($(category_selector).val() != '-1' && $(category_selector).find('option[value="-1"]').length > 0 )
-			{
-				document.getElementById("id_ticket_category").remove(0);
-			}
+        // change the selected category
+        $(category_selector).on("change", function(event, fromParent) {
+        	manageDefaultValueInList(fromParent, category_selector, "id_ticket_category", msg_select_category);
 			selectedCategory = (selectedDomain != undefined ? selectedDomain.categories_map[$(category_selector).val()] : selectedDomain);
 			load_combo(precision_selector, (selectedCategory == undefined ? selectedCategory : selectedCategory.precisions));
-			$(precision_selector).change();
+			$(precision_selector).trigger("change", true);
 			
         });
 
-        $(precision_selector).change(function() {
+        // Change the selected precision
+        $(precision_selector).on("change", function(event, fromParent) {
+        	manageDefaultValueInList(fromParent, precision_selector, "id_ticket_precision", msg_select_precision);
 			if(selectedCategory != undefined && selectedCategory.precisions_map != undefined)
 			{
 				selectedPrecision = selectedCategory.precisions_map[$(precision_selector).val()];
+			}
+			else
+			{
+				selectedPrecision = -1;
 			}
 			load_messages();
 			setSelectedCategoryId();
@@ -204,5 +290,40 @@ function load_combo(id_combo, options, selected_option, text_to_display) {
 	else
 	{
 		$(id_combo).parents(".form-group:first").hide();
+	}
+}
+
+// Add default value on list with specific message
+function addDefaultValueInList(list, message)
+{
+	var emptyElement = {};
+	emptyElement['id'] = -1;
+	emptyElement['label'] = message;
+	list.unshift(emptyElement);
+}
+
+// Add the default value or remove it in a list if necessary
+function manageDefaultValueInList( fromParent, selector, idField, message )
+{
+	removeDefaultValue(selector, idField);
+	addDefaultValue(fromParent, selector, idField, message);
+}
+
+// Add the default value in a list
+function addDefaultValue( fromParent, selector, idField, message )
+{
+	if(fromParent && $(selector).find('option[value="-1"]').length < 1 )
+	{
+		$("#" + idField).prepend(new Option(message, -1));
+		$("#" + idField + " option:first-child").attr("selected", "selected");
+	}
+}
+
+// Remove the default value on a list
+function removeDefaultValue( selector, idField )
+{
+	if($(selector).val() != '-1' && $(selector).find('option[value="-1"]').length > 0 )
+	{
+		document.getElementById(idField).remove(0);
 	}
 }

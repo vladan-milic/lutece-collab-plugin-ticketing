@@ -45,6 +45,8 @@ import org.apache.commons.lang.StringUtils;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
@@ -177,6 +179,23 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         model.put( MARK_USER_FACTORY, UserFactory.getInstance( ) );
         _ticketFormService.removeTicketFromSession( request.getSession( ) );
 
+        // Validate if precision has been selected if the selected category has precisions  
+        if ( ticket.getTicketCategory( ).getId( ) != TicketingConstants.PROPERTY_UNSET_INT )
+        {
+            List<TicketCategory> listTicketCategory = TicketCategoryHome.findByDomainId( ticket.getIdTicketDomain( ) );
+            for ( TicketCategory ticketCategoryByDomain : listTicketCategory )
+            {
+                if ( ticketCategoryByDomain.getLabel( ).equals( ticket.getTicketCategory( ).getLabel( ) ) && StringUtils.isNotBlank( ticketCategoryByDomain.getPrecision( ) ) 
+                        && ( StringUtils.isNotBlank( request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) ) 
+                                && request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING ) ) )
+                {
+                    addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED, getLocale( ) );
+                    ticket.getTicketCategory( ).setPrecision( TicketingConstants.NO_ID_STRING );
+                    break;
+                }
+            }
+        }
+        
         if ( TicketUtils.isAssignee( ticket, getUser( ) ) )
         {
             TicketHome.markAsRead( ticket );

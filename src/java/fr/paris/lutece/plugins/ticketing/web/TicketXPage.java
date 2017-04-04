@@ -33,6 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
@@ -49,6 +59,7 @@ import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
@@ -73,16 +84,6 @@ import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * This class provides the user interface to manage Ticket xpages ( manage, create, modify, remove )
@@ -353,9 +354,23 @@ public class TicketXPage extends WorkflowCapableXPage
         populate( ticket, request );
         ticket.setListResponse( new ArrayList<Response>( ) );
 
-        int nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
+        int nIdCategory = TicketingConstants.PROPERTY_UNSET_INT;
+        if ( StringUtils.isNotBlank( request.getParameter( PARAMETER_ID_CATEGORY ) ) )
+        {
+            nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
+        }
+        
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
-        ticket.setTicketCategory( ticketCategory );
+        if ( ticketCategory == null )
+        {
+            TicketCategory ticketCategoryEmpty = new TicketCategory( );
+            ticketCategoryEmpty.setId( TicketingConstants.PROPERTY_UNSET_INT );
+            ticket.setTicketCategory( ticketCategoryEmpty );
+        }
+        else
+        {
+            ticket.setTicketCategory( ticketCategory );
+        }
 
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
 
@@ -381,6 +396,23 @@ public class TicketXPage extends WorkflowCapableXPage
         FormValidator formValidator = new FormValidator( request );
         listValidationErrors.add( formValidator.isEmailFilled( ) );
         listValidationErrors.add( formValidator.isPhoneNumberFilled( ) );
+        
+        // Validate if precision has been selected if the selected category has precisions
+        if ( ticket.getTicketCategory( ).getId( ) != TicketingConstants.PROPERTY_UNSET_INT )
+        {
+            List<TicketCategory> listTicketCategory = TicketCategoryHome.findByDomainId( ticket.getIdTicketDomain( ) );
+            for ( TicketCategory ticketCategoryByDomain : listTicketCategory )
+            {
+                if ( ticketCategoryByDomain.getLabel( ).equals( ticket.getTicketCategory( ).getLabel( ) ) && StringUtils.isNotBlank( ticketCategoryByDomain.getPrecision( ) ) 
+                        && request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING ) )
+                {
+                    addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED, getLocale( request ) );
+                    bIsFormValid = false;
+                    ticket.getTicketCategory( ).setPrecision( TicketingConstants.NO_ID_STRING );
+                    break;
+                }
+            }
+        }
 
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
         if ( iNbCharcount > 5000 )
@@ -397,6 +429,13 @@ public class TicketXPage extends WorkflowCapableXPage
                 bIsFormValid = false;
             }
         }
+        
+        // Check if a category has been selected
+        if ( ticket.getTicketCategory( ) != null && ticket.getTicketCategory( ).getId( ) == TicketingConstants.PROPERTY_UNSET_INT )
+        {
+            addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( request ) );
+            bIsFormValid = false;
+        }
 
         if ( listFormErrors.size( ) > 0 )
         {
@@ -404,9 +443,17 @@ public class TicketXPage extends WorkflowCapableXPage
         }
 
         TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) );
-        ticket.setTicketDomain( ticketDomain.getLabel( ) );
-
-        ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType( ) ).getLabel( ) );
+        if ( ticketDomain != null)
+        {
+            ticket.setTicketDomain( ticketDomain.getLabel( ) );
+            
+            TicketType ticketType = TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType( ) );
+            if ( ticketType != null )
+            {
+                ticket.setTicketType( ticketType.getLabel( ) );
+            }
+        }
+        
         ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) ).getCode( ) );
         ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle( ) ).getLabel( ) );
         ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) ).getConfirmationMsg( ) );

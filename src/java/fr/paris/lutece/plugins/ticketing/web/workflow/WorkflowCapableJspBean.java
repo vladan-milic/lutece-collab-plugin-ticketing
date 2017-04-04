@@ -48,6 +48,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.resourcehistory.IResourceHistoryInformationService;
 import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
@@ -334,6 +335,14 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 {
                     Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
                     TicketCategory ticketCategory = ticket.getTicketCategory( );
+                    
+                    // Control if a precision has been selected or not
+                    if ( !precisionHasBeenSelected( request ) )
+                    {
+                        addErrorWorkflowAction( request, nIdAction );
+                        
+                        return redirectWorkflowActionCancelled( request );
+                    }
 
                     if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( ) ) )
                     {
@@ -512,6 +521,29 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 IndexerActionHome.create( TicketIndexerActionUtil.createIndexerActionFromTicket( ticket ) );
             }
         }
+    }
+    
+    /**
+     * Determine if a precision has been selected during the current task
+     * 
+     * @param request
+     * @return true if a selection has been if its necessary false otherwise
+     */
+    protected boolean precisionHasBeenSelected( HttpServletRequest request )
+    {
+        // We check if a precision has been selected
+        String strNewCategoryId = request.getParameter( TicketingConstants.PARAMETER_TICKET_CATEGORY_ID );
+        if ( StringUtils.isNumeric( strNewCategoryId ) )
+        {
+            TicketCategory ticketCategoryTemp = TicketCategoryHome.findByPrimaryKey( Integer.parseInt( strNewCategoryId ) );
+            if ( StringUtils.isNotBlank( request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) ) 
+                    && request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING ) 
+                    && StringUtils.isNotBlank( ticketCategoryTemp.getPrecision( ) ) )
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

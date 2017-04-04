@@ -769,10 +769,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
         ticket = ( ticket != null ) ? ticket : new Ticket( );
 
-        int nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
-        ticket.setTicketCategory( ticketCategory );
-
         boolean bIsFormValid = populateAndValidateFormTicket( ticket, request );
 
         if ( !bIsFormValid )
@@ -811,10 +807,21 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         boolean bIsFormValid = true;
         populate( ticket, request );
 
-        int nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
+        int nIdCategory = TicketingConstants.PROPERTY_UNSET_INT;
+        if ( StringUtils.isNotBlank( request.getParameter( PARAMETER_ID_CATEGORY ) ) )
+        {
+            nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
+        }
+        
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
+        if ( ticketCategory == null )
+        {
+            TicketCategory ticketCategoryEmpty = new TicketCategory( );
+            ticketCategoryEmpty.setId( TicketingConstants.PROPERTY_UNSET_INT );
+            ticketCategory = ticketCategoryEmpty;
+        }
         ticket.setTicketCategory( ticketCategory );
-
+        
         String _strAddress = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS ) );
         String _strAddressDetail = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS_DETAIL ) );
         String _strPostalCode = String.valueOf( request.getParameter( MARK_TICKET_POSTAL_CODE ) );
@@ -853,6 +860,23 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         FormValidator formValidator = new FormValidator( request );
         listValidationErrors.add( formValidator.isContactModeFilled( ) );
+        
+        // Validate if precision has been selected if the selected category has precisions
+        if ( ticket.getTicketCategory( ).getId( ) != TicketingConstants.PROPERTY_UNSET_INT )
+        {
+            List<TicketCategory> listTicketCategory = TicketCategoryHome.findByDomainId( ticket.getIdTicketDomain( ) );
+            for ( TicketCategory ticketCategoryByDomain : listTicketCategory )
+            {
+                if ( ticketCategoryByDomain.getLabel( ).equals( ticket.getTicketCategory( ).getLabel( ) ) && StringUtils.isNotBlank( ticketCategoryByDomain.getPrecision( ) ) 
+                        && request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING ) )
+                {
+                    addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED, getLocale( ) );
+                    bIsFormValid = false;
+                    ticket.getTicketCategory( ).setPrecision( TicketingConstants.NO_ID_STRING );
+                    break;
+                }
+            }
+        }
 
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
         if ( iNbCharcount > 5000 )
@@ -868,6 +892,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 addError( error );
                 bIsFormValid = false;
             }
+        }
+        
+        // Check if a category has been selected
+        if ( ticket.getTicketCategory( ) != null && ticket.getTicketCategory( ).getId( ) == TicketingConstants.PROPERTY_UNSET_INT )
+        {
+            addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( ) );
+            bIsFormValid = false;
         }
 
         if ( listFormErrors.size( ) > 0 )
