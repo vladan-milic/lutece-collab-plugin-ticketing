@@ -335,12 +335,12 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 {
                     Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
                     TicketCategory ticketCategory = ticket.getTicketCategory( );
-                    
+
                     // Control if a precision has been selected or not
                     if ( !precisionHasBeenSelected( request ) )
                     {
                         addErrorWorkflowAction( request, nIdAction );
-                        
+
                         return redirectWorkflowActionCancelled( request );
                     }
 
@@ -522,7 +522,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
             }
         }
     }
-    
+
     /**
      * Determine if a precision has been selected during the current task
      * 
@@ -536,8 +536,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         if ( StringUtils.isNumeric( strNewCategoryId ) )
         {
             TicketCategory ticketCategoryTemp = TicketCategoryHome.findByPrimaryKey( Integer.parseInt( strNewCategoryId ) );
-            if ( StringUtils.isNotBlank( request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) ) 
-                    && request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING ) 
+            if ( StringUtils.isNotBlank( request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) )
+                    && request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING )
                     && StringUtils.isNotBlank( ticketCategoryTemp.getPrecision( ) ) )
             {
                 return false;

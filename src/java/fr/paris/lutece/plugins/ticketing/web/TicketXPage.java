@@ -359,7 +359,7 @@ public class TicketXPage extends WorkflowCapableXPage
         {
             nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
         }
-        
+
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
         if ( ticketCategory == null )
         {
@@ -396,14 +396,15 @@ public class TicketXPage extends WorkflowCapableXPage
         FormValidator formValidator = new FormValidator( request );
         listValidationErrors.add( formValidator.isEmailFilled( ) );
         listValidationErrors.add( formValidator.isPhoneNumberFilled( ) );
-        
+
         // Validate if precision has been selected if the selected category has precisions
         if ( ticket.getTicketCategory( ).getId( ) != TicketingConstants.PROPERTY_UNSET_INT )
         {
             List<TicketCategory> listTicketCategory = TicketCategoryHome.findByDomainId( ticket.getIdTicketDomain( ) );
             for ( TicketCategory ticketCategoryByDomain : listTicketCategory )
             {
-                if ( ticketCategoryByDomain.getLabel( ).equals( ticket.getTicketCategory( ).getLabel( ) ) && StringUtils.isNotBlank( ticketCategoryByDomain.getPrecision( ) ) 
+                if ( ticketCategoryByDomain.getLabel( ).equals( ticket.getTicketCategory( ).getLabel( ) )
+                        && StringUtils.isNotBlank( ticketCategoryByDomain.getPrecision( ) )
                         && request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING ) )
                 {
                     addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED, getLocale( request ) );
@@ -429,7 +430,7 @@ public class TicketXPage extends WorkflowCapableXPage
                 bIsFormValid = false;
             }
         }
-        
+
         // Check if a category has been selected
         if ( ticket.getTicketCategory( ) != null && ticket.getTicketCategory( ).getId( ) == TicketingConstants.PROPERTY_UNSET_INT )
         {
@@ -443,17 +444,17 @@ public class TicketXPage extends WorkflowCapableXPage
         }
 
         TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) );
-        if ( ticketDomain != null)
+        if ( ticketDomain != null )
         {
             ticket.setTicketDomain( ticketDomain.getLabel( ) );
-            
+
             TicketType ticketType = TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType( ) );
             if ( ticketType != null )
             {
                 ticket.setTicketType( ticketType.getLabel( ) );
             }
         }
-        
+
         ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) ).getCode( ) );
         ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle( ) ).getLabel( ) );
         ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) ).getConfirmationMsg( ) );

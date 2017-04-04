@@ -812,7 +812,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
         }
-        
+
         TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
         if ( ticketCategory == null )
         {
@@ -821,7 +821,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             ticketCategory = ticketCategoryEmpty;
         }
         ticket.setTicketCategory( ticketCategory );
-        
+
         String _strAddress = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS ) );
         String _strAddressDetail = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS_DETAIL ) );
         String _strPostalCode = String.valueOf( request.getParameter( MARK_TICKET_POSTAL_CODE ) );
@@ -860,14 +860,15 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         FormValidator formValidator = new FormValidator( request );
         listValidationErrors.add( formValidator.isContactModeFilled( ) );
-        
+
         // Validate if precision has been selected if the selected category has precisions
         if ( ticket.getTicketCategory( ).getId( ) != TicketingConstants.PROPERTY_UNSET_INT )
         {
             List<TicketCategory> listTicketCategory = TicketCategoryHome.findByDomainId( ticket.getIdTicketDomain( ) );
             for ( TicketCategory ticketCategoryByDomain : listTicketCategory )
             {
-                if ( ticketCategoryByDomain.getLabel( ).equals( ticket.getTicketCategory( ).getLabel( ) ) && StringUtils.isNotBlank( ticketCategoryByDomain.getPrecision( ) ) 
+                if ( ticketCategoryByDomain.getLabel( ).equals( ticket.getTicketCategory( ).getLabel( ) )
+                        && StringUtils.isNotBlank( ticketCategoryByDomain.getPrecision( ) )
                         && request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING ) )
                 {
                     addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED, getLocale( ) );
@@ -893,7 +894,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 bIsFormValid = false;
             }
         }
-        
+
         // Check if a category has been selected
         if ( ticket.getTicketCategory( ) != null && ticket.getTicketCategory( ).getId( ) == TicketingConstants.PROPERTY_UNSET_INT )
         {
