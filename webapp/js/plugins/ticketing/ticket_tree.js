@@ -169,7 +169,7 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
         	}
         }
         var setSelectedCategoryId = function() {
-        	if (selectedPrecision != undefined) {
+        	if (selectedPrecision != undefined  && selectedPrecision != -1) {
         		$(category_selector + ' option:selected').val(selectedPrecision.id);
         	}
         }
