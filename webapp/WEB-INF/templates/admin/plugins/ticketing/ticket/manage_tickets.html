@@ -264,6 +264,23 @@
   <div id="demand-panel" class="row bg-gru-light tickets">
     <div class="col-xs-12 col-sm-12">
     <ul class="nav nav-tabs nav-ticket">
+		<#if mass_actions_list?? && mass_actions_list?has_content>
+			<li role="presentation">
+				<form id="mass_action_form" class="form" method="post" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+					<div class="form-group">
+						<input type="hidden" name="action_massAction" value="action_massAction"></input>
+						<select id="id_mass_action" name="id_mass_action">
+							<#list mass_actions_list as massAction>
+								<option value="${massAction.id}">${massAction.name}</option>
+							</#list>
+						</select>
+						<a onclick="launchMassAction()" class="btn btn-border bg-gru-light">
+							<i class="fa fa-check"></i>
+						</a>
+					</div>
+				</form>
+			</li>
+		</#if>
       <li role="presentation" <#if !selected_tab?? || ( selected_tab?? && selected_tab=="agent")> class="active" </#if> >
         <a href="#" onclick="setSelectedTab('agent')" aria-controls="agent" role="tab" data-toggle="tab">
           <i class="fa fa-inbox"></i> #i18n{ticketing.manage_tickets.labelAgentTickets} <span class="badge">${nb_ticket_agent}</span>
@@ -362,6 +379,10 @@ $( function(){
 function setSelectedTab(tab){
 	$("input[name=selected_tab]").val(tab);
 	$("#filter_form").submit( );
+}
+
+function launchMassAction() {
+	$("#mass_action_form").submit();
 }
 </script>
 

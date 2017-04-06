@@ -133,6 +133,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String PARAMETER_SELECTED_TAB = "selected_tab";
     private static final String PARAMETER_NOMENCLATURE = "nom";
+    private static final String PARAMETER_MASS_ACTION_ID = "id_mass_action";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_MANAGE_TITLE = "ticketing.manage_tickets.title";
@@ -151,6 +152,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
     private static final String MARK_TICKET_PRECISIONS_LIST = "ticket_precisions_list";
+    private static final String MARK_MASS_ACTIONS_LIST = "mass_actions_list";
     private static final String MARK_NB_TICKET_AGENT = "nb_ticket_agent";
     private static final String MARK_NB_TICKET_GROUP = "nb_ticket_group";
     private static final String MARK_NB_TICKET_DOMAIN = "nb_ticket_domain";
@@ -185,6 +187,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String ACTION_REMOVE_TICKET = "removeTicket";
     private static final String ACTION_CONFIRM_REMOVE_TICKET = "confirmRemoveTicket";
     private static final String ACTION_RECAP_TICKET = "recapTicket";
+    private static final String ACTION_MASS_ACTION = "massAction";
 
     // Infos
     private static final String INFO_TICKET_CREATED = "ticketing.info.ticket.created";
@@ -261,9 +264,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         TicketFilter filter = TicketFilterHelper.getFilter( request, userCurrent );
         TicketFilterHelper.setFilterUserAndUnitIds( filter, userCurrent );
-        
+
         // Check if a user belong to a unit
-        boolean bUserWithNoUnit = ( filter.getFilterIdAssigneeUnit( ) == null || filter.getFilterIdAssigneeUnit( ).isEmpty( ) 
+        boolean bUserWithNoUnit = ( filter.getFilterIdAssigneeUnit( ) == null || filter.getFilterIdAssigneeUnit( ).isEmpty( )
                 || filter.getFilterIdAssignerUnit( ) == null || filter.getFilterIdAssignerUnit( ).isEmpty( ) ) ? true : false;
 
         _strCurrentPageIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
@@ -371,7 +374,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // PAGINATORS
         LocalizedPaginator<Ticket> paginatorTickets = new LocalizedPaginator<Ticket>( listTickets, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndex, getLocale( ) );
-        
+
         Map<String, Object> model = getModel( );
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
         model.put( SearchConstants.MARK_QUERY, strQuery );
@@ -394,7 +397,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         String strCreationDateDisplay = AdminUserPreferencesService.instance( ).get( String.valueOf( userCurrent.getUserId( ) ),
                 TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY, StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_CREATION_DATE_AS_DATE, TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY_DATE.equals( strCreationDateDisplay ) );
-        
+        model.put( MARK_MASS_ACTIONS_LIST, getListMassActions( userCurrent, filter ) );
+
         String messageInfo = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
 
         if ( StringUtils.isNotEmpty( messageInfo ) )
@@ -798,7 +802,22 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             return redirectView( request, VIEW_RECAP_TICKET );
         }
     }
-    
+
+    /**
+     * Process the mass action selected
+     * 
+     * @param request
+     *            The Http Request
+     * @return The Jsp URL of the process result
+     */
+    @Action( ACTION_MASS_ACTION )
+    public String doMassAction( HttpServletRequest request )
+    {
+        // [FIXME] TO COMPLETE
+        String strIdMassAction = request.getParameter( PARAMETER_MASS_ACTION_ID );
+        return redirectView( request, VIEW_TICKET_PAGE );
+    }
+
     /**
      * Populate the ticket from the request and validate the ticket form
      *
