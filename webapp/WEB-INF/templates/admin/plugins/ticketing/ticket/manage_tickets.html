@@ -159,7 +159,13 @@
       </div>
     <#else>
       <div id="no-content">
-       <h2 class="text-muted">#i18n{ticketing.manage_tickets.labelNoTicket}</h2>
+       <h2 class="text-muted">
+       	<#if user_with_no_unit>
+       		#i18n{ticketing.manage_tickets.noTicket.labelNoUnit}
+       	<#else>
+       		#i18n{ticketing.manage_tickets.labelNoTicket}
+       	</#if>
+       </h2>
        <img class="img-responsive" src="images/admin/skin/plugins/ticketing/no_content.jpg" alt="" title="">
       </div>
     </#if>

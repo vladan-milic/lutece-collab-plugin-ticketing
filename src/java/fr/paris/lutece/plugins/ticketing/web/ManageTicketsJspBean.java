@@ -160,6 +160,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
     private static final String MARK_SELECTED_TAB = "selected_tab";
+    private static final String MARK_USER_WITH_NO_UNIT = "user_with_no_unit";
     private static final String JSP_MANAGE_TICKETS = TicketingConstants.ADMIN_CONTROLLLER_PATH + "ManageTickets.jsp";
     private static final String MARK_MANAGE_PAGE_TITLE = "manage_ticket_page_title";
     private static final String MARK_TICKET_ADDRESS = "address";
@@ -260,6 +261,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         TicketFilter filter = TicketFilterHelper.getFilter( request, userCurrent );
         TicketFilterHelper.setFilterUserAndUnitIds( filter, userCurrent );
+        
+        // Check if a user belong to a unit
+        boolean bUserWithNoUnit = ( filter.getFilterIdAssigneeUnit( ) == null || filter.getFilterIdAssigneeUnit( ).isEmpty( ) 
+                || filter.getFilterIdAssignerUnit( ) == null || filter.getFilterIdAssignerUnit( ).isEmpty( ) ) ? true : false;
 
         _strCurrentPageIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
@@ -366,7 +371,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // PAGINATORS
         LocalizedPaginator<Ticket> paginatorTickets = new LocalizedPaginator<Ticket>( listTickets, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndex, getLocale( ) );
-
+        
         Map<String, Object> model = getModel( );
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
         model.put( SearchConstants.MARK_QUERY, strQuery );
@@ -376,6 +381,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_NB_TICKET_GROUP, nGroupTickets );
         model.put( MARK_NB_TICKET_DOMAIN, strSelectedTab.equals( TabulationEnum.DOMAIN.getLabel( ) ) ? listIdTickets.size( ) : null );
         model.put( MARK_SELECTED_TAB, strSelectedTab );
+        model.put( MARK_USER_WITH_NO_UNIT, bUserWithNoUnit );
         model.put( MARK_USER_FACTORY, UserFactory.getInstance( ) );
         model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
         model.put(
@@ -388,7 +394,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         String strCreationDateDisplay = AdminUserPreferencesService.instance( ).get( String.valueOf( userCurrent.getUserId( ) ),
                 TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY, StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_CREATION_DATE_AS_DATE, TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY_DATE.equals( strCreationDateDisplay ) );
-
+        
         String messageInfo = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
 
         if ( StringUtils.isNotEmpty( messageInfo ) )
@@ -792,7 +798,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             return redirectView( request, VIEW_RECAP_TICKET );
         }
     }
-
+    
     /**
      * Populate the ticket from the request and validate the ticket form
      *
