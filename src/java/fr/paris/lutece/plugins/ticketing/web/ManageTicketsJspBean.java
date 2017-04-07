@@ -820,8 +820,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         List<String> listTicketId = new ArrayList<>( );
         if ( StringUtils.isNotBlank( request.getParameter( PARAMETER_MASS_ACTION_SELECTED_TICKET ) ) )
         {
-            listTicketId = new ArrayList<>( Arrays.asList( request.getParameter( PARAMETER_MASS_ACTION_SELECTED_TICKET ).split( TicketingConstants.FIELD_ID_SEPARATOR ) ));
-        }        
+            listTicketId = new ArrayList<>( Arrays.asList( request.getParameter( PARAMETER_MASS_ACTION_SELECTED_TICKET ).split(
+                    TicketingConstants.FIELD_ID_SEPARATOR ) ) );
+        }
         return redirectView( request, VIEW_TICKET_PAGE );
     }
 

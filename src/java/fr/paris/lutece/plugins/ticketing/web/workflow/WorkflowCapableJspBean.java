@@ -567,7 +567,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         {
             Integer nStateIdFilter = filter.getListIdWorkflowState( ).get( 0 );
             State stateSelected = _stateService.findByPrimaryKey( nStateIdFilter );
-            
+
             if ( stateSelected != null && stateSelected.getWorkflow( ) != null )
             {
                 List<Action> listWorkflowMassActions = _workflowService.getMassActions( stateSelected.getWorkflow( ).getId( ) );
@@ -579,7 +579,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                     for ( Action workflowActionMass : listWorkflowMassActions )
                     {
                         if ( workflowActionMass.getStateBefore( ) != null && nStateIdFilter == workflowActionMass.getStateBefore( ).getId( ) )
-                        {   
+                        {
                             mapLibelleAction.put( workflowActionMass.getOrder( ), workflowActionMass );
                         }
                     }
