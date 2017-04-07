@@ -18,7 +18,10 @@
   	    <table class="table table-hover table-striped">
       		<thead>
       		  <tr>
-                  <th data-field="reference">#i18n{ticketing.manage_tickets.columnReference}</th>
+      		  		<#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
+      		  			<th data-field="mass_selection" class="mass-checkbox"><input id="select_all_tickets" type="checkbox" value=""></th>
+      		  		</#if>
+                  	<th data-field="reference">#i18n{ticketing.manage_tickets.columnReference}</th>
         			<#if creation_date_as_date >
                       <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.date}</th>
                     <#else>
@@ -35,6 +38,11 @@
       		<tbody>
     			<#list panel_list as ticket >
     			<tr data-url="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" >
+    			<#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
+    				<td class="mass-checkbox">
+    					<input type="checkbox" value="${ticket.id}" class="mass-action-ready">
+    				</td>
+    			</#if>
     			  <td>
               <#assign textColor="aqua"/>
               <#if ticket.urgency==1 >
@@ -264,11 +272,12 @@
   <div id="demand-panel" class="row bg-gru-light tickets">
     <div class="col-xs-12 col-sm-12">
     <ul class="nav nav-tabs nav-ticket">
-		<#if mass_actions_list?? && mass_actions_list?has_content>
+		<#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
 			<li role="presentation">
 				<form id="mass_action_form" class="form" method="post" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
 					<div class="form-group">
 						<input type="hidden" name="action_massAction" value="action_massAction"></input>
+						<input type="hidden" name="selected_tickets" value=""></input>
 						<select id="id_mass_action" name="id_mass_action">
 							<#list mass_actions_list as massAction>
 								<option value="${massAction.id}">${massAction.name}</option>
@@ -324,8 +333,10 @@
 $( function(){
 
 	// Set link on whole tr
-	$("tbody > tr ").on( 'click', function(e){
-		redirectOnClick(this);
+	$("tbody > tr").on( 'click', function(e){
+		if (!$(e.target).hasClass("mass-checkbox") && !$(e.target).hasClass("mass-action-ready")){
+			redirectOnClick(this);
+		}
 	});
 
 	// Tooltip
@@ -340,15 +351,17 @@ $( function(){
   // Column order
   $("th").on( 'click', function( e ){
     var field = $(this).attr('data-field');
-    var oldField = $("input[name=fltr_order_by]").val();
-    var order;
-    if( field === oldField ){
-      order = sort_order=="asc" ? "desc" : "asc";
+    if(field != 'mass_selection'){
+    	var oldField = $("input[name=fltr_order_by]").val();
+    	var order;
+    	if( field === oldField ){
+      		order = sort_order=="asc" ? "desc" : "asc";
+    	}
+    	else{
+      		order = "asc";
+    	}
+    	sortList( field, order);
     }
-    else{
-      order = "asc";
-    }
-    sortList( field, order);
   });
 
   function sortList(field, order){
@@ -373,6 +386,19 @@ $( function(){
   $("#fltr_state_ids").on( 'change', function(e){
         $("#filter_form").submit( );
     });
+  
+  // Select or deselect all checkbox
+  $("#select_all_tickets").change(function(){
+    var status = $(this).is(":checked") ? true : false;
+    $(".mass-action-ready").prop("checked",status);
+  });
+  
+  // Deselect the global checkbox if manual modification
+  $(".mass-action-ready").change(function(){
+	if($("#select_all_tickets").is(":checked")){
+		$("#select_all_tickets").prop("checked",false);
+	}
+  });  
     
 });
 
@@ -382,6 +408,10 @@ function setSelectedTab(tab){
 }
 
 function launchMassAction() {
+	var checkedValues = $('.mass-action-ready:checkbox:checked').map(function() {
+	    return this.value;
+	}).get();
+	$("input[name=selected_tickets]").val(checkedValues);
 	$("#mass_action_form").submit();
 }
 </script>

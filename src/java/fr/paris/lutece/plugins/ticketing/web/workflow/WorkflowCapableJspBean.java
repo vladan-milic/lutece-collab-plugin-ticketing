@@ -67,6 +67,7 @@ import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
 import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
+import fr.paris.lutece.plugins.workflowcore.service.state.StateService;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
@@ -126,6 +127,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     private static WorkflowService _workflowService = WorkflowService.getInstance( );
     private static IResourceHistoryInformationService _resourceHistoryTicketingInformationService = SpringContextService
             .getBean( BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE );
+    private static StateService _stateService = SpringContextService.getBean( StateService.BEAN_SERVICE );
 
     /**
      * Generated serial id
@@ -563,22 +565,26 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         // We get the list of mass actions only for one task
         if ( filter.getListIdWorkflowState( ).size( ) == 1 )
         {
-            Integer nTaskIdFilter = filter.getListIdWorkflowState( ).get( 0 );
-            List<Action> listWorkflowMassActions = WorkflowService.getInstance( ).getMassActions(
-                    PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT ) );
-
-            if ( listWorkflowMassActions != null && !listWorkflowMassActions.isEmpty( ) )
+            Integer nStateIdFilter = filter.getListIdWorkflowState( ).get( 0 );
+            State stateSelected = _stateService.findByPrimaryKey( nStateIdFilter );
+            
+            if ( stateSelected != null && stateSelected.getWorkflow( ) != null )
             {
-                Map<Integer, Action> mapLibelleAction = new TreeMap<>( );
-                // We sort the list of actions by order
-                for ( Action workflowActionMass : listWorkflowMassActions )
+                List<Action> listWorkflowMassActions = _workflowService.getMassActions( stateSelected.getWorkflow( ).getId( ) );
+
+                if ( listWorkflowMassActions != null && !listWorkflowMassActions.isEmpty( ) )
                 {
-                    if ( workflowActionMass.getStateBefore( ) != null && nTaskIdFilter == workflowActionMass.getStateBefore( ).getId( ) )
+                    Map<Integer, Action> mapLibelleAction = new TreeMap<>( );
+                    // We sort the list of actions by order
+                    for ( Action workflowActionMass : listWorkflowMassActions )
                     {
-                        mapLibelleAction.put( workflowActionMass.getOrder( ), workflowActionMass );
+                        if ( workflowActionMass.getStateBefore( ) != null && nStateIdFilter == workflowActionMass.getStateBefore( ).getId( ) )
+                        {   
+                            mapLibelleAction.put( workflowActionMass.getOrder( ), workflowActionMass );
+                        }
                     }
+                    listMassActions.addAll( mapLibelleAction.values( ) );
                 }
-                listMassActions.addAll( mapLibelleAction.values( ) );
             }
         }
         return listMassActions;

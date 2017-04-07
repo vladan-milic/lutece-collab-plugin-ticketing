@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.ticketing.web;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,6 +135,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String PARAMETER_SELECTED_TAB = "selected_tab";
     private static final String PARAMETER_NOMENCLATURE = "nom";
     private static final String PARAMETER_MASS_ACTION_ID = "id_mass_action";
+    private static final String PARAMETER_MASS_ACTION_SELECTED_TICKET = "selected_tickets";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_MANAGE_TITLE = "ticketing.manage_tickets.title";
@@ -815,6 +817,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     {
         // [FIXME] TO COMPLETE
         String strIdMassAction = request.getParameter( PARAMETER_MASS_ACTION_ID );
+        List<String> listTicketId = new ArrayList<>( );
+        if ( StringUtils.isNotBlank( request.getParameter( PARAMETER_MASS_ACTION_SELECTED_TICKET ) ) )
+        {
+            listTicketId = new ArrayList<>( Arrays.asList( request.getParameter( PARAMETER_MASS_ACTION_SELECTED_TICKET ).split( TicketingConstants.FIELD_ID_SEPARATOR ) ));
+        }        
         return redirectView( request, VIEW_TICKET_PAGE );
     }
 
