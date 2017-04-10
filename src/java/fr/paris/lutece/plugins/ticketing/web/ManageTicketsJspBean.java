@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.ticketing.web;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,8 +133,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String PARAMETER_SELECTED_TAB = "selected_tab";
     private static final String PARAMETER_NOMENCLATURE = "nom";
-    private static final String PARAMETER_MASS_ACTION_ID = "id_mass_action";
-    private static final String PARAMETER_MASS_ACTION_SELECTED_TICKET = "selected_tickets";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_MANAGE_TITLE = "ticketing.manage_tickets.title";
@@ -189,7 +186,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String ACTION_REMOVE_TICKET = "removeTicket";
     private static final String ACTION_CONFIRM_REMOVE_TICKET = "confirmRemoveTicket";
     private static final String ACTION_RECAP_TICKET = "recapTicket";
-    private static final String ACTION_MASS_ACTION = "massAction";
 
     // Infos
     private static final String INFO_TICKET_CREATED = "ticketing.info.ticket.created";
@@ -393,6 +389,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 MARK_MANAGE_PAGE_TITLE,
                 ( _bSearchMode ? I18nService.getLocalizedString( PROPERTY_PAGE_SEARCH_TILE, getLocale( ) ) : I18nService.getLocalizedString(
                         PROPERTY_PAGE_MANAGE_TITLE, getLocale( ) ) ) );
+        model.put( TicketingConstants.MARK_JSP_CONTROLLER, getControllerJsp( ) );
         TicketFilterHelper.setModel( model, filter, request, userCurrent );
         ModelUtils.storeTicketRights( model, userCurrent );
 
@@ -803,27 +800,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
             return redirectView( request, VIEW_RECAP_TICKET );
         }
-    }
-
-    /**
-     * Process the mass action selected
-     * 
-     * @param request
-     *            The Http Request
-     * @return The Jsp URL of the process result
-     */
-    @Action( ACTION_MASS_ACTION )
-    public String doMassAction( HttpServletRequest request )
-    {
-        // [FIXME] TO COMPLETE
-        String strIdMassAction = request.getParameter( PARAMETER_MASS_ACTION_ID );
-        List<String> listTicketId = new ArrayList<>( );
-        if ( StringUtils.isNotBlank( request.getParameter( PARAMETER_MASS_ACTION_SELECTED_TICKET ) ) )
-        {
-            listTicketId = new ArrayList<>( Arrays.asList( request.getParameter( PARAMETER_MASS_ACTION_SELECTED_TICKET ).split(
-                    TicketingConstants.FIELD_ID_SEPARATOR ) ) );
-        }
-        return redirectView( request, VIEW_TICKET_PAGE );
     }
 
     /**
