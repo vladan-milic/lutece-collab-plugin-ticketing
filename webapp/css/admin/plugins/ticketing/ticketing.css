@@ -119,6 +119,10 @@ textarea.ticketing.richtext {
 	cursor: default !important;
 }
 
+.mass-action-tab {
+	padding-left: initial !important;
+}
+
 #search_input {
     width: 200px;
 }

@@ -18,6 +18,10 @@ $(document).ready(function(){
 		if($("#select_all_tickets").is(":checked")){
 			$("#select_all_tickets").prop("checked",false);
 		}
+		// If all checkbox are checked we will check the global checkbox
+		if($(".mass-action-ready:checked").length == $(".mass-action-ready").length){
+			$("#select_all_tickets").prop("checked",true);
+		}
 	});
 
 	// Modify the url for the action to execute
