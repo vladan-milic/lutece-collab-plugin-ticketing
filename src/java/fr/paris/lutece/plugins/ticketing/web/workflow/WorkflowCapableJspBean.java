@@ -91,7 +91,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     // MARKS
     private static final String MARK_RESOURCE_HISTORY_CHANNEL = "resource_history_channel";
     private static final String MARK_USER_FACTORY = "user_factory";
-    
+
     // Parameters
     private static final String PARAMETER_MASS_ACTION_SELECTED_TICKET = "selected_tickets";
 
