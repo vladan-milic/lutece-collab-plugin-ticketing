@@ -38,6 +38,7 @@ import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import java.io.IOException;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -97,9 +98,9 @@ interface IModelResponseIndexer
      * 
      * @param strQuery
      *            lucene query
-     * @param strIdDomain
-     *            domain id
+     * @param setIdDomain
+     *            set of domain id
      * @return list of modelResponse matching query
      */
-    List<ModelResponse> searchResponses( String strQuery, String strIdDomain );
+    List<ModelResponse> searchResponses( String strQuery, Set<String> setIdDomain );
 }

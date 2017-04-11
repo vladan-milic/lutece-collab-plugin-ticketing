@@ -277,14 +277,13 @@
 			<li role="presentation" class="mass-action-tab">
 				<form id="mass_action_form" class="form" method="post" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
 					<div class="form-group">
-						<input type="hidden" name="action_massAction" value="action_massAction"></input>
 						<select id="id_mass_action" name="id_mass_action">
 							<#list mass_actions_list as massAction>
 								<option value="${massAction.id}" data-description="${massAction.description}" data-name="${massAction.name}">${massAction.name}</option>
 							</#list>
 						</select>
-						<a id="linkMassAction" class="btn btn-border bg-gru-light link-modal" href="jsp/admin/plugins/ticketing/Standalone.jsp?view=viewWorkflowActionForm&id_action=<#if mass_actions_list?? 
-							&& mass_actions_list?has_content>${mass_actions_list[0].id}<#else>-1</#if>&id=-1&jsp=${jsp_controller}" data-remote="false" data-toggle="modal" 
+						<a id="linkMassAction" class="btn btn-border bg-gru-light link-modal" href="jsp/admin/plugins/ticketing/Standalone.jsp?view=viewWorkflowActionForm&jsp=${jsp_controller}&id_action=<#if mass_actions_list?? 
+							&& mass_actions_list?has_content>${mass_actions_list[0].id}<#else>-1</#if>" data-remote="false" data-toggle="modal" 
 							data-title="<#if mass_actions_list?? && mass_actions_list?has_content>${mass_actions_list[0].description}</#if>" data-target="#ticketing-modal-workflow-action-form" 
 							title="<#if mass_actions_list?? && mass_actions_list?has_content>${mass_actions_list[0].name}</#if>" 
 							data-action-id="<#if mass_actions_list?? && mass_actions_list?has_content>${mass_actions_list[0].id}</#if>" disabled="disabled">

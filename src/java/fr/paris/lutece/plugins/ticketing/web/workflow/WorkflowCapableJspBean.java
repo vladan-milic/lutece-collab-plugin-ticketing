@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.ticketing.web.workflow;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -91,9 +90,6 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     // MARKS
     private static final String MARK_RESOURCE_HISTORY_CHANNEL = "resource_history_channel";
     private static final String MARK_USER_FACTORY = "user_factory";
-
-    // Parameters
-    private static final String PARAMETER_MASS_ACTION_SELECTED_TICKET = "selected_tickets";
 
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
@@ -269,7 +265,10 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     public String getWorkflowActionForm( HttpServletRequest request )
     {
         String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
-        String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
+        
+        // Manage the id tickets list
+        String [ ] strSeqIdTickets = request.getParameterValues( TicketingConstants.PARAMETER_ID_TICKET );
+        String strIdTicket = ( strSeqIdTickets != null && strSeqIdTickets.length > 0 ) ? strSeqIdTickets[0] : "";
 
         if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) && StringUtils.isNotEmpty( strIdTicket )
                 && StringUtils.isNumeric( strIdTicket ) )
@@ -330,7 +329,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         String strError = null;
         String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
-        List<String> listIdTickets = Arrays.asList( request.getParameterValues( PARAMETER_MASS_ACTION_SELECTED_TICKET ) );
+        String[] arrayIdTicket = request.getParameterValues( TicketingConstants.PARAMETER_MASS_ACTION_SELECTED_TICKET );
 
         if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) && StringUtils.isNotEmpty( strIdTicket )
                 && StringUtils.isNumeric( strIdTicket ) )

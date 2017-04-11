@@ -1,4 +1,7 @@
 $(document).ready(function(){
+	// The init url of modal opening
+	var initUrlModal = $(".link-modal").attr("href");
+	
 	// Select or deselect all checkbox
 	$("#select_all_tickets").change(function(){
 		var status = $(this).is(":checked") ? true : false;
@@ -6,8 +9,16 @@ $(document).ready(function(){
 		var checkedValues = getSelectedTickets( );
 		if(status){
 			activeMassAction( );
+			if(checkedValues != undefined && checkedValues.length != 0){
+				for(i=0; i<checkedValues.length; i++){
+					// Change the url parameters value
+					var currentUrl = $(".link-modal").attr("href");
+					$(".link-modal").attr("href", currentUrl.concat("&id=" + checkedValues[i].value));
+				}
+			}
 		} else {
 			if(checkedValues == undefined || checkedValues.length == 0){
+				$(".link-modal").attr("href", initUrlModal);
 				disableMassAction( );
 			}
 		}
@@ -30,7 +41,14 @@ $(document).ready(function(){
 		if(checkedValues != undefined && checkedValues.length != 0){
 			activeMassAction( );
 		} else {
+			$(".link-modal").attr("href", initUrlModal);
 			disableMassAction( );
+		}
+		var currentUrl = $(".link-modal").attr("href");
+		if($(this).is(":checked")){
+			$(".link-modal").attr("href", currentUrl.concat("&id=" + $(this).val()));			
+		} else {
+			$(".link-modal").attr("href", currentUrl.replace("&id=" + $(this).val(), '') );
 		}
 	});
 
@@ -45,12 +63,6 @@ $(document).ready(function(){
 		var currentUrl = $(".link-modal").attr("href");
 		$(".link-modal").attr("href", currentUrl.replace(/id_action=[^&]+/, 'id_action='+massActionSelected.value));
 	});
-
-	// Send the ticket list selected to the modal
-	$('#ticketing-modal-workflow-action-form').on("shown.bs.modal", function (e) {
-		var checkedValues = getSelectedTickets();
-		$('#ticketing-modal-workflow-action-form').find("input[name=selected_tickets]").val(checkedValues);
-	});
 });
 
 // Return the list of id of all selected tickets
@@ -63,15 +75,10 @@ function getSelectedTickets( ) {
 
 // Active the action mass link and init the id value in the url
 function activeMassAction( ) {
-	var currentUrl = $(".link-modal").attr("href");
-	var checkedValues = getSelectedTickets( );
-	$(".link-modal").attr("href", currentUrl.replace(/id=[^&]+/, 'id='+checkedValues[0]));
 	document.getElementById("linkMassAction").removeAttribute("disabled");
 };
 
 // Disabled the mass action link and reset the id value in the url
 function disableMassAction( ) {
-	var currentUrl = $(".link-modal").attr("href");
-	$(".link-modal").attr("href", currentUrl.replace(/id=[^&]+/, 'id=-1'));
 	document.getElementById("linkMassAction").setAttribute("disabled","disabled");
 };

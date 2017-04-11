@@ -66,6 +66,7 @@ public final class TicketingConstants
     public static final String PARAMETER_TICKET_DOMAIN_ID = "id_ticket_domain";
     public static final String PARAMETER_TICKET_PRECISION_ID = "id_ticket_precision";
     public static final String PARAMETER_TICKET_CATEGORY_ID = "id_ticket_category";
+    public static final String PARAMETER_MASS_ACTION_SELECTED_TICKET = "selected_tickets";
 
     // Attributes
     public static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON = "hide_next_button";
