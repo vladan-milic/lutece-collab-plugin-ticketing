@@ -120,6 +120,15 @@ textarea.ticketing.richtext {
 	height:100%;
 }
 
+.mass-checkbox {
+	min-width: initial !important;
+	cursor: default !important;
+}
+
+.mass-action-tab {
+	padding-left: initial !important;
+}
+
 #search_input {
     width: 200px;
 }

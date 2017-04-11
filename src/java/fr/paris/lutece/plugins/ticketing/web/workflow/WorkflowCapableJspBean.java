@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -50,7 +51,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.resourcehistory.IResourceHistoryInformationService;
@@ -58,6 +58,7 @@ import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerException;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
@@ -72,6 +73,8 @@ import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
 import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
+import fr.paris.lutece.plugins.workflowcore.service.state.StateService;
+import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -99,7 +102,6 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 	private static final String MARK_MASS_ACTION_SUCCESS_TICKETS = "success_tickets";
 	private static final String MARK_MASS_ACTION_FAILED_TICKETS = "failed_tickets";
 	private static final String MARK_MASS_ACTION_NOT_ALLOWED_TICKETS = "notallowed_tickets";
-    
 
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
@@ -143,6 +145,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
             .getBean( BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE );
     private final TicketSearchEngine _engine = (TicketSearchEngine) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
     private final IActionService _actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
+    private static StateService _stateService = SpringContextService.getBean( StateService.BEAN_SERVICE );
+
 
     /**
      * Generated serial id
@@ -353,12 +357,13 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         String strError = null;
         String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
         _nIdAction = StringUtils.isNotBlank( strIdAction )&& StringUtils.isNumeric( strIdAction ) ?  Integer.parseInt( strIdAction ) : TicketingConstants.PROPERTY_UNSET_INT;
-        String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ); 
-        List<String> listIdsSelectedTickets = Arrays.asList( request.getParameterValues( TicketingConstants.PARAMETER_SELECTED_TICKETS ) );
+        String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
         
-        if (listIdsSelectedTickets != null && !listIdsSelectedTickets.isEmpty( ) )
+        String[] tabIdsSelectedTickets = request.getParameterValues( TicketingConstants.PARAMETER_SELECTED_TICKETS );
+        
+        if (tabIdsSelectedTickets != null && tabIdsSelectedTickets.length > 0 )
         {
-        	return doProcessWorkflowMassAction(listIdsSelectedTickets, request);
+        	return doProcessWorkflowMassAction(Arrays.asList( tabIdsSelectedTickets ), request);
         }
 
         if ( _nIdAction != TicketingConstants.PROPERTY_UNSET_INT && StringUtils.isNotEmpty( strIdTicket )
@@ -373,15 +378,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                     Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
                     TicketCategory ticketCategory = ticket.getTicketCategory( );
 
-                    // Control if a precision has been selected or not
-                    if ( !precisionHasBeenSelected( request ) )
-                    {
-                        addErrorWorkflowAction( request, _nIdAction );
-
-                        return redirectWorkflowActionCancelled( request );
-                    }
-
                     if ( _workflowService.isDisplayTasksForm( _nIdAction, getLocale( ) ) )
+
                     {
                         strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, ticketCategory.getId( ), request,
                                 getLocale( ) );
@@ -663,29 +661,6 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     }
 
     /**
-     * Determine if a precision has been selected during the current task
-     * 
-     * @param request
-     * @return true if a selection has been if its necessary false otherwise
-     */
-    protected boolean precisionHasBeenSelected( HttpServletRequest request )
-    {
-        // We check if a precision has been selected
-        String strNewCategoryId = request.getParameter( TicketingConstants.PARAMETER_TICKET_CATEGORY_ID );
-        if ( StringUtils.isNumeric( strNewCategoryId ) )
-        {
-            TicketCategory ticketCategoryTemp = TicketCategoryHome.findByPrimaryKey( Integer.parseInt( strNewCategoryId ) );
-            if ( StringUtils.isNotBlank( request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) )
-                    && request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING )
-                    && StringUtils.isNotBlank( ticketCategoryTemp.getPrecision( ) ) )
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * Adds information message for workflow action
      * 
      * @param request
@@ -774,6 +749,45 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 	}
 
 	/**
+     * Return the list of all mass actions associated to the enabled workflow for the user filter by the selected task. If more than one task has been selected
+     * the list returned will be empty
+     * 
+     * @param user
+     * @param filter
+     * @return the list of all mass actions associated to the enabled workflow for the user
+     */
+    protected List<Action> getListMassActions( AdminUser user, TicketFilter filter )
+    {
+        List<Action> listMassActions = new ArrayList<>( );
+        // We get the list of mass actions only for one task
+        if ( filter.getListIdWorkflowState( ).size( ) == 1 )
+        {
+            Integer nStateIdFilter = filter.getListIdWorkflowState( ).get( 0 );
+            State stateSelected = _stateService.findByPrimaryKey( nStateIdFilter );
+
+            if ( stateSelected != null && stateSelected.getWorkflow( ) != null )
+            {
+                List<Action> listWorkflowMassActions = _workflowService.getMassActions( stateSelected.getWorkflow( ).getId( ) );
+
+                if ( listWorkflowMassActions != null && !listWorkflowMassActions.isEmpty( ) )
+                {
+                    Map<Integer, Action> mapLibelleAction = new TreeMap<>( );
+                    // We sort the list of actions by order
+                    for ( Action workflowActionMass : listWorkflowMassActions )
+                    {
+                        if ( workflowActionMass.getStateBefore( ) != null && nStateIdFilter == workflowActionMass.getStateBefore( ).getId( ) )
+                        {
+                            mapLibelleAction.put( workflowActionMass.getOrder( ), workflowActionMass );
+                        }
+                    }
+                    listMassActions.addAll( mapLibelleAction.values( ) );
+                }
+            }
+        }
+        return listMassActions;
+    }
+
+    /**
      * Redirects to the correct page after workflow action
      * 
      * @param request

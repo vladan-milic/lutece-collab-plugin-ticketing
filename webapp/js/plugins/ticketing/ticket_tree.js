@@ -2,7 +2,7 @@
 var msg_select_type = "-- Choisir une nature --";
 var msg_select_domain = "-- Choisir un domaine --";
 var msg_select_category = "-- Choisir une probl\u00e9matique --";
-var msg_select_precision = "-- Choisir une pr\u00e9cision --";
+var msg_select_precision = "-- Choisir une sous-probl\u00e9matique --";
 
 // Turns the 3 combos identified by the jquery selectors into dynamic combos
 function lutece_ticket_tree(type_selector, domain_selector, category_selector, precision_selector, selected_category_id, url) {
@@ -169,7 +169,7 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
         	}
         }
         var setSelectedCategoryId = function() {
-        	if (selectedPrecision != undefined) {
+        	if (selectedPrecision != undefined  && selectedPrecision != -1) {
         		$(category_selector + ' option:selected').val(selectedPrecision.id);
         	}
         }

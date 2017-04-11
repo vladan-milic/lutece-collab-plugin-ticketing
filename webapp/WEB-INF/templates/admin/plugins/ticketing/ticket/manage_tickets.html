@@ -1,6 +1,7 @@
 <script>$(".content-header").hide();</script>
 <#include "/admin/plugins/ticketing/commons.html" />
 <#include "/admin/plugins/ticketing/include/user_info.html"/>
+<#include "/admin/plugins/ticketing/include/popins.html" />
 <!-- Include the plugin's CSS and JS for multiselect bootstrap -->
 <script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
 <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css"/>
@@ -18,7 +19,10 @@
   	    <table class="table table-hover table-striped">
       		<thead>
       		  <tr>
-                  <th data-field="reference">#i18n{ticketing.manage_tickets.columnReference}</th>
+      		  		<#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
+      		  			<th data-field="mass_selection" class="mass-checkbox"><input id="select_all_tickets" type="checkbox" value=""></th>
+      		  		</#if>
+                  	<th data-field="reference">#i18n{ticketing.manage_tickets.columnReference}</th>
         			<#if creation_date_as_date >
                       <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.date}</th>
                     <#else>
@@ -35,6 +39,11 @@
       		<tbody>
     			<#list panel_list as ticket >
     			<tr data-url="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" >
+    			<#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
+    				<td class="mass-checkbox">
+    					<input type="checkbox" value="${ticket.id}" class="mass-action-ready">
+    				</td>
+    			</#if>
     			  <td>
               <#assign textColor="aqua"/>
               <#if ticket.urgency==1 >
@@ -159,7 +168,13 @@
       </div>
     <#else>
       <div id="no-content">
-       <h2 class="text-muted">#i18n{ticketing.manage_tickets.labelNoTicket}</h2>
+       <h2 class="text-muted">
+       	<#if user_with_no_unit>
+       		#i18n{ticketing.manage_tickets.noTicket.labelNoUnit}
+       	<#else>
+       		#i18n{ticketing.manage_tickets.labelNoTicket}
+       	</#if>
+       </h2>
        <img class="img-responsive" src="images/admin/skin/plugins/ticketing/no_content.jpg" alt="" title="">
       </div>
     </#if>
@@ -258,6 +273,27 @@
   <div id="demand-panel" class="row bg-gru-light tickets">
     <div class="col-xs-12 col-sm-12">
     <ul class="nav nav-tabs nav-ticket">
+		<#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
+			<li role="presentation" class="mass-action-tab">
+				<form id="mass_action_form" class="form" method="post" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+					<div class="form-group">
+						<input type="hidden" name="action_massAction" value="action_massAction"></input>
+						<select id="id_mass_action" name="id_mass_action">
+							<#list mass_actions_list as massAction>
+								<option value="${massAction.id}" data-description="${massAction.description}" data-name="${massAction.name}">${massAction.name}</option>
+							</#list>
+						</select>
+						<a id="linkMassAction" class="btn btn-border bg-gru-light link-modal" href="jsp/admin/plugins/ticketing/Standalone.jsp?view=viewWorkflowActionForm&id_action=<#if mass_actions_list?? 
+							&& mass_actions_list?has_content>${mass_actions_list[0].id}<#else>-1</#if>&id=-1&jsp=${jsp_controller}" data-remote="false" data-toggle="modal" 
+							data-title="<#if mass_actions_list?? && mass_actions_list?has_content>${mass_actions_list[0].description}</#if>" data-target="#ticketing-modal-workflow-action-form" 
+							title="<#if mass_actions_list?? && mass_actions_list?has_content>${mass_actions_list[0].name}</#if>" 
+							data-action-id="<#if mass_actions_list?? && mass_actions_list?has_content>${mass_actions_list[0].id}</#if>" disabled="disabled">
+              				<i class="fa fa-check"></i>
+						</a>
+					</div>
+				</form>
+			</li>
+		</#if>
       <li role="presentation" <#if !selected_tab?? || ( selected_tab?? && selected_tab=="agent")> class="active" </#if> >
         <a href="#" onclick="setSelectedTab('agent')" aria-controls="agent" role="tab" data-toggle="tab">
           <i class="fa fa-inbox"></i> #i18n{ticketing.manage_tickets.labelAgentTickets} <span class="badge">${nb_ticket_agent}</span>
@@ -297,12 +333,15 @@
   </div>
 </div>
 <script src="js/plugins/ticketing/ticketing.js"></script>
+<script type="text/javascript" src="js/plugins/ticketing/action_mass.js"></script>
 <script>
 $( function(){
 
 	// Set link on whole tr
-	$("tbody > tr ").on( 'click', function(e){
-		redirectOnClick(this);
+	$("tbody > tr").on( 'click', function(e){
+		if (!$(e.target).hasClass("mass-checkbox") && !$(e.target).hasClass("mass-action-ready")){
+			redirectOnClick(this);
+		}
 	});
 
 	// Tooltip
@@ -317,15 +356,17 @@ $( function(){
   // Column order
   $("th").on( 'click', function( e ){
     var field = $(this).attr('data-field');
-    var oldField = $("input[name=fltr_order_by]").val();
-    var order;
-    if( field === oldField ){
-      order = sort_order=="asc" ? "desc" : "asc";
+    if(field != 'mass_selection'){
+    	var oldField = $("input[name=fltr_order_by]").val();
+    	var order;
+    	if( field === oldField ){
+      		order = sort_order=="asc" ? "desc" : "asc";
+    	}
+    	else{
+      		order = "asc";
+    	}
+    	sortList( field, order);
     }
-    else{
-      order = "asc";
-    }
-    sortList( field, order);
   });
 
   function sortList(field, order){

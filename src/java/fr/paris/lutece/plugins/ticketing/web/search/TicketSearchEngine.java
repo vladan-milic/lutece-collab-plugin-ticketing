@@ -401,21 +401,27 @@ public class TicketSearchEngine implements ITicketSearchEngine
                     booleanFilterGlobal.add( booleanFilterIdUser, Occur.MUST );
                     break;
                 case GROUP:
-                    booleanFilterGlobal.add( termFilterIdAdminUser, Occur.MUST_NOT );
-                    booleanFilterGlobal.add( termFilterIdAssignerUser, Occur.MUST_NOT );
+                    if ( termsFilterIdAssigneeUnit != null && termsFilterIdAssignerUnit != null )
+                    {
+                        booleanFilterGlobal.add( termFilterIdAdminUser, Occur.MUST_NOT );
+                        booleanFilterGlobal.add( termFilterIdAssignerUser, Occur.MUST_NOT );
 
-                    booleanFilterIdUnit = new BooleanFilter( );
-                    booleanFilterIdUnit.add( termsFilterIdAssigneeUnit, Occur.SHOULD );
-                    booleanFilterIdUnit.add( termsFilterIdAssignerUnit, Occur.SHOULD );
+                        booleanFilterIdUnit = new BooleanFilter( );
+                        booleanFilterIdUnit.add( termsFilterIdAssigneeUnit, Occur.SHOULD );
+                        booleanFilterIdUnit.add( termsFilterIdAssignerUnit, Occur.SHOULD );
 
-                    booleanFilterGlobal.add( booleanFilterIdUnit, Occur.MUST );
+                        booleanFilterGlobal.add( booleanFilterIdUnit, Occur.MUST );
+                    }
                     break;
                 case DOMAIN:
-                    booleanFilterGlobal.add( termFilterIdAdminUser, Occur.MUST_NOT );
-                    booleanFilterGlobal.add( termFilterIdAssignerUser, Occur.MUST_NOT );
+                    if ( termsFilterIdAssigneeUnit != null && termsFilterIdAssignerUnit != null )
+                    {
+                        booleanFilterGlobal.add( termFilterIdAdminUser, Occur.MUST_NOT );
+                        booleanFilterGlobal.add( termFilterIdAssignerUser, Occur.MUST_NOT );
 
-                    booleanFilterGlobal.add( termsFilterIdAssigneeUnit, Occur.MUST_NOT );
-                    booleanFilterGlobal.add( termsFilterIdAssignerUnit, Occur.MUST_NOT );
+                        booleanFilterGlobal.add( termsFilterIdAssigneeUnit, Occur.MUST_NOT );
+                        booleanFilterGlobal.add( termsFilterIdAssignerUnit, Occur.MUST_NOT );
+                    }
                     break;
                 case ALL:
                 default:
