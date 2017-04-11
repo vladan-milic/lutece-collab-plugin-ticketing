@@ -81,7 +81,6 @@ public interface ITicketSearchEngine
      */
     int searchCountTickets( String strQuery, List<TicketDomain> listTicketDomain, TicketFilter filter ) throws ParseException;
 
-    
     /**
      * search the tickets which contains id from the provided listIdsTickets in lucene contents fields
      * 
@@ -93,5 +92,5 @@ public interface ITicketSearchEngine
      * @throws ParseException
      *             exception occurs while parsing input query
      */
-	List<Ticket> searchTicketsByIds( List<Integer> listIdsTickets, TicketFilter filter ) throws ParseException;
+    List<Ticket> searchTicketsByIds( List<Integer> listIdsTickets, TicketFilter filter ) throws ParseException;
 }
