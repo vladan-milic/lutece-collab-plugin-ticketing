@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.ticketing.web.workflow;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -46,18 +47,23 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.queryparser.classic.ParseException;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.resourcehistory.IResourceHistoryInformationService;
 import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerException;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.ticketing.web.search.SearchConstants;
+import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchEngine;
 import fr.paris.lutece.plugins.ticketing.web.user.UserFactory;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexerActionUtil;
@@ -69,11 +75,13 @@ import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import fr.paris.lutece.util.html.HtmlTemplate;
 
 /**
  * This class represents a JSP bean which can use workflow
@@ -87,6 +95,11 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     // MARKS
     private static final String MARK_RESOURCE_HISTORY_CHANNEL = "resource_history_channel";
     private static final String MARK_USER_FACTORY = "user_factory";
+    private static final String MARK_ACTION = "action";
+	private static final String MARK_MASS_ACTION_SUCCESS_TICKETS = "success_tickets";
+	private static final String MARK_MASS_ACTION_FAILED_TICKETS = "failed_tickets";
+	private static final String MARK_MASS_ACTION_NOT_ALLOWED_TICKETS = "notallowed_tickets";
+    
 
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
@@ -96,12 +109,16 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     // Templates
     private static final String TEMPLATE_RESOURCE_HISTORY = "admin/plugins/ticketing/workflow/ticket_history.html";
+    private static final String TEMPLATE_WORKFLOW_MASS_TASK_RESULT = "admin/plugins/ticketing/workflow/mass_task_result.html";
 
     // Infos
     private static final String INFO_WORKFLOW_ACTION_EXECUTED = "ticketing.info.workflow.action.executed";
 
     // Errors
     private static final String ERROR_WORKFLOW_ACTION_ABORTED = "ticketing.error.workflow.action.aborted.backoffice";
+    
+    // Views
+    private static final String VIEW_MASS_ACTION_RESULT = "MassActionResult";
 
     static
     {
@@ -124,11 +141,19 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     private static WorkflowService _workflowService = WorkflowService.getInstance( );
     private static IResourceHistoryInformationService _resourceHistoryTicketingInformationService = SpringContextService
             .getBean( BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE );
+    private final TicketSearchEngine _engine = (TicketSearchEngine) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
+    private final IActionService _actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
 
     /**
      * Generated serial id
      */
     private static final long serialVersionUID = -249042695023346133L;
+
+	private ArrayList<Integer> _listIdsSuccessTickets;
+	private ArrayList<Integer> _listIdsFailedTickets;
+	private ArrayList<Integer> _listIdsPermissionErrorTickets;
+	private int _nIdAction;
+	
 
     /**
      * set workflow attributes needed for display a list of ticket
@@ -262,6 +287,12 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     {
         String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
+        String [] listIdsSelectedTickets = request.getParameterValues( TicketingConstants.PARAMETER_SELECTED_TICKETS );
+        
+        if (listIdsSelectedTickets != null && StringUtils.isNotEmpty( listIdsSelectedTickets[0] ) )
+        {
+        	strIdTicket = listIdsSelectedTickets[0];
+        }
 
         if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) && StringUtils.isNotEmpty( strIdTicket )
                 && StringUtils.isNumeric( strIdTicket ) )
@@ -321,12 +352,18 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     {
         String strError = null;
         String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
-        String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
+        _nIdAction = StringUtils.isNotBlank( strIdAction )&& StringUtils.isNumeric( strIdAction ) ?  Integer.parseInt( strIdAction ) : TicketingConstants.PROPERTY_UNSET_INT;
+        String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ); 
+        List<String> listIdsSelectedTickets = Arrays.asList( request.getParameterValues( TicketingConstants.PARAMETER_SELECTED_TICKETS ) );
+        
+        if (listIdsSelectedTickets != null && !listIdsSelectedTickets.isEmpty( ) )
+        {
+        	return doProcessWorkflowMassAction(listIdsSelectedTickets, request);
+        }
 
-        if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) && StringUtils.isNotEmpty( strIdTicket )
+        if ( _nIdAction != TicketingConstants.PROPERTY_UNSET_INT && StringUtils.isNotEmpty( strIdTicket )
                 && StringUtils.isNumeric( strIdTicket ) )
         {
-            int nIdAction = Integer.parseInt( strIdAction );
             int nIdTicket = Integer.parseInt( strIdTicket );
 
             if ( request.getParameter( TicketingConstants.PARAMETER_BACK ) == null )
@@ -339,14 +376,14 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                     // Control if a precision has been selected or not
                     if ( !precisionHasBeenSelected( request ) )
                     {
-                        addErrorWorkflowAction( request, nIdAction );
+                        addErrorWorkflowAction( request, _nIdAction );
 
                         return redirectWorkflowActionCancelled( request );
                     }
 
-                    if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( ) ) )
+                    if ( _workflowService.isDisplayTasksForm( _nIdAction, getLocale( ) ) )
                     {
-                        strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, ticketCategory.getId( ), request,
+                        strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, ticketCategory.getId( ), request,
                                 getLocale( ) );
 
                         if ( strError != null )
@@ -354,14 +391,14 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                             return redirect( request, strError );
                         }
 
-                        addInfoWorkflowAction( request, nIdAction );
+                        addInfoWorkflowAction( request, _nIdAction );
                     }
                     else
                     {
-                        _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, ticketCategory.getId( ), request, getLocale( ),
+                        _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, ticketCategory.getId( ), request, getLocale( ),
                                 false );
 
-                        addInfoWorkflowAction( request, nIdAction );
+                        addInfoWorkflowAction( request, _nIdAction );
                     }
 
                     // Immediate indexation of the Ticket
@@ -369,7 +406,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 }
                 catch( Exception e )
                 {
-                    addErrorWorkflowAction( request, nIdAction );
+                    addErrorWorkflowAction( request, _nIdAction );
                     AppLogService.error( e );
 
                     return redirectWorkflowActionCancelled( request );
@@ -384,7 +421,109 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         return redirectAfterWorkflowAction( request );
     }
 
+    
+    
     /**
+     * Do process a workflow mass action over a list of tickets
+     *
+     * @param listIdsSelectedTickets
+     *            The list of ticket Ids to process
+     *@param _nIdAction
+     *            The id of workflow action
+     * @param request
+     *            The request
+     * @return The next URL to redirect to
+     */    
+    private String doProcessWorkflowMassAction( List<String> listIdsSelectedTickets,
+    		HttpServletRequest request )
+    {
+    	String strError = null;
+    	_listIdsSuccessTickets = new ArrayList<Integer>( );
+    	_listIdsFailedTickets = new ArrayList<Integer>( );
+    	_listIdsPermissionErrorTickets = new ArrayList<Integer>( );
+
+    	if (  _nIdAction  != TicketingConstants.PROPERTY_UNSET_INT)
+    	{
+    		if ( request.getParameter( TicketingConstants.PARAMETER_BACK ) == null )
+    		{
+    			for ( String strIdTicket : listIdsSelectedTickets )
+    			{
+    				if (StringUtils.isNotEmpty( strIdTicket )
+    						&& StringUtils.isNumeric( strIdTicket ) )
+    				{
+    					int nIdTicket = Integer.parseInt( strIdTicket );
+
+    					try
+    					{
+    						Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
+    						TicketCategory ticketCategory = ticket.getTicketCategory( );
+
+    						if ( RBACService.isAuthorized( TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) ), TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, getUser( ) ) )
+    						{
+
+	    						if (_workflowService.canProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, null, request, false ) )
+	    						{
+	
+		
+		    						if ( _workflowService.isDisplayTasksForm( _nIdAction, getLocale( ) ) )
+		    						{
+		    							strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, ticketCategory.getId( ), request,
+		    									getLocale( ) );
+		
+		    							if ( strError != null )
+		    							{
+		    								_listIdsFailedTickets.add( nIdTicket );
+		    							}
+		    							else
+		    							{
+		
+		    								_listIdsSuccessTickets.add( nIdTicket );
+		    								immediateTicketIndexing( ticket.getId( ) );
+		    							}
+		    						}
+		    						else
+		    						{
+		    							_workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, ticketCategory.getId( ), request, getLocale( ),
+		    									false );
+		
+		    							_listIdsSuccessTickets.add( nIdTicket );
+		    							immediateTicketIndexing( ticket.getId( ) );
+		    						}
+	    						}
+	    						else
+	    						{
+	    							_listIdsFailedTickets.add(nIdTicket);
+	    						}
+	    						
+    		    			}
+    						else
+    						{
+    							_listIdsPermissionErrorTickets.add( nIdTicket );
+    						
+    						}
+	
+	    					}
+	    					catch( Exception e )
+	    					{
+	    						//addErrorWorkflowAction( request, nIdAction );
+	    						AppLogService.error( e );
+	    						_listIdsFailedTickets.add(nIdTicket);
+	    					}
+	    				}
+    			}
+    			return redirectView( request, VIEW_MASS_ACTION_RESULT );
+
+    		}
+    		else
+    		{
+    			return redirectWorkflowActionCancelled( request );
+    		}
+    	}
+
+    	return redirectAfterWorkflowAction( request );
+    }
+
+	/**
      * Do process a workflow automatic action over a ticket
      *
      * @param ticket
@@ -577,8 +716,64 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         String strError = MessageFormat.format( I18nService.getLocalizedString( ERROR_WORKFLOW_ACTION_ABORTED, Locale.FRENCH ), action.getName( ) );
         addError( strError );
     }
+    
+    /**
+     * Get the html for mass action result
+     * 
+     * @param request
+     *            the HTTP request
+     * @return the html code
+     */
+    @View( value = VIEW_MASS_ACTION_RESULT, defaultView = true )
+    public String getMassActionResult( HttpServletRequest request )
+    {
+
+        if ( _nIdAction  != TicketingConstants.PROPERTY_UNSET_INT )
+        {
+            
+            Map<String, Object> model = new HashMap<String, Object>( );
+          
+            model.put( MARK_ACTION, _actionService.findByPrimaryKey( _nIdAction ) );
+            
+            populateMassActionResult( model );
+
+            HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_WORKFLOW_MASS_TASK_RESULT, getLocale( ), model );
+
+            return getAdminPage( templateList.getHtml( ) );
+        }
+
+        return redirectAfterWorkflowAction( request );
+    }
+
 
     /**
+     * Fill the model with Tickets list for mass action result page
+     * Tickets lists are built using search engine queries on id lists
+     * 
+     * @param listIdsSuccessTickets
+     *            the list of ticket Ids with success status
+     * @param listIdsFailedTickets
+     *            the list of ticket Ids with failed status
+     * @param listIdsPermissionErrorTickets
+     *            the list of ticket Ids with permission error           
+     */
+    private void populateMassActionResult( Map<String, Object> model )
+	{
+    	
+    	try
+		{
+        	model.put(MARK_MASS_ACTION_SUCCESS_TICKETS, _engine.searchTicketsByIds( _listIdsSuccessTickets, null ) );
+        	model.put(MARK_MASS_ACTION_FAILED_TICKETS, _engine.searchTicketsByIds( _listIdsFailedTickets, null ) );
+        	model.put(MARK_MASS_ACTION_NOT_ALLOWED_TICKETS, _engine.searchTicketsByIds( _listIdsPermissionErrorTickets, null ));
+		}
+		catch ( ParseException e )
+		{
+			AppLogService.error( e );
+		}
+
+	}
+
+	/**
      * Redirects to the correct page after workflow action
      * 
      * @param request
@@ -604,4 +799,6 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
      * @return the page to redirect to
      */
     protected abstract String defaultRedirectWorkflowAction( HttpServletRequest request );
+    
+
 }
