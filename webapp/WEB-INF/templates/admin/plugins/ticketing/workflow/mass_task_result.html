@@ -1,0 +1,60 @@
+<script>$(".content-header").hide();</script>
+<div class="gru-wrapper">
+  <div id="customer-panel" class="row bg-gru-light">
+    <div class="col-sm-offset-1 col-sm-7">
+		<div class="row">
+      		<h2>${action.name}</h2>
+    	</div>
+		<div class="row">
+			<h2>
+	         <a class="btn btn-border" href="jsp/admin/plugins/ticketing/ManageTickets.jsp?plugin_name=ticketing">
+	         	<i class="fa fa-arrow-left"></i> #i18n{ticketing.view_ticket_header.labelReturn}
+	         </a>
+	     	</h2>
+		</div>
+  	</div>
+   </div>
+  <div id="demand-panel">
+    <div class="col-xs-12 col-sm-offset-1 col-sm-9">
+		<div class="row">
+		<#if success_tickets?? && success_tickets?has_content>
+			<div class="alert alert-info action-result">
+				<i class="fa fa-check"></i>
+				#i18n{ticketing.mass_action_result.labelSuccessTickets}
+			</div>
+			<div class="col-xs-12 col-xs-offset-1">
+			<#list success_tickets as success_ticket>
+				<h4>${success_ticket.reference}</h4>
+			</#list>
+			</div>
+		</#if>
+		</div>
+		<div class="row">
+		<#if failed_tickets?? && failed_tickets?has_content>
+			<div class="alert alert-warning action-result">
+			<i class="fa fa-exclamation-circle"></i>
+			#i18n{ticketing.mass_action_result.labelFailureTickets}
+			</div>
+			<div class="col-xs-12 col-xs-offset-1">
+			<#list failed_tickets as failed_ticket>
+				<h4>${failed_ticket.reference}</h4>
+			</#list>
+			</div>	
+		</#if>
+		</div>
+		<div class="row">
+		<#if notallowed_tickets?? && notallowed_tickets?has_content>
+			<div class="alert alert-warning action-result">
+			<i class="fa fa-exclamation-circle"></i>
+			#i18n{ticketing.mass_action_result.labelPermissionDeniedTickets}
+			</div>
+			<div class="col-xs-12 col-xs-offset-1">
+			<#list notallowed_tickets as notallowed_ticket>
+				<h4>${notallowed_ticket.reference}</h4>
+			</#list>
+			</div>
+		</#if>
+		</div>
+    </div>
+  </div>
+</div>

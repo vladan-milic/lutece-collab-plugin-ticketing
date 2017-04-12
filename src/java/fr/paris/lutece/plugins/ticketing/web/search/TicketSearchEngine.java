@@ -220,6 +220,28 @@ public class TicketSearchEngine implements ITicketSearchEngine
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Ticket> searchTicketsByIds( List<Integer> listIdsTickets, TicketFilter filter ) throws ParseException
+    {
+        if ( listIdsTickets != null && !listIdsTickets.isEmpty( ) )
+        {
+            BooleanQuery idTicketsQuery = new BooleanQuery( );
+            for ( int idTicket : listIdsTickets )
+            {
+                TermQuery idTicketQuery = new TermQuery( new Term( TicketSearchItemConstant.FIELD_TICKET_ID, TicketSearchUtil.getBytesRef( idTicket ) ) );
+                idTicketsQuery.add( new BooleanClause( idTicketQuery, BooleanClause.Occur.SHOULD ) );
+            }
+            BooleanQuery mainIdTicketsQuery = new BooleanQuery( );
+            mainIdTicketsQuery.add( new BooleanClause( idTicketsQuery, BooleanClause.Occur.MUST ) );
+
+            return search( mainIdTicketsQuery, filter );
+        }
+        return null;
+    }
+
+    /**
      * Return the number of result documents
      *
      * @param query

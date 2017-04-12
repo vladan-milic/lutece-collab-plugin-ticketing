@@ -80,4 +80,17 @@ public interface ITicketSearchEngine
      *             exception occurs while parsing input query
      */
     int searchCountTickets( String strQuery, List<TicketDomain> listTicketDomain, TicketFilter filter ) throws ParseException;
+
+    /**
+     * search the tickets which contains id from the provided listIdsTickets in lucene contents fields
+     * 
+     * @param listIdsTickets
+     *            list of tickets id
+     * @param filter
+     *            the ticketfilter
+     * @return Results as a collection of Ticket
+     * @throws ParseException
+     *             exception occurs while parsing input query
+     */
+    List<Ticket> searchTicketsByIds( List<Integer> listIdsTickets, TicketFilter filter ) throws ParseException;
 }

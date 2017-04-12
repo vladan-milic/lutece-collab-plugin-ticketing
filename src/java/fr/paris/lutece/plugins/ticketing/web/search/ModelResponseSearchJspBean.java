@@ -91,7 +91,7 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
         
         // Create the set of id domain
         Set<String> setIdDomain = new LinkedHashSet<>( );
-        String [ ] strSeqIdTickets = request.getParameterValues( TicketingConstants.PARAMETER_MASS_ACTION_SELECTED_TICKET );
+        String [ ] strSeqIdTickets = request.getParameterValues( TicketingConstants.PARAMETER_SELECTED_TICKETS );
         if ( strSeqIdTickets != null && strSeqIdTickets.length > 0 )
         {
             setIdDomain = getListIdDomain( strSeqIdTickets );
