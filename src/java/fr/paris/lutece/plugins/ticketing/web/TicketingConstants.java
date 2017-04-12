@@ -136,6 +136,8 @@ public final class TicketingConstants
     public static final String ERROR_TICKET_CREATION_ABORTED = "ticketing.error.ticket.creation.aborted.backoffice";
     public static final String ERROR_INDEX_TICKET_FAILED_BACK = "ticketing.error.ticket.indexing.failed.backoffice";
     public static final String ERROR_INDEX_TICKET_FAILED_FRONT = "ticketing.error.ticket.indexing.failed.frontoffice";
+    public static final String MESSAGE_ERROR_TICKET_TYPE_NOT_SELECTED = "ticketing.validation.ticket.TicketType.mandatory";
+    public static final String MESSAGE_ERROR_TICKET_DOMAIN_NOT_SELECTED = "ticketing.validation.ticket.TicketDomain.mandatory";
     public static final String MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED = "ticketing.error.ticketCategory.notSelected";
     public static final String MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED = "ticketing.error.ticketCategory.precision.notSelected";
 

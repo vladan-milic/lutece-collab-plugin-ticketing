@@ -904,7 +904,20 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             }
         }
 
-        // Check if a category has been selected
+        // Check if a type/domain/category have been selected (made here to sort errors)
+
+        if ( ticket.getIdTicketType( ) == TicketingConstants.PROPERTY_UNSET_INT )
+        {
+            addError( TicketingConstants.MESSAGE_ERROR_TICKET_TYPE_NOT_SELECTED, getLocale( ) );
+            bIsFormValid = false;
+        }
+
+        if ( ticket.getIdTicketDomain( ) == TicketingConstants.PROPERTY_UNSET_INT )
+        {
+            addError( TicketingConstants.MESSAGE_ERROR_TICKET_DOMAIN_NOT_SELECTED, getLocale( ) );
+            bIsFormValid = false;
+        }
+
         if ( ticket.getTicketCategory( ) != null && ticket.getTicketCategory( ).getId( ) == TicketingConstants.PROPERTY_UNSET_INT )
         {
             addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( ) );

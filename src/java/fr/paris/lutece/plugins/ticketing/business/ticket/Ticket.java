@@ -91,11 +91,9 @@ public class Ticket implements Serializable, RBACResource
     private String _strFixedPhoneNumber;
     @Pattern( regexp = PHONE_NUMBER_REGEX, message = "#i18n{ticketing.validation.ticket.MobilePhoneNumber.format}" )
     private String _strMobilePhoneNumber;
-    @Min( value = 1, message = "#i18n{ticketing.validation.ticket.TicketType.mandatory}" )
     private int _nIdTicketType;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketType.size}" )
     private String _strTicketType;
-    @Min( value = 1, message = "#i18n{ticketing.validation.ticket.TicketDomain.mandatory}" )
     private int _nIdTicketDomain;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketDomain.size}" )
     private String _strTicketDomain;
