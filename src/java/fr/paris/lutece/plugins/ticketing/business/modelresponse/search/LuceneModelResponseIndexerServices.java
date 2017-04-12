@@ -33,15 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.modelresponse.search;
 
-import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
-import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
-import fr.paris.lutece.plugins.ticketing.web.search.SearchConstants;
-import fr.paris.lutece.portal.service.search.IndexationService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.portal.service.util.AppException;
-import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPathService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
@@ -58,23 +56,26 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
+import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
+import fr.paris.lutece.plugins.ticketing.web.search.SearchConstants;
+import fr.paris.lutece.portal.service.search.IndexationService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppException;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPathService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 /**
  * The Class LuceneModelResponseIndexerServices.
@@ -239,7 +240,7 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
      * @see fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer#searchResponses(java.lang.String, java.lang.String)
      */
     @Override
-    public List<ModelResponse> searchResponses( String strQuery, String strIdDomain )
+    public List<ModelResponse> searchResponses( String strQuery, Set<String> setIdDomain )
     {
         List<ModelResponse> list = new ArrayList<ModelResponse>( );
         int nMaxResponsePerQuery = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY, 5 );
@@ -251,8 +252,16 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
             IndexSearcher searcher = new IndexSearcher( reader );
 
             BooleanQuery booleanQueryMain = new BooleanQuery( );
-            TermQuery termQueryDomainId = new TermQuery( new Term( FIELD_DOMAIN_ID, strIdDomain ) );
-            booleanQueryMain.add( new BooleanClause( termQueryDomainId, Occur.MUST ) );
+            if ( setIdDomain != null && !setIdDomain.isEmpty( ) )
+            {
+                BooleanQuery booleanIdDomainQuery = new BooleanQuery( );
+                for ( String strIdDomain : setIdDomain )
+                {
+                    TermQuery termQueryDomainId = new TermQuery( new Term( FIELD_DOMAIN_ID, strIdDomain ) );
+                    booleanIdDomainQuery.add( new BooleanClause( termQueryDomainId, Occur.SHOULD ) );
+                }
+                booleanQueryMain.add( new BooleanClause( booleanIdDomainQuery, Occur.MUST ) );
+            }
 
             Query query = new QueryParser( Version.LUCENE_4_9, FIELD_SEARCH_CONTENT, getAnalyzer( ) ).parse( strQuery );
             booleanQueryMain.add( new BooleanClause( query, Occur.MUST ) );
@@ -336,7 +345,7 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
             try
             {
                 @SuppressWarnings( {
-                        "unchecked", "rawtypes"
+                    "rawtypes"
                 } )
                 java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName ).getConstructor( Version.class, String [ ].class );
                 _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {

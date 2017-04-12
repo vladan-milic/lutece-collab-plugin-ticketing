@@ -34,10 +34,13 @@
 package fr.paris.lutece.plugins.ticketing.web.search;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,6 +48,8 @@ import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices;
+import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
@@ -84,9 +89,18 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
         String strIdDomain = request.getParameter( SearchConstants.PARAMETER_DOMAIN );
         Map<String, Object> model = new HashMap<String, Object>( );
 
+        // Create the set of id domain
+        Set<String> setIdDomain = new LinkedHashSet<>( );
+        String [ ] strSeqIdTickets = request.getParameterValues( TicketingConstants.PARAMETER_SELECTED_TICKETS );
+        if ( strSeqIdTickets != null && strSeqIdTickets.length > 0 )
+        {
+            setIdDomain = getListIdDomain( strSeqIdTickets );
+        }
+        setIdDomain.add( strIdDomain );
+
         if ( StringUtils.isNotEmpty( strQuery ) )
         {
-            List<ModelResponse> listResults = LuceneModelResponseIndexerServices.instance( ).searchResponses( strQuery, strIdDomain );
+            List<ModelResponse> listResults = LuceneModelResponseIndexerServices.instance( ).searchResponses( strQuery, setIdDomain );
 
             model.put( SearchConstants.MARK_RESULT, listResults );
             model.put( SearchConstants.MARK_QUERY, strQuery );
@@ -119,6 +133,31 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
         }
 
         ( (List<ErrorMessage>) model.get( SearchConstants.MARK_ERRORS ) ).add( new MVCMessage( I18nService.getLocalizedString( strMessageKey, locale ) ) );
+    }
+
+    /**
+     * Return the set of id domain associated to the list of id ticket given in parameter
+     * 
+     * @param listIdTickets
+     *            the list of id tickets
+     * @return the set of id domain
+     */
+    private Set<String> getListIdDomain( String [ ] strIdTickets )
+    {
+        Set<String> setIdDomain = new LinkedHashSet<>( );
+        List<String> listIdTickets = Arrays.asList( strIdTickets );
+        if ( listIdTickets != null && !listIdTickets.isEmpty( ) )
+        {
+            for ( String idTicket : listIdTickets )
+            {
+                Ticket ticket = TicketHome.findByPrimaryKey( StringUtils.isNumeric( idTicket ) ? Integer.parseInt( idTicket ) : -1 );
+                if ( ticket != null )
+                {
+                    setIdDomain.add( String.valueOf( ticket.getIdTicketDomain( ) ) );
+                }
+            }
+        }
+        return setIdDomain;
     }
 
 }
