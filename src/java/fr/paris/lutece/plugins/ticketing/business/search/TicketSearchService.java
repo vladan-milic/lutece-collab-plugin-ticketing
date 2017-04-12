@@ -65,11 +65,9 @@ public final class TicketSearchService
 {
     private static final String PATH_INDEX = "ticketing.internalIndexer.lucene.indexPath";
     private static final String PROPERTY_ANALYSER_CLASS_NAME = "ticketing.internalIndexer.lucene.analyser.className";
-    private static final String PROPERTY_MAX_SKIPPED_INDEXATION = "ticketing.indexer.maxSkipedIndexation";
 
     // Constants corresponding to the variables defined in the lutece.properties file
     private static volatile TicketSearchService _singleton;
-    private int _nSkipedIndexations;
     private volatile String _strIndex;
     private Analyzer _analyzer;
     private ITicketSearchIndexer _indexer;
@@ -182,52 +180,8 @@ public final class TicketSearchService
      */
     public IndexWriter getTicketIndexWriter( boolean bCreate ) throws IOException
     {
-        try
-        {
-            Directory directory = NIOFSDirectory.open( new File( getIndex( ) ) );
-            if ( !isDirectoryLocked( directory, bCreate ) )
-            {
-                return new IndexWriter( directory, TicketIndexWriterUtil.getIndexWriterConfig( _analyzer ) );
-            }
-        }
-        catch( IOException e )
-        {
-            throw new IOException( );
-        }
-        return null;
-    }
-
-    /**
-     * Determine if the directory is lock or not
-     * 
-     * @param directory
-     *            the directory to analyze if is lock or not
-     * @param bCreate
-     *            the boolean of the creation of the index
-     * @return true if the directory is lock false otherwise
-     * @throws IOException
-     */
-    private boolean isDirectoryLocked( Directory directory, boolean bCreate ) throws IOException
-    {
-        boolean bIsLocked = false;
-
-        if ( IndexWriter.isLocked( directory ) )
-        {
-            _nSkipedIndexations++;
-
-            if ( bCreate || ( _nSkipedIndexations >= AppPropertiesService.getPropertyInt( PROPERTY_MAX_SKIPPED_INDEXATION, 10 ) ) )
-            {
-                IndexWriter.unlock( directory );
-                bIsLocked = false;
-            }
-            else
-            {
-                bIsLocked = true;
-                _nSkipedIndexations = 0;
-            }
-        }
-
-        return bIsLocked;
+        Directory directory = NIOFSDirectory.open( new File( getIndex( ) ) );
+        return new IndexWriter( directory, TicketIndexWriterUtil.getIndexWriterConfig( _analyzer ) );
     }
 
     /**
@@ -237,7 +191,7 @@ public final class TicketSearchService
      *            true for start full indexing false for begin incremental indexing
      * @return the log
      */
-    public String processIndexing( boolean bCreate )
+    public synchronized String processIndexing( boolean bCreate )
     {
         StringBuffer sbLogs = new StringBuffer( );
         IndexWriter writer = null;
@@ -247,26 +201,22 @@ public final class TicketSearchService
             sbLogs.append( "\r\nIndexing all contents ...\r\n" );
 
             Directory dir = NIOFSDirectory.open( new File( getIndex( ) ) );
+            Date start = new Date( );
 
-            if ( !isDirectoryLocked( dir, bCreate ) )
-            {
-                Date start = new Date( );
+            writer = new IndexWriter( dir, TicketIndexWriterUtil.getIndexWriterConfig( _analyzer ) );
 
-                writer = new IndexWriter( dir, TicketIndexWriterUtil.getIndexWriterConfig( _analyzer ) );
+            sbLogs.append( "\r\n<strong>Indexer : " );
+            sbLogs.append( _indexer.getName( ) );
+            sbLogs.append( " - " );
+            sbLogs.append( _indexer.getDescription( ) );
+            sbLogs.append( "</strong>\r\n" );
+            _indexer.processIndexing( writer, TicketIndexWriterUtil.isIndexExists( dir, bCreate ), sbLogs );
 
-                sbLogs.append( "\r\n<strong>Indexer : " );
-                sbLogs.append( _indexer.getName( ) );
-                sbLogs.append( " - " );
-                sbLogs.append( _indexer.getDescription( ) );
-                sbLogs.append( "</strong>\r\n" );
-                _indexer.processIndexing( writer, TicketIndexWriterUtil.isIndexExists( dir, bCreate ), sbLogs );
+            Date end = new Date( );
 
-                Date end = new Date( );
-
-                sbLogs.append( "Duration of the treatment : " );
-                sbLogs.append( end.getTime( ) - start.getTime( ) );
-                sbLogs.append( " milliseconds\r\n" );
-            }
+            sbLogs.append( "Duration of the treatment : " );
+            sbLogs.append( end.getTime( ) - start.getTime( ) );
+            sbLogs.append( " milliseconds\r\n" );
         }
         catch( Exception e )
         {

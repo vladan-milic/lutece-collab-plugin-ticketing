@@ -49,6 +49,7 @@ import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.NumericUtils;
 
@@ -376,6 +377,11 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             indexWriter = TicketSearchService.getInstance( ).getTicketIndexWriter( false );
             indexTicket( indexWriter, ticket );
+        }
+        catch( LockObtainFailedException e )
+        {
+            // When a writer is already writing in the index directory
+            throw new TicketIndexerException( );
         }
         catch( IOException | TicketIndexerException e )
         {
