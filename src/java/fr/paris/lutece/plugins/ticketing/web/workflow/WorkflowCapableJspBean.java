@@ -98,7 +98,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     // MARKS
     private static final String MARK_RESOURCE_HISTORY_CHANNEL = "resource_history_channel";
     private static final String MARK_USER_FACTORY = "user_factory";
-    
+
     private static final String MARK_ACTION = "action";
     private static final String MARK_MASS_ACTION_SUCCESS_TICKETS = "success_tickets";
     private static final String MARK_MASS_ACTION_FAILED_TICKETS = "failed_tickets";
@@ -289,11 +289,10 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     public String getWorkflowActionForm( HttpServletRequest request )
     {
         String strIdAction = request.getParameter( TicketingConstants.PARAMETER_WORKFLOW_ID_ACTION );
-        
+
         // Manage the id tickets list
         String [ ] strSeqIdTickets = request.getParameterValues( TicketingConstants.PARAMETER_ID_TICKET );
-        String strIdTicket = ( strSeqIdTickets != null && strSeqIdTickets.length > 0 ) ? strSeqIdTickets[0] : "";
-
+        String strIdTicket = ( strSeqIdTickets != null && strSeqIdTickets.length > 0 ) ? strSeqIdTickets [0] : "";
 
         if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) && StringUtils.isNotEmpty( strIdTicket )
                 && StringUtils.isNumeric( strIdTicket ) )

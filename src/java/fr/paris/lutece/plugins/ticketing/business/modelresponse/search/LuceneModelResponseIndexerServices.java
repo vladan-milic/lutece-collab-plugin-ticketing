@@ -345,7 +345,7 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
             try
             {
                 @SuppressWarnings( {
-                        "rawtypes"
+                    "rawtypes"
                 } )
                 java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName ).getConstructor( Version.class, String [ ].class );
                 _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {

@@ -88,7 +88,7 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
         String strQuery = request.getParameter( SearchConstants.PARAMETER_QUERY );
         String strIdDomain = request.getParameter( SearchConstants.PARAMETER_DOMAIN );
         Map<String, Object> model = new HashMap<String, Object>( );
-        
+
         // Create the set of id domain
         Set<String> setIdDomain = new LinkedHashSet<>( );
         String [ ] strSeqIdTickets = request.getParameterValues( TicketingConstants.PARAMETER_SELECTED_TICKETS );
@@ -134,14 +134,15 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
 
         ( (List<ErrorMessage>) model.get( SearchConstants.MARK_ERRORS ) ).add( new MVCMessage( I18nService.getLocalizedString( strMessageKey, locale ) ) );
     }
-    
+
     /**
      * Return the set of id domain associated to the list of id ticket given in parameter
      * 
-     * @param listIdTickets the list of id tickets
+     * @param listIdTickets
+     *            the list of id tickets
      * @return the set of id domain
      */
-    private Set<String> getListIdDomain( String[] strIdTickets )
+    private Set<String> getListIdDomain( String [ ] strIdTickets )
     {
         Set<String> setIdDomain = new LinkedHashSet<>( );
         List<String> listIdTickets = Arrays.asList( strIdTickets );
