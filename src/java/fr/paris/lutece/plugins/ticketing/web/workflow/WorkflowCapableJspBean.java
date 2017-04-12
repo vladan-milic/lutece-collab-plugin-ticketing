@@ -461,13 +461,15 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
                                         if ( strError != null )
                                         {
+                                            AppLogService.info( "An error occured during execution of action " + _nIdAction + " on ticket " + nIdTicket + " : "
+                                                    + strError );
                                             _listIdsFailedTickets.add( nIdTicket );
                                         }
                                         else
                                         {
 
-                                            _listIdsSuccessTickets.add( nIdTicket );
                                             immediateTicketIndexing( ticket.getId( ) );
+                                            _listIdsSuccessTickets.add( nIdTicket );
                                         }
                                     }
                                     else
@@ -475,12 +477,13 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                                         _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, ticketCategory.getId( ), request,
                                                 getLocale( ), false );
 
-                                        _listIdsSuccessTickets.add( nIdTicket );
                                         immediateTicketIndexing( ticket.getId( ) );
+                                        _listIdsSuccessTickets.add( nIdTicket );
                                     }
                                 }
                                 else
                                 {
+                                    AppLogService.info( "Cannot execute action " + _nIdAction + " on ticket " + nIdTicket + " : workflow state error" );
                                     _listIdsFailedTickets.add( nIdTicket );
                                 }
 
@@ -494,7 +497,6 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                         }
                         catch( Exception e )
                         {
-                            // addErrorWorkflowAction( request, nIdAction );
                             AppLogService.error( e );
                             _listIdsFailedTickets.add( nIdTicket );
                         }
