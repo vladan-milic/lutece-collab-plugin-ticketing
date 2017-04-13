@@ -32,17 +32,18 @@
 	<#if entry.helpMessage?exists&&entry.helpMessage!=''>
 		<p class="help-block">${entry.helpMessage}</p>
 	</#if>
-	<#if list_responses??>
-		<#list list_responses as response>
-			<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && response.entry.error.isDisplayableError>
-				<div class="alert alert-error alert-danger">
-					<#assign error = response.entry.error>${error.errorMessage}
-				</div>
-			</#if>
-		</#list>
-	</#if>
 	</div>
 </div>
+
+<#if list_responses??>
+	<#list list_responses as response>
+		<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && response.entry.error.isDisplayableError>
+			<div class="alert alert-error alert-danger">
+				<#assign error = response.entry.error>${error.errorMessage}
+			</div>
+		</#if>
+	</#list>
+</#if>
 
 <#if entry.fieldInLine>
 	<#include "/util/editor/editor.html" />
