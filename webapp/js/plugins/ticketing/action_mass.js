@@ -13,7 +13,7 @@ $(document).ready(function(){
 				for(i=0; i<checkedValues.length; i++){
 					// Change the url parameters value
 					var currentUrl = $(".link-modal").attr("href");
-					$(".link-modal").attr("href", currentUrl.concat("&id=" + checkedValues[i].value));
+					$(".link-modal").attr("href", currentUrl.concat("&id=" + checkedValues[i]));
 				}
 			}
 		} else {
