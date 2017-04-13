@@ -56,7 +56,6 @@ $(document).ready(function(){
 	$("#id_mass_action").on('click',function(){
 		var massActionList = document.getElementById("id_mass_action");
 		var massActionSelected = massActionList.options[massActionList.selectedIndex];
-		$(".link-modal").attr("data-action-id", massActionSelected.value);
 		$(".link-modal").attr("title", massActionSelected.getAttribute("data-name"));
 		$(".link-modal").attr("data-title", massActionSelected.getAttribute("data-description"));
 		// Change the url parameters value
