@@ -18,7 +18,11 @@ $(document).ready(function(){
 			}
 		} else {
 			if(checkedValues == undefined || checkedValues.length == 0){
+				var massActionList = document.getElementById("id_mass_action");
+				var massActionSelected = massActionList.options[massActionList.selectedIndex];
 				$(".link-modal").attr("href", initUrlModal);
+				var currentUrl = $(".link-modal").attr("href");
+				$(".link-modal").attr("href", currentUrl.replace(/id_action=[^&]+/, 'id_action='+massActionSelected.value));
 				disableMassAction( );
 			}
 		}
@@ -41,7 +45,11 @@ $(document).ready(function(){
 		if(checkedValues != undefined && checkedValues.length != 0){
 			activeMassAction( );
 		} else {
+			var massActionList = document.getElementById("id_mass_action");
+			var massActionSelected = massActionList.options[massActionList.selectedIndex];
 			$(".link-modal").attr("href", initUrlModal);
+			var currentUrl = $(".link-modal").attr("href");
+			$(".link-modal").attr("href", currentUrl.replace(/id_action=[^&]+/, 'id_action='+massActionSelected.value));
 			disableMassAction( );
 		}
 		var currentUrl = $(".link-modal").attr("href");
