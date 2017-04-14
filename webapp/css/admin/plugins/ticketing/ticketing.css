@@ -120,15 +120,6 @@ textarea.ticketing.richtext {
 	height:100%;
 }
 
-.mass-checkbox {
-	min-width: initial !important;
-	cursor: default !important;
-}
-
-.mass-action-tab {
-	padding-left: initial !important;
-}
-
 #search_input {
     width: 200px;
 }
@@ -146,14 +137,36 @@ textarea.ticketing.richtext {
     color: #ccc;
 }
 
+/* Mass actions */
+.mass-checkbox {
+	min-width: initial !important;
+	cursor: default !important;
+}
+
+.mass-action-tab {
+	padding-left: initial !important;
+}
+
+.link-mass-action {
+	font-size:50%;
+	margin-top: -2px;
+}
+
+.link-mass-action > .icon-mass-action { 
+	font-size:130%;
+	width:initial !important;
+	height:initial !important;
+	margin-top:initial !important;
+}
+
 /* FILTERS */
 #filter-ticket{ font-size: 1rem; color:#000 }
 #filter-ticket h3 { color: #FFF }
-#filter-ticket .form-control{ border-color: #000 }
+#filter-ticket .form-control, #mass_action_form .form-control{ border-color: #000 }
 #filter-ticket .input-group-btn > .btn { border: 1px solid #000}
 #filter-ticket span{ text-transform: uppercase }
-#filter-ticket select{ height:22px; font-weight:normal; padding: 1px 20px 0 2px; margin:0; background: #FFF; color:#000; border: 1px solid "000";border-radius: 3px; outline:none; display: inline-block; -webkit-appearance:none; -moz-appearance:none; appearance:none; cursor:pointer }
-#filter-ticket select::-ms-expand { display: none }
+#filter-ticket select, #mass_action_form select{ height:22px; font-weight:normal; padding: 1px 20px 0 2px; margin:0; background: #FFF; color:#000; border: 1px solid "000";border-radius: 3px; outline:none; display: inline-block; -webkit-appearance:none; -moz-appearance:none; appearance:none; cursor:pointer }
+#filter-ticket select::-ms-expand, #mass_action_form select::-ms-expand { display: none; }
 
 /* multiselect state */
 #filter-ticket .multiselect-selected-text {
@@ -221,12 +234,14 @@ textarea.ticketing.richtext {
 #demand-panel.instant-response tr td .detail{ max-height: 100px; overflow: auto; background: #EEE; padding: 10px; margin:10px;  border-radius: 8px }
 
 /* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
-@media screen and (-webkit-min-device-pixel-ratio:0) { #filter-ticket select {padding-right: 18px} }
-#filter-ticket label.select{ position:relative }
-#filter-ticket label.select:last-of-type{ margin-right:0 }
+@media screen and (-webkit-min-device-pixel-ratio:0) { #filter-ticket select, #mass_action_form select {padding-right: 18px} }
+#filter-ticket label.select, #mass_action_form label.select{ position:relative }
+#filter-ticket label.select:last-of-type, #mass_action_form label.select:last-of-type{ margin-right:0 }
 #filter-ticket label.select:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; font-size:18px; right: 5px; top: -2px; position:absolute; pointer-events:none }
 #filter-ticket .btn{ color:#fff; min-width: 50px }
 #filter-ticket .btn span.fa-search{ color:#000; }
+
+#mass_action_form label.select:after{ content:'\e259'; color:#606059; font-family: 'Glyphicons Halflings'; right: 20%; top: 2px; position:absolute; font-size: 12px; font-weight: 400 !important; pointer-events:none }
 
 .timeline-body > hr { margin: 5px 0 }
 
