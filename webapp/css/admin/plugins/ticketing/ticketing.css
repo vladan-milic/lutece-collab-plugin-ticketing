@@ -241,6 +241,14 @@ textarea.ticketing.richtext {
 #filter-ticket .btn{ color:#fff; min-width: 50px }
 #filter-ticket .btn span.fa-search{ color:#000; }
 
+#filter-ticket .btn.filter-button{
+	background-color: #DDD;
+	color: #000;
+	height:22px;
+	padding:0;
+	font-size: 1rem;
+}
+
 #mass_action_form label.select:after{ content:'\e259'; color:#606059; font-family: 'Glyphicons Halflings'; right: 5px; top: 2px; position:absolute; font-size: 12px; font-weight: 400 !important; pointer-events:none }
 
 .timeline-body > hr { margin: 5px 0 }

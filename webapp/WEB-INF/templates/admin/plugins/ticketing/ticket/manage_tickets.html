@@ -220,18 +220,6 @@
 				<button type="submit" name="fltr_new_urgency" value="2" class="btn btn-link btn-xs <#if ticket_filter.urgency==2>btn-danger<#else>border-red text-red btn-default</#if>">#i18n{ticketing.manage_tickets.urgency.high}</button>
 				<button type="submit" name="fltr_new_urgency" value="1" class="btn btn-link btn-xs <#if ticket_filter.urgency==1>btn-warning<#else>border-orange text-orange btn-default</#if>">#i18n{ticketing.manage_tickets.urgency.medium}</button>
 				<button type="submit" name="fltr_new_urgency" value="0" class="btn btn-link btn-xs <#if ticket_filter.urgency==0>btn-info<#else>border-info text-aqua btn-default</#if>">#i18n{ticketing.manage_tickets.urgency.low}</button>
-			</div>
-		</div>
-		<br/>
-	    <div class="row">
-			<div class="col-xs-12">
-				<label class="select" for="nature">
-					<@comboWithParams name="fltr_id_type" default_value="${ticket_filter.idType}" additionalParameters=" id=\"fltr_id_type\" class=\"form-control input-xs\" " items=type_list />
-				</label>
-				<label class="select" for="since">
-					<@comboWithParams name="fltr_open_since" default_value="${ticket_filter.openSincePeriod}" additionalParameters=" id=\"fltr_open_since\" class=\"form-control input-xs\" " items=period_list/>
-				</label>
-		
 				<!-- multi select state list -->
 				<#if state_list?? && state_list?size != 0>
 					<select name="fltr_state_ids" id="fltr_state_ids" multiple="multiple">
@@ -244,6 +232,20 @@
 						</#list>
 					</select>
 				</#if>
+				<button type="submit" class="filter-button btn btn-border bg-gru-light">
+		        	#i18n{ticketing.manage_tickets.filter.label}
+		        </button>
+			</div>
+		</div>
+		<br/>
+	    <div class="row">
+			<div class="col-xs-12">
+				<label class="select" for="nature">
+					<@comboWithParams name="fltr_id_type" default_value="${ticket_filter.idType}" additionalParameters=" id=\"fltr_id_type\" class=\"form-control input-xs\" " items=type_list />
+				</label>
+				<label class="select" for="since">
+					<@comboWithParams name="fltr_open_since" default_value="${ticket_filter.openSincePeriod}" additionalParameters=" id=\"fltr_open_since\" class=\"form-control input-xs\" " items=period_list/>
+				</label>
 			</div>
 	    </div>
 	    </form>
@@ -387,10 +389,6 @@ $( function(){
   $("#fltr_open_since").on( 'change', function(e){
 		$("#filter_form").submit( );
 	});
-	
-  $("#fltr_state_ids").on( 'change', function(e){
-        $("#filter_form").submit( );
-    });
     
 });
 
@@ -412,14 +410,19 @@ function setSelectedTab(tab){
     	  
         var orderCount = 0;
         $('#fltr_state_ids').multiselect({
-            buttonText: function(options) {
+        	buttonText: function(options, select) {
                 if (options.length === 0) {
                     return '#i18n{ticketing.manage_tickets.filter.state.allLabel}';
                 }
-                else {
+                else if(options.length < select[0].length) {
 					return getSelectStateLabel(options);
 				}
+                else {
+                	return '#i18n{ticketing.manage_tickets.filter.state.allSelected}';
+                }
             },
+            includeSelectAllOption: true,
+            selectAllText: '#i18n{ticketing.manage_tickets.filter.state.selectAll}',
         });
 
         //compute label to display
