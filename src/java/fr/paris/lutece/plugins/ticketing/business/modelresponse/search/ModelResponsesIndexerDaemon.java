@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.ticketing.business.modelresponse.search;
 
 import fr.paris.lutece.portal.service.daemon.Daemon;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
  * modelResponse indexation daemon
@@ -47,6 +48,7 @@ public class ModelResponsesIndexerDaemon extends Daemon
     @Override
     public void run( )
     {
-        setLastRunLogs( LuceneModelResponseIndexerServices.instance( ).addAll( ) );
+    	IModelResponseIndexer modelResponseIndexer = SpringContextService.getBean( IModelResponseIndexer.BEAN_SERVICE );
+        setLastRunLogs( modelResponseIndexer.addAll( ) );
     }
 }

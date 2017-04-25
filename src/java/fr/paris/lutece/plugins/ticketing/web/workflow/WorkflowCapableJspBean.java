@@ -79,6 +79,7 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
@@ -372,30 +373,39 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 {
                     Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
                     TicketCategory ticketCategory = ticket.getTicketCategory( );
-
-                    if ( _workflowService.isDisplayTasksForm( _nIdAction, getLocale( ) ) )
-
+                    
+                    if ( RBACService.isAuthorized( TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) ),
+                            TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, getUser( ) ) &&  _workflowService.canProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, null, request, false ) )
                     {
-                        strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, ticketCategory.getId( ), request,
-                                getLocale( ) );
 
-                        if ( strError != null )
-                        {
-                            return redirect( request, strError );
-                        }
-
-                        addInfoWorkflowAction( request, _nIdAction );
+	                    if ( _workflowService.isDisplayTasksForm( _nIdAction, getLocale( ) ) )
+	
+	                    {
+	                        strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, ticketCategory.getId( ), request,
+	                                getLocale( ) );
+	
+	                        if ( strError != null )
+	                        {
+	                            return redirect( request, strError );
+	                        }
+	
+	                        addInfoWorkflowAction( request, _nIdAction );
+	                    }
+	                    else
+	                    {
+	                        _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, ticketCategory.getId( ), request, getLocale( ),
+	                                false );
+	
+	                        addInfoWorkflowAction( request, _nIdAction );
+	                    }
+	
+	                    // Immediate indexation of the Ticket
+	                    immediateTicketIndexing( ticket.getId( ) );
                     }
                     else
                     {
-                        _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, ticketCategory.getId( ), request, getLocale( ),
-                                false );
-
-                        addInfoWorkflowAction( request, _nIdAction );
+                    	throw new AppException( "User [" + getUser( ).getAccessCode( ) + "] don't have the right to do action [" + _nIdAction + "] on ticket [" + nIdTicket + "]" );
                     }
-
-                    // Immediate indexation of the Ticket
-                    immediateTicketIndexing( ticket.getId( ) );
                 }
                 catch( Exception e )
                 {

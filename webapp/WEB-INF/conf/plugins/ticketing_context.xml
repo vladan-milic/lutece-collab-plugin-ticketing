@@ -46,7 +46,11 @@
     <bean id="ticketing.ticketIndexerActionDAO"  class="fr.paris.lutece.plugins.ticketing.business.search.IndexerActionDAO" />
     <bean id="ticketing.ticketIndexer"  class="fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer" />
     
-    <bean id="ticketing.modelResponsesServices" class="fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices" />
+    <bean id="ticketing.modelResponsesServices" class="fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices">
+        <constructor-arg type="java.lang.String" value="/WEB-INF/plugins/ticketing/model-responses/indexes"/>
+        <constructor-arg type="java.lang.String" value="fr.paris.lutece.plugins.lucene.service.analyzer.LuteceFrenchAnalyzer"/>
+        <constructor-arg type="java.lang.Boolean" value="true"/>
+    </bean>
 
     
     <!-- SignRequest -->

@@ -64,6 +64,7 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 public final class TicketSearchService
 {
     private static final String PATH_INDEX = "ticketing.internalIndexer.lucene.indexPath";
+    private static final String PATH_INDEX_IN_WEBAPP = "ticketing.internalIndexer.lucene.indexInWebapp";
     private static final String PROPERTY_ANALYSER_CLASS_NAME = "ticketing.internalIndexer.lucene.analyser.className";
 
     // Constants corresponding to the variables defined in the lutece.properties file
@@ -292,7 +293,15 @@ public final class TicketSearchService
     {
         if ( _strIndex == null )
         {
-            _strIndex = AppPathService.getPath( PATH_INDEX );
+        	boolean indexInWebapp = AppPropertiesService.getPropertyBoolean( PATH_INDEX_IN_WEBAPP, true );
+            if ( indexInWebapp )
+            {
+                _strIndex = AppPathService.getPath( PATH_INDEX );
+            }
+            else
+            {
+                _strIndex = AppPropertiesService.getProperty( PATH_INDEX );
+            }            
         }
 
         return _strIndex;

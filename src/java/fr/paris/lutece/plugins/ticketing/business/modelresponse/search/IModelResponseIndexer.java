@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.ticketing.business.modelresponse.search;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 
 import java.io.IOException;
-
 import java.util.List;
 import java.util.Set;
 
@@ -44,17 +43,10 @@ import java.util.Set;
  *
  * @author root
  */
-interface IModelResponseIndexer
+public interface IModelResponseIndexer
 {
-    String PATH_INDEX = "/WEB-INF/plugins/ticketing/model-responses/indexes";
-    String FIELD_MODEL_RESPONSE_INFOS = "model_responses";
-    String FIELD_ID = "id";
-    String FIELD_TITLE = "title";
-    String FIELD_RESPONSE = "response";
-    String FIELD_KEYWORD = "keyword";
-    String FIELD_DOMAIN_ID = "id_domain";
-    String FIELD_DOMAIN_LABEL = "domain";
-    String FIELD_SEARCH_CONTENT = "content";
+	/** The Constant BEAN_SERVICE. */
+    String BEAN_SERVICE = "ticketing.modelResponsesServices";
 
     /**
      * update index with modelResponse

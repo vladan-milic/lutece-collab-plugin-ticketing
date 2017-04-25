@@ -47,11 +47,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
-import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices;
+import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
@@ -113,7 +114,8 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
         if ( StringUtils.isNotEmpty( strQuery ) )
         {
             List<ModelResponse> listResults = new ArrayList<>( );
-            List<ModelResponse> listFullResults = LuceneModelResponseIndexerServices.instance( ).searchResponses( strQuery, setIdDomain );
+			IModelResponseIndexer modelResponseIndexer = SpringContextService.getBean( IModelResponseIndexer.BEAN_SERVICE );
+            List<ModelResponse> listFullResults = modelResponseIndexer.searchResponses( strQuery, setIdDomain );
 
             // Add an info message if there are more response than maximum limit 
             if( listFullResults.size( ) > _nMaxResponsePerQuery ){

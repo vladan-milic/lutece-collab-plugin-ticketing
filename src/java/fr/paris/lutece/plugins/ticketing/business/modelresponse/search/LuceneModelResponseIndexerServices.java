@@ -70,49 +70,46 @@ import org.apache.lucene.util.Version;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
 import fr.paris.lutece.portal.service.search.IndexationService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 /**
  * The Class LuceneModelResponseIndexerServices.
  */
-public final class LuceneModelResponseIndexerServices implements IModelResponseIndexer
+public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 {
-    /** The _singleton. */
-    private static LuceneModelResponseIndexerServices _singleton;
+	/** Constant for lucene */
+    private final String FIELD_MODEL_RESPONSE_INFOS = "model_responses";
+    private final String FIELD_ID = "id";
+    private final String FIELD_TITLE = "title";
+    private final String FIELD_RESPONSE = "response";
+    private final String FIELD_KEYWORD = "keyword";
+    private final String FIELD_DOMAIN_ID = "id_domain";
+    private final String FIELD_DOMAIN_LABEL = "domain";
+    private final String FIELD_SEARCH_CONTENT = "content";
+    
+	/** The _analyzer. */
+    private Analyzer _analyzer;
 
-    /** The Constant BEAN_SERVICE. */
-    private static final String BEAN_SERVICE = "ticketing.modelResponsesServices";
-
-    /** The Constant PROPERTY_ANALYSER_CLASS_NAME. */
-    private static final String PROPERTY_ANALYSER_CLASS_NAME = "ticketing.internalIndexer.lucene.analyser.className";
-
-    /** The _analyzer. */
-    private static Analyzer _analyzer;
+    /** property index path */
+    private String _strIndexPath;
+    /** property index in webapp*/
+    private Boolean _bIndexInWebapp;
 
     /**
      * Instantiates a new lucene model response indexer services.
      */
-    private LuceneModelResponseIndexerServices( )
+    public LuceneModelResponseIndexerServices( String strIndexPath, String strClassAnalyzer, Boolean bIndexInWebapp )
     {
+    	super( );
+    	_strIndexPath = strIndexPath;
+    	_bIndexInWebapp = bIndexInWebapp;
+    	setAnalyzer( strClassAnalyzer );
     }
-
-    /**
-     * Instance.
-     *
-     * @return the lucene model response indexer services
-     */
-    public static LuceneModelResponseIndexerServices instance( )
+    public LuceneModelResponseIndexerServices( String strIndexPath, String strClassAnalyzer )
     {
-        if ( _singleton == null )
-        {
-            _singleton = SpringContextService.getBean( BEAN_SERVICE );
-        }
-
-        return _singleton;
+    	this( strIndexPath, strClassAnalyzer, true );
     }
 
     /*
@@ -261,7 +258,7 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
                 booleanQueryMain.add( new BooleanClause( booleanIdDomainQuery, Occur.MUST ) );
             }
 
-            Query query = new QueryParser( Version.LUCENE_4_9, FIELD_SEARCH_CONTENT, getAnalyzer( ) ).parse( strQuery );
+            Query query = new QueryParser( Version.LUCENE_4_9, FIELD_SEARCH_CONTENT, _analyzer ).parse( strQuery );
             booleanQueryMain.add( new BooleanClause( query, Occur.MUST ) );
 
             TopDocs results = searcher.search( booleanQueryMain, Short.MAX_VALUE );
@@ -308,7 +305,7 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
     private IndexWriter getIndexWriter( Boolean bcreate ) throws IOException
     {
         Directory indexDir = FSDirectory.open( getIndexPath( ) );
-        IndexWriterConfig config = new IndexWriterConfig( Version.LUCENE_4_9, getAnalyzer( ) );
+        IndexWriterConfig config = new IndexWriterConfig( Version.LUCENE_4_9, _analyzer );
 
         if ( !DirectoryReader.indexExists( indexDir ) || bcreate )
         {
@@ -325,60 +322,53 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
     }
 
     /**
-     * Gets the analyzer.
+     * Sets the analyzer.
      *
-     * @return the analyzer
+     * @param strClassAnalyzer the class to use
      */
-    private Analyzer getAnalyzer( )
+    private void setAnalyzer( String strAnalyserClassName )
     {
-        if ( _analyzer == null )
+        if ( ( strAnalyserClassName == null ) || ( strAnalyserClassName.equals( "" ) ) )
         {
-            String strAnalyserClassName = AppPropertiesService.getProperty( PROPERTY_ANALYSER_CLASS_NAME );
+            throw new AppException( "Analyser class name not found in context", null );
+        }
 
-            if ( ( strAnalyserClassName == null ) || ( strAnalyserClassName.equals( "" ) ) )
-            {
-                throw new AppException( "Analyser class name not found in ticketing.properties", null );
-            }
+        try
+        {
+            @SuppressWarnings( {
+                "rawtypes"
+            } )
+            java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName ).getConstructor( Version.class, String [ ].class );
+            _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {
+                    IndexationService.LUCENE_INDEX_VERSION, new String [ ] { }
+            } );
+        }
+        catch( InstantiationException ie )
+        {
+            @SuppressWarnings( "rawtypes" )
+            Class classAnalyzer;
 
             try
             {
+                classAnalyzer = Class.forName( strAnalyserClassName );
+
                 @SuppressWarnings( {
-                    "rawtypes"
+                        "unchecked", "rawtypes"
                 } )
-                java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName ).getConstructor( Version.class, String [ ].class );
+                java.lang.reflect.Constructor constructeur = classAnalyzer.getConstructor( Version.class );
                 _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {
-                        IndexationService.LUCENE_INDEX_VERSION, new String [ ] { }
+                    IndexationService.LUCENE_INDEX_VERSION
                 } );
-            }
-            catch( InstantiationException ie )
-            {
-                @SuppressWarnings( "rawtypes" )
-                Class classAnalyzer;
-
-                try
-                {
-                    classAnalyzer = Class.forName( strAnalyserClassName );
-
-                    @SuppressWarnings( {
-                            "unchecked", "rawtypes"
-                    } )
-                    java.lang.reflect.Constructor constructeur = classAnalyzer.getConstructor( Version.class );
-                    _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {
-                        IndexationService.LUCENE_INDEX_VERSION
-                    } );
-                }
-                catch( Exception e )
-                {
-                    throw new AppException( "Failed to load Lucene Analyzer class", e );
-                }
             }
             catch( Exception e )
             {
                 throw new AppException( "Failed to load Lucene Analyzer class", e );
             }
         }
-
-        return _analyzer;
+        catch( Exception e )
+        {
+            throw new AppException( "Failed to load Lucene Analyzer class", e );
+        }
     }
 
     /**
@@ -388,7 +378,12 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
      */
     private File getIndexPath( )
     {
-        String strIndexPath = AppPathService.getAbsolutePathFromRelativePath( PATH_INDEX );
+        String strIndexPath = _strIndexPath;
+        
+        if ( _bIndexInWebapp )
+        {
+        	strIndexPath = AppPathService.getAbsolutePathFromRelativePath( _strIndexPath );
+        }
 
         return Paths.get( strIndexPath ).toFile( );
     }

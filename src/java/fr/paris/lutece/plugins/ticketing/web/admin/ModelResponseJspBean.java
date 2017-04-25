@@ -37,10 +37,11 @@ import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
-import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.LuceneModelResponseIndexerServices;
+import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
@@ -52,7 +53,6 @@ import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
 import java.io.IOException;
-
 import java.util.List;
 import java.util.Map;
 
@@ -127,6 +127,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
     // Session variable to store working values
     private ModelResponse _modelResponse;
+    private IModelResponseIndexer _modelResponseIndexer = SpringContextService.getBean( IModelResponseIndexer.BEAN_SERVICE );
 
     /**
      * Return a model that contains the list and paginator infos
@@ -224,7 +225,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         try
         {
-            LuceneModelResponseIndexerServices.instance( ).add( _modelResponse );
+        	_modelResponseIndexer.add( _modelResponse );
         }
         catch( IOException ex )
         {
@@ -281,7 +282,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         try
         {
-            LuceneModelResponseIndexerServices.instance( ).delete( ModelResponseHome.findByPrimaryKey( nId ) );
+        	_modelResponseIndexer.delete( ModelResponseHome.findByPrimaryKey( nId ) );
         }
         catch( IOException ex )
         {
@@ -345,7 +346,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         try
         {
-            LuceneModelResponseIndexerServices.instance( ).update( _modelResponse );
+        	_modelResponseIndexer.update( _modelResponse );
         }
         catch( IOException ex )
         {
