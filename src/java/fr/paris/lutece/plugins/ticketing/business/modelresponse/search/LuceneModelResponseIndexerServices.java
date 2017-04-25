@@ -79,7 +79,7 @@ import fr.paris.lutece.portal.service.util.AppPathService;
  */
 public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 {
-	/** Constant for lucene */
+    /** Constant for lucene */
     private final String FIELD_MODEL_RESPONSE_INFOS = "model_responses";
     private final String FIELD_ID = "id";
     private final String FIELD_TITLE = "title";
@@ -88,13 +88,13 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     private final String FIELD_DOMAIN_ID = "id_domain";
     private final String FIELD_DOMAIN_LABEL = "domain";
     private final String FIELD_SEARCH_CONTENT = "content";
-    
-	/** The _analyzer. */
+
+    /** The _analyzer. */
     private Analyzer _analyzer;
 
     /** property index path */
     private String _strIndexPath;
-    /** property index in webapp*/
+    /** property index in webapp */
     private Boolean _bIndexInWebapp;
 
     /**
@@ -102,14 +102,15 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
      */
     public LuceneModelResponseIndexerServices( String strIndexPath, String strClassAnalyzer, Boolean bIndexInWebapp )
     {
-    	super( );
-    	_strIndexPath = strIndexPath;
-    	_bIndexInWebapp = bIndexInWebapp;
-    	setAnalyzer( strClassAnalyzer );
+        super( );
+        _strIndexPath = strIndexPath;
+        _bIndexInWebapp = bIndexInWebapp;
+        setAnalyzer( strClassAnalyzer );
     }
+
     public LuceneModelResponseIndexerServices( String strIndexPath, String strClassAnalyzer )
     {
-    	this( strIndexPath, strClassAnalyzer, true );
+        this( strIndexPath, strClassAnalyzer, true );
     }
 
     /*
@@ -324,7 +325,8 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     /**
      * Sets the analyzer.
      *
-     * @param strClassAnalyzer the class to use
+     * @param strClassAnalyzer
+     *            the class to use
      */
     private void setAnalyzer( String strAnalyserClassName )
     {
@@ -379,10 +381,10 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     private File getIndexPath( )
     {
         String strIndexPath = _strIndexPath;
-        
+
         if ( _bIndexInWebapp )
         {
-        	strIndexPath = AppPathService.getAbsolutePathFromRelativePath( _strIndexPath );
+            strIndexPath = AppPathService.getAbsolutePathFromRelativePath( _strIndexPath );
         }
 
         return Paths.get( strIndexPath ).toFile( );

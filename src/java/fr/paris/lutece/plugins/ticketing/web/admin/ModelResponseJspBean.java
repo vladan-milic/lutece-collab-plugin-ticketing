@@ -225,7 +225,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         try
         {
-        	_modelResponseIndexer.add( _modelResponse );
+            _modelResponseIndexer.add( _modelResponse );
         }
         catch( IOException ex )
         {
@@ -282,7 +282,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         try
         {
-        	_modelResponseIndexer.delete( ModelResponseHome.findByPrimaryKey( nId ) );
+            _modelResponseIndexer.delete( ModelResponseHome.findByPrimaryKey( nId ) );
         }
         catch( IOException ex )
         {
@@ -346,7 +346,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         try
         {
-        	_modelResponseIndexer.update( _modelResponse );
+            _modelResponseIndexer.update( _modelResponse );
         }
         catch( IOException ex )
         {

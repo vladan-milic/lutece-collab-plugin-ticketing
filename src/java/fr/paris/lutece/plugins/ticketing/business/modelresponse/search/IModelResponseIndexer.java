@@ -45,7 +45,7 @@ import java.util.Set;
  */
 public interface IModelResponseIndexer
 {
-	/** The Constant BEAN_SERVICE. */
+    /** The Constant BEAN_SERVICE. */
     String BEAN_SERVICE = "ticketing.modelResponsesServices";
 
     /**

@@ -48,7 +48,7 @@ public class ModelResponsesIndexerDaemon extends Daemon
     @Override
     public void run( )
     {
-    	IModelResponseIndexer modelResponseIndexer = SpringContextService.getBean( IModelResponseIndexer.BEAN_SERVICE );
+        IModelResponseIndexer modelResponseIndexer = SpringContextService.getBean( IModelResponseIndexer.BEAN_SERVICE );
         setLastRunLogs( modelResponseIndexer.addAll( ) );
     }
 }

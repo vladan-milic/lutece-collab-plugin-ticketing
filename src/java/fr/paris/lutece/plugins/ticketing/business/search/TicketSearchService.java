@@ -293,7 +293,7 @@ public final class TicketSearchService
     {
         if ( _strIndex == null )
         {
-        	boolean indexInWebapp = AppPropertiesService.getPropertyBoolean( PATH_INDEX_IN_WEBAPP, true );
+            boolean indexInWebapp = AppPropertiesService.getPropertyBoolean( PATH_INDEX_IN_WEBAPP, true );
             if ( indexInWebapp )
             {
                 _strIndex = AppPathService.getPath( PATH_INDEX );
@@ -301,7 +301,7 @@ public final class TicketSearchService
             else
             {
                 _strIndex = AppPropertiesService.getProperty( PATH_INDEX );
-            }            
+            }
         }
 
         return _strIndex;

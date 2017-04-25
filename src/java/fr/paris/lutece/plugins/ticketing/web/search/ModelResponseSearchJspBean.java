@@ -75,13 +75,13 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
 
     // Actions
     private static final String ACTION_SEARCH_RESPONSE = "search_response";
-    
+
     // Messages
     private static final String MESSAGE_INFO_TOO_MANY_RESULTS = "ticketing.search_ticket.tooManyResults";
 
     // Other constants
     private static final long serialVersionUID = 1L;
-    
+
     // Variables
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
@@ -114,17 +114,18 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
         if ( StringUtils.isNotEmpty( strQuery ) )
         {
             List<ModelResponse> listResults = new ArrayList<>( );
-			IModelResponseIndexer modelResponseIndexer = SpringContextService.getBean( IModelResponseIndexer.BEAN_SERVICE );
+            IModelResponseIndexer modelResponseIndexer = SpringContextService.getBean( IModelResponseIndexer.BEAN_SERVICE );
             List<ModelResponse> listFullResults = modelResponseIndexer.searchResponses( strQuery, setIdDomain );
 
-            // Add an info message if there are more response than maximum limit 
-            if( listFullResults.size( ) > _nMaxResponsePerQuery ){
+            // Add an info message if there are more response than maximum limit
+            if ( listFullResults.size( ) > _nMaxResponsePerQuery )
+            {
                 listResults = listFullResults.subList( 0, _nMaxResponsePerQuery );
-                
+
                 Object [ ] args = {
                         _nMaxResponsePerQuery, listFullResults.size( )
                 };
-                List<ErrorMessage> listInfos = new ArrayList<ErrorMessage>(  );
+                List<ErrorMessage> listInfos = new ArrayList<ErrorMessage>( );
                 listInfos.add( new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_TOO_MANY_RESULTS, args, getLocale( ) ) ) );
                 model.put( SearchConstants.MARK_INFOS, listInfos );
             }
@@ -135,12 +136,13 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
 
             model.put( SearchConstants.MARK_RESULT, listResults );
             model.put( SearchConstants.MARK_QUERY, strQuery );
-            
+
             // Add a Paginator for the list of the responses
             _strCurrentPageIndex = Paginator.getPageIndex( request, SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
             _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, _nDefaultItemsPerPage );
-            
-            LocalizedPaginator<ModelResponse> paginator = new LocalizedPaginator<ModelResponse>( listResults, _nItemsPerPage, StringUtils.EMPTY, SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );           
+
+            LocalizedPaginator<ModelResponse> paginator = new LocalizedPaginator<ModelResponse>( listResults, _nItemsPerPage, StringUtils.EMPTY,
+                    SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
             model.put( SearchConstants.MARK_RESULT, paginator.getPageItems( ) );
             model.put( SearchConstants.MARK_QUERY, strQuery );
             model.put( SearchConstants.MARK_PAGINATOR, paginator );
