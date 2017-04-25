@@ -53,12 +53,15 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.utils.MVCMessage;
+import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ErrorMessage;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.util.html.Paginator;
 
 /**
  * ModelResponseSearch
@@ -71,9 +74,18 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
 
     // Actions
     private static final String ACTION_SEARCH_RESPONSE = "search_response";
+    
+    // Messages
+    private static final String MESSAGE_INFO_TOO_MANY_RESULTS = "ticketing.search_ticket.tooManyResults";
 
     // Other constants
     private static final long serialVersionUID = 1L;
+    
+    // Variables
+    private String _strCurrentPageIndex;
+    private int _nItemsPerPage;
+    private int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_DEFAULT_RESPONSE_MODEL_ITEM_PER_PAGE, 10 );
+    private int _nMaxResponsePerQuery = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY, 100 );
 
     /**
      * Search response for tickets
@@ -100,10 +112,37 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
 
         if ( StringUtils.isNotEmpty( strQuery ) )
         {
-            List<ModelResponse> listResults = LuceneModelResponseIndexerServices.instance( ).searchResponses( strQuery, setIdDomain );
+            List<ModelResponse> listResults = new ArrayList<>( );
+            List<ModelResponse> listFullResults = LuceneModelResponseIndexerServices.instance( ).searchResponses( strQuery, setIdDomain );
+
+            // Add an info message if there are more response than maximum limit 
+            if( listFullResults.size( ) > _nMaxResponsePerQuery ){
+                listResults = listFullResults.subList( 0, _nMaxResponsePerQuery );
+                
+                Object [ ] args = {
+                        _nMaxResponsePerQuery, listFullResults.size( )
+                };
+                List<ErrorMessage> listInfos = new ArrayList<ErrorMessage>(  );
+                listInfos.add( new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_TOO_MANY_RESULTS, args, getLocale( ) ) ) );
+                model.put( SearchConstants.MARK_INFOS, listInfos );
+            }
+            else
+            {
+                listResults = listFullResults;
+            }
 
             model.put( SearchConstants.MARK_RESULT, listResults );
             model.put( SearchConstants.MARK_QUERY, strQuery );
+            
+            // Add a Paginator for the list of the responses
+            _strCurrentPageIndex = Paginator.getPageIndex( request, SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
+            _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, _nDefaultItemsPerPage );
+            
+            LocalizedPaginator<ModelResponse> paginator = new LocalizedPaginator<ModelResponse>( listResults, _nItemsPerPage, StringUtils.EMPTY, SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );           
+            model.put( SearchConstants.MARK_RESULT, paginator.getPageItems( ) );
+            model.put( SearchConstants.MARK_QUERY, strQuery );
+            model.put( SearchConstants.MARK_PAGINATOR, paginator );
+            model.put( SearchConstants.MARK_NB_ITEMS_PER_PAGE, String.valueOf( _nItemsPerPage ) );
         }
         else
         {

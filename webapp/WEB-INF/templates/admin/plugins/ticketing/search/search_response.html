@@ -15,7 +15,27 @@
 
 <script>
   $( function(){
+	  $(document).on('click', "a.navigate", function(e){
+		  e.preventDefault();
+		  var pageIndexValue = $(this).text();
+		  var activeIndex = $("ul.pagination > li.active").find("a:first").text();
+		  if( !$(this).parent().hasClass("disabled") && activeIndex != null ){
+		  	if( $(this).parent().hasClass("previous") ){
+			  pageIndexValue = parseInt(activeIndex) - 1;
+		  	}
+		  	if( $(this).parent().hasClass("next") ){
+			  pageIndexValue = parseInt(activeIndex) + 1;
+		  	}
+			var pageIndex = "&page_index=" + pageIndexValue;
+			getResponses(pageIndex);
+		  }
+	  });
+	  
 	  $("#search_button").click(function(){
+		  getResponses("&page_index=1");
+	  });
+	  
+	  function getResponses(pageIndex){
 		  var targetUrl="jsp/admin/plugins/ticketing/ModelResponseSearch.jsp";
 		  var selectedTickets = $("input[name='selected_tickets']");
 		  var strListIdParameter = "";
@@ -24,7 +44,7 @@
 				  strListIdParameter+="&selected_tickets="+selectedTickets[i].value;
 			  }
 		  }
-		  var dataToSend="action=search_response&searched_field=ticket_response&query="+$("#query").val()+"&category=${ticket.ticketCategory.label!}"+"&domain=${ticket.idTicketDomain!}"+strListIdParameter;
+		  var dataToSend="action=search_response&searched_field=ticket_response&query="+$("#query").val()+"&category=${ticket.ticketCategory.label!}"+"&domain=${ticket.idTicketDomain!}"+strListIdParameter+pageIndex;
 		  $.ajax({
 			  url: targetUrl,
 			  type: "POST",
@@ -32,9 +52,19 @@
 			  dataType : "html",
 			  success: function( response ) {
 					$('#results').replaceWith('<div id="results" class="form-group">' + response + '</div>');
+					var indexPageAnchor = $('ul.pagination').find('a');
+					if( indexPageAnchor != null ) {
+						for(i = 0; i<indexPageAnchor.length; i++){
+							indexPageAnchor[i].setAttribute("href", "javascript:void(0);");
+							indexPageAnchor[i].setAttribute("class", "navigate");
+						}
+					}
+					var spanLibelle = $('#results').find("span.showcount:first");
+					var cleanText = spanLibelle.text().replace("-", "");
+					spanLibelle.text(cleanText);
 			  }
-		  });
-	  });
+		  });  
+	  }
   });  
 
 </script>

@@ -69,7 +69,6 @@ import org.apache.lucene.util.Version;
 
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
-import fr.paris.lutece.plugins.ticketing.web.search.SearchConstants;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppException;
@@ -243,7 +242,6 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
     public List<ModelResponse> searchResponses( String strQuery, Set<String> setIdDomain )
     {
         List<ModelResponse> list = new ArrayList<ModelResponse>( );
-        int nMaxResponsePerQuery = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY, 5 );
 
         try
         {
@@ -266,7 +264,7 @@ public final class LuceneModelResponseIndexerServices implements IModelResponseI
             Query query = new QueryParser( Version.LUCENE_4_9, FIELD_SEARCH_CONTENT, getAnalyzer( ) ).parse( strQuery );
             booleanQueryMain.add( new BooleanClause( query, Occur.MUST ) );
 
-            TopDocs results = searcher.search( booleanQueryMain, nMaxResponsePerQuery );
+            TopDocs results = searcher.search( booleanQueryMain, Short.MAX_VALUE );
             ScoreDoc [ ] hits = results.scoreDocs;
 
             AppLogService.debug( "\n Ticketing - Model Response  : query lucene " + hits.length + " \n" );

@@ -56,6 +56,7 @@ public final class SearchConstants
     public static final String MARK_SEARCH_FIELD = "searched_field";
     public static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
     public static final String MARK_ERRORS = "errors";
+    public static final String MARK_INFOS = "infos";
 
     // Properties
     public static final String PROPERTY_PAGE_TITLE_TICKET_SEARCH = "ticketing.search_ticket.pageTitle";
@@ -64,6 +65,7 @@ public final class SearchConstants
     public static final String MESSAGE_SEARCH_NO_INPUT = "ticketing.search_ticket.noInput";
     public static final String MESSAGE_SEARCH_ERROR = "ticketing.search_ticket.error";
     public static final String PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY = "ticketing.modelResponsesIndexerDaemon.limitResponse";
+    public static final String PROPERTY_DEFAULT_RESPONSE_MODEL_ITEM_PER_PAGE = "ticketing.responseModel.itemsPerPage";
 
     // for search purpose
     public static final String BEAN_SEARCH_ENGINE = "ticketing.ticketSearchEngine";
