@@ -1030,4 +1030,21 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             }
         }
     }
+
+    /**
+     * Set the ticket list in session and get the workflow action form before processing a mass action.
+     *
+     * @param request
+     *            The request
+     * @return The HTML content to display, or the next URL to redirect the user to
+     */
+    @View( TicketingConstants.VIEW_WORKFLOW_MASS_ACTION_FORM )
+    public String getWorkflowMassActionForm( HttpServletRequest request )
+    {
+        request.getSession( )
+                .setAttribute( TicketingConstants.PARAMETER_SELECTED_TICKETS, request.getParameterValues( TicketingConstants.PARAMETER_ID_TICKET ) );
+        request.getSession( ).setAttribute( TicketingConstants.PARAMETER_IS_MASS_ACTION, true );
+        return getWorkflowActionForm( request );
+    }
+
 }

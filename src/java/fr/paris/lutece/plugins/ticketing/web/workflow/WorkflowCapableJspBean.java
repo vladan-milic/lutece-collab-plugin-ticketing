@@ -47,6 +47,7 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 
@@ -355,9 +356,13 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         _nIdAction = StringUtils.isNotBlank( strIdAction ) && StringUtils.isNumeric( strIdAction ) ? Integer.parseInt( strIdAction )
                 : TicketingConstants.PROPERTY_UNSET_INT;
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
-        String [ ] tabIdsSelectedTickets = request.getParameterValues( TicketingConstants.PARAMETER_SELECTED_TICKETS );
 
-        if ( tabIdsSelectedTickets != null && tabIdsSelectedTickets.length > 1 )
+        String [ ] tabIdsSelectedTickets = (String [ ]) request.getSession( ).getAttribute( TicketingConstants.PARAMETER_SELECTED_TICKETS );
+        request.getSession( ).removeAttribute( TicketingConstants.PARAMETER_SELECTED_TICKETS );
+        boolean bIsMassAction = BooleanUtils.toBoolean( (Boolean) ( request.getSession( ).getAttribute( TicketingConstants.PARAMETER_IS_MASS_ACTION ) ) );
+        request.getSession( ).removeAttribute( TicketingConstants.PARAMETER_IS_MASS_ACTION );
+
+        if ( tabIdsSelectedTickets != null && tabIdsSelectedTickets.length > 0 && bIsMassAction )
         {
             return doProcessWorkflowMassAction( Arrays.asList( tabIdsSelectedTickets ), request );
         }
