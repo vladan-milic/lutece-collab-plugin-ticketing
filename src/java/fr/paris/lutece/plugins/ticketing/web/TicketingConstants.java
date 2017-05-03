@@ -67,6 +67,7 @@ public final class TicketingConstants
     public static final String PARAMETER_TICKET_PRECISION_ID = "id_ticket_precision";
     public static final String PARAMETER_TICKET_CATEGORY_ID = "id_ticket_category";
     public static final String PARAMETER_SELECTED_TICKETS = "selected_tickets";
+    public static final String PARAMETER_IS_MASS_ACTION = "is_mass_action";
 
     // Attributes
     public static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON = "hide_next_button";
@@ -127,7 +128,7 @@ public final class TicketingConstants
 
     // Views
     public static final String VIEW_WORKFLOW_ACTION_FORM = "viewWorkflowActionForm";
-
+    public static final String VIEW_WORKFLOW_MASS_ACTION_FORM = "viewWorkflowMassActionForm";
     // Actions
     public static final String ACTION_DO_PROCESS_WORKFLOW_ACTION = "doProcessWorkflowAction";
 

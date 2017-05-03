@@ -289,7 +289,7 @@
 								</#list>
 							</select>
 						</label>
-						<a id="linkMassAction" class="btn btn-border bg-gru-light link-modal link-mass-action" href="jsp/admin/plugins/ticketing/Standalone.jsp?view=viewWorkflowActionForm&jsp=${jsp_controller}&id_action=<#if mass_actions_list?? 
+						<a id="linkMassAction" class="btn btn-border bg-gru-light link-modal link-mass-action" href="jsp/admin/plugins/ticketing/WorkflowMassAction.jsp?view=viewWorkflowMassActionForm&jsp=${jsp_controller}&id_action=<#if mass_actions_list?? 
 							&& mass_actions_list?has_content>${mass_actions_list[0].id}<#else>-1</#if>" data-remote="false" data-toggle="modal" 
 							data-title="<#if mass_actions_list?? && mass_actions_list?has_content>${mass_actions_list[0].description}</#if>" data-target="#ticketing-modal-workflow-action-form" 
 							title="<#if mass_actions_list?? && mass_actions_list?has_content>${mass_actions_list[0].name}</#if>" data-action-id="" disabled="disabled">
