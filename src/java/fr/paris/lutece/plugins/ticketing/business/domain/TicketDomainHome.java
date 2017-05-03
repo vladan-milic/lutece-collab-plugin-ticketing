@@ -136,6 +136,18 @@ public final class TicketDomainHome
     {
         return _dao.selectTicketDomainsList( _plugin );
     }
+    
+    /**
+     * Load the data of all the ticketDomain objects for a label and returns them in form of a collection
+     * 
+     * @param sDomainLabel
+     *            The ticketDomain label
+     * @return the collection which contains the data of all the ticketDomain objects
+     */
+    public static List<TicketDomain> getTicketDomainsListByLabel( String sDomainLabel )
+    {
+        return _dao.selectDomainsByLabel( sDomainLabel, _plugin );
+    }
 
     /**
      * Load the id of all the ticketDomain objects and returns them in form of a collection

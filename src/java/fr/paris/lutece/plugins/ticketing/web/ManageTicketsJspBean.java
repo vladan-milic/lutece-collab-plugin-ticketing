@@ -292,7 +292,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         List<Ticket> listTickets = new ArrayList<>( );
         List<Integer> listIdTickets = new ArrayList<>( );
 
-        if ( _lstTicketDomain == null )
+        if ( filter.getIdDomain( ) != -1 )
+    	{
+        	TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( filter.getIdDomain( ) );
+        	_lstTicketDomain.clear();
+        	_lstTicketDomain.addAll( TicketDomainHome.getTicketDomainsListByLabel( ticketDomain.getLabel() ) );
+    	}
+        else
         {
             Map<Integer, TicketDomain> mapIdDomainTicketDomain = new LinkedHashMap<>( );
             addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST );

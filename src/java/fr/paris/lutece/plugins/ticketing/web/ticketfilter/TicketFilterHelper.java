@@ -33,9 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.ticketfilter;
 
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
+import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
@@ -62,6 +64,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -419,22 +422,45 @@ public final class TicketFilterHelper
 
         ReferenceList refListTypes = TicketUtils.createReferenceList( I18nService.getLocalizedString( PROPERTY_TICKET_TYPE_LABEL, request.getLocale( ) ),
                 StringUtils.EMPTY );
-        refListTypes.addAll( TicketTypeHome.getReferenceList( ) );
-
-        ReferenceList refListDomains = TicketUtils.createReferenceList( I18nService.getLocalizedString( PROPERTY_TICKET_DOMAIN_LABEL, request.getLocale( ) ),
-                StringUtils.EMPTY );
-
-        if ( fltrFilter.getIdType( ) > 0 )
-        {
-            refListDomains.addAll( TicketDomainHome.getReferenceListByType( fltrFilter.getIdType( ) ) );
-        }
-
+        
+        Map<String, String> mapDomains = new LinkedHashMap<String, String>();
+        mapDomains.put( StringUtils.EMPTY, I18nService.getLocalizedString( PROPERTY_TICKET_DOMAIN_LABEL, request.getLocale( ) ) );
+        
+        boolean isTypeAuthorized = false;
+        
+        for (ReferenceItem refType : TicketTypeHome.getReferenceList( ) )
+    	{
+        	isTypeAuthorized = false;
+        	
+        	TicketDomain domain = new TicketDomain();
+        	
+        	for (ReferenceItem refDomain : TicketDomainHome.getReferenceListByType( Integer.parseInt( refType.getCode( ) ) ) )
+        	{
+        		domain.setId( Integer.parseInt( refDomain.getCode( ) ) );
+        		// Check user rights
+                if ( RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST, user ) )
+                {
+                	isTypeAuthorized = true;
+                	
+                	if( (fltrFilter.getIdType() < 0 && !mapDomains.containsValue(refDomain.getName())) || fltrFilter.getIdType() == Integer.parseInt( refType.getCode() ) )
+                	{
+                		mapDomains.put( refDomain.getCode( ), refDomain.getName( ) );
+                	}
+                }
+        	}
+        	
+        	if(isTypeAuthorized)
+        	{
+        		refListTypes.add( refType );
+        	}
+    	}
+        
         ReferenceList refListStates = new ReferenceList( );
         refListStates.addAll( getWorkflowStates( user, fltrFilter.getListIdWorkflowState( ) ) );
 
         mapModel.put( MARK_TICKET_FILTER, fltrFilter );
         mapModel.put( MARK_FULL_TYPE_LIST, refListTypes );
-        mapModel.put( MARK_FULL_DOMAIN_LIST, refListDomains );
+        mapModel.put( MARK_FULL_DOMAIN_LIST, ReferenceList.convert( mapDomains ) );
         mapModel.put( MARK_FULL_STATE_LIST, refListStates );
     }
 

@@ -58,7 +58,9 @@ public final class TicketDomainDAO implements ITicketDomainDAO
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_domain FROM ticketing_ticket_domain  AND inactive <> 1 ";
     private static final String SQL_QUERY_SELECT_BY_TYPE = "SELECT id_ticket_domain , label FROM ticketing_ticket_domain WHERE id_ticket_type = ?  AND inactive <> 1 ORDER BY label ASC";
     private static final String SQL_QUERY_COUNT_CATEGORY_BY_DOMAIN = "SELECT COUNT(1) FROM ticketing_ticket_category WHERE id_ticket_domain = ? AND inactive <> 1 ";
-
+    private static final String SQL_QUERY_SELECT_BY_LABEL = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label FROM ticketing_ticket_domain a, ticketing_ticket_type b "
+            + " WHERE a.label = ? AND a.id_ticket_type = b.id_ticket_type AND a.inactive <> 1 AND b.inactive <> 1 ";
+    
     /**
      * Generates a new primary key
      * 
@@ -246,6 +248,34 @@ public final class TicketDomainDAO implements ITicketDomainDAO
         daoUtil.free( );
 
         return list;
+    }
+    
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<TicketDomain> selectDomainsByLabel( String sDomainLabel, Plugin plugin )
+    {
+    	List<TicketDomain> ticketDomainList = new ArrayList<TicketDomain>( );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_LABEL, plugin );
+        daoUtil.setString( 1, sDomainLabel );
+        daoUtil.executeQuery( );
+
+        while ( daoUtil.next( ) )
+        {
+        	TicketDomain ticketDomain = new TicketDomain( );
+
+            ticketDomain.setId( daoUtil.getInt( 1 ) );
+            ticketDomain.setIdTicketType( daoUtil.getInt( 2 ) );
+            ticketDomain.setLabel( daoUtil.getString( 3 ) );
+            ticketDomain.setTicketType( daoUtil.getString( 4 ) );
+
+            ticketDomainList.add( ticketDomain );
+        }
+
+        daoUtil.free( );
+
+        return ticketDomainList;
     }
 
     /**

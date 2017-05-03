@@ -243,6 +243,9 @@
 				<label class="select" for="nature">
 					<@comboWithParams name="fltr_id_type" default_value="${ticket_filter.idType}" additionalParameters=" id=\"fltr_id_type\" class=\"form-control input-xs\" " items=type_list />
 				</label>
+				<label class="select" for="domain">
+					<@comboWithParams name="fltr_id_domain" default_value="${ticket_filter.idDomain}" additionalParameters=" id=\"fltr_id_domain\" class=\"form-control input-xs\" " items=domain_list />
+				</label>
 				<label class="select" for="since">
 					<@comboWithParams name="fltr_open_since" default_value="${ticket_filter.openSincePeriod}" additionalParameters=" id=\"fltr_open_since\" class=\"form-control input-xs\" " items=period_list/>
 				</label>
