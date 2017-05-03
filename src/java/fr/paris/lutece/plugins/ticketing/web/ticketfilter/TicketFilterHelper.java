@@ -422,39 +422,40 @@ public final class TicketFilterHelper
 
         ReferenceList refListTypes = TicketUtils.createReferenceList( I18nService.getLocalizedString( PROPERTY_TICKET_TYPE_LABEL, request.getLocale( ) ),
                 StringUtils.EMPTY );
-        
-        Map<String, String> mapDomains = new LinkedHashMap<String, String>();
+
+        Map<String, String> mapDomains = new LinkedHashMap<String, String>( );
         mapDomains.put( StringUtils.EMPTY, I18nService.getLocalizedString( PROPERTY_TICKET_DOMAIN_LABEL, request.getLocale( ) ) );
-        
+
         boolean isTypeAuthorized = false;
-        
-        for (ReferenceItem refType : TicketTypeHome.getReferenceList( ) )
-    	{
-        	isTypeAuthorized = false;
-        	
-        	TicketDomain domain = new TicketDomain();
-        	
-        	for (ReferenceItem refDomain : TicketDomainHome.getReferenceListByType( Integer.parseInt( refType.getCode( ) ) ) )
-        	{
-        		domain.setId( Integer.parseInt( refDomain.getCode( ) ) );
-        		// Check user rights
+
+        for ( ReferenceItem refType : TicketTypeHome.getReferenceList( ) )
+        {
+            isTypeAuthorized = false;
+
+            TicketDomain domain = new TicketDomain( );
+
+            for ( ReferenceItem refDomain : TicketDomainHome.getReferenceListByType( Integer.parseInt( refType.getCode( ) ) ) )
+            {
+                domain.setId( Integer.parseInt( refDomain.getCode( ) ) );
+                // Check user rights
                 if ( RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST, user ) )
                 {
-                	isTypeAuthorized = true;
-                	
-                	if( (fltrFilter.getIdType() < 0 && !mapDomains.containsValue(refDomain.getName())) || fltrFilter.getIdType() == Integer.parseInt( refType.getCode() ) )
-                	{
-                		mapDomains.put( refDomain.getCode( ), refDomain.getName( ) );
-                	}
+                    isTypeAuthorized = true;
+
+                    if ( ( fltrFilter.getIdType( ) < 0 && !mapDomains.containsValue( refDomain.getName( ) ) )
+                            || fltrFilter.getIdType( ) == Integer.parseInt( refType.getCode( ) ) )
+                    {
+                        mapDomains.put( refDomain.getCode( ), refDomain.getName( ) );
+                    }
                 }
-        	}
-        	
-        	if(isTypeAuthorized)
-        	{
-        		refListTypes.add( refType );
-        	}
-    	}
-        
+            }
+
+            if ( isTypeAuthorized )
+            {
+                refListTypes.add( refType );
+            }
+        }
+
         ReferenceList refListStates = new ReferenceList( );
         refListStates.addAll( getWorkflowStates( user, fltrFilter.getListIdWorkflowState( ) ) );
 

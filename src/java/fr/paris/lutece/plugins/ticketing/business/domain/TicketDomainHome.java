@@ -136,7 +136,7 @@ public final class TicketDomainHome
     {
         return _dao.selectTicketDomainsList( _plugin );
     }
-    
+
     /**
      * Load the data of all the ticketDomain objects for a label and returns them in form of a collection
      * 

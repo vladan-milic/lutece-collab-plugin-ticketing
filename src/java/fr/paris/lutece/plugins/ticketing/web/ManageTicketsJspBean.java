@@ -293,11 +293,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         List<Integer> listIdTickets = new ArrayList<>( );
 
         if ( filter.getIdDomain( ) != -1 )
-    	{
-        	TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( filter.getIdDomain( ) );
-        	_lstTicketDomain.clear();
-        	_lstTicketDomain.addAll( TicketDomainHome.getTicketDomainsListByLabel( ticketDomain.getLabel() ) );
-    	}
+        {
+            TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( filter.getIdDomain( ) );
+            _lstTicketDomain.clear( );
+            _lstTicketDomain.addAll( TicketDomainHome.getTicketDomainsListByLabel( ticketDomain.getLabel( ) ) );
+        }
         else
         {
             Map<Integer, TicketDomain> mapIdDomainTicketDomain = new LinkedHashMap<>( );

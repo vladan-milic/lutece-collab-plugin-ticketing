@@ -115,7 +115,7 @@ public interface ITicketDomainDAO
      * @return The reference list
      */
     ReferenceList selectReferenceListByType( int nTicketTypeId, Plugin plugin );
-    
+
     /**
      * Get a reference list of domains for a given domain label
      * 
