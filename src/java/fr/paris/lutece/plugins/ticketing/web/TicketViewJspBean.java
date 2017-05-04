@@ -232,8 +232,8 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     @Override
     public String redirectAfterWorkflowAction( HttpServletRequest request )
     {
-        String strRedirect = ( request.getAttribute( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) != null ) ? (String) request
-                .getAttribute( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION ) : request
+        String strRedirect = ( request.getAttribute( TicketingConstants.ATTRIBUTE_REDIRECT_AFTER_WORKFLOW_ACTION ) != null ) ? (String) request
+                .getAttribute( TicketingConstants.ATTRIBUTE_REDIRECT_AFTER_WORKFLOW_ACTION ) : request
                 .getParameter( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION );
 
         String strRedirectUrl = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_RETURN_URL );
