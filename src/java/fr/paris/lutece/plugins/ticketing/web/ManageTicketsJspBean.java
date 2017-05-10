@@ -915,7 +915,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( ) );
             bIsFormValid = false;
         }
-        
+
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
 
         if ( ticket.getTicketCategory( ).getId( ) > 0 && bIsFormValid )

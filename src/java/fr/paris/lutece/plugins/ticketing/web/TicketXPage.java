@@ -449,7 +449,7 @@ public class TicketXPage extends WorkflowCapableXPage
                 listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry( ), getLocale( request ), ticket ) );
             }
         }
-        
+
         if ( listFormErrors.size( ) > 0 )
         {
             bIsFormValid = false;
