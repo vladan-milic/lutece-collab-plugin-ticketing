@@ -153,7 +153,6 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
 			}
 		}
 
-
         var load_messages = function() {
         	if (selectedCategory!= undefined && selectedCategory.help != undefined) {
         		$("#help_message_category").html(selectedCategory.help);
@@ -169,7 +168,7 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
         	}
         }
         var setSelectedCategoryId = function() {
-        	if (selectedPrecision != undefined  && selectedPrecision != -1) {
+        	if (selectedPrecision != undefined  && selectedPrecision.id != -1 && selectedCategory != undefined) {
         		$(category_selector + ' option:selected').val(selectedPrecision.id);
         	}
         }
@@ -188,7 +187,14 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
 		}
 		load_messages();
 		setSelectedCategoryId();
-		loadGenericAttributesForm(url, false, category_selector, true);
+		var valueIdPrecision = -1;
+		if(selectedCategory != undefined && selectedCategory.precisions != undefined && selectedCategory.precisions.length > 0){
+			valueIdPrecision = undefined;
+		}
+		if(selectedPrecision != undefined && selectedPrecision.id != undefined && selectedPrecision.id != -1){
+			valueIdPrecision = selectedPrecision.id;
+		}
+		loadGenericAttributesForm(url, false, category_selector, true, valueIdPrecision);
 
 		// Change the selected type
 		$(type_selector).change(function() {
@@ -211,14 +217,20 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
         	manageDefaultValueInList(fromParent, category_selector, "id_ticket_category", msg_select_category);
 			selectedCategory = (selectedDomain != undefined ? selectedDomain.categories_map[$(category_selector).val()] : selectedDomain);
 			load_combo(precision_selector, (selectedCategory == undefined ? selectedCategory : selectedCategory.precisions));
-			$(precision_selector).trigger("change", true);
-			
+			if(selectedCategory != undefined && (selectedCategory.precisions == undefined || selectedCategory.precisions.length == 0) )
+			{
+				loadGenericAttributesForm(url, false, category_selector, false, -1);
+			}
+			else
+			{
+				$(precision_selector).trigger("change", true);
+			}			
         });
 
         // Change the selected precision
         $(precision_selector).on("change", function(event, fromParent) {
         	manageDefaultValueInList(fromParent, precision_selector, "id_ticket_precision", msg_select_precision);
-			if(selectedCategory != undefined && selectedCategory.precisions_map != undefined)
+			if(selectedCategory != undefined && selectedCategory.precisions_map != undefined && Object.keys(selectedCategory.precisions_map).length > 0)
 			{
 				selectedPrecision = selectedCategory.precisions_map[$(precision_selector).val()];
 			}
@@ -228,15 +240,15 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
 			}
 			load_messages();
 			setSelectedCategoryId();
-			loadGenericAttributesForm(url, false, category_selector, false);
+			loadGenericAttributesForm(url, false, category_selector, false, selectedPrecision);
         });
     });
 }
 
 
 //load generic attributes form from selected category
-function loadGenericAttributesForm(url, is_response_reseted, category_selector, is_first_call) {
-	if (typeof url !== "undefined") {
+function loadGenericAttributesForm(url, is_response_reseted, category_selector, is_first_call, selectedPrecision) {
+	if (typeof url !== "undefined" && selectedPrecision != undefined) {
 		$.ajax({
 			url: url+"&id_ticket_category="+$(category_selector).val()+"&reset_response="+is_response_reseted,
 			type: "GET",
@@ -265,6 +277,10 @@ function loadGenericAttributesForm(url, is_response_reseted, category_selector, 
 				}
 			}
 		});
+	}
+	else
+	{
+		$('#generic_attributes').replaceWith('<div id="generic_attributes">' + "" + '</div>');
 	}
 }
 

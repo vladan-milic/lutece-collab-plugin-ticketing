@@ -849,20 +849,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         _ticketAddress.setCity( _strCity );
         ticket.setTicketAddress( _ticketAddress );
 
-        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
-
-        if ( ticket.getTicketCategory( ).getId( ) > 0 )
-        {
-            ticket.setListResponse( null );
-
-            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory( ).getId( ), null );
-
-            for ( Entry entry : listEntry )
-            {
-                listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry( ), getLocale( ), ticket ) );
-            }
-        }
-
         // Check constraints
         // Count the number of characters in the ticket comment
         int iNbCharcount = FormValidator.countCharTicketComment( ticket.getTicketComment( ) );
@@ -928,6 +914,20 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( ) );
             bIsFormValid = false;
+        }
+
+        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
+
+        if ( ticket.getTicketCategory( ).getId( ) > 0 && bIsFormValid )
+        {
+            ticket.setListResponse( null );
+
+            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory( ).getId( ), null );
+
+            for ( Entry entry : listEntry )
+            {
+                listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry( ), getLocale( ), ticket ) );
+            }
         }
 
         if ( listFormErrors.size( ) > 0 )

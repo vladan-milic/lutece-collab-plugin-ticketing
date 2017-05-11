@@ -372,18 +372,6 @@ public class TicketXPage extends WorkflowCapableXPage
             ticket.setTicketCategory( ticketCategory );
         }
 
-        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
-
-        if ( ticket.getTicketCategory( ).getId( ) > 0 )
-        {
-            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory( ).getId( ), null );
-
-            for ( Entry entry : listEntry )
-            {
-                listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry( ), getLocale( request ), ticket ) );
-            }
-        }
-
         // Check constraints
         // Count the number of characters in the ticket comment
         int iNbCharcount = FormValidator.countCharTicketComment( ticket.getTicketComment( ) );
@@ -448,6 +436,18 @@ public class TicketXPage extends WorkflowCapableXPage
         {
             addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( request ) );
             bIsFormValid = false;
+        }
+
+        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
+
+        if ( ticket.getTicketCategory( ).getId( ) > 0 && bIsFormValid )
+        {
+            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory( ).getId( ), null );
+
+            for ( Entry entry : listEntry )
+            {
+                listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry( ), getLocale( request ), ticket ) );
+            }
         }
 
         if ( listFormErrors.size( ) > 0 )
