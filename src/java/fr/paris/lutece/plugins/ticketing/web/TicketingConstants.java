@@ -74,6 +74,7 @@ public final class TicketingConstants
     public static final String ATTRIBUTE_RETURN_URL = "return_url";
     public static final String ATTRIBUTE_REDIRECT_AFTER_WORKFLOW_ACTION = PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION;
     public static final String ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO = "ticketing.workflow.action.message.info";
+    public static final String ATTRIBUTE_IS_DISPLAY_FRONT = "bDisplayFront";
 
     // Markers
     public static final String MARK_TICKET = "ticket";
