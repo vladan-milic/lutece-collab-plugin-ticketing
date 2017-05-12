@@ -13,11 +13,11 @@
 	<#list entry.fields as field>
 		<#if list_responses??>
 			<#list list_responses as response>
-				<#if response.entry.idEntry == entry.idEntry && response.toStringValueResponse??>
+				<#if response.entry.idEntry == entry.idEntry && response.responseValue??>
 					<#if response.entry.error??>
-						<@getTextAreaContent responseContent=response.toStringValueResponse has_error=true entry=entry field=field/>
+						<@getTextAreaContent responseContent=response.responseValue has_error=true entry=entry field=field/>
 					<#else>
-						<@getTextAreaContent responseContent=response.toStringValueResponse has_error=false entry=entry field=field/>
+						<@getTextAreaContent responseContent=response.responseValue has_error=false entry=entry field=field/>
 					</#if>
 				</#if>
 			</#list>
