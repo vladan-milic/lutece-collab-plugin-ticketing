@@ -124,4 +124,33 @@ public interface ITicketTypeDAO
      * @return true if type can be removed, false otherwise
      */
     boolean canRemoveType( int nKey, Plugin plugin );
+
+    /**
+     * Update order of a Type
+     * 
+     * @param nId
+     *            id Type to move
+     * @param nNewPosition
+     *            the order value to update
+     * @param plugin
+     *            the Plugin
+     */
+    void updateTypeOrder( int nId, int nNewPosition, Plugin _plugin );
+
+    /**
+     * returns the Id of a Type for a given position
+     * 
+     * @param nOrder
+     *            Position of the input
+     * @return the id of Type as an integer
+     */
+    int selectTypeIdByOrder( int nOrder, Plugin _plugin );
+
+    /**
+     * Rebuild the order sequence of active TicketTypes, by substracting 1 to all orders larger than a given value
+     * 
+     * @param nfromId
+     *            the order to rebuild sequence from
+     */
+    void rebuildTypeOrders( int nfromOrder, Plugin _plugin );
 }

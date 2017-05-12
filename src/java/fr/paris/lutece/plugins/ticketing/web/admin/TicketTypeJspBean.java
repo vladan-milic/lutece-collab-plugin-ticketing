@@ -38,6 +38,7 @@ import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
@@ -56,252 +57,324 @@ import javax.servlet.http.HttpServletRequest;
 @Controller( controllerJsp = "ManageTicketTypes.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
 public class TicketTypeJspBean extends ManageAdminTicketingJspBean
 {
-    // //////////////////////////////////////////////////////////////////////////
-    // Constants
+	// //////////////////////////////////////////////////////////////////////////
+	// Constants
 
-    // templates
-    private static final String TEMPLATE_MANAGE_TICKETTYPES = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_ticket_types.html";
-    private static final String TEMPLATE_CREATE_TICKETTYPE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_ticket_type.html";
-    private static final String TEMPLATE_MODIFY_TICKETTYPE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_ticket_type.html";
+	// templates
+	private static final String TEMPLATE_MANAGE_TICKETTYPES = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_ticket_types.html";
+	private static final String TEMPLATE_CREATE_TICKETTYPE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_ticket_type.html";
+	private static final String TEMPLATE_MODIFY_TICKETTYPE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_ticket_type.html";
 
-    // Parameters
-    private static final String PARAMETER_ID_TICKETTYPE = "id";
+	// Parameters
+	private static final String PARAMETER_ID_TICKETTYPE = "id";
+	private static final String PARAMETER_ORDER_TICKETTYPE = "type_order";
 
-    // Properties for page titles
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETTYPES = "ticketing.manage_tickettypes.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_TICKETTYPE = "ticketing.modify_tickettype.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_TICKETTYPE = "ticketing.create_tickettype.pageTitle";
+	// Properties for page titles
+	private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETTYPES = "ticketing.manage_tickettypes.pageTitle";
+	private static final String PROPERTY_PAGE_TITLE_MODIFY_TICKETTYPE = "ticketing.modify_tickettype.pageTitle";
+	private static final String PROPERTY_PAGE_TITLE_CREATE_TICKETTYPE = "ticketing.create_tickettype.pageTitle";
 
-    // Markers
-    private static final String MARK_TICKETTYPE_LIST = "tickettype_list";
-    private static final String MARK_TICKETTYPE = "tickettype";
-    private static final String JSP_MANAGE_TICKETTYPES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageTicketTypes.jsp";
+	// Markers
+	private static final String MARK_TICKETTYPE_LIST = "tickettype_list";
+	private static final String MARK_TICKETTYPE = "tickettype";
+	private static final String JSP_MANAGE_TICKETTYPES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageTicketTypes.jsp";
 
-    // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_TICKETTYPE = "ticketing.message.confirmRemoveTicketType";
-    private static final String MESSAGE_ERROR_REFERENCE_PREFIX_INVALID_FORMAT = "ticketing.message.errorTicketType.referencePrefixInvalidFormat";
-    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.tickettype.attribute.";
+	// Properties
+	private static final String MESSAGE_CONFIRM_REMOVE_TICKETTYPE = "ticketing.message.confirmRemoveTicketType";
+	private static final String MESSAGE_ERROR_REFERENCE_PREFIX_INVALID_FORMAT = "ticketing.message.errorTicketType.referencePrefixInvalidFormat";
+	private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.tickettype.attribute.";
 
-    // Views
-    private static final String VIEW_MANAGE_TICKETTYPES = "manageTicketTypes";
-    private static final String VIEW_CREATE_TICKETTYPE = "createTicketType";
-    private static final String VIEW_MODIFY_TICKETTYPE = "modifyTicketType";
+	// Views
+	private static final String VIEW_MANAGE_TICKETTYPES = "manageTicketTypes";
+	private static final String VIEW_CREATE_TICKETTYPE = "createTicketType";
+	private static final String VIEW_MODIFY_TICKETTYPE = "modifyTicketType";
 
-    // Actions
-    private static final String ACTION_CREATE_TICKETTYPE = "createTicketType";
-    private static final String ACTION_MODIFY_TICKETTYPE = "modifyTicketType";
-    private static final String ACTION_REMOVE_TICKETTYPE = "removeTicketType";
-    private static final String ACTION_CONFIRM_REMOVE_TICKETTYPE = "confirmRemoveTicketType";
+	// Actions
+	private static final String ACTION_CREATE_TICKETTYPE = "createTicketType";
+	private static final String ACTION_MODIFY_TICKETTYPE = "modifyTicketType";
+	private static final String ACTION_REMOVE_TICKETTYPE = "removeTicketType";
+	private static final String ACTION_CONFIRM_REMOVE_TICKETTYPE = "confirmRemoveTicketType";
+	private static final String ACTION_MOVEUP_TICKETTYPE = "doMoveTypeUp";
+	private static final String ACTION_MOVEDOWN_TICKETTYPE = "doMoveTypeDown";
 
-    // Infos
-    private static final String INFO_TICKETTYPE_CREATED = "ticketing.info.tickettype.created";
-    private static final String INFO_TICKETTYPE_UPDATED = "ticketing.info.tickettype.updated";
-    private static final String INFO_TICKETTYPE_REMOVED = "ticketing.info.tickettype.removed";
+	// Infos
+	private static final String INFO_TICKETTYPE_CREATED = "ticketing.info.tickettype.created";
+	private static final String INFO_TICKETTYPE_UPDATED = "ticketing.info.tickettype.updated";
+	private static final String INFO_TICKETTYPE_REMOVED = "ticketing.info.tickettype.removed";
 
-    // Messages
-    private static final String MESSAGE_CAN_NOT_REMOVE_TYPE_DOMAINS_ARE_ASSOCIATE = "ticketing.message.canNotRemoveTypeDomainsAreAssociate";
+	//Errors
+	private static final String ERROR_TICKETTYPE_REMOVED = "ticketing.error.tickettype.removed";
+	
+	
+	// Messages
+	private static final String MESSAGE_CAN_NOT_REMOVE_TYPE_DOMAINS_ARE_ASSOCIATE = "ticketing.message.canNotRemoveTypeDomainsAreAssociate";
 
-    // Other constants
-    private static final String PATTERN_REFERENCE_PREFIX = "^[A-Z]{3}$";
-    private static Pattern _patternReferencePrefix = Pattern.compile( PATTERN_REFERENCE_PREFIX );
-    private static final long serialVersionUID = 1L;
+	// Other constants
+	private static final String PATTERN_REFERENCE_PREFIX = "^[A-Z]{3}$";
+	private static Pattern _patternReferencePrefix = Pattern.compile( PATTERN_REFERENCE_PREFIX );
+	private static final long serialVersionUID = 1L;
 
-    // Session variable to store working values
-    private TicketType _tickettype;
+	// Session variable to store working values
+	private TicketType _tickettype;
 
-    /**
-     * Build the Manage View
-     * 
-     * @param request
-     *            The HTTP request
-     * @return The page
-     */
-    @View( value = VIEW_MANAGE_TICKETTYPES, defaultView = true )
-    public String getManageTicketTypes( HttpServletRequest request )
-    {
-        _tickettype = null;
+	/**
+	 * Build the Manage View
+	 * 
+	 * @param request
+	 *            The HTTP request
+	 * @return The page
+	 */
+	@View( value = VIEW_MANAGE_TICKETTYPES, defaultView = true )
+	public String getManageTicketTypes( HttpServletRequest request )
+	{
+		_tickettype = null;
 
-        List<TicketType> listTicketTypes = (List<TicketType>) TicketTypeHome.getTicketTypesList( );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKETTYPE_LIST, listTicketTypes, JSP_MANAGE_TICKETTYPES );
+		List<TicketType> listTicketTypes = (List<TicketType>) TicketTypeHome.getTicketTypesList( );
+		Map<String, Object> model = getPaginatedListModel( request, MARK_TICKETTYPE_LIST, listTicketTypes, JSP_MANAGE_TICKETTYPES );
 
-        return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETTYPES, TEMPLATE_MANAGE_TICKETTYPES, model );
-    }
+		return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETTYPES, TEMPLATE_MANAGE_TICKETTYPES, model );
+	}
 
-    /**
-     * Returns the form to create a tickettype
-     *
-     * @param request
-     *            The Http request
-     * @return the html code of the tickettype form
-     */
-    @View( VIEW_CREATE_TICKETTYPE )
-    public String getCreateTicketType( HttpServletRequest request )
-    {
-        _tickettype = ( _tickettype != null ) ? _tickettype : new TicketType( );
+	/**
+	 * Returns the form to create a tickettype
+	 *
+	 * @param request
+	 *            The Http request
+	 * @return the html code of the tickettype form
+	 */
+	@View( VIEW_CREATE_TICKETTYPE )
+	public String getCreateTicketType( HttpServletRequest request )
+	{
+		_tickettype = ( _tickettype != null ) ? _tickettype : new TicketType( );
 
-        Map<String, Object> model = getModel( );
-        model.put( MARK_TICKETTYPE, _tickettype );
+		Map<String, Object> model = getModel( );
+		model.put( MARK_TICKETTYPE, _tickettype );
 
-        return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKETTYPE, TEMPLATE_CREATE_TICKETTYPE, model );
-    }
+		return getPage( PROPERTY_PAGE_TITLE_CREATE_TICKETTYPE, TEMPLATE_CREATE_TICKETTYPE, model );
+	}
 
-    /**
-     * Process the data capture form of a new tickettype
-     *
-     * @param request
-     *            The Http Request
-     * @return The Jsp URL of the process result
-     */
-    @Action( ACTION_CREATE_TICKETTYPE )
-    public String doCreateTicketType( HttpServletRequest request )
-    {
-        populate( _tickettype, request );
+	/**
+	 * Process the data capture form of a new tickettype
+	 *
+	 * @param request
+	 *            The Http Request
+	 * @return The Jsp URL of the process result
+	 */
+	@Action( ACTION_CREATE_TICKETTYPE )
+	public String doCreateTicketType( HttpServletRequest request )
+	{
+		populate( _tickettype, request );
 
-        // Check constraints
-        if ( !validateBean( _tickettype, VALIDATION_ATTRIBUTES_PREFIX ) || !validate( _tickettype ) )
-        {
-            return redirectView( request, VIEW_CREATE_TICKETTYPE );
-        }
+		// Check constraints
+		if ( !validateBean( _tickettype, VALIDATION_ATTRIBUTES_PREFIX ) || !validate( _tickettype ) )
+		{
+			return redirectView( request, VIEW_CREATE_TICKETTYPE );
+		}
 
-        TicketTypeHome.create( _tickettype );
-        addInfo( INFO_TICKETTYPE_CREATED, getLocale( ) );
+		TicketTypeHome.create( _tickettype );
+		addInfo( INFO_TICKETTYPE_CREATED, getLocale( ) );
 
-        return redirectView( request, VIEW_MANAGE_TICKETTYPES );
-    }
+		return redirectView( request, VIEW_MANAGE_TICKETTYPES );
+	}
 
-    /**
-     * Manages the removal form of a tickettype whose identifier is in the http request
-     *
-     * @param request
-     *            The Http request
-     * @return the html code to confirm
-     */
-    @Action( ACTION_CONFIRM_REMOVE_TICKETTYPE )
-    public String getConfirmRemoveTicketType( HttpServletRequest request )
-    {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETTYPE ) );
+	/**
+	 * Manages the removal form of a tickettype whose identifier is in the http request
+	 *
+	 * @param request
+	 *            The Http request
+	 * @return the html code to confirm
+	 */
+	@Action( ACTION_CONFIRM_REMOVE_TICKETTYPE )
+	public String getConfirmRemoveTicketType( HttpServletRequest request )
+	{
+		int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETTYPE ) );
+		int nOrder = Integer.parseInt( request.getParameter( PARAMETER_ORDER_TICKETTYPE ) );
 
-        if ( !TicketTypeHome.canRemove( nId ) )
-        {
-            return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CAN_NOT_REMOVE_TYPE_DOMAINS_ARE_ASSOCIATE, AdminMessage.TYPE_STOP ) );
-        }
+		if ( !TicketTypeHome.canRemove( nId ) )
+		{
+			return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CAN_NOT_REMOVE_TYPE_DOMAINS_ARE_ASSOCIATE, AdminMessage.TYPE_STOP ) );
+		}
 
-        UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_TICKETTYPE ) );
-        url.addParameter( PARAMETER_ID_TICKETTYPE, nId );
+		UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_TICKETTYPE ) );
+		url.addParameter( PARAMETER_ID_TICKETTYPE, nId );
+		url.addParameter( PARAMETER_ORDER_TICKETTYPE, nOrder );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TICKETTYPE, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
+		String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TICKETTYPE, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
 
-        return redirect( request, strMessageUrl );
-    }
+		return redirect( request, strMessageUrl );
+	}
 
-    /**
-     * Handles the removal form of a tickettype
-     *
-     * @param request
-     *            The Http request
-     * @return the jsp URL to display the form to manage tickettypes
-     */
-    @Action( ACTION_REMOVE_TICKETTYPE )
-    public String doRemoveTicketType( HttpServletRequest request )
-    {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETTYPE ) );
-        TicketTypeHome.remove( nId );
-        addInfo( INFO_TICKETTYPE_REMOVED, getLocale( ) );
+	/**
+	 * Handles the removal form of a tickettype
+	 *
+	 * @param request
+	 *            The Http request
+	 * @return the jsp URL to display the form to manage tickettypes
+	 */
+	@Action( ACTION_REMOVE_TICKETTYPE )
+	public String doRemoveTicketType( HttpServletRequest request )
+	{
+		try{
+			int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETTYPE ) );
+			int nOrder = Integer.parseInt( request.getParameter( PARAMETER_ORDER_TICKETTYPE ) );
+	
+			TicketTypeHome.remove( nId );
+			TicketTypeHome.rebuildTypeOrders( nOrder );
+	
+			addInfo( INFO_TICKETTYPE_REMOVED, getLocale( ) );
+		}
+		catch (NumberFormatException e){
+			AppLogService.debug( "Error while removing TicketType " + e.getMessage() );
+			addError( ERROR_TICKETTYPE_REMOVED, getLocale( ) );
+		}
+		return redirectView( request, VIEW_MANAGE_TICKETTYPES );
+	}
 
-        return redirectView( request, VIEW_MANAGE_TICKETTYPES );
-    }
+	/**
+	 * Handles the increment of position of a tickettype
+	 *
+	 * @param request
+	 *            The Http request
+	 * @return the jsp URL to display the form to manage tickettypes
+	 */
+	@Action( ACTION_MOVEUP_TICKETTYPE )
+	public String doMoveUpTicketType( HttpServletRequest request )
+	{
+		return doMoveTicketType( request, true );
+	}
 
-    /**
-     * Returns the form to update info about a tickettype
-     *
-     * @param request
-     *            The Http request
-     * @return The HTML form to update info
-     */
-    @View( VIEW_MODIFY_TICKETTYPE )
-    public String getModifyTicketType( HttpServletRequest request )
-    {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETTYPE ) );
+	/**
+	 * Handles the decrement of position of a tickettype
+	 *
+	 * @param request
+	 *            The Http request
+	 * @return the jsp URL to display the form to manage tickettypes
+	 */
+	@Action( ACTION_MOVEDOWN_TICKETTYPE )
+	public String doMoveDownTicketType( HttpServletRequest request )
+	{
+		return doMoveTicketType( request, false );
+	}
 
-        if ( ( _tickettype == null ) || ( _tickettype.getId( ) != nId ) )
-        {
-            _tickettype = TicketTypeHome.findByPrimaryKey( nId );
-        }
+	/**
+	 * Move a TicketType position up or down
+	 * 
+	 * @param request
+	 *            The request
+	 * @param bMoveUp
+	 *            True to move the TicketType up, false to move it down
+	 * @return The next URL to redirect to
+	 */
+	private String doMoveTicketType( HttpServletRequest request, boolean bMoveUp )
+	{
+		try{        	
 
-        Map<String, Object> model = getModel( );
-        model.put( MARK_TICKETTYPE, _tickettype );
+			int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETTYPE ) );
+			int nTypeCurrentPosition = Integer.parseInt( request.getParameter( PARAMETER_ORDER_TICKETTYPE ) );
 
-        return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKETTYPE, TEMPLATE_MODIFY_TICKETTYPE, model );
-    }
+			int nNewPosition = bMoveUp ? ( nTypeCurrentPosition - 1 ) : ( nTypeCurrentPosition + 1 );
 
-    /**
-     * Process the change form of a tickettype
-     *
-     * @param request
-     *            The Http request
-     * @return The Jsp URL of the process result
-     */
-    @Action( ACTION_MODIFY_TICKETTYPE )
-    public String doModifyTicketType( HttpServletRequest request )
-    {
-        populate( _tickettype, request );
+			TicketTypeHome.updateTypeOrder( nId, nTypeCurrentPosition, nNewPosition );
+			AppLogService.debug( "Ticketing - TicketType " + nId + " moved from position " + nTypeCurrentPosition + " to " + nNewPosition );
+		}
+		catch (NumberFormatException e){
+			AppLogService.debug( "Error while moving TicketType. " + e.getMessage() );
+		}
+		
+		return redirectView( request, VIEW_MANAGE_TICKETTYPES );
+	}
 
-        // Check constraints
-        if ( !validateBean( _tickettype, VALIDATION_ATTRIBUTES_PREFIX ) || !validate( _tickettype ) )
-        {
-            return redirect( request, VIEW_MODIFY_TICKETTYPE, PARAMETER_ID_TICKETTYPE, _tickettype.getId( ) );
-        }
+	/**
+	 * Returns the form to update info about a tickettype
+	 *
+	 * @param request
+	 *            The Http request
+	 * @return The HTML form to update info
+	 */
+	@View( VIEW_MODIFY_TICKETTYPE )
+	public String getModifyTicketType( HttpServletRequest request )
+	{
+		int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETTYPE ) );
 
-        TicketTypeHome.update( _tickettype );
-        addInfo( INFO_TICKETTYPE_UPDATED, getLocale( ) );
+		if ( ( _tickettype == null ) || ( _tickettype.getId( ) != nId ) )
+		{
+			_tickettype = TicketTypeHome.findByPrimaryKey( nId );
+		}
 
-        return redirectView( request, VIEW_MANAGE_TICKETTYPES );
-    }
+		Map<String, Object> model = getModel( );
+		model.put( MARK_TICKETTYPE, _tickettype );
 
-    /**
-     * Validate the specified TicketType object
-     * 
-     * @param ticketType
-     *            the TicketType object
-     * @return {@code true} if the object is valid, {@code false} otherwise
-     */
-    private boolean validate( TicketType ticketType )
-    {
-        boolean bIsValid = true;
+		return getPage( PROPERTY_PAGE_TITLE_MODIFY_TICKETTYPE, TEMPLATE_MODIFY_TICKETTYPE, model );
+	}
 
-        bIsValid &= validateReferencePrefix( ticketType );
+	/**
+	 * Process the change form of a tickettype
+	 *
+	 * @param request
+	 *            The Http request
+	 * @return The Jsp URL of the process result
+	 */
+	@Action( ACTION_MODIFY_TICKETTYPE )
+	public String doModifyTicketType( HttpServletRequest request )
+	{
+		populate( _tickettype, request );
 
-        return bIsValid;
-    }
+		// Check constraints
+		if ( !validateBean( _tickettype, VALIDATION_ATTRIBUTES_PREFIX ) || !validate( _tickettype ) )
+		{
+			return redirect( request, VIEW_MODIFY_TICKETTYPE, PARAMETER_ID_TICKETTYPE, _tickettype.getId( ) );
+		}
 
-    /**
-     * Validate the reference prefix
-     * 
-     * @param ticketType
-     *            The TicketType object containing the reference prefix
-     * @return {@code true} if the reference prefix is valid, {@code false} otherwise
-     */
-    private boolean validateReferencePrefix( TicketType ticketType )
-    {
-        boolean bIsValid = true;
-        String strReferencePrefix = ticketType.getReferencePrefix( );
+		TicketTypeHome.update( _tickettype );
+		addInfo( INFO_TICKETTYPE_UPDATED, getLocale( ) );
 
-        if ( ( strReferencePrefix != null ) && !strReferencePrefix.equals( "" ) )
-        {
-            Matcher matcher = _patternReferencePrefix.matcher( strReferencePrefix );
+		return redirectView( request, VIEW_MANAGE_TICKETTYPES );
+	}
 
-            if ( !matcher.matches( ) )
-            {
-                addError( MESSAGE_ERROR_REFERENCE_PREFIX_INVALID_FORMAT, getLocale( ) );
-                bIsValid = false;
-            }
-        }
-        else
-        {
-            addError( MESSAGE_ERROR_REFERENCE_PREFIX_INVALID_FORMAT, getLocale( ) );
-            bIsValid = false;
-        }
+	/**
+	 * Validate the specified TicketType object
+	 * 
+	 * @param ticketType
+	 *            the TicketType object
+	 * @return {@code true} if the object is valid, {@code false} otherwise
+	 */
+	private boolean validate( TicketType ticketType )
+	{
+		boolean bIsValid = true;
 
-        return bIsValid;
-    }
+		bIsValid &= validateReferencePrefix( ticketType );
+
+		return bIsValid;
+	}
+
+	/**
+	 * Validate the reference prefix
+	 * 
+	 * @param ticketType
+	 *            The TicketType object containing the reference prefix
+	 * @return {@code true} if the reference prefix is valid, {@code false} otherwise
+	 */
+	private boolean validateReferencePrefix( TicketType ticketType )
+	{
+		boolean bIsValid = true;
+		String strReferencePrefix = ticketType.getReferencePrefix( );
+
+		if ( ( strReferencePrefix != null ) && !strReferencePrefix.equals( "" ) )
+		{
+			Matcher matcher = _patternReferencePrefix.matcher( strReferencePrefix );
+
+			if ( !matcher.matches( ) )
+			{
+				addError( MESSAGE_ERROR_REFERENCE_PREFIX_INVALID_FORMAT, getLocale( ) );
+				bIsValid = false;
+			}
+		}
+		else
+		{
+			addError( MESSAGE_ERROR_REFERENCE_PREFIX_INVALID_FORMAT, getLocale( ) );
+			bIsValid = false;
+		}
+
+		return bIsValid;
+	}
 }
