@@ -7,8 +7,7 @@
 ${entry.CSSClass!}
 
 <div class="form-group">
-	<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label nopadding" for="form${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> :</label>
-	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 nopadding">
+	<label for="form${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> :</label>
     <#list entry.fields as field>
 		<#if !entry.fieldInLine><div class="radio lalala"></#if>
 			<label <#if entry.fieldInLine>class="radio-inline"</#if> for="attribute${entry.idEntry}_${field.idField}" <#if field.comment?? && field.comment != ''>title="${field.comment}"</#if> > 
@@ -37,19 +36,19 @@ ${entry.CSSClass!}
 			<#if entry.fieldInLine&&entry.helpMessage?exists&&entry.helpMessage!=''>
 			${entry.helpMessage}
 		</#if></p>
-	</div>
+		<#if list_responses??>
+			<#list list_responses as response>
+				<#if response.entry.idEntry == entry.idEntry && response.entry.error??  && response.entry.error.isDisplayableError>
+					<div class="alert alert-error alert-danger">
+					<#assign error = response.entry.error>
+						${error.errorMessage}
+					</div>
+				</#if>
+			</#list>
+		</#if>
  </div>	
 
-<#if list_responses??>
-	<#list list_responses as response>
-		<#if response.entry.idEntry == entry.idEntry && response.entry.error??  && response.entry.error.isDisplayableError>
-			<div class="alert alert-error alert-danger">
-			<#assign error = response.entry.error>
-				${error.errorMessage}
-			</div>
-		</#if>
-	</#list>
-</#if>
+
 <#if str_list_entry_children?exists>${str_list_entry_children}</#if>
 
 <#if list_responses??>
