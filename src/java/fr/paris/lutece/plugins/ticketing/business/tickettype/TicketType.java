@@ -53,6 +53,7 @@ public class TicketType implements Serializable
     private String _strLabel;
     private String _strReferencePrefix;
     private int _nDemandTypeId;
+    private int _nOrder;
 
     /**
      * Returns the Id
@@ -136,5 +137,22 @@ public class TicketType implements Serializable
     public void setDemandTypeId( int nDemandTypeId )
     {
         _nDemandTypeId = nDemandTypeId;
+    }
+
+    /**
+     * @return the Order
+     */
+    public int getOrder( )
+    {
+        return _nOrder;
+    }
+
+    /**
+     * @param nOrder
+     *            the Order to set
+     */
+    public void setOrder( int nOrder )
+    {
+        this._nOrder = nOrder;
     }
 }

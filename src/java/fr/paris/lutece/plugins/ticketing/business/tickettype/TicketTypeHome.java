@@ -37,6 +37,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppException;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
@@ -153,4 +154,42 @@ public final class TicketTypeHome
     {
         return _dao.selectReferenceList( _plugin );
     }
+
+    /**
+     * Change the position of a TicketType
+     *
+     * @param nId
+     *            the if of category to move
+     * @param nCurrentPostion
+     *            the current position of the Type
+     * 
+     * @param nNewPosition
+     *            the target position of the Type
+     */
+    public static void updateTypeOrder( int nId, int nCurrentPostion, int nNewPosition )
+    {
+        int nIdTypeWhichPlaceIsTaken = _dao.selectTypeIdByOrder( nNewPosition, _plugin );
+
+        if ( nIdTypeWhichPlaceIsTaken != -1 )
+        {
+            _dao.updateTypeOrder( nId, nNewPosition, _plugin );
+            _dao.updateTypeOrder( nIdTypeWhichPlaceIsTaken, nCurrentPostion, _plugin );
+        }
+        else
+        {
+            AppLogService.error( "Could not move TicketType " + nId + " to position " + nNewPosition + " : no type to replace on position " + nCurrentPostion );
+        }
+    }
+
+    /**
+     * Rebuild the order sequence of active Types, by substracting 1 to all orders larger than a given value
+     * 
+     * @param nfromId
+     *            the order to rebuild sequence from
+     */
+    public static void rebuildTypeOrders( int nOrderFrom )
+    {
+        _dao.rebuildTypeOrders( nOrderFrom, _plugin );
+    }
+
 }

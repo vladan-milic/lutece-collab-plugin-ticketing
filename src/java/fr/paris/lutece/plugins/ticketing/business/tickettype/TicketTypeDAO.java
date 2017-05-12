@@ -47,13 +47,17 @@ public final class TicketTypeDAO implements ITicketTypeDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket_type ) FROM ticketing_ticket_type";
-    private static final String SQL_QUERY_SELECT = "SELECT id_ticket_type, label, reference_prefix, demand_type_id FROM ticketing_ticket_type WHERE id_ticket_type = ? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_type ( id_ticket_type, label, reference_prefix, demand_type_id, inactive ) VALUES ( ?, ?, ?, ?, 0 ) ";
-    private static final String SQL_QUERY_DELETE = "UPDATE ticketing_ticket_type SET inactive = 1 WHERE id_ticket_type = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_type SET id_ticket_type = ?, label = ?, reference_prefix = ?, demand_type_id = ? WHERE id_ticket_type = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_ticket_type, label, reference_prefix, demand_type_id FROM ticketing_ticket_type WHERE inactive <> 1 ORDER BY label ASC";
+    private static final String SQL_QUERY_SELECT = "SELECT id_ticket_type, label, reference_prefix, demand_type_id, type_order FROM ticketing_ticket_type WHERE id_ticket_type = ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_type ( id_ticket_type, label, reference_prefix, demand_type_id, inactive, type_order ) VALUES ( ?, ?, ?, ?, 0, ? ) ";
+    private static final String SQL_QUERY_DELETE = "UPDATE ticketing_ticket_type SET inactive = 1, type_order= -1 WHERE id_ticket_type = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_type SET id_ticket_type = ?, label = ?, reference_prefix = ?, demand_type_id = ?, type_order = ? WHERE id_ticket_type = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_ticket_type, label, reference_prefix, demand_type_id, type_order FROM ticketing_ticket_type WHERE inactive <> 1 ORDER BY type_order";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_type FROM ticketing_ticket_type WHERE inactive <> 1 ";
     private static final String SQL_QUERY_COUNT_DOMAIN_BY_TYPE = "SELECT COUNT(1) FROM ticketing_ticket_domain WHERE id_ticket_type = ? AND inactive <> 1 ";
+    private static final String SQL_QUERY_MAX_TYPE_ORDER = "SELECT max( type_order ) FROM ticketing_ticket_type";
+    private static final String SQL_QUERY_REBUILD_TYPE_ORDER_SEQUENCE = "UPDATE ticketing_ticket_type SET type_order = type_order - 1 WHERE type_order > ? and inactive <> 1";
+    private static final String SQL_QUERY_UPDATE_TYPE_ORDER = "UPDATE ticketing_ticket_type SET type_order = ? WHERE id_ticket_type = ?";
+    private static final String SQL_QUERY_SELECT_TYPEID_BY_ORDER = "SELECT id_ticket_type FROM ticketing_ticket_type WHERE type_order = ? ";
 
     /**
      * Generates a new primary key
@@ -85,6 +89,8 @@ public final class TicketTypeDAO implements ITicketTypeDAO
     @Override
     public void insert( TicketType ticketType, Plugin plugin )
     {
+        int nOrder = newTypeOrder( plugin );
+
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
 
         ticketType.setId( newPrimaryKey( plugin ) );
@@ -93,6 +99,7 @@ public final class TicketTypeDAO implements ITicketTypeDAO
         daoUtil.setString( 2, ticketType.getLabel( ) );
         daoUtil.setString( 3, ticketType.getReferencePrefix( ) );
         daoUtil.setInt( 4, ticketType.getDemandTypeId( ) );
+        daoUtil.setInt( 5, nOrder );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -117,6 +124,7 @@ public final class TicketTypeDAO implements ITicketTypeDAO
             ticketType.setLabel( daoUtil.getString( 2 ) );
             ticketType.setReferencePrefix( daoUtil.getString( 3 ) );
             ticketType.setDemandTypeId( daoUtil.getInt( 4 ) );
+            ticketType.setOrder( daoUtil.getInt( 5 ) );
         }
 
         daoUtil.free( );
@@ -148,7 +156,8 @@ public final class TicketTypeDAO implements ITicketTypeDAO
         daoUtil.setString( 2, ticketType.getLabel( ) );
         daoUtil.setString( 3, ticketType.getReferencePrefix( ) );
         daoUtil.setInt( 4, ticketType.getDemandTypeId( ) );
-        daoUtil.setInt( 5, ticketType.getId( ) );
+        daoUtil.setInt( 5, ticketType.getOrder( ) );
+        daoUtil.setInt( 6, ticketType.getId( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -172,6 +181,7 @@ public final class TicketTypeDAO implements ITicketTypeDAO
             ticketType.setLabel( daoUtil.getString( 2 ) );
             ticketType.setReferencePrefix( daoUtil.getString( 3 ) );
             ticketType.setDemandTypeId( daoUtil.getInt( 4 ) );
+            ticketType.setOrder( daoUtil.getInt( 5 ) );
 
             ticketTypeList.add( ticketType );
         }
@@ -244,4 +254,59 @@ public final class TicketTypeDAO implements ITicketTypeDAO
 
         return bResult;
     }
+
+    private int newTypeOrder( Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_MAX_TYPE_ORDER, plugin );
+        daoUtil.executeQuery( );
+
+        int nOrder = 1;
+
+        if ( daoUtil.next( ) )
+        {
+            nOrder = daoUtil.getInt( 1 ) + 1;
+        }
+
+        daoUtil.free( );
+
+        return nOrder;
+    }
+
+    @Override
+    public void updateTypeOrder( int nId, int nNewPosition, Plugin _plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_TYPE_ORDER, _plugin );
+        daoUtil.setInt( 1, nNewPosition );
+        daoUtil.setInt( 2, nId );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
+    }
+
+    @Override
+    public int selectTypeIdByOrder( int nOrder, Plugin _plugin )
+    {
+        int nTicketTypeId = -1;
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_TYPEID_BY_ORDER, _plugin );
+        daoUtil.setInt( 1, nOrder );
+        daoUtil.executeQuery( );
+
+        while ( daoUtil.next( ) )
+        {
+            nTicketTypeId = daoUtil.getInt( 1 );
+        }
+
+        daoUtil.free( );
+
+        return nTicketTypeId;
+    }
+
+    @Override
+    public void rebuildTypeOrders( int nfromOrder, Plugin _plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_REBUILD_TYPE_ORDER_SEQUENCE, _plugin );
+        daoUtil.setInt( 1, nfromOrder );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
+    }
+
 }

@@ -109,6 +109,7 @@ id_ticket_domain int(6) NOT NULL,
 id_ticket_type int(11) NOT NULL,
 label varchar(50) NOT NULL default '',
 inactive int(1)  NOT NULL default '0',
+domain_order INT(6) DEFAULT 0 NOT NULL,
 PRIMARY KEY (id_ticket_domain)
 );
 
@@ -123,6 +124,7 @@ label varchar(50) NOT NULL default '',
 reference_prefix varchar(3) NOT NULL,
 inactive int(1)  NOT NULL default '0',
 demand_type_id int(6) NOT NULL default '0',
+type_order INT(6) DEFAULT 0 NOT NULL,
 PRIMARY KEY (id_ticket_type)
 );
 

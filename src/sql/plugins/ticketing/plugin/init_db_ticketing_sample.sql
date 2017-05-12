@@ -2,16 +2,16 @@
 DELETE FROM ticketing_ticket_category ;
 DELETE FROM ticketing_ticket_domain ;
 DELETE FROM ticketing_ticket_type ;
-INSERT INTO ticketing_ticket_type (id_ticket_type, label, reference_prefix, demand_type_id) VALUES
-(1, "Demande d'information", "INF", 101),
-(2, "Réclamation", "RCL", 102);
+INSERT INTO ticketing_ticket_type (id_ticket_type, label, reference_prefix, demand_type_id, type_order) VALUES
+(1, "Demande d'information", "INF", 101, 1),
+(2, "Réclamation", "RCL", 102, 2);
 
-INSERT INTO ticketing_ticket_domain (id_ticket_domain, id_ticket_type, label) VALUES
-(100, 1, "Autre" ),
-(110, 1, "Mairie" ),
-(120, 1, "Stationnement" ),
-(200, 2, "Autre" ),
-(210, 2, "Facil'familles" );
+INSERT INTO ticketing_ticket_domain (id_ticket_domain, id_ticket_type, label, domain_order) VALUES
+(100, 1, "Autre", 1 ),
+(110, 1, "Mairie", 2 ),
+(120, 1, "Stationnement", 3 ),
+(200, 2, "Autre", 4 ),
+(210, 2, "Facil'familles", 5 );
 
 INSERT INTO ticketing_ticket_category (id_ticket_category, id_ticket_domain, label, category_code, id_workflow, id_unit, category_precision, category_order ) VALUES
 (1, 100, "Autre" , NULL, 301, 0, NULL, 1 ),
