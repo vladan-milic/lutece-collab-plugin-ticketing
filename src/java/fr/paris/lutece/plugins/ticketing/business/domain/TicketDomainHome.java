@@ -39,6 +39,7 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppException;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
 
 import java.util.ArrayList;
@@ -79,7 +80,20 @@ public final class TicketDomainHome
      */
     public static void update( TicketDomain ticketDomain )
     {
-        _dao.store( ticketDomain, _plugin );
+        TicketDomain currentTicketDomain = findByPrimaryKey( ticketDomain.getId( ) );
+        int nCurrentTypeId = currentTicketDomain.getIdTicketType( );
+        int nCurrentOrder = currentTicketDomain.getOrder( );
+        int nTargetTypeId = ticketDomain.getIdTicketType( );
+
+        if ( nCurrentTypeId != nTargetTypeId )
+        {
+            _dao.storeWithLastOrder( ticketDomain, _plugin );
+            _dao.rebuildDomainOrdersByType( nCurrentOrder, nCurrentTypeId, _plugin );
+        }
+        else
+        {
+            _dao.store( ticketDomain, _plugin );
+        }
     }
 
     /**
@@ -92,12 +106,28 @@ public final class TicketDomainHome
     {
         if ( canRemove( nKey ) )
         {
+            TicketDomain ticketDomainToRemove = findByPrimaryKey( nKey );
+
             _dao.delete( nKey, _plugin );
+            _dao.rebuildDomainOrdersByType( ticketDomainToRemove.getOrder( ), ticketDomainToRemove.getIdTicketType( ), _plugin );
         }
         else
         {
             throw new AppException( "TicketDomain cannot be removed for ID :" + nKey );
         }
+    }
+
+    /**
+     * Returns the ticketType Id of a TicketDomain whose identifier is specified in parameter
+     * 
+     * @param nKey
+     *            The ticketDomain Id
+     */
+    public static int getTypeId( int nKey )
+    {
+
+        TicketDomain _ticketDomain = _dao.load( nKey, _plugin );
+        return _ticketDomain.getIdTicketType( );
     }
 
     /**
@@ -135,6 +165,18 @@ public final class TicketDomainHome
     public static List<TicketDomain> getTicketDomainsList( )
     {
         return _dao.selectTicketDomainsList( _plugin );
+    }
+
+    /**
+     * Load the data of all the ticketDomain objects for a given ticketType and returns them in form of a collection
+     * 
+     * @param nTypeId
+     *            The ticketType id
+     * @return the collection which contains the data of all the ticketDomain objects
+     */
+    public static List<TicketDomain> getTicketDomainsListbyType( int nTypeId )
+    {
+        return _dao.selectDomainListByTypeId( nTypeId, _plugin );
     }
 
     /**
@@ -224,4 +266,37 @@ public final class TicketDomainHome
     {
         return _dao.selectReferenceListModelResponse( _plugin );
     }
+
+    /**
+     * Change the position of a TicketDomain
+     *
+     * @param nId
+     *            the if of domain to move
+     * @param nCurrentPostion
+     *            the current position of the Type
+     * 
+     * @param nNewPosition
+     *            the target position of the Type
+     */
+    public static void updateDomainOrder( int nId, boolean moveUp )
+    {
+        TicketDomain ticketDomainToRemove = findByPrimaryKey( nId );
+        int nCurrentOrder = ticketDomainToRemove.getOrder( );
+        int nIdTicketType = ticketDomainToRemove.getIdTicketType( );
+        int nTargetOrder = moveUp ? ( nCurrentOrder - 1 ) : ( nCurrentOrder + 1 );
+
+        int nIdDomainWhichPlaceIsTaken = _dao.selectDomainIdByOrder( nTargetOrder, nIdTicketType, _plugin );
+
+        if ( nIdDomainWhichPlaceIsTaken != -1 )
+        {
+            _dao.updateDomainOrder( nId, nTargetOrder, _plugin );
+            _dao.updateDomainOrder( nIdDomainWhichPlaceIsTaken, nCurrentOrder, _plugin );
+        }
+        else
+        {
+            AppLogService
+                    .error( "Could not move TicketDomain " + nId + " to position " + nTargetOrder + " : no Domain to replace on position " + nCurrentOrder );
+        }
+    }
+
 }

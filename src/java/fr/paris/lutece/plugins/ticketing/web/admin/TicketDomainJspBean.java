@@ -35,10 +35,13 @@ package fr.paris.lutece.plugins.ticketing.web.admin;
 
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.util.AppException;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
@@ -65,6 +68,7 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
 
     // Parameters
     private static final String PARAMETER_ID_TICKETDOMAIN = "id";
+    private static final String PARAMETER_ORDER_TICKETDOMAIN = "domain_order";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETDOMAINS = "ticketing.manage_ticketdomains.pageTitle";
@@ -91,6 +95,8 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     private static final String ACTION_MODIFY_TICKETDOMAIN = "modifyTicketDomain";
     private static final String ACTION_REMOVE_TICKETDOMAIN = "removeTicketDomain";
     private static final String ACTION_CONFIRM_REMOVE_TICKETDOMAIN = "confirmRemoveTicketDomain";
+    private static final String ACTION_MOVEUP_TICKETDOMAIN = "doMoveDomainUp";
+    private static final String ACTION_MOVEDOWN_TICKETDOMAIN = "doMoveDomainDown";
 
     // Infos
     private static final String INFO_TICKETDOMAIN_CREATED = "ticketing.info.ticketdomain.created";
@@ -100,6 +106,7 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
 
     // Messages
     private static final String MESSAGE_CAN_NOT_REMOVE_DOMAIN_CATEGORIES_ARE_ASSOCIATE = "ticketing.message.canNotRemoveDomainCategoriesAreAssociate";
+    private static final String ERROR_TICKETDOMAIN_REMOVED = "ticketing.error.ticketdomain.removed";
 
     // Session variable to store working values
     private TicketDomain _ticketdomain;
@@ -116,8 +123,18 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     {
         _ticketdomain = null;
 
-        List<TicketDomain> listTicketDomains = (List<TicketDomain>) TicketDomainHome.getTicketDomainsList( );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKETDOMAIN_LIST, listTicketDomains, JSP_MANAGE_TICKETDOMAINS );
+        // This List could be directly populated by DAO instead of loop
+        List<TicketType> _ticketTypeList = TicketTypeHome.getTicketTypesList( );
+        for ( TicketType _ticketType : _ticketTypeList )
+        {
+            List<TicketDomain> _ticketDomainListById = TicketDomainHome.getTicketDomainsListbyType( _ticketType.getId( ) );
+            if ( _ticketDomainListById != null )
+            {
+                _ticketType.setDomainList( _ticketDomainListById );
+            }
+        }
+
+        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKET_TYPES_LIST, _ticketTypeList, JSP_MANAGE_TICKETDOMAINS );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETDOMAINS, TEMPLATE_MANAGE_TICKETDOMAINS, model );
     }
@@ -201,11 +218,21 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
     @Action( ACTION_REMOVE_TICKETDOMAIN )
     public String doRemoveTicketDomain( HttpServletRequest request )
     {
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETDOMAIN ) );
-        TicketDomainHome.remove( nId );
-        addInfo( INFO_TICKETDOMAIN_REMOVED, getLocale( ) );
+        try
+        {
+            int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETDOMAIN ) );
 
+            TicketDomainHome.remove( nId );
+
+            addInfo( INFO_TICKETDOMAIN_REMOVED, getLocale( ) );
+        }
+        catch( NumberFormatException | AppException e )
+        {
+            AppLogService.debug( "Error while removing TicketType " + e.getMessage( ) );
+            addError( ERROR_TICKETDOMAIN_REMOVED, getLocale( ) );
+        }
         return redirectView( request, VIEW_MANAGE_TICKETDOMAINS );
+
     }
 
     /**
@@ -255,4 +282,57 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
 
         return redirectView( request, VIEW_MANAGE_TICKETDOMAINS );
     }
+
+    /**
+     * Handles the increment of position of a tickettype
+     *
+     * @param request
+     *            The Http request
+     * @return the jsp URL to display the form to manage ticketDomains
+     */
+    @Action( ACTION_MOVEUP_TICKETDOMAIN )
+    public String doMoveUpTicketDomain( HttpServletRequest request )
+    {
+        return doMoveTicketDomain( request, true );
+    }
+
+    /**
+     * Handles the decrement of position of a ticketDomain
+     *
+     * @param request
+     *            The Http request
+     * @return the jsp URL to display the form to manage ticketDomains
+     */
+    @Action( ACTION_MOVEDOWN_TICKETDOMAIN )
+    public String doMoveDownTicketDomain( HttpServletRequest request )
+    {
+        return doMoveTicketDomain( request, false );
+    }
+
+    /**
+     * Move a ticketDomain position up or down
+     * 
+     * @param request
+     *            The request
+     * @param bMoveUp
+     *            True to move the ticketDomain up, false to move it down
+     * @return The next URL to redirect to
+     */
+    private String doMoveTicketDomain( HttpServletRequest request, boolean bMoveUp )
+    {
+        try
+        {
+
+            int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETDOMAIN ) );
+
+            TicketDomainHome.updateDomainOrder( nId, bMoveUp );
+        }
+        catch( NumberFormatException e )
+        {
+            AppLogService.debug( "Error while moving TicketDomain. " + e.getMessage( ) );
+        }
+
+        return redirectView( request, VIEW_MANAGE_TICKETDOMAINS );
+    }
+
 }

@@ -25,16 +25,16 @@
               <a href="jsp/admin/plugins/ticketing/admin/ManageTicketTypes.jsp?view=modifyTicketType&id=${tickettype.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a href="jsp/admin/plugins/ticketing/admin/ManageTicketTypes.jsp?action=confirmRemoveTicketType&id=${tickettype.id}&type_order=${tickettype.order}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
+              <a href="jsp/admin/plugins/ticketing/admin/ManageTicketTypes.jsp?action=confirmRemoveTicketType&id=${tickettype.id}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
                   <i class="fa fa-trash"></i>
               </a>
               <#if tickettype_index gt 0>
-				<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketTypes.jsp?action=doMoveTypeUp&id=${tickettype.id}&type_order=${tickettype.order}"  title="#i18n{ticketing.manage_tickettypes.titleMoveUp}" >
+				<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketTypes.jsp?action=doMoveTypeUp&id=${tickettype.id}"  title="#i18n{ticketing.manage_tickettypes.titleMoveUp}" >
 					<i class="glyphicon glyphicon-chevron-up"></i>
 				</a>
 			  </#if>
 			  <#if tickettype_has_next>
-				<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketTypes.jsp?&action=doMoveTypeDown&id=${tickettype.id}&type_order=${tickettype.order}"  title="#i18n{ticketing.manage_tickettypes.titleMoveDown}" >
+				<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketTypes.jsp?&action=doMoveTypeDown&id=${tickettype.id}"  title="#i18n{ticketing.manage_tickettypes.titleMoveDown}" >
 						<i class="glyphicon glyphicon-chevron-down"></i>
 				</a>
 			  </#if>

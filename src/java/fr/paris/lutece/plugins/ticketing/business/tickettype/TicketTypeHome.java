@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.tickettype;
 
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -88,9 +89,12 @@ public final class TicketTypeHome
      */
     public static void remove( int nKey )
     {
+
         if ( canRemove( nKey ) )
         {
+            TicketType ticketTypeToRemove = findByPrimaryKey( nKey );
             _dao.delete( nKey, _plugin );
+            _dao.rebuildTypeOrders( ticketTypeToRemove.getOrder( ), _plugin );
         }
         else
         {
@@ -166,30 +170,23 @@ public final class TicketTypeHome
      * @param nNewPosition
      *            the target position of the Type
      */
-    public static void updateTypeOrder( int nId, int nCurrentPostion, int nNewPosition )
+    public static void updateTypeOrder( int nId, boolean bMoveUp )
     {
-        int nIdTypeWhichPlaceIsTaken = _dao.selectTypeIdByOrder( nNewPosition, _plugin );
+        TicketType ticketTypeToMove = _dao.load( nId, _plugin );
+        int nCurrentOrder = ticketTypeToMove.getOrder( );
+
+        int nTargetOrder = bMoveUp ? ( nCurrentOrder - 1 ) : ( nCurrentOrder + 1 );
+        int nIdTypeWhichPlaceIsTaken = _dao.selectTypeIdByOrder( nTargetOrder, _plugin );
 
         if ( nIdTypeWhichPlaceIsTaken != -1 )
         {
-            _dao.updateTypeOrder( nId, nNewPosition, _plugin );
-            _dao.updateTypeOrder( nIdTypeWhichPlaceIsTaken, nCurrentPostion, _plugin );
+            _dao.updateTypeOrder( nId, nTargetOrder, _plugin );
+            _dao.updateTypeOrder( nIdTypeWhichPlaceIsTaken, nCurrentOrder, _plugin );
         }
         else
         {
-            AppLogService.error( "Could not move TicketType " + nId + " to position " + nNewPosition + " : no type to replace on position " + nCurrentPostion );
+            AppLogService.error( "Could not move TicketType " + nId + " to position " + nTargetOrder + " : no type to replace on position " + nCurrentOrder );
         }
-    }
-
-    /**
-     * Rebuild the order sequence of active Types, by substracting 1 to all orders larger than a given value
-     * 
-     * @param nfromId
-     *            the order to rebuild sequence from
-     */
-    public static void rebuildTypeOrders( int nOrderFrom )
-    {
-        _dao.rebuildTypeOrders( nOrderFrom, _plugin );
     }
 
 }

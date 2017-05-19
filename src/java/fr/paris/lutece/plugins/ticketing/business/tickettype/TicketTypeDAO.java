@@ -66,7 +66,7 @@ public final class TicketTypeDAO implements ITicketTypeDAO
      *            The Plugin
      * @return The new primary key
      */
-    public int newPrimaryKey( Plugin plugin )
+    private int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
         daoUtil.executeQuery( );
@@ -255,6 +255,12 @@ public final class TicketTypeDAO implements ITicketTypeDAO
         return bResult;
     }
 
+    /**
+     * Retrieve the last available order value for type_order
+     * 
+     * @param _plugin
+     * @return the next domain_order value for the given TicketType
+     */
     private int newTypeOrder( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_MAX_TYPE_ORDER, plugin );

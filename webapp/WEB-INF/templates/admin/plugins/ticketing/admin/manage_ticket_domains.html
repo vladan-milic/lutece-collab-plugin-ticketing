@@ -12,7 +12,8 @@
         </tr>
       </thead>
       <tbody>
-        <#list ticketdomain_list as ticketdomain >
+        <#list ticket_types_list as tickettypes >
+		<#list tickettypes.domainList as ticketdomain >
         <tr>
           <td>${ticketdomain.label}</td>
           <td>${ticketdomain.ticketType}</td>
@@ -23,8 +24,19 @@
             <a href="jsp/admin/plugins/ticketing/admin/ManageTicketDomains.jsp?action=confirmRemoveTicketDomain&id=${ticketdomain.id}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
               <i class="fa fa-trash"></i>
             </a>
+			<#if ticketdomain_index gt 0>
+				<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketDomains.jsp?action=doMoveDomainUp&id=${ticketdomain.id}"  title="#i18n{ticketing.manage_tickettypes.titleMoveUp}" >
+					<i class="glyphicon glyphicon-chevron-up"></i>
+				</a>
+			</#if>
+			<#if ticketdomain_has_next>
+				<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketDomains.jsp?&action=doMoveDomainDown&id=${ticketdomain.id}"  title="#i18n{ticketing.manage_tickettypes.titleMoveDown}" >
+						<i class="glyphicon glyphicon-chevron-down"></i>
+				</a>
+			 </#if>
           </td>
         </tr>
+		</#list>
         </#list>
       </tbody>
     </table>

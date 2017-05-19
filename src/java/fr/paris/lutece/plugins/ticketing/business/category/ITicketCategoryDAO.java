@@ -250,29 +250,43 @@ public interface ITicketCategoryDAO
      * 
      * @param nIdCategory
      *            id Category to move
-     * @param nIdInput
-     *            id Input
      * @param nNewPosition
      *            the order value to update
      * @param plugin
      *            the Plugin
      */
-    void updateCategoryOrder( int nId, int nNewPosition, Plugin _plugin );
+    void updateCategoryOrder( int nIdCategory, int nNewPosition, Plugin _plugin );
 
     /**
-     * returns the Id of a Category for a given position
+     * returns the Id of a Category for a given position and Domain
      * 
      * @param nOrder
      *            Position of the input
+     * @param nDomainId
+     *            Identifier of the domain
      * @return the id of Category as an integer
      */
-    int selectCategoryIdByOrder( int nOrder, Plugin _plugin );
+    int selectCategoryIdByOrder( int nOrder, int nDomainId, Plugin _plugin );
 
     /**
-     * Rebuild the order sequence of active categories, by substracting 1 to all orders larger than a given value
+     * Rebuild the order sequence of active categories within a TicketDomain, by substracting 1 to all orders larger than a given value
      * 
      * @param nfromId
      *            the order to rebuild sequence from
+     * 
+     * @param nDomainId
+     *            Identifier of the domain
      */
-    void rebuildCategoryOrders( int nfromOrder, Plugin _plugin );
+    void rebuildCategoryOrders( int nfromOrder, int nDomainId, Plugin _plugin );
+
+    /**
+     * Update the record in the table. The category_order value will be replaced by the next available value for the TicketDomain
+     * 
+     * @param ticketCategory
+     *            the reference of the TicketCategory
+     * @param plugin
+     *            the Plugin
+     */
+    void storeWithLastOrder( TicketCategory ticketCategory, Plugin _plugin );
+
 }

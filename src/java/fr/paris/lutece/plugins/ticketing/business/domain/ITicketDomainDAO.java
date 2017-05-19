@@ -163,4 +163,59 @@ public interface ITicketDomainDAO
      * @return the reference list
      */
     ReferenceList selectReferenceListModelResponse( Plugin _plugin );
+
+    /**
+     * Get a list of domains for a given Type id
+     * 
+     * @param nTicketTypeId
+     *            The Type id
+     * @param plugin
+     *            The plugin
+     * @return The reference list
+     */
+    public List<TicketDomain> selectDomainListByTypeId( int nTicketTypeId, Plugin plugin );
+
+    /**
+     * Update order of a Domain
+     * 
+     * @param nId
+     *            id Type to move
+     * @param nNewPosition
+     *            the order value to update
+     * @param plugin
+     *            the Plugin
+     */
+    void updateDomainOrder( int nId, int nNewPosition, Plugin _plugin );
+
+    /**
+     * returns the Id of a Domain for a given position and TicketType
+     * 
+     * @param nOrder
+     *            Position of the Domain
+     * @param nIdType
+     *            Id of the Type
+     * @return the id of Domain as an integer
+     */
+    int selectDomainIdByOrder( int nOrder, int nIdType, Plugin _plugin );
+
+    /**
+     * Rebuild the order sequence of active TicketDomain for a TicketType, by substracting 1 to all orders larger than a given value
+     * 
+     * @param nfromOrder
+     *            the order to rebuild sequence from
+     * @param nIdTicketType
+     *            the Type id
+     */
+    void rebuildDomainOrdersByType( int nfromOrder, int nIdTicketType, Plugin _plugin );
+
+    /**
+     * Update the record in the table. The field domain_order will be replaced by the next available value for the TicketType.
+     * 
+     * @param ticketDomain
+     *            the reference of the TicketDomain
+     * @param plugin
+     *            the Plugin
+     */
+    void storeWithLastOrder( TicketDomain ticketDomain, Plugin _plugin );
+
 }

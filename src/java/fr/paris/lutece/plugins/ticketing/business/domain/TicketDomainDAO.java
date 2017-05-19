@@ -47,19 +47,24 @@ public final class TicketDomainDAO implements ITicketDomainDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket_domain ) FROM ticketing_ticket_domain";
-    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label FROM ticketing_ticket_domain a, ticketing_ticket_type b "
+    private static final String SQL_QUERY_SELECT = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label, a.domain_order FROM ticketing_ticket_domain a, ticketing_ticket_type b "
             + " WHERE a.id_ticket_domain = ? AND a.id_ticket_type = b.id_ticket_type ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_domain ( id_ticket_domain, id_ticket_type, label, inactive ) VALUES ( ?, ?, ?, 0 ) ";
-    private static final String SQL_QUERY_DELETE = "UPDATE ticketing_ticket_domain SET inactive = 1 WHERE id_ticket_domain = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_domain SET id_ticket_domain = ?, id_ticket_type = ?, label = ? WHERE id_ticket_domain = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket_domain ( id_ticket_domain, id_ticket_type, label, inactive , domain_order) VALUES ( ?, ?, ?, 0, ?) ";
+    private static final String SQL_QUERY_DELETE = "UPDATE ticketing_ticket_domain SET inactive = 1, domain_order = -1 WHERE id_ticket_domain = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_domain SET id_ticket_domain = ?, id_ticket_type = ?, label = ?, domain_order = ?  WHERE id_ticket_domain = ?";
     private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label FROM ticketing_ticket_domain a, ticketing_ticket_type b "
-            + " WHERE a.id_ticket_type = b.id_ticket_type  AND a.inactive <> 1 AND b.inactive <> 1 ";
+            + " WHERE a.id_ticket_type = b.id_ticket_type  AND a.inactive <> 1 AND b.inactive <> 1 ORDER BY  b.type_order, a.domain_order";
     private static final String SQL_QUERY_SELECTALL_SIMPLE = "SELECT a.id_ticket_domain, a.label FROM ticketing_ticket_domain a  WHERE a.inactive <> 1";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_domain FROM ticketing_ticket_domain  AND inactive <> 1 ";
-    private static final String SQL_QUERY_SELECT_BY_TYPE = "SELECT id_ticket_domain , label FROM ticketing_ticket_domain WHERE id_ticket_type = ?  AND inactive <> 1 ORDER BY label ASC";
+    private static final String SQL_QUERY_SELECT_BY_TYPE = "SELECT id_ticket_domain , label FROM ticketing_ticket_domain WHERE id_ticket_type = ?  AND inactive <> 1 ORDER BY domain_order";
+    private static final String SQL_QUERY_LOAD_BY_TYPE = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label, a.domain_order  FROM ticketing_ticket_domain a, ticketing_ticket_type b WHERE a.id_ticket_type = ?  AND a.id_ticket_type = b.id_ticket_type AND a.inactive <> 1 AND b.inactive <> 1 ORDER BY a.domain_order";
     private static final String SQL_QUERY_COUNT_CATEGORY_BY_DOMAIN = "SELECT COUNT(1) FROM ticketing_ticket_category WHERE id_ticket_domain = ? AND inactive <> 1 ";
-    private static final String SQL_QUERY_SELECT_BY_LABEL = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label FROM ticketing_ticket_domain a, ticketing_ticket_type b "
+    private static final String SQL_QUERY_SELECT_BY_LABEL = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label, a.domain_order FROM ticketing_ticket_domain a, ticketing_ticket_type b "
             + " WHERE a.label = ? AND a.id_ticket_type = b.id_ticket_type AND a.inactive <> 1 AND b.inactive <> 1 ";
+    private static final String SQL_QUERY_MAX_DOMAIN_ORDER_BY_TYPE = "SELECT max(domain_order) FROM ticketing_ticket_domain WHERE id_ticket_type = ? AND inactive <> 1";
+    private static final String SQL_QUERY_REBUILD_DOMAIN_ORDER_SEQUENCE = "UPDATE ticketing_ticket_domain SET domain_order = domain_order - 1 WHERE domain_order > ? AND id_ticket_type = ? AND inactive <> 1 ";
+    private static final String SQL_QUERY_SELECT_DOMAINID_BY_ORDER = "SELECT id_ticket_domain FROM ticketing_ticket_domain WHERE id_ticket_type = ? AND domain_order = ? ";
+    private static final String SQL_QUERY_UPDATE_DOMAIN_ORDER = "UPDATE ticketing_ticket_domain SET domain_order = ? WHERE id_ticket_domain = ? ";
 
     /**
      * Generates a new primary key
@@ -91,6 +96,9 @@ public final class TicketDomainDAO implements ITicketDomainDAO
     @Override
     public void insert( TicketDomain ticketDomain, Plugin plugin )
     {
+
+        int nextOrder = newDomainOrder( ticketDomain.getIdTicketType( ), plugin );
+
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
 
         ticketDomain.setId( newPrimaryKey( plugin ) );
@@ -98,6 +106,7 @@ public final class TicketDomainDAO implements ITicketDomainDAO
         daoUtil.setInt( 1, ticketDomain.getId( ) );
         daoUtil.setInt( 2, ticketDomain.getIdTicketType( ) );
         daoUtil.setString( 3, ticketDomain.getLabel( ) );
+        daoUtil.setInt( 4, nextOrder );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -122,6 +131,7 @@ public final class TicketDomainDAO implements ITicketDomainDAO
             ticketDomain.setIdTicketType( daoUtil.getInt( 2 ) );
             ticketDomain.setLabel( daoUtil.getString( 3 ) );
             ticketDomain.setTicketType( daoUtil.getString( 4 ) );
+            ticketDomain.setOrder( daoUtil.getInt( 5 ) );
         }
 
         daoUtil.free( );
@@ -176,7 +186,8 @@ public final class TicketDomainDAO implements ITicketDomainDAO
         daoUtil.setInt( 1, ticketDomain.getId( ) );
         daoUtil.setInt( 2, ticketDomain.getIdTicketType( ) );
         daoUtil.setString( 3, ticketDomain.getLabel( ) );
-        daoUtil.setInt( 4, ticketDomain.getId( ) );
+        daoUtil.setInt( 4, ticketDomain.getOrder( ) );
+        daoUtil.setInt( 5, ticketDomain.getId( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -269,6 +280,36 @@ public final class TicketDomainDAO implements ITicketDomainDAO
             ticketDomain.setIdTicketType( daoUtil.getInt( 2 ) );
             ticketDomain.setLabel( daoUtil.getString( 3 ) );
             ticketDomain.setTicketType( daoUtil.getString( 4 ) );
+            ticketDomain.setOrder( daoUtil.getInt( 5 ) );
+
+            ticketDomainList.add( ticketDomain );
+        }
+
+        daoUtil.free( );
+
+        return ticketDomainList;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<TicketDomain> selectDomainListByTypeId( int nTicketTypeId, Plugin plugin )
+    {
+        List<TicketDomain> ticketDomainList = new ArrayList<TicketDomain>( );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_LOAD_BY_TYPE, plugin );
+        daoUtil.setInt( 1, nTicketTypeId );
+        daoUtil.executeQuery( );
+
+        while ( daoUtil.next( ) )
+        {
+            TicketDomain ticketDomain = new TicketDomain( );
+
+            ticketDomain.setId( daoUtil.getInt( 1 ) );
+            ticketDomain.setIdTicketType( daoUtil.getInt( 2 ) );
+            ticketDomain.setLabel( daoUtil.getString( 3 ) );
+            ticketDomain.setTicketType( daoUtil.getString( 4 ) );
+            ticketDomain.setOrder( daoUtil.getInt( 5 ) );
 
             ticketDomainList.add( ticketDomain );
         }
@@ -342,4 +383,71 @@ public final class TicketDomainDAO implements ITicketDomainDAO
 
         return list;
     }
+
+    @Override
+    public void updateDomainOrder( int nId, int nNewPosition, Plugin _plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_DOMAIN_ORDER, _plugin );
+        daoUtil.setInt( 1, nNewPosition );
+        daoUtil.setInt( 2, nId );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
+    }
+
+    @Override
+    public int selectDomainIdByOrder( int nOrder, int nIdType, Plugin _plugin )
+    {
+        int nTicketTypeId = -1;
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_DOMAINID_BY_ORDER, _plugin );
+        daoUtil.setInt( 1, nIdType );
+        daoUtil.setInt( 2, nOrder );
+        daoUtil.executeQuery( );
+
+        if ( daoUtil.next( ) )
+        {
+            nTicketTypeId = daoUtil.getInt( 1 );
+        }
+
+        daoUtil.free( );
+
+        return nTicketTypeId;
+    }
+
+    @Override
+    public void rebuildDomainOrdersByType( int nfromOrder, int nTypeId, Plugin _plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_REBUILD_DOMAIN_ORDER_SEQUENCE, _plugin );
+        daoUtil.setInt( 1, nfromOrder );
+        daoUtil.setInt( 2, nTypeId );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
+    }
+
+    private int newDomainOrder( int nTypeId, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_MAX_DOMAIN_ORDER_BY_TYPE, plugin );
+        daoUtil.setInt( 1, nTypeId );
+        daoUtil.executeQuery( );
+
+        int nOrder = 1;
+
+        if ( daoUtil.next( ) )
+        {
+            nOrder = daoUtil.getInt( 1 ) + 1;
+        }
+
+        daoUtil.free( );
+
+        return nOrder;
+    }
+
+    @Override
+    public void storeWithLastOrder( TicketDomain ticketDomain, Plugin _plugin )
+    {
+        int nNewDomainOrder = newDomainOrder( ticketDomain.getIdTicketType( ), _plugin );
+        ticketDomain.setOrder( nNewDomainOrder );
+        store( ticketDomain, _plugin );
+
+    }
+
 }

@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.category;
 
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -111,7 +112,20 @@ public final class TicketCategoryHome
      */
     public static void update( TicketCategory ticketCategory )
     {
-        _dao.store( ticketCategory, _plugin );
+        TicketCategory currentTicketCategory = findByPrimaryKey( ticketCategory.getId( ) );
+        int nCurrentDomainId = currentTicketCategory.getIdTicketDomain( );
+        int nCurrentOrder = currentTicketCategory.getOrder( );
+        int nTargetDomainId = ticketCategory.getIdTicketDomain( );
+
+        if ( nCurrentDomainId != nTargetDomainId )
+        {
+            _dao.storeWithLastOrder( ticketCategory, _plugin );
+            _dao.rebuildCategoryOrders( nCurrentOrder, nCurrentDomainId, _plugin );
+        }
+        else
+        {
+            _dao.store( ticketCategory, _plugin );
+        }
     }
 
     /**
@@ -122,7 +136,10 @@ public final class TicketCategoryHome
      */
     public static void remove( int nKey )
     {
+        TicketCategory ticketCategoryToRemove = findByPrimaryKey( nKey );
+
         _dao.delete( nKey, _plugin );
+        _dao.rebuildCategoryOrders( ticketCategoryToRemove.getOrder( ), ticketCategoryToRemove.getIdTicketDomain( ), _plugin );
     }
 
     /**
@@ -297,35 +314,31 @@ public final class TicketCategoryHome
      *
      * @param nId
      *            the if of category to move
+     * @param bMoveUp
+     *            true if position is to be moved up, false if moved down
      * @param nNewPosition
      *            the target position of the Category
      */
-    public static void updateCategoryOrder( int nId, int nCurrentPostion, int nNewPosition )
+    public static void updateCategoryOrder( int nId, boolean bMoveUp )
     {
-        int nIdCategoryWhichPlaceIsTaken = _dao.selectCategoryIdByOrder( nNewPosition, _plugin );
+
+        TicketCategory ticketCategoryToMove = _dao.load( nId, _plugin );
+        int nCurrentOrder = ticketCategoryToMove.getOrder( );
+        int nIdTicketDomain = ticketCategoryToMove.getIdTicketDomain( );
+        int nTargetOrder = bMoveUp ? ( nCurrentOrder - 1 ) : ( nCurrentOrder + 1 );
+        int nIdCategoryWhichPlaceIsTaken = _dao.selectCategoryIdByOrder( nTargetOrder, nIdTicketDomain, _plugin );
 
         if ( nIdCategoryWhichPlaceIsTaken != -1 )
         {
-            _dao.updateCategoryOrder( nId, nNewPosition, _plugin );
-            _dao.updateCategoryOrder( nIdCategoryWhichPlaceIsTaken, nCurrentPostion, _plugin );
+            _dao.updateCategoryOrder( nId, nTargetOrder, _plugin );
+            _dao.updateCategoryOrder( nIdCategoryWhichPlaceIsTaken, nCurrentOrder, _plugin );
         }
         else
         {
-            AppLogService
-                    .error( "Could not move Category " + nId + " to position " + nNewPosition + " : no category to replace on position " + nCurrentPostion );
+            AppLogService.error( "Could not move Category " + nId + " to position " + nTargetOrder + " : no category to replace on position " + nCurrentOrder );
 
         }
 
     }
 
-    /**
-     * Rebuild the order sequence of active categories, by substracting 1 to all orders larger than a given value
-     * 
-     * @param nfromId
-     *            the order to rebuild sequence from
-     */
-    public static void rebuildCategoryOrders( int nOrderFrom )
-    {
-        _dao.rebuildCategoryOrders( nOrderFrom, _plugin );
-    }
 }
