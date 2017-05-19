@@ -33,11 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.domain;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.validation.constraints.Size;
 
@@ -57,6 +59,8 @@ public class TicketDomain implements Serializable, RBACResource
     @NotEmpty( message = "#i18n{ticketing.validation.ticketdomain.Label.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.ticketdomain.Label.size}" )
     private String _strLabel;
+    private int _nOrder;
+    private List<TicketCategory> _categoryList;
 
     /**
      * Returns the Id
@@ -153,4 +157,42 @@ public class TicketDomain implements Serializable, RBACResource
     {
         return RESOURCE_TYPE;
     }
+
+    /**
+     * @return the Order
+     */
+    public int getOrder( )
+    {
+        return _nOrder;
+    }
+
+    /**
+     * @param nOrder
+     *            the Order to set
+     */
+    public void setOrder( int nOrder )
+    {
+        this._nOrder = nOrder;
+    }
+
+    /**
+     * Set the TicketCategoryList
+     * 
+     * @param ticketCategoryList
+     *            the ticket Category List to set
+     */
+    public void setCategoryList( List<TicketCategory> ticketCategoryList )
+    {
+        this._categoryList = ticketCategoryList;
+
+    }
+
+    /**
+     * @return the TicketCategory List
+     */
+    public List<TicketCategory> getCategoryList( )
+    {
+        return _categoryList;
+    }
+
 }

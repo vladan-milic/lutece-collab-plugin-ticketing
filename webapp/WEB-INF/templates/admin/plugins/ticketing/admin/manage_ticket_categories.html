@@ -14,7 +14,8 @@
         </tr>
       </thead>
       <tbody>
-        <#list ticketcategory_list as ticketcategory>
+        <#list ticketdomain_list as ticketdomain>
+        <#list ticketdomain.categoryList as ticketcategory>
           <tr>
             <td>
             	<#if ticketcategory.precision?has_content>
@@ -45,21 +46,22 @@
               <a href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?view=modifyTicketCategory&id=${ticketcategory.id}" class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?action=confirmRemoveTicketCategory&id=${ticketcategory.id}&category_order=${ticketcategory.order}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}">
+              <a href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?action=confirmRemoveTicketCategory&id=${ticketcategory.id}" class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}">
                 <i class="fa fa-trash"></i>
               </a>
            	  <#if ticketcategory_index gt 0>
-				<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?action=doMoveCategoryUp&id=${ticketcategory.id}&category_order=${ticketcategory.order}"  title="#i18n{ticketing.createEntry.manageField.titleMoveUp}" >
+				<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?action=doMoveCategoryUp&id=${ticketcategory.id}"  title="#i18n{ticketing.createEntry.manageField.titleMoveUp}" >
 					<i class="glyphicon glyphicon-chevron-up"></i>
 				</a>
 			  </#if>
 			  <#if ticketcategory_has_next>
-				<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?&action=doMoveCategoryDown&id=${ticketcategory.id}&category_order=${ticketcategory.order}"  title="#i18n{ticketing.createEntry.manageField.titleMoveDown}" >
+				<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp?&action=doMoveCategoryDown&id=${ticketcategory.id}"  title="#i18n{ticketing.createEntry.manageField.titleMoveDown}" >
 						<i class="glyphicon glyphicon-chevron-down"></i>
 				</a>
 			  </#if>
             </td>
           </tr>
+        </#list>
         </#list>
       <tbody>
     </table>

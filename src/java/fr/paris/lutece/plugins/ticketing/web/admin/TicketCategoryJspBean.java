@@ -39,7 +39,10 @@ import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
@@ -95,7 +98,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     // Markers
     private static final String MARK_TICKETCATEGORY_LIST = "ticketcategory_list";
     private static final String MARK_TICKETCATEGORY = "ticketcategory";
-    private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
+    private static final String MARK_TICKET_DOMAINS_REFLIST = "ticket_domains_list";
+    private static final String MARK_TICKET_DOMAIN_LIST = "ticketdomain_list";
     private static final String MARK_LIST_WORKFLOWS = "listWorkflows";
     private static final String MARK_LIST_UNITS = "units_list";
     private static final String MARK_ALL_INPUTS_LIST = "inputs_list";
@@ -155,9 +159,18 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     {
         _category = null;
 
-        List<TicketCategory> listTicketCategorys = (List<TicketCategory>) TicketCategoryHome.getTicketCategorysList( );
+        // This List could be directly populated by DAO instead of loop
+        List<TicketDomain> _ticketDomainList = TicketDomainHome.getTicketDomainsList( );
+        for ( TicketDomain _ticketDomain : _ticketDomainList )
+        {
+            List<TicketCategory> listTicketCategories = (List<TicketCategory>) TicketCategoryHome.findByDomainId( _ticketDomain.getId( ) );
+            if ( listTicketCategories != null )
+            {
+                _ticketDomain.setCategoryList( listTicketCategories );
+            }
+        }
 
-        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKETCATEGORY_LIST, listTicketCategorys, JSP_MANAGE_TICKETCATEGORYS );
+        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKET_DOMAIN_LIST, _ticketDomainList, JSP_MANAGE_TICKETCATEGORYS );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETCATEGORIES, TEMPLATE_MANAGE_TICKETCATEGORIES, model );
     }
@@ -176,7 +189,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_TICKETCATEGORY, _category );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList( ) );
+        model.put( MARK_TICKET_DOMAINS_REFLIST, TicketDomainHome.getReferenceList( ) );
         model.put( MARK_LIST_WORKFLOWS, WorkflowService.getInstance( ).getWorkflowsEnabled( getUser( ), getLocale( ) ) );
         model.put( MARK_LIST_UNITS, getUnitsList( ) );
 
@@ -218,10 +231,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     public String getConfirmRemoveTicketCategory( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY ) );
-        int nOrder = Integer.parseInt( request.getParameter( PARAMETER_TICKETCATEGORY_ORDER ) );
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_TICKETCATEGORY ) );
         url.addParameter( PARAMETER_ID_TICKETCATEGORY, nId );
-        url.addParameter( PARAMETER_TICKETCATEGORY_ORDER, nOrder );
 
         String strMessageUrl = AdminMessageService
                 .getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_TICKETCATEGORY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
@@ -240,9 +251,8 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     public String doRemoveTicketCategory( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY ) );
-        int nOrder = Integer.parseInt( request.getParameter( PARAMETER_TICKETCATEGORY_ORDER ) );
         TicketCategoryHome.remove( nId );
-        TicketCategoryHome.rebuildCategoryOrders( nOrder );
+
         addInfo( INFO_TICKETCATEGORY_REMOVED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_TICKETCATEGORYS );
@@ -267,7 +277,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_TICKETCATEGORY, _category );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList( ) );
+        model.put( MARK_TICKET_DOMAINS_REFLIST, TicketDomainHome.getReferenceList( ) );
         model.put( MARK_LIST_WORKFLOWS, WorkflowService.getInstance( ).getWorkflowsEnabled( getUser( ), getLocale( ) ) );
 
         model.put( MARK_LIST_UNITS, getUnitsList( ) );
@@ -337,13 +347,9 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
     private String doMoveCategory( HttpServletRequest request, boolean bMoveUp )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_TICKETCATEGORY ) );
-        int nCategoryCurrentPosition = Integer.parseInt( request.getParameter( PARAMETER_TICKETCATEGORY_ORDER ) );
-
-        int nNewPosition = bMoveUp ? ( nCategoryCurrentPosition - 1 ) : ( nCategoryCurrentPosition + 1 );
 
         // Update the Category with new Position
-        TicketCategoryHome.updateCategoryOrder( nId, nCategoryCurrentPosition, nNewPosition );
-        AppLogService.debug( "Ticketing - Category " + nId + " moved from position " + nCategoryCurrentPosition + " to " + nNewPosition );
+        TicketCategoryHome.updateCategoryOrder( nId, bMoveUp );
 
         return redirectView( request, VIEW_MANAGE_TICKETCATEGORYS );
     }

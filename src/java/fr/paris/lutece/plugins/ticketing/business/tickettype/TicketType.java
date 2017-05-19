@@ -35,7 +35,10 @@ package fr.paris.lutece.plugins.ticketing.business.tickettype;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
+
 import java.io.Serializable;
+import java.util.List;
 
 import javax.validation.constraints.Size;
 
@@ -54,6 +57,7 @@ public class TicketType implements Serializable
     private String _strReferencePrefix;
     private int _nDemandTypeId;
     private int _nOrder;
+    private List<TicketDomain> _domainList;
 
     /**
      * Returns the Id
@@ -154,5 +158,24 @@ public class TicketType implements Serializable
     public void setOrder( int nOrder )
     {
         this._nOrder = nOrder;
+    }
+
+    /**
+     * Sets the ticket domain list
+     * 
+     * @param ticketDomainsList
+     */
+    public void setDomainList( List<TicketDomain> ticketDomainsList )
+    {
+        this._domainList = ticketDomainsList;
+
+    }
+
+    /**
+     * @return the _domainList
+     */
+    public List<TicketDomain> getDomainList( )
+    {
+        return _domainList;
     }
 }
