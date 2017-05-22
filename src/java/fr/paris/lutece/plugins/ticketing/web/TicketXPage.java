@@ -385,6 +385,8 @@ public class TicketXPage extends WorkflowCapableXPage
         listValidationErrors.add( formValidator.isEmailFilled( ) );
         listValidationErrors.add( formValidator.isPhoneNumberFilled( ) );
 
+        boolean bIsSubProbSelected = true;
+        
         // Validate if precision has been selected if the selected category has precisions
         if ( ticket.getTicketCategory( ).getId( ) != TicketingConstants.PROPERTY_UNSET_INT )
         {
@@ -393,10 +395,12 @@ public class TicketXPage extends WorkflowCapableXPage
             {
                 if ( ticketCategoryByDomain.getLabel( ).equals( ticket.getTicketCategory( ).getLabel( ) )
                         && StringUtils.isNotBlank( ticketCategoryByDomain.getPrecision( ) )
+                        && StringUtils.isNotBlank( request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) )
                         && request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING ) )
                 {
                     addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED, getLocale( request ) );
                     bIsFormValid = false;
+                    bIsSubProbSelected = false;
                     ticket.getTicketCategory( ).setPrecision( TicketingConstants.NO_ID_STRING );
                     break;
                 }
@@ -440,7 +444,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
 
-        if ( ticket.getTicketCategory( ).getId( ) > 0 && bIsFormValid )
+        if ( ticket.getTicketCategory( ).getId( ) > 0 && bIsSubProbSelected )
         {
             List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory( ).getId( ), null );
 
