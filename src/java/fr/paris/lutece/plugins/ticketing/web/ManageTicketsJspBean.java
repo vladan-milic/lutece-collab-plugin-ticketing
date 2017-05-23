@@ -863,7 +863,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         listValidationErrors.add( formValidator.isContactModeFilled( ) );
 
         boolean bIsSubProbSelected = true;
-        
+
         // Validate if precision has been selected if the selected category has precisions
         if ( ticket.getTicketCategory( ).getId( ) != TicketingConstants.PROPERTY_UNSET_INT )
         {
@@ -922,7 +922,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
 
-        if ( ticket.getTicketCategory( ).getId( ) > 0 && bIsSubProbSelected)
+        if ( ticket.getTicketCategory( ).getId( ) > 0 && bIsSubProbSelected )
         {
             ticket.setListResponse( null );
 
@@ -933,7 +933,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry( ), getLocale( ), ticket ) );
             }
         }
-        
+
         if ( listFormErrors.size( ) > 0 )
         {
             bIsFormValid = false;

@@ -386,7 +386,7 @@ public class TicketXPage extends WorkflowCapableXPage
         listValidationErrors.add( formValidator.isPhoneNumberFilled( ) );
 
         boolean bIsSubProbSelected = true;
-        
+
         // Validate if precision has been selected if the selected category has precisions
         if ( ticket.getTicketCategory( ).getId( ) != TicketingConstants.PROPERTY_UNSET_INT )
         {
