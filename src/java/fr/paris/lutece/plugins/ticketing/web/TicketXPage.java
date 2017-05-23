@@ -444,6 +444,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
 
+        request.setAttribute( TicketingConstants.ATTRIBUTE_IS_DISPLAY_FRONT, true );
         if ( ticket.getTicketCategory( ).getId( ) > 0 && bIsSubProbSelected )
         {
             List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory( ).getId( ), null );
