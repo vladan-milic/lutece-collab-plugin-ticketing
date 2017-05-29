@@ -129,7 +129,7 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
         _tickettype = null;
 
         List<TicketType> listTicketTypes = (List<TicketType>) TicketTypeHome.getTicketTypesList( );
-        
+
         Map<String, Object> model = getModel( );
         model.put( MARK_TICKETTYPE_LIST, listTicketTypes );
 
