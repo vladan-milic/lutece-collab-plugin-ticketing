@@ -129,7 +129,9 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
         _tickettype = null;
 
         List<TicketType> listTicketTypes = (List<TicketType>) TicketTypeHome.getTicketTypesList( );
-        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKETTYPE_LIST, listTicketTypes, JSP_MANAGE_TICKETTYPES );
+        
+        Map<String, Object> model = getModel( );
+        model.put( MARK_TICKETTYPE_LIST, listTicketTypes );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETTYPES, TEMPLATE_MANAGE_TICKETTYPES, model );
     }

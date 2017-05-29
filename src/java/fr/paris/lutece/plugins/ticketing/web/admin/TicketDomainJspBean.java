@@ -134,7 +134,8 @@ public class TicketDomainJspBean extends ManageAdminTicketingJspBean
             }
         }
 
-        Map<String, Object> model = getPaginatedListModel( request, MARK_TICKET_TYPES_LIST, _ticketTypeList, JSP_MANAGE_TICKETDOMAINS );
+        Map<String, Object> model = getModel( );
+        model.put( MARK_TICKET_TYPES_LIST, _ticketTypeList );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETDOMAINS, TEMPLATE_MANAGE_TICKETDOMAINS, model );
     }
