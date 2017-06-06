@@ -36,21 +36,19 @@ package fr.paris.lutece.plugins.ticketing.web;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.GenAttFileItem;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
-import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.address.TicketAddress;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
@@ -76,8 +74,6 @@ import fr.paris.lutece.plugins.ticketing.web.util.FormValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.ResponseRecap;
-import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
-import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -646,8 +642,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
         }
 
-        clearUploadFilesIfNeeded( request.getSession( ) );
-
         int nId = Integer.parseInt( request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ) );
 
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
@@ -659,22 +653,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         else
         {
             ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
-        }
-
-        if ( ticket.getListResponse( ) != null )
-        {
-            for ( Response response : ticket.getListResponse( ) )
-            {
-                if ( response.getFile( ) != null )
-                {
-                    String strIdEntry = Integer.toString( response.getEntry( ).getIdEntry( ) );
-
-                    FileItem fileItem = new GenAttFileItem( response.getFile( ).getPhysicalFile( ).getValue( ), response.getFile( ).getTitle( ),
-                            IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry, response.getIdResponse( ) );
-                    TicketAsynchronousUploadHandler.getHandler( ).addFileItemToUploadedFilesList( fileItem, IEntryTypeService.PREFIX_ATTRIBUTE + strIdEntry,
-                            request );
-                }
-            }
         }
 
         Map<String, Object> model = getModel( );
@@ -710,7 +688,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             ticket = TicketHome.findByPrimaryKey( nId );
         }
 
-        boolean bIsFormValid = populateAndValidateFormTicket( ticket, request );
+        boolean bIsFormValid = populateAndValidateModificationFormTicket( ticket, request );
 
         if ( !bIsFormValid )
         {
@@ -719,22 +697,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         TicketHome.update( ticket );
 
-        // remove and add generic attributes responses
-        TicketHome.removeTicketResponse( ticket.getId( ) );
-
-        if ( ( ticket.getListResponse( ) != null ) && !ticket.getListResponse( ).isEmpty( ) )
-        {
-            for ( Response response : ticket.getListResponse( ) )
-            {
-                ResponseHome.create( response );
-                TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
-            }
-        }
-
         // Immediate indexation of the Ticket
         immediateTicketIndexing( ticket.getId( ) );
 
-        addInfo( INFO_TICKET_UPDATED, getLocale( ) );
+        String strMessage = I18nService.getLocalizedString( INFO_TICKET_UPDATED, Locale.FRENCH );
+        RequestUtils.setParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_MODIFY_ACTION_MESSAGE_INFO, strMessage );
 
         return redirectToViewDetails( request, ticket );
     }
@@ -837,30 +804,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
         ticket.setTicketCategory( ticketCategory );
 
-        String _strAddress = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS ) );
-        String _strAddressDetail = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS_DETAIL ) );
-        String _strPostalCode = String.valueOf( request.getParameter( MARK_TICKET_POSTAL_CODE ) );
-        String _strCity = String.valueOf( request.getParameter( MARK_TICKET_CITY ) );
-
-        TicketAddress _ticketAddress = new TicketAddress( );
-        _ticketAddress.setAddress( _strAddress );
-        _ticketAddress.setAddressDetail( _strAddressDetail );
-        _ticketAddress.setPostalCode( _strPostalCode );
-        _ticketAddress.setCity( _strCity );
-        ticket.setTicketAddress( _ticketAddress );
-
-        // Check constraints
-        // Count the number of characters in the ticket comment
-        int iNbCharcount = FormValidator.countCharTicketComment( ticket.getTicketComment( ) );
-
+        setTicketAddress( ticket, request );
+        
         bIsFormValid = validateBean( ticket, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX )
-                && validateBean( _ticketAddress, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
+                && validateBean( ticket.getTicketAddress( ), TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
 
-        TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
-        List<String> listValidationErrors = ticketValidator.validate( ticket, false );
-
-        FormValidator formValidator = new FormValidator( request );
-        listValidationErrors.add( formValidator.isContactModeFilled( ) );
+        bIsFormValid = bIsFormValid && isContactModeValid( ticket, request );
 
         boolean bIsSubProbSelected = true;
 
@@ -884,21 +833,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             }
         }
 
-        // The validation for the ticket comment size is made here because the validation doesn't work for this field
-        if ( iNbCharcount > 5000 )
-        {
-            addError( MESSAGE_ERROR_COMMENT_VALIDATION, getLocale( ) );
-            bIsFormValid = false;
-        }
-
-        for ( String error : listValidationErrors )
-        {
-            if ( !StringUtils.isEmpty( error ) )
-            {
-                addError( error );
-                bIsFormValid = false;
-            }
-        }
+        bIsFormValid = bIsFormValid && isCommentValid( ticket, request );
 
         // Check if a type/domain/category have been selected (made here to sort errors)
 
@@ -940,6 +875,101 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
 
         return bIsFormValid;
+    }
+
+    /**
+     * Populate the ticket from the request and validate the ticket form for modification
+     *
+     * @param ticket
+     *            The ticket to populate
+     * @param request
+     *            The Http Request
+     * @return true if the ticket is valid else false
+     */
+    public boolean populateAndValidateModificationFormTicket( Ticket ticket, HttpServletRequest request )
+    {
+        boolean bIsFormValid = true;
+        populate( ticket, request );
+        
+        setTicketAddress( ticket, request );
+
+        bIsFormValid = validateBean( ticket, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX )
+                && validateBean( ticket.getTicketAddress( ), TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
+        
+        bIsFormValid = bIsFormValid && isContactModeValid( ticket, request );
+        
+        bIsFormValid = bIsFormValid && isCommentValid( ticket, request );
+
+        return bIsFormValid;
+    }
+
+    /**
+     * Set the TicketAddress element of ticket from request
+     *
+     * @param ticket
+     *            The ticket to set
+     * @param request
+     *            The Http Request
+     */
+    private void setTicketAddress( Ticket ticket, HttpServletRequest request )
+    {
+        String strAddress = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS ) );
+        String strAddressDetail = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS_DETAIL ) );
+        String strPostalCode = String.valueOf( request.getParameter( MARK_TICKET_POSTAL_CODE ) );
+        String strCity = String.valueOf( request.getParameter( MARK_TICKET_CITY ) );
+
+        TicketAddress ticketAddress = new TicketAddress( );
+        ticketAddress.setAddress( strAddress );
+        ticketAddress.setAddressDetail( strAddressDetail );
+        ticketAddress.setPostalCode( strPostalCode );
+        ticketAddress.setCity( strCity );
+        ticket.setTicketAddress( ticketAddress );
+    }
+
+    /**
+     * Test if the contact mode is correctly filled
+     *
+     * @param ticket
+     *            The ticket to set
+     * @param request
+     *            The Http Request
+     * @return true if the contact mode is valid else false          
+     */
+    private boolean isContactModeValid( Ticket ticket, HttpServletRequest request )
+    {
+        String errorModeContactFilled = new FormValidator( request ).isContactModeFilled( );
+        if ( errorModeContactFilled != null )
+        {
+            addError( errorModeContactFilled );
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Test if the comment is too long
+     *
+     * @param ticket
+     *            The ticket to set
+     * @param request
+     *            The Http Request
+     * @return true if the comment is not too long else false          
+     */
+    private boolean isCommentValid( Ticket ticket, HttpServletRequest request )
+    {
+        // Check constraints
+        // Count the number of characters in the ticket comment
+        int iNbCharcount = FormValidator.countCharTicketComment( ticket.getTicketComment( ) );
+
+        // The validation for the ticket comment size is made here because the validation doesn't work for this field
+        if ( iNbCharcount > 5000 )
+        {
+            addError( MESSAGE_ERROR_COMMENT_VALIDATION, getLocale( ) );
+            return false;
+        }
+        
+        return true;
     }
 
     /**
