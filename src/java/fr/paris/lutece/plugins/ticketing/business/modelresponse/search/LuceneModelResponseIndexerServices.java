@@ -145,7 +145,6 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         doc.add( new StringField( FIELD_TITLE, modelReponse.getTitle( ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_KEYWORD, modelReponse.getKeyword( ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_RESPONSE, modelReponse.getReponse( ), Field.Store.YES ) );
-        doc.add( new StringField( FIELD_DOMAIN_ID, String.valueOf( modelReponse.getIdDomain( ) ), Field.Store.YES ) );
         doc.add( new TextField( FIELD_DOMAIN_LABEL, modelReponse.getDomain( ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString( ), Field.Store.YES ) );
 

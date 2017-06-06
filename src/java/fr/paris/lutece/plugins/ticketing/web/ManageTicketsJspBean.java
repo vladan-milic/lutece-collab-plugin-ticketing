@@ -74,6 +74,8 @@ import fr.paris.lutece.plugins.ticketing.web.util.FormValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.ResponseRecap;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -160,10 +162,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String MARK_USER_WITH_NO_UNIT = "user_with_no_unit";
     private static final String JSP_MANAGE_TICKETS = TicketingConstants.ADMIN_CONTROLLLER_PATH + "ManageTickets.jsp";
     private static final String MARK_MANAGE_PAGE_TITLE = "manage_ticket_page_title";
-    private static final String MARK_TICKET_ADDRESS = "address";
-    private static final String MARK_TICKET_ADDRESS_DETAIL = "address_detail";
-    private static final String MARK_TICKET_POSTAL_CODE = "postal_code";
-    private static final String MARK_TICKET_CITY = "city";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
@@ -804,10 +802,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
         ticket.setTicketCategory( ticketCategory );
 
-        setTicketAddress( ticket, request );
-        
-        bIsFormValid = validateBean( ticket, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX )
-                && validateBean( ticket.getTicketAddress( ), TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
+        TicketAddress ticketAdress = new TicketAddress( );
+        populate( ticketAdress, request );
+        ticket.setTicketAddress( ticketAdress );
+
+        TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
+        List<String> listValidationErrors = ticketValidator.validateBean( ticket );
+        bIsFormValid = ( !listValidationErrors.isEmpty( ) ) ? false : true;
 
         bIsFormValid = bIsFormValid && isContactModeValid( ticket, request );
 
@@ -891,39 +892,19 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         boolean bIsFormValid = true;
         populate( ticket, request );
         
-        setTicketAddress( ticket, request );
+        TicketAddress ticketAdress = new TicketAddress( );
+        populate( ticketAdress, request );
+        ticket.setTicketAddress( ticketAdress );
 
-        bIsFormValid = validateBean( ticket, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX )
-                && validateBean( ticket.getTicketAddress( ), TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
-        
+        TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
+        List<String> listValidationErrors = ticketValidator.validateBean( ticket );
+        bIsFormValid = ( !listValidationErrors.isEmpty( ) ) ? false : true;
+
         bIsFormValid = bIsFormValid && isContactModeValid( ticket, request );
         
         bIsFormValid = bIsFormValid && isCommentValid( ticket, request );
 
         return bIsFormValid;
-    }
-
-    /**
-     * Set the TicketAddress element of ticket from request
-     *
-     * @param ticket
-     *            The ticket to set
-     * @param request
-     *            The Http Request
-     */
-    private void setTicketAddress( Ticket ticket, HttpServletRequest request )
-    {
-        String strAddress = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS ) );
-        String strAddressDetail = String.valueOf( request.getParameter( MARK_TICKET_ADDRESS_DETAIL ) );
-        String strPostalCode = String.valueOf( request.getParameter( MARK_TICKET_POSTAL_CODE ) );
-        String strCity = String.valueOf( request.getParameter( MARK_TICKET_CITY ) );
-
-        TicketAddress ticketAddress = new TicketAddress( );
-        ticketAddress.setAddress( strAddress );
-        ticketAddress.setAddressDetail( strAddressDetail );
-        ticketAddress.setPostalCode( strPostalCode );
-        ticketAddress.setCity( strCity );
-        ticket.setTicketAddress( ticketAddress );
     }
 
     /**
