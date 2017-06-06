@@ -213,7 +213,6 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     public String doCreateModelResponse( HttpServletRequest request )
     {
         populate( _modelResponse, request );
-        populateLabel( _modelResponse );
 
         // Check constraints
         if ( !validateBean( _modelResponse, VALIDATION_ATTRIBUTES_PREFIX ) )
@@ -237,17 +236,6 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
     }
 
-    /**
-     * Populate label.
-     *
-     * @param modelResponse
-     *            the model response
-     */
-    private void populateLabel( ModelResponse modelResponse )
-    {
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( modelResponse.getIdDomain( ) );
-        modelResponse.setDomain( ticketDomain.getLabel( ) );
-    }
 
     /**
      * Manages the removal form of a modelresponse whose identifier is in the http request
@@ -333,7 +321,6 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     public String doModifyModelResponse( HttpServletRequest request )
     {
         populate( _modelResponse, request );
-        populateLabel( _modelResponse );
 
         // Check constraints
         if ( !validateBean( _modelResponse, VALIDATION_ATTRIBUTES_PREFIX ) )

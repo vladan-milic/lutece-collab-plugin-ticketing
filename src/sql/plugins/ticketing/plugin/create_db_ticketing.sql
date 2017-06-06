@@ -194,7 +194,8 @@ CREATE TABLE `ticketing_model_reponses` (
   `id_ticket_domain` int(11) NOT NULL DEFAULT '0',
   `title` varchar(500) NOT NULL DEFAULT '',
   `reponse` text,
-  `keyword` text
+  `keyword` text,
+  label_ticket_domain VARCHAR(50) DEFAULT ''
 );
 
 ALTER TABLE `ticketing_model_reponses` ADD PRIMARY KEY (`id_model_response`);
