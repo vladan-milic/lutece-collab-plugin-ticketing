@@ -236,7 +236,6 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
     }
 
-
     /**
      * Manages the removal form of a modelresponse whose identifier is in the http request
      *

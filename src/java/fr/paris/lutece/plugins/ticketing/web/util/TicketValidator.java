@@ -88,7 +88,7 @@ public class TicketValidator
         List<String> listErrors = new ArrayList<String>( );
 
         List<ValidationError> listValidationErrors = BeanValidationUtil.validate( ticket, _locale, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
-        
+
         if ( ticket != null && ticket.getTicketAddress( ) != null )
         {
             listValidationErrors.addAll( BeanValidationUtil.validate( ticket.getTicketAddress( ), _locale, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX ) );

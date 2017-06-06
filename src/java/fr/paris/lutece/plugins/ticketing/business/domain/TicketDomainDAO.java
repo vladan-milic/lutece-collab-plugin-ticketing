@@ -65,7 +65,7 @@ public final class TicketDomainDAO implements ITicketDomainDAO
     private static final String SQL_QUERY_REBUILD_DOMAIN_ORDER_SEQUENCE = "UPDATE ticketing_ticket_domain SET domain_order = domain_order - 1 WHERE domain_order > ? AND id_ticket_type = ? AND inactive <> 1 ";
     private static final String SQL_QUERY_SELECT_DOMAINID_BY_ORDER = "SELECT id_ticket_domain FROM ticketing_ticket_domain WHERE id_ticket_type = ? AND domain_order = ? ";
     private static final String SQL_QUERY_UPDATE_DOMAIN_ORDER = "UPDATE ticketing_ticket_domain SET domain_order = ? WHERE id_ticket_domain = ? ";
-	private static final String SQL_QUERY_SELECT_DISTINCT_LABELS = "SELECT DISTINCT label FROM ticketing_ticket_domain WHERE inactive <> 1 ORDER BY label";
+    private static final String SQL_QUERY_SELECT_DISTINCT_LABELS = "SELECT DISTINCT label FROM ticketing_ticket_domain WHERE inactive <> 1 ORDER BY label";
 
     /**
      * Generates a new primary key
