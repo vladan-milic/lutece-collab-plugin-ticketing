@@ -1,15 +1,15 @@
+![](http://dev.lutece.paris.fr/jenkins/buildStatus/icon?job=collab-plugin-ticketing-deploy)
+# Plugin ticketing
 
-#Plugin ticketing
-
-##Introduction
+## Introduction
 
 This plugin allows a user to create tickets of differents types (e.g. request informations, claims) through a front office ticket creation form and allows a target organization to manage these tickets through a back office interface.
 
 The tickets can be classified by type, category and domain. This classification allows to assign automatically a ticket to the right entity in the target organization.
 
-##Configuration
+## Configuration
 
-##Usage
+## Usage
 
 The front office URL web page to access to the ticket creation form : */jsp/site/Portal.jsp?page=ticket&view=createTicket* 
 
