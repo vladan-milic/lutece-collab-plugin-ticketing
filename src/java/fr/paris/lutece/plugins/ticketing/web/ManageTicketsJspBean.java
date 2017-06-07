@@ -802,16 +802,28 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
         ticket.setTicketCategory( ticketCategory );
 
-        TicketAddress ticketAdress = new TicketAddress( );
-        populate( ticketAdress, request );
-        ticket.setTicketAddress( ticketAdress );
+        TicketAddress ticketAddress = new TicketAddress( );
+        populate( ticketAddress, request );
+        ticket.setTicketAddress( ticketAddress );
 
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validateBean( ticket );
-        bIsFormValid = ( !listValidationErrors.isEmpty( ) ) ? false : true;
-
-        bIsFormValid = bIsFormValid && isContactModeValid( ticket, request );
-
+        for ( String error : listValidationErrors )
+        {
+            if ( !StringUtils.isEmpty( error ) )
+            {
+                addError( error );
+                bIsFormValid = false;
+            }
+        }
+        
+        String errorModeContactFilled = new FormValidator( request ).isContactModeFilled( );
+        if ( errorModeContactFilled != null )
+        {
+            addError( errorModeContactFilled );
+            bIsFormValid = false;
+        }
+        
         boolean bIsSubProbSelected = true;
 
         // Validate if precision has been selected if the selected category has precisions
@@ -834,10 +846,17 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             }
         }
 
-        bIsFormValid = bIsFormValid && isCommentValid( ticket, request );
+        // The validation for the ticket comment size is made here because the validation doesn't work for this field
+        // Check constraints
+        // Count the number of characters in the ticket comment
+        int iNbCharcount = FormValidator.countCharTicketComment( ticket.getTicketComment( ) );        
+        if ( iNbCharcount > 5000 )
+        {
+            addError( MESSAGE_ERROR_COMMENT_VALIDATION, getLocale( ) );
+            bIsFormValid = false;
+        }
 
         // Check if a type/domain/category have been selected (made here to sort errors)
-
         if ( ticket.getIdTicketType( ) == TicketingConstants.PROPERTY_UNSET_INT )
         {
             addError( TicketingConstants.MESSAGE_ERROR_TICKET_TYPE_NOT_SELECTED, getLocale( ) );
@@ -892,65 +911,39 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         boolean bIsFormValid = true;
         populate( ticket, request );
         
-        TicketAddress ticketAdress = new TicketAddress( );
-        populate( ticketAdress, request );
-        ticket.setTicketAddress( ticketAdress );
+        TicketAddress ticketAddress = new TicketAddress( );
+        populate( ticketAddress, request );
+        ticket.setTicketAddress( ticketAddress );
 
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validateBean( ticket );
-        bIsFormValid = ( !listValidationErrors.isEmpty( ) ) ? false : true;
-
-        bIsFormValid = bIsFormValid && isContactModeValid( ticket, request );
+        for ( String error : listValidationErrors )
+        {
+            if ( !StringUtils.isEmpty( error ) )
+            {
+                addError( error );
+                bIsFormValid = false;
+            }
+        }
         
-        bIsFormValid = bIsFormValid && isCommentValid( ticket, request );
-
-        return bIsFormValid;
-    }
-
-    /**
-     * Test if the contact mode is correctly filled
-     *
-     * @param ticket
-     *            The ticket to set
-     * @param request
-     *            The Http Request
-     * @return true if the contact mode is valid else false          
-     */
-    private boolean isContactModeValid( Ticket ticket, HttpServletRequest request )
-    {
         String errorModeContactFilled = new FormValidator( request ).isContactModeFilled( );
         if ( errorModeContactFilled != null )
         {
             addError( errorModeContactFilled );
-            return false;
+            bIsFormValid = false;
         }
         
-        return true;
-    }
-    
-    /**
-     * Test if the comment is too long
-     *
-     * @param ticket
-     *            The ticket to set
-     * @param request
-     *            The Http Request
-     * @return true if the comment is not too long else false          
-     */
-    private boolean isCommentValid( Ticket ticket, HttpServletRequest request )
-    {
+        // The validation for the ticket comment size is made here because the validation doesn't work for this field
         // Check constraints
         // Count the number of characters in the ticket comment
         int iNbCharcount = FormValidator.countCharTicketComment( ticket.getTicketComment( ) );
-
-        // The validation for the ticket comment size is made here because the validation doesn't work for this field
         if ( iNbCharcount > 5000 )
         {
             addError( MESSAGE_ERROR_COMMENT_VALIDATION, getLocale( ) );
-            return false;
+            bIsFormValid = false;
         }
-        
-        return true;
+
+        return bIsFormValid;
     }
 
     /**
