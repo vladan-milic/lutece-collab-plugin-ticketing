@@ -222,6 +222,15 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
             addInfo( messageInfo );
             fillCommons( model );
         }
+        else
+        {
+            messageInfo = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_MODIFY_ACTION_MESSAGE_INFO );
+            if ( StringUtils.isNotEmpty( messageInfo ) )
+            {
+                addInfo( messageInfo );
+                fillCommons( model );
+            }
+        }
 
         return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS, TEMPLATE_VIEW_TICKET_DETAILS, model );
     }
