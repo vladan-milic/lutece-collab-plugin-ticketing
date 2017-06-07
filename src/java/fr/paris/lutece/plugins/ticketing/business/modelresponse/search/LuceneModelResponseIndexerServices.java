@@ -85,9 +85,10 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     private final String FIELD_TITLE = "title";
     private final String FIELD_RESPONSE = "response";
     private final String FIELD_KEYWORD = "keyword";
-    private final String FIELD_DOMAIN_ID = "id_domain";
     private final String FIELD_DOMAIN_LABEL = "domain";
     private final String FIELD_SEARCH_CONTENT = "content";
+    private final String SEPARATOR_COMA = ",";
+    private final String SEPARATOR_SPACE = " ";
 
     /** The _analyzer. */
     private Analyzer _analyzer;
@@ -145,18 +146,9 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         doc.add( new StringField( FIELD_TITLE, modelReponse.getTitle( ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_KEYWORD, modelReponse.getKeyword( ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_RESPONSE, modelReponse.getReponse( ), Field.Store.YES ) );
-        doc.add( new TextField( FIELD_DOMAIN_LABEL, modelReponse.getDomain( ), Field.Store.YES ) );
+        doc.add( new StringField( FIELD_DOMAIN_LABEL, modelReponse.getDomain( ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString( ), Field.Store.YES ) );
-
-        List<String> tKeywords = new ArrayList<String>( );
-        tKeywords.addAll( Arrays.asList( modelReponse.getKeyword( ).split( "," ) ) );
-
-        // add title to index
-        tKeywords.addAll( Arrays.asList( modelReponse.getTitle( ).split( " " ) ) );
-
-        String strIndexWords = StringUtils.join( tKeywords, " " );
-        doc.add( new TextField( FIELD_SEARCH_CONTENT, strIndexWords, Field.Store.NO ) );
-
+        doc.add( new TextField( FIELD_SEARCH_CONTENT, modelReponse.getKeyword( ).replace( SEPARATOR_COMA , SEPARATOR_SPACE ), Field.Store.NO ) );
         return doc;
     }
 
@@ -236,7 +228,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
      * @see fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer#searchResponses(java.lang.String, java.lang.String)
      */
     @Override
-    public List<ModelResponse> searchResponses( String strQuery, Set<String> setIdDomain )
+    public List<ModelResponse> searchResponses( String strQuery, Set<String> setDomain )
     {
         List<ModelResponse> list = new ArrayList<ModelResponse>( );
 
@@ -247,15 +239,15 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
             IndexSearcher searcher = new IndexSearcher( reader );
 
             BooleanQuery booleanQueryMain = new BooleanQuery( );
-            if ( setIdDomain != null && !setIdDomain.isEmpty( ) )
+            if ( setDomain != null && !setDomain.isEmpty( ) )
             {
-                BooleanQuery booleanIdDomainQuery = new BooleanQuery( );
-                for ( String strIdDomain : setIdDomain )
+                BooleanQuery booleanDomainQuery = new BooleanQuery( );
+                for ( String strDomain : setDomain )
                 {
-                    TermQuery termQueryDomainId = new TermQuery( new Term( FIELD_DOMAIN_ID, strIdDomain ) );
-                    booleanIdDomainQuery.add( new BooleanClause( termQueryDomainId, Occur.SHOULD ) );
+                    TermQuery termQueryDomain = new TermQuery( new Term( FIELD_DOMAIN_LABEL, strDomain ) );
+                    booleanDomainQuery.add( new BooleanClause( termQueryDomain, Occur.SHOULD ) );
                 }
-                booleanQueryMain.add( new BooleanClause( booleanIdDomainQuery, Occur.MUST ) );
+                booleanQueryMain.add( new BooleanClause( booleanDomainQuery, Occur.MUST ) );
             }
 
             Query query = new QueryParser( Version.LUCENE_4_9, FIELD_SEARCH_CONTENT, _analyzer ).parse( strQuery );
@@ -274,7 +266,6 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
                 modelResponse.setTitle( doc.get( FIELD_TITLE ) );
                 modelResponse.setReponse( doc.get( FIELD_RESPONSE ) );
                 modelResponse.setDomain( doc.get( FIELD_DOMAIN_LABEL ) );
-                modelResponse.setIdDomain( Integer.parseInt( doc.get( FIELD_DOMAIN_ID ) ) );
                 modelResponse.setKeyword( doc.get( FIELD_KEYWORD ) );
                 list.add( modelResponse );
             }

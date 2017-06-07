@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.ticketing.web.search;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -46,6 +45,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
@@ -99,23 +100,21 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
     public String searchResponse( HttpServletRequest request )
     {
         String strQuery = request.getParameter( SearchConstants.PARAMETER_QUERY );
-        String strIdDomain = request.getParameter( SearchConstants.PARAMETER_DOMAIN );
         Map<String, Object> model = new HashMap<String, Object>( );
 
         // Create the set of id domain
-        Set<String> setIdDomain = new LinkedHashSet<>( );
+        Set<String> setDomain = new LinkedHashSet<>( );
         String [ ] strSeqIdTickets = request.getParameterValues( TicketingConstants.PARAMETER_SELECTED_TICKETS );
         if ( strSeqIdTickets != null && strSeqIdTickets.length > 0 )
         {
-            setIdDomain = getListIdDomain( strSeqIdTickets );
+            setDomain = getListDomain( strSeqIdTickets );            
         }
-        setIdDomain.add( strIdDomain );
 
-        if ( StringUtils.isNotEmpty( strQuery ) )
+        if ( StringUtils.isNotEmpty( strQuery ) && !setDomain.isEmpty( ) )
         {
             List<ModelResponse> listResults = new ArrayList<>( );
             IModelResponseIndexer modelResponseIndexer = SpringContextService.getBean( IModelResponseIndexer.BEAN_SERVICE );
-            List<ModelResponse> listFullResults = modelResponseIndexer.searchResponses( strQuery, setIdDomain );
+            List<ModelResponse> listFullResults = modelResponseIndexer.searchResponses( strQuery, setDomain );
 
             // Add an info message if there are more response than maximum limit
             if ( listFullResults.size( ) > _nMaxResponsePerQuery )
@@ -178,29 +177,33 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
         ( (List<ErrorMessage>) model.get( SearchConstants.MARK_ERRORS ) ).add( new MVCMessage( I18nService.getLocalizedString( strMessageKey, locale ) ) );
     }
 
+    
     /**
-     * Return the set of id domain associated to the list of id ticket given in parameter
+     * Return the set of domain labels associated to the list of id ticket given in parameter
      * 
      * @param listIdTickets
      *            the list of id tickets
-     * @return the set of id domain
+     * @return the set of domain labels
      */
-    private Set<String> getListIdDomain( String [ ] strIdTickets )
+    private Set<String> getListDomain( String [ ] strIdTickets )
     {
-        Set<String> setIdDomain = new LinkedHashSet<>( );
-        List<String> listIdTickets = Arrays.asList( strIdTickets );
-        if ( listIdTickets != null && !listIdTickets.isEmpty( ) )
+        Set<String> setDomain = new LinkedHashSet<>( );
+        if ( strIdTickets != null && strIdTickets.length > 0 )
         {
-            for ( String idTicket : listIdTickets )
+            for ( String idTicket : strIdTickets )
             {
                 Ticket ticket = TicketHome.findByPrimaryKey( StringUtils.isNumeric( idTicket ) ? Integer.parseInt( idTicket ) : -1 );
                 if ( ticket != null )
                 {
-                    setIdDomain.add( String.valueOf( ticket.getIdTicketDomain( ) ) );
+                    TicketDomain domain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) );
+                    if (domain != null )
+                    {
+                    	setDomain.add( domain.getLabel( ) );
+                    }                    
                 }
             }
         }
-        return setIdDomain;
+        return setDomain;
     }
-
+    
 }
