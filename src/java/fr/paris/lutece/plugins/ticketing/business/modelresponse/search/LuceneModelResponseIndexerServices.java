@@ -37,11 +37,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -122,7 +120,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
      * .ModelResponse)
      */
     @Override
-    public void update( ModelResponse modelReponse ) throws IOException
+    public synchronized void update( ModelResponse modelReponse ) throws IOException
     {
         AppLogService.debug( "\n Ticketing - Model Response : " + modelReponse );
 
@@ -160,7 +158,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
      * .ModelResponse)
      */
     @Override
-    public void delete( ModelResponse modelReponse ) throws IOException
+    public synchronized void delete( ModelResponse modelReponse ) throws IOException
     {
         AppLogService.debug( "\n Ticketing - Model Response  : " + modelReponse );
 
@@ -176,7 +174,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
      * ModelResponse)
      */
     @Override
-    public void add( ModelResponse modelReponse ) throws IOException
+    public synchronized void add( ModelResponse modelReponse ) throws IOException
     {
         AppLogService.debug( "\n Ticketing - Model Response  : " + modelReponse );
 
@@ -192,15 +190,17 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
      * @see fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer#addAll()
      */
     @Override
-    public String addAll( )
+    public synchronized String addAll( )
     {
         AppLogService.debug( "\n Ticketing - Model Response : Indexing All model response : \n" );
 
         StringBuilder sbLogs = new StringBuilder( );
 
+        IndexWriter writer = null;
+        
         try
         {
-            IndexWriter writer = getIndexWriter( true );
+            writer = getIndexWriter( true );
             List<ModelResponse> modelResponses = ModelResponseHome.getModelResponsesList( );
 
             for ( ModelResponse modelResponse : modelResponses )
@@ -215,6 +215,11 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         catch( IOException ex )
         {
             AppLogService.error( "\n Ticketing - Model Response : Error indexing model response : " + ex.getMessage( ), ex );
+            sbLogs.append( "\n Ticketing - Model Response : Error while indexing model responses " );
+        }
+        finally
+        {
+        	close(writer);
         }
 
         AppLogService.debug( "\n Ticketing - Model Response : end Indexing All model response : \n" );
@@ -378,5 +383,27 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         }
 
         return Paths.get( strIndexPath ).toFile( );
+    }
+    
+    
+    
+    /**
+     * Close an IndexWriter
+     * 
+     * @param indexWriter
+     */
+    private void close(IndexWriter indexWriter)
+    {
+        try
+        {
+            if ( indexWriter != null )
+            {
+                indexWriter.close( );
+            }
+        }
+        catch( IOException e )
+        {
+            AppLogService.error( e.getMessage( ), e );
+        }
     }
 }
