@@ -4,19 +4,25 @@
 	<#assign hide=hide+"hide(${field.idField});">
 </#if>	
 </#list>
-${entry.CSSClass!}
+<#assign cssClass=entry.CSSClass!''>
+<#if list_responses?has_content>
+	<#list list_responses as response>
+		<#if response.entry.error??>
+			<#assign cssClass=cssClass+' error'>
+			<#break>
+		</#if>
+	</#list>
+</#if>
 
 <div class="form-group">
 	<label class="control-label col-sm-3" for="form${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if> :</label>
 	<div class="controls col-sm-9">
     <#list entry.fields as field>
 			<label class="radio<#if entry.fieldInLine>-inline</#if>" for="attribute${entry.idEntry}_${field.idField}" <#if field.comment?? && field.comment != ''>title="${field.comment}"</#if> > 
-			<input type="radio" class="" id="attribute${entry.idEntry}_${field.idField}" name="attribute${entry.idEntry}" value="${field.idField}"
-			<#if list_responses??>
+			<input type="radio" class="${cssClass}" id="attribute${entry.idEntry}_${field.idField}" name="attribute${entry.idEntry}" value="${field.idField}"
+			<#if list_responses?has_content>
 				<#list list_responses as response>
-					<#if response.entry.idEntry == entry.idEntry && response.field??>
-						<#if response.field.idField == field.idField>checked="checked"<#break></#if>
-					</#if>
+					<#if response.field?? && response.field.idField == field.idField>checked="checked" <#break></#if>
 				</#list>
 			<#else>
 				<#if field.defaultValue>checked="checked"</#if>
@@ -35,35 +41,35 @@ ${entry.CSSClass!}
         	<p class="form-control-static">${entry.helpMessage}</p>
       </div>
 	</#if>
-</div>	
-<#if list_responses??>
+</div>
+<#if list_responses?has_content>
 	<#list list_responses as response>
-		<#if response.entry.idEntry == entry.idEntry && response.entry.error?? && response.entry.error.isDisplayableError>
+		<#if response.entry.error?? && response.entry.error.isDisplayableError>
 			<div class="alert alert-error alert-danger">
 			<#assign error = response.entry.error>
-				<#if error.mandatoryError>
-						${error.errorMessage}
-					<#else>
-						#i18n{ticketing.message.mandatory.entry}
-					</#if>
+			<#if error.mandatoryError>
+				${error.errorMessage}
+			<#else>
+				#i18n{ticketing.message.mandatory.entry}
+			</#if>
 			</div>
 		</#if>
 	</#list>
 </#if>
-<#if str_list_entry_children?exists>${str_list_entry_children}</#if>
-<#if list_responses??>
+
+<#if list_responses?has_content>
+	<#list list_responses as response>
+		<#if response.field??>
 	<script type="text/javascript">
-		<#list list_responses as response>
-			<#if response.entry.idEntry == entry.idEntry && response.field??>
-				var baliseId = "div" + ${response.field.idField};
-				if(document.getElementById && document.getElementById(baliseId) != null)
-				{
-					document.getElementById(baliseId).style.visibility='visible';
-					document.getElementById(baliseId).style.display='block';
-				}
-			</#if>
-		</#list>
+		var baliseId = "div" + ${response.field.idField};
+		if(document.getElementById && document.getElementById(baliseId) != null)
+		{
+			document.getElementById(baliseId).style.visibility='visible';
+			document.getElementById(baliseId).style.display='block';
+		}
 	</script>
+		</#if>
+	</#list>
 <#else>
 	<#list entry.fields as field>
 		<#if field.defaultValue && field.conditionalQuestions?exists && field.conditionalQuestions?size != 0>

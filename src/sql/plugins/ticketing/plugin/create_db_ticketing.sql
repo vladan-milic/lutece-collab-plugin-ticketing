@@ -191,7 +191,6 @@ PRIMARY KEY (id_support_entity)
 DROP TABLE IF EXISTS ticketing_model_reponses;
 CREATE TABLE `ticketing_model_reponses` (
   `id_model_response` int(6) NOT NULL,
-  `id_ticket_domain` int(11) NOT NULL DEFAULT '0',
   `title` varchar(500) NOT NULL DEFAULT '',
   `reponse` text,
   `keyword` text,

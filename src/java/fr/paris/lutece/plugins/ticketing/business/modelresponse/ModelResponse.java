@@ -48,7 +48,6 @@ public class ModelResponse implements Serializable
 
     // Variables declarations
     private int _nId;
-    private int _nIdDomain;
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Title.notEmpty}" )
     @Size( max = 500, message = "#i18n{ticketing.validation.modelresponse.Title.size}" )
     private String _strTitle;
@@ -144,26 +143,6 @@ public class ModelResponse implements Serializable
         _strDomain = strDomain;
     }
 
-    /**
-     * Returns the IdDomain
-     * 
-     * @return The IdDomain
-     */
-    public int getIdDomain( )
-    {
-        return _nIdDomain;
-    }
-
-    /**
-     * Sets the IdDomain
-     * 
-     * @param nIdDomain
-     *            The IdDomain
-     */
-    public void setIdDomain( int nIdDomain )
-    {
-        _nIdDomain = nIdDomain;
-    }
 
     /**
      * Returns the Keyword
