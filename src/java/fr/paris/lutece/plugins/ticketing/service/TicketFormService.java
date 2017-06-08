@@ -57,7 +57,6 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -280,7 +279,7 @@ public class TicketFormService implements Serializable
 
             if ( ticket != null )
             {
-                model.put( MARK_LIST_RESPONSES, ticket.getListResponse( ) );
+                model.put( MARK_LIST_RESPONSES, getEntryListResponse( ticket, entry ) );
             }
         }
 
@@ -294,6 +293,27 @@ public class TicketFormService implements Serializable
 
         template = AppTemplateService.getTemplate( entryTypeService.getTemplateHtmlForm( entry, bDisplayFront ), locale, model );
         stringBuffer.append( template.getHtml( ) );
+    }
+
+    /**
+     * @param ticket
+     * @param entry
+     * @return list of Response for the given entry
+     */
+    private static List<Response> getEntryListResponse( Ticket ticket, Entry entry )
+    {
+        List<Response> listResult = new ArrayList<Response>( );
+        if ( entry != null && ticket != null && ticket.getListResponse( ) != null )
+        {
+            for ( Response response : ticket.getListResponse( ) )
+            {
+                if ( response.getEntry( ).getIdEntry( ) == entry.getIdEntry( ) )
+                {
+                    listResult.add( response );
+                }
+            }
+        }
+        return listResult;
     }
 
     /**

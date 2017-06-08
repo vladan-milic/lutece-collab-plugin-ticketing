@@ -1,32 +1,25 @@
+<#assign cssClass=entry.CSSClass!''>
+<#if list_responses?has_content>
+	<#list list_responses as response>
+		<#if response.entry.error??>
+			<#assign cssClass=cssClass+' error'>
+			<#break>
+		</#if>
+	</#list>
+</#if>
 <div class="form-group">
 	<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label nopadding" for="attribute${entry.idEntry}">${entry.title} <#if entry.mandatory>*</#if> :</label>
 	<div>	 
-		<select name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" class="form-control input-sm 
-			<#if list_responses??>
-				<#list list_responses as response>
-					<#if response.entry.idEntry == entry.idEntry && response.entry.error??>
-						class="form-control error"
-						<#break>
-					</#if>
-				</#list>
-				${entry.CSSClass!}
-		</#if>">
+		<select name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" class="form-control input-sm ${cssClass}">
 		<option value="">#i18n{ticketing.xpage.form.noValue}</option>
 		<#list entry.fields as field>
 			<option  value="${field.idField}" <#if field.comment?? && field.comment != ''>title="${field.comment}"</#if>
-				<#if list_responses??>
+				<#if list_responses?has_content>
 					<#list list_responses as response>
-						<#if response.entry.idEntry == entry.idEntry && response.field??>
-							<#if response.field.idField == field.idField>
-								selected ="selected"
-								<#break>
-							</#if>
-						</#if>
+						<#if response.field?? && response.field.idField == field.idField>selected ="selected"</#if>
 					</#list>
 				<#else>
-					<#if field.defaultValue>
-						selected ="selected"
-					</#if>
+					<#if field.defaultValue>selected ="selected"</#if>
 				</#if>
 				>
 					${field.title}
@@ -36,15 +29,14 @@
 	<#if entry.helpMessage?exists&&entry.helpMessage!=''>
 	<p class="help-block">${entry.helpMessage}</p>
 	</#if>
-	<#if list_responses??>
+	<#if list_responses?has_content>
 		<#list list_responses as response>
-			<#if response.entry.idEntry == entry.idEntry && response.entry.error??  && response.entry.error.isDisplayableError>
-				<div class="alert alert-error alert-danger">
-					<#assign error = response.entry.error>
-					${error.errorMessage}
-				</div>	
-				</#if>
-			</#list>
+			<#if response.entry.error??  && response.entry.error.isDisplayableError>
+		<div class="alert alert-error alert-danger">
+			${response.entry.error.errorMessage}
+		</div>
+			</#if>
+		</#list>
 	</#if>
 	</div>
 </div>

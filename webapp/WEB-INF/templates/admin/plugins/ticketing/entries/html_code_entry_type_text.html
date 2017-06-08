@@ -1,16 +1,20 @@
+<#assign cssClass=entry.CSSClass!''>
+<#if list_responses?has_content>
+	<#list list_responses as response>
+		<#if response.entry.error??>
+			<#assign cssClass=cssClass+' error'>
+			<#break>
+		</#if>
+	</#list>
+</#if>
 <div class="form-group">
     <label for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
     <#list entry.fields as field>
-        <input type="text" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" size="${field.width}" class="form-control input-lg"
-            <#if list_responses??>
-                <#list list_responses as response>
-                    <#if response.entry.idEntry == entry.idEntry>
-                        <#if response.responseValue??>
-                            value="${response.responseValue}"
-                        </#if>
-                        <#if response.entry.error??>
-                            class="error"
-                        </#if>
+        <input type="text" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" size="${field.width}" class="form-control input-lg ${cssClass}"
+            <#if list_responses?has_content>
+				<#list list_responses as response>
+					<#if response.responseValue??>
+                    	value="${response.responseValue}"
                     </#if>
                 </#list>
             <#else>
@@ -23,18 +27,17 @@
             <#if field.maxSizeEnter!=-1>
                     maxlength="${field.maxSizeEnter}"
             </#if>
-            class="form-control ${entry.CSSClass!} " />
+    	/>
         <#if entry.helpMessage?exists&&entry.helpMessage!=''>
             <p class="help-block">${entry.helpMessage}</p>
         </#if>
     </#list>
 </div>
-<#if list_responses??>
-    <#list list_responses as response>
-        <#if response.entry.idEntry == entry.idEntry && response.entry.error??    && response.entry.error.isDisplayableError>
-            <#assign error = response.entry.error>
-            <div class="alert alert-error alert-danger">${error.errorMessage}</div>
-        </#if>
+<#if list_responses?has_content>
+	<#list list_responses as response>
+		<#if response.entry.error??  && response.entry.error.isDisplayableError>
+    <div class="alert alert-error alert-danger">${response.entry.error.errorMessage}</div>
+    	</#if>
     </#list>
 </#if>
 <#if entry.confirmField>
