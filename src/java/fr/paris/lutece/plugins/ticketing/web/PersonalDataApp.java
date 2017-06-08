@@ -87,7 +87,7 @@ public class PersonalDataApp extends MVCApplication
     {
         LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
-        if ( user != null && StringUtils.isNotEmpty( user.getName( ) ) )
+        if ( user != null && StringUtils.isNotEmpty( user.getName( ) ) && request.getSession( ).getAttribute( SESSION_INIT_PERSONAL_DATA ) == null)
         {
             Map<String, String> mapAttributes = new HashMap<String, String>( );
 
@@ -117,7 +117,7 @@ public class PersonalDataApp extends MVCApplication
         {
             try
             {
-                Map<String, String> mapInitPersonalData = (Map<String, String>) (Map<String, String>) request.getSession( ).getAttribute(
+                Map<String, String> mapInitPersonalData = (Map<String, String>) request.getSession( ).getAttribute(
                         SESSION_INIT_PERSONAL_DATA );
                 if ( mapInitPersonalData != null )
                 {
@@ -185,7 +185,7 @@ public class PersonalDataApp extends MVCApplication
             Map<String, String> mapDeltaPersonalData = new HashMap<String, String>( );
             try
             {
-                mapDeltaPersonalData = (Map<String, String>) (Map<String, String>) request.getSession( ).getAttribute( SESSION_DELTA_PERSONAL_DATA );
+                mapDeltaPersonalData = (Map<String, String>) request.getSession( ).getAttribute( SESSION_DELTA_PERSONAL_DATA );
             }
             catch( ClassCastException e )
             {
@@ -225,6 +225,7 @@ public class PersonalDataApp extends MVCApplication
                 {
                     _identityService.updateIdentity( identityChangeDto, null );
                     request.getSession( ).removeAttribute( SESSION_DELTA_PERSONAL_DATA );
+                    request.getSession( ).removeAttribute( SESSION_INIT_PERSONAL_DATA );
                 }
                 catch( Exception e )
                 {
