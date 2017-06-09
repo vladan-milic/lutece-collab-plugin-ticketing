@@ -61,9 +61,9 @@ import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
  */
 public class PersonalDataApp extends MVCApplication
 {
-	private static final long serialVersionUID = 1L;
-	
-	// Session keys
+    private static final long serialVersionUID = 1L;
+
+    // Session keys
     private static final String SESSION_INIT_PERSONAL_DATA = "ticketing.personal.data.init";
     private static final String SESSION_DELTA_PERSONAL_DATA = "ticketing.personal.data.delta";
 
@@ -88,7 +88,7 @@ public class PersonalDataApp extends MVCApplication
     {
         LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
-        if ( user != null && StringUtils.isNotEmpty( user.getName( ) ) && request.getSession( ).getAttribute( SESSION_INIT_PERSONAL_DATA ) == null)
+        if ( user != null && StringUtils.isNotEmpty( user.getName( ) ) && request.getSession( ).getAttribute( SESSION_INIT_PERSONAL_DATA ) == null )
         {
             Map<String, String> mapAttributes = new HashMap<String, String>( );
 
@@ -109,7 +109,7 @@ public class PersonalDataApp extends MVCApplication
      * 
      * @param request
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public void doDeltaPersonalData( HttpServletRequest request )
     {
         LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
@@ -119,8 +119,7 @@ public class PersonalDataApp extends MVCApplication
         {
             try
             {
-				Map<String, String> mapInitPersonalData = (Map<String, String>) request.getSession( ).getAttribute(
-                        SESSION_INIT_PERSONAL_DATA );
+                Map<String, String> mapInitPersonalData = (Map<String, String>) request.getSession( ).getAttribute( SESSION_INIT_PERSONAL_DATA );
                 if ( mapInitPersonalData != null )
                 {
                     for ( String strAttrKeyToSave : MAP_ATTRIBUTES_IDENTITY_TOSAVE )
@@ -148,7 +147,7 @@ public class PersonalDataApp extends MVCApplication
      * @param request
      * @return json string
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public String getDeltaPersonalData( HttpServletRequest request )
     {
         ObjectNode jsonMap = JsonNodeFactory.instance.objectNode( );
@@ -179,7 +178,7 @@ public class PersonalDataApp extends MVCApplication
      * 
      * @param request
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public void doSavePersonalData( HttpServletRequest request )
     {
         LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );

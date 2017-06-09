@@ -189,7 +189,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     @View( value = VIEW_MANAGE_MODELRESPONSES, defaultView = true )
     public String getManageModelResponses( HttpServletRequest request )
     {
-    	Map<String, String> mapDomains = new LinkedHashMap<String, String>( );
+        Map<String, String> mapDomains = new LinkedHashMap<String, String>( );
         mapDomains.put( StringUtils.EMPTY, I18nService.getLocalizedString( PROPERTY_TICKET_DOMAIN_LABEL, request.getLocale( ) ) );
 
         AdminUser userCurrent = getUser( );
@@ -203,8 +203,8 @@ public class ModelResponseJspBean extends MVCAdminJspBean
             {
                 domain.setId( Integer.parseInt( refDomain.getCode( ) ) );
                 // Check user rights
-                if ( RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST, userCurrent ) ||
-                		RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, userCurrent ))
+                if ( RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST, userCurrent )
+                        || RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, userCurrent ) )
                 {
                     if ( !mapDomains.containsValue( refDomain.getName( ) ) )
                     {
@@ -213,28 +213,28 @@ public class ModelResponseJspBean extends MVCAdminJspBean
                 }
             }
         }
-        
+
         _modelResponse = null;
-        List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>();
-        
+        List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>( );
+
         String strSelectedDomain = StringUtils.EMPTY;
-        
+
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_DOMAIN ) ) )
         {
-        	strSelectedDomain = request.getParameter( PARAMETER_FILTER_ID_DOMAIN );
-        	listModelResponses = ModelResponseHome.getModelResponsesListByDomain( strSelectedDomain );
+            strSelectedDomain = request.getParameter( PARAMETER_FILTER_ID_DOMAIN );
+            listModelResponses = ModelResponseHome.getModelResponsesListByDomain( strSelectedDomain );
         }
-        else 
+        else
         {
-        	for( ModelResponse modelResponse : ModelResponseHome.getModelResponsesList( ) )
-        	{
-    			if ( mapDomains.containsKey( modelResponse.getDomain( ) ) )
-    			{
-    				listModelResponses.add( modelResponse );
-    			}
-        	}
+            for ( ModelResponse modelResponse : ModelResponseHome.getModelResponsesList( ) )
+            {
+                if ( mapDomains.containsKey( modelResponse.getDomain( ) ) )
+                {
+                    listModelResponses.add( modelResponse );
+                }
+            }
         }
-        
+
         // SORT
         String strSortedAttributeName = request.getParameter( Parameters.SORTED_ATTRIBUTE_NAME );
         String strAscSort = null;
@@ -247,7 +247,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
             Collections.sort( listModelResponses, new AttributeComparator( strSortedAttributeName, bIsAscSort ) );
         }
-        
+
         String strURL = getHomeUrl( request );
         UrlItem url = new UrlItem( strURL );
 
@@ -260,9 +260,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         {
             url.addParameter( Parameters.SORTED_ASC, strAscSort );
         }
-        
-        
-        
+
         Map<String, Object> model = getPaginatedListModel( request, MARK_MODELRESPONSE_LIST, listModelResponses, JSP_MANAGE_MODELRESPONSES );
 
         model.put( MARK_SELECTED_DOMAIN, strSelectedDomain );

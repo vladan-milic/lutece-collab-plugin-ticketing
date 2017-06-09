@@ -816,14 +816,14 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 bIsFormValid = false;
             }
         }
-        
+
         String errorModeContactFilled = new FormValidator( request ).isContactModeFilled( );
         if ( errorModeContactFilled != null )
         {
             addError( errorModeContactFilled );
             bIsFormValid = false;
         }
-        
+
         boolean bIsSubProbSelected = true;
 
         // Validate if precision has been selected if the selected category has precisions
@@ -849,7 +849,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
         // Check constraints
         // Count the number of characters in the ticket comment
-        int iNbCharcount = FormValidator.countCharTicketComment( ticket.getTicketComment( ) );        
+        int iNbCharcount = FormValidator.countCharTicketComment( ticket.getTicketComment( ) );
         if ( iNbCharcount > 5000 )
         {
             addError( MESSAGE_ERROR_COMMENT_VALIDATION, getLocale( ) );
@@ -910,7 +910,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     {
         boolean bIsFormValid = true;
         populate( ticket, request );
-        
+
         TicketAddress ticketAddress = new TicketAddress( );
         populate( ticketAddress, request );
         ticket.setTicketAddress( ticketAddress );
@@ -925,14 +925,14 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 bIsFormValid = false;
             }
         }
-        
+
         String errorModeContactFilled = new FormValidator( request ).isContactModeFilled( );
         if ( errorModeContactFilled != null )
         {
             addError( errorModeContactFilled );
             bIsFormValid = false;
         }
-        
+
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
         // Check constraints
         // Count the number of characters in the ticket comment

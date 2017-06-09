@@ -146,7 +146,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         doc.add( new StringField( FIELD_RESPONSE, modelReponse.getReponse( ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_DOMAIN_LABEL, modelReponse.getDomain( ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString( ), Field.Store.YES ) );
-        doc.add( new TextField( FIELD_SEARCH_CONTENT, modelReponse.getKeyword( ).replace( SEPARATOR_COMA , SEPARATOR_SPACE ), Field.Store.NO ) );
+        doc.add( new TextField( FIELD_SEARCH_CONTENT, modelReponse.getKeyword( ).replace( SEPARATOR_COMA, SEPARATOR_SPACE ), Field.Store.NO ) );
         return doc;
     }
 
@@ -197,7 +197,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         StringBuilder sbLogs = new StringBuilder( );
 
         IndexWriter writer = null;
-        
+
         try
         {
             writer = getIndexWriter( true );
@@ -219,7 +219,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         }
         finally
         {
-        	close(writer);
+            close( writer );
         }
 
         AppLogService.debug( "\n Ticketing - Model Response : end Indexing All model response : \n" );
@@ -384,15 +384,13 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 
         return Paths.get( strIndexPath ).toFile( );
     }
-    
-    
-    
+
     /**
      * Close an IndexWriter
      * 
      * @param indexWriter
      */
-    private void close(IndexWriter indexWriter)
+    private void close( IndexWriter indexWriter )
     {
         try
         {

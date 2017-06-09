@@ -107,7 +107,7 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
         String [ ] strSeqIdTickets = request.getParameterValues( TicketingConstants.PARAMETER_SELECTED_TICKETS );
         if ( strSeqIdTickets != null && strSeqIdTickets.length > 0 )
         {
-            setDomain = getListDomain( strSeqIdTickets );            
+            setDomain = getListDomain( strSeqIdTickets );
         }
 
         if ( StringUtils.isNotEmpty( strQuery ) && !setDomain.isEmpty( ) )
@@ -177,7 +177,6 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
         ( (List<ErrorMessage>) model.get( SearchConstants.MARK_ERRORS ) ).add( new MVCMessage( I18nService.getLocalizedString( strMessageKey, locale ) ) );
     }
 
-    
     /**
      * Return the set of domain labels associated to the list of id ticket given in parameter
      * 
@@ -196,14 +195,14 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
                 if ( ticket != null )
                 {
                     TicketDomain domain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) );
-                    if (domain != null )
+                    if ( domain != null )
                     {
-                    	setDomain.add( domain.getLabel( ) );
-                    }                    
+                        setDomain.add( domain.getLabel( ) );
+                    }
                 }
             }
         }
         return setDomain;
     }
-    
+
 }

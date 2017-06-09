@@ -205,16 +205,16 @@ public final class TicketDomainDAO implements ITicketDomainDAO
     public List<TicketDomain> selectTicketDomainsList( Plugin plugin, boolean bInactiveDomain )
     {
         List<TicketDomain> ticketDomainList = new ArrayList<TicketDomain>( );
-        
+
         String query = SQL_QUERY_SELECTALL;
-        
+
         if ( !bInactiveDomain )
         {
-        	query += SQL_QUERY_INACTIVE_CLAUSE_TYPE_DOMAIN;
+            query += SQL_QUERY_INACTIVE_CLAUSE_TYPE_DOMAIN;
         }
-        
+
         query += SQL_QUERY_ORDER_BY_TYPE_DOMAIN;
-        
+
         DAOUtil daoUtil = new DAOUtil( query, plugin );
         daoUtil.executeQuery( );
 
@@ -259,21 +259,21 @@ public final class TicketDomainDAO implements ITicketDomainDAO
      * {@inheritDoc }
      */
     @Override
-    public ReferenceList selectReferenceListByType( int nTicketTypeId, boolean bInactiveDomain, Plugin plugin ) 
+    public ReferenceList selectReferenceListByType( int nTicketTypeId, boolean bInactiveDomain, Plugin plugin )
     {
         ReferenceList list = new ReferenceList( );
-        
+
         String query = SQL_QUERY_SELECT_BY_TYPE;
-        
+
         if ( !bInactiveDomain )
         {
-        	query += SQL_QUERY_INACTIVE_CLAUSE_DOMAIN;
+            query += SQL_QUERY_INACTIVE_CLAUSE_DOMAIN;
         }
-        
+
         query += SQL_QUERY_ORDER_BY_DOMAIN;
-        
+
         DAOUtil daoUtil = new DAOUtil( query, plugin );
-        
+
         daoUtil.setInt( 1, nTicketTypeId );
         daoUtil.executeQuery( );
 

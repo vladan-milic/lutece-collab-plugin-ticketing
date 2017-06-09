@@ -59,10 +59,10 @@ public class TicketDomainResourceIdService extends ResourceIdService
     private static final String PROPERTY_LABEL_VIEW_LIST = "ticketing.ticketdomain.permission.label.viewList";
     private static final String PROPERTY_LABEL_VIEW_DETAIL = "ticketing.ticketdomain.permission.label.viewDetail";
     private static final String PROPERTY_LABEL_BELONG_TO = "ticketing.ticketdomain.permission.label.belongTo";
-    
+
     /** Constants */
     private static final String SEPARATOR = " - ";
-    
+
     /**
      * Constructor
      */
@@ -110,10 +110,10 @@ public class TicketDomainResourceIdService extends ResourceIdService
     public ReferenceList getResourceIdList( Locale locale )
     {
         ReferenceList list = new ReferenceList( );
-        
+
         for ( TicketDomain domain : TicketDomainHome.getTicketDomainsList( true ) )
         {
-        	list.addItem(domain.getId(), ( domain.getTicketType() + SEPARATOR + domain.getLabel() ) ); 
+            list.addItem( domain.getId( ), ( domain.getTicketType( ) + SEPARATOR + domain.getLabel( ) ) );
         }
 
         return list;

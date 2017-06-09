@@ -214,7 +214,7 @@ public final class TicketDomainHome
      */
     public static ReferenceList getReferenceListByType( int nTicketTypeId, boolean bInactiveDomain )
     {
-        return _dao.selectReferenceListByType( nTicketTypeId, bInactiveDomain,  _plugin );
+        return _dao.selectReferenceListByType( nTicketTypeId, bInactiveDomain, _plugin );
     }
 
     /**

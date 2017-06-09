@@ -143,7 +143,6 @@ public class ModelResponse implements Serializable
         _strDomain = strDomain;
     }
 
-
     /**
      * Returns the Keyword
      * 

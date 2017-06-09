@@ -55,7 +55,7 @@ public final class ModelResponseDAO implements IModelResponseDAO
     private static final String SQL_QUERY_SELECTALL = "SELECT id_model_response, label_ticket_domain, title, reponse,keyword FROM ticketing_model_reponses";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_model_response FROM ticketing_model_reponses";
     private static final String SQL_QUERY_SELECT_BY_DOMAIN = "SELECT id_model_response, label_ticket_domain, title, reponse,keyword FROM ticketing_model_reponses WHERE label_ticket_domain = ?";
-    
+
     /**
      * Generates a new primary key
      * 
@@ -107,11 +107,11 @@ public final class ModelResponseDAO implements IModelResponseDAO
     @Override
     public ModelResponse load( int nKey, Plugin plugin )
     {
-    	ModelResponse modelResponse = null;
-    	
+        ModelResponse modelResponse = null;
+
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setInt( 1, nKey );
-        
+
         daoUtil.executeQuery( );
 
         if ( daoUtil.next( ) )
@@ -181,7 +181,7 @@ public final class ModelResponseDAO implements IModelResponseDAO
 
         return listModelResponses;
     }
-    
+
     /**
      * {@inheritDoc }
      */
@@ -190,9 +190,9 @@ public final class ModelResponseDAO implements IModelResponseDAO
     {
         List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_DOMAIN, plugin );
-        
-        daoUtil.setString(1, sLabelDomain);
-        
+
+        daoUtil.setString( 1, sLabelDomain );
+
         daoUtil.executeQuery( );
 
         listModelResponses = dataToModelResponse( daoUtil );
@@ -201,7 +201,7 @@ public final class ModelResponseDAO implements IModelResponseDAO
 
         return listModelResponses;
     }
-    
+
     /**
      * Creates a Ticket object from data
      * 
@@ -211,9 +211,9 @@ public final class ModelResponseDAO implements IModelResponseDAO
      */
     private static List<ModelResponse> dataToModelResponse( DAOUtil daoUtil )
     {
-    	List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>( );
-    	
-    	while ( daoUtil.next( ) )
+        List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>( );
+
+        while ( daoUtil.next( ) )
         {
             ModelResponse modelResponse = new ModelResponse( );
             int nIndex = 1;
@@ -226,8 +226,8 @@ public final class ModelResponseDAO implements IModelResponseDAO
 
             listModelResponses.add( modelResponse );
         }
-    	
-    	return listModelResponses;
+
+        return listModelResponses;
     }
 
     /**
@@ -249,8 +249,6 @@ public final class ModelResponseDAO implements IModelResponseDAO
 
         return modelResponseList;
     }
-    
-    
 
     /**
      * {@inheritDoc }
