@@ -92,9 +92,11 @@ public interface ITicketDomainDAO
      * 
      * @param plugin
      *            the Plugin
+     * @param bInactiveDomain
+     *            Boolean for inactive domain inclusion
      * @return The collection which contains the data of all the ticketDomain objects
      */
-    List<TicketDomain> selectTicketDomainsList( Plugin plugin );
+    List<TicketDomain> selectTicketDomainsList( Plugin plugin, boolean bInactiveDomain );
 
     /**
      * Load the id of all the ticketDomain objects and returns them as a collection
@@ -110,11 +112,13 @@ public interface ITicketDomainDAO
      * 
      * @param nTicketTypeId
      *            The type id
+     * @param bInactiveDomain
+     *            Boolean for inactive domain inclusion
      * @param plugin
      *            The plugin
      * @return The reference list
      */
-    ReferenceList selectReferenceListByType( int nTicketTypeId, Plugin plugin );
+    ReferenceList selectReferenceListByType( int nTicketTypeId, boolean bInactiveDomain, Plugin plugin );
 
     /**
      * Get a reference list of domains for a given domain label

@@ -160,11 +160,13 @@ public final class TicketDomainHome
     /**
      * Load the data of all the ticketDomain objects and returns them in form of a collection
      * 
+     * @param bInactiveDomain
+     *            Boolean for inactive domain inclusion
      * @return the collection which contains the data of all the ticketDomain objects
      */
-    public static List<TicketDomain> getTicketDomainsList( )
+    public static List<TicketDomain> getTicketDomainsList( boolean bInactiveDomain )
     {
-        return _dao.selectTicketDomainsList( _plugin );
+        return _dao.selectTicketDomainsList( _plugin, bInactiveDomain );
     }
 
     /**
@@ -206,11 +208,13 @@ public final class TicketDomainHome
      * 
      * @param nTicketTypeId
      *            id of type
+     * @param bInactiveDomain
+     *            Boolean for inactive domain inclusion
      * @return ReferenceList of typeId
      */
-    public static ReferenceList getReferenceListByType( int nTicketTypeId )
+    public static ReferenceList getReferenceListByType( int nTicketTypeId, boolean bInactiveDomain )
     {
-        return _dao.selectReferenceListByType( nTicketTypeId, _plugin );
+        return _dao.selectReferenceListByType( nTicketTypeId, bInactiveDomain,  _plugin );
     }
 
     /**
@@ -246,7 +250,7 @@ public final class TicketDomainHome
     {
         List<TicketDomain> listDomains = new ArrayList<TicketDomain>( );
 
-        for ( TicketDomain domain : getTicketDomainsList( ) )
+        for ( TicketDomain domain : getTicketDomainsList( true ) )
         {
             if ( RBACService.isAuthorized( domain, strPermission, adminUser ) )
             {

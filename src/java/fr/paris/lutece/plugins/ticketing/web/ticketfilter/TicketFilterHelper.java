@@ -434,7 +434,7 @@ public final class TicketFilterHelper
 
             TicketDomain domain = new TicketDomain( );
 
-            for ( ReferenceItem refDomain : TicketDomainHome.getReferenceListByType( Integer.parseInt( refType.getCode( ) ) ) )
+            for ( ReferenceItem refDomain : TicketDomainHome.getReferenceListByType( Integer.parseInt( refType.getCode( ) ), true ) )
             {
                 domain.setId( Integer.parseInt( refDomain.getCode( ) ) );
                 // Check user rights

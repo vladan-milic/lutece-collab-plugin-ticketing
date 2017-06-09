@@ -119,7 +119,7 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
 
         JSONArray jsonDomains = new JSONArray( );
 
-        for ( ReferenceItem refItemDomain : TicketDomainHome.getReferenceListByType( ticketType.getId( ) ) )
+        for ( ReferenceItem refItemDomain : TicketDomainHome.getReferenceListByType( ticketType.getId( ), false ) )
         {
             int nDomainId = Integer.parseInt( refItemDomain.getCode( ) );
             JSONObject jsonDomain = new JSONObject( );

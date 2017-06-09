@@ -53,14 +53,18 @@ public final class TicketDomainDAO implements ITicketDomainDAO
     private static final String SQL_QUERY_DELETE = "UPDATE ticketing_ticket_domain SET inactive = 1, domain_order = -1 WHERE id_ticket_domain = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket_domain SET id_ticket_domain = ?, id_ticket_type = ?, label = ?, domain_order = ?  WHERE id_ticket_domain = ?";
     private static final String SQL_QUERY_SELECTALL = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label FROM ticketing_ticket_domain a, ticketing_ticket_type b "
-            + " WHERE a.id_ticket_type = b.id_ticket_type  AND a.inactive <> 1 AND b.inactive <> 1 ORDER BY  b.type_order, a.domain_order";
+            + " WHERE a.id_ticket_type = b.id_ticket_type";
+    private static final String SQL_QUERY_INACTIVE_CLAUSE_TYPE_DOMAIN = " AND a.inactive <> 1 AND b.inactive <> 1";
+    private static final String SQL_QUERY_ORDER_BY_TYPE_DOMAIN = " ORDER BY  b.type_order, a.domain_order";
     private static final String SQL_QUERY_SELECTALL_SIMPLE = "SELECT a.id_ticket_domain, a.label FROM ticketing_ticket_domain a  WHERE a.inactive <> 1";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_domain FROM ticketing_ticket_domain  AND inactive <> 1 ";
-    private static final String SQL_QUERY_SELECT_BY_TYPE = "SELECT id_ticket_domain , label FROM ticketing_ticket_domain WHERE id_ticket_type = ?  AND inactive <> 1 ORDER BY domain_order";
+    private static final String SQL_QUERY_SELECT_BY_TYPE = "SELECT id_ticket_domain , label FROM ticketing_ticket_domain WHERE id_ticket_type = ?";
+    private static final String SQL_QUERY_INACTIVE_CLAUSE_DOMAIN = " AND inactive <> 1";
+    private static final String SQL_QUERY_ORDER_BY_DOMAIN = " ORDER BY domain_order";
     private static final String SQL_QUERY_LOAD_BY_TYPE = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label, a.domain_order  FROM ticketing_ticket_domain a, ticketing_ticket_type b WHERE a.id_ticket_type = ?  AND a.id_ticket_type = b.id_ticket_type AND a.inactive <> 1 AND b.inactive <> 1 ORDER BY a.domain_order";
     private static final String SQL_QUERY_COUNT_CATEGORY_BY_DOMAIN = "SELECT COUNT(1) FROM ticketing_ticket_category WHERE id_ticket_domain = ? AND inactive <> 1 ";
     private static final String SQL_QUERY_SELECT_BY_LABEL = "SELECT a.id_ticket_domain, a.id_ticket_type, a.label, b.label, a.domain_order FROM ticketing_ticket_domain a, ticketing_ticket_type b "
-            + " WHERE a.label = ? AND a.id_ticket_type = b.id_ticket_type AND a.inactive <> 1 AND b.inactive <> 1 ";
+            + " WHERE a.label = ? AND a.id_ticket_type = b.id_ticket_type";
     private static final String SQL_QUERY_MAX_DOMAIN_ORDER_BY_TYPE = "SELECT max(domain_order) FROM ticketing_ticket_domain WHERE id_ticket_type = ? AND inactive <> 1";
     private static final String SQL_QUERY_REBUILD_DOMAIN_ORDER_SEQUENCE = "UPDATE ticketing_ticket_domain SET domain_order = domain_order - 1 WHERE domain_order > ? AND id_ticket_type = ? AND inactive <> 1 ";
     private static final String SQL_QUERY_SELECT_DOMAINID_BY_ORDER = "SELECT id_ticket_domain FROM ticketing_ticket_domain WHERE id_ticket_type = ? AND domain_order = ? ";
@@ -198,10 +202,20 @@ public final class TicketDomainDAO implements ITicketDomainDAO
      * {@inheritDoc }
      */
     @Override
-    public List<TicketDomain> selectTicketDomainsList( Plugin plugin )
+    public List<TicketDomain> selectTicketDomainsList( Plugin plugin, boolean bInactiveDomain )
     {
         List<TicketDomain> ticketDomainList = new ArrayList<TicketDomain>( );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
+        
+        String query = SQL_QUERY_SELECTALL;
+        
+        if ( !bInactiveDomain )
+        {
+        	query += SQL_QUERY_INACTIVE_CLAUSE_TYPE_DOMAIN;
+        }
+        
+        query += SQL_QUERY_ORDER_BY_TYPE_DOMAIN;
+        
+        DAOUtil daoUtil = new DAOUtil( query, plugin );
         daoUtil.executeQuery( );
 
         while ( daoUtil.next( ) )
@@ -245,10 +259,21 @@ public final class TicketDomainDAO implements ITicketDomainDAO
      * {@inheritDoc }
      */
     @Override
-    public ReferenceList selectReferenceListByType( int nTicketTypeId, Plugin plugin )
+    public ReferenceList selectReferenceListByType( int nTicketTypeId, boolean bInactiveDomain, Plugin plugin ) 
     {
         ReferenceList list = new ReferenceList( );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_TYPE, plugin );
+        
+        String query = SQL_QUERY_SELECT_BY_TYPE;
+        
+        if ( !bInactiveDomain )
+        {
+        	query += SQL_QUERY_INACTIVE_CLAUSE_DOMAIN;
+        }
+        
+        query += SQL_QUERY_ORDER_BY_DOMAIN;
+        
+        DAOUtil daoUtil = new DAOUtil( query, plugin );
+        
         daoUtil.setInt( 1, nTicketTypeId );
         daoUtil.executeQuery( );
 
@@ -327,7 +352,7 @@ public final class TicketDomainDAO implements ITicketDomainDAO
     public ReferenceList selectReferenceList( Plugin plugin )
     {
         ReferenceList list = new ReferenceList( );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL + SQL_QUERY_INACTIVE_CLAUSE_TYPE_DOMAIN + SQL_QUERY_ORDER_BY_TYPE_DOMAIN, plugin );
         daoUtil.executeQuery( );
 
         while ( daoUtil.next( ) )

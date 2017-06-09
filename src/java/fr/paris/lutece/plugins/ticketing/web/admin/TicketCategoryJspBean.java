@@ -160,7 +160,7 @@ public class TicketCategoryJspBean extends ManageAdminTicketingJspBean
         _category = null;
 
         // This List could be directly populated by DAO instead of loop
-        List<TicketDomain> _ticketDomainList = TicketDomainHome.getTicketDomainsList( );
+        List<TicketDomain> _ticketDomainList = TicketDomainHome.getTicketDomainsList( false );
         for ( TicketDomain _ticketDomain : _ticketDomainList )
         {
             List<TicketCategory> listTicketCategories = (List<TicketCategory>) TicketCategoryHome.findByDomainId( _ticketDomain.getId( ) );

@@ -106,7 +106,7 @@ public class TicketTypeFormatterXml implements ITicketingFormatter<TicketType>
         XmlUtil.addElement( sbXML, FormatConstants.KEY_ID, ticketType.getId( ) );
         XmlUtil.addElement( sbXML, FormatConstants.KEY_LABEL, ticketType.getLabel( ) );
 
-        for ( ReferenceItem domain : TicketDomainHome.getReferenceListByType( ticketType.getId( ) ) )
+        for ( ReferenceItem domain : TicketDomainHome.getReferenceListByType( ticketType.getId( ), false ) )
         {
             XmlUtil.beginElement( sbXML, FormatConstants.KEY_TICKET_DOMAIN );
 
