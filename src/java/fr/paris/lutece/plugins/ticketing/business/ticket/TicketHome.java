@@ -172,6 +172,7 @@ public final class TicketHome
     public static void markAsRead( Ticket ticket )
     {
         markAsRead( ticket.getId( ) );
+        ticket.setRead( true );
     }
 
     /**
@@ -194,6 +195,7 @@ public final class TicketHome
     public static void markAsUnread( Ticket ticket )
     {
         markAsUnread( ticket.getId( ) );
+        ticket.setRead( false );
     }
 
     /**
