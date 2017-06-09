@@ -33,10 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
+import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -57,7 +54,8 @@ public final class ModelResponseDAO implements IModelResponseDAO
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_model_reponses SET id_model_response = ?, label_ticket_domain = ?, title = ?, reponse = ?, keyword =? WHERE id_model_response = ?";
     private static final String SQL_QUERY_SELECTALL = "SELECT id_model_response, label_ticket_domain, title, reponse,keyword FROM ticketing_model_reponses";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_model_response FROM ticketing_model_reponses";
-
+    private static final String SQL_QUERY_SELECT_BY_DOMAIN = "SELECT id_model_response, label_ticket_domain, title, reponse,keyword FROM ticketing_model_reponses WHERE label_ticket_domain = ?";
+    
     /**
      * Generates a new primary key
      * 
@@ -109,13 +107,12 @@ public final class ModelResponseDAO implements IModelResponseDAO
     @Override
     public ModelResponse load( int nKey, Plugin plugin )
     {
+    	ModelResponse modelResponse = null;
+    	
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setInt( 1, nKey );
+        
         daoUtil.executeQuery( );
-
-        ModelResponse modelResponse = null;
-
-        TicketDomain ticketDomain;
 
         if ( daoUtil.next( ) )
         {
@@ -174,14 +171,49 @@ public final class ModelResponseDAO implements IModelResponseDAO
     @Override
     public List<ModelResponse> selectModelResponsesList( Plugin plugin )
     {
-        List<ModelResponse> typeResponseList = new ArrayList<ModelResponse>( );
+        List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
         daoUtil.executeQuery( );
 
-        TicketDomain ticketDomain;
-        TicketType ticketType;
+        listModelResponses = dataToModelResponse( daoUtil );
 
-        while ( daoUtil.next( ) )
+        daoUtil.free( );
+
+        return listModelResponses;
+    }
+    
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<ModelResponse> selectModelResponsesListByDomain( Plugin plugin, String sLabelDomain )
+    {
+        List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>( );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_DOMAIN, plugin );
+        
+        daoUtil.setString(1, sLabelDomain);
+        
+        daoUtil.executeQuery( );
+
+        listModelResponses = dataToModelResponse( daoUtil );
+
+        daoUtil.free( );
+
+        return listModelResponses;
+    }
+    
+    /**
+     * Creates a Ticket object from data
+     * 
+     * @param daoUtil
+     *            the data
+     * @return the Ticket object
+     */
+    private static List<ModelResponse> dataToModelResponse( DAOUtil daoUtil )
+    {
+    	List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>( );
+    	
+    	while ( daoUtil.next( ) )
         {
             ModelResponse modelResponse = new ModelResponse( );
             int nIndex = 1;
@@ -192,12 +224,10 @@ public final class ModelResponseDAO implements IModelResponseDAO
             modelResponse.setReponse( daoUtil.getString( nIndex++ ) );
             modelResponse.setKeyword( daoUtil.getString( nIndex++ ) );
 
-            typeResponseList.add( modelResponse );
+            listModelResponses.add( modelResponse );
         }
-
-        daoUtil.free( );
-
-        return typeResponseList;
+    	
+    	return listModelResponses;
     }
 
     /**
@@ -219,6 +249,8 @@ public final class ModelResponseDAO implements IModelResponseDAO
 
         return modelResponseList;
     }
+    
+    
 
     /**
      * {@inheritDoc }

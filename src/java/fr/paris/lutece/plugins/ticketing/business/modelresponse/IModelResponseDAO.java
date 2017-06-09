@@ -95,6 +95,17 @@ public interface IModelResponseDAO
      * @return The list which contains the data of all the modelResponse objects
      */
     List<ModelResponse> selectModelResponsesList( Plugin plugin );
+    
+    /**
+     * Load the data of all the modelResponse objects for a fiven domain label and returns them as a list
+     * 
+     * @param plugin
+     *            the Plugin
+     * @param sLabelDomain
+     *            the domain label
+     * @return The list which contains the data of all the modelResponse objects
+     */
+    List<ModelResponse> selectModelResponsesListByDomain( Plugin plugin, String sLabelDomain );
 
     /**
      * Load the id of all the modelResponse objects and returns them as a list

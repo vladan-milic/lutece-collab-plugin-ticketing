@@ -38,9 +38,14 @@ import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
+import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
+import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -48,15 +53,24 @@ import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import fr.paris.lutece.portal.web.constants.Parameters;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
+import fr.paris.lutece.util.ReferenceItem;
+import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
+import fr.paris.lutece.util.sort.AttributeComparator;
 import fr.paris.lutece.util.url.UrlItem;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * This class provides the user interface to manage ModelResponse features ( manage, create, modify, remove )
@@ -77,11 +91,13 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
     // Parameters
     private static final String PARAMETER_PAGE_INDEX = "page_index";
+    private static final String PARAMETER_FILTER_ID_DOMAIN = "fltr_id_domain";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_MODELRESPONSES = "ticketing.manage_modelresponse.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_MODELRESPONSE = "ticketing.modify_modelresponse.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_CREATE_MODELRESPONSE = "ticketing.create_modelresponse.pageTitle";
+    private static final String PROPERTY_TICKET_DOMAIN_LABEL = "ticketing.model.entity.ticket.attribute.ticketDomain";
 
     // Properties
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
@@ -93,9 +109,9 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     // Markers
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
-    private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
     private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
-    private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
+    private static final String MARK_FULL_DOMAIN_LIST = "domain_list";
+    private static final String MARK_SELECTED_DOMAIN = "selected_domain";
     private static final String JSP_MANAGE_MODELRESPONSES = "jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp";
 
     // Properties
@@ -173,10 +189,84 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     @View( value = VIEW_MANAGE_MODELRESPONSES, defaultView = true )
     public String getManageModelResponses( HttpServletRequest request )
     {
-        _modelResponse = null;
+    	Map<String, String> mapDomains = new LinkedHashMap<String, String>( );
+        mapDomains.put( StringUtils.EMPTY, I18nService.getLocalizedString( PROPERTY_TICKET_DOMAIN_LABEL, request.getLocale( ) ) );
 
-        List<ModelResponse> listModelResponses = ModelResponseHome.getModelResponsesList( );
+        AdminUser userCurrent = getUser( );
+
+        for ( ReferenceItem refType : TicketTypeHome.getReferenceList( ) )
+        {
+
+            TicketDomain domain = new TicketDomain( );
+
+            for ( ReferenceItem refDomain : TicketDomainHome.getReferenceListByType( Integer.parseInt( refType.getCode( ) ), true ) )
+            {
+                domain.setId( Integer.parseInt( refDomain.getCode( ) ) );
+                // Check user rights
+                if ( RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST, userCurrent ) ||
+                		RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, userCurrent ))
+                {
+                    if ( !mapDomains.containsValue( refDomain.getName( ) ) )
+                    {
+                        mapDomains.put( refDomain.getName( ), refDomain.getName( ) );
+                    }
+                }
+            }
+        }
+        
+        _modelResponse = null;
+        List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>();
+        
+        String strSelectedDomain = StringUtils.EMPTY;
+        
+        if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_DOMAIN ) ) )
+        {
+        	strSelectedDomain = request.getParameter( PARAMETER_FILTER_ID_DOMAIN );
+        	listModelResponses = ModelResponseHome.getModelResponsesListByDomain( strSelectedDomain );
+        }
+        else 
+        {
+        	for( ModelResponse modelResponse : ModelResponseHome.getModelResponsesList( ) )
+        	{
+    			if ( mapDomains.containsKey( modelResponse.getDomain( ) ) )
+    			{
+    				listModelResponses.add( modelResponse );
+    			}
+        	}
+        }
+        
+        // SORT
+        String strSortedAttributeName = request.getParameter( Parameters.SORTED_ATTRIBUTE_NAME );
+        String strAscSort = null;
+
+        if ( strSortedAttributeName != null )
+        {
+            strAscSort = request.getParameter( Parameters.SORTED_ASC );
+
+            boolean bIsAscSort = Boolean.parseBoolean( strAscSort );
+
+            Collections.sort( listModelResponses, new AttributeComparator( strSortedAttributeName, bIsAscSort ) );
+        }
+        
+        String strURL = getHomeUrl( request );
+        UrlItem url = new UrlItem( strURL );
+
+        if ( strSortedAttributeName != null )
+        {
+            url.addParameter( Parameters.SORTED_ATTRIBUTE_NAME, strSortedAttributeName );
+        }
+
+        if ( strAscSort != null )
+        {
+            url.addParameter( Parameters.SORTED_ASC, strAscSort );
+        }
+        
+        
+        
         Map<String, Object> model = getPaginatedListModel( request, MARK_MODELRESPONSE_LIST, listModelResponses, JSP_MANAGE_MODELRESPONSES );
+
+        model.put( MARK_SELECTED_DOMAIN, strSelectedDomain );
+        model.put( MARK_FULL_DOMAIN_LIST, ReferenceList.convert( mapDomains ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_MODELRESPONSES, TEMPLATE_MANAGE_MODELRESPONSES, model );
     }

@@ -33,12 +33,21 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
+import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
+import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.rbac.RBACResource;
+import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class provides instances management methods (create, find, ...) for TypeResponse objects
@@ -115,6 +124,16 @@ public final class ModelResponseHome
     public static List<ModelResponse> getModelResponsesList( )
     {
         return _dao.selectModelResponsesList( _plugin );
+    }
+    
+    /**
+     * Load the data of all the modelResponse objects for a given domain label and returns them as a list
+     * 
+     * @return the list which contains the data of all the modelResponse objects
+     */
+    public static List<ModelResponse> getModelResponsesListByDomain( String sLabelDomain )
+    {
+        return _dao.selectModelResponsesListByDomain( _plugin, sLabelDomain );
     }
 
     /**

@@ -17,8 +17,19 @@
 				<thead>
 				<tr>			            
 			           		           
-			            <th width="75%" >#i18n{ticketing.manage_modelresponse.columnTitle}</th>
-                                     <th width="15%" >#i18n{ticketing.manage_modelresponse.columnDomain}</th>	
+			            <th width="75%" >
+			            	#i18n{ticketing.manage_modelresponse.columnTitle}
+			            	<@sort jsp_url="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp" attribute="title" />
+			            </th>
+                        <th width="15%" >
+                        	<form id="filter_form" class="form-inline" method="post" name="manage_modelresponse" action="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp">
+								<label class="select" for="domain">
+									<@comboWithParams name="fltr_id_domain" default_value="${selected_domain!}" additionalParameters=" id=\"fltr_id_domain\" class=\"form-control input-xs\" " items=domain_list />
+								</label>
+							</form>
+                        	#i18n{ticketing.manage_modelresponse.columnDomain}
+                        	<@sort jsp_url="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp" attribute="domain" />
+                        </th>	
 			           <th width="5%" style="text-align:center">#i18n{ticketing.manage_modelresponse.columnEdit}</th>	
 			           <th width="5%" style="text-align:center">#i18n{ticketing.manage_modelresponse.columnDelete}</th>	
         			</tr>
@@ -53,3 +64,10 @@
 		</div>
 	</div>
 </div>
+<script>
+$( function(){
+  $("#fltr_id_domain").on( 'change', function(e){
+		$("#filter_form").submit( );
+	});
+});
+</script>
