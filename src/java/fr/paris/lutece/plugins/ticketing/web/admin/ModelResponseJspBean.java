@@ -140,6 +140,9 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     private int _nDefaultItemsPerPage;
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
+    private String _strSelectedDomain;
+    private String _strSortedAttributeName;
+    private String _strAscSort;
 
     // Session variable to store working values
     private ModelResponse _modelResponse;
@@ -190,13 +193,13 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     public String getManageModelResponses( HttpServletRequest request )
     {
         Map<String, String> mapDomains = new LinkedHashMap<String, String>( );
-        mapDomains.put( StringUtils.EMPTY, I18nService.getLocalizedString( PROPERTY_TICKET_DOMAIN_LABEL, request.getLocale( ) ) );
+        String strDefaultDomainLabel = I18nService.getLocalizedString( PROPERTY_TICKET_DOMAIN_LABEL, request.getLocale( ) );
+        mapDomains.put( strDefaultDomainLabel, strDefaultDomainLabel );
 
         AdminUser userCurrent = getUser( );
 
         for ( ReferenceItem refType : TicketTypeHome.getReferenceList( ) )
         {
-
             TicketDomain domain = new TicketDomain( );
 
             for ( ReferenceItem refDomain : TicketDomainHome.getReferenceListByType( Integer.parseInt( refType.getCode( ) ), true ) )
@@ -217,12 +220,16 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         _modelResponse = null;
         List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>( );
 
-        String strSelectedDomain = StringUtils.EMPTY;
+        String strSelectedDomain = request.getParameter( PARAMETER_FILTER_ID_DOMAIN );
 
-        if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_DOMAIN ) ) )
+        if ( StringUtils.isNotEmpty( strSelectedDomain ) )
         {
-            strSelectedDomain = request.getParameter( PARAMETER_FILTER_ID_DOMAIN );
-            listModelResponses = ModelResponseHome.getModelResponsesListByDomain( strSelectedDomain );
+            _strSelectedDomain = strSelectedDomain;
+        }
+
+        if ( !strDefaultDomainLabel.equals( _strSelectedDomain ) && StringUtils.isNotEmpty( _strSelectedDomain ) )
+        {
+            listModelResponses = ModelResponseHome.getModelResponsesListByDomain( _strSelectedDomain );
         }
         else
         {
@@ -237,33 +244,26 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         // SORT
         String strSortedAttributeName = request.getParameter( Parameters.SORTED_ATTRIBUTE_NAME );
-        String strAscSort = null;
 
-        if ( strSortedAttributeName != null )
+        if ( StringUtils.isNotEmpty( strSortedAttributeName ) )
         {
-            strAscSort = request.getParameter( Parameters.SORTED_ASC );
-
-            boolean bIsAscSort = Boolean.parseBoolean( strAscSort );
-
-            Collections.sort( listModelResponses, new AttributeComparator( strSortedAttributeName, bIsAscSort ) );
+            _strSortedAttributeName = strSortedAttributeName;
+            _strAscSort = request.getParameter( Parameters.SORTED_ASC );
         }
 
         String strURL = getHomeUrl( request );
         UrlItem url = new UrlItem( strURL );
 
-        if ( strSortedAttributeName != null )
+        if ( _strSortedAttributeName != null )
         {
-            url.addParameter( Parameters.SORTED_ATTRIBUTE_NAME, strSortedAttributeName );
-        }
-
-        if ( strAscSort != null )
-        {
-            url.addParameter( Parameters.SORTED_ASC, strAscSort );
+            Collections.sort( listModelResponses, new AttributeComparator( _strSortedAttributeName, Boolean.parseBoolean( _strAscSort ) ) );
+            url.addParameter( Parameters.SORTED_ATTRIBUTE_NAME, _strSortedAttributeName );
+            url.addParameter( Parameters.SORTED_ASC, _strAscSort );
         }
 
         Map<String, Object> model = getPaginatedListModel( request, MARK_MODELRESPONSE_LIST, listModelResponses, JSP_MANAGE_MODELRESPONSES );
 
-        model.put( MARK_SELECTED_DOMAIN, strSelectedDomain );
+        model.put( MARK_SELECTED_DOMAIN, _strSelectedDomain );
         model.put( MARK_FULL_DOMAIN_LIST, ReferenceList.convert( mapDomains ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_MODELRESPONSES, TEMPLATE_MANAGE_MODELRESPONSES, model );
