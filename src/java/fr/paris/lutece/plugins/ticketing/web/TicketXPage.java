@@ -144,7 +144,7 @@ public class TicketXPage extends WorkflowCapableXPage
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
 
     // Other constants
-    private static final String LUTECE_USER_INFO_CUSTOMER_ID = "customer_id";
+    private static final String LUTECE_USER_INFO_CUSTOMER_ID = "user.id.customer";
 
     /**
      * Returns the form to create a ticket
