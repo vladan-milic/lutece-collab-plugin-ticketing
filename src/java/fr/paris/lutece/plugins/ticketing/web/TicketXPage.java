@@ -557,6 +557,7 @@ public class TicketXPage extends WorkflowCapableXPage
         model.put( MARK_FIX_PHONE_NUMBER, ticket.getFixedPhoneNumber( ) );
         model.put( MARK_MOBILE_PHONE_NUMBER, ticket.getMobilePhoneNumber( ) );
 
+        @SuppressWarnings( "deprecation" )
         String strContent = AppTemplateService.getTemplateFromStringFtl( template.getHtml( ), request.getLocale( ), model ).getHtml( );
 
         return strContent;
