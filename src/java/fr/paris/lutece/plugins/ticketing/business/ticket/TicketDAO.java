@@ -70,11 +70,12 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_SELECT_WITH_JOIN_DATA_TICKET = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, "
             + " a.fixed_phone_number, a.mobile_phone_number, c.id_ticket_type, c.label, d.id_ticket_domain, "
             + " d.label, a.id_ticket_category, e.label, e.category_precision, e.id_workflow, a.id_contact_mode, f.code, a.ticket_comment, "
-            + " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, g.first_name, g.last_name, a.id_unit, h.label, a.id_assigner_user, a.id_assigner_unit, a.user_message, a.url, a.id_channel, x.label, x.icon_font, a.nomenclature, a.is_read, "
+            + " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, g.first_name, g.last_name, a.id_unit, h.label, a.id_assigner_user, a.id_assigner_unit, h2.label, a.user_message, a.url, a.id_channel, x.label, x.icon_font, a.nomenclature, a.is_read, "
             + " ad.address, ad.address_detail, ad.postal_code, ad.city"
             + " FROM ticketing_ticket a"
             + " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user"
             + " LEFT JOIN unittree_unit h ON h.id_unit=a.id_unit"
+            + " LEFT JOIN unittree_unit h2 ON h2.id_unit=a.id_assigner_unit"
             + " LEFT JOIN ticketing_ticket_address ad ON ad.id_ticket=a.id_ticket"
             + " JOIN ticketing_user_title b ON a.id_user_title = b.id_user_title"
             + " JOIN ticketing_ticket_category e ON a.id_ticket_category = e.id_ticket_category"
@@ -679,11 +680,12 @@ public final class TicketDAO implements ITicketDAO
 
         // assigner unit
         nId = daoUtil.getInt( nIndex++ );
-
+        String sAssignerUnitName = daoUtil.getString( nIndex++ );
         if ( nId != -1 )
         {
             AssigneeUnit assignerUnit = new AssigneeUnit( );
             assignerUnit.setUnitId( nId );
+            assignerUnit.setName( sAssignerUnitName );
             ticket.setAssignerUnit( assignerUnit );
         }
 
