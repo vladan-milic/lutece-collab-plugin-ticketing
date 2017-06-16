@@ -67,7 +67,7 @@ public class TicketDomainBusinessTest extends LuteceTestCase
         assertEquals( ticketDomainStored.getLabel( ), ticketDomain.getLabel( ) );
 
         // List test
-        TicketDomainHome.getTicketDomainsList( );
+        TicketDomainHome.getTicketDomainsList( true );
 
         // Delete test
         TicketDomainHome.remove( ticketDomain.getId( ) );

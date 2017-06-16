@@ -48,8 +48,6 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.identitystore.web.exception.IdentityNotFoundException;
-import fr.paris.lutece.plugins.identitystore.web.rs.dto.AttributeDto;
-import fr.paris.lutece.plugins.identitystore.web.rs.dto.IdentityDto;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
@@ -64,7 +62,6 @@ import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
-import fr.paris.lutece.plugins.ticketing.service.identity.TicketingIdentityService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.util.FormValidator;
@@ -146,6 +143,9 @@ public class TicketXPage extends WorkflowCapableXPage
     // Session variable to store working values
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
 
+    // Other constants
+    private static final String LUTECE_USER_INFO_CUSTOMER_ID = "user.id.customer";
+
     /**
      * Returns the form to create a ticket
      *
@@ -204,17 +204,15 @@ public class TicketXPage extends WorkflowCapableXPage
             {
                 ticket.setGuid( user.getName( ) );
 
-                IdentityDto identityDto = TicketingIdentityService.getInstance( ).getIdentityService( )
-                        .getIdentityByConnectionId( user.getName( ), TicketingConstants.APPLICATION_CODE );
+                String strCustomerId = user.getUserInfo( LUTECE_USER_INFO_CUSTOMER_ID );
+                String strIdUserTitle = user.getUserInfo( LuteceUser.GENDER );
+                String strFirstname = user.getUserInfo( LuteceUser.NAME_GIVEN );
+                String strLastname = user.getUserInfo( LuteceUser.NAME_FAMILY );
+                String strEmail = user.getUserInfo( LuteceUser.HOME_INFO_ONLINE_EMAIL );
+                String strFixedPhoneNumber = user.getUserInfo( LuteceUser.HOME_INFO_TELECOM_TELEPHONE_NUMBER );
+                String strMobilePhoneNumber = user.getUserInfo( LuteceUser.HOME_INFO_TELECOM_MOBILE_NUMBER );
 
-                String strIdUserTitle = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_GENDER );
-                String strFirstname = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_NAME_GIVEN );
-                String strLastname = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_NAME_PREFERRED_NAME );
-                String strEmail = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_ONLINE_EMAIL );
-                String strFixedPhoneNumber = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_TELEPHONE_NUMBER );
-                String strMobilePhoneNumber = getAttribute( identityDto, TicketingConstants.ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_MOBILE_NUMBER );
-
-                ticket.setCustomerId( identityDto.getCustomerId( ) );
+                ticket.setCustomerId( strCustomerId );
 
                 if ( !StringUtils.isEmpty( strIdUserTitle ) && StringUtils.isEmpty( ticket.getUserTitle( ) ) )
                 {
@@ -559,6 +557,7 @@ public class TicketXPage extends WorkflowCapableXPage
         model.put( MARK_FIX_PHONE_NUMBER, ticket.getFixedPhoneNumber( ) );
         model.put( MARK_MOBILE_PHONE_NUMBER, ticket.getMobilePhoneNumber( ) );
 
+        @SuppressWarnings( "deprecation" )
         String strContent = AppTemplateService.getTemplateFromStringFtl( template.getHtml( ), request.getLocale( ), model ).getHtml( );
 
         return strContent;
@@ -654,21 +653,5 @@ public class TicketXPage extends WorkflowCapableXPage
     protected XPage defaultRedirectWorkflowAction( HttpServletRequest request )
     {
         return redirectView( request, VIEW_CREATE_TICKET );
-    }
-
-    /**
-     * Gets the attribute value from the specified identity
-     * 
-     * @param identityDto
-     *            the identity
-     * @param strCode
-     *            the attribute code
-     * @return {@code null} if the attribute does not exist, the attribute value otherwise
-     */
-    private String getAttribute( IdentityDto identityDto, String strCode )
-    {
-        AttributeDto attribute = identityDto.getAttributes( ).get( strCode );
-
-        return ( attribute == null ) ? null : attribute.getValue( );
     }
 }
