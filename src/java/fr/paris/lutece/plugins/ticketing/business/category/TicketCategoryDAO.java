@@ -63,7 +63,8 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             + " FROM ticketing_ticket_category a, ticketing_ticket_domain b , ticketing_ticket_type c "
             + " WHERE a.id_ticket_domain = b.id_ticket_domain AND b.id_ticket_type = c.id_ticket_type  AND a.inactive <> 1 AND  b.inactive <> 1 AND  c.inactive <> 1"
             + " ORDER BY c.type_order, b.domain_order, a.category_order ASC";
-    private static final String SQL_QUERY_SELECT_BY_DOMAIN = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label, a.category_precision, a.id_workflow, b.label, c.label, c.id_ticket_type, a.category_code, a.help_message, a.category_order FROM ticketing_ticket_category a, ticketing_ticket_domain b, ticketing_ticket_type c "
+    private static final String SQL_QUERY_SELECT_BY_DOMAIN = "SELECT a.id_ticket_category, a.id_ticket_domain, a.label, a.id_workflow, b.label, c.label, c.id_ticket_type, a.category_code, a.id_unit, a.category_precision, a.help_message, a.category_order "
+            + " FROM ticketing_ticket_category a, ticketing_ticket_domain b, ticketing_ticket_type c "
             + " WHERE a.id_ticket_domain = ?  AND a.id_ticket_domain = b.id_ticket_domain AND b.id_ticket_type = c.id_ticket_type AND a.inactive <> 1 ORDER BY a.category_order ASC";
     private static final String SQL_QUERY_SELECT_BY_CATEGORY = "SELECT id_ticket_category, category_precision FROM ticketing_ticket_category WHERE id_ticket_domain = ? AND label = ?  AND inactive <> 1 ";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket_category FROM ticketing_ticket_category AND inactive <> 1 ";
@@ -233,30 +234,9 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
 
         TicketCategory category = null;
 
-        int nIndex = 1;
-
         if ( daoUtil.next( ) )
         {
-            category = new TicketCategory( );
-            category.setId( daoUtil.getInt( nIndex++ ) );
-            category.setIdTicketDomain( daoUtil.getInt( nIndex++ ) );
-            category.setLabel( daoUtil.getString( nIndex++ ) );
-            category.setIdWorkflow( daoUtil.getInt( nIndex++ ) );
-            category.setTicketDomain( daoUtil.getString( nIndex++ ) );
-            category.setTicketType( daoUtil.getString( nIndex++ ) );
-            category.setIdTicketType( daoUtil.getInt( nIndex++ ) );
-            category.setCode( daoUtil.getString( nIndex++ ) );
-
-            int nUnitId = daoUtil.getInt( nIndex++ );
-            Unit unit = UnitHome.findByPrimaryKey( nUnitId );
-            if ( unit != null )
-            {
-                AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
-                category.setAssigneeUnit( assigneeUnit );
-            }
-            category.setPrecision( daoUtil.getString( nIndex++ ) );
-            category.setHelpMessage( daoUtil.getString( nIndex++ ) );
-            category.setOrder( daoUtil.getInt( nIndex++ ) );
+            category = dataToCategory( daoUtil );
         }
 
         daoUtil.free( );
@@ -267,6 +247,34 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         {
             category.setListIdInput( listIdInput );
         }
+
+        return category;
+    }
+
+    private TicketCategory dataToCategory( DAOUtil daoUtil )
+    {
+        int nIndex = 1;
+
+        TicketCategory category = new TicketCategory( );
+        category.setId( daoUtil.getInt( nIndex++ ) );
+        category.setIdTicketDomain( daoUtil.getInt( nIndex++ ) );
+        category.setLabel( daoUtil.getString( nIndex++ ) );
+        category.setIdWorkflow( daoUtil.getInt( nIndex++ ) );
+        category.setTicketDomain( daoUtil.getString( nIndex++ ) );
+        category.setTicketType( daoUtil.getString( nIndex++ ) );
+        category.setIdTicketType( daoUtil.getInt( nIndex++ ) );
+        category.setCode( daoUtil.getString( nIndex++ ) );
+
+        int nUnitId = daoUtil.getInt( nIndex++ );
+        Unit unit = UnitHome.findByPrimaryKey( nUnitId );
+        if ( unit != null )
+        {
+            AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
+            category.setAssigneeUnit( assigneeUnit );
+        }
+        category.setPrecision( daoUtil.getString( nIndex++ ) );
+        category.setHelpMessage( daoUtil.getString( nIndex++ ) );
+        category.setOrder( daoUtil.getInt( nIndex++ ) );
 
         return category;
     }
@@ -283,30 +291,9 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
 
         TicketCategory category = null;
 
-        int nIndex = 1;
-
         if ( daoUtil.next( ) )
         {
-            category = new TicketCategory( );
-            category.setId( daoUtil.getInt( nIndex++ ) );
-            category.setIdTicketDomain( daoUtil.getInt( nIndex++ ) );
-            category.setLabel( daoUtil.getString( nIndex++ ) );
-            category.setIdWorkflow( daoUtil.getInt( nIndex++ ) );
-            category.setTicketDomain( daoUtil.getString( nIndex++ ) );
-            category.setTicketType( daoUtil.getString( nIndex++ ) );
-            category.setIdTicketType( daoUtil.getInt( nIndex++ ) );
-            category.setCode( daoUtil.getString( nIndex++ ) );
-
-            int nUnitId = daoUtil.getInt( nIndex++ );
-            Unit unit = UnitHome.findByPrimaryKey( nUnitId );
-            if ( unit != null )
-            {
-                AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
-                category.setAssigneeUnit( assigneeUnit );
-            }
-            category.setPrecision( daoUtil.getString( nIndex++ ) );
-            category.setHelpMessage( daoUtil.getString( nIndex++ ) );
-            category.setOrder( daoUtil.getInt( nIndex++ ) );
+            category = dataToCategory( daoUtil );
         }
 
         daoUtil.free( );
@@ -327,23 +314,9 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
 
         TicketCategory category = null;
 
-        int nIndex;
-
         while ( daoUtil.next( ) )
         {
-            nIndex = 1;
-            category = new TicketCategory( );
-            category.setId( daoUtil.getInt( nIndex++ ) );
-            category.setIdTicketDomain( daoUtil.getInt( nIndex++ ) );
-            category.setLabel( daoUtil.getString( nIndex++ ) );
-            category.setPrecision( daoUtil.getString( nIndex++ ) );
-            category.setIdWorkflow( daoUtil.getInt( nIndex++ ) );
-            category.setTicketDomain( daoUtil.getString( nIndex++ ) );
-            category.setTicketType( daoUtil.getString( nIndex++ ) );
-            category.setIdTicketType( daoUtil.getInt( nIndex++ ) );
-            category.setCode( daoUtil.getString( nIndex++ ) );
-            category.setHelpMessage( daoUtil.getString( nIndex++ ) );
-            category.setOrder( daoUtil.getInt( nIndex++ ) );
+            category = dataToCategory( daoUtil );
 
             ticketCategoryList.add( category );
         }
@@ -430,28 +403,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
 
         while ( daoUtil.next( ) )
         {
-            TicketCategory category = new TicketCategory( );
-
-            int nIndex = 1;
-            category.setId( daoUtil.getInt( nIndex++ ) );
-            category.setIdTicketDomain( daoUtil.getInt( nIndex++ ) );
-            category.setLabel( daoUtil.getString( nIndex++ ) );
-            category.setIdWorkflow( daoUtil.getInt( nIndex++ ) );
-            category.setTicketDomain( daoUtil.getString( nIndex++ ) );
-            category.setTicketType( daoUtil.getString( nIndex++ ) );
-            category.setIdTicketType( daoUtil.getInt( nIndex++ ) );
-            category.setCode( daoUtil.getString( nIndex++ ) );
-
-            int nUnitId = daoUtil.getInt( nIndex++ );
-            Unit unit = UnitHome.findByPrimaryKey( nUnitId );
-            if ( unit != null )
-            {
-                AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
-                category.setAssigneeUnit( assigneeUnit );
-            }
-            category.setPrecision( daoUtil.getString( nIndex++ ) );
-            category.setHelpMessage( daoUtil.getString( nIndex++ ) );
-            category.setOrder( daoUtil.getInt( nIndex++ ) );
+            TicketCategory category = dataToCategory( daoUtil );
 
             ticketCategoryList.add( category );
         }
