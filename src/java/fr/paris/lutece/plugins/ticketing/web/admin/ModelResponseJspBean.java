@@ -409,41 +409,43 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
     }
-    
+
     /**
-     * Return a ReferenceList with all domain names allowed by current user 
+     * Return a ReferenceList with all domain names allowed by current user
      * 
-     * @param mapDomains the map to be completed with domain names
+     * @param mapDomains
+     *            the map to be completed with domain names
      * 
-     * @return filtered referenceList 
+     * @return filtered referenceList
      */
-    private Map<String, String> getFilteredDomainList (Map<String, String> mapDomains){
+    private Map<String, String> getFilteredDomainList( Map<String, String> mapDomains )
+    {
 
-    	AdminUser userCurrent = getUser( );
-    	
-    	if (mapDomains == null)
-    	{
-    		mapDomains = new LinkedHashMap<String, String>( );
-    	}
+        AdminUser userCurrent = getUser( );
 
-    	for ( ReferenceItem refType : TicketTypeHome.getReferenceList( ) )
-    	{
-    		TicketDomain domain = new TicketDomain( );
+        if ( mapDomains == null )
+        {
+            mapDomains = new LinkedHashMap<String, String>( );
+        }
 
-    		for ( ReferenceItem refDomain : TicketDomainHome.getReferenceListByType( Integer.parseInt( refType.getCode( ) ), true ) )
-    		{
-    			domain.setId( Integer.parseInt( refDomain.getCode( ) ) );
-    			// Check user rights
-    			if ( RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST, userCurrent )
-    					|| RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, userCurrent ) )
-    			{
-    				if ( !mapDomains.containsValue( refDomain.getName( ) ) )
-    				{
-    					mapDomains.put( refDomain.getName( ), refDomain.getName( ) );
-    				}
-    			}
-    		}
-    	}
-    	return  mapDomains;
+        for ( ReferenceItem refType : TicketTypeHome.getReferenceList( ) )
+        {
+            TicketDomain domain = new TicketDomain( );
+
+            for ( ReferenceItem refDomain : TicketDomainHome.getReferenceListByType( Integer.parseInt( refType.getCode( ) ), true ) )
+            {
+                domain.setId( Integer.parseInt( refDomain.getCode( ) ) );
+                // Check user rights
+                if ( RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST, userCurrent )
+                        || RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, userCurrent ) )
+                {
+                    if ( !mapDomains.containsValue( refDomain.getName( ) ) )
+                    {
+                        mapDomains.put( refDomain.getName( ), refDomain.getName( ) );
+                    }
+                }
+            }
+        }
+        return mapDomains;
     }
 }

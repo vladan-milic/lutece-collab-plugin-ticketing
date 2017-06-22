@@ -118,32 +118,34 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     public String getTicketDetails( HttpServletRequest request )
     {
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
-        
+
         // Determine the url of the caller in the header of the request
         String strRedirectUrl = RequestUtils.getParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_RETURN_URL );
         if ( StringUtils.isBlank( strRedirectUrl ) )
         {
             strRedirectUrl = TICKET_NOT_EXIST_REDIRECT_URL;
         }
-        
+
         // Check if the id is an integer
         int nIdTicket = -1;
         try
         {
             nIdTicket = Integer.parseInt( strIdTicket );
         }
-        catch ( NumberFormatException exception )
+        catch( NumberFormatException exception )
         {
-            return redirect( request, AdminMessageService.getMessageUrl( request, TicketingConstants.MESSAGE_ERROR_TICKET_NOT_EXISTS, strRedirectUrl, AdminMessage.TYPE_STOP ) );
+            return redirect( request,
+                    AdminMessageService.getMessageUrl( request, TicketingConstants.MESSAGE_ERROR_TICKET_NOT_EXISTS, strRedirectUrl, AdminMessage.TYPE_STOP ) );
         }
 
         // Check if the ticket is present in the database
         Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
         if ( ticket == null )
         {
-            return redirect( request, AdminMessageService.getMessageUrl( request, TicketingConstants.MESSAGE_ERROR_TICKET_NOT_EXISTS, strRedirectUrl, AdminMessage.TYPE_STOP ) );            
+            return redirect( request,
+                    AdminMessageService.getMessageUrl( request, TicketingConstants.MESSAGE_ERROR_TICKET_NOT_EXISTS, strRedirectUrl, AdminMessage.TYPE_STOP ) );
         }
-        
+
         TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) );
 
         // check user rights
