@@ -195,27 +195,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         Map<String, String> mapDomains = new LinkedHashMap<String, String>( );
         String strDefaultDomainLabel = I18nService.getLocalizedString( PROPERTY_TICKET_DOMAIN_LABEL, request.getLocale( ) );
         mapDomains.put( strDefaultDomainLabel, strDefaultDomainLabel );
-
-        AdminUser userCurrent = getUser( );
-
-        for ( ReferenceItem refType : TicketTypeHome.getReferenceList( ) )
-        {
-            TicketDomain domain = new TicketDomain( );
-
-            for ( ReferenceItem refDomain : TicketDomainHome.getReferenceListByType( Integer.parseInt( refType.getCode( ) ), true ) )
-            {
-                domain.setId( Integer.parseInt( refDomain.getCode( ) ) );
-                // Check user rights
-                if ( RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST, userCurrent )
-                        || RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, userCurrent ) )
-                {
-                    if ( !mapDomains.containsValue( refDomain.getName( ) ) )
-                    {
-                        mapDomains.put( refDomain.getName( ), refDomain.getName( ) );
-                    }
-                }
-            }
-        }
+        mapDomains = getFilteredDomainList( mapDomains );
 
         _modelResponse = null;
         List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>( );
@@ -283,7 +263,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_MODELRESPONSE, _modelResponse );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceListModelResponse( ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, ReferenceList.convert( getFilteredDomainList( new LinkedHashMap<String, String>( ) ) ) );
 
         ModelUtils.storeRichText( request, model );
 
@@ -390,7 +370,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         Map<String, Object> model = getModel( );
         model.put( MARK_MODELRESPONSE, _modelResponse );
 
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceListModelResponse( ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, ReferenceList.convert( getFilteredDomainList( new LinkedHashMap<String, String>( ) ) ) );
 
         ModelUtils.storeRichText( request, model );
 
@@ -428,5 +408,42 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         }
 
         return redirectView( request, VIEW_MANAGE_MODELRESPONSES );
+    }
+    
+    /**
+     * Return a ReferenceList with all domain names allowed by current user 
+     * 
+     * @param mapDomains the map to be completed with domain names
+     * 
+     * @return filtered referenceList 
+     */
+    private Map<String, String> getFilteredDomainList (Map<String, String> mapDomains){
+
+    	AdminUser userCurrent = getUser( );
+    	
+    	if (mapDomains == null)
+    	{
+    		mapDomains = new LinkedHashMap<String, String>( );
+    	}
+
+    	for ( ReferenceItem refType : TicketTypeHome.getReferenceList( ) )
+    	{
+    		TicketDomain domain = new TicketDomain( );
+
+    		for ( ReferenceItem refDomain : TicketDomainHome.getReferenceListByType( Integer.parseInt( refType.getCode( ) ), true ) )
+    		{
+    			domain.setId( Integer.parseInt( refDomain.getCode( ) ) );
+    			// Check user rights
+    			if ( RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST, userCurrent )
+    					|| RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, userCurrent ) )
+    			{
+    				if ( !mapDomains.containsValue( refDomain.getName( ) ) )
+    				{
+    					mapDomains.put( refDomain.getName( ), refDomain.getName( ) );
+    				}
+    			}
+    		}
+    	}
+    	return  mapDomains;
     }
 }
