@@ -146,6 +146,7 @@ public final class TicketingConstants
     public static final String MESSAGE_ERROR_TICKET_DOMAIN_NOT_SELECTED = "ticketing.validation.ticket.TicketDomain.mandatory";
     public static final String MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED = "ticketing.error.ticketCategory.notSelected";
     public static final String MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED = "ticketing.error.ticketCategory.precision.notSelected";
+    public static final String MESSAGE_ERROR_TICKET_NOT_EXISTS = "ticketing.error.ticket.notExist";
 
     // User preferences
     public static final String USER_PREFERENCE_CREATION_DATE_DISPLAY = "creationDateDisplay";
