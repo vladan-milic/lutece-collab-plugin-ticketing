@@ -619,6 +619,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         doRemoveWorkFlowResource( nId );
 
         TicketHome.remove( nId );
+        immediateRemoveTicketFromIndex( nId );
         addInfo( INFO_TICKET_REMOVED, getLocale( ) );
 
         return redirectView( request, VIEW_TICKET_PAGE );

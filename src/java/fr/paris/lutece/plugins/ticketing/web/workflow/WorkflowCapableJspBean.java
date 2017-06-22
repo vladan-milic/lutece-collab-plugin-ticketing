@@ -657,6 +657,31 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
             }
         }
     }
+    
+    
+    /**
+     * Removes a Ticket from index for the Backoffice
+     * 
+     * @param idTicket
+     *            the id of the Ticket to remove from index
+     */
+    protected void immediateRemoveTicketFromIndex( int idTicket )
+    {
+    	try
+    	{
+    		TicketIndexer ticketIndexer = new TicketIndexer( );
+    		ticketIndexer.deleteTicketIndex( idTicket );
+    	}
+    	catch( TicketIndexerException ticketIndexerException )
+    	{
+    		addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
+
+    		// The indexation of the Ticket fail, we will store the Ticket in the table for the daemon
+    		IndexerActionHome.create( TicketIndexerActionUtil.createIndexerDeleteActionFromTicket( idTicket ) );
+    	}
+
+    }
+    
 
     /**
      * Adds information message for workflow action
