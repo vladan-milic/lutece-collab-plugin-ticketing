@@ -105,14 +105,19 @@
         <div class="col-xs-12 col-sm-12">
           <div class="form-group text-center">
              <button class="btn btn-primary btn-lg" name="action_createTicket" type="submit">
-               <i class="fa fa-check"></i> #i18n{ticketing.recap_ticket.button.labelOk}
+               <i class="fa fa-check"></i> #i18n{ticketing.recap_ticket.button.labelCreate}
              </button>
+             <#if create_assign_right?? && create_assign_right>
+             <button class="btn btn-primary btn-lg" name="action_createAssignTicket" type="submit">
+               <i class="fa fa-check"></i> #i18n{ticketing.recap_ticket.button.labelCreateAssign}
+             </button>
+             </#if>
              <button class="btn btn-default btn-lg" name="view_createTicket" type="submit">
                <i class="fa fa-close"></i> #i18n{ticketing.recap_ticket.button.labelCancel}
              </button>
           </div>
         </div>
-      </div>
+      </div> 
       </form>
     </div>
   </div>

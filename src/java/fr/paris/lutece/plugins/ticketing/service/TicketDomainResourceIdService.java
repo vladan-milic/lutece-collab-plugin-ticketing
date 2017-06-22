@@ -41,7 +41,6 @@ import fr.paris.lutece.portal.service.rbac.ResourceType;
 import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
 import fr.paris.lutece.util.ReferenceList;
 
-import java.util.List;
 import java.util.Locale;
 
 /**

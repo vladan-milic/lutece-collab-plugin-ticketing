@@ -76,6 +76,7 @@ public final class TicketingConstants
     public static final String ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO = "ticketing.workflow.action.message.info";
     public static final String ATTRIBUTE_IS_DISPLAY_FRONT = "bDisplayFront";
     public static final String ATTRIBUTE_IS_UNIT_CHANGED = "bTicketingUnitChanged";
+    public static final String ATTRIBUTE_PASS_ASSSIGN_TO_ME = "bPassAssignToMe";
     public static final String ATTRIBUTE_MODIFY_ACTION_MESSAGE_INFO = "ticketing.modify.action.message.info";
 
     // Markers

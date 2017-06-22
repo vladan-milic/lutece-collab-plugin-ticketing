@@ -162,6 +162,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String MARK_USER_WITH_NO_UNIT = "user_with_no_unit";
     private static final String JSP_MANAGE_TICKETS = TicketingConstants.ADMIN_CONTROLLLER_PATH + "ManageTickets.jsp";
     private static final String MARK_MANAGE_PAGE_TITLE = "manage_ticket_page_title";
+    private static final String MARK_CREATE_ASSIGN_RIGHT = "create_assign_right";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
@@ -176,6 +177,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
     // Actions
     private static final String ACTION_CREATE_TICKET = "createTicket";
+    private static final String ACTION_CREATE_ASSIGN_TICKET = "createAssignTicket";
     private static final String ACTION_MODIFY_TICKET = "modifyTicket";
     private static final String ACTION_REMOVE_TICKET = "removeTicket";
     private static final String ACTION_CONFIRM_REMOVE_TICKET = "confirmRemoveTicket";
@@ -533,12 +535,15 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                     TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
                 }
             }
+            request.setAttribute( TicketingConstants.ATTRIBUTE_PASS_ASSSIGN_TO_ME, true );
 
             doProcessNextWorkflowAction( ticket, request );
 
             // Immediate indexation of the Ticket
             immediateTicketIndexing( ticket.getId( ) );
 
+            _ticketFormService.removeTicketFromSession( request.getSession( ) );
+            return redirectAfterCreateAction( request );
         }
         catch( Exception e )
         {
@@ -547,9 +552,62 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
             return redirectView( request, VIEW_TICKET_PAGE );
         }
+    }
 
-        _ticketFormService.removeTicketFromSession( request.getSession( ) );
-        return redirectAfterCreateAction( request );
+    /**
+     * Process the data capture form of a new ticket and assign it to the agent
+     *
+     * @param request
+     *            The Http Request
+     * @return The Jsp URL of the process result
+     */
+    @Action( ACTION_CREATE_ASSIGN_TICKET )
+    public String doCreateAssignTicket( HttpServletRequest request )
+    {
+        // Check user rights
+        if ( !RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_CREATE, getUser( ) ) )
+        {
+            return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+        }
+
+        try
+        {
+            Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
+            // Check user rights on domain
+            if ( !RBACService.isAuthorized( TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) ),
+                    TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, getUser( ) ) )
+            {
+                return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+            }
+
+            TicketHome.create( ticket );
+
+            if ( ( ticket.getListResponse( ) != null ) && !ticket.getListResponse( ).isEmpty( ) )
+            {
+                for ( Response response : ticket.getListResponse( ) )
+                {
+                    ResponseHome.create( response );
+                    TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
+                }
+            }
+            request.setAttribute( TicketingConstants.ATTRIBUTE_PASS_ASSSIGN_TO_ME, false );
+
+            doProcessNextWorkflowAction( ticket, request );
+
+            // Immediate indexation of the Ticket
+            immediateTicketIndexing( ticket.getId( ) );
+
+            _ticketFormService.removeTicketFromSession( request.getSession( ) );
+
+            return redirectToViewDetails( request, ticket );
+        }
+        catch( Exception e )
+        {
+            addError( TicketingConstants.ERROR_TICKET_CREATION_ABORTED, getLocale( ) );
+            AppLogService.error( e );
+
+            return redirectView( request, VIEW_TICKET_PAGE );
+        }
     }
 
     /**
@@ -726,6 +784,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         Map<String, Object> model = getModel( );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_RESPONSE_RECAP_LIST, listResponseRecap );
+        model.put( MARK_CREATE_ASSIGN_RIGHT, RBACService.isAuthorized( TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) ),
+                TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, getUser( ) ) );
 
         return getPage( PROPERTY_PAGE_TITLE_RECAP_TICKET, TEMPLATE_RECAP_TICKET, model );
     }
