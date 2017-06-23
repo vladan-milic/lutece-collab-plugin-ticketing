@@ -680,6 +680,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         IndexerActionHome.removeByIdTicket( nId );
 
         TicketHome.remove( nId );
+        immediateRemoveTicketFromIndex( nId );
         addInfo( INFO_TICKET_REMOVED, getLocale( ) );
 
         return redirectView( request, VIEW_TICKET_PAGE );

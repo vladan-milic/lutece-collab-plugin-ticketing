@@ -105,4 +105,14 @@ public interface ITicketSearchIndexer
      * @return true if enable, otherwise false
      */
     boolean isEnable( );
+
+    /**
+     * Remove a ticket from index
+     * 
+     * @param nTicketId
+     *            the identifier of ticket to remove from index
+     *            
+     * @throws TicketIndexerException
+     */
+	void deleteTicketIndex( int nTicketId ) throws TicketIndexerException;
 }

@@ -393,6 +393,41 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             TicketIndexWriterUtil.manageCloseWriter( indexWriter );
         }
     }
+    
+    
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteTicketIndex( int nTicketId ) throws TicketIndexerException
+    {
+    	IndexWriter indexWriter = null;
+    	try
+    	{
+    		indexWriter = TicketSearchService.getInstance( ).getTicketIndexWriter( false );
+    		BytesRef bytesRefTicketId = new BytesRef( NumericUtils.BUF_SIZE_INT );
+    		NumericUtils.intToPrefixCoded( nTicketId, 0, bytesRefTicketId );
+
+    		indexWriter.deleteDocuments( new Term( TicketSearchItemConstant.FIELD_TICKET_ID, bytesRefTicketId ) );
+
+    	}
+    	catch( LockObtainFailedException e )
+    	{
+    		// When a writer is already writing in the index directory
+    		throw new TicketIndexerException( );
+    	}
+    	catch( IOException e )
+    	{
+    		AppLogService.error( "Error during the indexation of the ticket : " + e.getMessage( ), e );
+    		throw new TicketIndexerException( );
+    	}
+    	finally
+    	{
+    		TicketIndexWriterUtil.manageCloseWriter( indexWriter );
+    	}
+    }
+
 
     /**
      * Get Lucene index document type
