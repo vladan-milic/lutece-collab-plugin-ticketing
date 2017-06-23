@@ -53,6 +53,7 @@ public final class IndexerActionDAO implements IIndexerActionDAO
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_action,id_ticket,id_task" + " FROM ticketing_indexer_action WHERE id_action = ?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_indexer_action( id_action,id_ticket,id_task)" + " VALUES(?,?,?)";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_indexer_action WHERE id_action = ? ";
+    private static final String SQL_QUERY_DELETE_BY_ID_TICKET = "DELETE FROM ticketing_indexer_action WHERE id_ticket = ? ";
     private static final String SQL_QUERY_SELECT = "SELECT id_action,id_ticket,id_task" + " FROM ticketing_indexer_action  ";
     private static final String SQL_FILTER_ID_TASK = " id_task = ? ";
     private static final String SQL_FILTER_id_ticket = " id_ticket = ? ";
@@ -131,6 +132,18 @@ public final class IndexerActionDAO implements IIndexerActionDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nId );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteByIdTicket( int nIdTicket, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_TICKET, plugin );
+        daoUtil.setInt( 1, nIdTicket );
         daoUtil.executeUpdate( );
         daoUtil.free( );
     }

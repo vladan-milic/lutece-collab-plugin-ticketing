@@ -56,6 +56,7 @@ import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilterViewEnum;
@@ -675,6 +676,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         int nId = Integer.parseInt( request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ) );
 
         doRemoveWorkFlowResource( nId );
+        
+        IndexerActionHome.removeByIdTicket( nId );
 
         TicketHome.remove( nId );
         addInfo( INFO_TICKET_REMOVED, getLocale( ) );
