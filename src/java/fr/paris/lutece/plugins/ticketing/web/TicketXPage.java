@@ -242,7 +242,7 @@ public class TicketXPage extends WorkflowCapableXPage
                 {
                     ticket.setLastname( strLastname );
                 }
-                
+
                 if ( StringUtils.isEmpty( strLastname ) && !StringUtils.isEmpty( strBirthname ) && StringUtils.isEmpty( ticket.getLastname( ) ) )
                 {
                     ticket.setLastname( strBirthname );
