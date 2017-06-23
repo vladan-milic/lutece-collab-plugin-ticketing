@@ -83,7 +83,7 @@ public interface IIndexerActionDAO
      *            the plugin
      */
     void delete( int nId, Plugin plugin );
-    
+
     /**
      * Delete a record from the table
      *

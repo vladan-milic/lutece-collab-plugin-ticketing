@@ -111,8 +111,8 @@ public interface ITicketSearchIndexer
      * 
      * @param nTicketId
      *            the identifier of ticket to remove from index
-     *            
+     * 
      * @throws TicketIndexerException
      */
-	void deleteTicketIndex( int nTicketId ) throws TicketIndexerException;
+    void deleteTicketIndex( int nTicketId ) throws TicketIndexerException;
 }

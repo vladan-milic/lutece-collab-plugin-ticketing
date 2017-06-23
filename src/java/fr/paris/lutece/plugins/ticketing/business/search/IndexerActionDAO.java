@@ -135,7 +135,7 @@ public final class IndexerActionDAO implements IIndexerActionDAO
         daoUtil.executeUpdate( );
         daoUtil.free( );
     }
-    
+
     /**
      * {@inheritDoc}
      */

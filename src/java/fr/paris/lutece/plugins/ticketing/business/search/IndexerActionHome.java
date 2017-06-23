@@ -122,7 +122,7 @@ public final class IndexerActionHome
     {
         _dao.delete( nId, _plugin );
     }
-    
+
     /**
      * Remove the indexerAction associated to the identifier of the ticket given in parameter
      * 

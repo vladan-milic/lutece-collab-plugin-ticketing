@@ -676,7 +676,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         int nId = Integer.parseInt( request.getParameter( TicketingConstants.PARAMETER_ID_TICKET ) );
 
         doRemoveWorkFlowResource( nId );
-        
+
         IndexerActionHome.removeByIdTicket( nId );
 
         TicketHome.remove( nId );
