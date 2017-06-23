@@ -76,11 +76,12 @@ public class TicketIndexerActionUtil
 
         return indexerAction;
     }
-    
+
     /**
      * Create a Delete IndexerAction from the given Ticket identifier
      * 
-     * @param ticket identifier
+     * @param ticket
+     *            identifier
      * @return the IndexerAction from the Ticket
      */
     public static IndexerAction createIndexerDeleteActionFromTicket( int nTicketId )
@@ -96,5 +97,5 @@ public class TicketIndexerActionUtil
 
         return indexerAction;
     }
-    
+
 }

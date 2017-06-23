@@ -123,6 +123,17 @@ public final class IndexerActionHome
         _dao.delete( nId, _plugin );
     }
 
+    /**
+     * Remove the indexerAction associated to the identifier of the ticket given in parameter
+     * 
+     * @param nIdTicket
+     *            The identifier of the Ticket
+     */
+    public static synchronized void removeByIdTicket( int nIdTicket )
+    {
+        _dao.deleteByIdTicket( nIdTicket, _plugin );
+    }
+
     // /////////////////////////////////////////////////////////////////////////
     // Finders
 

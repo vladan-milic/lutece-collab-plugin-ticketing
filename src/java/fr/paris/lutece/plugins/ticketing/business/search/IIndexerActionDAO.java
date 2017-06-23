@@ -85,6 +85,16 @@ public interface IIndexerActionDAO
     void delete( int nId, Plugin plugin );
 
     /**
+     * Delete a record from the table
+     *
+     * @param nIdTicket
+     *            The identifier of the ticket
+     * @param plugin
+     *            the plugin
+     */
+    void deleteByIdTicket( int nIdTicket, Plugin plugin );
+
+    /**
      * Load the data of all indexerAction and returns them in a list
      * 
      * @param filter
