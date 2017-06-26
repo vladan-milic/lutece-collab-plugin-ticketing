@@ -131,7 +131,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
             String [ ] strArraySplitQuery = strRedirectUrl.split( SessionFilter.PARAM_RETURN_URL + TicketingConstants.EQUAL_SYMBOL );
             if ( strArraySplitQuery.length > 1 )
             {
-                strRedirectUrl = strArraySplitQuery[ 1 ];
+                strRedirectUrl = strArraySplitQuery [1];
             }
             else
             {
