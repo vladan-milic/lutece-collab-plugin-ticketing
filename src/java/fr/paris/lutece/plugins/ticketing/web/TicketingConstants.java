@@ -188,6 +188,7 @@ public final class TicketingConstants
     public static final String ROLE_GRU_ADMIN = "gru_admin";
     public static final String ROLE_LEVEL_3 = "gru_level_3";
     public static final String FIELD_ID_SEPARATOR = ",";
+    public static final String EQUAL_SYMBOL = "=";
     public static final int NO_ID_CHANNEL = 0;
     public static final int TICKET_STATUS_IN_PROGRESS = 0;
     public static final int TICKET_STATUS_CLOSED = 1;

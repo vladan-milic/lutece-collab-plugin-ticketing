@@ -59,6 +59,7 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.TicketPriority;
 import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
+import fr.paris.lutece.plugins.ticketing.web.filter.SessionFilter;
 import fr.paris.lutece.plugins.ticketing.web.user.UserFactory;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
@@ -120,10 +121,23 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         String strIdTicket = request.getParameter( TicketingConstants.PARAMETER_ID_TICKET );
 
         // Determine the url of the caller in the header of the request
-        String strRedirectUrl = RequestUtils.getParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = request.getQueryString( );
         if ( StringUtils.isBlank( strRedirectUrl ) )
         {
             strRedirectUrl = TICKET_NOT_EXIST_REDIRECT_URL;
+        }
+        else
+        {
+            String [ ] strArraySplitQuery = strRedirectUrl.split( SessionFilter.PARAM_RETURN_URL + TicketingConstants.EQUAL_SYMBOL );
+            if ( strArraySplitQuery.length > 1 )
+            {
+                strRedirectUrl = strArraySplitQuery [1];
+            }
+            else
+            {
+                String strRedirectSessionUrl = RequestUtils.getParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_RETURN_URL );
+                strRedirectUrl = ( StringUtils.isNotBlank( strRedirectSessionUrl ) ) ? strRedirectSessionUrl : TICKET_NOT_EXIST_REDIRECT_URL;
+            }
         }
 
         // Check if the id is an integer

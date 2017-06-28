@@ -66,7 +66,7 @@ public class SessionFilter implements Filter
     private static final String PROPERTY_LIST_TICKETING_BACKOFFICE_URL = "ticketing.backoffice.url.list";
 
     // Parameters
-    private static final String PARAM_RETURN_URL = AppPropertiesService.getProperty( PROPERTY_RETURN_URL_PARAMETER_NAME, "return_url" );
+    public static final String PARAM_RETURN_URL = AppPropertiesService.getProperty( PROPERTY_RETURN_URL_PARAMETER_NAME, "return_url" );
     private static final String PARAMETER_XPAGE = "page";
 
     // Other

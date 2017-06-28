@@ -42,6 +42,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 
@@ -257,6 +258,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // Determine if we are in Search Ticket mode or in Manage Ticket mode
         String strQuery = request.getParameter( SearchConstants.PARAMETER_QUERY );
         _bSearchMode = StringUtils.isNotBlank( strQuery ) ? true : false;
+        if ( StringUtils.isBlank( strQuery ) )
+        {
+            strQuery = StringUtils.EMPTY;
+        }
 
         TicketFilter filter = TicketFilterHelper.getFilter( request, userCurrent );
         TicketFilterHelper.setFilterUserAndUnitIds( filter, userCurrent );
@@ -379,7 +384,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
-        model.put( SearchConstants.MARK_QUERY, strQuery );
+        model.put( SearchConstants.MARK_QUERY, StringEscapeUtils.escapeHtml( strQuery ) );
         model.put( MARK_TICKET_LIST, paginatorTickets.getPageItems( ) );
         model.put( MARK_PAGINATOR, paginatorTickets );
         model.put( MARK_NB_TICKET_AGENT, nAgentTickets );
