@@ -500,10 +500,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         String strEmail = request.getParameter( PARAMETER_EMAIL );
         String strCategoryCode = request.getParameter( PARAMETER_CATEGORY );
         String strNomenclature = request.getParameter( PARAMETER_NOMENCLATURE );
-        
-        if (StringUtils.isEmpty( strLastname ) && StringUtils.isNotEmpty( strFamilyname ) )
+
+        if ( StringUtils.isEmpty( strLastname ) && StringUtils.isNotEmpty( strFamilyname ) )
         {
-        	strLastname = strFamilyname;
+            strLastname = strFamilyname;
         }
         ticket.enrich( strIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber, strEmail, strCategoryCode, null, null, null,
                 strGuid, strIdCustomer, strNomenclature );

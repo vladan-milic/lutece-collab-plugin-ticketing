@@ -388,13 +388,10 @@ public class TicketSearchEngine implements ITicketSearchEngine
             TermsFilter termsFilterIdAssignerUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID,
                     filter.getFilterIdAssignerUnit( ) );
 
-            BooleanFilter booleanFilterIdUser = new BooleanFilter( );
-            BooleanFilter booleanFilterIdUnit = new BooleanFilter( );
-
             switch( filter.getFilterView( ) )
             {
                 case AGENT:
-                    booleanFilterIdUser = new BooleanFilter( );
+                	BooleanFilter booleanFilterIdUser = new BooleanFilter( );
                     booleanFilterIdUser.add( termFilterIdAdminUser, Occur.SHOULD );
                     booleanFilterIdUser.add( termFilterIdAssignerUser, Occur.SHOULD );
 
@@ -406,7 +403,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
                         booleanFilterGlobal.add( termFilterIdAdminUser, Occur.MUST_NOT );
                         booleanFilterGlobal.add( termFilterIdAssignerUser, Occur.MUST_NOT );
 
-                        booleanFilterIdUnit = new BooleanFilter( );
+                        BooleanFilter booleanFilterIdUnit = new BooleanFilter( );
                         booleanFilterIdUnit.add( termsFilterIdAssigneeUnit, Occur.SHOULD );
                         booleanFilterIdUnit.add( termsFilterIdAssignerUnit, Occur.SHOULD );
 
