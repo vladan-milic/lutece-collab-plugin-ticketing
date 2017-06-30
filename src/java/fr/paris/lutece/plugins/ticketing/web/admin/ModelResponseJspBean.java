@@ -78,7 +78,10 @@ import org.apache.commons.lang.StringUtils;
 @Controller( controllerJsp = "ManageModelResponses.jsp", controllerPath = "jsp/admin/plugins/ticketing/admin/", right = "TICKETING_MANAGEMENT_MODEL_RESPONSE" )
 public class ModelResponseJspBean extends MVCAdminJspBean
 {
-    // Rights
+
+	private static final long serialVersionUID = -3664860610121112868L;
+
+	// Rights
     public static final String RIGHT_MANAGETICKETINGREPONSESTYPES = "TICKETING_MANAGEMENT_MODEL_RESPONSE";
 
     // Templates
@@ -161,7 +164,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
      *            The JSP
      * @return The model
      */
-    protected Map<String, Object> getPaginatedListModel( HttpServletRequest request, String strBookmark, List list, String strManageJsp )
+    protected Map<String, Object> getPaginatedListModel( HttpServletRequest request, String strBookmark, List<ModelResponse> list, String strManageJsp )
     {
         _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
@@ -171,7 +174,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         String strUrl = url.getUrl( );
 
         // PAGINATOR
-        LocalizedPaginator paginator = new LocalizedPaginator( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
+        LocalizedPaginator<ModelResponse> paginator = new LocalizedPaginator<ModelResponse>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
         Map<String, Object> model = getModel( );
 
@@ -195,7 +198,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         Map<String, String> mapDomains = new LinkedHashMap<String, String>( );
         String strDefaultDomainLabel = I18nService.getLocalizedString( PROPERTY_TICKET_DOMAIN_LABEL, request.getLocale( ) );
         mapDomains.put( strDefaultDomainLabel, strDefaultDomainLabel );
-        mapDomains = getFilteredDomainList( mapDomains );
+        mapDomains.putAll( getFilteredDomainList( ) );
 
         _modelResponse = null;
         List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>( );
@@ -263,7 +266,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_MODELRESPONSE, _modelResponse );
-        model.put( MARK_TICKET_DOMAINS_LIST, ReferenceList.convert( getFilteredDomainList( new LinkedHashMap<String, String>( ) ) ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, ReferenceList.convert( getFilteredDomainList( ) ) );
 
         ModelUtils.storeRichText( request, model );
 
@@ -370,7 +373,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         Map<String, Object> model = getModel( );
         model.put( MARK_MODELRESPONSE, _modelResponse );
 
-        model.put( MARK_TICKET_DOMAINS_LIST, ReferenceList.convert( getFilteredDomainList( new LinkedHashMap<String, String>( ) ) ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, ReferenceList.convert( getFilteredDomainList( ) ) );
 
         ModelUtils.storeRichText( request, model );
 
@@ -418,15 +421,12 @@ public class ModelResponseJspBean extends MVCAdminJspBean
      * 
      * @return filtered referenceList
      */
-    private Map<String, String> getFilteredDomainList( Map<String, String> mapDomains )
+    private Map<String, String> getFilteredDomainList(  )
     {
 
         AdminUser userCurrent = getUser( );
 
-        if ( mapDomains == null )
-        {
-            mapDomains = new LinkedHashMap<String, String>( );
-        }
+        Map<String, String> mapDomains = new LinkedHashMap<String, String>( );
 
         for ( ReferenceItem refType : TicketTypeHome.getReferenceList( ) )
         {

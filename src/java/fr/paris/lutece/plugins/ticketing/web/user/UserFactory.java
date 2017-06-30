@@ -47,7 +47,7 @@ import java.util.List;
  * Factory of User. Designed as a singleton
  *
  */
-public class UserFactory
+public final class UserFactory
 {
     private static UserFactory _instance;
 
