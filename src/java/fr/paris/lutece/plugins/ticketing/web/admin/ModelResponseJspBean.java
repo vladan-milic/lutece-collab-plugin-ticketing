@@ -79,9 +79,9 @@ import org.apache.commons.lang.StringUtils;
 public class ModelResponseJspBean extends MVCAdminJspBean
 {
 
-	private static final long serialVersionUID = -3664860610121112868L;
+    private static final long serialVersionUID = -3664860610121112868L;
 
-	// Rights
+    // Rights
     public static final String RIGHT_MANAGETICKETINGREPONSESTYPES = "TICKETING_MANAGEMENT_MODEL_RESPONSE";
 
     // Templates
@@ -174,7 +174,8 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         String strUrl = url.getUrl( );
 
         // PAGINATOR
-        LocalizedPaginator<ModelResponse> paginator = new LocalizedPaginator<ModelResponse>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
+        LocalizedPaginator<ModelResponse> paginator = new LocalizedPaginator<ModelResponse>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
+                _strCurrentPageIndex, getLocale( ) );
 
         Map<String, Object> model = getModel( );
 
@@ -421,7 +422,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
      * 
      * @return filtered referenceList
      */
-    private Map<String, String> getFilteredDomainList(  )
+    private Map<String, String> getFilteredDomainList( )
     {
 
         AdminUser userCurrent = getUser( );

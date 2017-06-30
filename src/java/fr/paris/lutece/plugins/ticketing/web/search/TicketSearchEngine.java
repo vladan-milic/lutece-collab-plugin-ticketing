@@ -391,7 +391,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             switch( filter.getFilterView( ) )
             {
                 case AGENT:
-                	BooleanFilter booleanFilterIdUser = new BooleanFilter( );
+                    BooleanFilter booleanFilterIdUser = new BooleanFilter( );
                     booleanFilterIdUser.add( termFilterIdAdminUser, Occur.SHOULD );
                     booleanFilterIdUser.add( termFilterIdAssignerUser, Occur.SHOULD );
 

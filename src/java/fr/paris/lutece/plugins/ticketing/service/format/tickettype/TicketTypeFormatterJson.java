@@ -161,7 +161,7 @@ public class TicketTypeFormatterJson implements ITicketingFormatter<TicketType>
 
                     if ( StringUtils.isNotEmpty( category.getPrecision( ) ) )
                     {
-                    	JSONObject jsonPrecision = new JSONObject( );
+                        JSONObject jsonPrecision = new JSONObject( );
                         jsonPrecision.accumulate( FormatConstants.KEY_ID, category.getId( ) );
                         jsonPrecision.accumulate( FormatConstants.KEY_LABEL, category.getPrecision( ) );
 
