@@ -33,12 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.search;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -47,11 +48,9 @@ import org.apache.lucene.search.IndexSearcher;
 //import org.apache.lucene.search.Searcher;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
-import org.apache.lucene.util.Version;
 
 import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexWriterUtil;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -79,9 +78,9 @@ public final class TicketSearchService
     private TicketSearchService( )
     {
         // Read configuration properties
-        String strIndex = getIndex( );
+        Path pathIndex = getIndex( );
 
-        if ( StringUtils.isEmpty( strIndex ) )
+        if ( pathIndex == null )
         {
             throw new AppException( "Lucene index path not found in ticketing.properties", null );
         }
@@ -100,9 +99,9 @@ public final class TicketSearchService
             @SuppressWarnings( {
                 "rawtypes"
             } )
-            java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName ).getConstructor( Version.class, String [ ].class );
+            java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName ).getConstructor( String [ ].class );
             _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {
-                    IndexationService.LUCENE_INDEX_VERSION, new String [ ] { }
+                new String [ ] { }
             } );
         }
 
@@ -118,10 +117,8 @@ public final class TicketSearchService
                 @SuppressWarnings( {
                         "unchecked", "rawtypes"
                 } )
-                java.lang.reflect.Constructor constructeur = classAnalyzer.getConstructor( Version.class );
-                _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {
-                    IndexationService.LUCENE_INDEX_VERSION
-                } );
+                java.lang.reflect.Constructor constructeur = classAnalyzer.getConstructor( );
+                _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] { } );
             }
             catch( Exception e )
             {
@@ -160,7 +157,7 @@ public final class TicketSearchService
 
         try
         {
-            IndexReader ir = DirectoryReader.open( NIOFSDirectory.open( new File( getIndex( ) ) ) );
+            IndexReader ir = DirectoryReader.open( NIOFSDirectory.open( getIndex( ) ) );
             searcher = new IndexSearcher( ir );
         }
         catch( IOException e )
@@ -181,7 +178,7 @@ public final class TicketSearchService
      */
     public IndexWriter getTicketIndexWriter( boolean bCreate ) throws IOException
     {
-        Directory directory = NIOFSDirectory.open( new File( getIndex( ) ) );
+        Directory directory = NIOFSDirectory.open( getIndex( ) );
         return new IndexWriter( directory, TicketIndexWriterUtil.getIndexWriterConfig( _analyzer ) );
     }
 
@@ -201,7 +198,7 @@ public final class TicketSearchService
         {
             sbLogs.append( "\r\nIndexing all contents ...\r\n" );
 
-            Directory dir = NIOFSDirectory.open( new File( getIndex( ) ) );
+            Directory dir = NIOFSDirectory.open( getIndex( ) );
             Date start = new Date( );
 
             writer = new IndexWriter( dir, TicketIndexWriterUtil.getIndexWriterConfig( _analyzer ) );
@@ -289,7 +286,7 @@ public final class TicketSearchService
      * 
      * @return The path to the index of the search service
      */
-    private String getIndex( )
+    private Path getIndex( )
     {
         if ( _strIndex == null )
         {
@@ -304,7 +301,15 @@ public final class TicketSearchService
             }
         }
 
-        return _strIndex;
+        try
+        {
+            return Paths.get( _strIndex );
+        }
+        catch( InvalidPathException exception )
+        {
+            AppLogService.error( exception.getMessage( ), exception );
+            return null;
+        }
     }
 
     /**
