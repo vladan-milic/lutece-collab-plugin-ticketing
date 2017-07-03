@@ -353,7 +353,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         else
         {
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_STATE_ID, CONSTANT_ID_NULL ) );
-            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_STATE_ID, TicketSearchUtil.getBytesRef( BigInteger.valueOf(  CONSTANT_ID_NULL ) ) ) );
+            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_STATE_ID, TicketSearchUtil.getBytesRef( BigInteger.valueOf( CONSTANT_ID_NULL ) ) ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_STATE_ID, CONSTANT_ID_NULL ) );
 
             doc.add( new TextField( TicketSearchItemConstant.FIELD_STATE, StringUtils.EMPTY, Store.YES ) );
@@ -382,7 +382,8 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             int nAssigneeUnitId = ticket.getAssigneeUnit( ).getUnitId( );
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, nAssigneeUnitId ) );
-            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger.valueOf( nAssigneeUnitId ) ) ) );
+            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger
+                    .valueOf( nAssigneeUnitId ) ) ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, nAssigneeUnitId ) );
 
             String strAssigneeUnitName = manageNullValue( ticket.getAssigneeUnit( ).getName( ) );
@@ -392,7 +393,8 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         else
         {
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, CONSTANT_ID_NULL ) );
-            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger.valueOf( CONSTANT_ID_NULL ) ) ) );
+            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger
+                    .valueOf( CONSTANT_ID_NULL ) ) ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, CONSTANT_ID_NULL ) );
 
             doc.add( new TextField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, StringUtils.EMPTY, Store.YES ) );
@@ -428,13 +430,15 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             int nAssignerUnitId = ticket.getAssignerUnit( ).getUnitId( );
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, nAssignerUnitId ) );
-            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger.valueOf( nAssignerUnitId ) ) ) );
+            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger
+                    .valueOf( nAssignerUnitId ) ) ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, nAssignerUnitId ) );
         }
         else
         {
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, CONSTANT_ID_NULL ) );
-            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger.valueOf( CONSTANT_ID_NULL ) ) ) );
+            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger
+                    .valueOf( CONSTANT_ID_NULL ) ) ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, CONSTANT_ID_NULL ) );
         }
 
