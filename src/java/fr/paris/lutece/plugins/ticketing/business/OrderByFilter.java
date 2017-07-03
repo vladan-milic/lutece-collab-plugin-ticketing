@@ -106,7 +106,7 @@ public abstract class OrderByFilter
      */
     public String getOrderBySqlClause( boolean isOrderAsc )
     {
-        String strComputedOrderby = new String( );
+        String strComputedOrderby = StringUtils.EMPTY;
 
         if ( _mapOrderNameToColumnName.containsKey( _strOrderBy ) )
         {
@@ -145,7 +145,7 @@ public abstract class OrderByFilter
      */
     public String getDefaultOrderBySqlClause( boolean isOrderAsc )
     {
-        String strComputedOrderby = new String( );
+        String strComputedOrderby = StringUtils.EMPTY;
 
         Iterator<String> iterator = getDefaultOrderBySqlColumns( ).iterator( );
         strComputedOrderby += CONSTANT_ORDER_BY;

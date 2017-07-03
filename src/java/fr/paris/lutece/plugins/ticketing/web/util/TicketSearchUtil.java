@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.util;
 
+import java.math.BigInteger;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,12 +42,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.lucene.index.Term;
-import org.apache.lucene.queries.TermsFilter;
+import org.apache.lucene.search.DocValuesTermsQuery;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.SortField.Type;
 import org.apache.lucene.util.BytesRef;
-import org.apache.lucene.util.NumericUtils;
 
 import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchItemConstant;
 
@@ -56,8 +55,7 @@ import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchItemConstant;
 public class TicketSearchUtil
 {
     // CONSTANTS
-    private static final int CAPACITY = NumericUtils.BUF_SIZE_INT;
-    private static final int SHIFT = 0;
+    private static final int OFFSET = 0;
 
     /**
      * Create a TermsFilter object which contains all the values to filter on a specific field
@@ -68,18 +66,17 @@ public class TicketSearchUtil
      *            the set which contains all values to filter
      * @return the TermsFilter object
      */
-    public static TermsFilter createTermsFilter( String strFieldForTerm, Collection<Integer> collectionInteger )
+    public static DocValuesTermsQuery createTermsFilter( String strFieldForTerm, Collection<Integer> collectionInteger )
     {
-        List<Term> listTermIdAssignUnit = new ArrayList<Term>( );
+        List<BytesRef> listBytesRefIdAssignUnit = new ArrayList<BytesRef>( );
         if ( collectionInteger != null && !collectionInteger.isEmpty( ) )
         {
             for ( Integer currentId : collectionInteger )
             {
-                BytesRef bytesRefId = getBytesRef( currentId );
-                listTermIdAssignUnit.add( new Term( strFieldForTerm, bytesRefId ) );
+                listBytesRefIdAssignUnit.add( getBytesRef( currentId ) );
             }
         }
-        return listTermIdAssignUnit.isEmpty( ) ? null : new TermsFilter( listTermIdAssignUnit );
+        return listBytesRefIdAssignUnit.isEmpty( ) ? null : new DocValuesTermsQuery( strFieldForTerm, listBytesRefIdAssignUnit );
     }
 
     /**
@@ -91,10 +88,8 @@ public class TicketSearchUtil
      */
     public static BytesRef getBytesRef( int value )
     {
-        BytesRef bytesRef = new BytesRef( CAPACITY );
-        NumericUtils.intToPrefixCoded( value, SHIFT, bytesRef );
-
-        return bytesRef;
+        byte[] byteArrayValue = BigInteger.valueOf( value ).toByteArray( );
+        return new BytesRef( byteArrayValue, OFFSET, byteArrayValue.length );
     }
 
     /**
@@ -106,10 +101,8 @@ public class TicketSearchUtil
      */
     public static BytesRef getBytesRef( long value )
     {
-        BytesRef bytesRef = new BytesRef( CAPACITY );
-        NumericUtils.longToPrefixCoded( value, SHIFT, bytesRef );
-
-        return bytesRef;
+        byte[] byteArrayValue = BigInteger.valueOf( value ).toByteArray( );
+        return new BytesRef( byteArrayValue, OFFSET, byteArrayValue.length );
     }
 
     /**

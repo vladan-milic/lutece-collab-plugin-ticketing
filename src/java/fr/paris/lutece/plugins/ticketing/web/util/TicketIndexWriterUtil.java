@@ -47,7 +47,6 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.LogDocMergePolicy;
 import org.apache.lucene.index.LogMergePolicy;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.util.Version;
 
 import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchItemConstant;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -82,7 +81,7 @@ public class TicketIndexWriterUtil
         int nWriterMaxSectorLength = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MAX_FIELD_LENGTH, DEFAULT_WRITER_MAX_FIELD_LENGTH );
 
         PerFieldAnalyzerWrapper perFieldAnalyzerWrapper = new PerFieldAnalyzerWrapper( analyzer, getPerFieldAnalyzerMap( ) );
-        IndexWriterConfig indexWriterConfig = new IndexWriterConfig( Version.LUCENE_4_9, new LimitTokenCountAnalyzer( perFieldAnalyzerWrapper,
+        IndexWriterConfig indexWriterConfig = new IndexWriterConfig( new LimitTokenCountAnalyzer( perFieldAnalyzerWrapper,
                 nWriterMaxSectorLength ) );
 
         LogMergePolicy mergePolicy = new LogDocMergePolicy( );
