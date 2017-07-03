@@ -176,7 +176,8 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         String strUrl = url.getUrl( );
 
         // PAGINATOR
-        LocalizedPaginator<ModelResponse> paginator = new LocalizedPaginator<ModelResponse>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
+        LocalizedPaginator<ModelResponse> paginator = new LocalizedPaginator<ModelResponse>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
+                _strCurrentPageIndex, getLocale( ) );
 
         Map<String, Object> model = getModel( );
 

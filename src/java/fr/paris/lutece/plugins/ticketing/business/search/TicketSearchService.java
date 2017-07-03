@@ -101,7 +101,7 @@ public final class TicketSearchService
             } )
             java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName ).getConstructor( String [ ].class );
             _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {
-                    new String [ ] { }
+                new String [ ] { }
             } );
         }
 
@@ -117,7 +117,7 @@ public final class TicketSearchService
                 @SuppressWarnings( {
                         "unchecked", "rawtypes"
                 } )
-                java.lang.reflect.Constructor constructeur = classAnalyzer.getConstructor(  );
+                java.lang.reflect.Constructor constructeur = classAnalyzer.getConstructor( );
                 _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] { } );
             }
             catch( Exception e )
@@ -200,7 +200,7 @@ public final class TicketSearchService
 
             Directory dir = NIOFSDirectory.open( getIndex( ) );
             Date start = new Date( );
-            
+
             writer = new IndexWriter( dir, TicketIndexWriterUtil.getIndexWriterConfig( _analyzer ) );
 
             sbLogs.append( "\r\n<strong>Indexer : " );
@@ -305,7 +305,7 @@ public final class TicketSearchService
         {
             return Paths.get( _strIndex );
         }
-        catch ( InvalidPathException exception )
+        catch( InvalidPathException exception )
         {
             AppLogService.error( exception.getMessage( ), exception );
             return null;

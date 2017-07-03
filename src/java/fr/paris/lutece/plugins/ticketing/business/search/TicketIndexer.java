@@ -241,61 +241,61 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         // make a new, empty document
         Document doc = new Document( );
-        
+
         int nIdTicket = ticket.getId( );
-        
+
         // --- document identifier
         doc.add( new StringField( TicketSearchItemConstant.FIELD_DOCUMENT_ID, String.valueOf( nIdTicket ), Store.YES ) );
-        
+
         // --- ticket identifier
         doc.add( new IntPoint( TicketSearchItemConstant.FIELD_TICKET_ID, nIdTicket ) );
         doc.add( new NumericDocValuesField( TicketSearchItemConstant.FIELD_TICKET_ID, nIdTicket ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_TICKET_ID, nIdTicket ) );
-        
+
         // --- field contents
         doc.add( new TextField( TicketSearchItemConstant.FIELD_CONTENTS, manageNullValue( getContentForIndexer( ticket ) ), Store.NO ) );
-        
+
         // --- ticket domain
         doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN_ID, Integer.toString( ticket.getIdTicketDomain( ) ), Store.YES ) );
         doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN, manageNullValue( ticket.getTicketDomain( ) ), Store.YES ) );
-        
+
         // --- ticket reference
         String strReference = manageNullValue( ticket.getReference( ) );
         doc.add( new StringField( TicketSearchItemConstant.FIELD_REFERENCE, strReference, Store.YES ) );
         doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_REFERENCE, new BytesRef( strReference ) ) );
-        
+
         // --- ticket date creation
         Long longCreationDate = ticket.getDateCreate( ) == null ? 0 : ticket.getDateCreate( ).getTime( );
         doc.add( new LongPoint( TicketSearchItemConstant.FIELD_DATE_CREATION, longCreationDate ) );
         doc.add( new NumericDocValuesField( TicketSearchItemConstant.FIELD_DATE_CREATION, longCreationDate ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_DATE_CREATION, longCreationDate ) );
-        
+
         // --- ticket comment
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_COMMENT, manageNullValue( ticket.getTicketComment( ) ) ) );
-        
+
         // --- ticket nomenclature
         String strNomenclature = manageNullValue( ticket.getNomenclature( ) );
         doc.add( new TextField( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE, strNomenclature, Store.YES ) );
         doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE, new BytesRef( strNomenclature ) ) );
-        
+
         // --- ticket criticality
         int nCriticality = ticket.getCriticality( );
         doc.add( new IntPoint( TicketSearchItemConstant.FIELD_CRITICALITY, nCriticality ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_CRITICALITY, nCriticality ) );
-        
+
         // --- ticket priority
         int nPriority = ticket.getPriority( );
         doc.add( new IntPoint( TicketSearchItemConstant.FIELD_PRIORITY, nPriority ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_PRIORITY, nPriority ) );
-        
+
         // --- ticket status
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_STATUS, ticket.getTicketStatus( ) ) );
-        
+
         // --- ticket type id
         int nTicketTypeId = ticket.getIdTicketType( );
         doc.add( new IntPoint( TicketSearchItemConstant.FIELD_TICKET_TYPE_ID, nTicketTypeId ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_TICKET_TYPE_ID, nTicketTypeId ) );
-        
+
         // --- ticket type
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_TICKET_TYPE, manageNullValue( ticket.getTicketType( ) ) ) );
 
@@ -305,7 +305,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             String strCategoryLabel = manageNullValue( ticket.getTicketCategory( ).getLabel( ) );
             doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY, strCategoryLabel, Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_CATEGORY, new BytesRef( strCategoryLabel ) ) );
-            
+
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_PRECISION, manageNullValue( ticket.getTicketCategory( ).getPrecision( ) ) ) );
         }
         else
@@ -317,22 +317,22 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         // --- ticket user title
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_USER_TITLE, manageNullValue( ticket.getUserTitle( ) ) ) );
-        
+
         // --- ticket user firstname
         String strFirstname = manageNullValue( ticket.getFirstname( ) );
         doc.add( new TextField( TicketSearchItemConstant.FIELD_FIRSTNAME, strFirstname, Store.YES ) );
         doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_FIRSTNAME, new BytesRef( strFirstname ) ) );
-        
+
         // --- ticket user lastname
         String strLastName = manageNullValue( ticket.getLastname( ) );
         doc.add( new TextField( TicketSearchItemConstant.FIELD_LASTNAME, strLastName, Store.YES ) );
         doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_LASTNAME, new BytesRef( strLastName ) ) );
-        
+
         // --- ticket user email
         String strEmail = manageNullValue( ticket.getEmail( ) );
         doc.add( new StringField( TicketSearchItemConstant.FIELD_EMAIL, strEmail, Store.YES ) );
         doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_EMAIL, new BytesRef( strEmail ) ) );
-        
+
         // --- ticket phone number
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_MOBILE_PHONE_NUMBER, manageNullValue( ticket.getMobilePhoneNumber( ) ) ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_FIXED_PHONE_NUMBER, manageNullValue( ticket.getFixedPhoneNumber( ) ) ) );
@@ -344,7 +344,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_STATE_ID, nIdState ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_STATE_ID, TicketSearchUtil.getBytesRef( nIdState ) ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_STATE_ID, nIdState ) );
-            
+
             String strState = manageNullValue( ticket.getState( ).getName( ) );
             doc.add( new TextField( TicketSearchItemConstant.FIELD_STATE, strState, Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_STATE, new BytesRef( strState ) ) );
@@ -354,7 +354,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_STATE_ID, CONSTANT_ID_NULL ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_STATE_ID, TicketSearchUtil.getBytesRef( CONSTANT_ID_NULL ) ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_STATE_ID, CONSTANT_ID_NULL ) );
-            
+
             doc.add( new TextField( TicketSearchItemConstant.FIELD_STATE, StringUtils.EMPTY, Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_STATE, new BytesRef( StringUtils.EMPTY ) ) );
         }
@@ -363,7 +363,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         if ( ticket.getChannel( ) != null )
         {
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_CHANNEL_ICONFONT, manageNullValue( ticket.getChannel( ).getIconFont( ) ) ) );
-            
+
             String strChannelLabel = manageNullValue( ticket.getChannel( ).getLabel( ) );
             doc.add( new TextField( TicketSearchItemConstant.FIELD_CHANNEL_LABEL, strChannelLabel, Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_CHANNEL_LABEL, new BytesRef( strChannelLabel ) ) );
@@ -371,7 +371,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         else
         {
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_CHANNEL_ICONFONT, StringUtils.EMPTY ) );
-            
+
             doc.add( new TextField( TicketSearchItemConstant.FIELD_CHANNEL_LABEL, StringUtils.EMPTY, Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_CHANNEL_LABEL, new BytesRef( StringUtils.EMPTY ) ) );
         }
@@ -383,7 +383,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, nAssigneeUnitId ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, TicketSearchUtil.getBytesRef( nAssigneeUnitId ) ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, nAssigneeUnitId ) );
-            
+
             String strAssigneeUnitName = manageNullValue( ticket.getAssigneeUnit( ).getName( ) );
             doc.add( new TextField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, strAssigneeUnitName, Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, new BytesRef( strAssigneeUnitName ) ) );
@@ -393,7 +393,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, CONSTANT_ID_NULL ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, TicketSearchUtil.getBytesRef( CONSTANT_ID_NULL ) ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, CONSTANT_ID_NULL ) );
-            
+
             doc.add( new TextField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, StringUtils.EMPTY, Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, new BytesRef( StringUtils.EMPTY ) ) );
         }
@@ -404,9 +404,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             int nAdminUserId = ticket.getAssigneeUser( ).getAdminUserId( );
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_ADMIN_ID, nAdminUserId ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_ADMIN_ID, nAdminUserId ) );
-            
+
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_FIRSTNAME, manageNullValue( ticket.getAssigneeUser( ).getFirstname( ) ) ) );
-            
+
             String strAssigneeUserLastname = manageNullValue( ticket.getAssigneeUser( ).getLastname( ) );
             doc.add( new TextField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, strAssigneeUserLastname, Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, new BytesRef( strAssigneeUserLastname ) ) );
@@ -415,9 +415,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_ADMIN_ID, CONSTANT_ID_NULL ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_ADMIN_ID, CONSTANT_ID_NULL ) );
-            
+
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_FIRSTNAME, StringUtils.EMPTY ) );
-            
+
             doc.add( new TextField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, StringUtils.EMPTY, Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, new BytesRef( StringUtils.EMPTY ) ) );
         }

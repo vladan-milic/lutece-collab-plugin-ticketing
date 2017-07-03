@@ -337,7 +337,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
             } )
             java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName ).getConstructor( String [ ].class );
             _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {
-                    new String [ ] { }
+                new String [ ] { }
             } );
         }
         catch( InstantiationException ie )

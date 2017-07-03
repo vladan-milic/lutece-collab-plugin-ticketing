@@ -188,7 +188,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             IndexSearcher searcher = TicketSearchService.getInstance( ).getSearcher( );
 
             if ( searcher != null )
-            {                
+            {
                 // Get results documents
                 TopDocs topDocs = searcher.search( query, LuceneSearchEngine.MAX_RESPONSES, getSortQuery( filter ) );
                 ScoreDoc [ ] hits = topDocs.scoreDocs;
@@ -232,7 +232,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
                 Query idTicketQuery = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_TICKET_ID, idTicket );
                 idTicketsQueryBuilder.add( new BooleanClause( idTicketQuery, BooleanClause.Occur.SHOULD ) );
             }
-            
+
             // Create the main builder
             Builder mainIdTicketsQuery = new Builder( );
             mainIdTicketsQuery.add( new BooleanClause( idTicketsQueryBuilder.build( ), BooleanClause.Occur.MUST ) );
@@ -257,7 +257,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             IndexSearcher searcher = TicketSearchService.getInstance( ).getSearcher( );
 
             if ( searcher != null )
-            {                
+            {
                 // Get the number of results documents
                 TotalHitCountCollector totaltHitcountCollector = new TotalHitCountCollector( );
                 searcher.search( query, totaltHitcountCollector );
@@ -294,7 +294,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
     private BooleanQuery createMainSearchQuery( String strQuery, List<TicketDomain> listTicketDomain, TicketFilter filter ) throws ParseException
     {
         Builder mainQuery = new Builder( );
-        
+
         if ( StringUtils.isNotBlank( strQuery ) )
         {
             PerFieldAnalyzerWrapper perFieldAnalyzerWrapper = new PerFieldAnalyzerWrapper( TicketSearchService.getInstance( ).getAnalyzer( ),
@@ -302,14 +302,14 @@ public class TicketSearchEngine implements ITicketSearchEngine
             Query queryTicket = new QueryParser( TicketSearchItemConstant.FIELD_CONTENTS, perFieldAnalyzerWrapper ).parse( strQuery );
             mainQuery.add( queryTicket, BooleanClause.Occur.MUST );
         }
-        
+
         addQueryDomainClause( mainQuery, listTicketDomain );
 
         // Construct the final query with the selected filter
         Builder finalGlobalQueryBuilder = new Builder( );
         finalGlobalQueryBuilder.add( mainQuery.build( ), Occur.MUST );
         finalGlobalQueryBuilder.add( addQueryFilterTabClause( filter ).build( ), Occur.FILTER );
-        
+
         return finalGlobalQueryBuilder.build( );
     }
 
@@ -383,17 +383,19 @@ public class TicketSearchEngine implements ITicketSearchEngine
         {
             // Create the global query builder
             Builder booleanQueryBuilderGlobal = new Builder( );
-            
-            // Create the query on the id admin user and id assigner user field 
+
+            // Create the query on the id admin user and id assigner user field
             int nIdAdminUser = filter.getFilterIdAdminUser( );
             Query queryIdAdminUser = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_ADMIN_ID, nIdAdminUser );
             Query queryIdAssignerUser = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_ASSIGNER_USER_ID, nIdAdminUser );
 
             // Create a list of filter terms for the id of assignee unit
-            DocValuesTermsQuery docValuesTermsQueryIdAssigneeUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, filter.getFilterIdAssigneeUnit( ) );
+            DocValuesTermsQuery docValuesTermsQueryIdAssigneeUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID,
+                    filter.getFilterIdAssigneeUnit( ) );
 
             // Create a list of filter terms for the id of assigner unit
-            DocValuesTermsQuery docValuesTermsQueryIdAssignerUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, filter.getFilterIdAssignerUnit( ) );
+            DocValuesTermsQuery docValuesTermsQueryIdAssignerUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID,
+                    filter.getFilterIdAssignerUnit( ) );
 
             switch( filter.getFilterView( ) )
             {
@@ -443,11 +445,10 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * Add the filters selected by the user
      * 
      * @param booleanQueryBuilderGlobal
-     *          The global query builder of the query
+     *            The global query builder of the query
      * @param filter
-     *          The filter to apply to the global builder
-     * @return
-     *          The builder with all clause
+     *            The filter to apply to the global builder
+     * @return The builder with all clause
      */
     private Builder addSelectedFilter( Builder booleanQueryBuilderGlobal, TicketFilter filter )
     {
@@ -484,9 +485,9 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * Add a filter for the urgency value
      * 
      * @param queryBuilder
-     *          The query builder to add the new BooleanClause
+     *            The query builder to add the new BooleanClause
      * @param urgencyValue
-     *          The value to filter
+     *            The value to filter
      */
     private void addUrgencyFilter( Builder queryBuilder, int urgencyValue )
     {
@@ -521,9 +522,9 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * Add a filter for the ticket type id value
      * 
      * @param queryBuilder
-     *          The query builder to add the new BooleanClause
+     *            The query builder to add the new BooleanClause
      * @param ticketTypeIdValue
-     *          The value to filter
+     *            The value to filter
      */
     private void addTicketTypeIdFilter( Builder queryBuilder, int ticketTypeIdValue )
     {
@@ -538,9 +539,9 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * Add the Boolean clause on the creation date on the query builder
      * 
      * @param queryBuilder
-     *          The query builder to add the new BooleanClause
+     *            The query builder to add the new BooleanClause
      * @param creationDate
-     *          The creation date limit
+     *            The creation date limit
      */
     private void addCreationDateFilter( Builder queryBuilder, long creationDate )
     {
@@ -555,9 +556,9 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * Add the boolean clause of the list id workflow state on the query builder
      * 
      * @param queryBuilder
-     *          The query builder to add the new BooleanClause
+     *            The query builder to add the new BooleanClause
      * @param listIdWorkflowState
-     *          The list of workflow state id to filter
+     *            The list of workflow state id to filter
      */
     private void addIdWorkflowStateFilter( Builder queryBuilder, List<Integer> listIdWorkflowState )
     {

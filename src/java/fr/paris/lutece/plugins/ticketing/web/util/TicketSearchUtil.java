@@ -88,7 +88,7 @@ public class TicketSearchUtil
      */
     public static BytesRef getBytesRef( int value )
     {
-        byte[] byteArrayValue = BigInteger.valueOf( value ).toByteArray( );
+        byte [ ] byteArrayValue = BigInteger.valueOf( value ).toByteArray( );
         return new BytesRef( byteArrayValue, OFFSET, byteArrayValue.length );
     }
 
@@ -101,7 +101,7 @@ public class TicketSearchUtil
      */
     public static BytesRef getBytesRef( long value )
     {
-        byte[] byteArrayValue = BigInteger.valueOf( value ).toByteArray( );
+        byte [ ] byteArrayValue = BigInteger.valueOf( value ).toByteArray( );
         return new BytesRef( byteArrayValue, OFFSET, byteArrayValue.length );
     }
 

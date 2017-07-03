@@ -81,8 +81,7 @@ public class TicketIndexWriterUtil
         int nWriterMaxSectorLength = AppPropertiesService.getPropertyInt( PROPERTY_WRITER_MAX_FIELD_LENGTH, DEFAULT_WRITER_MAX_FIELD_LENGTH );
 
         PerFieldAnalyzerWrapper perFieldAnalyzerWrapper = new PerFieldAnalyzerWrapper( analyzer, getPerFieldAnalyzerMap( ) );
-        IndexWriterConfig indexWriterConfig = new IndexWriterConfig( new LimitTokenCountAnalyzer( perFieldAnalyzerWrapper,
-                nWriterMaxSectorLength ) );
+        IndexWriterConfig indexWriterConfig = new IndexWriterConfig( new LimitTokenCountAnalyzer( perFieldAnalyzerWrapper, nWriterMaxSectorLength ) );
 
         LogMergePolicy mergePolicy = new LogDocMergePolicy( );
         mergePolicy.setMergeFactor( nWriterMergeFactor );
