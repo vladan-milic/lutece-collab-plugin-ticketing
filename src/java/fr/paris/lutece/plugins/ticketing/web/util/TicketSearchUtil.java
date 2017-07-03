@@ -73,35 +73,22 @@ public class TicketSearchUtil
         {
             for ( Integer currentId : collectionInteger )
             {
-                listBytesRefIdAssignUnit.add( getBytesRef( currentId ) );
+                listBytesRefIdAssignUnit.add( getBytesRef( BigInteger.valueOf( currentId ) ) );
             }
         }
         return listBytesRefIdAssignUnit.isEmpty( ) ? null : new DocValuesTermsQuery( strFieldForTerm, listBytesRefIdAssignUnit );
     }
 
     /**
-     * Return a BytesRef object associated to the given int parameter
+     * Return a BytesRef object associated to the given BigInteger parameter
      * 
      * @param value
-     *            the int value to convert
+     *            the BigInteger value to convert
      * @return the BytesRef associated to the value
      */
-    public static BytesRef getBytesRef( int value )
+    public static BytesRef getBytesRef( BigInteger value )
     {
-        byte [ ] byteArrayValue = BigInteger.valueOf( value ).toByteArray( );
-        return new BytesRef( byteArrayValue, OFFSET, byteArrayValue.length );
-    }
-
-    /**
-     * Return a BytesRef object associated to the given long parameter
-     * 
-     * @param value
-     *            the long value to convert
-     * @return the BytesRef associated to the value
-     */
-    public static BytesRef getBytesRef( long value )
-    {
-        byte [ ] byteArrayValue = BigInteger.valueOf( value ).toByteArray( );
+        byte [ ] byteArrayValue = value.toByteArray( );
         return new BytesRef( byteArrayValue, OFFSET, byteArrayValue.length );
     }
 
