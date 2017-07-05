@@ -548,7 +548,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                     TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
                 }
             }
-            request.setAttribute( TicketingConstants.ATTRIBUTE_PASS_ASSSIGN_TO_ME, true );
+            request.setAttribute( TicketingConstants.ATTRIBUTE_BYPASS_ASSSIGN_TO_ME, true );
 
             doProcessNextWorkflowAction( ticket, request );
 
@@ -603,7 +603,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                     TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
                 }
             }
-            request.setAttribute( TicketingConstants.ATTRIBUTE_PASS_ASSSIGN_TO_ME, false );
+            request.setAttribute( TicketingConstants.ATTRIBUTE_BYPASS_ASSSIGN_TO_ME, false );
 
             doProcessNextWorkflowAction( ticket, request );
 

@@ -299,8 +299,6 @@ public class TicketXPage extends WorkflowCapableXPage
                 }
             }
 
-            request.setAttribute( TicketingConstants.ATTRIBUTE_PASS_ASSSIGN_TO_ME, true );
-
             doProcessNextWorkflowAction( ticket, request );
 
             // Immediate indexation of the Ticket
