@@ -197,6 +197,7 @@ public final class TicketingConstants
     public static final int NO_PARENT_ID = -1;
     public static final String NO_ID_STRING = "-1";
     public static final String RESOURCE_TYPE_INPUT = "TICKET_INPUT";
+    public static final String REDIRECT_VIEW_LIST = "list";
 
     /**
      * Default constructor
