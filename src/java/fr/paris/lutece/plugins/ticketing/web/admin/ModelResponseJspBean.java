@@ -424,7 +424,6 @@ public class ModelResponseJspBean extends MVCAdminJspBean
      */
     private Map<String, String> getFilteredDomainList( )
     {
-
         AdminUser userCurrent = getUser( );
 
         Map<String, String> mapDomains = new LinkedHashMap<String, String>( );

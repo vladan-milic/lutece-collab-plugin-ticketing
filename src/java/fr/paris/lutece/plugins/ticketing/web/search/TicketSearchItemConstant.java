@@ -38,6 +38,8 @@ package fr.paris.lutece.plugins.ticketing.web.search;
  */
 public class TicketSearchItemConstant
 {
+    public static final String FIELD_DOCUMENT_ID = "document_id";
+
     public static final String FIELD_URL = "url";
     public static final String FIELD_CONTENTS = "contents";
     public static final String FIELD_TITLE = "title";

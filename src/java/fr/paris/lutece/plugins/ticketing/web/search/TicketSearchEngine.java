@@ -46,15 +46,16 @@ import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.IntPoint;
+import org.apache.lucene.document.LongPoint;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queries.BooleanFilter;
-import org.apache.lucene.queries.TermFilter;
-import org.apache.lucene.queries.TermsFilter;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.BooleanQuery.Builder;
+import org.apache.lucene.search.DocValuesTermsQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -62,10 +63,8 @@ import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.SortField.Type;
 import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.TermRangeFilter;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.TotalHitCountCollector;
-import org.apache.lucene.util.BytesRef;
 
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
@@ -75,10 +74,10 @@ import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexWriterUtil;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketSearchUtil;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
-import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
@@ -191,7 +190,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             if ( searcher != null )
             {
                 // Get results documents
-                TopDocs topDocs = searcher.search( query, addQueryFilterTabClause( filter ), LuceneSearchEngine.MAX_RESPONSES, getSortQuery( filter ) );
+                TopDocs topDocs = searcher.search( query, LuceneSearchEngine.MAX_RESPONSES, getSortQuery( filter ) );
                 ScoreDoc [ ] hits = topDocs.scoreDocs;
 
                 for ( int i = 0; i < hits.length; i++ )
@@ -216,7 +215,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
     @Override
     public List<Ticket> searchTickets( String strQuery, List<TicketDomain> listTicketDomain, TicketFilter filter ) throws ParseException
     {
-        return search( createMainSearchQuery( strQuery, listTicketDomain ), filter );
+        return search( createMainSearchQuery( strQuery, listTicketDomain, filter ), filter );
     }
 
     /**
@@ -227,16 +226,18 @@ public class TicketSearchEngine implements ITicketSearchEngine
     {
         if ( listIdsTickets != null && !listIdsTickets.isEmpty( ) )
         {
-            BooleanQuery idTicketsQuery = new BooleanQuery( );
+            Builder idTicketsQueryBuilder = new Builder( );
             for ( int idTicket : listIdsTickets )
             {
-                TermQuery idTicketQuery = new TermQuery( new Term( TicketSearchItemConstant.FIELD_TICKET_ID, TicketSearchUtil.getBytesRef( idTicket ) ) );
-                idTicketsQuery.add( new BooleanClause( idTicketQuery, BooleanClause.Occur.SHOULD ) );
+                Query idTicketQuery = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_TICKET_ID, idTicket );
+                idTicketsQueryBuilder.add( new BooleanClause( idTicketQuery, BooleanClause.Occur.SHOULD ) );
             }
-            BooleanQuery mainIdTicketsQuery = new BooleanQuery( );
-            mainIdTicketsQuery.add( new BooleanClause( idTicketsQuery, BooleanClause.Occur.MUST ) );
 
-            return search( mainIdTicketsQuery, filter );
+            // Create the main builder
+            Builder mainIdTicketsQuery = new Builder( );
+            mainIdTicketsQuery.add( new BooleanClause( idTicketsQueryBuilder.build( ), BooleanClause.Occur.MUST ) );
+
+            return search( mainIdTicketsQuery.build( ), filter );
         }
         return null;
     }
@@ -259,7 +260,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             {
                 // Get the number of results documents
                 TotalHitCountCollector totaltHitcountCollector = new TotalHitCountCollector( );
-                searcher.search( query, addQueryFilterTabClause( filter ), totaltHitcountCollector );
+                searcher.search( query, totaltHitcountCollector );
                 return totaltHitcountCollector.getTotalHits( );
             }
         }
@@ -277,7 +278,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
     @Override
     public int searchCountTickets( String strQuery, List<TicketDomain> listTicketDomain, TicketFilter filter ) throws ParseException
     {
-        return searchCount( createMainSearchQuery( strQuery, listTicketDomain ), filter );
+        return searchCount( createMainSearchQuery( strQuery, listTicketDomain, filter ), filter );
     }
 
     /**
@@ -290,43 +291,49 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * @return the main query constructed for the search
      * @throws ParseException
      */
-    private BooleanQuery createMainSearchQuery( String strQuery, List<TicketDomain> listTicketDomain ) throws ParseException
+    private BooleanQuery createMainSearchQuery( String strQuery, List<TicketDomain> listTicketDomain, TicketFilter filter ) throws ParseException
     {
-        BooleanQuery mainQuery = new BooleanQuery( );
+        Builder mainQuery = new Builder( );
+
         if ( StringUtils.isNotBlank( strQuery ) )
         {
             PerFieldAnalyzerWrapper perFieldAnalyzerWrapper = new PerFieldAnalyzerWrapper( TicketSearchService.getInstance( ).getAnalyzer( ),
                     TicketIndexWriterUtil.getPerFieldAnalyzerMap( ) );
-            Query queryTicket = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, TicketSearchItemConstant.FIELD_CONTENTS, perFieldAnalyzerWrapper )
-                    .parse( strQuery );
+            Query queryTicket = new QueryParser( TicketSearchItemConstant.FIELD_CONTENTS, perFieldAnalyzerWrapper ).parse( strQuery );
             mainQuery.add( queryTicket, BooleanClause.Occur.MUST );
         }
+
         addQueryDomainClause( mainQuery, listTicketDomain );
 
-        return mainQuery;
+        // Construct the final query with the selected filter
+        Builder finalGlobalQueryBuilder = new Builder( );
+        finalGlobalQueryBuilder.add( mainQuery.build( ), Occur.MUST );
+        finalGlobalQueryBuilder.add( addQueryFilterTabClause( filter ).build( ), Occur.FILTER );
+
+        return finalGlobalQueryBuilder.build( );
     }
 
     /**
      * add ticket domain clause
      * 
-     * @param booleanQuery
+     * @param booleanQueryBuilder
      *            input query
      * @param listUserDomain
      *            list domains authorized for admin user
      * @throws ParseException
      *             exception while parsing document type
      */
-    private void addQueryDomainClause( BooleanQuery booleanQuery, List<TicketDomain> listUserDomain ) throws ParseException
+    private void addQueryDomainClause( Builder booleanQueryBuilder, List<TicketDomain> listUserDomain ) throws ParseException
     {
-        BooleanQuery domainsQuery = new BooleanQuery( );
+        Builder domainsQueryBuilder = new Builder( );
 
         for ( TicketDomain domain : listUserDomain )
         {
             TermQuery domQuery = new TermQuery( new Term( TicketSearchItemConstant.FIELD_DOMAIN_ID, Integer.toString( domain.getId( ) ) ) );
-            domainsQuery.add( new BooleanClause( domQuery, BooleanClause.Occur.SHOULD ) );
+            domainsQueryBuilder.add( new BooleanClause( domQuery, BooleanClause.Occur.SHOULD ) );
         }
 
-        booleanQuery.add( new BooleanClause( domainsQuery, BooleanClause.Occur.MUST ) );
+        booleanQueryBuilder.add( new BooleanClause( domainsQueryBuilder.build( ), BooleanClause.Occur.MUST ) );
     }
 
     /**
@@ -370,54 +377,57 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * @param booleanQuery
      * @param filter
      */
-    private BooleanFilter addQueryFilterTabClause( TicketFilter filter )
+    private Builder addQueryFilterTabClause( TicketFilter filter )
     {
         if ( filter != null )
         {
-            BooleanFilter booleanFilterGlobal = new BooleanFilter( );
+            // Create the global query builder
+            Builder booleanQueryBuilderGlobal = new Builder( );
 
-            BytesRef bytesRefIdAssigneAdminUser = TicketSearchUtil.getBytesRef( filter.getFilterIdAdminUser( ) );
-            TermFilter termFilterIdAdminUser = new TermFilter( new Term( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_ADMIN_ID, bytesRefIdAssigneAdminUser ) );
-            TermFilter termFilterIdAssignerUser = new TermFilter( new Term( TicketSearchItemConstant.FIELD_ASSIGNER_USER_ID, bytesRefIdAssigneAdminUser ) );
+            // Create the query on the id admin user and id assigner user field
+            int nIdAdminUser = filter.getFilterIdAdminUser( );
+            Query queryIdAdminUser = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_ADMIN_ID, nIdAdminUser );
+            Query queryIdAssignerUser = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_ASSIGNER_USER_ID, nIdAdminUser );
 
             // Create a list of filter terms for the id of assignee unit
-            TermsFilter termsFilterIdAssigneeUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID,
+            DocValuesTermsQuery docValuesTermsQueryIdAssigneeUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID,
                     filter.getFilterIdAssigneeUnit( ) );
 
             // Create a list of filter terms for the id of assigner unit
-            TermsFilter termsFilterIdAssignerUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID,
+            DocValuesTermsQuery docValuesTermsQueryIdAssignerUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID,
                     filter.getFilterIdAssignerUnit( ) );
 
             switch( filter.getFilterView( ) )
             {
                 case AGENT:
-                    BooleanFilter booleanFilterIdUser = new BooleanFilter( );
-                    booleanFilterIdUser.add( termFilterIdAdminUser, Occur.SHOULD );
-                    booleanFilterIdUser.add( termFilterIdAssignerUser, Occur.SHOULD );
 
-                    booleanFilterGlobal.add( booleanFilterIdUser, Occur.MUST );
+                    Builder booleanQueryBuilderIdUser = new Builder( );
+                    booleanQueryBuilderIdUser.add( queryIdAdminUser, Occur.SHOULD );
+                    booleanQueryBuilderIdUser.add( queryIdAssignerUser, Occur.SHOULD );
+
+                    booleanQueryBuilderGlobal.add( booleanQueryBuilderIdUser.build( ), Occur.MUST );
                     break;
                 case GROUP:
-                    if ( termsFilterIdAssigneeUnit != null && termsFilterIdAssignerUnit != null )
+                    if ( docValuesTermsQueryIdAssigneeUnit != null && docValuesTermsQueryIdAssignerUnit != null )
                     {
-                        booleanFilterGlobal.add( termFilterIdAdminUser, Occur.MUST_NOT );
-                        booleanFilterGlobal.add( termFilterIdAssignerUser, Occur.MUST_NOT );
+                        booleanQueryBuilderGlobal.add( queryIdAdminUser, Occur.MUST_NOT );
+                        booleanQueryBuilderGlobal.add( queryIdAssignerUser, Occur.MUST_NOT );
 
-                        BooleanFilter booleanFilterIdUnit = new BooleanFilter( );
-                        booleanFilterIdUnit.add( termsFilterIdAssigneeUnit, Occur.SHOULD );
-                        booleanFilterIdUnit.add( termsFilterIdAssignerUnit, Occur.SHOULD );
+                        Builder booleanQueryBuilderIdUnit = new Builder( );
+                        booleanQueryBuilderIdUnit.add( docValuesTermsQueryIdAssigneeUnit, Occur.SHOULD );
+                        booleanQueryBuilderIdUnit.add( docValuesTermsQueryIdAssignerUnit, Occur.SHOULD );
 
-                        booleanFilterGlobal.add( booleanFilterIdUnit, Occur.MUST );
+                        booleanQueryBuilderGlobal.add( booleanQueryBuilderIdUnit.build( ), Occur.MUST );
                     }
                     break;
                 case DOMAIN:
-                    if ( termsFilterIdAssigneeUnit != null && termsFilterIdAssignerUnit != null )
+                    if ( docValuesTermsQueryIdAssigneeUnit != null && docValuesTermsQueryIdAssignerUnit != null )
                     {
-                        booleanFilterGlobal.add( termFilterIdAdminUser, Occur.MUST_NOT );
-                        booleanFilterGlobal.add( termFilterIdAssignerUser, Occur.MUST_NOT );
+                        booleanQueryBuilderGlobal.add( queryIdAdminUser, Occur.MUST_NOT );
+                        booleanQueryBuilderGlobal.add( queryIdAssignerUser, Occur.MUST_NOT );
 
-                        booleanFilterGlobal.add( termsFilterIdAssigneeUnit, Occur.MUST_NOT );
-                        booleanFilterGlobal.add( termsFilterIdAssignerUnit, Occur.MUST_NOT );
+                        booleanQueryBuilderGlobal.add( docValuesTermsQueryIdAssigneeUnit, Occur.MUST_NOT );
+                        booleanQueryBuilderGlobal.add( docValuesTermsQueryIdAssignerUnit, Occur.MUST_NOT );
                     }
                     break;
                 case ALL:
@@ -426,7 +436,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             }
 
             // Return the global filter
-            return addSelectedFilter( booleanFilterGlobal, filter );
+            return addSelectedFilter( booleanQueryBuilderGlobal, filter );
         }
 
         return null;
@@ -435,134 +445,131 @@ public class TicketSearchEngine implements ITicketSearchEngine
     /**
      * Add the filters selected by the user
      * 
-     * @param booleanFilterGlobal
-     *            the global filter of the request
+     * @param booleanQueryBuilderGlobal
+     *            The global query builder of the query
      * @param filter
-     *            to apply to the global filter
-     * @return
+     *            The filter to apply to the global builder
+     * @return The builder with all clause
      */
-    private BooleanFilter addSelectedFilter( BooleanFilter booleanFilterGlobal, TicketFilter filter )
+    private Builder addSelectedFilter( Builder booleanQueryBuilderGlobal, TicketFilter filter )
     {
         if ( filter != null )
         {
             // Filter on the ticket urgency
             if ( filter.getUrgency( ) != -1 )
             {
-                addUrgencyFilter( booleanFilterGlobal, filter.getUrgency( ) );
+                addUrgencyFilter( booleanQueryBuilderGlobal, filter.getUrgency( ) );
             }
 
             // Filter on the ticket type
             if ( filter.getIdType( ) != -1 )
             {
-                addTicketTypeIdFilter( booleanFilterGlobal, filter.getIdType( ) );
+                addTicketTypeIdFilter( booleanQueryBuilderGlobal, filter.getIdType( ) );
             }
 
             // Filter on the creation date
             if ( filter.getCreationStartDate( ) != null )
             {
-                addCreationDateFilter( booleanFilterGlobal, filter.getCreationStartDate( ).getTime( ) );
+                addCreationDateFilter( booleanQueryBuilderGlobal, filter.getCreationStartDate( ).getTime( ) );
             }
 
             // Filter on the selected state
             if ( filter.getListIdWorkflowState( ) != null && !filter.getListIdWorkflowState( ).isEmpty( ) )
             {
-                addIdWorkflowStateFilter( booleanFilterGlobal, filter.getListIdWorkflowState( ) );
+                addIdWorkflowStateFilter( booleanQueryBuilderGlobal, filter.getListIdWorkflowState( ) );
             }
         }
-        return booleanFilterGlobal;
+        return booleanQueryBuilderGlobal;
     }
 
     /**
      * Add a filter for the urgency value
      * 
-     * @param booleanFilter
-     *            the filter to add the urgency filter
+     * @param queryBuilder
+     *            The query builder to add the new BooleanClause
      * @param urgencyValue
-     *            the value to filter
+     *            The value to filter
      */
-    private void addUrgencyFilter( BooleanFilter booleanFilter, int urgencyValue )
+    private void addUrgencyFilter( Builder queryBuilder, int urgencyValue )
     {
-        BytesRef bytesRefZero = TicketSearchUtil.getBytesRef( 0 );
-        BytesRef bytesRefUrgency = TicketSearchUtil.getBytesRef( urgencyValue );
+        // Create the Query on the Priority field
+        Query queryRangePriority = IntPoint.newRangeQuery( TicketSearchItemConstant.FIELD_PRIORITY, TicketingConstants.CONSTANT_ZERO, urgencyValue );
+        Query querySamePriority = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_PRIORITY, urgencyValue );
 
-        TermRangeFilter termRangeFilterPriority = new TermRangeFilter( TicketSearchItemConstant.FIELD_PRIORITY, bytesRefZero, bytesRefUrgency, true, true );
-        TermFilter termFilterSamePriority = new TermFilter( new Term( TicketSearchItemConstant.FIELD_PRIORITY, bytesRefUrgency ) );
-
-        TermRangeFilter termRangeFilterCritilicatity = new TermRangeFilter( TicketSearchItemConstant.FIELD_CRITICALITY, bytesRefZero, bytesRefUrgency, true,
-                true );
-        TermFilter termFilterSameCritilicatity = new TermFilter( new Term( TicketSearchItemConstant.FIELD_CRITICALITY, bytesRefUrgency ) );
+        // Create the query on the Criticality field
+        Query queryRangeCritilicatity = IntPoint.newRangeQuery( TicketSearchItemConstant.FIELD_CRITICALITY, TicketingConstants.CONSTANT_ZERO, urgencyValue );
+        Query querySameCritilicatity = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_CRITICALITY, urgencyValue );
 
         // Same Criticality value and Priority in range [0, urgency]
-        BooleanFilter booleanFilterRangePrioritySameCriticality = new BooleanFilter( );
-        booleanFilterRangePrioritySameCriticality.add( termRangeFilterPriority, Occur.MUST );
-        booleanFilterRangePrioritySameCriticality.add( termFilterSameCritilicatity, Occur.MUST );
+        Builder booleanQueryBuilderRangePrioritySameCriticality = new Builder( );
+        booleanQueryBuilderRangePrioritySameCriticality.add( queryRangePriority, Occur.MUST );
+        booleanQueryBuilderRangePrioritySameCriticality.add( querySameCritilicatity, Occur.MUST );
 
         // Same Priority value and Criticality in range [0, urgency]
-        BooleanFilter booleanFilterRangeCriticalitySamePriority = new BooleanFilter( );
-        booleanFilterRangeCriticalitySamePriority.add( termRangeFilterCritilicatity, Occur.MUST );
-        booleanFilterRangeCriticalitySamePriority.add( termFilterSamePriority, Occur.MUST );
+        Builder booleanQueryBuilderRangeCriticalitySamePriority = new Builder( );
+        booleanQueryBuilderRangeCriticalitySamePriority.add( queryRangeCritilicatity, Occur.MUST );
+        booleanQueryBuilderRangeCriticalitySamePriority.add( querySamePriority, Occur.MUST );
 
         // Create the urgency filter
-        BooleanFilter booleanfilterUrgency = new BooleanFilter( );
-        booleanfilterUrgency.add( booleanFilterRangePrioritySameCriticality, Occur.SHOULD );
-        booleanfilterUrgency.add( booleanFilterRangeCriticalitySamePriority, Occur.SHOULD );
+        Builder booleanQueryBuilderUrgency = new Builder( );
+        booleanQueryBuilderUrgency.add( booleanQueryBuilderRangePrioritySameCriticality.build( ), Occur.SHOULD );
+        booleanQueryBuilderUrgency.add( booleanQueryBuilderRangeCriticalitySamePriority.build( ), Occur.SHOULD );
 
-        // Add the urgency filter to the global filter
-        booleanFilter.add( booleanfilterUrgency, Occur.MUST );
+        // Add the urgency filter to the global query builder
+        queryBuilder.add( booleanQueryBuilderUrgency.build( ), Occur.MUST );
     }
 
     /**
      * Add a filter for the ticket type id value
      * 
-     * @param booleanFilter
-     *            the filter to add the ticket type id filter
+     * @param queryBuilder
+     *            The query builder to add the new BooleanClause
      * @param ticketTypeIdValue
-     *            the value to filter
+     *            The value to filter
      */
-    private void addTicketTypeIdFilter( BooleanFilter booleanFilter, int ticketTypeIdValue )
+    private void addTicketTypeIdFilter( Builder queryBuilder, int ticketTypeIdValue )
     {
-        BytesRef bytesRefIdType = TicketSearchUtil.getBytesRef( ticketTypeIdValue );
-
-        TermFilter termRangeFilterIdType = new TermFilter( new Term( TicketSearchItemConstant.FIELD_TICKET_TYPE_ID, bytesRefIdType ) );
+        // Create the Query on th Type Id
+        Query queryTypeId = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_TICKET_TYPE_ID, ticketTypeIdValue );
 
         // Add the ticket type id filter to the global filter
-        booleanFilter.add( termRangeFilterIdType, Occur.MUST );
+        queryBuilder.add( new BooleanClause( queryTypeId, Occur.MUST ) );
     }
 
     /**
-     * Add a filter for the ticket creation date
+     * Add the Boolean clause on the creation date on the query builder
      * 
-     * @param booleanFilter
-     *            the filter to add the creation date filter
+     * @param queryBuilder
+     *            The query builder to add the new BooleanClause
      * @param creationDate
-     *            the creation date limit
+     *            The creation date limit
      */
-    private void addCreationDateFilter( BooleanFilter booleanFilter, long creationDate )
+    private void addCreationDateFilter( Builder queryBuilder, long creationDate )
     {
-        BytesRef bytesRefCreationDateFilter = TicketSearchUtil.getBytesRef( creationDate );
-        BytesRef bytesRefActualDateFilter = TicketSearchUtil.getBytesRef( new Date( ).getTime( ) );
+        // Create the range query of the creation date
+        Query queryCreationDate = LongPoint.newRangeQuery( TicketSearchItemConstant.FIELD_DATE_CREATION, creationDate, new Date( ).getTime( ) );
 
-        TermRangeFilter termRangeFilterCreationDate = new TermRangeFilter( TicketSearchItemConstant.FIELD_DATE_CREATION, bytesRefCreationDateFilter,
-                bytesRefActualDateFilter, true, true );
-
-        // Add the creation date filter to the global filter
-        booleanFilter.add( termRangeFilterCreationDate, Occur.MUST );
+        // Return the Boolean clause on the creation date
+        queryBuilder.add( new BooleanClause( queryCreationDate, Occur.MUST ) );
     }
 
     /**
-     * Add the workflow state id list to filter
+     * Add the boolean clause of the list id workflow state on the query builder
      * 
-     * @param booleanFilter
-     *            the filter to add the workflow state id filter
+     * @param queryBuilder
+     *            The query builder to add the new BooleanClause
      * @param listIdWorkflowState
-     *            the list of workflow state id to filter
+     *            The list of workflow state id to filter
      */
-    private void addIdWorkflowStateFilter( BooleanFilter booleanFilter, List<Integer> listIdWorkflowState )
+    private void addIdWorkflowStateFilter( Builder queryBuilder, List<Integer> listIdWorkflowState )
     {
-        // Create a list of filter terms for the id of workflow state
-        TermsFilter termsFilterIdWorkflowState = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_STATE_ID, listIdWorkflowState );
+        if ( listIdWorkflowState != null && !listIdWorkflowState.isEmpty( ) )
+        {
+            // Create a list of filter terms for the id of workflow state
+            DocValuesTermsQuery termsFilterIdWorkflowState = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_STATE_ID, listIdWorkflowState );
 
-        // Add the workflow state id list to filter to the global filter
-        booleanFilter.add( termsFilterIdWorkflowState, Occur.MUST );
+            // Return the Boolean clause on the id workflow state list
+            queryBuilder.add( new BooleanClause( termsFilterIdWorkflowState, Occur.MUST ) );
+        }
     }
 }

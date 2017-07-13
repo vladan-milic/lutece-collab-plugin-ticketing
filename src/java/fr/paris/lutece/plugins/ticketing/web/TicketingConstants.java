@@ -191,6 +191,7 @@ public final class TicketingConstants
     public static final String EQUAL_SYMBOL = "=";
     public static final int NO_ID_CHANNEL = 0;
     public static final int TICKET_STATUS_IN_PROGRESS = 0;
+    public static final int CONSTANT_ZERO = 0;
     public static final int TICKET_STATUS_CLOSED = 1;
     public static final int PROPERTY_UNSET_INT = -1;
     public static final int NO_PARENT_ID = -1;

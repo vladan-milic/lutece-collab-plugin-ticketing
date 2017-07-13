@@ -33,12 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
+import java.util.ArrayList;
+import java.util.List;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class provides Data Access methods for TypeResponse objects
@@ -187,9 +186,7 @@ public final class ModelResponseDAO implements IModelResponseDAO
     public List<ModelResponse> selectModelResponsesListByDomain( Plugin plugin, String sLabelDomain )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_DOMAIN, plugin );
-
         daoUtil.setString( 1, sLabelDomain );
-
         daoUtil.executeQuery( );
 
         List<ModelResponse> listModelResponses = dataToModelResponse( daoUtil );

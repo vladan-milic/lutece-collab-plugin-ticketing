@@ -33,15 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.util;
 
-import java.io.Reader;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.core.KeywordTokenizer;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
 import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
-import org.apache.lucene.util.Version;
 
 /**
  * Specific Analyzer for field lastname, firstname and state label use for sorting Ticket
@@ -50,12 +47,12 @@ public class TicketSortAnalyzer extends Analyzer
 {
 
     @Override
-    protected TokenStreamComponents createComponents( String fieldName, Reader reader )
+    protected TokenStreamComponents createComponents( String fieldName )
     {
-        final Tokenizer source = new KeywordTokenizer( reader );
+        final Tokenizer source = new KeywordTokenizer( );
 
         TokenStream tokenStream = source;
-        tokenStream = new LowerCaseFilter( Version.LUCENE_4_9, source );
+        tokenStream = new LowerCaseFilter( source );
         tokenStream = new ASCIIFoldingFilter( tokenStream );
         return new TokenStreamComponents( source, tokenStream );
     }

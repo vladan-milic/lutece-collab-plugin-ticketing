@@ -33,8 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.modelresponse.search;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,8 @@ import java.util.Set;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.IntField;
+import org.apache.lucene.document.IntPoint;
+import org.apache.lucene.document.StoredField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
@@ -55,7 +56,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.BooleanQuery.Builder;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -63,11 +64,9 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
-import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
@@ -140,7 +139,8 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     private Document getDocument( ModelResponse modelReponse )
     {
         Document doc = new Document( );
-        doc.add( new IntField( FIELD_ID, modelReponse.getId( ), Field.Store.YES ) );
+        doc.add( new IntPoint( FIELD_ID, modelReponse.getId( ) ) );
+        doc.add( new StoredField( FIELD_ID, modelReponse.getId( ) ) );
         doc.add( new StringField( FIELD_TITLE, modelReponse.getTitle( ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_KEYWORD, modelReponse.getKeyword( ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_RESPONSE, modelReponse.getReponse( ), Field.Store.YES ) );
@@ -243,22 +243,22 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 
             IndexSearcher searcher = new IndexSearcher( reader );
 
-            BooleanQuery booleanQueryMain = new BooleanQuery( );
+            Builder booleanQueryBuilderMain = new Builder( );
             if ( setDomain != null && !setDomain.isEmpty( ) )
             {
-                BooleanQuery booleanDomainQuery = new BooleanQuery( );
+                Builder booleanQueryBuilderDomain = new Builder( );
                 for ( String strDomain : setDomain )
                 {
                     TermQuery termQueryDomain = new TermQuery( new Term( FIELD_DOMAIN_LABEL, strDomain ) );
-                    booleanDomainQuery.add( new BooleanClause( termQueryDomain, Occur.SHOULD ) );
+                    booleanQueryBuilderDomain.add( new BooleanClause( termQueryDomain, Occur.SHOULD ) );
                 }
-                booleanQueryMain.add( new BooleanClause( booleanDomainQuery, Occur.MUST ) );
+                booleanQueryBuilderMain.add( new BooleanClause( booleanQueryBuilderDomain.build( ), Occur.MUST ) );
             }
 
-            Query query = new QueryParser( Version.LUCENE_4_9, FIELD_SEARCH_CONTENT, _analyzer ).parse( strQuery );
-            booleanQueryMain.add( new BooleanClause( query, Occur.MUST ) );
+            Query query = new QueryParser( FIELD_SEARCH_CONTENT, _analyzer ).parse( strQuery );
+            booleanQueryBuilderMain.add( new BooleanClause( query, Occur.MUST ) );
 
-            TopDocs results = searcher.search( booleanQueryMain, Short.MAX_VALUE );
+            TopDocs results = searcher.search( booleanQueryBuilderMain.build( ), Short.MAX_VALUE );
             ScoreDoc [ ] hits = results.scoreDocs;
 
             AppLogService.debug( "\n Ticketing - Model Response  : query lucene " + hits.length + " \n" );
@@ -301,7 +301,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     private IndexWriter getIndexWriter( Boolean bcreate ) throws IOException
     {
         Directory indexDir = FSDirectory.open( getIndexPath( ) );
-        IndexWriterConfig config = new IndexWriterConfig( Version.LUCENE_4_9, _analyzer );
+        IndexWriterConfig config = new IndexWriterConfig( _analyzer );
 
         if ( !DirectoryReader.indexExists( indexDir ) || bcreate )
         {
@@ -335,9 +335,9 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
             @SuppressWarnings( {
                 "rawtypes"
             } )
-            java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName ).getConstructor( Version.class, String [ ].class );
+            java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName ).getConstructor( String [ ].class );
             _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {
-                    IndexationService.LUCENE_INDEX_VERSION, new String [ ] { }
+                new String [ ] { }
             } );
         }
         catch( InstantiationException ie )
@@ -352,10 +352,8 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
                 @SuppressWarnings( {
                         "unchecked", "rawtypes"
                 } )
-                java.lang.reflect.Constructor constructeur = classAnalyzer.getConstructor( Version.class );
-                _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {
-                    IndexationService.LUCENE_INDEX_VERSION
-                } );
+                java.lang.reflect.Constructor constructeur = classAnalyzer.getConstructor( );
+                _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] { } );
             }
             catch( Exception e )
             {
@@ -373,7 +371,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
      *
      * @return the index path
      */
-    private File getIndexPath( )
+    private Path getIndexPath( )
     {
         String strIndexPath = _strIndexPath;
 
@@ -382,7 +380,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
             strIndexPath = AppPathService.getAbsolutePathFromRelativePath( _strIndexPath );
         }
 
-        return Paths.get( strIndexPath ).toFile( );
+        return Paths.get( strIndexPath );
     }
 
     /**
