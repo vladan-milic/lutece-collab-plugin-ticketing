@@ -56,12 +56,14 @@ public class FormValidator
     private static final String PARAMETER_EMAIL = "email";
     private static final String PARAMETER_FIXED_PHONE_NUMBER = "fixed_phone_number";
     private static final String PARAMETER_MOBILE_PHONE_NUMBER = "mobile_phone_number";
+    private static final String PARAMETER_COMMENT = "ticket_comment";
 
     // Errors
     private static final String ERROR_CONTACT_MODE_NOT_FILLED = "ticketing.error.contactmode.not.filled";
     private static final String ERROR_EMAIL_NOT_FILLED = "ticketing.validation.ticket.Email.notEmpty";
     private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
     private static final String CONTACT_MODE_LABEL_I18N = "ticketing.contactmodes.label.";
+    private static final String ERROR_EMPTY_COMMENT = "ticketing.error.comment.empty";
     private HttpServletRequest _request;
 
     // Pattern
@@ -143,6 +145,22 @@ public class FormValidator
         return strError;
     }
 
+    /**
+     * Tests if the comment is empty
+     *
+     * @return the localized error message if the comment is not filled, {@code null} otherwise
+     */
+    public String isCommentFilled( )
+    {
+        String strError = null;
+
+        if ( StringUtils.isEmpty( _request.getParameter( PARAMETER_COMMENT ) ) )
+        {
+            strError = I18nService.getLocalizedString( ERROR_EMPTY_COMMENT, _request.getLocale( ) );
+        }
+
+        return strError;
+    }
     /**
      * Tests whether the specified ticket has a phone number or not
      *
