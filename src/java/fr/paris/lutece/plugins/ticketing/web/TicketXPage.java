@@ -390,7 +390,8 @@ public class TicketXPage extends WorkflowCapableXPage
         FormValidator formValidator = new FormValidator( request );
         listValidationErrors.add( formValidator.isEmailFilled( ) );
         listValidationErrors.add( formValidator.isPhoneNumberFilled( ) );
-
+        listValidationErrors.add( formValidator.isCommentFilled( ) );
+        
         boolean bIsSubProbSelected = true;
 
         // Validate if precision has been selected if the selected category has precisions
