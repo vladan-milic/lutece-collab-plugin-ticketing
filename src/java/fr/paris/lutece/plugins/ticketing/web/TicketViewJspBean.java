@@ -59,6 +59,7 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.TicketPriority;
 import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
+import fr.paris.lutece.plugins.ticketing.service.reference.ITicketReferenceService;
 import fr.paris.lutece.plugins.ticketing.web.filter.SessionFilter;
 import fr.paris.lutece.plugins.ticketing.web.user.UserFactory;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
@@ -66,6 +67,7 @@ import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexerActionUtil;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
+import fr.paris.lutece.portal.service.content.ContentPostProcessor;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -73,6 +75,7 @@ import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
+import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.util.url.UrlItem;
@@ -97,16 +100,22 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
     // Views
     private static final String VIEW_DETAILS = "ticketDetails";
+    
+    // Actions
+    private static final String ACTION_DETAILS_FROM_REFERENCE = "ticketReference";
 
     // Other constants
     private static final long serialVersionUID = 1L;
     private static final String TICKET_NOT_EXIST_REDIRECT_URL = TicketingConstants.ADMIN_CONTROLLLER_PATH + TicketingConstants.JSP_MANAGE_TICKETS;
+    private static final String CONTENT_POST_PROCESSORS_LIST_BEAN_NAME = "ticketing.ticketContentPostProcessors.list";
 
     // Session keys
     private static boolean _bAvatarAvailable = ( PluginService.getPlugin( TicketingConstants.PLUGIN_AVATAR ) != null );
 
     // Variable
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
+    private final ITicketReferenceService _ticketReferenceService = SpringContextService.getBean( ITicketReferenceService.BEAN_NAME );
+    private static final List<ContentPostProcessor> _listContentPostProcessors = SpringContextService.getBean( CONTENT_POST_PROCESSORS_LIST_BEAN_NAME );
 
     /**
      * Gets the Details tab of the Ticket View
@@ -212,6 +221,18 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
         model.put( TicketingConstants.MARK_JSP_CONTROLLER, getControllerJsp( ) );
 
+        // Add link to all reference present in the ticket comment
+        String strTicketComment = ticket.getTicketComment( );
+        if ( _listContentPostProcessors != null && !_listContentPostProcessors.isEmpty( ) )
+        {
+            String strProcessResult = strTicketComment.replaceAll( System.lineSeparator( ), TicketingConstants.HTML_BR_BALISE );
+            for ( ContentPostProcessor contentPostProcessor : _listContentPostProcessors )
+            {
+                strProcessResult = contentPostProcessor.process( request, strProcessResult );
+            }
+            ticket.setTicketComment( strProcessResult );
+        }
+
         String strHistory = getDisplayDocumentHistory( request, ticket );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_HISTORY, strHistory );
@@ -243,6 +264,10 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
             try
             {
                 TicketIndexer ticketIndexer = new TicketIndexer( );
+
+                // We will not index the ticket comment with the link
+                ticket.setTicketComment( strTicketComment );
+
                 ticketIndexer.indexTicket( ticket );
             }
             catch( TicketIndexerException ticketIndexerException )
@@ -273,6 +298,30 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         }
 
         return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS, TEMPLATE_VIEW_TICKET_DETAILS, model );
+    }
+    
+    /**
+     * Access the details of a ticket by its reference
+     * 
+     * @param request
+     *      The HttpServletRequest
+     * @return redirect to the details page of the ticket
+     */
+    @Action( ACTION_DETAILS_FROM_REFERENCE )
+    public String getTicketDetailsByReference( HttpServletRequest request )
+    {
+        String strTicketReference = request.getParameter( TicketingConstants.MARK_TICKET_REFERENCE );
+        
+        Integer nIdTicket = null;
+        if ( StringUtils.isNotBlank( strTicketReference ) )
+        {
+            nIdTicket = _ticketReferenceService.findIdTicketByReference( strTicketReference );
+        }
+        
+        Map<String, String> mapParams = new HashMap<String, String>( );
+        mapParams.put( TicketingConstants.PARAMETER_ID_TICKET, ( nIdTicket == null ) ? null : String.valueOf( nIdTicket ) );
+
+        return redirect( request, VIEW_DETAILS, mapParams );
     }
 
     /**

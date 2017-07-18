@@ -10,7 +10,7 @@
     <h3 class="text-darkgray">${ticket.dateCreate!''}</h3>
     <#if ticket.ticketComment !=''>
       <div class="text-justify">
-        <p class="wordwrap-ticket-comment">${convertNewLineToHtml(ticket.ticketComment)}</p>
+        <p class="wordwrap-ticket-comment">${ticket.ticketComment}</p>
       </div>
     <#else>
       <p class="lead">

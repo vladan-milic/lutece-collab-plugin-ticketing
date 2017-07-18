@@ -39,6 +39,19 @@
     <bean id="ticketing.entryTypeFile" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeFile" />
     <bean id="ticketing.entryTypePhone" class="fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypePhone" />
     
+    <bean id="ticketing.ticketReferenceService" class="fr.paris.lutece.plugins.ticketing.service.reference.TicketReferencePrefixAndNumberService">
+		<constructor-arg>
+			<bean class="fr.paris.lutece.plugins.ticketing.business.reference.TicketReferencePrefixAndNumberDAO" />
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ticketing.ticketContentPostProcessors.list" class="java.util.ArrayList">
+        <constructor-arg>
+            <list>
+                <ref bean="ticketing.ticketReferenceService" />
+            </list>
+        </constructor-arg>
+    </bean>    
     
     
     <!-- Search Engine -->

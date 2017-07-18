@@ -81,6 +81,7 @@ public final class TicketingConstants
 
     // Markers
     public static final String MARK_TICKET = "ticket";
+    public static final String MARK_TICKET_REFERENCE = "reference";
     public static final String MARK_ID_TICKET = PARAMETER_ID_TICKET;
     public static final String MARK_POCGRU_URL_360 = "url_poc_gru";
     public static final String MARK_LIST_READ_ONLY_HTML_RESPONSES = "read_only_reponses_html_list";
@@ -197,6 +198,7 @@ public final class TicketingConstants
     public static final int NO_PARENT_ID = -1;
     public static final String NO_ID_STRING = "-1";
     public static final String RESOURCE_TYPE_INPUT = "TICKET_INPUT";
+    public static final String HTML_BR_BALISE = "<br>";
 
     /**
      * Default constructor

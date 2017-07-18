@@ -33,23 +33,24 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
+import fr.paris.lutece.plugins.ticketing.service.reference.ITicketReferenceService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.url.UrlItem;
-
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * This class provides the user interface to manage TicketType features ( manage, create, modify, remove )
@@ -67,7 +68,6 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
 
     // Parameters
     private static final String PARAMETER_ID_TICKETTYPE = "id";
-    private static final String PARAMETER_ORDER_TICKETTYPE = "type_order";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETTYPES = "ticketing.manage_tickettypes.pageTitle";
@@ -77,7 +77,6 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     // Markers
     private static final String MARK_TICKETTYPE_LIST = "tickettype_list";
     private static final String MARK_TICKETTYPE = "tickettype";
-    private static final String JSP_MANAGE_TICKETTYPES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageTicketTypes.jsp";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKETTYPE = "ticketing.message.confirmRemoveTicketType";
@@ -109,11 +108,11 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
     private static final String MESSAGE_CAN_NOT_REMOVE_TYPE_DOMAINS_ARE_ASSOCIATE = "ticketing.message.canNotRemoveTypeDomainsAreAssociate";
 
     // Other constants
-    private static final String PATTERN_REFERENCE_PREFIX = "^[A-Z]{3}$";
-    private static Pattern _patternReferencePrefix = Pattern.compile( PATTERN_REFERENCE_PREFIX );
     private static final long serialVersionUID = 1L;
+    private static final String TICKET_REFERENCE_SERVICE_BEAN_NAME = "ticketing.ticketReferenceService";
 
     // Session variable to store working values
+    private ITicketReferenceService _ticketReferenceService = SpringContextService.getBean( TICKET_REFERENCE_SERVICE_BEAN_NAME );
     private TicketType _tickettype;
 
     /**
@@ -356,7 +355,7 @@ public class TicketTypeJspBean extends ManageAdminTicketingJspBean
 
         if ( ( strReferencePrefix != null ) && !strReferencePrefix.equals( "" ) )
         {
-            Matcher matcher = _patternReferencePrefix.matcher( strReferencePrefix );
+            Matcher matcher = _ticketReferenceService.getReferencePrefixPattern( ).matcher( strReferencePrefix );
 
             if ( !matcher.matches( ) )
             {
