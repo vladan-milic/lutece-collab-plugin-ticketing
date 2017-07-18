@@ -45,7 +45,7 @@ import fr.paris.lutece.portal.service.content.ContentPostProcessor;
 public interface ITicketReferenceService extends ContentPostProcessor
 {
     public static final String BEAN_NAME = "ticketing.ticketReferenceService";
-    
+
     /**
      * Generates a reference for the specified ticket
      * 
@@ -66,7 +66,7 @@ public interface ITicketReferenceService extends ContentPostProcessor
      * Return the identifier of the ticket from the given reference
      * 
      * @param strReference
-     *              the reference of the ticket
+     *            the reference of the ticket
      * @return the identifier of the ticket
      */
     Integer findIdTicketByReference( String strReference );

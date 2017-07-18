@@ -61,7 +61,7 @@ public interface ITicketReferenceDAO
      * Return the id of a ticket from the given reference
      * 
      * @param strReference
-     *              the reference of the ticket
+     *            the reference of the ticket
      * @return the identifier of the ticket associated with this reference
      */
     Integer findIdTicketByReference( String strReference );

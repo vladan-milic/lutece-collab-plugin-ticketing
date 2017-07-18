@@ -172,7 +172,7 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
         }
         return strContent;
     }
-    
+
     /**
      * {@inheritDoc}
      */

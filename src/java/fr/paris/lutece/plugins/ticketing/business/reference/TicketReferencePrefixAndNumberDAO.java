@@ -95,7 +95,7 @@ public class TicketReferencePrefixAndNumberDAO implements ITicketReferenceDAO
 
         return listPrefixReference;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -105,16 +105,16 @@ public class TicketReferencePrefixAndNumberDAO implements ITicketReferenceDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ID_TICKET_BY_REFERENCE, PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME ) );
         daoUtil.setString( 1, strReference );
         daoUtil.executeQuery( );
-        
+
         Integer nIdTicket = null;
-        
-        if( daoUtil.next( ) )
+
+        if ( daoUtil.next( ) )
         {
             nIdTicket = daoUtil.getInt( 1 );
         }
-        
+
         daoUtil.free( );
-        
+
         return nIdTicket;
     }
 }

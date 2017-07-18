@@ -161,6 +161,7 @@ public class FormValidator
 
         return strError;
     }
+
     /**
      * Tests whether the specified ticket has a phone number or not
      *

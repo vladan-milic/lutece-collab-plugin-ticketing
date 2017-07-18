@@ -100,7 +100,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
     // Views
     private static final String VIEW_DETAILS = "ticketDetails";
-    
+
     // Actions
     private static final String ACTION_DETAILS_FROM_REFERENCE = "ticketReference";
 
@@ -299,25 +299,25 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
         return getPage( PROPERTY_PAGE_TITLE_TICKET_DETAILS, TEMPLATE_VIEW_TICKET_DETAILS, model );
     }
-    
+
     /**
      * Access the details of a ticket by its reference
      * 
      * @param request
-     *      The HttpServletRequest
+     *            The HttpServletRequest
      * @return redirect to the details page of the ticket
      */
     @Action( ACTION_DETAILS_FROM_REFERENCE )
     public String getTicketDetailsByReference( HttpServletRequest request )
     {
         String strTicketReference = request.getParameter( TicketingConstants.MARK_TICKET_REFERENCE );
-        
+
         Integer nIdTicket = null;
         if ( StringUtils.isNotBlank( strTicketReference ) )
         {
             nIdTicket = _ticketReferenceService.findIdTicketByReference( strTicketReference );
         }
-        
+
         Map<String, String> mapParams = new HashMap<String, String>( );
         mapParams.put( TicketingConstants.PARAMETER_ID_TICKET, ( nIdTicket == null ) ? null : String.valueOf( nIdTicket ) );
 
