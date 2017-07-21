@@ -155,25 +155,25 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
             {
                 // Get the current reference and its prefix
                 String currentReference = matcherReference.group( );
-                
+
                 // Detect if the prefix of the current reference is a valid prefix
-                if ( StringUtils.isNotBlank( currentReference ) &&  _listPrefixReference.contains( getPrefixFromReference( currentReference ) ) )
+                if ( StringUtils.isNotBlank( currentReference ) && _listPrefixReference.contains( getPrefixFromReference( currentReference ) ) )
                 {
                     // Check if this reference has been already processed
                     if ( !setReferenceChecked.contains( currentReference ) )
                     {
-                         Map<String, Object> model = new HashMap<String, Object>( );
-                         model.put( MARK_URL_REFERENCE, currentReference );
+                        Map<String, Object> model = new HashMap<String, Object>( );
+                        model.put( MARK_URL_REFERENCE, currentReference );
 
-                         HtmlTemplate templateLink = AppTemplateService.getTemplate( TEMPLATE_COMMENT_URL, request.getLocale( ), model );
-                         if ( templateLink != null )
-                         {
-                             strResult = strResult.replaceAll( WORD_BOUNDARY_PATTERN + currentReference + WORD_BOUNDARY_PATTERN, templateLink.getHtml( ) );
-                         }
-                         
-                         // Add the current reference as processed
-                         setReferenceChecked.add( currentReference );
-                     }
+                        HtmlTemplate templateLink = AppTemplateService.getTemplate( TEMPLATE_COMMENT_URL, request.getLocale( ), model );
+                        if ( templateLink != null )
+                        {
+                            strResult = strResult.replaceAll( WORD_BOUNDARY_PATTERN + currentReference + WORD_BOUNDARY_PATTERN, templateLink.getHtml( ) );
+                        }
+
+                        // Add the current reference as processed
+                        setReferenceChecked.add( currentReference );
+                    }
                 }
             }
             return strResult;
@@ -185,13 +185,13 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
      * Return the prefix of a Reference
      * 
      * @param currentReference
-     *          The reference
+     *            The reference
      * @return the prefix of the reference
      */
     private String getPrefixFromReference( String currentReference )
     {
         String strPrefix = StringUtils.EMPTY;
-        
+
         Pattern patternReferencePrefixInReference = Pattern.compile( PATTERN_REFERENCE_PREFIX_IN_REFERENCE );
         Matcher matcherPrefixReference = patternReferencePrefixInReference.matcher( currentReference );
         while ( matcherPrefixReference.find( ) )
