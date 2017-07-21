@@ -154,7 +154,7 @@ public class FormValidator
     {
         String strError = null;
 
-        if ( StringUtils.isEmpty( _request.getParameter( PARAMETER_COMMENT ) ) )
+        if ( StringUtils.isBlank( _request.getParameter( PARAMETER_COMMENT ) ) )
         {
             strError = I18nService.getLocalizedString( ERROR_EMPTY_COMMENT, _request.getLocale( ) );
         }
