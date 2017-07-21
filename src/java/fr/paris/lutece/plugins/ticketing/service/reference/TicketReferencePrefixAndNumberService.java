@@ -37,8 +37,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,7 +67,9 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
     private static final String REFERENCE_FORMAT = "%s%05d";
     private static final String DATE_FORMAT = "yyMM";
     private static final String PATTERN_REFERENCE_PREFIX = "^[A-Z]{3}$";
+    private static final String PATTERN_REFERENCE_PREFIX_IN_REFERENCE = "^[A-Z]{3}";
     private static final String PATTERN_REFERENCE = "\\b[A-Z]{3}\\d{9}\\b";
+    private static final String WORD_BOUNDARY_PATTERN = "\\b";
 
     private static final String MARK_URL_REFERENCE = "reference_url";
 
@@ -142,35 +146,59 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
         if ( StringUtils.isNotBlank( strContent ) )
         {
             String strResult = strContent;
+            Set<String> setReferenceChecked = new LinkedHashSet<>( );
 
             // Detect if there is a reference in the given string
             Pattern patternReference = Pattern.compile( PATTERN_REFERENCE );
             Matcher matcherReference = patternReference.matcher( strContent );
             while ( matcherReference.find( ) )
             {
+                // Get the current reference and its prefix
                 String currentReference = matcherReference.group( );
-                if ( StringUtils.isNotBlank( currentReference ) )
+                
+                // Detect if the prefix of the current reference is a valid prefix
+                if ( StringUtils.isNotBlank( currentReference ) &&  _listPrefixReference.contains( getPrefixFromReference( currentReference ) ) )
                 {
-                    // Detect if the prefix used in the current reference is a valid prefix
-                    for ( String strPrefix : _listPrefixReference )
+                    // Check if this reference has been already processed
+                    if ( !setReferenceChecked.contains( currentReference ) )
                     {
-                        if ( currentReference.contains( strPrefix ) )
-                        {
-                            Map<String, Object> model = new HashMap<String, Object>( );
-                            model.put( MARK_URL_REFERENCE, currentReference );
+                         Map<String, Object> model = new HashMap<String, Object>( );
+                         model.put( MARK_URL_REFERENCE, currentReference );
 
-                            HtmlTemplate templateLink = AppTemplateService.getTemplate( TEMPLATE_COMMENT_URL, request.getLocale( ), model );
-                            if ( templateLink != null )
-                            {
-                                strResult = strResult.replace( currentReference, templateLink.getHtml( ) );
-                            }
-                        }
-                    }
+                         HtmlTemplate templateLink = AppTemplateService.getTemplate( TEMPLATE_COMMENT_URL, request.getLocale( ), model );
+                         if ( templateLink != null )
+                         {
+                             strResult = strResult.replaceAll( WORD_BOUNDARY_PATTERN + currentReference + WORD_BOUNDARY_PATTERN, templateLink.getHtml( ) );
+                         }
+                         
+                         // Add the current reference as processed
+                         setReferenceChecked.add( currentReference );
+                     }
                 }
             }
             return strResult;
         }
         return strContent;
+    }
+
+    /**
+     * Return the prefix of a Reference
+     * 
+     * @param currentReference
+     *          The reference
+     * @return the prefix of the reference
+     */
+    private String getPrefixFromReference( String currentReference )
+    {
+        String strPrefix = StringUtils.EMPTY;
+        
+        Pattern patternReferencePrefixInReference = Pattern.compile( PATTERN_REFERENCE_PREFIX_IN_REFERENCE );
+        Matcher matcherPrefixReference = patternReferencePrefixInReference.matcher( currentReference );
+        while ( matcherPrefixReference.find( ) )
+        {
+            strPrefix = matcherPrefixReference.group( );
+        }
+        return strPrefix;
     }
 
     /**

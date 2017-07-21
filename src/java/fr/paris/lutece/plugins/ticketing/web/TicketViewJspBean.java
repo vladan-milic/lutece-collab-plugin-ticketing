@@ -107,7 +107,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     // Other constants
     private static final long serialVersionUID = 1L;
     private static final String TICKET_NOT_EXIST_REDIRECT_URL = TicketingConstants.ADMIN_CONTROLLLER_PATH + TicketingConstants.JSP_MANAGE_TICKETS;
-    private static final String CONTENT_POST_PROCESSORS_LIST_BEAN_NAME = "ticketing.ticketContentPostProcessors.list";
+    private static final String CONTENT_POST_PROCESSORS_LIST_BEAN_NAME = "workflow.commentContentPostProcessors.list";
 
     // Session keys
     private static boolean _bAvatarAvailable = ( PluginService.getPlugin( TicketingConstants.PLUGIN_AVATAR ) != null );
