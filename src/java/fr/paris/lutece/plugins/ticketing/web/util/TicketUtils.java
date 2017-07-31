@@ -427,4 +427,28 @@ public final class TicketUtils
     {
         return ( ticket.getAssignerUser( ) != null ) && ( ticket.getAssignerUser( ).getAdminUserId( ) == user.getUserId( ) );
     }
+    
+    /**
+     * Return the parsing of the String into Integer or -1 if fails
+     * 
+     * @param strStringToConvert
+     * @param strMessageError
+     *          the error message
+     * @return the parsing of the String or -1 if fails
+     */
+    public static int manageIntegerParsingFromString( String strStringToConvert, String strMessageError )
+    {
+        try
+        {
+            return Integer.parseInt( strStringToConvert );
+        }
+        catch( NumberFormatException e )
+        {
+            if( StringUtils.isNotBlank( strMessageError ) )
+            {
+                AppLogService.error( strMessageError );
+            }
+            return TicketingConstants.PROPERTY_UNSET_INT;
+        }
+    }
 }

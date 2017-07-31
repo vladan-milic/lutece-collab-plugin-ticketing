@@ -52,7 +52,6 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.address.TicketAddress;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
@@ -76,6 +75,8 @@ import fr.paris.lutece.plugins.ticketing.web.util.FormValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.ResponseRecap;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidator;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidatorResult;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
@@ -122,7 +123,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String TEMPLATE_RECAP_TICKET = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "recap_ticket.html";
 
     // Parameters
-    private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
     private static final String PARAMETER_USER_TITLE = "ut";
     private static final String PARAMETER_FIRSTNAME = "fn";
     private static final String PARAMETER_FAMILYNAME = "fan";
@@ -863,25 +863,20 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         boolean bIsFormValid = true;
         populate( ticket, request );
 
-        int nIdCategory = TicketingConstants.PROPERTY_UNSET_INT;
-        if ( StringUtils.isNotBlank( request.getParameter( PARAMETER_ID_CATEGORY ) ) )
-        {
-            nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
-        }
-
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
-        if ( ticketCategory == null )
-        {
-            TicketCategory ticketCategoryEmpty = new TicketCategory( );
-            ticketCategoryEmpty.setId( TicketingConstants.PROPERTY_UNSET_INT );
-            ticketCategory = ticketCategoryEmpty;
-        }
-        ticket.setTicketCategory( ticketCategory );
-
         TicketAddress ticketAddress = new TicketAddress( );
         populate( ticketAddress, request );
         ticket.setTicketAddress( ticketAddress );
-
+        
+        // Validate the Type, Domain, TicketCategory
+        boolean bIsSubProbSelected = true;
+        boolean isTicketCategoryValid = validateTicketTypeDomainCategory( request, ticket );
+        if( !isTicketCategoryValid )
+        {
+            bIsFormValid = false;
+            bIsSubProbSelected = false;
+        }
+        
+        // Validate the bean
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validateBean( ticket );
         for ( String error : listValidationErrors )
@@ -900,28 +895,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             bIsFormValid = false;
         }
 
-        boolean bIsSubProbSelected = true;
-
-        // Validate if precision has been selected if the selected category has precisions
-        if ( ticket.getTicketCategory( ).getId( ) != TicketingConstants.PROPERTY_UNSET_INT )
-        {
-            List<TicketCategory> listTicketCategory = TicketCategoryHome.findByDomainId( ticket.getIdTicketDomain( ) );
-            for ( TicketCategory ticketCategoryByDomain : listTicketCategory )
-            {
-                if ( ticketCategoryByDomain.getLabel( ).equals( ticket.getTicketCategory( ).getLabel( ) )
-                        && StringUtils.isNotBlank( ticketCategoryByDomain.getPrecision( ) )
-                        && StringUtils.isNotBlank( request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) )
-                        && request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING ) )
-                {
-                    addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED, getLocale( ) );
-                    bIsFormValid = false;
-                    bIsSubProbSelected = false;
-                    ticket.getTicketCategory( ).setPrecision( TicketingConstants.NO_ID_STRING );
-                    break;
-                }
-            }
-        }
-
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
         // Check constraints
         // Count the number of characters in the ticket comment
@@ -929,25 +902,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         if ( iNbCharcount > 5000 )
         {
             addError( MESSAGE_ERROR_COMMENT_VALIDATION, getLocale( ) );
-            bIsFormValid = false;
-        }
-
-        // Check if a type/domain/category have been selected (made here to sort errors)
-        if ( ticket.getIdTicketType( ) == TicketingConstants.PROPERTY_UNSET_INT )
-        {
-            addError( TicketingConstants.MESSAGE_ERROR_TICKET_TYPE_NOT_SELECTED, getLocale( ) );
-            bIsFormValid = false;
-        }
-
-        if ( ticket.getIdTicketDomain( ) == TicketingConstants.PROPERTY_UNSET_INT )
-        {
-            addError( TicketingConstants.MESSAGE_ERROR_TICKET_DOMAIN_NOT_SELECTED, getLocale( ) );
-            bIsFormValid = false;
-        }
-
-        if ( ticket.getTicketCategory( ) != null && ticket.getTicketCategory( ).getId( ) == TicketingConstants.PROPERTY_UNSET_INT )
-        {
-            addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( ) );
             bIsFormValid = false;
         }
 
@@ -1135,6 +1089,51 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 .setAttribute( TicketingConstants.PARAMETER_SELECTED_TICKETS, request.getParameterValues( TicketingConstants.PARAMETER_ID_TICKET ) );
         request.getSession( ).setAttribute( TicketingConstants.PARAMETER_IS_MASS_ACTION, true );
         return getWorkflowActionForm( request );
+    }
+    
+    /**
+     * Populate the TicketCategory object and validate the selected Type, 
+     * Domain, TicketCategory and Precision from the request parameters
+     * 
+     * @param request
+     *      the HttpServletRequest
+     * @return true if the selection is valid false otherwise
+     */
+    private boolean validateTicketTypeDomainCategory( HttpServletRequest request, Ticket ticket )
+    {       
+        // Validate if precision has been selected if the selected category has precisions
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategoryAndPrecision( );        
+        
+        boolean bIsFormValid = categoryValidatorResult.isTicketCategoryValid( );
+        ticket.setTicketCategory( categoryValidatorResult.getTicketCategory( ) );
+        
+        // Validate the precision
+        if( !bIsFormValid )
+        {
+            addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED, getLocale( ) );
+            ticket.getTicketCategory( ).setPrecision( TicketingConstants.NO_ID_STRING );
+        }
+                
+        // Check if a type/domain/category have been selected (made here to sort errors)
+        if ( ticket.getIdTicketType( ) == TicketingConstants.PROPERTY_UNSET_INT )
+        {
+            addError( TicketingConstants.MESSAGE_ERROR_TICKET_TYPE_NOT_SELECTED, getLocale( ) );
+            bIsFormValid = false;
+        }
+
+        if ( ticket.getIdTicketDomain( ) == TicketingConstants.PROPERTY_UNSET_INT )
+        {
+            addError( TicketingConstants.MESSAGE_ERROR_TICKET_DOMAIN_NOT_SELECTED, getLocale( ) );
+            bIsFormValid = false;
+        }
+
+        if ( ticket.getTicketCategory( ) != null && ticket.getTicketCategory( ).getId( ) == TicketingConstants.PROPERTY_UNSET_INT )
+        {
+            addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( ) );
+            bIsFormValid = false;
+        }
+        
+        return bIsFormValid;
     }
 
 }
