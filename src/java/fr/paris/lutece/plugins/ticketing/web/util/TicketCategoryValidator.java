@@ -53,7 +53,7 @@ public class TicketCategoryValidator
 
     // Variables
     private HttpServletRequest _request;
-    
+
     /**
      * Constructor
      * 
@@ -64,33 +64,31 @@ public class TicketCategoryValidator
     {
         this._request = request;
     }
-    
+
     /**
      * Global method to validate a TicketCategory with the managing of the precision
      * 
      * @param nIdDomain
-     *          The id of the domain
+     *            The id of the domain
      * @return the TicketCategoryValidatorResult which represent the result of the validation
      */
     public TicketCategoryValidatorResult validateTicketCategoryAndPrecision( )
     {
         // Retrieve the TicketCategory
         TicketCategory ticketCategory = retrieveTicketCategoryFromRequest( );
-        
+
         // Validate if precision has been selected if the selected category has precisions
         String strIdDomain = _request.getParameter( TicketingConstants.PARAMETER_TICKET_DOMAIN_ID );
         boolean isValid = isTicketCategoryPrecisionValid( ticketCategory, TicketUtils.manageIntegerParsingFromString( strIdDomain, LOG_MESSAGE_TYPE_ID_MISSING ) );
-        
+
         return new TicketCategoryValidatorResult( ticketCategory, isValid );
 
     }
-    
+
     /**
-     * Return the TicketCategory object associated to the id from the request
-     * or an "empty" ticket category object if parameter is missing
+     * Return the TicketCategory object associated to the id from the request or an "empty" ticket category object if parameter is missing
      * 
-     * @return the TicketCategory object associated to the id from the request
-     * or an "empty" ticket category object if parameter is missing
+     * @return the TicketCategory object associated to the id from the request or an "empty" ticket category object if parameter is missing
      */
     public TicketCategory retrieveTicketCategoryFromRequest( )
     {
@@ -109,13 +107,11 @@ public class TicketCategoryValidator
         }
         return ticketCategory;
     }
-    
+
     /**
-     * Return true if precision has been selected if the selected category has precisions
-     * otherwise return false
+     * Return true if precision has been selected if the selected category has precisions otherwise return false
      * 
-     * @return true if precision has been selected if the selected category has precisions
-     * false otherwise
+     * @return true if precision has been selected if the selected category has precisions false otherwise
      */
     public boolean isTicketCategoryPrecisionValid( TicketCategory ticketCategory, Integer nIdDomain )
     {
@@ -124,16 +120,15 @@ public class TicketCategoryValidator
             List<TicketCategory> listTicketCategory = TicketCategoryHome.findByDomainId( nIdDomain );
             for ( TicketCategory ticketCategoryByDomain : listTicketCategory )
             {
-                if ( ticketCategoryByDomain.getLabel( ).equals( ticketCategory.getLabel( ) )
-                        && StringUtils.isNotBlank( ticketCategoryByDomain.getPrecision( ) )
+                if ( ticketCategoryByDomain.getLabel( ).equals( ticketCategory.getLabel( ) ) && StringUtils.isNotBlank( ticketCategoryByDomain.getPrecision( ) )
                         && StringUtils.isNotBlank( _request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) )
                         && _request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING ) )
-                {                    
+                {
                     return false;
                 }
             }
         }
         return true;
     }
-    
+
 }

@@ -866,16 +866,16 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         TicketAddress ticketAddress = new TicketAddress( );
         populate( ticketAddress, request );
         ticket.setTicketAddress( ticketAddress );
-        
+
         // Validate the Type, Domain, TicketCategory
         boolean bIsSubProbSelected = true;
         boolean isTicketCategoryValid = validateTicketTypeDomainCategory( request, ticket );
-        if( !isTicketCategoryValid )
+        if ( !isTicketCategoryValid )
         {
             bIsFormValid = false;
             bIsSubProbSelected = false;
         }
-        
+
         // Validate the bean
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validateBean( ticket );
@@ -1090,30 +1090,29 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         request.getSession( ).setAttribute( TicketingConstants.PARAMETER_IS_MASS_ACTION, true );
         return getWorkflowActionForm( request );
     }
-    
+
     /**
-     * Populate the TicketCategory object and validate the selected Type, 
-     * Domain, TicketCategory and Precision from the request parameters
+     * Populate the TicketCategory object and validate the selected Type, Domain, TicketCategory and Precision from the request parameters
      * 
      * @param request
-     *      the HttpServletRequest
+     *            the HttpServletRequest
      * @return true if the selection is valid false otherwise
      */
     private boolean validateTicketTypeDomainCategory( HttpServletRequest request, Ticket ticket )
-    {       
+    {
         // Validate if precision has been selected if the selected category has precisions
-        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategoryAndPrecision( );        
-        
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategoryAndPrecision( );
+
         boolean bIsFormValid = categoryValidatorResult.isTicketCategoryValid( );
         ticket.setTicketCategory( categoryValidatorResult.getTicketCategory( ) );
-        
+
         // Validate the precision
-        if( !bIsFormValid )
+        if ( !bIsFormValid )
         {
             addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED, getLocale( ) );
             ticket.getTicketCategory( ).setPrecision( TicketingConstants.NO_ID_STRING );
         }
-                
+
         // Check if a type/domain/category have been selected (made here to sort errors)
         if ( ticket.getIdTicketType( ) == TicketingConstants.PROPERTY_UNSET_INT )
         {
@@ -1132,7 +1131,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( ) );
             bIsFormValid = false;
         }
-        
+
         return bIsFormValid;
     }
 

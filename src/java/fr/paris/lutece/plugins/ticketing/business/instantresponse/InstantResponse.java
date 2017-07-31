@@ -206,7 +206,7 @@ public class InstantResponse implements Serializable
     {
         _strCategory = strCategory;
     }
-    
+
     /**
      * Returns the TicketCategoryPrecision
      * 
@@ -220,7 +220,8 @@ public class InstantResponse implements Serializable
     /**
      * Set the strTicketCategoryPrecision
      * 
-     * @param strTicketCategoryPrecision the strTicketCategoryPrecision to set
+     * @param strTicketCategoryPrecision
+     *            the strTicketCategoryPrecision to set
      */
     public void setTicketCategoryPrecision( String strTicketCategoryPrecision )
     {

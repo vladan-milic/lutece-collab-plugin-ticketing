@@ -427,13 +427,13 @@ public final class TicketUtils
     {
         return ( ticket.getAssignerUser( ) != null ) && ( ticket.getAssignerUser( ).getAdminUserId( ) == user.getUserId( ) );
     }
-    
+
     /**
      * Return the parsing of the String into Integer or -1 if fails
      * 
      * @param strStringToConvert
      * @param strMessageError
-     *          the error message
+     *            the error message
      * @return the parsing of the String or -1 if fails
      */
     public static int manageIntegerParsingFromString( String strStringToConvert, String strMessageError )
@@ -444,7 +444,7 @@ public final class TicketUtils
         }
         catch( NumberFormatException e )
         {
-            if( StringUtils.isNotBlank( strMessageError ) )
+            if ( StringUtils.isNotBlank( strMessageError ) )
             {
                 AppLogService.error( strMessageError );
             }

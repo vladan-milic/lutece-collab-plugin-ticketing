@@ -40,17 +40,17 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
  */
 public class TicketCategoryValidatorResult
 {
-    
+
     private TicketCategory _ticketCategory;
     private boolean _ticketCategoryValid;
-    
+
     /**
      * Constructor
      * 
      * @param ticketCategory
-     *      the ticketCategory to set
+     *            the ticketCategory to set
      * @param isValid
-     *      the ticketCategoryValid to set
+     *            the ticketCategoryValid to set
      */
     public TicketCategoryValidatorResult( TicketCategory ticketCategory, boolean ticketCategoryValid )
     {
@@ -67,17 +67,18 @@ public class TicketCategoryValidatorResult
     {
         return _ticketCategory;
     }
-    
+
     /**
      * Set the ticketCategory
      * 
-     * @param _ticketCategory the ticketCategory to set
+     * @param _ticketCategory
+     *            the ticketCategory to set
      */
     public void setTicketCategory( TicketCategory ticketCategory )
     {
         this._ticketCategory = ticketCategory;
     }
-    
+
     /**
      * Return the _ticketCategoryValid
      * 
@@ -87,15 +88,16 @@ public class TicketCategoryValidatorResult
     {
         return _ticketCategoryValid;
     }
-    
+
     /**
      * Set the ticketCategoryValid
      * 
-     * @param ticketCategoryValid the ticketCategoryValid to set
+     * @param ticketCategoryValid
+     *            the ticketCategoryValid to set
      */
     public void setTicketCategoryValid( boolean ticketCategoryValid )
     {
         this._ticketCategoryValid = ticketCategoryValid;
     }
-    
+
 }

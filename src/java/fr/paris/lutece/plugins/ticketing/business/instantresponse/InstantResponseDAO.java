@@ -118,14 +118,14 @@ public final class InstantResponseDAO implements IInstantResponseDAO
         if ( daoUtil.next( ) )
         {
             instantResponse = new InstantResponse( );
-            
+
             int nIndex = 1;
             instantResponse.setId( daoUtil.getInt( nIndex++ ) );
 
             instantResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
             instantResponse.setCategory( daoUtil.getString( nIndex++ ) );
             instantResponse.setTicketCategoryPrecision( daoUtil.getString( nIndex++ ) );
-            
+
             instantResponse.setSubject( daoUtil.getString( nIndex++ ) );
             instantResponse.setIdAdminUser( daoUtil.getInt( nIndex++ ) );
             instantResponse.setIdChannel( daoUtil.getInt( nIndex++ ) );
@@ -224,25 +224,25 @@ public final class InstantResponseDAO implements IInstantResponseDAO
 
         return instantResponseList;
     }
-    
+
     /**
      * Create an InstantResponse object from the daoUtil data
      * 
      * @param daoUtil
-     *      The daoUtil
+     *            The daoUtil
      * @return the InstantResponse object created from the daoUtil
      */
     private InstantResponse dataToInstantResponse( DAOUtil daoUtil )
-    {        
+    {
         InstantResponse instantResponse = new InstantResponse( );
-        
+
         int nIndex = 1;
         instantResponse.setId( daoUtil.getInt( nIndex++ ) );
 
         instantResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
         instantResponse.setCategory( daoUtil.getString( nIndex++ ) );
         instantResponse.setTicketCategoryPrecision( daoUtil.getString( nIndex++ ) );
-        
+
         instantResponse.setDomain( daoUtil.getString( nIndex++ ) );
         instantResponse.setType( daoUtil.getString( nIndex++ ) );
         instantResponse.setSubject( daoUtil.getString( nIndex++ ) );
@@ -252,7 +252,7 @@ public final class InstantResponseDAO implements IInstantResponseDAO
         instantResponse.setUserLastname( daoUtil.getString( nIndex++ ) );
         instantResponse.setIdUnit( daoUtil.getInt( nIndex++ ) );
         instantResponse.setUnit( daoUtil.getString( nIndex++ ) );
-        
+
         return instantResponse;
     }
 }
