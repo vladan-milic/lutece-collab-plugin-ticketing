@@ -344,6 +344,20 @@ public final class TicketHome
     }
 
     /**
+     * Remove the association between an ticket and a specific response
+     *
+     * @param nIdTicket
+     *            The id of the ticket
+     * @param nIdResponse
+     *            The id of the response
+     */
+    public static void removeTicketResponse( int nIdTicket, int nIdResponse )
+    {
+        _dao.removeTicketResponsesByIdResponse( nIdResponse, _plugin );
+        _cacheService.removeKey( _cacheService.getTicketResponseCacheKey( nIdTicket ) );
+    }
+
+    /**
      * Remove every ticket responses associated with a given entry.
      * 
      * @param nIdEntry
