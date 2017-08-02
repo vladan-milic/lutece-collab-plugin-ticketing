@@ -51,6 +51,7 @@ public class InstantResponse implements Serializable
     private String _strType;
     private String _strDomain;
     private String _strCategory;
+    private String _strTicketCategoryPrecision;
     private Timestamp _dDateCreate;
     private int _nIdAdminUser;
     private String _strUserFirstname;
@@ -204,6 +205,27 @@ public class InstantResponse implements Serializable
     public void setCategory( String strCategory )
     {
         _strCategory = strCategory;
+    }
+
+    /**
+     * Returns the TicketCategoryPrecision
+     * 
+     * @return the strTicketCategoryPrecision
+     */
+    public String getTicketCategoryPrecision( )
+    {
+        return _strTicketCategoryPrecision;
+    }
+
+    /**
+     * Set the strTicketCategoryPrecision
+     * 
+     * @param strTicketCategoryPrecision
+     *            the strTicketCategoryPrecision to set
+     */
+    public void setTicketCategoryPrecision( String strTicketCategoryPrecision )
+    {
+        this._strTicketCategoryPrecision = strTicketCategoryPrecision;
     }
 
     /**
