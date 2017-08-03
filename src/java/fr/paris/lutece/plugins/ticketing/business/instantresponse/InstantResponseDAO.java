@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.instantresponse;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.util.sql.DAOUtil;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
  * This class provides Data Access methods for InstantResponse objects
@@ -46,11 +46,11 @@ public final class InstantResponseDAO implements IInstantResponseDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_instant_response ) FROM ticketing_instant_response";
-    private static final String SQL_QUERY_SELECT = "SELECT id_instant_response, id_ticket_category, subject, id_admin_user, id_channel FROM ticketing_instant_response WHERE id_instant_response = ?";
+    private static final String SQL_QUERY_SELECT = "SELECT r.id_instant_response, r.id_ticket_category, c.label, c.category_precision, r.subject, r.id_admin_user, r.id_channel FROM ticketing_instant_response r JOIN ticketing_ticket_category c ON r.id_ticket_category = c.id_ticket_category WHERE id_instant_response = ?";
     private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_instant_response ( id_instant_response, id_ticket_category, subject, id_admin_user, id_unit, date_create, id_channel ) VALUES ( ?, ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_instant_response WHERE id_instant_response = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_instant_response SET id_instant_response = ?, id_ticket_category = ?, subject = ?, id_admin_user = ?, id_unit = ? WHERE id_instant_response = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_instant_response, a.id_ticket_category, b.label, c.label, d.label, a.subject, a.date_create, a.id_admin_user , e.first_name , e.last_name, a.id_unit, f.label "
+    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_instant_response, a.id_ticket_category, b.label, b.category_precision, c.label, d.label, a.subject, a.date_create, a.id_admin_user , e.first_name , e.last_name, a.id_unit, f.label "
             + " FROM ticketing_instant_response a, ticketing_ticket_category b, ticketing_ticket_domain c , ticketing_ticket_type d, core_admin_user e, unittree_unit f "
             + " WHERE a.id_ticket_category = b.id_ticket_category AND b.id_ticket_domain = c.id_ticket_domain AND c.id_ticket_type = d.id_ticket_type AND a.id_admin_user = e.id_user AND a.id_unit = f.id_unit";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_instant_response FROM ticketing_instant_response";
@@ -117,10 +117,15 @@ public final class InstantResponseDAO implements IInstantResponseDAO
 
         if ( daoUtil.next( ) )
         {
-            int nIndex = 1;
             instantResponse = new InstantResponse( );
+
+            int nIndex = 1;
             instantResponse.setId( daoUtil.getInt( nIndex++ ) );
+
             instantResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
+            instantResponse.setCategory( daoUtil.getString( nIndex++ ) );
+            instantResponse.setTicketCategoryPrecision( daoUtil.getString( nIndex++ ) );
+
             instantResponse.setSubject( daoUtil.getString( nIndex++ ) );
             instantResponse.setIdAdminUser( daoUtil.getInt( nIndex++ ) );
             instantResponse.setIdChannel( daoUtil.getInt( nIndex++ ) );
@@ -213,25 +218,41 @@ public final class InstantResponseDAO implements IInstantResponseDAO
         {
             while ( daoUtil.next( ) )
             {
-                InstantResponse instantResponse = new InstantResponse( );
-                int nIndex = 1;
-                instantResponse.setId( daoUtil.getInt( nIndex++ ) );
-                instantResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
-                instantResponse.setCategory( daoUtil.getString( nIndex++ ) );
-                instantResponse.setDomain( daoUtil.getString( nIndex++ ) );
-                instantResponse.setType( daoUtil.getString( nIndex++ ) );
-                instantResponse.setSubject( daoUtil.getString( nIndex++ ) );
-                instantResponse.setDateCreate( daoUtil.getTimestamp( nIndex++ ) );
-                instantResponse.setIdAdminUser( daoUtil.getInt( nIndex++ ) );
-                instantResponse.setUserFirstname( daoUtil.getString( nIndex++ ) );
-                instantResponse.setUserLastname( daoUtil.getString( nIndex++ ) );
-                instantResponse.setIdUnit( daoUtil.getInt( nIndex++ ) );
-                instantResponse.setUnit( daoUtil.getString( nIndex++ ) );
-
-                instantResponseList.add( instantResponse );
+                instantResponseList.add( dataToInstantResponse( daoUtil ) );
             }
         }
 
         return instantResponseList;
+    }
+
+    /**
+     * Create an InstantResponse object from the daoUtil data
+     * 
+     * @param daoUtil
+     *            The daoUtil
+     * @return the InstantResponse object created from the daoUtil
+     */
+    private InstantResponse dataToInstantResponse( DAOUtil daoUtil )
+    {
+        InstantResponse instantResponse = new InstantResponse( );
+
+        int nIndex = 1;
+        instantResponse.setId( daoUtil.getInt( nIndex++ ) );
+
+        instantResponse.setIdTicketCategory( daoUtil.getInt( nIndex++ ) );
+        instantResponse.setCategory( daoUtil.getString( nIndex++ ) );
+        instantResponse.setTicketCategoryPrecision( daoUtil.getString( nIndex++ ) );
+
+        instantResponse.setDomain( daoUtil.getString( nIndex++ ) );
+        instantResponse.setType( daoUtil.getString( nIndex++ ) );
+        instantResponse.setSubject( daoUtil.getString( nIndex++ ) );
+        instantResponse.setDateCreate( daoUtil.getTimestamp( nIndex++ ) );
+        instantResponse.setIdAdminUser( daoUtil.getInt( nIndex++ ) );
+        instantResponse.setUserFirstname( daoUtil.getString( nIndex++ ) );
+        instantResponse.setUserLastname( daoUtil.getString( nIndex++ ) );
+        instantResponse.setIdUnit( daoUtil.getInt( nIndex++ ) );
+        instantResponse.setUnit( daoUtil.getString( nIndex++ ) );
+
+        return instantResponse;
     }
 }

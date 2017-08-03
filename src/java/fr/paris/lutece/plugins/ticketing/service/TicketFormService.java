@@ -33,11 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
+import fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
+import fr.paris.lutece.plugins.genericattributes.business.GenAttFileItem;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
@@ -66,6 +68,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItem;
 
 /**
  * Service for ticketing forms
@@ -272,14 +276,15 @@ public class TicketFormService implements Serializable
         }
 
         model.put( MARK_USER, user );
-
+        List<Response> listResponse = null;
         if ( request != null )
         {
             Ticket ticket = getTicketFromSession( request.getSession( ) );
 
             if ( ticket != null )
             {
-                model.put( MARK_LIST_RESPONSES, getEntryListResponse( ticket, entry ) );
+            	listResponse = getEntryListResponse( ticket, entry );
+                model.put( MARK_LIST_RESPONSES, listResponse );
             }
         }
 
@@ -288,7 +293,16 @@ public class TicketFormService implements Serializable
         // If the entry type is a file, we add the
         if ( entryTypeService instanceof AbstractEntryTypeUpload )
         {
-            model.put( MARK_UPLOAD_HANDLER, ( (AbstractEntryTypeUpload) entryTypeService ).getAsynchronousUploadHandler( ) );
+        	IAsyncUploadHandler uploadHandler = ( (AbstractEntryTypeUpload) entryTypeService ).getAsynchronousUploadHandler( );
+        	if( listResponse != null && ! listResponse.isEmpty( ) )
+        	{
+	            for ( Response response : listResponse )
+				{
+	            	FileItem fileItem = new GenAttFileItem( response.getFile( ).getPhysicalFile( ).getValue( ), response.getFile( ).getTitle( ) );
+	            	uploadHandler.addFileItemToUploadedFilesList( fileItem, entryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry( ), request );
+				}
+        	}
+            model.put( MARK_UPLOAD_HANDLER, uploadHandler );
         }
 
         template = AppTemplateService.getTemplate( entryTypeService.getTemplateHtmlForm( entry, bDisplayFront ), locale, model );

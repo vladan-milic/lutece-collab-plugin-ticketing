@@ -63,6 +63,7 @@ public final class TicketingConstants
     public static final String PARAMETER_FILTER_TYPE_ID = "fltr_id_type";
     public static final String PARAMETER_FILTER_OPEN_SINCE = "fltr_open_since";
     public static final String PARAMETER_FILTER_STATE_ID = "fltr_state_ids";
+    public static final String PARAMETER_TICKET_TYPE_ID = "id_ticket_type";
     public static final String PARAMETER_TICKET_DOMAIN_ID = "id_ticket_domain";
     public static final String PARAMETER_TICKET_PRECISION_ID = "id_ticket_precision";
     public static final String PARAMETER_TICKET_CATEGORY_ID = "id_ticket_category";

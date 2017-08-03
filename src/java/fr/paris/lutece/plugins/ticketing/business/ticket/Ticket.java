@@ -33,6 +33,19 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.ticket;
 
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.ticketing.business.address.TicketAddress;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
@@ -45,22 +58,6 @@ import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
-
-import org.apache.commons.lang.StringUtils;
-
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import java.io.Serializable;
-
-import java.sql.Timestamp;
-
-import java.util.Collection;
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 /**
  * This is the business class for the object Ticket
