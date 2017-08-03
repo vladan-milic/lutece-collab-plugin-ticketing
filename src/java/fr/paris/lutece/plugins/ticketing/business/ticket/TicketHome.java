@@ -39,6 +39,8 @@ import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.category.ITicketCategoryDAO;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
+import fr.paris.lutece.plugins.ticketing.business.marking.MarkingHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormCacheService;
 import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
@@ -51,317 +53,367 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class provides instances management methods (create, find, ...) for Ticket objects
+ * This class provides instances management methods (create, find, ...) for
+ * Ticket objects
  */
-public final class TicketHome
-{
-    // Static variable pointed at the DAO instance
-    private static ITicketDAO _dao = SpringContextService.getBean( "ticketing.ticketDAO" );
-    private static ITicketCategoryDAO _daoTicketCategory = SpringContextService.getBean( "ticketing.ticketCategoryDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
-    private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance( );
+public final class TicketHome {
+	// Static variable pointed at the DAO instance
+	private static ITicketDAO _dao = SpringContextService.getBean("ticketing.ticketDAO");
+	private static ITicketCategoryDAO _daoTicketCategory = SpringContextService.getBean("ticketing.ticketCategoryDAO");
+	private static Plugin _plugin = PluginService.getPlugin("ticketing");
+	private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance();
 
-    /**
-     * Private constructor - this class need not be instantiated
-     */
-    private TicketHome( )
-    {
-    }
+	/**
+	 * Private constructor - this class need not be instantiated
+	 */
+	private TicketHome() {
+	}
 
-    /**
-     * Create an instance of the ticket class
-     * 
-     * @param ticket
-     *            The instance of the Ticket which contains the informations to store
-     * @return The instance of ticket which has been created with its primary key.
-     */
-    public static Ticket create( Ticket ticket )
-    {
-        _dao.insert( ticket, _plugin );
+	/**
+	 * Create an instance of the ticket class
+	 * 
+	 * @param ticket
+	 *            The instance of the Ticket which contains the informations to
+	 *            store
+	 * @return The instance of ticket which has been created with its primary
+	 *         key.
+	 */
+	public static Ticket create(Ticket ticket) {
+		_dao.insert(ticket, _plugin);
 
-        return ticket;
-    }
+		return ticket;
+	}
 
-    /**
-     * Update of the ticket which is specified in parameter
-     * 
-     * @param ticket
-     *            The instance of the Ticket which contains the data to store
-     * @return The instance of the ticket which has been updated
-     */
-    public static Ticket update( Ticket ticket )
-    {
-        _dao.store( ticket, _plugin );
+	/**
+	 * Update of the ticket which is specified in parameter
+	 * 
+	 * @param ticket
+	 *            The instance of the Ticket which contains the data to store
+	 * @return The instance of the ticket which has been updated
+	 */
+	public static Ticket update(Ticket ticket) {
+		_dao.store(ticket, _plugin);
 
-        return ticket;
-    }
+		return ticket;
+	}
 
-    /**
-     * Remove the ticket and its generic attributes responses whose identifier is specified in parameter
-     *
-     * @param nKey
-     *            The ticket Id
-     */
-    public static void remove( int nKey )
-    {
-        removeTicketResponse( nKey );
-        _dao.delete( nKey, _plugin );
-    }
+	/**
+	 * Remove the ticket and its generic attributes responses whose identifier
+	 * is specified in parameter
+	 *
+	 * @param nKey
+	 *            The ticket Id
+	 */
+	public static void remove(int nKey) {
+		removeTicketResponse(nKey);
+		_dao.delete(nKey, _plugin);
+	}
 
-    // /////////////////////////////////////////////////////////////////////////
-    // Finders
+	// /////////////////////////////////////////////////////////////////////////
+	// Finders
 
-    /**
-     * Returns an instance of a ticket whose identifier is specified in parameter generic attributes responses are also loaded
-     *
-     * @param nKey
-     *            The ticket primary key
-     * @return an instance of Ticket
-     */
-    public static Ticket findByPrimaryKey( int nKey )
-    {
-        Ticket ticket = _dao.load( nKey, _plugin );
+	/**
+	 * Returns an instance of a ticket whose identifier is specified in
+	 * parameter generic attributes responses are also loaded
+	 *
+	 * @param nKey
+	 *            The ticket primary key
+	 * @return an instance of Ticket
+	 */
+	public static Ticket findByPrimaryKey(int nKey) {
+		Ticket ticket = _dao.load(nKey, _plugin);
 
-        if ( ticket != null )
-        {
-            TicketCategory ticketCategory = _daoTicketCategory.load( ticket.getTicketCategory( ).getId( ), _plugin );
-            ticket.setTicketCategory( ticketCategory );
-        }
+		if (ticket != null) {
+			TicketCategory ticketCategory = _daoTicketCategory.load(ticket.getTicketCategory().getId(), _plugin);
+			ticket.setTicketCategory(ticketCategory);
+		}
 
-        if ( ticket != null )
-        {
-            // retrieving tickets generic attributes response
-            List<Integer> listIdResponse = TicketHome.findListIdResponse( ticket.getId( ) );
-            List<Response> listResponses = new ArrayList<Response>( listIdResponse.size( ) );
+		if (ticket != null) {
+			// retrieving tickets generic attributes response
+			List<Integer> listIdResponse = TicketHome.findListIdResponse(ticket.getId());
+			List<Response> listResponses = new ArrayList<Response>(listIdResponse.size());
 
-            if ( listIdResponse != null )
-            {
-                for ( int nIdResponse : listIdResponse )
-                {
-                    Response response = ResponseHome.findByPrimaryKey( nIdResponse );
+			if (listIdResponse != null) {
+				for (int nIdResponse : listIdResponse) {
+					Response response = ResponseHome.findByPrimaryKey(nIdResponse);
 
-                    if ( response.getField( ) != null )
-                    {
-                        response.setField( FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) ) );
-                    }
+					if (response.getField() != null) {
+						response.setField(FieldHome.findByPrimaryKey(response.getField().getIdField()));
+					}
 
-                    if ( response.getFile( ) != null )
-                    {
-                        fr.paris.lutece.portal.business.file.File file = FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) );
-                        PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) );
-                        file.setPhysicalFile( physicalFile );
-                        response.setFile( file );
-                    }
+					if (response.getFile() != null) {
+						fr.paris.lutece.portal.business.file.File file = FileHome
+								.findByPrimaryKey(response.getFile().getIdFile());
+						PhysicalFile physicalFile = PhysicalFileHome
+								.findByPrimaryKey(file.getPhysicalFile().getIdPhysicalFile());
+						file.setPhysicalFile(physicalFile);
+						response.setFile(file);
+					}
 
-                    listResponses.add( response );
-                }
-            }
+					listResponses.add(response);
+				}
+			}
 
-            ticket.setListResponse( listResponses );
-        }
+			ticket.setListResponse(listResponses);
+		}
 
-        return ticket;
-    }
+		return ticket;
+	}
 
-    /**
-     * Marks the specified ticket as read
-     * 
-     * @param ticket
-     *            the ticket
-     */
-    public static void markAsRead( Ticket ticket )
-    {
-        markAsRead( ticket.getId( ) );
-        ticket.setRead( true );
-    }
+	/**
+	 * Marks the specified ticket as read
+	 * 
+	 * @param ticket
+	 *            the ticket
+	 */
+	public static void markAsRead(Ticket ticket) {
+		markAsRead(ticket.getId());
+		ticket.setRead(true);
+	}
 
-    /**
-     * Marks the specified ticket as read
-     * 
-     * @param nIdTicket
-     *            the ticket
-     */
-    public static void markAsRead( int nIdTicket )
-    {
-        _dao.storeIsRead( nIdTicket, true, _plugin );
-    }
+	/**
+	 * Marks the specified ticket as read
+	 * 
+	 * @param nIdTicket
+	 *            the ticket
+	 */
+	public static void markAsRead(int nIdTicket) {
+		_dao.storeIsRead(nIdTicket, true, _plugin);
+	}
 
-    /**
-     * Marks the specified ticket as unread
-     * 
-     * @param ticket
-     *            the ticket
-     */
-    public static void markAsUnread( Ticket ticket )
-    {
-        markAsUnread( ticket.getId( ) );
-        ticket.setRead( false );
-    }
+	/**
+	 * Marks the specified ticket as unread
+	 * 
+	 * @param ticket
+	 *            the ticket
+	 */
+	public static void markAsUnread(Ticket ticket) {
+		markAsUnread(ticket.getId());
+		ticket.setRead(false);
+	}
 
-    /**
-     * Marks the specified ticket as unread
-     * 
-     * @param nIdTicket
-     *            the ticket
-     */
-    public static void markAsUnread( int nIdTicket )
-    {
-        _dao.storeIsRead( nIdTicket, false, _plugin );
-    }
+	/**
+	 * Marks the specified ticket as unread
+	 * 
+	 * @param nIdTicket
+	 *            the ticket
+	 */
+	public static void markAsUnread(int nIdTicket) {
+		_dao.storeIsRead(nIdTicket, false, _plugin);
+	}
 
-    /**
-     * Load the data of all the ticket objects and returns them in form of a collection be carefull generic attribute response are not loaded in this method
-     * 
-     * @see findByPrimaryKey for loading all attribute responses
-     * @return the collection which contains the data of all the ticket objects
-     */
-    public static List<Ticket> getTicketsList( )
-    {
-        return _dao.selectTicketsList( _plugin );
-    }
+	/**
+	 * Get the marking for the given ticket id
+	 * 
+	 * @param nIdTicketMarking
+	 *            the marking id
+	 * @return the marking
+	 */
+	public static Marking getTicketMarking(Ticket ticket) {
+		Marking marking = new Marking();
+		int nIdTicketMarking = ticket.getIdTicketMarking( );
+		
+		if ( nIdTicketMarking == -1)
+		{
+			nIdTicketMarking = getTicketMarkingId( ticket.getId( ) );
+		}
 
-    /**
-     * Load the data of all the ticket objects and returns them in form of a collection
-     *
-     * @param filter
-     *            filter to apply to ticket search
-     * @return the collection which contains the data of all the ticket objects
-     */
-    public static List<Ticket> getTicketsList( TicketFilter filter )
-    {
-        return _dao.selectTicketsList( filter, _plugin );
-    }
+		if (nIdTicketMarking > 0) 
+		{
+			marking = MarkingHome.loadMarkingFromCache(nIdTicketMarking);
+		} 
 
-    /**
-     * Load the id of all the ticket objects and returns them in form of a collection
-     * 
-     * @return the collection which contains the id of all the ticket objects
-     */
-    public static List<Integer> getIdTicketsList( )
-    {
-        return _dao.selectIdTicketsList( _plugin );
-    }
+		return marking;
+	}
+	
+	/**
+	 * Get the marking id for the given ticket
+	 * 
+	 * @param nIdTicket
+	 *            the ticket
+	 * @param nIdMarking
+	 *            the marking
+	 */
+	public static int getTicketMarkingId(int nIdTicket ) {
+		return _dao.loadTicketMarkingId(nIdTicket, _plugin);
+	}
 
-    /**
-     * Load the id of all the ticket objects and returns them in form of a collection
-     *
-     * @param filter
-     *            filter to apply to ticket search
-     * 
-     * @return the collection which contains the id of all the ticket objects
-     */
-    public static List<Integer> getIdTicketsList( TicketFilter filter )
-    {
-        return _dao.selectIdTicketsList( filter, _plugin );
-    }
+	/**
+	 * Store the marking id for the given ticket
+	 * 
+	 * @param nIdTicket
+	 *            the ticket
+	 * @param nIdMarking
+	 *            the marking
+	 */
+	public static void setTicketMarkingId(int nIdTicket, int nIdMarking) {
+		_dao.storeTicketMarkingId(nIdTicket, nIdMarking, _plugin);
+	}
+	
+	/**
+	 * Reset the marking id to default value for the given marking id
+	 * 
+	 * @param nIdMarking
+	 *            the marking id
+	 */
+	public static void resetMarkingId(int nIdMarking) {
+		_dao.resetMarkingId( nIdMarking, _plugin);
+	}
+	
+	/**
+	 * Reset the marking id to default value for the given ticket id
+	 * 
+	 * @param nIdTicket
+	 *            the ticket id
+	 */
+	public static void resetTicketMarkingId(int nIdTicket) {
+		_dao.resetTicketMarkingId( nIdTicket, _plugin);
+	}
 
-    // -----------------------------------------------
-    // Ticket response management
-    // -----------------------------------------------
+	/**
+	 * Load the data of all the ticket objects and returns them in form of a
+	 * collection be carefull generic attribute response are not loaded in this
+	 * method
+	 * 
+	 * @see findByPrimaryKey for loading all attribute responses
+	 * @return the collection which contains the data of all the ticket objects
+	 */
+	public static List<Ticket> getTicketsList() {
+		return _dao.selectTicketsList(_plugin);
+	}
 
-    /**
-     * Associates a response to a ticket
-     * 
-     * @param nIdTicket
-     *            The id of the ticket
-     * @param nIdResponse
-     *            The id of the response
-     */
-    public static void insertTicketResponse( int nIdTicket, int nIdResponse )
-    {
-        _dao.insertTicketResponse( nIdTicket, nIdResponse, _plugin );
-        _cacheService.removeKey( _cacheService.getTicketResponseCacheKey( nIdTicket ) );
-    }
+	/**
+	 * Load the data of all the ticket objects and returns them in form of a
+	 * collection
+	 *
+	 * @param filter
+	 *            filter to apply to ticket search
+	 * @return the collection which contains the data of all the ticket objects
+	 */
+	public static List<Ticket> getTicketsList(TicketFilter filter) {
+		return _dao.selectTicketsList(filter, _plugin);
+	}
 
-    /**
-     * Get the list of id of responses associated with an ticket
-     * 
-     * @param nIdticket
-     *            the id of the ticket
-     * @return the list of responses, or an empty list if no response was found
-     */
-    @SuppressWarnings( "unchecked" )
-    public static List<Integer> findListIdResponse( int nIdticket )
-    {
-        String strCacheKey = _cacheService.getTicketResponseCacheKey( nIdticket );
-        List<Integer> listIdResponse = (List<Integer>) _cacheService.getFromCache( strCacheKey );
+	/**
+	 * Load the id of all the ticket objects and returns them in form of a
+	 * collection
+	 * 
+	 * @return the collection which contains the id of all the ticket objects
+	 */
+	public static List<Integer> getIdTicketsList() {
+		return _dao.selectIdTicketsList(_plugin);
+	}
 
-        if ( listIdResponse == null )
-        {
-            listIdResponse = _dao.findListIdResponse( nIdticket, _plugin );
-            _cacheService.putInCache( strCacheKey, new ArrayList<Integer>( listIdResponse ) );
-        }
-        else
-        {
-            listIdResponse = new ArrayList<Integer>( listIdResponse );
-        }
+	/**
+	 * Load the id of all the ticket objects and returns them in form of a
+	 * collection
+	 *
+	 * @param filter
+	 *            filter to apply to ticket search
+	 * 
+	 * @return the collection which contains the id of all the ticket objects
+	 */
+	public static List<Integer> getIdTicketsList(TicketFilter filter) {
+		return _dao.selectIdTicketsList(filter, _plugin);
+	}
 
-        return listIdResponse;
-    }
+	// -----------------------------------------------
+	// Ticket response management
+	// -----------------------------------------------
 
-    /**
-     * Get the list of responses associated with an ticket
-     * 
-     * @param nIdticket
-     *            the id of the ticket
-     * @return the list of responses, or an empty list if no response was found
-     */
-    public static List<Response> findListResponse( int nIdticket )
-    {
-        List<Integer> listIdResponse = findListIdResponse( nIdticket );
-        List<Response> listResponse = new ArrayList<Response>( listIdResponse.size( ) );
+	/**
+	 * Associates a response to a ticket
+	 * 
+	 * @param nIdTicket
+	 *            The id of the ticket
+	 * @param nIdResponse
+	 *            The id of the response
+	 */
+	public static void insertTicketResponse(int nIdTicket, int nIdResponse) {
+		_dao.insertTicketResponse(nIdTicket, nIdResponse, _plugin);
+		_cacheService.removeKey(_cacheService.getTicketResponseCacheKey(nIdTicket));
+	}
 
-        for ( Integer nIdResponse : listIdResponse )
-        {
-            listResponse.add( ResponseHome.findByPrimaryKey( nIdResponse ) );
-        }
+	/**
+	 * Get the list of id of responses associated with an ticket
+	 * 
+	 * @param nIdticket
+	 *            the id of the ticket
+	 * @return the list of responses, or an empty list if no response was found
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Integer> findListIdResponse(int nIdticket) {
+		String strCacheKey = _cacheService.getTicketResponseCacheKey(nIdticket);
+		List<Integer> listIdResponse = (List<Integer>) _cacheService.getFromCache(strCacheKey);
 
-        return listResponse;
-    }
+		if (listIdResponse == null) {
+			listIdResponse = _dao.findListIdResponse(nIdticket, _plugin);
+			_cacheService.putInCache(strCacheKey, new ArrayList<Integer>(listIdResponse));
+		} else {
+			listIdResponse = new ArrayList<Integer>(listIdResponse);
+		}
 
-    /**
-     * Find the id of the ticket associated with a given response
-     * 
-     * @param nIdResponse
-     *            The id of the response
-     * @return The id of the ticket, or 0 if no ticket is associated with he given response.
-     */
-    public static int findIdTicketByIdResponse( int nIdResponse )
-    {
-        return _dao.findIdTicketByIdResponse( nIdResponse, _plugin );
-    }
+		return listIdResponse;
+	}
 
-    /**
-     * Remove the association between an ticket and responses
-     *
-     * @param nIdTicket
-     *            The id of the ticket
-     */
-    public static void removeTicketResponse( int nIdTicket )
-    {
-        _dao.deleteTicketResponse( nIdTicket, _plugin );
-        _cacheService.removeKey( _cacheService.getTicketResponseCacheKey( nIdTicket ) );
-    }
+	/**
+	 * Get the list of responses associated with an ticket
+	 * 
+	 * @param nIdticket
+	 *            the id of the ticket
+	 * @return the list of responses, or an empty list if no response was found
+	 */
+	public static List<Response> findListResponse(int nIdticket) {
+		List<Integer> listIdResponse = findListIdResponse(nIdticket);
+		List<Response> listResponse = new ArrayList<Response>(listIdResponse.size());
 
-    /**
-     * Remove every ticket responses associated with a given entry.
-     * 
-     * @param nIdEntry
-     *            The id of the entry
-     */
-    public static void removeResponsesByIdEntry( int nIdEntry )
-    {
-        ResponseFilter filter = new ResponseFilter( );
-        filter.setIdEntry( nIdEntry );
+		for (Integer nIdResponse : listIdResponse) {
+			listResponse.add(ResponseHome.findByPrimaryKey(nIdResponse));
+		}
 
-        List<Response> listResponses = ResponseHome.getResponseList( filter );
+		return listResponse;
+	}
 
-        for ( Response response : listResponses )
-        {
-            _dao.removeTicketResponsesByIdResponse( response.getIdResponse( ), _plugin );
-            ResponseHome.remove( response.getIdResponse( ) );
-        }
+	/**
+	 * Find the id of the ticket associated with a given response
+	 * 
+	 * @param nIdResponse
+	 *            The id of the response
+	 * @return The id of the ticket, or 0 if no ticket is associated with he
+	 *         given response.
+	 */
+	public static int findIdTicketByIdResponse(int nIdResponse) {
+		return _dao.findIdTicketByIdResponse(nIdResponse, _plugin);
+	}
 
-        _cacheService.resetCache( );
-    }
+	/**
+	 * Remove the association between an ticket and responses
+	 *
+	 * @param nIdTicket
+	 *            The id of the ticket
+	 */
+	public static void removeTicketResponse(int nIdTicket) {
+		_dao.deleteTicketResponse(nIdTicket, _plugin);
+		_cacheService.removeKey(_cacheService.getTicketResponseCacheKey(nIdTicket));
+	}
+
+	/**
+	 * Remove every ticket responses associated with a given entry.
+	 * 
+	 * @param nIdEntry
+	 *            The id of the entry
+	 */
+	public static void removeResponsesByIdEntry(int nIdEntry) {
+		ResponseFilter filter = new ResponseFilter();
+		filter.setIdEntry(nIdEntry);
+
+		List<Response> listResponses = ResponseHome.getResponseList(filter);
+
+		for (Response response : listResponses) {
+			_dao.removeTicketResponsesByIdResponse(response.getIdResponse(), _plugin);
+			ResponseHome.remove(response.getIdResponse());
+		}
+
+		_cacheService.resetCache();
+	}
 }

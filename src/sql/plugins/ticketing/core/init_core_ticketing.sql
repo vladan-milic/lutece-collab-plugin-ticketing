@@ -65,7 +65,11 @@ INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is
 
 DELETE FROM core_admin_right WHERE id_right = 'TICKETING_MANAGEMENT_MODEL_RESPONSE';
 INSERT INTO core_admin_right (`id_right`, `name`, `level_right`, `admin_url`, `description`, `is_updatable`, `plugin_name`, `id_feature_group`, `icon_url`, `documentation_url`, `id_order`) VALUES
-('TICKETING_MANAGEMENT_MODEL_RESPONSE', 'ticketing.adminFeature.ManageTicketingModelResponse.name', '2', 'jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp', 'ticketing.adminFeature.ManageTicketingModelResponse.description', '0', 'ticketing', 'APPLICATIONS', NULL, NULL, '3');
+('TICKETING_MANAGEMENT_MODEL_RESPONSE', 'ticketing.adminFeature.ManageTicketingModelResponse.name', '2', 'jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp', 'ticketing.adminFeature.ManageTicketingModelResponse.description', '0', 'ticketing', 'APPLICATIONS', NULL, NULL, '5');
+
+DELETE FROM core_admin_right WHERE id_right = 'TICKETING_MANAGEMENT_MARKING';
+INSERT INTO core_admin_right (`id_right`, `name`, `level_right`, `admin_url`, `description`, `is_updatable`, `plugin_name`, `id_feature_group`, `icon_url`, `documentation_url`, `id_order`) VALUES
+('TICKETING_MANAGEMENT_MARKING', 'ticketing.adminFeature.ManageTicketingMarking.name', '2', 'jsp/admin/plugins/ticketing/admin/ManageMarkings.jsp', 'ticketing.adminFeature.ManageTicketingMarking.description', '0', 'ticketing', 'APPLICATIONS', NULL, NULL, '4');
 
 DELETE FROM core_admin_right WHERE id_right = 'TICKETING_PLUGIN_CONFIGURATION';
 INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is_updatable,plugin_name,id_feature_group,icon_url,documentation_url, id_order ) VALUES 

@@ -26,7 +26,7 @@
     <bean id="ticketing.supportEntityDAO"  class="fr.paris.lutece.plugins.ticketing.business.supportentity.SupportEntityDAO" />  
     <bean id="ticketing.instantResponseDAO"  class="fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponseDAO" />  
     <bean id="ticketing.modelResponseDAO" class=" fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseDAO" />
-
+	<bean id="ticketing.markingDAO" class=" fr.paris.lutece.plugins.ticketing.business.marking.MarkingDAO" />
     
     
     <bean id="ticketing.ticketFormService" class="fr.paris.lutece.plugins.ticketing.service.TicketFormService" />         

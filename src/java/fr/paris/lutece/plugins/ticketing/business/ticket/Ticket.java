@@ -41,6 +41,7 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
+import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
@@ -57,7 +58,6 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -127,6 +127,7 @@ public class Ticket implements Serializable, RBACResource
     private Channel _channel = new Channel( );
     private String _strNomenclature;
     private boolean _bRead;
+    private int _nIdticketMarking = -1;
 
     /**
      * Enriches empty ticket attributes with specified values
@@ -1112,4 +1113,29 @@ public class Ticket implements Serializable, RBACResource
         this._ticketAddress = _ticketAddress;
     }
 
+    /**
+     * @return the ticket marking
+     */
+    public int getIdTicketMarking( )
+    {
+        return _nIdticketMarking;
+    }
+
+    /**
+     * @param _ticketMarking
+     *            the Marking to set
+     */
+    public void setIdTicketMarking( int _nIdticketMarking )
+    {
+        this._nIdticketMarking = _nIdticketMarking;
+    }
+    
+    /**
+     * @return load and return the ticket marking
+     */
+    public Marking getMarking( ) 
+    {
+    	return TicketHome.getTicketMarking( this );
+    }
+    
 }

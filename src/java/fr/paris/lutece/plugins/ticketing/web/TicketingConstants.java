@@ -200,6 +200,7 @@ public final class TicketingConstants
     public static final String RESOURCE_TYPE_INPUT = "TICKET_INPUT";
     public static final String HTML_BR_BALISE = "<br>";
     public static final String REDIRECT_VIEW_LIST = "list";
+    public static final int DEFAULT_MARKING = 0;
 
     /**
      * Default constructor

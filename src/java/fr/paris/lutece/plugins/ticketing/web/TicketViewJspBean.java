@@ -260,7 +260,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
         if ( TicketUtils.isAssignee( ticket, getUser( ) ) )
         {
-            TicketHome.markAsRead( ticket );
+            TicketHome.resetTicketMarkingId( ticket.getId( ) );
             try
             {
                 TicketIndexer ticketIndexer = new TicketIndexer( );
