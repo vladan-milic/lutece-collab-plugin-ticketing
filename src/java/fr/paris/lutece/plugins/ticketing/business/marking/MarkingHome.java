@@ -9,12 +9,12 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-public class MarkingHome 
+public class MarkingHome
 {
-	// Static variable pointed at the DAO instance
+    // Static variable pointed at the DAO instance
     private static IMarkingDAO _dao = SpringContextService.getBean( "ticketing.markingDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
-    private static TicketCacheService _ticketCacheService = TicketCacheService.getInstance();
+    private static TicketCacheService _ticketCacheService = TicketCacheService.getInstance( );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -81,29 +81,29 @@ public class MarkingHome
      */
     public static List<Marking> getMarkingsList( )
     {
-    	return _dao.selectMarkingsList( _plugin );
+        return _dao.selectMarkingsList( _plugin );
     }
-    
+
     public static Marking loadMarkingFromCache( int nIdMarking )
     {
-    	Marking marking = new Marking();
-    	
-    	String strCacheKey = _ticketCacheService.getMarkingByIdCacheKey( nIdMarking );
+        Marking marking = new Marking( );
 
-		marking = (Marking) _ticketCacheService.getFromCache( strCacheKey );
-    	
-    	if (marking == null) {
-			for (Marking refMarking : MarkingHome.getMarkingsList()) {
-				_ticketCacheService.enableCache(true);
-				strCacheKey = _ticketCacheService.getMarkingByIdCacheKey(refMarking.getId());
-				_ticketCacheService.putInCache(strCacheKey, refMarking);
-			}
+        String strCacheKey = _ticketCacheService.getMarkingByIdCacheKey( nIdMarking );
 
-			marking = (Marking) _ticketCacheService.getFromCache(strCacheKey);
-		}
-    	
-    	
-    	
-    	return marking;
+        marking = (Marking) _ticketCacheService.getFromCache( strCacheKey );
+
+        if ( marking == null )
+        {
+            for ( Marking refMarking : MarkingHome.getMarkingsList( ) )
+            {
+                _ticketCacheService.enableCache( true );
+                strCacheKey = _ticketCacheService.getMarkingByIdCacheKey( refMarking.getId( ) );
+                _ticketCacheService.putInCache( strCacheKey, refMarking );
+            }
+
+            marking = (Marking) _ticketCacheService.getFromCache( strCacheKey );
+        }
+
+        return marking;
     }
 }

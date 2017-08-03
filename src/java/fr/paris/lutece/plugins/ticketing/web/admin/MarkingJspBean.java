@@ -24,15 +24,16 @@ import fr.paris.lutece.util.url.UrlItem;
  * This class provides the user interface to manage Marking features ( manage, create, modify, remove )
  */
 @Controller( controllerJsp = "ManageMarkings.jsp", controllerPath = "jsp/admin/plugins/ticketing/admin/", right = "TICKETING_MANAGEMENT_MARKING" )
-public class MarkingJspBean extends MVCAdminJspBean {
+public class MarkingJspBean extends MVCAdminJspBean
+{
 
-	private static final long serialVersionUID = 8048541959673399437L;
+    private static final long serialVersionUID = 8048541959673399437L;
 
-	// Templates
+    // Templates
     private static final String TEMPLATE_MANAGE_MARKINGS = "/admin/plugins/ticketing/admin/manage_markings.html";
     private static final String TEMPLATE_CREATE_MARKING = "/admin/plugins/ticketing/admin/create_marking.html";
     private static final String TEMPLATE_MODIFY_MARKING = "/admin/plugins/ticketing/admin/modify_marking.html";
-    
+
     // Views
     private static final String VIEW_MANAGE_MARKINGS = "manageMarkings";
     private static final String VIEW_CREATE_MARKING = "createMarking";
@@ -43,45 +44,45 @@ public class MarkingJspBean extends MVCAdminJspBean {
     private static final String ACTION_MODIFY_MARKING = "modifyMarking";
     private static final String ACTION_REMOVE_MARKING = "removeMarking";
     private static final String ACTION_CONFIRM_REMOVE_MARKING = "confirmRemoveMarking";
-    
+
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_MARKINGS = "ticketing.manage_marking.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_MARKING = "ticketing.modify_marking.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_CREATE_MARKING = "ticketing.create_marking.pageTitle";
-    
+
     // Properties
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
-    
+
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_MARKING = "ticketing.message.confirmRemoveMarking";
-    
+
     // Validations
     private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.marking.attribute.";
-  
+
     // Markers
     private static final String MARK_MARKING_LIST = "marking_list";
     private static final String MARK_MARKING = "marking";
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
     private static final String JSP_MANAGE_MARKINGS = "jsp/admin/plugins/ticketing/admin/ManageMarkings.jsp";
-    
+
     // Infos
     private static final String INFO_MARKING_CREATED = "ticketing.info.marking.created";
     private static final String INFO_MARKING_UPDATED = "ticketing.info.marking.updated";
     private static final String INFO_MARKING_REMOVED = "ticketing.info.marking.removed";
-    
+
     // Variables
     private int _nDefaultItemsPerPage;
     private String _strCurrentPageIndex;
     private int _nItemsPerPage;
-    
+
     // Parameters
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String PARAMETER_ID_MARKING = "id";
-    
+
     // Session variable to store working values
     private Marking _marking;
-    
+
     /**
      * Return a model that contains the list and paginator infos
      * 
@@ -105,18 +106,18 @@ public class MarkingJspBean extends MVCAdminJspBean {
         String strUrl = url.getUrl( );
 
         // PAGINATOR
-        LocalizedPaginator<Marking> paginator = new LocalizedPaginator<Marking>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
-                _strCurrentPageIndex, getLocale( ) );
+        LocalizedPaginator<Marking> paginator = new LocalizedPaginator<Marking>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex,
+                getLocale( ) );
 
         Map<String, Object> model = getModel( );
-        
+
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
         model.put( MARK_PAGINATOR, paginator );
         model.put( strBookmark, paginator.getPageItems( ) );
 
         return model;
     }
-    
+
     /**
      * Build the Manage View
      * 
@@ -127,14 +128,14 @@ public class MarkingJspBean extends MVCAdminJspBean {
     @View( value = VIEW_MANAGE_MARKINGS, defaultView = true )
     public String getManageMarkings( HttpServletRequest request )
     {
-    	List<Marking> listMarkings = new ArrayList<Marking>( );
-    	listMarkings = MarkingHome.getMarkingsList( ); 
-    	
-    	Map<String, Object> model = getPaginatedListModel( request, MARK_MARKING_LIST, listMarkings, JSP_MANAGE_MARKINGS );
+        List<Marking> listMarkings = new ArrayList<Marking>( );
+        listMarkings = MarkingHome.getMarkingsList( );
+
+        Map<String, Object> model = getPaginatedListModel( request, MARK_MARKING_LIST, listMarkings, JSP_MANAGE_MARKINGS );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_MARKINGS, TEMPLATE_MANAGE_MARKINGS, model );
     }
-    
+
     /**
      * Returns the form to create a modelresponse
      *
@@ -164,7 +165,7 @@ public class MarkingJspBean extends MVCAdminJspBean {
     public String doCreateMarking( HttpServletRequest request )
     {
         populate( _marking, request );
-        
+
         // Check constraints
         if ( !validateBean( _marking, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
@@ -191,7 +192,7 @@ public class MarkingJspBean extends MVCAdminJspBean {
         int nIdMarking = Integer.parseInt( request.getParameter( PARAMETER_ID_MARKING ) );
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_MARKING ) );
         url.addParameter( PARAMETER_ID_MARKING, nIdMarking );
-        
+
         String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_MARKING, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
@@ -211,7 +212,7 @@ public class MarkingJspBean extends MVCAdminJspBean {
 
         TicketHome.resetMarkingId( nIdMarking );
         MarkingHome.remove( nIdMarking );
-        
+
         addInfo( INFO_MARKING_REMOVED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_MARKINGS );
@@ -251,11 +252,11 @@ public class MarkingJspBean extends MVCAdminJspBean {
     public String doModifyMarking( HttpServletRequest request )
     {
         populate( _marking, request );
-        
+
         // Check constraints
         if ( !validateBean( _marking, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
-        	return redirect( request, VIEW_MODIFY_MARKING, PARAMETER_ID_MARKING, _marking.getId( ) );
+            return redirect( request, VIEW_MODIFY_MARKING, PARAMETER_ID_MARKING, _marking.getId( ) );
         }
 
         MarkingHome.update( _marking );

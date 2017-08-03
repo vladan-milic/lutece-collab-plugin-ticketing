@@ -49,7 +49,7 @@ public final class TicketFormCacheService extends AbstractCacheableService
     private static final String CACHE_KEY_TICKET_TYPE = "ticketing.ticketType";
     private static final String CACHE_KEY_TICKET_USER_TITLE = "ticketing.ticketUserTitle";
     private static final String CACHE_KEY_TICKET_CONTACT_MODE = "ticketing.ticketContactMode";
-    
+
     private static TicketFormCacheService _instance = new TicketFormCacheService( );
 
     /**

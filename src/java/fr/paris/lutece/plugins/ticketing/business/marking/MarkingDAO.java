@@ -75,7 +75,7 @@ public class MarkingDAO implements IMarkingDAO
 
         if ( daoUtil.next( ) )
         {
-        	marking = new Marking( );
+            marking = new Marking( );
 
             int nIndex = 1;
 
@@ -129,12 +129,12 @@ public class MarkingDAO implements IMarkingDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
         daoUtil.executeQuery( );
-        
+
         List<Marking> listMarkings = new ArrayList<Marking>( );
 
         while ( daoUtil.next( ) )
         {
-        	Marking marking = new Marking( );
+            Marking marking = new Marking( );
             int nIndex = 1;
 
             marking.setId( daoUtil.getInt( nIndex++ ) );

@@ -4,7 +4,8 @@ import java.util.List;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-public interface IMarkingDAO {
+public interface IMarkingDAO
+{
     /**
      * Insert a new record in the table.
      * 
@@ -48,7 +49,7 @@ public interface IMarkingDAO {
      * @return The instance of the marking
      */
     Marking load( int nKey, Plugin plugin );
-    
+
     /**
      * Load the data of all the marking objects and returns them as a list
      * 

@@ -283,7 +283,7 @@ public class TicketFormService implements Serializable
 
             if ( ticket != null )
             {
-            	listResponse = getEntryListResponse( ticket, entry );
+                listResponse = getEntryListResponse( ticket, entry );
                 model.put( MARK_LIST_RESPONSES, listResponse );
             }
         }
@@ -293,15 +293,15 @@ public class TicketFormService implements Serializable
         // If the entry type is a file, we add the
         if ( entryTypeService instanceof AbstractEntryTypeUpload )
         {
-        	IAsyncUploadHandler uploadHandler = ( (AbstractEntryTypeUpload) entryTypeService ).getAsynchronousUploadHandler( );
-        	if( listResponse != null && ! listResponse.isEmpty( ) )
-        	{
-	            for ( Response response : listResponse )
-				{
-	            	FileItem fileItem = new GenAttFileItem( response.getFile( ).getPhysicalFile( ).getValue( ), response.getFile( ).getTitle( ) );
-	            	uploadHandler.addFileItemToUploadedFilesList( fileItem, entryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry( ), request );
-				}
-        	}
+            IAsyncUploadHandler uploadHandler = ( (AbstractEntryTypeUpload) entryTypeService ).getAsynchronousUploadHandler( );
+            if ( listResponse != null && !listResponse.isEmpty( ) )
+            {
+                for ( Response response : listResponse )
+                {
+                    FileItem fileItem = new GenAttFileItem( response.getFile( ).getPhysicalFile( ).getValue( ), response.getFile( ).getTitle( ) );
+                    uploadHandler.addFileItemToUploadedFilesList( fileItem, entryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry( ), request );
+                }
+            }
             model.put( MARK_UPLOAD_HANDLER, uploadHandler );
         }
 

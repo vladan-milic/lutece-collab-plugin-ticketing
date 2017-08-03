@@ -42,7 +42,7 @@ public final class TicketCacheService extends AbstractCacheableService
 {
     private static final String SERVICE_NAME = "ticketing.ticketCacheService";
     private static final String CACHE_KEY_TICKET_MARKING = "ticketing.ticketMarking";
-    
+
     private static TicketCacheService _instance = new TicketCacheService( );
 
     /**
@@ -62,7 +62,7 @@ public final class TicketCacheService extends AbstractCacheableService
     {
         return _instance;
     }
-  
+
     /**
      * Get the marking cache key for a given marking id
      *

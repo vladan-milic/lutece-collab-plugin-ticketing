@@ -135,7 +135,7 @@ public interface ITicketDAO
      *            the plugin
      */
     void storeIsRead( int nIdTicket, boolean bIsRead, Plugin plugin );
-    
+
     /**
      * Load the marking id for the given ticket
      *
@@ -146,9 +146,9 @@ public interface ITicketDAO
      * @return The marking id
      */
     int loadTicketMarkingId( int nIdTicket, Plugin plugin );
-    
+
     /**
-     * Stores the marking id to know which marking to use 
+     * Stores the marking id to know which marking to use
      * 
      * @param nIdTicket
      *            the ticket id
@@ -158,7 +158,7 @@ public interface ITicketDAO
      *            the plugin
      */
     void storeTicketMarkingId( int nIdTicket, int nIdMarking, Plugin plugin );
-    
+
     /**
      * Reset the marking id to default value
      * 
@@ -168,7 +168,7 @@ public interface ITicketDAO
      *            the plugin
      */
     void resetMarkingId( int nIdMarking, Plugin plugin );
-    
+
     /**
      * Reset the marking id to default value for a given ticket
      * 

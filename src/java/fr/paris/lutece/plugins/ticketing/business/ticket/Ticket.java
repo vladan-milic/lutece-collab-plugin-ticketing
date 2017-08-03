@@ -1126,13 +1126,13 @@ public class Ticket implements Serializable, RBACResource
     {
         this._nIdticketMarking = _nIdticketMarking;
     }
-    
+
     /**
      * @return load and return the ticket marking
      */
-    public Marking getMarking( ) 
+    public Marking getMarking( )
     {
-    	return TicketHome.getTicketMarking( this );
+        return TicketHome.getTicketMarking( this );
     }
-    
+
 }

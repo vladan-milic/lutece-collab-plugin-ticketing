@@ -53,8 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class provides instances management methods (create, find, ...) for
- * Ticket objects
+ * This class provides instances management methods (create, find, ...) for Ticket objects
  */
 public final class TicketHome
 {
@@ -211,76 +210,79 @@ public final class TicketHome
     {
         _dao.storeIsRead( nIdTicket, false, _plugin );
     }
-    
+
     /**
-	 * Get the marking for the given ticket id
-	 * 
-	 * @param nIdTicketMarking
-	 *            the marking id
-	 * @return the marking
-	 */
-	public static Marking getTicketMarking(Ticket ticket) {
-		Marking marking = new Marking();
-		int nIdTicketMarking = ticket.getIdTicketMarking( );
-		
-		if ( nIdTicketMarking == -1)
-		{
-			nIdTicketMarking = getTicketMarkingId( ticket.getId( ) );
-		}
+     * Get the marking for the given ticket id
+     * 
+     * @param nIdTicketMarking
+     *            the marking id
+     * @return the marking
+     */
+    public static Marking getTicketMarking( Ticket ticket )
+    {
+        Marking marking = new Marking( );
+        int nIdTicketMarking = ticket.getIdTicketMarking( );
 
-		if (nIdTicketMarking > 0) 
-		{
-			marking = MarkingHome.loadMarkingFromCache(nIdTicketMarking);
-		} 
+        if ( nIdTicketMarking == -1 )
+        {
+            nIdTicketMarking = getTicketMarkingId( ticket.getId( ) );
+        }
 
-		return marking;
-	}
-	
-	/**
-	 * Get the marking id for the given ticket
-	 * 
-	 * @param nIdTicket
-	 *            the ticket
-	 * @param nIdMarking
-	 *            the marking
-	 */
-	public static int getTicketMarkingId(int nIdTicket ) {
-		return _dao.loadTicketMarkingId(nIdTicket, _plugin);
-	}
+        if ( nIdTicketMarking > 0 )
+        {
+            marking = MarkingHome.loadMarkingFromCache( nIdTicketMarking );
+        }
 
-	/**
-	 * Store the marking id for the given ticket
-	 * 
-	 * @param nIdTicket
-	 *            the ticket
-	 * @param nIdMarking
-	 *            the marking
-	 */
-	public static void setTicketMarkingId(int nIdTicket, int nIdMarking) {
-		_dao.storeTicketMarkingId(nIdTicket, nIdMarking, _plugin);
-	}
-	
-	/**
-	 * Reset the marking id to default value for the given marking id
-	 * 
-	 * @param nIdMarking
-	 *            the marking id
-	 */
-	public static void resetMarkingId(int nIdMarking)
-	{
-		_dao.resetMarkingId( nIdMarking, _plugin);
-	}
-	
-	/**
-	 * Reset the marking id to default value for the given ticket id
-	 * 
-	 * @param nIdTicket
-	 *            the ticket id
-	 */
-	public static void resetTicketMarkingId(int nIdTicket)
-	{
-		_dao.resetTicketMarkingId( nIdTicket, _plugin);
-	}
+        return marking;
+    }
+
+    /**
+     * Get the marking id for the given ticket
+     * 
+     * @param nIdTicket
+     *            the ticket
+     * @param nIdMarking
+     *            the marking
+     */
+    public static int getTicketMarkingId( int nIdTicket )
+    {
+        return _dao.loadTicketMarkingId( nIdTicket, _plugin );
+    }
+
+    /**
+     * Store the marking id for the given ticket
+     * 
+     * @param nIdTicket
+     *            the ticket
+     * @param nIdMarking
+     *            the marking
+     */
+    public static void setTicketMarkingId( int nIdTicket, int nIdMarking )
+    {
+        _dao.storeTicketMarkingId( nIdTicket, nIdMarking, _plugin );
+    }
+
+    /**
+     * Reset the marking id to default value for the given marking id
+     * 
+     * @param nIdMarking
+     *            the marking id
+     */
+    public static void resetMarkingId( int nIdMarking )
+    {
+        _dao.resetMarkingId( nIdMarking, _plugin );
+    }
+
+    /**
+     * Reset the marking id to default value for the given ticket id
+     * 
+     * @param nIdTicket
+     *            the ticket id
+     */
+    public static void resetTicketMarkingId( int nIdTicket )
+    {
+        _dao.resetTicketMarkingId( nIdTicket, _plugin );
+    }
 
     /**
      * Load the data of all the ticket objects and returns them in form of a collection be carefull generic attribute response are not loaded in this method
