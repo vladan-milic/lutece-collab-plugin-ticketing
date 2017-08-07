@@ -48,6 +48,7 @@ import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.IntPoint;
 import org.apache.lucene.document.LongPoint;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -71,6 +72,7 @@ import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
+import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
@@ -168,6 +170,11 @@ public class TicketSearchEngine implements ITicketSearchEngine
             AssigneeUser assignerUser = new AssigneeUser( );
             assignerUser.setAdminUserId( document.getField( TicketSearchItemConstant.FIELD_ASSIGNER_USER_ID ).numericValue( ).intValue( ) );
             result.setAssignerUser( assignerUser );
+            
+            // Ticket marking
+            IndexableField ticketMarkingId = document.getField( TicketSearchItemConstant.FIELD_TICKET_MARKING_ID);
+            int nMarkingId = ticketMarkingId != null ? ticketMarkingId.numericValue( ).intValue( ) : TicketingConstants.PROPERTY_UNSET_INT;
+            result.setIdTicketMarking( nMarkingId );
         }
         return result;
     }

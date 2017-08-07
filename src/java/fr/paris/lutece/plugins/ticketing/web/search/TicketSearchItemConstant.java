@@ -79,4 +79,5 @@ public class TicketSearchItemConstant
     public static final String FIELD_ASSIGNER_UNIT_ID = "ticket_assigner_unit_id";
     public static final String FIELD_ASSIGNER_USER_ID = "ticket_asigner_user_id";
     public static final String FIELD_TICKET_READ = "ticket_read";
+    public static final String FIELD_TICKET_MARKING_ID = "ticket_marking_id";
 }
