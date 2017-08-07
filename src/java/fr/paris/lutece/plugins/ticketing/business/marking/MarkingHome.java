@@ -46,6 +46,8 @@ public class MarkingHome
      */
     public static Marking update( Marking marking )
     {
+        String strCacheKey = _ticketCacheService.getMarkingByIdCacheKey( marking.getId( ) );
+        _ticketCacheService.putInCache( strCacheKey, marking );
         _dao.store( marking, _plugin );
 
         return marking;
@@ -59,6 +61,8 @@ public class MarkingHome
      */
     public static void remove( int nKey )
     {
+        String strCacheKey = _ticketCacheService.getMarkingByIdCacheKey( nKey );
+        _ticketCacheService.removeKey( strCacheKey );
         _dao.delete( nKey, _plugin );
     }
 
@@ -84,6 +88,11 @@ public class MarkingHome
         return _dao.selectMarkingsList( _plugin );
     }
 
+    /**
+     * Load the marking from cache or put it in if doesn't exist
+     * 
+     * @return the marking object
+     */
     public static Marking loadMarkingFromCache( int nIdMarking )
     {
         Marking marking = new Marking( );
@@ -94,14 +103,9 @@ public class MarkingHome
 
         if ( marking == null )
         {
-            for ( Marking refMarking : MarkingHome.getMarkingsList( ) )
-            {
-                _ticketCacheService.enableCache( true );
-                strCacheKey = _ticketCacheService.getMarkingByIdCacheKey( refMarking.getId( ) );
-                _ticketCacheService.putInCache( strCacheKey, refMarking );
-            }
-
-            marking = (Marking) _ticketCacheService.getFromCache( strCacheKey );
+            marking = MarkingHome.findByPrimaryKey( nIdMarking );
+            strCacheKey = _ticketCacheService.getMarkingByIdCacheKey( marking.getId( ) );
+            _ticketCacheService.putInCache( strCacheKey, marking );
         }
 
         return marking;
