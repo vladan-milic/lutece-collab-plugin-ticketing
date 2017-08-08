@@ -261,6 +261,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         if ( TicketUtils.isAssignee( ticket, getUser( ) ) )
         {
             TicketHome.resetTicketMarkingId( ticket.getId( ) );
+            ticket.setIdTicketMarking( TicketingConstants.DEFAULT_MARKING );
             try
             {
                 TicketIndexer ticketIndexer = new TicketIndexer( );
