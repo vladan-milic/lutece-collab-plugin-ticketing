@@ -123,7 +123,6 @@ public class Ticket implements Serializable, RBACResource
     private String _strUrl;
     private Channel _channel = new Channel( );
     private String _strNomenclature;
-    private boolean _bRead;
     private int _nIdticketMarking = -1;
 
     /**
@@ -1046,26 +1045,6 @@ public class Ticket implements Serializable, RBACResource
         this._strNomenclature = _strNomenclature;
     }
 
-    /**
-     * Sets the flag to know if the ticket has been read (by the assignee user)
-     * 
-     * @param bRead
-     *            {@code true} if the ticket has been read, {@code false} otherwise
-     */
-    public void setRead( boolean bRead )
-    {
-        _bRead = bRead;
-    }
-
-    /**
-     * Returns the flag to know if the ticket has been read (by the assignee user)
-     * 
-     * @return {@code true} if the ticket has been read, {@code false} otherwise
-     */
-    public boolean isRead( )
-    {
-        return _bRead;
-    }
 
     /**
      * Returns urgency, it s computed from max of criticty and priority value

@@ -166,52 +166,6 @@ public final class TicketHome
     }
 
     /**
-     * Marks the specified ticket as read
-     * 
-     * @param ticket
-     *            the ticket
-     */
-    public static void markAsRead( Ticket ticket )
-    {
-        markAsRead( ticket.getId( ) );
-        ticket.setRead( true );
-    }
-
-    /**
-     * Marks the specified ticket as read
-     * 
-     * @param nIdTicket
-     *            the ticket
-     */
-    public static void markAsRead( int nIdTicket )
-    {
-        _dao.storeIsRead( nIdTicket, true, _plugin );
-    }
-
-    /**
-     * Marks the specified ticket as unread
-     * 
-     * @param ticket
-     *            the ticket
-     */
-    public static void markAsUnread( Ticket ticket )
-    {
-        markAsUnread( ticket.getId( ) );
-        ticket.setRead( false );
-    }
-
-    /**
-     * Marks the specified ticket as unread
-     * 
-     * @param nIdTicket
-     *            the ticket
-     */
-    public static void markAsUnread( int nIdTicket )
-    {
-        _dao.storeIsRead( nIdTicket, false, _plugin );
-    }
-
-    /**
      * Get the marking for the given ticket id
      * 
      * @param nIdTicketMarking
@@ -220,13 +174,8 @@ public final class TicketHome
      */
     public static Marking getTicketMarking( Ticket ticket )
     {
-        Marking marking = new Marking( );
+        Marking marking = null;
         int nIdTicketMarking = ticket.getIdTicketMarking( );
-
-        if ( nIdTicketMarking == -1 )
-        {
-            nIdTicketMarking = getTicketMarkingId( ticket.getId( ) );
-        }
 
         if ( nIdTicketMarking > 0 )
         {

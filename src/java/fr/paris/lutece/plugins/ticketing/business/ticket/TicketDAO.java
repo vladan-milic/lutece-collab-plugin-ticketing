@@ -71,7 +71,7 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_SELECT_WITH_JOIN_DATA_TICKET = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, "
             + " a.fixed_phone_number, a.mobile_phone_number, a.id_marking, c.id_ticket_type, c.label, d.id_ticket_domain, "
             + " d.label, a.id_ticket_category, e.label, e.category_precision, e.id_workflow, a.id_contact_mode, f.code, a.ticket_comment, "
-            + " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, g.first_name, g.last_name, a.id_unit, h.label, a.id_assigner_user, a.id_assigner_unit, h2.label, a.user_message, a.url, a.id_channel, x.label, x.icon_font, a.nomenclature, a.is_read, "
+            + " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, g.first_name, g.last_name, a.id_unit, h.label, a.id_assigner_user, a.id_assigner_unit, h2.label, a.user_message, a.url, a.id_channel, x.label, x.icon_font, a.nomenclature, "
             + " ad.address, ad.address_detail, ad.postal_code, ad.city"
             + " FROM ticketing_ticket a"
             + " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user"
@@ -95,12 +95,12 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket ( id_ticket, ticket_reference , guid, id_user_title, firstname, lastname, email, "
             + " fixed_phone_number, mobile_phone_number, id_ticket_category, "
             + " id_contact_mode, ticket_comment, ticket_status, ticket_status_text, date_update, date_create, "
-            + " priority, criticality, id_customer, id_admin_user, id_unit, id_assigner_user, id_assigner_unit, user_message, url, id_channel, nomenclature, is_read ) "
+            + " priority, criticality, id_customer, id_admin_user, id_unit, id_assigner_user, id_assigner_unit, user_message, url, id_channel, nomenclature ) "
             + " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE t, ad FROM ticketing_ticket t LEFT JOIN ticketing_ticket_address ad ON ad.id_ticket = t.id_ticket WHERE t.id_ticket = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket SET id_ticket = ?, ticket_reference = ?, guid = ?, id_user_title = ?, firstname = ?, lastname = ?, email = ?, fixed_phone_number = ?, mobile_phone_number = ?, "
             + " id_ticket_category = ?, id_contact_mode = ?, ticket_comment = ?, ticket_status = ?, ticket_status_text = ?, date_update = ?,"
-            + " date_close = ? , priority = ? , criticality = ? , id_customer = ? , id_admin_user = ? , id_unit = ?, id_assigner_user = ? , id_assigner_unit = ?, user_message = ?, url = ?, id_channel = ?, nomenclature = ?, is_read = ? "
+            + " date_close = ? , priority = ? , criticality = ? , id_customer = ? , id_admin_user = ? , id_unit = ?, id_assigner_user = ? , id_assigner_unit = ?, user_message = ?, url = ?, id_channel = ?, nomenclature = ? "
             + " WHERE id_ticket = ?";
     private static final String SQL_QUERY_SELECTALL_SELECT_CLAUSE = SQL_SELECT_WITH_JOIN_DATA_TICKET;
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket FROM ticketing_ticket";
@@ -161,7 +161,6 @@ public final class TicketDAO implements ITicketDAO
             + " JOIN genatt_response b ON b.id_response = a.id_response " + " LEFT JOIN core_file c ON c.id_file = b.id_file"
             + " LEFT JOIN core_physical_file d ON d.id_physical_file = c.id_physical_file  WHERE a.id_response = ? ";
     private static final String SQL_QUERY_FIND_ID_TICKET_FROM_ID_RESPONSE = " SELECT id_ticket FROM ticketing_ticket_response WHERE id_response = ? ";
-    private static final String SQL_QUERY_UPDATE_IS_READ = "UPDATE ticketing_ticket SET is_read = ? WHERE id_ticket = ?";
     private static final String SQL_QUERY_INSERT_TICKET_ADDRESS = "INSERT INTO ticketing_ticket_address ( id_ticket, address, address_detail, postal_code, city)"
             + " VALUES ( ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_UPDATE_TICKET_ADDRESS = "UPDATE ticketing_ticket_address SET  address = ?, address_detail = ?, postal_code = ?, city = ?"
@@ -248,7 +247,6 @@ public final class TicketDAO implements ITicketDAO
         }
 
         daoUtil.setString( nIndex++, ticket.getNomenclature( ) );
-        daoUtil.setBoolean( nIndex++, ticket.isRead( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -344,8 +342,6 @@ public final class TicketDAO implements ITicketDAO
         }
 
         daoUtil.setString( nIndex++, ticket.getNomenclature( ) );
-
-        daoUtil.setBoolean( nIndex++, ticket.isRead( ) );
 
         daoUtil.setInt( nIndex++, ticket.getId( ) );
 
@@ -504,22 +500,6 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.free( );
 
         return ticketList;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public void storeIsRead( int nIdTicket, boolean bIsRead, Plugin plugin )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_IS_READ, plugin );
-        int nIndex = 1;
-
-        daoUtil.setBoolean( nIndex++, bIsRead );
-        daoUtil.setInt( nIndex++, nIdTicket );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
     }
 
     /**
@@ -776,8 +756,6 @@ public final class TicketDAO implements ITicketDAO
         }
 
         ticket.setNomenclature( daoUtil.getString( nIndex++ ) );
-
-        ticket.setRead( daoUtil.getBoolean( nIndex++ ) );
 
         // Ticket Address
         TicketAddress ticketAddress = new TicketAddress( );

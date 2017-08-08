@@ -455,11 +455,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNER_USER_ID, CONSTANT_ID_NULL ) );
         }
 
-        // --- ticket read mark
-        doc.add( new StoredField( TicketSearchItemConstant.FIELD_TICKET_READ, BooleanUtils.toInteger( ticket.isRead( ) ) ) );
-
-        // --- ticket read mark Id
-
+        // --- ticket read marker Id
         int nMarkingId = ticket.getIdTicketMarking( );
         doc.add( new IntPoint( TicketSearchItemConstant.FIELD_TICKET_MARKING_ID, nMarkingId ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_TICKET_MARKING_ID, nMarkingId ) );

@@ -127,8 +127,6 @@ public class TicketSearchEngine implements ITicketSearchEngine
             result.setMobilePhoneNumber( document.get( TicketSearchItemConstant.FIELD_MOBILE_PHONE_NUMBER ) );
             result.setFixedPhoneNumber( document.get( TicketSearchItemConstant.FIELD_FIXED_PHONE_NUMBER ) );
             result.setNomenclature( document.get( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE ) );
-            result.setRead( BooleanUtils.toBoolean( Integer.parseInt( document.get( TicketSearchItemConstant.FIELD_TICKET_READ ) ), TRUE_VALUE_CONSTANT,
-                    FALSE_VALUE_CONSTANT ) );
 
             // TicketCategory
             TicketCategory ticketCategory = new TicketCategory( );
