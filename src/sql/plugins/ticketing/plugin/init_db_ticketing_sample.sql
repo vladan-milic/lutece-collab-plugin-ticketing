@@ -61,3 +61,6 @@ INSERT INTO ticketing_channel (id_channel, label, icon_font) VALUES
 (4, "Twitter", "fa fa-twitter"),
 (5, "Facebook", "fa fa-facebook"),
 (99, "Guichet (Web)", "fa fa-desktop");
+
+DELETE FROM ticketing_markings ;
+INSERT INTO ticketing_markings VALUES (1, 'NON LU', '#FFFFFF', '#00C0EF');

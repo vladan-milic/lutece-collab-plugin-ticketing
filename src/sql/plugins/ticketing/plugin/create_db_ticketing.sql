@@ -60,7 +60,7 @@ id_channel int(11) NULL,
 id_assigner_user int(11) NOT NULL default '-1',
 id_assigner_unit int(11) NOT NULL default '0', 
 nomenclature varchar(3) NULL,
-is_read int(1) NOT NULL default '0',
+id_marking INT(11) DEFAULT '0';
 PRIMARY KEY (id_ticket)
 );
 
@@ -223,6 +223,18 @@ CREATE TABLE ticketing_ticket_category_input (
     id_input int(6) NOT NULL,
     pos int(6) NOT NULL default '0',
     PRIMARY KEY (id_ticket_category, id_input)
+);
+
+--
+-- Structure for table ticketing_markings
+--
+
+CREATE TABLE ticketing_markings (
+	id_marking INT(6) NOT NULL,
+	title VARCHAR(500) NOT NULL DEFAULT '',
+	label_color VARCHAR(50),
+	background_color VARCHAR(50),
+	PRIMARY KEY (id_marking)
 );
 
 
