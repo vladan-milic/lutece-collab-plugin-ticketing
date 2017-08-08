@@ -104,8 +104,11 @@ public class MarkingHome
         if ( marking == null )
         {
             marking = MarkingHome.findByPrimaryKey( nIdMarking );
+            if ( marking != null )
+            {
             strCacheKey = _ticketCacheService.getMarkingByIdCacheKey( marking.getId( ) );
             _ticketCacheService.putInCache( strCacheKey, marking );
+            }
         }
 
         return marking;

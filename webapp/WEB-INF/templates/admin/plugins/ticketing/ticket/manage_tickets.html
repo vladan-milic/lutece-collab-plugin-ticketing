@@ -81,10 +81,12 @@
                 </a>
               </#if>
               <#if id == "agent" || id == "group">
-                <#assign marking=ticket.marking!>
-                <#if marking?exists && marking.title?exists >
-                	<div class="label unread" style="color:${marking.labelColor!};background-color:${marking.backgroundColor!};border-radius: 5px;" for="marking_id" title="${marking.title}">${marking.title}</div>
-                </#if>
+				<#if ticket.marking??>
+					<#assign marking=ticket.marking>
+					<#if marking.title?exists >
+						<div class="label unread" style="color:${marking.labelColor!};background-color:${marking.backgroundColor!};border-radius: 5px;" for="marking_id" title="${marking.title}">${marking.title}</div>
+					</#if>
+				</#if>
               </#if>  
             </td>
 		          <td>
