@@ -1045,7 +1045,6 @@ public class Ticket implements Serializable, RBACResource
         this._strNomenclature = _strNomenclature;
     }
 
-
     /**
      * Returns urgency, it s computed from max of criticty and priority value
      * 

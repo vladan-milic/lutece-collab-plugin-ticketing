@@ -106,8 +106,8 @@ public class MarkingHome
             marking = MarkingHome.findByPrimaryKey( nIdMarking );
             if ( marking != null )
             {
-            strCacheKey = _ticketCacheService.getMarkingByIdCacheKey( marking.getId( ) );
-            _ticketCacheService.putInCache( strCacheKey, marking );
+                strCacheKey = _ticketCacheService.getMarkingByIdCacheKey( marking.getId( ) );
+                _ticketCacheService.putInCache( strCacheKey, marking );
             }
         }
 

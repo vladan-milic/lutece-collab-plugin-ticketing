@@ -124,7 +124,6 @@ public interface ITicketDAO
      */
     List<Integer> selectIdTicketsList( TicketFilter filter, Plugin plugin );
 
-
     /**
      * Load the marking id for the given ticket
      *

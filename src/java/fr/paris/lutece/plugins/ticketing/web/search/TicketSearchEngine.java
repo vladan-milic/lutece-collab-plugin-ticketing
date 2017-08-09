@@ -168,9 +168,9 @@ public class TicketSearchEngine implements ITicketSearchEngine
             AssigneeUser assignerUser = new AssigneeUser( );
             assignerUser.setAdminUserId( document.getField( TicketSearchItemConstant.FIELD_ASSIGNER_USER_ID ).numericValue( ).intValue( ) );
             result.setAssignerUser( assignerUser );
-            
+
             // Ticket marking
-            IndexableField ticketMarkingId = document.getField( TicketSearchItemConstant.FIELD_TICKET_MARKING_ID);
+            IndexableField ticketMarkingId = document.getField( TicketSearchItemConstant.FIELD_TICKET_MARKING_ID );
             int nMarkingId = ticketMarkingId != null ? ticketMarkingId.numericValue( ).intValue( ) : TicketingConstants.PROPERTY_UNSET_INT;
             result.setIdTicketMarking( nMarkingId );
         }
