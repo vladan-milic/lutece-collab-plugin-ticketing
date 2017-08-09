@@ -34,11 +34,9 @@
 package fr.paris.lutece.plugins.ticketing.service.reference;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -68,7 +66,6 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
     private static final String REFERENCE_FORMAT = "%s%05d";
     private static final String DATE_FORMAT = "yyMM";
     private static final String PATTERN_REFERENCE_PREFIX = "^[A-Z]{3}$";
-    private static final String PATTERN_REFERENCE_PREFIX_IN_REFERENCE = "^[A-Z]{3}";
     private static final String PATTERN_REFERENCE = "\\b[A-Z]{3}\\d{9}\\b";
     private static final String WORD_BOUNDARY_PATTERN = "\\b";
 
@@ -78,7 +75,6 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
 
     private static Pattern _patternReferencePrefix = Pattern.compile( PATTERN_REFERENCE_PREFIX );
     private SimpleDateFormat _simpleDateFormat = new SimpleDateFormat( DATE_FORMAT );
-    private static List<String> _listPrefixReference = new ArrayList<>( );
     private ITicketReferenceDAO _dao;
 
     /**
@@ -90,10 +86,6 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
     public TicketReferencePrefixAndNumberService( ITicketReferenceDAO ticketReferenceDAO )
     {
         _dao = ticketReferenceDAO;
-        if ( _dao != null )
-        {
-            _listPrefixReference = _dao.findAllPrefixReference( );
-        }
     }
 
     /**
@@ -159,7 +151,7 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
                 String currentReference = matcherReference.group( );
 
                 // Detect if the prefix of the current reference is a valid prefix
-                if ( StringUtils.isNotBlank( currentReference ) && _listPrefixReference.contains( getPrefixFromReference( currentReference ) ) )
+                if ( StringUtils.isNotBlank( currentReference ) )
                 {
                     // Check if this reference has been already processed
                     if ( !setReferenceChecked.contains( currentReference ) )
@@ -181,26 +173,6 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
             return strResult;
         }
         return strContent;
-    }
-
-    /**
-     * Return the prefix of a Reference
-     * 
-     * @param currentReference
-     *            The reference
-     * @return the prefix of the reference
-     */
-    private String getPrefixFromReference( String currentReference )
-    {
-        String strPrefix = StringUtils.EMPTY;
-
-        Pattern patternReferencePrefixInReference = Pattern.compile( PATTERN_REFERENCE_PREFIX_IN_REFERENCE );
-        Matcher matcherPrefixReference = patternReferencePrefixInReference.matcher( currentReference );
-        while ( matcherPrefixReference.find( ) )
-        {
-            strPrefix = matcherPrefixReference.group( );
-        }
-        return strPrefix;
     }
 
     /**
