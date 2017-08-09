@@ -54,6 +54,7 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
 import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
@@ -143,7 +144,8 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
     @Override
     public String process( HttpServletRequest request, String strContent )
     {
-        if ( StringUtils.isNotBlank( strContent ) )
+        Object isProcessContent = request.getAttribute( TicketingConstants.ATTRIBUTE_IS_PROCESS_CONTENT );
+        if ( StringUtils.isNotBlank( strContent ) && isProcessContent != null && ( ( Boolean ) isProcessContent ).booleanValue( ) )
         {
             String strResult = strContent;
             Set<String> setReferenceChecked = new LinkedHashSet<>( );

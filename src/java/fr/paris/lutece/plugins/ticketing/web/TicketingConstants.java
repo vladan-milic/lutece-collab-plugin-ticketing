@@ -79,6 +79,7 @@ public final class TicketingConstants
     public static final String ATTRIBUTE_IS_UNIT_CHANGED = "bTicketingUnitChanged";
     public static final String ATTRIBUTE_BYPASS_ASSSIGN_TO_ME = "bBypassAssignToMe";
     public static final String ATTRIBUTE_MODIFY_ACTION_MESSAGE_INFO = "ticketing.modify.action.message.info";
+    public static final String ATTRIBUTE_IS_PROCESS_CONTENT = "is_process_content";
 
     // Markers
     public static final String MARK_TICKET = "ticket";

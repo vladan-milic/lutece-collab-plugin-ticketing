@@ -224,6 +224,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         // Add link to all reference present in the ticket comment
         String strTicketComment = ticket.getTicketComment( );
         String strProcessResult = strTicketComment.replaceAll( System.lineSeparator( ), TicketingConstants.HTML_BR_BALISE );
+        request.setAttribute( TicketingConstants.ATTRIBUTE_IS_PROCESS_CONTENT, Boolean.TRUE );
         if ( _listContentPostProcessors != null && !_listContentPostProcessors.isEmpty( ) )
         {
             for ( ContentPostProcessor contentPostProcessor : _listContentPostProcessors )
