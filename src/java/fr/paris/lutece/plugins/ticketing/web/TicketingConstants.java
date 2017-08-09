@@ -111,6 +111,7 @@ public final class TicketingConstants
     public static final String MARK_PREVIOUS_TICKET = "previous_ticket";
     public static final String MARK_AVATAR_AVAILABLE = "avatar_available";
     public static final String MARK_SELECTED_TICKETS = PARAMETER_SELECTED_TICKETS;
+    public static final String MARK_TICKET_COMMENT = "ticket_processed_comment";
 
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";

@@ -222,8 +222,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         model.put( TicketingConstants.MARK_JSP_CONTROLLER, getControllerJsp( ) );
 
         // Add link to all reference present in the ticket comment
-        String strTicketComment = ticket.getTicketComment( );
-        String strProcessResult = strTicketComment.replaceAll( System.lineSeparator( ), TicketingConstants.HTML_BR_BALISE );
+        String strProcessResult = ticket.getTicketComment( ).replaceAll( System.lineSeparator( ), TicketingConstants.HTML_BR_BALISE );
         request.setAttribute( TicketingConstants.ATTRIBUTE_IS_PROCESS_CONTENT, Boolean.TRUE );
         if ( _listContentPostProcessors != null && !_listContentPostProcessors.isEmpty( ) )
         {
@@ -232,9 +231,9 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
                 strProcessResult = contentPostProcessor.process( request, strProcessResult );
             }
         }
-        ticket.setTicketComment( strProcessResult );
 
         String strHistory = getDisplayDocumentHistory( request, ticket );
+        model.put( TicketingConstants.MARK_TICKET_COMMENT, strProcessResult );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_HISTORY, strHistory );
         model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
@@ -266,10 +265,6 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
             try
             {
                 TicketIndexer ticketIndexer = new TicketIndexer( );
-
-                // We will not index the ticket comment with the link
-                ticket.setTicketComment( strTicketComment );
-
                 ticketIndexer.indexTicket( ticket );
             }
             catch( TicketIndexerException ticketIndexerException )
