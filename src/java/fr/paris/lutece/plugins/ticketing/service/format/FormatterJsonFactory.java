@@ -33,15 +33,14 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.service.format.channel.ChannelFormatterJson;
 import fr.paris.lutece.plugins.ticketing.service.format.contactmode.ContactModeFormatterJson;
 import fr.paris.lutece.plugins.ticketing.service.format.ticket.TicketFormatterJson;
-import fr.paris.lutece.plugins.ticketing.service.format.tickettype.TicketTypeFormatterJson;
 import fr.paris.lutece.plugins.ticketing.service.format.usertitle.UserTitleFormatterJson;
 
 import java.util.HashMap;
@@ -62,7 +61,7 @@ public class FormatterJsonFactory implements IFormatterFactory
     {
         _formatters = new HashMap<Class<?>, ITicketingFormatter<?>>( );
         _formatters.put( Ticket.class, new TicketFormatterJson( ) );
-        _formatters.put( TicketType.class, new TicketTypeFormatterJson( ) );
+        _formatters.put( TicketCategory.class, new TicketCategoryFormatterJson( ) );
         _formatters.put( Channel.class, new ChannelFormatterJson( ) );
         _formatters.put( ContactMode.class, new ContactModeFormatterJson( ) );
         _formatters.put( UserTitle.class, new UserTitleFormatterJson( ) );

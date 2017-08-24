@@ -60,6 +60,7 @@ import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchItemConstant;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexWriterUtil;
@@ -307,7 +308,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY, strCategoryLabel, Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_CATEGORY, new BytesRef( strCategoryLabel ) ) );
 
-            doc.add( new StoredField( TicketSearchItemConstant.FIELD_PRECISION, manageNullValue( ticket.getTicketCategory( ).getPrecision( ) ) ) );
+            doc.add( new StoredField( TicketSearchItemConstant.FIELD_PRECISION, manageNullValue( TicketCategoryService.getPrecision( ticket.getTicketCategory( ) ).getLabel( ) ) ) );
         }
         else
         {
@@ -797,9 +798,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
                 sb.append( state.getName( ) ).append( SEPARATOR );
             }
 
-            if ( StringUtils.isNotBlank( ticketCategory.getPrecision( ) ) )
+            if ( StringUtils.isNotBlank( TicketCategoryService.getPrecision( ticketCategory ).getLabel( ) ) )
             {
-                sb.append( ticketCategory.getPrecision( ) ).append( SEPARATOR );
+                sb.append( TicketCategoryService.getPrecision( ticketCategory ).getLabel( ) ).append( SEPARATOR );
             }
         }
 

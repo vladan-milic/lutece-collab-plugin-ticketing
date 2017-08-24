@@ -33,15 +33,14 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.service.format.channel.ChannelFormatterXml;
 import fr.paris.lutece.plugins.ticketing.service.format.contactmode.ContactModeFormatterXml;
 import fr.paris.lutece.plugins.ticketing.service.format.ticket.TicketFormatterXml;
-import fr.paris.lutece.plugins.ticketing.service.format.tickettype.TicketTypeFormatterXml;
 import fr.paris.lutece.plugins.ticketing.service.format.usertitle.UserTitleFormatterXml;
 
 import java.util.HashMap;
@@ -62,7 +61,7 @@ public class FormatterXmlFactory implements IFormatterFactory
     {
         _formatters = new HashMap<Class<?>, ITicketingFormatter<?>>( );
         _formatters.put( Ticket.class, new TicketFormatterXml( ) );
-        _formatters.put( TicketType.class, new TicketTypeFormatterXml( ) );
+        _formatters.put( TicketCategory.class, new TicketCategoryFormatterXml( ) );
         _formatters.put( Channel.class, new ChannelFormatterXml( ) );
         _formatters.put( ContactMode.class, new ContactModeFormatterXml( ) );
         _formatters.put( UserTitle.class, new UserTitleFormatterXml( ) );

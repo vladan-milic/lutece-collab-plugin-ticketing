@@ -37,7 +37,7 @@ import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
+import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
@@ -113,7 +113,6 @@ public class TicketSearchEngine implements ITicketSearchEngine
             // TicketCategory
             TicketCategory ticketCategory = new TicketCategory( );
             ticketCategory.setLabel( document.get( TicketSearchItemConstant.FIELD_CATEGORY ) );
-            ticketCategory.setPrecision( document.get( TicketSearchItemConstant.FIELD_PRECISION ) );
             result.setTicketCategory( ticketCategory );
 
             // State
@@ -201,9 +200,9 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * {@inheritDoc}
      */
     @Override
-    public List<Ticket> searchTickets( String strQuery, List<TicketDomain> listTicketDomain, TicketFilter filter ) throws ParseException
+    public List<Ticket> searchTickets( String strQuery, List<TicketCategory> listTicketCategory, TicketFilter filter ) throws ParseException
     {
-        return search( createMainSearchQuery( strQuery, listTicketDomain, filter ), filter );
+        return search( createMainSearchQuery( strQuery, listTicketCategory, filter ), filter );
     }
 
     /**
@@ -266,9 +265,9 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * {@inheritDoc}
      */
     @Override
-    public int searchCountTickets( String strQuery, List<TicketDomain> listTicketDomain, TicketFilter filter ) throws ParseException
+    public int searchCountTickets( String strQuery, List<TicketCategory> listTicketCategory, TicketFilter filter ) throws ParseException
     {
-        return searchCount( createMainSearchQuery( strQuery, listTicketDomain, filter ), filter );
+        return searchCount( createMainSearchQuery( strQuery, listTicketCategory, filter ), filter );
     }
 
     /**
@@ -281,7 +280,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * @return the main query constructed for the search
      * @throws ParseException
      */
-    private BooleanQuery createMainSearchQuery( String strQuery, List<TicketDomain> listTicketDomain, TicketFilter filter ) throws ParseException
+    private BooleanQuery createMainSearchQuery( String strQuery, List<TicketCategory> listTicketDomain, TicketFilter filter ) throws ParseException
     {
         Builder mainQuery = new Builder( );
 
@@ -313,11 +312,11 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * @throws ParseException
      *             exception while parsing document type
      */
-    private void addQueryDomainClause( Builder booleanQueryBuilder, List<TicketDomain> listUserDomain ) throws ParseException
+    private void addQueryDomainClause( Builder booleanQueryBuilder, List<TicketCategory> listUserDomain ) throws ParseException
     {
         Builder domainsQueryBuilder = new Builder( );
 
-        for ( TicketDomain domain : listUserDomain )
+        for ( TicketCategory domain : listUserDomain )
         {
             TermQuery domQuery = new TermQuery( new Term( TicketSearchItemConstant.FIELD_DOMAIN_ID, Integer.toString( domain.getId( ) ) ) );
             domainsQueryBuilder.add( new BooleanClause( domQuery, BooleanClause.Occur.SHOULD ) );

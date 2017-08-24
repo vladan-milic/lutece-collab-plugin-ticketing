@@ -1,0 +1,30 @@
+<#include "manageticketing_tabs.html" />
+<@tabs2 tab="category" />
+<@box>
+	<@boxHeader title='#i18n{ticketing.create_category.title}' />
+	<@boxBody>
+    <@tform name='create_category' action='jsp/admin/plugins/ticketing/ManageCategorys.jsp'>
+        <@messages errors=errors />
+        <input type="hidden" id="id" name="id"/>
+            <@formGroup labelKey='#i18n{ticketing.create_category.labelLabel}' helpKey='#i18n{ticketing.create_category.labelLabel.help}' mandatory=true>
+                    <@input type='text' name='label' value='${category.label!\'\'}' />
+            </@formGroup>
+            <@formGroup labelKey='#i18n{ticketing.create_category.labelCode}' helpKey='#i18n{ticketing.create_category.labelCode.help}' mandatory=true>
+                    <@input type='text' name='code' value='${category.code!\'\'}' />
+            </@formGroup>
+            <@formGroup labelKey='#i18n{ticketing.create_category.labelUnit}' helpKey='#i18n{ticketing.create_category.labelUnit.help}'>
+                <select id="id_unit" name="id_unit" >
+                    <option value="-1" >#i18n{ticketing.create_category.unit.noUnit}</option>
+                <#list unit_list as item>
+                        <#if category.defaultAssignUnit.idUnit?string == item.code >
+                                <option selected="selected" value="${item.code}" >${item.name}</option>
+                        <#else>
+                                <option value="${item.code}" >${item.name}</option>
+                        </#if>
+                </#list>
+                </select>
+            </@formGroup>
+            <@actionButtons button1Name="action_createCategory" button2Name="view_manageCategory"/>
+    </@tform>
+	</@boxBody>
+</@box>

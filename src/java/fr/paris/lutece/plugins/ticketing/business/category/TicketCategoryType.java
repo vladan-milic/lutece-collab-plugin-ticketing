@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,33 +31,28 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.business.tickettype;
+package fr.paris.lutece.plugins.ticketing.business.category;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
-
+import fr.paris.lutece.plugins.ticketing.service.tree.AbstractDepth;
+import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.*;
 import java.io.Serializable;
-import java.util.List;
-
-import javax.validation.constraints.Size;
 
 /**
- * This is the business class for the object TicketType
+ * This is the business class for the object CategoryType
  */
-public class TicketType implements Serializable
+public class TicketCategoryType extends AbstractDepth implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
     // Variables declarations
     private int _nId;
-    @NotEmpty( message = "#i18n{ticketing.validation.tickettype.Label.notEmpty}" )
-    @Size( max = 50, message = "#i18n{ticketing.validation.tickettype.Label.size}" )
+
+    @NotEmpty( message = "#i18n{ticketing.validation.categorytype.Label.notEmpty}" )
+    @Size( max = 255, message = "#i18n{ticketing.validation.categorytype.Label.size}" )
     private String _strLabel;
-    private String _strReferencePrefix;
-    private int _nDemandTypeId;
-    private int _nOrder;
-    private List<TicketDomain> _domainList;
+
+    private int _nDepth;
 
     /**
      * Returns the Id
@@ -85,6 +80,7 @@ public class TicketType implements Serializable
      * 
      * @return The Label
      */
+    @Override
     public String getLabel( )
     {
         return _strLabel;
@@ -102,80 +98,32 @@ public class TicketType implements Serializable
     }
 
     /**
-     * Returns the reference prefix
+     * Returns the Depth
      * 
-     * @return The reference prefix
+     * @return The Depth
      */
-    public String getReferencePrefix( )
+    public int getDepth( )
     {
-        return _strReferencePrefix;
+        return _nDepth;
     }
 
     /**
-     * Sets the reference prefix
+     * Sets the Depth
      * 
-     * @param strReferencePrefix
-     *            The reference prefix
+     * @param nDepth
+     *            The Depth
      */
-    public void setReferencePrefix( String strReferencePrefix )
+    public void setDepth( int nDepth )
     {
-        _strReferencePrefix = strReferencePrefix;
+        _nDepth = nDepth;
     }
 
     /**
-     * Returns the DemandTypeId
-     * 
-     * @return The DemandTypeId
+     * {@inheritDoc}
      */
-    public int getDemandTypeId( )
+    @Override
+    public int getNbDepth( )
     {
-        return _nDemandTypeId;
-    }
-
-    /**
-     * Sets the DemandTypeId
-     * 
-     * @param nDemandTypeId
-     *            The DemandTypeId
-     */
-    public void setDemandTypeId( int nDemandTypeId )
-    {
-        _nDemandTypeId = nDemandTypeId;
-    }
-
-    /**
-     * @return the Order
-     */
-    public int getOrder( )
-    {
-        return _nOrder;
-    }
-
-    /**
-     * @param nOrder
-     *            the Order to set
-     */
-    public void setOrder( int nOrder )
-    {
-        this._nOrder = nOrder;
-    }
-
-    /**
-     * Sets the ticket domain list
-     * 
-     * @param ticketDomainsList
-     */
-    public void setDomainList( List<TicketDomain> ticketDomainsList )
-    {
-        this._domainList = ticketDomainsList;
-
-    }
-
-    /**
-     * @return the _domainList
-     */
-    public List<TicketDomain> getDomainList( )
-    {
-        return _domainList;
+        return _nDepth;
     }
 }

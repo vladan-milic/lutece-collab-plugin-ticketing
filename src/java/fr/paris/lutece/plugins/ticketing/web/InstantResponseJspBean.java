@@ -46,6 +46,7 @@ import org.apache.commons.lang.StringUtils;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponse;
 import fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponseHome;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidator;
@@ -384,7 +385,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         TicketCategory ticketCategory = categoryValidatorResult.getTicketCategory( );
         _instantresponse.setIdTicketCategory( ticketCategory.getId( ) );
         _instantresponse.setCategory( ticketCategory.getLabel( ) );
-        _instantresponse.setTicketCategoryPrecision( ticketCategory.getPrecision( ) );
+        _instantresponse.setTicketCategoryPrecision( TicketCategoryService.getPrecision( ticketCategory ).getLabel( ) );
 
         // Validate the precision
         if ( !bIsFormValid )

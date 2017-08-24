@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,25 +33,20 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.category;
 
-import java.util.List;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
 
-/**
- * This class provides instances management methods (create, find, ...) for TicketCategory objects
- */
+import java.util.List;
 
 /**
- * @author a120274
- *
+ * This class provides instances management methods (create, find, ...) for Category objects
  */
 public final class TicketCategoryHome
 {
     // Static variable pointed at the DAO instance
-    private static ITicketCategoryDAO _dao = SpringContextService.getBean( "ticketing.ticketCategoryDAO" );
+    private static ITicketCategoryDAO _dao = SpringContextService.getBean( "ticketing.categoryDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
@@ -62,281 +57,98 @@ public final class TicketCategoryHome
     }
 
     /**
-     * Create an instance of the ticketCategory class
+     * Create an instance of the category class
      * 
-     * @param ticketCategory
-     *            The instance of the TicketCategory which contains the informations to store
+     * @param category
+     *            The instance of the Category which contains the informations to store
+     * @return The instance of category which has been created with its primary key.
      */
-    public static void create( TicketCategory ticketCategory )
+    public static TicketCategory create( TicketCategory category )
     {
-        _dao.insert( ticketCategory, _plugin );
+        _dao.insert( category, _plugin );
+
+        return category;
     }
 
     /**
-     * Create a link between a category and an input
+     * Update of the category which is specified in parameter
      * 
-     * @param nIdCategory
-     *            id Category
-     * @param nIdInput
-     *            id Input
-     * @param nPos
-     *            id Input position
+     * @param category
+     *            The instance of the Category which contains the data to store
+     * @return The instance of the category which has been updated
      */
-    public static void createLinkCategoryInput( int nIdCategory, int nIdInput, int nPos )
+    public static TicketCategory update( TicketCategory category )
     {
-        _dao.insertLinkCategoryInput( nIdCategory, nIdInput, nPos, _plugin );
+        _dao.store( category, _plugin );
+
+        return category;
     }
 
     /**
-     * Create a link between a category and an input
-     * 
-     * @param nIdCategory
-     *            id Category
-     * @param nIdInput
-     *            id Input
-     * @param nPos
-     *            id Input position
-     */
-    public static void createLinkCategoryInputNextPos( int nIdCategory, int nIdInput )
-    {
-        _dao.insertLinkCategoryInputNextPos( nIdCategory, nIdInput, _plugin );
-    }
-
-    /**
-     * Update of the ticketCategory which is specified in parameter
-     * 
-     * @param ticketCategory
-     *            The instance of the TicketCategory which contains the data to store
-     */
-    public static void update( TicketCategory ticketCategory )
-    {
-        TicketCategory currentTicketCategory = findByPrimaryKey( ticketCategory.getId( ) );
-        int nCurrentDomainId = currentTicketCategory.getIdTicketDomain( );
-        int nCurrentOrder = currentTicketCategory.getOrder( );
-        int nTargetDomainId = ticketCategory.getIdTicketDomain( );
-
-        if ( nCurrentDomainId != nTargetDomainId )
-        {
-            _dao.storeWithLastOrder( ticketCategory, _plugin );
-            _dao.rebuildCategoryOrders( nCurrentOrder, nCurrentDomainId, _plugin );
-        }
-        else
-        {
-            _dao.store( ticketCategory, _plugin );
-        }
-    }
-
-    /**
-     * Remove the ticketCategory whose identifier is specified in parameter
+     * Remove the category whose identifier is specified in parameter
      * 
      * @param nKey
-     *            The ticketCategory Id
+     *            The category Id
      */
     public static void remove( int nKey )
     {
-        TicketCategory ticketCategoryToRemove = findByPrimaryKey( nKey );
-
         _dao.delete( nKey, _plugin );
-        _dao.rebuildCategoryOrders( ticketCategoryToRemove.getOrder( ), ticketCategoryToRemove.getIdTicketDomain( ), _plugin );
     }
 
     /**
-     * Remove a link between a category and an input
-     * 
-     * @param nIdCategory
-     *            id Category
-     * @param nIdInput
-     *            id Input
-     */
-    public static void removeLinkCategoryInput( int nIdCategory, int nIdInput )
-    {
-        _dao.deleteLinkCategoryInput( nIdCategory, nIdInput, _plugin );
-    }
-
-    /**
-     * Update the Position field in a link between a category and an input
-     * 
-     * @param nIdCategory
-     *            id Category
-     * @param nIdInput
-     *            id Input
-     * @param nPosition
-     *            the position value
-     */
-    public static void updateCategoryInputPosition( int nIdCategory, int nIdInput, int nPosition )
-    {
-        _dao.updateLinkCategoryInputPos( nIdCategory, nIdInput, nPosition, _plugin );
-    }
-
-    // /////////////////////////////////////////////////////////////////////////
-    // Finders
-
-    /**
-     * Returns an instance of a ticketCategory whose identifier is specified in parameter
+     * Returns an instance of a category whose identifier is specified in parameter
      * 
      * @param nKey
-     *            The ticketCategory primary key
-     * @return an instance of TicketCategory
+     *            The category primary key
+     * @return an instance of Category
      */
     public static TicketCategory findByPrimaryKey( int nKey )
     {
         return _dao.load( nKey, _plugin );
     }
 
-    /**
-     * Find a category by its code
-     * 
-     * @param strCode
-     *            The code
-     * @return The category
-     */
     public static TicketCategory findByCode( String strCode )
     {
         return _dao.loadByCode( strCode, _plugin );
     }
 
     /**
-     * Find a category by its domain id
+     * Load the data of all the category objects and returns them as a list
      * 
-     * @param nDomainId
-     *            The domain id
-     * @return The category
+     * @return the list which contains the data of all the category objects
      */
-    public static List<TicketCategory> findByDomainId( int nDomainId )
+    public static List<TicketCategory> getCategorysList( )
     {
-        return _dao.loadByDomainId( nDomainId, _plugin );
+        return _dao.selectCategorysList( _plugin );
     }
 
     /**
-     * Load the data of all the ticketCategory objects and returns them in form of a collection
+     * Load the list of categories (full, with java objects filled)
      * 
-     * @return the collection which contains the data of all the ticketCategory objects
+     * @return
      */
-    public static List<TicketCategory> getTicketCategorysList( )
+    public static List<TicketCategory> getFullCategorysList( )
     {
-        return _dao.selectTicketCategorysList( _plugin );
+        return _dao.selectFullCategorysList( _plugin );
     }
 
     /**
-     * Load the id of all the ticketCategory objects and returns them in form of a collection
+     * Load the id of all the category objects and returns them as a list
      * 
-     * @return the collection which contains the id of all the ticketCategory objects
+     * @return the list which contains the id of all the category objects
      */
-    public static List<Integer> getIdTicketCategorysList( )
+    public static List<Integer> getIdCategorysList( )
     {
-        return _dao.selectIdTicketCategorysList( _plugin );
+        return _dao.selectIdCategorysList( _plugin );
     }
 
     /**
-     * returns referenceList of input domainId
+     * Load the data of all the category objects and returns them as a referenceList
      * 
-     * @param nDomainId
-     *            id of domain
-     * @return ReferenceList of domainId
+     * @return the referenceList which contains the data of all the category objects
      */
-    public static ReferenceList getReferenceListByDomain( int nDomainId )
+    public static ReferenceList getCategorysReferenceList( )
     {
-        return _dao.selectReferenceListByDomain( nDomainId, _plugin );
+        return _dao.selectCategorysReferenceList( _plugin );
     }
-
-    /**
-     * returns the position of an input for a given category
-     * 
-     * @param nId
-     *            id of category
-     * @param nIdInput
-     *            id of input
-     * @return the position as an integer
-     */
-    public static int getCategoryInputPosition( int nId, int nIdInput )
-    {
-        return _dao.selectCategoryInputPosition( nId, nIdInput, _plugin );
-    }
-
-    /**
-     * returns the iD of an input for a given category and position
-     * 
-     * @param nId
-     *            id of category
-     * @param nPos
-     *            the position
-     * @return the input id
-     */
-    public static int getCategoryInputByPosition( int nId, int nPos )
-    {
-        return _dao.selectCategoryInputByPosition( nId, nPos, _plugin );
-    }
-
-    /**
-     * returns referenceList of precision of category by a given category label for a given domain
-     * 
-     * @param nDomainId
-     *            id of domain
-     * @param labelCategory
-     *            the label category
-     * @return ReferenceList of domainId
-     */
-    public static ReferenceList getReferenceListByCategory( int nDomainId, String labelCategory )
-    {
-        return _dao.selectReferenceListByCategory( nDomainId, labelCategory, _plugin );
-    }
-
-    /**
-     * Load the id of all inputs related to the ticketCategory id and returns them as a collection
-     * 
-     * @param nCategoryId
-     *            The Category ID
-     * @param plugin
-     *            The plugin
-     * @return The collection which contains the id of all the ticketCategory objects
-     */
-    public static List<Integer> getIdInputListByCategory( int nCategoryId )
-    {
-        return _dao.selectIdInputListByCategory( nCategoryId, _plugin );
-    }
-
-    /**
-     * Check if an input is already used in a Category form
-     * 
-     * @param nIdResource
-     *            the id_resource of the input to be checked
-     * @return true if the input is linked to 1 or more Categories
-     */
-    public static boolean checkIfInputIsUsedInCategories( int nIdResource )
-    {
-        return _dao.checkIfInputIsUsedInCategories( nIdResource, _plugin );
-    }
-
-    /**
-     * Change the position of a category by switching with the next or previous one
-     *
-     * @param nId
-     *            the if of category to move
-     * @param bMoveUp
-     *            true if position is to be moved up, false if moved down
-     * @param nNewPosition
-     *            the target position of the Category
-     */
-    public static void updateCategoryOrder( int nId, boolean bMoveUp )
-    {
-
-        TicketCategory ticketCategoryToMove = _dao.load( nId, _plugin );
-        int nCurrentOrder = ticketCategoryToMove.getOrder( );
-        int nIdTicketDomain = ticketCategoryToMove.getIdTicketDomain( );
-        int nTargetOrder = bMoveUp ? ( nCurrentOrder - 1 ) : ( nCurrentOrder + 1 );
-        int nIdCategoryWhichPlaceIsTaken = _dao.selectCategoryIdByOrder( nTargetOrder, nIdTicketDomain, _plugin );
-
-        if ( nIdCategoryWhichPlaceIsTaken != -1 )
-        {
-            _dao.updateCategoryOrder( nId, nTargetOrder, _plugin );
-            _dao.updateCategoryOrder( nIdCategoryWhichPlaceIsTaken, nCurrentOrder, _plugin );
-        }
-        else
-        {
-            AppLogService.error( "Could not move Category " + nId + " to position " + nTargetOrder + " : no category to replace on position " + nCurrentOrder );
-
-        }
-
-    }
-
 }

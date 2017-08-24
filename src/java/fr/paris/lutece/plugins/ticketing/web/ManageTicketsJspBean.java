@@ -39,20 +39,19 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.address.TicketAddress;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilterViewEnum;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
-import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryIdService;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.web.search.SearchConstants;
 import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchEngine;
@@ -192,7 +191,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private String _strCurrentPageIndex;
     private int    _nItemsPerPage;
     private boolean _bSearchMode = false;
-    private List<TicketDomain> _lstTicketDomain;
+    private List<TicketCategory> _lstTicketDomain;
     private final TicketFormService  _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
     private final TicketSearchEngine _engine            = ( TicketSearchEngine ) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
     
@@ -438,14 +437,15 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         if ( filter.getIdDomain( ) != -1 )
         {
-            TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( filter.getIdDomain( ) );
+            TicketCategory ticketDomain = TicketCategoryService.getInstance( ).findById( filter.getIdDomain( ) );
             _lstTicketDomain.clear( );
-            _lstTicketDomain.addAll( TicketDomainHome.getTicketDomainsListByLabel( ticketDomain.getLabel( ) ) );
-        } else
+            _lstTicketDomain.addAll( TicketCategoryHome.getTicketDomainsListByLabel( ticketDomain.getLabel( ) ) );
+        }
+        else
         {
-            Map<Integer, TicketDomain> mapIdDomainTicketDomain = new LinkedHashMap<>( );
-            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST );
-            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL );
+            Map<Integer, TicketCategory> mapIdDomainTicketDomain = new LinkedHashMap<>( );
+            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_DETAILS );
+            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_LIST );
 
             _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
         }
@@ -716,7 +716,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
             // Check user rights on domain
-            if ( !RBACService.isAuthorized( TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) ), TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, getUser( ) ) )
+            if ( !RBACService.isAuthorized( TicketCategoryService.getInstance( ).findById( ticket.getIdTicketDomain( ) ),
+                    TicketCategory.PERMISSION_VIEW_DETAILS, getUser( ) ) )
             {
                 return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
             }
@@ -926,8 +927,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         Map<String, Object> model = getModel( );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_RESPONSE_RECAP_LIST, listResponseRecap );
-        model.put( MARK_CREATE_ASSIGN_RIGHT, RBACService.isAuthorized( TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) ), TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL,
-                getUser( ) ) );
+        model.put( MARK_CREATE_ASSIGN_RIGHT, RBACService.isAuthorized( TicketCategoryService.getInstance( ).findById( ticket.getIdTicketDomain( ) ),
+                TicketCategory.PERMISSION_VIEW_DETAILS, getUser( ) ) );
 
         return getPage( PROPERTY_PAGE_TITLE_RECAP_TICKET, TEMPLATE_RECAP_TICKET, model );
     }
@@ -960,10 +961,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             return redirectView( request, VIEW_CREATE_TICKET );
         } else
         {
-            TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) );
+            TicketCategory ticketDomain = TicketCategoryService.getInstance().findById( ticket.getIdTicketDomain( ) );
             ticket.setTicketDomain( ticketDomain.getLabel( ) );
 
-            ticket.setTicketType( TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType( ) ).getLabel( ) );
+            ticket.setTicketType( TicketCategoryService.getInstance().findById( ticket.getIdTicketType( ) ).getLabel( ) );
             ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) ).getCode( ) );
             ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle( ) ).getLabel( ) );
             ticket.setChannel( ChannelHome.findByPrimaryKey( ticket.getChannel( ).getId( ) ) );
@@ -1168,7 +1169,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * @param filter
      * @return
      */
-    private int getNbTicketsWithLucene( String strQuery, List<TicketDomain> listTicketDomain, TicketFilter filter )
+    private int getNbTicketsWithLucene( String strQuery, List<TicketCategory> listTicketDomain, TicketFilter filter )
     {
         try
         {
@@ -1187,12 +1188,20 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * @param mapIntegerTicketDomain
      * @param permission
      */
-    private void addTicketDomainToMapFromPermission( Map<Integer, TicketDomain> mapIntegerTicketDomain, String permission )
+    private void addTicketDomainToMapFromPermission( Map<Integer, TicketCategory> mapIntegerTicketDomain, String permission )
     {
-        List<TicketDomain> listDomain = TicketDomainHome.getTicketDomainsList( getUser( ), permission );
-        if ( mapIntegerTicketDomain != null && listDomain != null && !listDomain.isEmpty( ) )
+        List<TicketCategory> listDomain = TicketCategoryService.getInstance().getCategoriesTree().getRootElements();
+        List<TicketCategory> listAuthorizedDomain = new ArrayList<TicketCategory>( );
+        for ( TicketCategory domain : listDomain )
         {
-            for ( TicketDomain ticketDomain : listDomain )
+            if ( RBACService.isAuthorized( domain, permission, getUser() ) )
+            {
+                listAuthorizedDomain.add( domain );
+            }
+        }
+        if ( mapIntegerTicketDomain != null && listAuthorizedDomain != null && !listAuthorizedDomain.isEmpty( ) )
+        {
+            for ( TicketCategory ticketDomain : listAuthorizedDomain )
             {
                 mapIntegerTicketDomain.put( ticketDomain.getId( ), ticketDomain );
             }
@@ -1233,7 +1242,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         if ( !bIsFormValid )
         {
             addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED, getLocale( ) );
-            ticket.getTicketCategory( ).setPrecision( TicketingConstants.NO_ID_STRING );
         }
 
         // Check if a type/domain/category have been selected (made here to sort errors)

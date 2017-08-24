@@ -35,8 +35,8 @@ package fr.paris.lutece.plugins.ticketing.business.supportentity;
 
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -99,7 +99,7 @@ public final class SupportEntityDAO implements ISupportEntityDAO
         daoUtil.setInt( 3, supportEntity.getSupportLevel( ).getLevelValue( ) );
         daoUtil.setInt( 4, ( supportEntity.getUnit( ) != null ) ? supportEntity.getUnit( ).getUnitId( ) : ( -1 ) );
         daoUtil.setInt( 5, ( supportEntity.getUser( ) != null ) ? supportEntity.getUser( ).getAdminUserId( ) : ( -1 ) );
-        daoUtil.setInt( 6, ( supportEntity.getTicketDomain( ) != null ) ? supportEntity.getTicketDomain( ).getId( ) : ( -1 ) );
+        daoUtil.setInt( 6, ( supportEntity.getTicketCategory( )!= null ) ? supportEntity.getTicketCategory( ).getId( ) : ( -1 ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -151,7 +151,7 @@ public final class SupportEntityDAO implements ISupportEntityDAO
         daoUtil.setInt( 3, supportEntity.getSupportLevel( ).getLevelValue( ) );
         daoUtil.setInt( 4, ( supportEntity.getUnit( ) != null ) ? supportEntity.getUnit( ).getUnitId( ) : ( -1 ) );
         daoUtil.setInt( 5, ( supportEntity.getUser( ) != null ) ? supportEntity.getUser( ).getAdminUserId( ) : ( -1 ) );
-        daoUtil.setInt( 6, ( supportEntity.getTicketDomain( ) != null ) ? supportEntity.getTicketDomain( ).getId( ) : ( -1 ) );
+        daoUtil.setInt( 6, ( supportEntity.getTicketCategory( )!= null ) ? supportEntity.getTicketCategory( ).getId( ) : ( -1 ) );
         daoUtil.setInt( 7, supportEntity.getId( ) );
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -206,7 +206,7 @@ public final class SupportEntityDAO implements ISupportEntityDAO
             supportEntity.setUser( new AssigneeUser( adminUser ) );
         }
 
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( daoUtil.getInt( 6 ) );
+        TicketCategory ticketDomain = TicketCategoryHome.findByPrimaryKey( daoUtil.getInt( 6 ) );
 
         if ( ticketDomain != null )
         {

@@ -1,9 +1,9 @@
-<jsp:useBean id="manageadminticketingTicketCategory" scope="session" class="fr.paris.lutece.plugins.ticketing.web.admin.TicketCategoryJspBean" />
-<% String strContent = manageadminticketingTicketCategory.processController ( request , response ); %>
+<jsp:useBean id="manageTicketingCategory" scope="session" class="fr.paris.lutece.plugins.ticketing.web.TicketCategoryJspBean" />
+<% String strContent = manageTicketingCategory.processController ( request , response ); %>
 
-<%@ page errorPage="../../../ErrorPage.jsp" %>
-<jsp:include page="../../../AdminHeader.jsp" />
+<%@ page errorPage="../../ErrorPage.jsp" %>
+<jsp:include page="../../AdminHeader.jsp" />
 
 <%= strContent %>
 
-<%@ include file="../../../AdminFooter.jsp" %>
+<%@ include file="../../AdminFooter.jsp" %>

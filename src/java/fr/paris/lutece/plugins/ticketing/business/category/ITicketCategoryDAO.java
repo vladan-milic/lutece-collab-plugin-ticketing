@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,73 +31,47 @@
  *
  * License 1.0
  */
+
 package fr.paris.lutece.plugins.ticketing.business.category;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
-
 import java.util.List;
 
 /**
- * ITicketCategoryDAO Interface
+ * ICategoryDAO Interface
  */
 public interface ITicketCategoryDAO
 {
     /**
      * Insert a new record in the table.
      * 
-     * @param ticketCategory
-     *            instance of the TicketCategory object to insert
+     * @param category
+     *            instance of the Category object to insert
      * @param plugin
      *            the Plugin
      */
-    void insert( TicketCategory ticketCategory, Plugin plugin );
-
-    /**
-     * Insert a new record in the table linking category with input.
-     * 
-     * @param nIdCategory
-     *            id Category
-     * @param nIdInput
-     *            id Input
-     * @param nPos
-     *            input position
-     * @param plugin
-     *            the Plugin
-     */
-    void insertLinkCategoryInput( int nIdCategory, int nIdInput, int nPos, Plugin plugin );
+    void insert( TicketCategory category, Plugin plugin );
 
     /**
      * Update the record in the table
      * 
-     * @param ticketCategory
-     *            the reference of the TicketCategory
+     * @param category
+     *            the reference of the Category
      * @param plugin
      *            the Plugin
      */
-    void store( TicketCategory ticketCategory, Plugin plugin );
+    void store( TicketCategory category, Plugin plugin );
 
     /**
      * Delete a record from the table
      * 
      * @param nKey
-     *            The identifier of the TicketCategory to delete
+     *            The identifier of the Category to delete
      * @param plugin
      *            the Plugin
      */
     void delete( int nKey, Plugin plugin );
-
-    /**
-     * Delete a record in the table linking category with input.
-     * 
-     * @param nIdCategory
-     *            id Category
-     * @param nIdInput
-     *            id Input
-     * @param plugin
-     *            the Plugin
-     */
-    void deleteLinkCategoryInput( int nIdCategory, int nIdInput, Plugin plugin );
 
     // /////////////////////////////////////////////////////////////////////////
     // Finders
@@ -106,187 +80,55 @@ public interface ITicketCategoryDAO
      * Load the data from the table
      * 
      * @param nKey
-     *            The identifier of the ticketCategory
+     *            The identifier of the category
      * @param plugin
      *            the Plugin
-     * @return The instance of the ticketCategory
+     * @return The instance of the category
      */
     TicketCategory load( int nKey, Plugin plugin );
 
     /**
-     * Load the data from the table
+     * Load the category for given code
      * 
      * @param strCode
-     *            The code of the category
      * @param plugin
-     *            the Plugin
-     * @return The instance of the ticketCategory
+     * @return the category
      */
     TicketCategory loadByCode( String strCode, Plugin plugin );
 
     /**
-     * Load the data from the table
-     * 
-     * @param nDomainId
-     *            The domain id of the category
-     * @param plugin
-     *            the Plugin
-     * @return The instance of the ticketCategory
-     */
-    List<TicketCategory> loadByDomainId( int nDomainId, Plugin plugin );
-
-    /**
-     * Load the data of all the ticketCategory objects and returns them as a collection
+     * Load the data of all the category objects and returns them as a list
      * 
      * @param plugin
      *            the Plugin
-     * @return The collection which contains the data of all the ticketCategory objects
+     * @return The list which contains the data of all the category objects
      */
-    List<TicketCategory> selectTicketCategorysList( Plugin plugin );
+    List<TicketCategory> selectCategorysList( Plugin plugin );
 
     /**
-     * Load the id of all the ticketCategory objects and returns them as a collection
+     * Load the list of categories (full with java objects filled)
+     * 
+     * @param plugin
+     * @return the full categories list
+     */
+    List<TicketCategory> selectFullCategorysList( Plugin plugin );
+
+    /**
+     * Load the id of all the category objects and returns them as a list
      * 
      * @param plugin
      *            the Plugin
-     * @return The collection which contains the id of all the ticketCategory objects
+     * @return The list which contains the id of all the category objects
      */
-    List<Integer> selectIdTicketCategorysList( Plugin plugin );
+    List<Integer> selectIdCategorysList( Plugin plugin );
 
     /**
-     * Create a reference list of categories for a given domain
+     * Load the data of all the category objects and returns them as a referenceList
      * 
-     * @param nDomainId
-     *            The domain ID
-     * @param plugin
-     *            The plugin
-     * @return The reference list
-     */
-    ReferenceList selectReferenceListByDomain( int nDomainId, Plugin plugin );
-
-    /**
-     * Insert a new record in the table linking category with input Using the next available value for pos
-     * 
-     * @param nIdCategory
-     *            id Category
-     * @param nIdInput
-     *            id Input
      * @param plugin
      *            the Plugin
+     * @return The referenceList which contains the data of all the category objects
      */
-    void insertLinkCategoryInputNextPos( int nIdCategory, int nIdInput, Plugin plugin );
-
-    /**
-     * Update pos field in the table linking category with input
-     * 
-     * @param nIdCategory
-     *            id Category
-     * @param nIdInput
-     *            id Input
-     * @param nPos
-     *            the position to update
-     * @param plugin
-     *            the Plugin
-     */
-    void updateLinkCategoryInputPos( int nIdCategory, int nIdInput, int nPos, Plugin plugin );
-
-    /**
-     * returns the position of an input for a given category
-     * 
-     * @param nId
-     *            id of category
-     * @param nIdInput
-     *            id of input
-     * @return the position as an integer
-     */
-    int selectCategoryInputPosition( int nId, int nIdInput, Plugin _plugin );
-
-    /**
-     * returns the iD of an input for a given category and position
-     * 
-     * @param nId
-     *            id of category
-     * @param nIdInput
-     *            the position
-     * @return the input id
-     */
-    int selectCategoryInputByPosition( int nId, int nPos, Plugin plugin );
-
-    /**
-     * Create a reference list of categories for a given domain for a given category name
-     * 
-     * @param nDomainId
-     *            The domain ID
-     * @param labelCategory
-     *            The label category
-     * @param plugin
-     *            The plugin
-     * @return The reference list
-     */
-    ReferenceList selectReferenceListByCategory( int nDomainId, String labelCategory, Plugin _plugin );
-
-    /**
-     * Load the id of all inputs related to the ticketCategory id and returns them as a collection
-     * 
-     * @param nCategoryId
-     *            The Category ID
-     * @param plugin
-     *            The plugin
-     * @return The collection which contains the id of all the ticketCategory objects
-     */
-    List<Integer> selectIdInputListByCategory( int nCategoryId, Plugin _plugin );
-
-    /**
-     * Check if an input is already used in a Category form
-     * 
-     * @param nIdResource
-     *            the id_resource of the input to be checked
-     * @return true if the input is linked to 1 or more Categories
-     */
-    boolean checkIfInputIsUsedInCategories( int nIdResource, Plugin _plugin );
-
-    /**
-     * Update order of a Category
-     * 
-     * @param nIdCategory
-     *            id Category to move
-     * @param nNewPosition
-     *            the order value to update
-     * @param plugin
-     *            the Plugin
-     */
-    void updateCategoryOrder( int nIdCategory, int nNewPosition, Plugin _plugin );
-
-    /**
-     * returns the Id of a Category for a given position and Domain
-     * 
-     * @param nOrder
-     *            Position of the input
-     * @param nDomainId
-     *            Identifier of the domain
-     * @return the id of Category as an integer
-     */
-    int selectCategoryIdByOrder( int nOrder, int nDomainId, Plugin _plugin );
-
-    /**
-     * Rebuild the order sequence of active categories within a TicketDomain, by substracting 1 to all orders larger than a given value
-     * 
-     * @param nfromId
-     *            the order to rebuild sequence from
-     * 
-     * @param nDomainId
-     *            Identifier of the domain
-     */
-    void rebuildCategoryOrders( int nfromOrder, int nDomainId, Plugin _plugin );
-
-    /**
-     * Update the record in the table. The category_order value will be replaced by the next available value for the TicketDomain
-     * 
-     * @param ticketCategory
-     *            the reference of the TicketCategory
-     * @param plugin
-     *            the Plugin
-     */
-    void storeWithLastOrder( TicketCategory ticketCategory, Plugin _plugin );
+    ReferenceList selectCategorysReferenceList( Plugin plugin );
 
 }

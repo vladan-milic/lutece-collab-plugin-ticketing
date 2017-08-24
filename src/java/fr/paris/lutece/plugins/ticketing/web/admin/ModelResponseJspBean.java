@@ -33,13 +33,10 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
-import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -428,7 +425,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         Map<String, String> mapDomains = new LinkedHashMap<String, String>( );
 
-        for ( ReferenceItem refType : TicketTypeHome.getReferenceList( ) )
+        for ( ReferenceItem refType : ReferenceList.convert( TicketCategoryService., _strSortedAttributeName, _strSortedAttributeName, true)TicketTypeHome.getReferenceList( ) )
         {
             TicketDomain domain = new TicketDomain( );
 

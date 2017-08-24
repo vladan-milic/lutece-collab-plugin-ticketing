@@ -194,8 +194,8 @@ public class Ticket implements Serializable, RBACResource
             if ( category != null )
             {
                 setTicketCategory( category );
-                setIdTicketDomain( category.getIdTicketDomain( ) );
-                setIdTicketType( category.getIdTicketType( ) );
+                setIdTicketDomain( category.getBranch().get( 0 ).getId( ) );
+                setIdTicketType( category.getBranch().get( 1 ).getId( ) );
             }
         }
 

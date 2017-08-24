@@ -1,0 +1,86 @@
+<#include "manageticketing_tabs.html" />
+<@tabs2 tab="category" />
+
+<@box>
+    <@boxHeader title='#i18n{ticketing.manage_categories.title}' boxTools=true>
+            <@tform class='form-inline pull-right' name='manage_category_types' action='jsp/admin/plugins/ticketing/ManageCategoryTypes.jsp'>
+                    <@button type='submit' name='view_createCategoryType' buttonIcon='plus' title='#i18n{ticketing.manage_categorytype.buttonAdd}' />
+            </@tform>
+    </@boxHeader>
+    <@boxBody>    
+    <@messages infos=infos />
+    <div class="clearfix"></div>
+    <@table class="table-bordered table-hover">
+        <tr>
+            <#list tree.depths as category_type>
+                <th class="text-center">
+                    <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/ManageCategoryTypes.jsp'>
+                        <input type="hidden" id="id_category_type" name="id_category_type" value="${category_type.id}"/>
+                        <span class="h4"><strong>${category_type.label}</strong></span>
+                        <@button type='submit' class="pull-right" name='view_modifyCategoryType' buttonIcon='pencil'/>
+                    </@tform>
+                </th>
+            </#list>
+        </tr>
+        <@tableHeadBodySeparator />
+        <#list tree.rootElements as root >
+            <tr>
+                <@printNodeRecursive root/>
+            </tr>
+        
+        </#list>
+        <#if tree.depths?size gt 0 > 
+            <tr>
+                <td class="text-center" style="vertical-align:middle;" >
+                    <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/ManageCategorys.jsp'>
+                        <input type="hidden" id="id_category_type" name="id_category_type" value="${tree.depths[0].id}"/>
+                        <@button type='submit' name='view_createCategory' buttonIcon='plus' title='#i18n{ticketing.manage_categories.buttonAdd} ${tree.depths[0].label}' />
+                    </@tform>
+                </td>
+            </tr>
+        </#if>
+    </@table>
+  </@boxBody>
+</@box>
+
+
+<#macro printNodeRecursive category>
+        <#if !(category.parent)??>
+            <@printNode category/>
+        </#if>
+        <#if category.children?? && category.children?size gt 0>
+            <#list 0..category.children?size-1 as i>
+               <#if i gt 0 >
+                    <tr>
+                </#if>
+                  <@printNode category.children[i]/>
+               
+                <#if category.children[i].leaf == false>
+                    <@printNodeRecursive category.children[i]/>
+                    
+                <#else>
+                    </tr>
+                </#if>
+            </#list>
+        </#if>
+
+</#macro>
+                    
+<#macro printNode node>
+    <td class="text-center" style="vertical-align:middle;"  <#if node.children?? && node.children?size gt 0> rowspan="${node.leaves?size!'1'}"</#if>>
+           <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/ManageCategorys.jsp'>
+               <input type="hidden" id="id_parent_category" name="id_parent_category" value="${node.id}"/>
+               <input type="hidden" id="id_category" name="id_category" value="${node.id}"/>
+               <span><strong>${node.label}</strong></span> 
+               <@button class="pull-right" type='submit' name='view_createCategory' buttonIcon='plus' />
+               <@button type='submit' class="pull-right" name='view_modifyCategory' buttonIcon='pencil'/>
+               <@button type='submit' class="pull-right" color='btn-danger' name='action_confirmRemoveCategory' buttonIcon='trash'/>
+               </br>
+               <span>${node.code}</span>
+               </br>
+               <#if node.defaultAssignUnit?? && node.defaultAssignUnit.idUnit gte 0 >
+                <span class="pull-right"><i class="fa fa-lg fa-user-circle" aria-hidden="true"></i>${(node.defaultAssignUnit.label)!''}</span>
+               </#if >
+            </@tform>
+    </td>       
+</#macro>

@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.search;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import java.util.List;
 
 import org.apache.lucene.queryparser.classic.ParseException;
 
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 
@@ -56,30 +56,30 @@ public interface ITicketSearchEngine
      * 
      * @param strQuery
      *            query to search
-     * @param listTicketDomain
-     *            list domains authorized for admin user
+     * @param listTicketCategory
+     *            list categories authorized for admin user
      * @param filter
      *            the ticketfilter
      * @return Results as a collection of Ticket
      * @throws ParseException
      *             exception occurs while parsing input query
      */
-    List<Ticket> searchTickets( String strQuery, List<TicketDomain> listTicketDomain, TicketFilter filter ) throws ParseException;
+    List<Ticket> searchTickets( String strQuery, List<TicketCategory> listTicketCategory, TicketFilter filter ) throws ParseException;
 
     /**
      * search the count of tickets which contains strQuery in lucene contents field
      * 
      * @param strQuery
      *            query to search
-     * @param listTicketDomain
-     *            list domains authorized for admin user
+     * @param listTicketCategory
+     *            list categories authorized for admin user
      * @param filter
      *            the ticketfilter
      * @return Results as a collection of Ticket
      * @throws ParseException
      *             exception occurs while parsing input query
      */
-    int searchCountTickets( String strQuery, List<TicketDomain> listTicketDomain, TicketFilter filter ) throws ParseException;
+    int searchCountTickets( String strQuery, List<TicketCategory> listTicketCategory, TicketFilter filter ) throws ParseException;
 
     /**
      * search the tickets which contains id from the provided listIdsTickets in lucene contents fields

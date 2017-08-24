@@ -47,8 +47,6 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServ
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerException;
@@ -56,9 +54,9 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketCriticality;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketPriority;
-import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.service.reference.ITicketReferenceService;
 import fr.paris.lutece.plugins.ticketing.web.filter.SessionFilter;
 import fr.paris.lutece.plugins.ticketing.web.user.UserFactory;
@@ -167,11 +165,11 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
                     AdminMessageService.getMessageUrl( request, TicketingConstants.MESSAGE_ERROR_TICKET_NOT_EXISTS, strRedirectUrl, AdminMessage.TYPE_STOP ) );
         }
 
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) );
+        TicketCategory ticketDomain = TicketCategoryService.getInstance( ).findById( ticket.getIdTicketDomain( ) );
 
         // check user rights
         if ( !RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, getUser( ) )
-                || !RBACService.isAuthorized( ticketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, getUser( ) ) )
+                || !RBACService.isAuthorized( ticketDomain, TicketCategory.PERMISSION_VIEW_DETAILS, getUser( ) ) )
         {
             return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
         }
@@ -233,16 +231,15 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         // Validate if precision has been selected if the selected category has precisions
         if ( ticket.getTicketCategory( ).getId( ) != TicketingConstants.PROPERTY_UNSET_INT )
         {
-            List<TicketCategory> listTicketCategory = TicketCategoryHome.findByDomainId( ticket.getIdTicketDomain( ) );
+            List<TicketCategory> listTicketCategory = TicketCategoryService.getInstance().findById( ticket.getIdTicketDomain() ).getChildren( );
             for ( TicketCategory ticketCategoryByDomain : listTicketCategory )
             {
                 if ( ticketCategoryByDomain.getLabel( ).equals( ticket.getTicketCategory( ).getLabel( ) )
-                        && StringUtils.isNotBlank( ticketCategoryByDomain.getPrecision( ) )
+                        && StringUtils.isNotBlank( TicketCategoryService.getPrecision( ticketCategoryByDomain ).getLabel( ) )
                         && ( StringUtils.isNotBlank( request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) ) && request.getParameter(
                                 TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING ) ) )
                 {
                     addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED, getLocale( ) );
-                    ticket.getTicketCategory( ).setPrecision( TicketingConstants.NO_ID_STRING );
                     break;
                 }
             }

@@ -35,7 +35,7 @@ package fr.paris.lutece.plugins.ticketing.business.supportentity;
 
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -56,7 +56,7 @@ public class SupportEntity implements RBACResource
     private AssigneeUser _user;
     @NotNull( message = "#i18n{ticketing.validation.supportentity.unit.notNull}" )
     private AssigneeUnit _unit;
-    private TicketDomain _ticketDomain;
+    private TicketCategory _ticketCategory;
     @NotEmpty( message = "#i18n{ticketing.validation.supportentity.name.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.supportentity.name.size}" )
     private String _strName;
@@ -120,18 +120,18 @@ public class SupportEntity implements RBACResource
     /**
      * @return the ticketDomain
      */
-    public TicketDomain getTicketDomain( )
+    public TicketCategory getTicketCategory( )
     {
-        return _ticketDomain;
+        return _ticketCategory;
     }
 
     /**
      * @param ticketDomain
      *            the _ticketDomain to set
      */
-    public void setTicketDomain( TicketDomain ticketDomain )
+    public void setTicketDomain( TicketCategory ticketDomain )
     {
-        this._ticketDomain = ticketDomain;
+        _ticketCategory = ticketDomain;
     }
 
     /**

@@ -38,8 +38,6 @@ import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
@@ -70,7 +68,7 @@ public final class TicketDAO implements ITicketDAO
     // SQL Queries
     private static final String SQL_SELECT_WITH_JOIN_DATA_TICKET = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, "
             + " a.fixed_phone_number, a.mobile_phone_number, a.id_marking, c.id_ticket_type, c.label, d.id_ticket_domain, "
-            + " d.label, a.id_ticket_category, e.label, e.category_precision, e.id_workflow, a.id_contact_mode, f.code, a.ticket_comment, "
+            + " d.label, a.id_ticket_category, e.label, e.id_workflow, a.id_contact_mode, f.code, a.ticket_comment, "
             + " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, g.first_name, g.last_name, a.id_unit, h.label, a.id_assigner_user, a.id_assigner_unit, h2.label, a.user_message, a.url, a.id_channel, x.label, x.icon_font, a.nomenclature, "
             + " ad.address, ad.address_detail, ad.postal_code, ad.city"
             + " FROM ticketing_ticket a"
@@ -143,8 +141,8 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_FILTER_RBAC_TICKET_JOIN_CLAUSE = " JOIN core_admin_role_resource k ON k.resource_type = '" + Ticket.TICKET_RESOURCE_TYPE
             + "' " + " AND (k.permission = '" + TicketResourceIdService.PERMISSION_VIEW + "' OR k.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY + "' )"
             + " AND (k.resource_id = '" + RBAC.WILDCARD_RESOURCES_ID + "' OR k.resource_id = a.id_ticket ) AND k.role_key IN ( ";
-    private static final String SQL_FILTER_RBAC_DOMAIN_JOIN_CLAUSE = " JOIN core_admin_role_resource l ON l.resource_type = '" + TicketDomain.RESOURCE_TYPE
-            + "' " + " AND (l.permission = '" + TicketDomainResourceIdService.PERMISSION_VIEW_LIST + "' OR l.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY
+    private static final String SQL_FILTER_RBAC_DOMAIN_JOIN_CLAUSE = " JOIN core_admin_role_resource l ON l.resource_type = '" + TicketCategory.RESOURCE_TYPE
+            + "' " + " AND (l.permission = '" + TicketCategory.PERMISSION_VIEW_LIST + "' OR l.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY
             + "' )" + " AND (l.resource_id = '" + RBAC.WILDCARD_RESOURCES_ID + "' OR l.resource_id = d.id_ticket_domain ) AND l.role_key IN ( ";
 
     private static final String SQL_SELECT_ALL_WORKFLOW_JOIN_CLAUSE = " LEFT JOIN  workflow_resource_workflow i ON i.id_resource=a.id_ticket"
@@ -687,7 +685,6 @@ public final class TicketDAO implements ITicketDAO
         TicketCategory ticketCategory = new TicketCategory( );
         ticketCategory.setId( daoUtil.getInt( nIndex++ ) );
         ticketCategory.setLabel( daoUtil.getString( nIndex++ ) );
-        ticketCategory.setPrecision( daoUtil.getString( nIndex++ ) );
         ticketCategory.setIdWorkflow( daoUtil.getInt( nIndex++ ) );
         ticket.setTicketCategory( ticketCategory );
 

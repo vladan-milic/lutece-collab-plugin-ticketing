@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,48 +33,73 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.category;
 
-import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
-
-import org.hibernate.validator.constraints.NotEmpty;
-
+import fr.paris.lutece.plugins.ticketing.service.tree.AbstractNode;
+import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+import fr.paris.lutece.portal.service.rbac.RBACResource;
+import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.*;
 import java.io.Serializable;
-
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 /**
- * This is the business class for the object TicketCategory
+ * This is the business class for the object Category
  */
-public class TicketCategory implements Serializable
+public class TicketCategory extends AbstractNode implements Serializable, RBACResource
 {
     private static final long serialVersionUID = 1L;
 
+    // RBAC management
+    public static final String RESOURCE_TYPE = "CATEGORY_DEMAND";
+    public static final String PROPERTY_LABEL_RESOURCE_TYPE = "ticketing.category.ressourceType.label";
+
+    // Perimissions
+    public static final String PERMISSION_VIEW_LIST = "VIEW_DEMAND_LIST";
+    public static final String PROPERTY_LABEL_PERMISSION_VIEW = "ticketing.category.permission.view.label";
+
+    public static final String PERMISSION_VIEW_DETAILS = "VIEW_DEMAND_DETAILS";
+    public static final String PROPERTY_LABEL_PERMISSION_VIEW_DETAILS = "ticketing.category.permission.viewDetails.label";
+
     // Variables declarations
     private int _nId;
-    private int _nIdTicketDomain;
-    private int _nIdTicketType;
-    private String _strTicketDomain;
-    private String _strTicketType;
-    private List<Integer> _listIdInput;
-    @NotEmpty( message = "#i18n{ticketing.validation.ticketcategory.label.notEmpty}" )
-    @Size( max = 50, message = "#i18n{ticketing.validation.ticketcategory.label.size}" )
+
+    private int _nIdParent;
+
+    private TicketCategoryType _categoryType;
+
+    @NotEmpty( message = "#i18n{ticketing.validation.category.Label.notEmpty}" )
+    @Size( max = 255, message = "#i18n{ticketing.validation.category.Label.size}" )
     private String _strLabel;
-    private String _strCode;
-    private int _nIdWorkflow;
-    @NotNull( message = "#i18n{ticketing.validation.ticketcategory.unit.notEmpty}" )
-    private transient AssigneeUnit _unit;
-    @Size( max = 150, message = "#i18n{ticketing.validation.ticketcategory.precision.size}" )
-    private String _strPrecision;
-    private String _strHelpMessage;
+
     private int _nOrder;
+
+    private int _nIdWorkflow;
+
+    @NotEmpty( message = "#i18n{ticketing.validation.category.Code.notEmpty}" )
+    @Size( max = 255, message = "#i18n{ticketing.validation.category.Code.size}" )
+    private String _strCode;
+
+    private Unit _defaultAssignUnit;
+
+    /**
+     * Constructor for Catagory
+     */
+    public TicketCategory( )
+    {
+        _nIdParent = -1;
+        _categoryType = new TicketCategoryType( );
+        _categoryType.setId( -1 );
+        _defaultAssignUnit = new Unit( );
+        _defaultAssignUnit.setIdUnit( -1 );
+        _nIdWorkflow = 1;
+
+    }
 
     /**
      * Returns the Id
-     *
+     * 
      * @return The Id
      */
+    @Override
     public int getId( )
     {
         return _nId;
@@ -82,7 +107,7 @@ public class TicketCategory implements Serializable
 
     /**
      * Sets the Id
-     *
+     * 
      * @param nId
      *            The Id
      */
@@ -92,92 +117,31 @@ public class TicketCategory implements Serializable
     }
 
     /**
-     * Returns the IdTicketDomain
-     *
-     * @return The IdTicketDomain
+     * Returns the IdParent
+     * 
+     * @return The IdParent
      */
-    public int getIdTicketDomain( )
+    @Override
+    public int getIdParent( )
     {
-        return _nIdTicketDomain;
+        return _nIdParent;
     }
 
     /**
-     * Sets the IdTicketDomain
-     *
-     * @param nIdTicketDomain
-     *            The IdTicketDomain
+     * Sets the IdParent
+     * 
+     * @param nIdParent
+     *            The IdParent
      */
-    public void setIdTicketDomain( int nIdTicketDomain )
-    {
-        _nIdTicketDomain = nIdTicketDomain;
-    }
 
-    /**
-     * Returns the IdTicketType
-     *
-     * @return The IdTicketType
-     */
-    public int getIdTicketType( )
+    public void setIdParent( int nIdParent )
     {
-        return _nIdTicketType;
-    }
-
-    /**
-     * Sets the IdTicketType
-     *
-     * @param nIdTicketType
-     *            The IdTicketType
-     */
-    public void setIdTicketType( int nIdTicketType )
-    {
-        _nIdTicketType = nIdTicketType;
-    }
-
-    /**
-     * Returns the TicketDomain
-     *
-     * @return The TicketDomain
-     */
-    public String getTicketDomain( )
-    {
-        return _strTicketDomain;
-    }
-
-    /**
-     * Sets the TicketDomain
-     *
-     * @param strTicketDomain
-     *            The TicketDomain
-     */
-    public void setTicketDomain( String strTicketDomain )
-    {
-        _strTicketDomain = strTicketDomain;
-    }
-
-    /**
-     * Returns the TicketType
-     *
-     * @return The TicketType
-     */
-    public String getTicketType( )
-    {
-        return _strTicketType;
-    }
-
-    /**
-     * Sets the TicketType
-     *
-     * @param strTicketType
-     *            The TicketType
-     */
-    public void setTicketType( String strTicketType )
-    {
-        _strTicketType = strTicketType;
+        _nIdParent = nIdParent;
     }
 
     /**
      * Returns the Label
-     *
+     * 
      * @return The Label
      */
     public String getLabel( )
@@ -187,7 +151,7 @@ public class TicketCategory implements Serializable
 
     /**
      * Sets the Label
-     *
+     * 
      * @param strLabel
      *            The Label
      */
@@ -197,46 +161,29 @@ public class TicketCategory implements Serializable
     }
 
     /**
-     * Get the id of the workflow associated with this ticket category
-     *
-     * @return The id of the workflow
+     * Returns the Order
+     * 
+     * @return The Order
      */
-    public int getIdWorkflow( )
+    public int getOrder( )
     {
-        return _nIdWorkflow;
+        return _nOrder;
     }
 
     /**
-     * Set the id of the workflow associated with this ticket category
-     *
-     * @param nIdWorkflow
-     *            The id of the workflow
+     * Sets the Order
+     * 
+     * @param nOrder
+     *            The Order
      */
-    public void setIdWorkflow( int nIdWorkflow )
+    public void setOrder( int nOrder )
     {
-        _nIdWorkflow = nIdWorkflow;
-    }
-
-    /**
-     * @return the _listIdInput
-     */
-    public List<Integer> getListIdInput( )
-    {
-        return _listIdInput;
-    }
-
-    /**
-     * @param listIdInput
-     *            the listIdInput to set
-     */
-    public void setListIdInput( List<Integer> listIdInput )
-    {
-        this._listIdInput = listIdInput;
+        _nOrder = nOrder;
     }
 
     /**
      * Returns the Code
-     *
+     * 
      * @return The Code
      */
     public String getCode( )
@@ -246,7 +193,7 @@ public class TicketCategory implements Serializable
 
     /**
      * Sets the Code
-     *
+     * 
      * @param strCode
      *            The Code
      */
@@ -256,78 +203,121 @@ public class TicketCategory implements Serializable
     }
 
     /**
-     * Returns the AssigneeUnit
-     *
-     * @return The AssigneeUnit
-     */
-    public AssigneeUnit getAssigneeUnit( )
-    {
-        return _unit;
-    }
-
-    /**
-     * Sets the assigneeUnit
-     *
-     * @param assigneeUnit
-     *            The assigneeUnit
-     */
-    public void setAssigneeUnit( AssigneeUnit assigneeUnit )
-    {
-        _unit = assigneeUnit;
-    }
-
-    /**
-     * @return the precision
-     */
-    public String getPrecision( )
-    {
-        return _strPrecision;
-    }
-
-    /**
-     * @param strPrecision
-     *            the precision to set
-     */
-    public void setPrecision( String strPrecision )
-    {
-        _strPrecision = strPrecision;
-    }
-
-    /**
-     * @return the _strHelpMessage
-     */
-    public String getHelpMessage( )
-    {
-        return _strHelpMessage;
-    }
-
-    /**
-     * @param _strHelpMessage
-     *            the _strHelpMessage to set
-     */
-    public void setHelpMessage( String _strHelpMessage )
-    {
-        this._strHelpMessage = _strHelpMessage;
-    }
-
-    /**
-     * Returns the category order
+     * Get the default assign unit
      * 
-     * @return the category_order
+     * @return the default assign unit
      */
-    public int getOrder( )
+    public Unit getDefaultAssignUnit( )
     {
-        return _nOrder;
-
+        return _defaultAssignUnit;
     }
 
     /**
-     * @param _nOrder
-     *            the category to set
+     * Set the default assign unit
+     * 
+     * @param defaultAssignUnit
      */
-    public void setOrder( int _nOrder )
+    public void setDefaultAssignUnit( Unit defaultAssignUnit )
     {
-        this._nOrder = _nOrder;
+        _defaultAssignUnit = defaultAssignUnit;
+    }
 
+    /**
+     * Get the category type
+     * 
+     * @return the category Type
+     */
+    public TicketCategoryType getCategoryType( )
+    {
+        return _categoryType;
+    }
+
+    /**
+     * Set the category type
+     * 
+     * @param categoryType
+     *            the category Type
+     */
+    public void setCategoryType( TicketCategoryType categoryType )
+    {
+        _categoryType = categoryType;
+    }
+
+    /**
+     * Get the id of the workflow related to the category
+     * 
+     * @return the id workflow
+     */
+    public int getIdWorkflow( )
+    {
+        return _nIdWorkflow;
+    }
+
+    /**
+     * Set the id of the workflow related to the category
+     * 
+     * @param nIdWorkflow
+     *            the workflow id
+     */
+    public void setIdWorkflow( int nIdWorkflow )
+    {
+        _nIdWorkflow = nIdWorkflow;
+    }  
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public TicketCategory getParent( )
+    {
+        return (TicketCategory) super.getParent( );
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<TicketCategory> getChildren( )
+    {
+        List<TicketCategory> listCategories = (List<TicketCategory>) (List<?>) _childrenNodes;
+        return listCategories;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<TicketCategory> getLeaves( )
+    {
+        List<TicketCategory> listCategories = (List<TicketCategory>) (List<?>) _leaves;
+        return listCategories;
+    }
+    
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<TicketCategory> getBranch( )
+    {
+        List<TicketCategory> listCategories = (List<TicketCategory>) (List<?>) super.getBranch( );
+        return listCategories;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public String getResourceTypeCode( )
+    {
+        return RESOURCE_TYPE;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public String getResourceId( )
+    {
+        return Integer.toString( _nId );
     }
 }
