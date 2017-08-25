@@ -49,6 +49,7 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.ResponseRecap;
+import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.service.content.XPageAppService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
@@ -298,8 +299,17 @@ public class TicketFormService implements Serializable
             {
                 for ( Response response : listResponse )
                 {
-                    FileItem fileItem = new GenAttFileItem( response.getFile( ).getPhysicalFile( ).getValue( ), response.getFile( ).getTitle( ) );
-                    uploadHandler.addFileItemToUploadedFilesList( fileItem, entryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry( ), request );
+                    // if the entry is mandatory, then a response is present in the list
+                    // see fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeFile#getResponseData( Entry, HttpServletRequest,
+                    // List<Response>, Locale )
+                    // thus if the entry is mandatory and no file is provided, a response exists but not the file
+                    File file = response.getFile( );
+
+                    if ( file != null )
+                    {
+                        FileItem fileItem = new GenAttFileItem( file.getPhysicalFile( ).getValue( ), file.getTitle( ) );
+                        uploadHandler.addFileItemToUploadedFilesList( fileItem, IEntryTypeService.PREFIX_ATTRIBUTE + entry.getIdEntry( ), request );
+                    }
                 }
             }
             model.put( MARK_UPLOAD_HANDLER, uploadHandler );
