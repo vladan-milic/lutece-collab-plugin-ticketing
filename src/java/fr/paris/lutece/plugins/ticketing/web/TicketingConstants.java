@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2016, Mairie de Paris
+ * Copyright (c) 2002-2017, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,6 @@ public final class TicketingConstants
 
     // Parameters
     public static final String PARAMETER_ID_TICKET = "id";
-    public static final String PARAMETER_GRU_CUSTOMER_ID = "id_customer";
     public static final String PARAMETER_CUSTOMER_ID = "cid";
     public static final String PARAMETER_GUID = "guid";
     public static final String PARAMETER_WORKFLOW_ID_ACTION = "id_action";
@@ -85,7 +84,6 @@ public final class TicketingConstants
     public static final String MARK_TICKET = "ticket";
     public static final String MARK_TICKET_REFERENCE = "reference";
     public static final String MARK_ID_TICKET = PARAMETER_ID_TICKET;
-    public static final String MARK_POCGRU_URL_360 = "url_poc_gru";
     public static final String MARK_LIST_READ_ONLY_HTML_RESPONSES = "read_only_reponses_html_list";
     public static final String MARK_WEBAPP_URL = "webapp_url";
     public static final String MARK_LOCALE = "locale";
@@ -114,7 +112,6 @@ public final class TicketingConstants
     public static final String MARK_TICKET_COMMENT = "ticket_processed_comment";
 
     // Properties
-    public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
     public static final String PROPERTY_REDIRECT_PREFIX = "ticketing.workflow.redirect.";
     public static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.ticket.attribute.";
     public static final String PROPERTIES_APPLICATION_CODE = "ticketing.application.code";
