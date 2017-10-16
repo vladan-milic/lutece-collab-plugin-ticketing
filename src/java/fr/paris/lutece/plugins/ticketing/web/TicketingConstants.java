@@ -60,7 +60,6 @@ public final class TicketingConstants
     public static final String PARAMETER_TIMESTAMP = "timestamp";
     public static final String PARAMETER_FILTER_URGENCY = "fltr_new_urgency";
     public static final String PARAMETER_FILTER_TYPE_ID = "fltr_id_type";
-    public static final String PARAMETER_FILTER_OPEN_SINCE = "fltr_open_since";
     public static final String PARAMETER_FILTER_STATE_ID = "fltr_state_ids";
     public static final String PARAMETER_TICKET_TYPE_ID = "id_ticket_type";
     public static final String PARAMETER_TICKET_DOMAIN_ID = "id_ticket_domain";

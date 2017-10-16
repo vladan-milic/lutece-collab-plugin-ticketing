@@ -54,22 +54,12 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
-
 import org.apache.commons.lang.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 /**
  * Helper class used to manage TicketFilter
@@ -82,6 +72,7 @@ public final class TicketFilterHelper
     // parameters
     private static final String PARAMETER_FILTER_ID_TICKET = "fltr_id_ticket";
     private static final String PARAMETER_FILTER_OPEN_SINCE = "fltr_open_since";
+    private static final String PARAMETER_FILTER_OPEN_UNTIL = "fltr_open_until";
     private static final String PARAMETER_FILTER_LASTUPDATE_DATE = "fltr_lastupdate";
     private static final String PARAMETER_FILTER_START_LASTUPDATE_DATE = "fltr_start_lastupdate";
     private static final String PARAMETER_FILTER_END_LASTUPDATE_DATE = "fltr_end_lastupdate";
@@ -137,9 +128,10 @@ public final class TicketFilterHelper
      * @throws ParseException
      *             if date is not well formated
      */
-    private static TicketFilter getFilterFromRequest( HttpServletRequest request )
+    private static TicketFilter getFilterFromRequest( HttpServletRequest request ) throws ParseException
     {
         TicketFilter fltrFiltre = new TicketFilter( );
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "dd/MM/yyyy" );
 
         if ( ( request.getParameterValues( PARAMETER_FILTER_WORKFLOW_STATE_IDS ) != null )
                 && ( request.getParameterValues( PARAMETER_FILTER_WORKFLOW_STATE_IDS ).length > 0 ) )
@@ -264,37 +256,16 @@ public final class TicketFilterHelper
             fltrFiltre.setReference( request.getParameter( PARAMETER_FILTER_REFERENCE ) );
         }
 
-        if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_OPEN_SINCE ) )
-                && StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_OPEN_SINCE ) )
-                && ( Integer.parseInt( request.getParameter( PARAMETER_FILTER_OPEN_SINCE ) ) != TicketFilterPeriod.NONE.getId( ) ) )
+        if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_OPEN_SINCE ) ) )
         {
-            Date date = new Date( );
-            Calendar cal = Calendar.getInstance( );
-            cal.setTime( date );
+            Date dateStart = simpleDateFormat.parse( request.getParameter( PARAMETER_FILTER_OPEN_SINCE ) );
+            fltrFiltre.setCreationStartDate( dateStart );
+        }
 
-            int nPeriodId = Integer.parseInt( request.getParameter( PARAMETER_FILTER_OPEN_SINCE ) );
-            fltrFiltre.setOpenSincePeriod( nPeriodId );
-
-            if ( nPeriodId == TicketFilterPeriod.DAY.getId( ) )
-            {
-                cal.add( Calendar.DAY_OF_MONTH, -1 );
-                date = cal.getTime( );
-                fltrFiltre.setCreationStartDate( date );
-            }
-            else
-                if ( nPeriodId == TicketFilterPeriod.WEEK.getId( ) )
-                {
-                    cal.add( Calendar.DAY_OF_MONTH, -7 );
-                    date = cal.getTime( );
-                    fltrFiltre.setCreationStartDate( date );
-                }
-                else
-                    if ( nPeriodId == TicketFilterPeriod.MONTH.getId( ) )
-                    {
-                        cal.add( Calendar.MONTH, -1 );
-                        date = cal.getTime( );
-                        fltrFiltre.setCreationStartDate( date );
-                    }
+        if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_OPEN_UNTIL ) ) )
+        {
+            Date dateEnd = simpleDateFormat.parse( request.getParameter( PARAMETER_FILTER_OPEN_UNTIL ) );
+            fltrFiltre.setCreationEndDate( dateEnd );
         }
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_URGENCY ) ) )
@@ -319,7 +290,7 @@ public final class TicketFilterHelper
      *            admin user
      * @return filter
      */
-    public static TicketFilter getFilter( HttpServletRequest request, AdminUser adminUser )
+    public static TicketFilter getFilter( HttpServletRequest request, AdminUser adminUser ) throws ParseException
     {
         TicketFilter filter = null;
 
@@ -418,8 +389,6 @@ public final class TicketFilterHelper
      */
     public static void setModel( Map<String, Object> mapModel, TicketFilter fltrFilter, HttpServletRequest request, AdminUser user )
     {
-        mapModel.put( MARK_FILTER_PERIOD_LIST, TicketFilterPeriod.getReferenceList( request.getLocale( ) ) );
-
         ReferenceList refListTypes = TicketUtils.createReferenceList( I18nService.getLocalizedString( PROPERTY_TICKET_TYPE_LABEL, request.getLocale( ) ),
                 StringUtils.EMPTY );
 

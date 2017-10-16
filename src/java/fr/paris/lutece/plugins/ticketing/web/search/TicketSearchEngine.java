@@ -33,46 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.search;
 
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.BooleanUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.IntPoint;
-import org.apache.lucene.document.LongPoint;
-import org.apache.lucene.index.IndexableField;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanClause.Occur;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.BooleanQuery.Builder;
-import org.apache.lucene.search.DocValuesTermsQuery;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.SortField;
-import org.apache.lucene.search.SortField.Type;
-import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.TotalHitCountCollector;
-
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
@@ -82,6 +47,23 @@ import fr.paris.lutece.plugins.ticketing.web.util.TicketSearchUtil;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.IntPoint;
+import org.apache.lucene.document.LongPoint;
+import org.apache.lucene.index.IndexableField;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanQuery.Builder;
+import org.apache.lucene.search.SortField.Type;
+
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * TicketSearchEngine
@@ -472,10 +454,12 @@ public class TicketSearchEngine implements ITicketSearchEngine
                 addTicketTypeIdFilter( booleanQueryBuilderGlobal, filter.getIdType( ) );
             }
 
-            // Filter on the creation date
-            if ( filter.getCreationStartDate( ) != null )
+            // Filter on the creation start and end date
+            if ( filter.getCreationStartDate( ) != null || filter.getCreationEndDate( ) != null )
             {
-                addCreationDateFilter( booleanQueryBuilderGlobal, filter.getCreationStartDate( ).getTime( ) );
+                Long startDate = filter.getCreationStartDate( ) != null ? filter.getCreationStartDate( ).getTime( ) : TicketingConstants.CONSTANT_ZERO;
+                Long endDate = filter.getCreationEndDate( ) != null ? filter.getCreationEndDate( ).getTime( ) : new Date( ).getTime( );
+                addCreationDateFilter( booleanQueryBuilderGlobal, startDate, endDate );
             }
 
             // Filter on the selected state
@@ -543,16 +527,18 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
     /**
      * Add the Boolean clause on the creation date on the query builder
-     * 
+     *
      * @param queryBuilder
-     *            The query builder to add the new BooleanClause
-     * @param creationDate
-     *            The creation date limit
+     *         The query builder to add the new BooleanClause
+     * @param creationDateStart
+     *         The creation date start limit
+     * @param creationDateEnd
+     *         The creation end date limit
      */
-    private void addCreationDateFilter( Builder queryBuilder, long creationDate )
+    private void addCreationDateFilter( Builder queryBuilder, long creationDateStart, long creationDateEnd )
     {
         // Create the range query of the creation date
-        Query queryCreationDate = LongPoint.newRangeQuery( TicketSearchItemConstant.FIELD_DATE_CREATION, creationDate, new Date( ).getTime( ) );
+        Query queryCreationDate = LongPoint.newRangeQuery( TicketSearchItemConstant.FIELD_DATE_CREATION, creationDateStart, creationDateEnd );
 
         // Return the Boolean clause on the creation date
         queryBuilder.add( new BooleanClause( queryCreationDate, Occur.MUST ) );

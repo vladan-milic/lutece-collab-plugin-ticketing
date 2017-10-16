@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.ticketing.web.dashboard;
 
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilterViewEnum;
+import fr.paris.lutece.plugins.ticketing.web.search.SearchConstants;
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.portal.business.right.Right;
@@ -44,10 +45,12 @@ import fr.paris.lutece.portal.service.dashboard.DashboardComponent;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,7 +93,14 @@ public class TicketingDashboardComponent extends DashboardComponent
 
         if ( WorkflowService.getInstance( ).isAvailable( ) )
         {
-            TicketFilter filter = TicketFilterHelper.getFilter( request, user );
+            TicketFilter filter = null;
+            try
+            {
+                filter = TicketFilterHelper.getFilter( request, user );
+            } catch ( ParseException e )
+            {
+                AppLogService.error( "Error while parsing dates" , e );
+            }
             TicketFilterHelper.setFilterUserAndUnitIds( filter, user );
 
             filter.setFilterView( TicketFilterViewEnum.AGENT );

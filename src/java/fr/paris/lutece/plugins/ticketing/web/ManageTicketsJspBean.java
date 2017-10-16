@@ -263,7 +263,15 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             strQuery = StringUtils.EMPTY;
         }
 
-        TicketFilter filter = TicketFilterHelper.getFilter( request, userCurrent );
+        TicketFilter filter = null;
+        try
+        {
+            filter = TicketFilterHelper.getFilter( request, userCurrent );
+        } catch ( java.text.ParseException e )
+        {
+            AppLogService.error( "Error while parsing dates" , e );
+            addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
+        }
         TicketFilterHelper.setFilterUserAndUnitIds( filter, userCurrent );
 
         // Check if a user belong to a unit
