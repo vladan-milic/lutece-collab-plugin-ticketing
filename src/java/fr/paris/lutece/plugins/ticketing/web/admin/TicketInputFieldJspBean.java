@@ -78,8 +78,8 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
 
     // Messages
     private static final String MESSAGE_CONFIRM_REMOVE_FIELD = "ticketing.message.confirmRemoveField";
-    private static final String MESSAGE_MANDATORY_FIELD = "portal.util.message.mandatoryField";
-    private static final String MESSAGE_FIELD_VALUE_FIELD = "ticketing.message.error.field_value_field";
+    private static final String MESSAGE_MANDATORY_FIELD      = "portal.util.message.mandatoryField";
+    private static final String MESSAGE_FIELD_CODE_FIELD     = "ticketing.message.error.field_code_field";
 
     // Views
     private static final String VIEW_GET_CREATE_FIELD = "getCreateField";
@@ -398,9 +398,9 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
                     strFieldError = FIELD_VALUE_FIELD;
                 }
                 else
-                    if ( !StringUtil.checkCodeKey( strValue ) )
+                    if ( !StringUtil.checkCodeKey( strCode ) )
                     {
-                        return AdminMessageService.getMessageUrl( request, MESSAGE_FIELD_VALUE_FIELD, AdminMessage.TYPE_STOP );
+                        return AdminMessageService.getMessageUrl( request, MESSAGE_FIELD_CODE_FIELD, AdminMessage.TYPE_STOP );
                     }
 
         if ( strFieldError != null )
