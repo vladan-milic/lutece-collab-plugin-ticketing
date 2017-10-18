@@ -71,7 +71,6 @@
     function open_close_history(id) {
         var icon_id = $('#icon-' + id);
         var message_id = $('#message-' + id)
-        console.log("icon_id: " + icon_id + "message_id: " + message_id);
         if ($(icon_id).hasClass("glyphicon-plus")) {
             $(icon_id).removeClass('glyphicon-plus').addClass('glyphicon-minus');
             $(message_id).show();
