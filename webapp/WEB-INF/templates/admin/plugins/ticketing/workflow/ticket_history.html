@@ -4,7 +4,8 @@
     <div class="panel">
       <#assign defaultUserFrontId=5>
       <#list history_information_list as history_information>
-        <p>
+          <p >
+          <span id="icon-${history_information.resource_history.id?string}" class="glyphicon glyphicon-plus" aria-hidden="true" onclick="open_close_history(${history_information.resource_history.id?string})"></span>
           <strong class="text-gru">${history_information.resource_history.creationDate!'Date missing'}</strong> &nbsp;
           <strong>${history_information.resource_history.action.description}</strong>
           <#if resource_history_channel[history_information.resource_history.id?string]?has_content>
@@ -12,7 +13,7 @@
             <span title="${msgTooltip} ${resource_history_channel[history_information.resource_history.id?string].label}" style="float:right;" class="${resource_history_channel[history_information.resource_history.id?string].iconFont}"></span>
           </#if>
         </p>
-        <ul class="timeline">
+        <ul id="message-${history_information.resource_history.id?string}" class="timeline" style="display: none">
           <li>
             <#if history_information.admin_user_history?exists>
               <#if adminAvatar>
@@ -64,3 +65,20 @@
 <#else>
   <div class="alert alert-error">#i18n{ticketing.view_ticket_history.history_empty}</div>
 </#if>
+
+<script>
+
+    function open_close_history(id) {
+        var icon_id = $('#icon-' + id);
+        var message_id = $('#message-' + id)
+        console.log("icon_id: " + icon_id + "message_id: " + message_id);
+        if ($(icon_id).hasClass("glyphicon-plus")) {
+            $(icon_id).removeClass('glyphicon-plus').addClass('glyphicon-minus');
+            $(message_id).show();
+        } else {
+            $(icon_id).removeClass('glyphicon-minus').addClass('glyphicon-plus');
+            $(message_id).hide();
+        }
+    }
+
+</script>
