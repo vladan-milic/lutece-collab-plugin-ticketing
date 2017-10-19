@@ -115,7 +115,7 @@ public final class TicketCategoryTypeDAO implements ITicketCategoryTypeDAO
 
             categoryType.setId( daoUtil.getInt( nIndex++ ) );
             categoryType.setLabel( daoUtil.getString( nIndex++ ) );
-            categoryType.setDepth( daoUtil.getInt( nIndex++ ) );
+            categoryType.setDepthNumber( daoUtil.getInt( nIndex++ ) );
         }
 
         daoUtil.free( );
@@ -145,7 +145,7 @@ public final class TicketCategoryTypeDAO implements ITicketCategoryTypeDAO
 
         daoUtil.setInt( nIndex++, categoryType.getId( ) );
         daoUtil.setString( nIndex++, categoryType.getLabel( ) );
-        daoUtil.setInt( nIndex++, categoryType.getDepth( ) );
+        daoUtil.setInt( nIndex++, categoryType.getDepthNumber( ) );
         daoUtil.setInt( nIndex, categoryType.getId( ) );
 
         daoUtil.executeUpdate( );
@@ -169,7 +169,7 @@ public final class TicketCategoryTypeDAO implements ITicketCategoryTypeDAO
 
             categoryType.setId( daoUtil.getInt( nIndex++ ) );
             categoryType.setLabel( daoUtil.getString( nIndex++ ) );
-            categoryType.setDepth( daoUtil.getInt( nIndex++ ) );
+            categoryType.setDepthNumber( daoUtil.getInt( nIndex++ ) );
 
             categoryTypeList.add( categoryType );
         }
@@ -240,7 +240,7 @@ public final class TicketCategoryTypeDAO implements ITicketCategoryTypeDAO
     @Override
     public void insertNewDepthCategoryType( TicketCategoryType categoryType, Plugin plugin )
     {
-        categoryType.setDepth( newDepth( plugin ) );
+        categoryType.setDepthNumber( newDepth( plugin ) );
         insert( categoryType, plugin );
     }
 
@@ -262,7 +262,7 @@ public final class TicketCategoryTypeDAO implements ITicketCategoryTypeDAO
 
             categoryType.setId( daoUtil.getInt( nIndex++ ) );
             categoryType.setLabel( daoUtil.getString( nIndex++ ) );
-            categoryType.setDepth( daoUtil.getInt( nIndex++ ) );
+            categoryType.setDepthNumber( daoUtil.getInt( nIndex++ ) );
         }
 
         daoUtil.free( );

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,43 +31,42 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.service.category;
+package fr.paris.lutece.plugins.ticketing.service.format.ticketcategory;
 
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTree;
+import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
 
-public class TicketCategoryTypeService
+import java.util.List;
+
+
+/**
+ * JSON formatter for ticket category resource
+ *
+ */
+public class TicketCategoryTreeFormatterJson implements ITicketingFormatter<TicketCategoryTree>
 {
-    private static TicketCategoryTree _treeCategories;
-
-    private static TicketCategoryTypeService _instance;
-
-    private TicketCategoryTypeService( )
+    @Override
+    public String format( TicketCategoryTree ticketCategoryTree )
     {
-    };
-
-    /**
-     * Get the instance of CategoryType service
-     * 
-     * @return the category type service
-     */
-    public static TicketCategoryTypeService getInstance( )
-    {
-        if ( _instance == null )
-        {
-            _instance = new TicketCategoryTypeService( );
-        }
-        _treeCategories = TicketCategoryTreeCacheService.getInstance( ).getResource( );
-        return _instance;
+        return ticketCategoryTree.getJSONObject( );
     }
 
-    /**
-     * Get the category type corresponding to given depth number
-     * 
-     * @param nDepth
-     * @return the category type of given depth number
-     */
-    public TicketCategoryType findByDepthNumber( int nDepth )
+    @Override
+    public String format( List<TicketCategoryTree> listCategoryTree )
     {
-        return _treeCategories.findDepthByDepthNumber( nDepth );
+        return null;
     }
+
+    @Override
+    public String formatError( String arg0, String arg1 )
+    {
+        return null;
+    }
+
+    @Override
+    public String formatResponse( TicketCategoryTree categoriesTree )
+    {
+        return format( categoriesTree );
+    }
+
 }

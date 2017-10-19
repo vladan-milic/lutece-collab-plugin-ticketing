@@ -33,12 +33,17 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.category;
 
+import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
 import fr.paris.lutece.plugins.ticketing.service.tree.Tree;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
+import fr.paris.lutece.plugins.ticketing.business.categoryinputs.TicketCategoryInputsHome;
+
 import java.util.List;
 
-public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
+public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType> 
 {
     /**
      * Constructor for category tree
@@ -51,6 +56,8 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
     public TicketCategoryTree( List<TicketCategory> listCategory, List<TicketCategoryType> listCategoryType )
     {
         super( listCategory, listCategoryType );
+        listCategory.stream( ).forEach( ( category ) -> 
+            category.setListIdInput( TicketCategoryInputsHome.getIdInputListByCategory( category.getId( ) ) ) );
     }
 
     /**
@@ -70,5 +77,57 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
             }
         }
         return null;
+    }
+
+    /**
+     * Get a JSON Object of the tree
+     * 
+     * @return the JSON Object of the tree
+     */
+    public String getJSONObject( )
+    {
+        JSONObject json = new JSONObject( );
+        
+        JSONArray jsonRootElements = new JSONArray( );
+
+        for ( TicketCategory ticketCategory : this.getRootElements( ) )
+        {
+            JSONObject jsonRootElement = new JSONObject( );
+            jsonRootElement.accumulate( FormatConstants.KEY_ID, ticketCategory.getId( ) );
+            jsonRootElement.accumulate( FormatConstants.KEY_LABEL, ticketCategory.getLabel( ) );
+            jsonRootElement.accumulate( FormatConstants.KEY_DEPTH, ticketCategory.getDepth( ).getDepthNumber( ) );
+            addJSONArraysChildren( jsonRootElement, ticketCategory );
+            jsonRootElements.add( jsonRootElement );
+        }
+        
+        json.accumulate( FormatConstants.KEY_CATEGORIES_DEPTH + "1", jsonRootElements );
+
+        return json.toString( );
+    }
+    
+    /**
+     * Add a JSON Array of the ticketCategory children
+     * 
+     * @param ticketCategory
+     *            the current ticketCategory
+     */
+    public void addJSONArraysChildren( JSONObject jsonRootElement, TicketCategory ticketCategory)
+    {
+        JSONArray jsonElements = new JSONArray( );
+        int nDepthChildren = ticketCategory.getDepth( ).getDepthNumber( ) + 1;
+
+        for ( TicketCategory children : ticketCategory.getChildren( ) )
+        {
+            JSONObject jsonElement = new JSONObject( );
+            jsonElement.accumulate( FormatConstants.KEY_ID, children.getId( ) );
+            jsonElement.accumulate( FormatConstants.KEY_LABEL, children.getLabel( ) );
+            jsonElement.accumulate( FormatConstants.KEY_DEPTH, children.getDepth( ).getDepthNumber( ) );
+            jsonElement.accumulate( FormatConstants.KEY_HELP, children.getHelpMessage( ) );
+            addJSONArraysChildren( jsonElement, children );
+            jsonElements.add( jsonElement );
+        }
+        
+        jsonRootElement.accumulate( FormatConstants.KEY_CATEGORIES_DEPTH + nDepthChildren, jsonElements );
+
     }
 }

@@ -118,7 +118,7 @@ public class TicketFormatterJson implements ITicketingFormatter<Ticket>
         json.accumulate( FormatConstants.KEY_USER, jsonUser );
 
         json.accumulate( FormatConstants.KEY_TICKET_REFERENCE, ticket.getReference( ) );
-        json.accumulate( FormatConstants.KEY_TICKET_CATEGORY_CODE, ticket.getTicketCategory( ).getId( ) );
+        json.accumulate( FormatConstants.KEY_TICKET_CATEGORY_CODE, ticket.getTicketCategory( ).getCode( ) );
         json.accumulate( FormatConstants.KEY_TICKET_CONTACT_MODE_ID, ticket.getIdContactMode( ) );
         json.accumulate( FormatConstants.KEY_TICKET_CHANNEL_ID, ticket.getChannel( ).getId( ) );
         json.accumulate( FormatConstants.KEY_TICKET_COMMENT, ticket.getTicketComment( ) );

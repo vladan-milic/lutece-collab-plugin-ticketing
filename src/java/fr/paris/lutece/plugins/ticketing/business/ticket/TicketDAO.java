@@ -39,6 +39,7 @@ import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.portal.business.rbac.RBAC;
@@ -67,8 +68,8 @@ public final class TicketDAO implements ITicketDAO
 
     // SQL Queries
     private static final String SQL_SELECT_WITH_JOIN_DATA_TICKET = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, "
-            + " a.fixed_phone_number, a.mobile_phone_number, a.id_marking, c.id_ticket_type, c.label, d.id_ticket_domain, "
-            + " d.label, a.id_ticket_category, e.label, e.id_workflow, a.id_contact_mode, f.code, a.ticket_comment, "
+            + " a.fixed_phone_number, a.mobile_phone_number, a.id_marking, "
+            + " a.id_ticket_category, a.id_contact_mode, f.code, a.ticket_comment, "
             + " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, g.first_name, g.last_name, a.id_unit, h.label, a.id_assigner_user, a.id_assigner_unit, h2.label, a.user_message, a.url, a.id_channel, x.label, x.icon_font, a.nomenclature, "
             + " ad.address, ad.address_detail, ad.postal_code, ad.city"
             + " FROM ticketing_ticket a"
@@ -77,16 +78,11 @@ public final class TicketDAO implements ITicketDAO
             + " LEFT JOIN unittree_unit h2 ON h2.id_unit=a.id_assigner_unit"
             + " LEFT JOIN ticketing_ticket_address ad ON ad.id_ticket=a.id_ticket"
             + " JOIN ticketing_user_title b ON a.id_user_title = b.id_user_title"
-            + " JOIN ticketing_ticket_category e ON a.id_ticket_category = e.id_ticket_category"
-            + " JOIN ticketing_ticket_domain d ON e.id_ticket_domain = d.id_ticket_domain"
-            + " JOIN ticketing_ticket_type c ON d.id_ticket_type = c.id_ticket_type"
             + " JOIN ticketing_contact_mode f ON a.id_contact_mode = f.id_contact_mode" + " JOIN ticketing_channel x ON a.id_channel = x.id_channel";
+    
     private static final String SQL_SELECT_ALL_ID_TICKET = "SELECT a.id_ticket " + " FROM ticketing_ticket a"
             + " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user" + " LEFT JOIN unittree_unit h ON h.id_unit=a.id_unit"
             + " LEFT JOIN ticketing_ticket_address ad ON ad.id_ticket=a.id_ticket" + " JOIN ticketing_user_title b ON a.id_user_title = b.id_user_title"
-            + " JOIN ticketing_ticket_category e ON a.id_ticket_category = e.id_ticket_category"
-            + " JOIN ticketing_ticket_domain d ON e.id_ticket_domain = d.id_ticket_domain"
-            + " JOIN ticketing_ticket_type c ON d.id_ticket_type = c.id_ticket_type"
             + " JOIN ticketing_contact_mode f ON a.id_contact_mode = f.id_contact_mode" + " JOIN ticketing_channel x ON a.id_channel = x.id_channel";
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket ) FROM ticketing_ticket";
     private static final String SQL_QUERY_SELECT = SQL_SELECT_WITH_JOIN_DATA_TICKET + " WHERE a.id_ticket = ?";
@@ -110,9 +106,9 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_FILTER_LASTUPDATE_DATE = " AND a.date_update >= ? AND a.date_update < ? ";
     private static final String SQL_FILTER_LASTUPDATE_START_DATE = " AND a.date_update >= ? ";
     private static final String SQL_FILTER_LASTUPDATE_END_DATE = " AND a.date_update <= ? ";
-    private static final String SQL_FILTER_DOMAIN = " AND d.id_ticket_domain = ? ";
-    private static final String SQL_FILTER_TYPE = "  AND c.id_ticket_type = ?  ";
-    private static final String SQL_FILTER_CATEGORY = " AND a.id_ticket_category = ?  ";
+    private static final String SQL_FILTER_DOMAIN = " AND d.id_category = ? ";
+    private static final String SQL_FILTER_TYPE = "  AND c.id_category = ?  ";
+    private static final String SQL_FILTER_CATEGORY = " AND a.id_category = ?  ";
     private static final String SQL_FILTER_ID_USER = "  AND a.guid = ? ";
     private static final String SQL_FILTER_ID_CHANNEL = " AND x.id_channel = ? ";
     private static final String SQL_FILTER_NOMENCLATURE = " AND a.nomenclature = ? ";
@@ -677,15 +673,8 @@ public final class TicketDAO implements ITicketDAO
         ticket.setFixedPhoneNumber( daoUtil.getString( nIndex++ ) );
         ticket.setMobilePhoneNumber( daoUtil.getString( nIndex++ ) );
         ticket.setIdTicketMarking( daoUtil.getInt( nIndex++ ) );
-        ticket.setIdTicketType( daoUtil.getInt( nIndex++ ) );
-        ticket.setTicketType( daoUtil.getString( nIndex++ ) );
-        ticket.setIdTicketDomain( daoUtil.getInt( nIndex++ ) );
-        ticket.setTicketDomain( daoUtil.getString( nIndex++ ) );
 
-        TicketCategory ticketCategory = new TicketCategory( );
-        ticketCategory.setId( daoUtil.getInt( nIndex++ ) );
-        ticketCategory.setLabel( daoUtil.getString( nIndex++ ) );
-        ticketCategory.setIdWorkflow( daoUtil.getInt( nIndex++ ) );
+        TicketCategory ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( daoUtil.getInt( nIndex++ ) );
         ticket.setTicketCategory( ticketCategory );
 
         ticket.setIdContactMode( daoUtil.getInt( nIndex++ ) );

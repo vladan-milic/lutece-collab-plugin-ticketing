@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.user;
 
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 
 import java.util.List;
@@ -49,7 +49,7 @@ public class User
     private String _strFirstName;
     private String _strLastName;
     private String _strEmail;
-    private List<TicketDomain> _listDomains;
+    private List<TicketCategory> _listDomains;
     private List<Unit> _listUnits;
 
     /**
@@ -137,24 +137,24 @@ public class User
     }
 
     /**
-     * Returns the TicketDomains
+     * Returns the TicketCategory list of domain type
      * 
-     * @return list of TicketDomain
+     * @return TicketCategory list of domain type
      */
-    public List<TicketDomain> getDomains( )
+    public List<TicketCategory> getDomains( )
     {
         return _listDomains;
     }
 
     /**
-     * Sets the list of TicketDomain
+     * Sets the list of TicketCategory list of domain type
      * 
-     * @param list
-     *            of TicketDomain
+     * @param listDomains
+     *            TicketCategory list of domain type
      */
-    public void setDomain( List<TicketDomain> _listDomains )
+    public void setDomains( List<TicketCategory> listDomains )
     {
-        this._listDomains = _listDomains;
+        this._listDomains = listDomains;
     }
 
     /**

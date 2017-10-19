@@ -45,8 +45,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
@@ -194,11 +192,7 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
                 Ticket ticket = TicketHome.findByPrimaryKey( StringUtils.isNumeric( idTicket ) ? Integer.parseInt( idTicket ) : -1 );
                 if ( ticket != null )
                 {
-                    TicketDomain domain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) );
-                    if ( domain != null )
-                    {
-                        setDomain.add( domain.getLabel( ) );
-                    }
+                    setDomain.add( ticket.getTicketDomain().getLabel( ) );
                 }
             }
         }

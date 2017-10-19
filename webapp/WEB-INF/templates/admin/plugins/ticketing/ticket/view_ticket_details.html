@@ -30,11 +30,12 @@
   </div>
   <div id="info-right" class="col-xs-12 col-sm-3">
     <h5>#i18n{ticketing.view_ticket_details.labelTicketType}<h5>
-    <h4>${ticket.ticketType}</h4>
+    <h4>${ticket.ticketType.label}</h4>
     <h5>#i18n{ticketing.view_ticket_details.labelTicketDomain}</h5>
-    <h4>${ticket.ticketDomain}</h4>
+    <h4>${ticket.ticketDomain.label}</h4>
     <h5>#i18n{ticketing.view_ticket_details.labelTicketCategory}</h5>
-    <h4><@categoryFormated ticket.ticketCategory/></h4>
+    <h4>${ticket.ticketCategory.label}<#if ticket.ticketPrecision?? && ticket.ticketPrecision.label != ''> - ${ticket.ticketPrecision.label}</#if></h4>
+    
     <#if ticket.nomenclature??>
       <h5>#i18n{ticketing.view_ticket_details.labelNomenclature}</h5>
       <h4>${ticket.nomenclature}</h4>

@@ -81,51 +81,33 @@ PRIMARY KEY (id_instant_response)
 );
 
 --
--- Structure for table ticketing_ticket_category
+-- Structure for table ticketing_category
 --
-
-DROP TABLE IF EXISTS ticketing_ticket_category;
-CREATE TABLE ticketing_ticket_category (
-id_ticket_category int(6) NOT NULL,
-id_ticket_domain int(11) NOT NULL,
-label varchar(50) NOT NULL default '',
-id_workflow INT NOT NULL default '0',
-category_code varchar(50) NULL,
-id_unit int(6) NOT NULL default '0',
+DROP TABLE IF EXISTS ticketing_category;
+CREATE TABLE ticketing_category (
+id_category int(6) NOT NULL,
+id_parent int(6) NOT NULL,
+label varchar(255) NOT NULL default '',
+n_order int(6) DEFAULT 0 NOT NULL,
+code varchar(50) NULL,
+id_default_assignee_unit int(6) NOT NULL default '0',
+id_category_type int(6) NOT NULL default '0',
+id_workflow int(6) NOT NULL default '0',
+demand_id int(6) NOT NULL default '0',
+help_message varchar(500) NULL,
 inactive int(1)  NOT NULL default '0',
-category_precision VARCHAR(150) NULL,
-help_message VARCHAR(500) NULL,
-category_order INT(6) DEFAULT 0 NOT NULL,
-PRIMARY KEY (id_ticket_category)
+PRIMARY KEY (id_category)
 );
 
 --
--- Structure for table ticketing_ticket_domain
+-- Structure for table ticketing_category_type
 --
-
-DROP TABLE IF EXISTS ticketing_ticket_domain;
-CREATE TABLE ticketing_ticket_domain (
-id_ticket_domain int(6) NOT NULL,
-id_ticket_type int(11) NOT NULL,
-label varchar(50) NOT NULL default '',
-inactive int(1)  NOT NULL default '0',
-domain_order INT(6) DEFAULT 0 NOT NULL,
-PRIMARY KEY (id_ticket_domain)
-);
-
---
--- Structure for table ticketing_ticket_type
---
-
-DROP TABLE IF EXISTS ticketing_ticket_type;
-CREATE TABLE ticketing_ticket_type (
-id_ticket_type int(6) NOT NULL,
-label varchar(50) NOT NULL default '',
-reference_prefix varchar(3) NOT NULL,
-inactive int(1)  NOT NULL default '0',
-demand_type_id int(6) NOT NULL default '0',
-type_order INT(6) DEFAULT 0 NOT NULL,
-PRIMARY KEY (id_ticket_type)
+DROP TABLE IF EXISTS ticketing_category_type;
+CREATE TABLE ticketing_category_type (
+id_category_type int(6) NOT NULL,
+label varchar(255) NOT NULL default '',
+depth int(6) DEFAULT 0 NOT NULL,
+PRIMARY KEY (id_category_type)
 );
 
 --
@@ -181,9 +163,6 @@ PRIMARY KEY (id_support_entity)
 );
 
 --
--- Structure for table ticketing_types_reponses
---
---
 -- Structure for table ticketing_Model_reponses
 --
 
@@ -212,15 +191,15 @@ PRIMARY KEY (id_channel)
 );
 
 --
--- Structure for table ticketing_ticket_category_input
+-- Structure for table ticketing_category_input
 --
 
-DROP TABLE IF EXISTS ticketing_ticket_category_input;
-CREATE TABLE ticketing_ticket_category_input (
-    id_ticket_category int(6) NOT NULL,
+DROP TABLE IF EXISTS ticketing_category_input;
+CREATE TABLE ticketing_category_input (
+    id_category int(6) NOT NULL,
     id_input int(6) NOT NULL,
     pos int(6) NOT NULL default '0',
-    PRIMARY KEY (id_ticket_category, id_input)
+    PRIMARY KEY (id_category, id_input)
 );
 
 --
@@ -256,15 +235,11 @@ PRIMARY KEY (id_viewing)
 ALTER TABLE ticketing_ticket ADD CONSTRAINT fk_ticketing_ticket_user_title FOREIGN KEY (id_user_title)
       REFERENCES ticketing_user_title (id_user_title) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE ticketing_ticket ADD CONSTRAINT fk_ticketing_ticket_category FOREIGN KEY (id_ticket_category)
-      REFERENCES ticketing_ticket_category (id_ticket_category) ON DELETE RESTRICT ON UPDATE RESTRICT;
+      REFERENCES ticketing_category (id_category) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE ticketing_ticket ADD CONSTRAINT fk_ticketing_ticket_contact_mode FOREIGN KEY (id_contact_mode)
       REFERENCES ticketing_contact_mode (id_contact_mode) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE ticketing_ticket ADD CONSTRAINT fk_ticketing_ticket_channel FOREIGN KEY (id_channel)
       REFERENCES ticketing_channel (id_channel) ON DELETE RESTRICT ON UPDATE RESTRICT;
-ALTER TABLE ticketing_ticket_domain ADD CONSTRAINT fk_ticketing_ticket_domain_type FOREIGN KEY (id_ticket_type)
-      REFERENCES ticketing_ticket_type (id_ticket_type) ON DELETE RESTRICT ON UPDATE RESTRICT;
-ALTER TABLE ticketing_ticket_category ADD CONSTRAINT fk_ticketing_ticket_category_domain FOREIGN KEY (id_ticket_domain)
-      REFERENCES ticketing_ticket_domain (id_ticket_domain) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE ticketing_instant_response ADD CONSTRAINT fk_ticketing_instant_response_category FOREIGN KEY (id_ticket_category)
       REFERENCES ticketing_ticket_category (id_ticket_category) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE ticketing_indexer_action ADD CONSTRAINT fk_ticketing_indexer_action_ticket FOREIGN KEY (id_ticket)

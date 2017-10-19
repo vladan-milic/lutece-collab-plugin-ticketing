@@ -16,10 +16,6 @@
       <input type="hidden" id="id" name="id"/>
       <input type="hidden" id="guid" name="guid" value="${ticket.guid!''}"/>
       <input type="hidden" id="customer_id" name="customer_id" value="${ticket.customerId!''}"/>
-      <input type="hidden" id="ticket_type_id" name="ticket_type_id" value="${ticket.idTicketType!''}"/>
-      <input type="hidden" id="ticket_domain_id" name="ticket_domain_id" value="${ticket.idTicketDomain!''}"/>
-      <input type="hidden" id="ticket_category_id" name="ticket_category_id" value="${(ticket.ticketCategory.id)!''}"/>
-      <input type="hidden" id="ticket_precision" name="ticket_precision" value="${(ticket.ticketCategory.precision)!''}"/>
       <div class="row">
         <div class="col-xs-12 col-sm-6">
           <div class="form-group">
@@ -78,20 +74,20 @@
         <div class="col-xs-12 col-sm-6">
           <div class="form-group">
             <label for="id_ticket_type">#i18n{ticketing.create_ticket.labelTicketType}</label>
-            <@comboWithParams name="id_ticket_type" default_value="${ticket.idTicketType!''}" additionalParameters=" id=\"id_ticket_type\" class=\"form-control input-lg\" " items=ticket_types_list />
+            <@comboWithParams name="id_ticket_type" default_value="${ticket.ticketType.id!''}" additionalParameters=" id=\"id_ticket_type\" class=\"form-control input-lg\" " items=[] />
           </div>
           <div class="form-group">
             <label for="id_ticket_domain">#i18n{ticketing.create_ticket.labelTicketDomain}</label>
-            <@comboWithParams name="id_ticket_domain" default_value="${ticket.idTicketDomain!''}" additionalParameters=" id=\"id_ticket_domain\" class=\"form-control input-lg\" " items=ticket_domains_list />
+            <@comboWithParams name="id_ticket_domain" default_value="${ticket.ticketDomain.id!''}" additionalParameters=" id=\"id_ticket_domain\" class=\"form-control input-lg\" " items=[] />
           </div>
           <div class="form-group">
             <label for="id_ticket_category">#i18n{ticketing.create_ticket.labelTicketCategory}</label>
-            <@comboWithParams name="id_ticket_category" default_value="${ticket.ticketCategory.id!''}" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=ticket_categories_list />
+            <@comboWithParams name="id_ticket_category" default_value="${ticket.ticketCategory.id!''}" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=[] />
             <span class="help-block" id="help_message_category"></span>
           </div>
           <div class="form-group">
-          	<@comboWithParams name="id_ticket_precision" default_value="" additionalParameters=" id=\"id_ticket_precision\" class=\"form-control input-lg\" " items=ticket_precisions_list />
-          	<span class="help-block" id="help_message_precision"></span>
+            <@comboWithParams name="id_ticket_precision" default_value="${ticket.ticketPrecision.id!''}" additionalParameters=" id=\"id_ticket_precision\" class=\"form-control input-lg\" " items=[] />
+            <span class="help-block" id="help_message_precision"></span>
 		  </div>       
           <div class="form-group">
             <label for="id_contact_mode">#i18n{ticketing.create_ticket.labelContactMode}</label>
@@ -134,10 +130,9 @@
 </div>
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
 <script language="javascript">
-    var category_id = ${ticket.ticketCategory.id!''};
     var url = "jsp/admin/plugins/ticketing/Standalone.jsp?view=ticketForm";
     $(document).ready(function() {
-        lutece_ticket_tree("#id_ticket_type", "#id_ticket_domain", "#id_ticket_category", "#id_ticket_precision", category_id, url);
+        lutece_ticket_tree("#id_ticket_type", "#id_ticket_domain", "#id_ticket_category", "#id_ticket_precision", ${categories_tree}, url);
     });
     $(document).ready(function() {
         $('.input-phone').change(function() {

@@ -46,7 +46,7 @@ import java.util.List;
 public final class TicketCategoryTypeHome
 {
     // Static variable pointed at the DAO instance
-    private static ITicketCategoryTypeDAO _dao = SpringContextService.getBean( "ticketing.categoryTypeDAO" );
+    private static ITicketCategoryTypeDAO _dao = SpringContextService.getBean( "ticketing.ticketCategoryTypeDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
@@ -160,4 +160,5 @@ public final class TicketCategoryTypeHome
     {
         return _dao.loadByDepth( nDepth, _plugin );
     }
+    
 }

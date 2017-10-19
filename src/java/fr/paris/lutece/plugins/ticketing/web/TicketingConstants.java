@@ -80,36 +80,38 @@ public final class TicketingConstants
     public static final String ATTRIBUTE_IS_PROCESS_CONTENT                                = "is_process_content";
 
     // Markers
-    public static final String MARK_TICKET                                                 = "ticket";
-    public static final String MARK_TICKET_REFERENCE                                       = "reference";
-    public static final String MARK_ID_TICKET                                              = PARAMETER_ID_TICKET;
-    public static final String MARK_LIST_READ_ONLY_HTML_RESPONSES                          = "read_only_reponses_html_list";
-    public static final String MARK_WEBAPP_URL                                             = "webapp_url";
-    public static final String MARK_LOCALE                                                 = "locale";
-    public static final String MARK_WORKFLOW_ACTION                                        = "workflow_action";
-    public static final String MARK_WORKFLOW_ID_ACTION                                     = PARAMETER_WORKFLOW_ID_ACTION;
-    public static final String MARK_HIDE_NEXT_STEP_BUTTON                                  = ATTRIBUTE_HIDE_NEXT_STEP_BUTTON;
-    public static final String MARK_TASKS_FORM                                             = "tasks_form";
-    public static final String MARK_FORM_ACTION                                            = "form_action";
-    public static final String MARK_PAGE                                                   = "page";
-    public static final String MARK_TICKET_CREATION_RIGHT                                  = "ticket_creation_right";
-    public static final String MARK_TICKET_DELETION_RIGHT                                  = "ticket_deletion_right";
-    public static final String MARK_TICKET_MODIFICATION_RIGHT                              = "ticket_modification_right";
+    public static final String MARK_TICKET = "ticket";
+    public static final String MARK_TICKET_REFERENCE = "reference";
+    public static final String MARK_ID_TICKET = PARAMETER_ID_TICKET;
+    public static final String MARK_POCGRU_URL_360 = "url_poc_gru";
+    public static final String MARK_LIST_READ_ONLY_HTML_RESPONSES = "read_only_reponses_html_list";
+    public static final String MARK_WEBAPP_URL = "webapp_url";
+    public static final String MARK_LOCALE = "locale";
+    public static final String MARK_WORKFLOW_ACTION = "workflow_action";
+    public static final String MARK_WORKFLOW_ID_ACTION = PARAMETER_WORKFLOW_ID_ACTION;
+    public static final String MARK_HIDE_NEXT_STEP_BUTTON = ATTRIBUTE_HIDE_NEXT_STEP_BUTTON;
+    public static final String MARK_TASKS_FORM = "tasks_form";
+    public static final String MARK_FORM_ACTION = "form_action";
+    public static final String MARK_PAGE = "page";
+    public static final String MARK_TICKET_CREATION_RIGHT = "ticket_creation_right";
+    public static final String MARK_TICKET_DELETION_RIGHT = "ticket_deletion_right";
+    public static final String MARK_TICKET_MODIFICATION_RIGHT = "ticket_modification_right";
     public static final String MARK_TICKET_EXPORT_RIGHT                                    = "ticket_export_right";
-    public static final String MARK_POPIN_MODE                                             = "popin_mode";
-    public static final String MARK_JSP_CONTROLLER                                         = "jsp_controller";
-    public static final String MARK_CHANNELS_LIST                                          = "channels_list";
-    public static final String MARK_SELECTABLE_CHANNELS_LIST                               = "selectable_channels_list";
-    public static final String MARK_PREFERRED_ID_CHANNEL                                   = "preferred_id_channel";
-    public static final String MARK_SELECTABLE_ID_CHANNEL_LIST                             = "selectable_id_channel_list";
-    public static final String MARK_USER_SIGNATURE                                         = "user_signature";
-    public static final String MARK_AGENT_VIEW                                             = "agent_view";
-    public static final String MARK_CREATION_DATE_AS_DATE                                  = "creation_date_as_date";
-    public static final String MARK_NEXT_TICKET                                            = "next_ticket";
-    public static final String MARK_PREVIOUS_TICKET                                        = "previous_ticket";
-    public static final String MARK_AVATAR_AVAILABLE                                       = "avatar_available";
-    public static final String MARK_SELECTED_TICKETS                                       = PARAMETER_SELECTED_TICKETS;
-    public static final String MARK_TICKET_COMMENT                                         = "ticket_processed_comment";
+    public static final String MARK_POPIN_MODE = "popin_mode";
+    public static final String MARK_JSP_CONTROLLER = "jsp_controller";
+    public static final String MARK_CHANNELS_LIST = "channels_list";
+    public static final String MARK_SELECTABLE_CHANNELS_LIST = "selectable_channels_list";
+    public static final String MARK_PREFERRED_ID_CHANNEL = "preferred_id_channel";
+    public static final String MARK_SELECTABLE_ID_CHANNEL_LIST = "selectable_id_channel_list";
+    public static final String MARK_USER_SIGNATURE = "user_signature";
+    public static final String MARK_AGENT_VIEW = "agent_view";
+    public static final String MARK_CREATION_DATE_AS_DATE = "creation_date_as_date";
+    public static final String MARK_NEXT_TICKET = "next_ticket";
+    public static final String MARK_PREVIOUS_TICKET = "previous_ticket";
+    public static final String MARK_AVATAR_AVAILABLE = "avatar_available";
+    public static final String MARK_SELECTED_TICKETS = PARAMETER_SELECTED_TICKETS;
+    public static final String MARK_TICKET_COMMENT = "ticket_processed_comment";
+    public static final String MARK_TICKET_CATEGORIES_TREE = "categories_tree";
 
     // Properties
     public static final String PROPERTY_REDIRECT_PREFIX                                    = "ticketing.workflow.redirect.";
@@ -203,6 +205,11 @@ public final class TicketingConstants
     public static final int    DEFAULT_MARKING                                             = 0;
     public static final String MESSAGE_MARK                                                = "<!-- MESSAGE-IN-WORKFLOW -->";
 
+    public static final int TYPE_DEPTH = 1;
+    public static final int DOMAIN_DEPTH = 2;
+    public static final int CATEGORY_DEPTH = 3;
+    public static final int PRECISION_DEPTH = 4;
+    
     /**
      * Default constructor
      */

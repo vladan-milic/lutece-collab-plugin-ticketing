@@ -31,49 +31,42 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.web.rs;
+package fr.paris.lutece.plugins.ticketing.service.format.ticketcategory;
 
-import fr.paris.lutece.plugins.rest.service.RestConstants;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
-import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
-import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTree;
+import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
 
 import java.util.List;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-
 /**
- * REST service for ticket type resource
+ * XML formatter for ticket type resource
+ *
  */
-@Path( RestConstants.BASE_PATH + Constants.PLUGIN_PATH + Constants.TYPE_PATH )
-public class TypeRest extends TicketingRest
+public class TicketCategoryTreeFormatterXml implements ITicketingFormatter<TicketCategoryTree>
 {
-    /**
-     * Gives the ticket types
-     * 
-     * @param accept
-     *            the accepted format
-     * @param format
-     *            the format
-     * @return the list of ticket types
-     */
-    @GET
-    @Path( Constants.ALL_PATH )
-    public Response getTypes( @HeaderParam( HttpHeaders.ACCEPT ) String accept, @QueryParam( Constants.FORMAT_QUERY ) String format )
+    @Override
+    public String format( TicketCategoryTree ticketCategoryTree )
     {
-        String strMediaType = getMediaType( accept, format );
+        StringBuffer sbXML = new StringBuffer( );
 
-        IFormatterFactory formatterFactory = _formatterFactories.get( strMediaType );
+        return sbXML.toString( );
+    }
 
-        List<TicketType> listTicketTypes = TicketTypeHome.getTicketTypesList( );
+    @Override
+    public String format( List<TicketCategoryTree> listCategoryTree )
+    {
+        return null;
+    }
 
-        String strResponse = formatterFactory.createFormatter( TicketType.class ).format( listTicketTypes );
+    @Override
+    public String formatError( String arg0, String arg1 )
+    {
+        return null;
+    }
 
-        return Response.ok( strResponse, strMediaType ).build( );
+    @Override
+    public String formatResponse( TicketCategoryTree ticketCategoryTree )
+    {
+        return format( ticketCategoryTree );
     }
 }

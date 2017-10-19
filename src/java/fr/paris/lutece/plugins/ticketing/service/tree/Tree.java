@@ -38,7 +38,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDepth>
+public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDepth> 
 {
     protected List<Node> _rootNodes;
 
@@ -68,7 +68,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
                     if ( nodeParent.getId( ) == Node.getIdParent( ) )
                     {
                         Node.setParent( nodeParent );
-                        Node.setDepth( findDepthByNbDepth( nodeParent.getDepth( ).getNbDepth( ) + 1 ) );
+                        Node.setDepth( findDepthByDepthNumber( nodeParent.getDepth( ).getDepthNumber( ) + 1 ) );
                         break;
                     }
                 }
@@ -77,7 +77,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
             {
                 // Set the depth of the node
                 Node.setParent( null );
-                Node.setDepth( findDepthByNbDepth( 0 ) );
+                Node.setDepth( findDepthByDepthNumber( 1 ) );
             }
 
             // Set the children
@@ -96,7 +96,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
             }
             Node.setChildren( listChildren );
         }
-        _nodes = new ArrayList<>( listNode );
+        _nodes = new ArrayList<Node>( listNode );
         _rootNodes = _nodes.stream( ).filter( node -> ( node.getIdParent( ) == -1 ) ).collect( Collectors.toList( ) );
         _leaves = _nodes.stream( ).filter( node -> ( node.getLeaf( ) == true ) ).collect( Collectors.toList( ) );
         _nodes.stream( ).forEach( ( node ) -> {
@@ -215,19 +215,20 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
      * Get all children nodes of the given node (recursively)
      * 
      * @param node
+     * @param isFirstCall true if first recursive call 
      * @return the list of all the children of the given node (recursively).
      */
-    public List<AbstractNode> getAllChildren( AbstractNode node )
+    public List<AbstractNode> getAllChildren( AbstractNode node, boolean isFirstCall )
     {
         List<AbstractNode> listAllChildren = new ArrayList<>( );
         if ( !node.getLeaf( ) )
         {
             for ( AbstractNode nodeChild : node.getChildren( ) )
             {
-                listAllChildren.addAll( getAllChildren( nodeChild ) );
+                listAllChildren.addAll( getAllChildren( nodeChild, false ) );
             }
         }
-        else
+        if ( !isFirstCall )
         {
             listAllChildren.add( node );
         }
@@ -253,16 +254,34 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
     }
 
     /**
-     * Find the Depth obj with given n° depth
+     * Find the Depth obj with given depth number
      * 
      * @param nDepth
      * @return the Depth obj
      */
-    public Depth findDepthByNbDepth( int nDepth )
+    public Depth findDepthByDepthNumber( int nDepth )
     {
         for ( Depth depth : _depths )
         {
-            if ( depth.getNbDepth( ) == nDepth )
+            if ( depth.getDepthNumber( ) == nDepth )
+            {
+                return depth;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Find the Depth obj with given label
+     * 
+     * @param strLabel
+     * @return the Depth obj
+     */
+    public Depth findDepthByLabel( String strLabel )
+    {
+        for ( Depth depth : _depths )
+        {
+            if ( depth.getLabel( ) == strLabel )
             {
                 return depth;
             }
@@ -275,14 +294,14 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
      * 
      * @return the max depth of the tree;
      */
-    public int getMaxNbDepth( )
+    public int getMaxDepthNumber( )
     {
         int max = -1;
         for ( AbstractDepth depth : _depths )
         {
-            if ( depth.getNbDepth( ) > max )
+            if ( depth.getDepthNumber( ) > max )
             {
-                max = depth.getNbDepth( );
+                max = depth.getDepthNumber( );
             }
         }
         return max;
@@ -317,7 +336,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
         List<Node> listNodes = new ArrayList<>();
         for ( Node node : getNodes( ) )
         {
-            if ( node.getDepth().getNbDepth() == depth.getNbDepth() )
+            if ( node.getDepth().getDepthNumber() == depth.getDepthNumber() )
             {
                 listNodes.add( node );
             }

@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.tree;
 
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -73,7 +72,7 @@ public abstract class AbstractNode
     public abstract int getIdParent( );
 
     /**
-     * Get the
+     * Get the boolean indicating the node is a leaf 
      * 
      * @return
      */
@@ -83,6 +82,7 @@ public abstract class AbstractNode
     }
 
     /**
+     * Set the boolean indicating the node is a leaf
      * 
      * @param bLeaf
      */

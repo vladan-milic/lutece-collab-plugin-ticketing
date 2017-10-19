@@ -45,7 +45,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.categoryinputs.TicketCategoryInputsHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.ResponseRecap;
@@ -111,7 +111,7 @@ public class TicketFormService implements Serializable
      */
     public static List<Entry> getFilterInputs( int idCategory, List<Integer> listEntryId )
     {
-        List<Integer> listInputs = TicketCategoryHome.getIdInputListByCategory( idCategory );
+        List<Integer> listInputs =  TicketCategoryInputsHome.getIdInputListByCategory( idCategory );
         List<Entry> listEntryFirstLevel;
         List<Entry> listEntry = new ArrayList<Entry>( );
 

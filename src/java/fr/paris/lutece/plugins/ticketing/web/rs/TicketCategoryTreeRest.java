@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,43 +31,47 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.ticketing.service.category;
+package fr.paris.lutece.plugins.ticketing.web.rs;
 
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
+import fr.paris.lutece.plugins.rest.service.RestConstants;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTree;
+import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
 
-public class TicketCategoryTypeService
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
+
+/**
+ * REST service for ticket type resource
+ */
+@Path( RestConstants.BASE_PATH + Constants.PLUGIN_PATH + Constants.TYPE_PATH )
+public class TicketCategoryTreeRest extends TicketingRest
 {
-    private static TicketCategoryTree _treeCategories;
-
-    private static TicketCategoryTypeService _instance;
-
-    private TicketCategoryTypeService( )
-    {
-    };
-
     /**
-     * Get the instance of CategoryType service
+     * Gives the categories tree
      * 
-     * @return the category type service
+     * @param accept
+     *            the accepted format
+     * @param format
+     *            the format
+     * @return the categories tree
      */
-    public static TicketCategoryTypeService getInstance( )
+    @GET
+    @Path( Constants.ALL_PATH )
+    public Response getCategoriesTree( @HeaderParam( HttpHeaders.ACCEPT ) String accept, @QueryParam( Constants.FORMAT_QUERY ) String format )
     {
-        if ( _instance == null )
-        {
-            _instance = new TicketCategoryTypeService( );
-        }
-        _treeCategories = TicketCategoryTreeCacheService.getInstance( ).getResource( );
-        return _instance;
-    }
+        String strMediaType = getMediaType( accept, format );
 
-    /**
-     * Get the category type corresponding to given depth number
-     * 
-     * @param nDepth
-     * @return the category type of given depth number
-     */
-    public TicketCategoryType findByDepthNumber( int nDepth )
-    {
-        return _treeCategories.findDepthByDepthNumber( nDepth );
+        IFormatterFactory formatterFactory = _formatterFactories.get( strMediaType );
+
+        TicketCategoryTree ticketCategoryTree = TicketCategoryService.getInstance( ).getCategoriesTree( );
+
+        String strResponse = formatterFactory.createFormatter( TicketCategoryTree.class ).format( ticketCategoryTree );
+
+        return Response.ok( strResponse, strMediaType ).build( );
     }
 }

@@ -49,7 +49,6 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.identitystore.web.exception.IdentityNotFoundException;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
@@ -59,12 +58,13 @@ import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
-import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTypeService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.util.FormValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.ResponseRecap;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidator;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidatorResult;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableXPage;
@@ -77,7 +77,6 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
-import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
 /**
@@ -98,10 +97,6 @@ public class TicketXPage extends WorkflowCapableXPage
     // Marks
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";
     private static final String MARK_TICKET_FORM = "ticket_form";
-    private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
-    private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
-    private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
-    private static final String MARK_TICKET_PRECISIONS_LIST = "ticket_precisions_list";
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
     private static final String MARK_TICKET_ACTION = "ticket_action";
     private static final String MARK_MESSAGE = "message";
@@ -170,10 +165,7 @@ public class TicketXPage extends WorkflowCapableXPage
         Map<String, Object> model = getModel( );
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
-        model.put( MARK_TICKET_TYPES_LIST, TicketCategoryService.getInstance( ). );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList( ) );
-        model.put( MARK_TICKET_CATEGORIES_LIST, TicketCategoryHome.getReferenceListByDomain( 1 ) );
-        model.put( MARK_TICKET_PRECISIONS_LIST, new ReferenceList( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getJSONObject( ) );
 
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale( ) ) );
 
@@ -357,23 +349,17 @@ public class TicketXPage extends WorkflowCapableXPage
         ticket = ( ticket != null ) ? ticket : new Ticket( );
         populate( ticket, request );
         ticket.setListResponse( new ArrayList<Response>( ) );
+        
+        // Validate the TicketCategory
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( );
 
-        int nIdCategory = TicketingConstants.PROPERTY_UNSET_INT;
-        if ( StringUtils.isNotBlank( request.getParameter( PARAMETER_ID_CATEGORY ) ) )
-        {
-            nIdCategory = Integer.valueOf( request.getParameter( PARAMETER_ID_CATEGORY ) );
-        }
+        bIsFormValid = categoryValidatorResult.isTicketCategoryValid( );
+        ticket.setTicketCategory( categoryValidatorResult.getTicketCategory( ) );
 
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
-        if ( ticketCategory == null )
+        // Check if a category have been selected
+        if ( !bIsFormValid )
         {
-            TicketCategory ticketCategoryEmpty = new TicketCategory( );
-            ticketCategoryEmpty.setId( TicketingConstants.PROPERTY_UNSET_INT );
-            ticket.setTicketCategory( ticketCategoryEmpty );
-        }
-        else
-        {
-            ticket.setTicketCategory( ticketCategory );
+            addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( request ) );
         }
 
         // Check constraints
@@ -391,27 +377,7 @@ public class TicketXPage extends WorkflowCapableXPage
         listValidationErrors.add( formValidator.isCommentFilled( ) );
 
         boolean bIsSubProbSelected = true;
-
-        // Validate if precision has been selected if the selected category has precisions
-        if ( ticket.getTicketCategory( ).getId( ) != TicketingConstants.PROPERTY_UNSET_INT )
-        {
-            List<TicketCategory> listTicketCategory = TicketCategoryHome.findByDomainId( ticket.getIdTicketDomain( ) );
-            for ( TicketCategory ticketCategoryByDomain : listTicketCategory )
-            {
-                if ( ticketCategoryByDomain.getLabel( ).equals( ticket.getTicketCategory( ).getLabel( ) )
-                        && StringUtils.isNotBlank( ticketCategoryByDomain.getPrecision( ) )
-                        && StringUtils.isNotBlank( request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) )
-                        && request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING ) )
-                {
-                    addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED, getLocale( request ) );
-                    bIsFormValid = false;
-                    bIsSubProbSelected = false;
-                    ticket.getTicketCategory( ).setPrecision( TicketingConstants.NO_ID_STRING );
-                    break;
-                }
-            }
-        }
-
+        
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
         if ( iNbCharcount > 5000 )
         {
@@ -427,26 +393,7 @@ public class TicketXPage extends WorkflowCapableXPage
                 bIsFormValid = false;
             }
         }
-
-        // Check if a type/domain/category have been selected (made here to sort errors)
-        if ( ticket.getIdTicketType( ) == TicketingConstants.PROPERTY_UNSET_INT )
-        {
-            addError( TicketingConstants.MESSAGE_ERROR_TICKET_TYPE_NOT_SELECTED, getLocale( request ) );
-            bIsFormValid = false;
-        }
-
-        if ( ticket.getIdTicketDomain( ) == TicketingConstants.PROPERTY_UNSET_INT )
-        {
-            addError( TicketingConstants.MESSAGE_ERROR_TICKET_DOMAIN_NOT_SELECTED, getLocale( request ) );
-            bIsFormValid = false;
-        }
-
-        if ( ticket.getTicketCategory( ) != null && ticket.getTicketCategory( ).getId( ) == TicketingConstants.PROPERTY_UNSET_INT )
-        {
-            addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( request ) );
-            bIsFormValid = false;
-        }
-
+        
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
 
         request.setAttribute( TicketingConstants.ATTRIBUTE_IS_DISPLAY_FRONT, true );
@@ -463,18 +410,6 @@ public class TicketXPage extends WorkflowCapableXPage
         if ( listFormErrors.size( ) > 0 )
         {
             bIsFormValid = false;
-        }
-
-        TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) );
-        if ( ticketDomain != null )
-        {
-            ticket.setTicketDomain( ticketDomain.getLabel( ) );
-
-            TicketType ticketType = TicketTypeHome.findByPrimaryKey( ticketDomain.getIdTicketType( ) );
-            if ( ticketType != null )
-            {
-                ticket.setTicketType( ticketType.getLabel( ) );
-            }
         }
 
         ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) ).getCode( ) );

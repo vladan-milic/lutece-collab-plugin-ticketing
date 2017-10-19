@@ -44,7 +44,7 @@
 				  strListIdParameter+="&selected_tickets="+selectedTickets[i].value;
 			  }
 		  }
-		  var dataToSend="action=search_response&searched_field=ticket_response&query="+$("#query").val()+"&category=${ticket.ticketCategory.label!}"+"&domain=${ticket.idTicketDomain!}"+strListIdParameter+pageIndex;
+		  var dataToSend="action=search_response&searched_field=ticket_response&query="+$("#query").val()+"&category=${ticket.ticketCategory.label!}"+"&domain=${ticket.ticketDomain.id!}"+strListIdParameter+pageIndex;
 		  $.ajax({
 			  url: targetUrl,
 			  type: "POST",

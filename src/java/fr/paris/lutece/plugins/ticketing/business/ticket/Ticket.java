@@ -55,6 +55,7 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
@@ -88,12 +89,6 @@ public class Ticket implements Serializable, RBACResource
     private String _strFixedPhoneNumber;
     @Pattern( regexp = PHONE_NUMBER_REGEX, message = "#i18n{ticketing.validation.ticket.MobilePhoneNumber.format}" )
     private String _strMobilePhoneNumber;
-    private int _nIdTicketType;
-    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketType.size}" )
-    private String _strTicketType;
-    private int _nIdTicketDomain;
-    @Size( max = 50, message = "#i18n{ticketing.validation.ticket.TicketDomain.size}" )
-    private String _strTicketDomain;
     @NotNull( message = "#i18n{ticketing.validation.ticket.TicketCategory.mandatory}" )
     private TicketCategory _ticketCategory;
     private int _nIdContactMode;
@@ -125,6 +120,15 @@ public class Ticket implements Serializable, RBACResource
     private String _strNomenclature;
     private int _nIdticketMarking = -1;
 
+    /**
+     * Constructor Ticket
+     */
+    public Ticket( )
+    {
+        _ticketCategory = new TicketCategory( );
+    }
+
+    
     /**
      * Enriches empty ticket attributes with specified values
      * 
@@ -194,8 +198,6 @@ public class Ticket implements Serializable, RBACResource
             if ( category != null )
             {
                 setTicketCategory( category );
-                setIdTicketDomain( category.getBranch().get( 0 ).getId( ) );
-                setIdTicketType( category.getBranch().get( 1 ).getId( ) );
             }
         }
 
@@ -426,66 +428,23 @@ public class Ticket implements Serializable, RBACResource
     }
 
     /**
-     * Returns the IdTicketType
-     * 
-     * @return The IdTicketType
-     */
-    public int getIdTicketType( )
-    {
-        return _nIdTicketType;
-    }
-
-    /**
-     * Sets the IdTicketType
-     * 
-     * @param nIdTicketType
-     *            The IdTicketType
-     */
-    public void setIdTicketType( int nIdTicketType )
-    {
-        _nIdTicketType = nIdTicketType;
-    }
-
-    /**
      * Returns the TicketType
      * 
      * @return The TicketType
      */
-    public String getTicketType( )
+    public TicketCategory getTicketType( )
     {
-        return _strTicketType;
+        return TicketCategoryService.getInstance().getType( _ticketCategory );
     }
 
     /**
-     * Sets the TicketType
+     * Returns the TicketDomain
      * 
-     * @param strTicketType
-     *            The TicketType
+     * @return The TicketDomain
      */
-    public void setTicketType( String strTicketType )
+    public TicketCategory getTicketDomain( )
     {
-        _strTicketType = strTicketType;
-    }
-
-    /**
-     * Returns the IdTicketDomain
-     * 
-     * @return The IdTicketDomain
-     */
-    public int getIdTicketDomain( )
-    {
-        return _nIdTicketDomain;
-    }
-
-    /**
-     * Sets the IdTicketDomain
-     * 
-     * @param nIdTicketDomain
-     *            The IdTicketDomain
-     */
-    public void setIdTicketDomain( int nIdTicketDomain )
-    {
-        _nIdTicketDomain = nIdTicketDomain;
+        return TicketCategoryService.getInstance().getDomain( _ticketCategory );
     }
 
     /**
@@ -495,7 +454,7 @@ public class Ticket implements Serializable, RBACResource
      */
     public TicketCategory getTicketCategory( )
     {
-        return _ticketCategory;
+        return TicketCategoryService.getInstance().getCategory( _ticketCategory );
     }
 
     /**
@@ -510,24 +469,13 @@ public class Ticket implements Serializable, RBACResource
     }
 
     /**
-     * Returns the TicketDomain
+     * Returns the TicketCategory precision
      * 
-     * @return The TicketDomain
+     * @return The TicketCategory precision
      */
-    public String getTicketDomain( )
+    public TicketCategory getTicketPrecision( )
     {
-        return _strTicketDomain;
-    }
-
-    /**
-     * Sets the TicketDomain
-     * 
-     * @param strTicketDomain
-     *            The TicketDomain
-     */
-    public void setTicketDomain( String strTicketDomain )
-    {
-        _strTicketDomain = strTicketDomain;
+        return TicketCategoryService.getInstance().getPrecision( _ticketCategory );
     }
 
     /**

@@ -33,8 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.category;
 
+import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.service.tree.AbstractNode;
-import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
@@ -49,22 +49,23 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     private static final long serialVersionUID = 1L;
 
     // RBAC management
-    public static final String RESOURCE_TYPE = "CATEGORY_DEMAND";
+    public static final String RESOURCE_TYPE = "TICKET_CATEGORY";
     public static final String PROPERTY_LABEL_RESOURCE_TYPE = "ticketing.category.ressourceType.label";
 
-    // Perimissions
-    public static final String PERMISSION_VIEW_LIST = "VIEW_DEMAND_LIST";
+    // Permissions
+    public static final String PERMISSION_VIEW_LIST = "VIEW_LIST";
     public static final String PROPERTY_LABEL_PERMISSION_VIEW = "ticketing.category.permission.view.label";
 
-    public static final String PERMISSION_VIEW_DETAILS = "VIEW_DEMAND_DETAILS";
-    public static final String PROPERTY_LABEL_PERMISSION_VIEW_DETAILS = "ticketing.category.permission.viewDetails.label";
+    public static final String PERMISSION_VIEW_DETAIL = "VIEW_DETAIL";
+    public static final String PROPERTY_LABEL_PERMISSION_VIEW_DETAIL = "ticketing.category.permission.viewDetail.label";
 
+    public static final String PERMISSION_BELONG_TO = "BELONG_TO";
+    public static final String PROPERTY_LABEL_BELONG_TO = "ticketing.category.permission.belongTo.label";
+    
     // Variables declarations
     private int _nId;
 
     private int _nIdParent;
-
-    private TicketCategoryType _categoryType;
 
     @NotEmpty( message = "#i18n{ticketing.validation.category.Label.notEmpty}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.category.Label.size}" )
@@ -74,22 +75,29 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     private int _nIdWorkflow;
 
-    @NotEmpty( message = "#i18n{ticketing.validation.category.Code.notEmpty}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.category.Code.size}" )
     private String _strCode;
 
-    private Unit _defaultAssignUnit;
+    private AssigneeUnit _defaultAssignUnit;
 
+    private List<Integer> _listIdInput;
+
+    @Digits(integer=6, fraction=0, message = "#i18n{ticketing.validation.category.DemandId.int}" )
+    private int _nDemandId;
+    
+    @Size( max = 500, message = "#i18n{ticketing.validation.category.HelpMessage.size}" )
+    private String _strHelpMessage;
+    
     /**
-     * Constructor for Catagory
+     * Constructor TicketCategory
      */
     public TicketCategory( )
     {
         _nIdParent = -1;
-        _categoryType = new TicketCategoryType( );
-        _categoryType.setId( -1 );
-        _defaultAssignUnit = new Unit( );
-        _defaultAssignUnit.setIdUnit( -1 );
+        _depth = new TicketCategoryType( );
+        ( (TicketCategoryType) _depth ).setId( -1 );
+        _defaultAssignUnit = new AssigneeUnit( );
+        _defaultAssignUnit.setUnitId( -1 );
         _nIdWorkflow = 1;
 
     }
@@ -140,9 +148,9 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     }
 
     /**
-     * Returns the Label
+     * Returns the categoryType
      * 
-     * @return The Label
+     * @return The categoryType
      */
     public String getLabel( )
     {
@@ -207,7 +215,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
      * 
      * @return the default assign unit
      */
-    public Unit getDefaultAssignUnit( )
+    public AssigneeUnit getDefaultAssignUnit( )
     {
         return _defaultAssignUnit;
     }
@@ -217,7 +225,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
      * 
      * @param defaultAssignUnit
      */
-    public void setDefaultAssignUnit( Unit defaultAssignUnit )
+    public void setDefaultAssignUnit( AssigneeUnit defaultAssignUnit )
     {
         _defaultAssignUnit = defaultAssignUnit;
     }
@@ -229,7 +237,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
      */
     public TicketCategoryType getCategoryType( )
     {
-        return _categoryType;
+        return (TicketCategoryType) _depth;
     }
 
     /**
@@ -240,7 +248,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
      */
     public void setCategoryType( TicketCategoryType categoryType )
     {
-        _categoryType = categoryType;
+        _depth = categoryType;
     }
 
     /**
@@ -264,6 +272,61 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
         _nIdWorkflow = nIdWorkflow;
     }  
 
+    /**
+     * @return the _listIdInput
+     */
+    public List<Integer> getListIdInput( )
+    {
+        return _listIdInput;
+    }
+
+    /**
+     * @param listIdInput
+     *            the listIdInput to set
+     */
+    public void setListIdInput( List<Integer> listIdInput )
+    {
+        this._listIdInput = listIdInput;
+    }
+
+    /**
+     * Returns the DemandId
+     * 
+     * @return The DemandId
+     */
+    public int getDemandId( )
+    {
+        return _nDemandId;
+    }
+
+    /**
+     * Sets the DemandId
+     * 
+     * @param nDemandId
+     *            The DemandId
+     */
+    public void setDemandId( int nDemandId )
+    {
+        _nDemandId = nDemandId;
+    }
+
+    /**
+     * @return the _strHelpMessage
+     */
+    public String getHelpMessage( )
+    {
+        return _strHelpMessage;
+    }
+
+    /**
+     * @param _strHelpMessage
+     *            the _strHelpMessage to set
+     */
+    public void setHelpMessage( String _strHelpMessage )
+    {
+        this._strHelpMessage = _strHelpMessage;
+    }
+    
     /**
      * {@inheritDoc }
      */

@@ -34,11 +34,11 @@
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.supportentity.SupportEntity;
 import fr.paris.lutece.plugins.ticketing.business.supportentity.SupportEntityHome;
 import fr.paris.lutece.plugins.ticketing.business.supportentity.SupportLevel;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
@@ -145,7 +145,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_SUPPORT_ENTITY, _supportEntity );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList( ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketCategoryService.getInstance( ).getReferenceList( TicketCategoryService.getInstance( ).getDomainList( ) ) );
         model.put( MARK_LEVEL_LIST, SupportLevel.getReferenceList( request.getLocale( ) ) );
         model.put( MARK_UNIT_LIST, getUnitsList( ) );
 
@@ -186,7 +186,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
 
         if ( StringUtils.isNotEmpty( strIdDomain ) && StringUtils.isNumeric( strIdDomain ) )
         {
-            TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( Integer.parseInt( strIdDomain ) );
+            TicketCategory ticketDomain = TicketCategoryService.getInstance( ).findCategoryById( ( Integer.parseInt( strIdDomain ) ) );
             _supportEntity.setTicketDomain( ticketDomain );
         }
 
@@ -266,7 +266,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_SUPPORT_ENTITY, _supportEntity );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketDomainHome.getReferenceList( ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, TicketCategoryService.getInstance( ).getReferenceList( TicketCategoryService.getInstance( ).getDomainList( ) ) );
         model.put( MARK_LEVEL_LIST, SupportLevel.getReferenceList( request.getLocale( ) ) );
         model.put( MARK_UNIT_LIST, getUnitsList( ) );
 

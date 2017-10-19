@@ -1,17 +1,20 @@
-<#include "manageticketing_tabs.html" />
-<@tabs2 tab="categorytype" />
-<@box>
-	<@boxHeader title='#i18n{ticketing.create_categorytype.title}' />
-	<@boxBody>
-    <@tform name='create_categorytype' action='jsp/admin/plugins/ticketing/ManageCategoryTypes.jsp'>
-        <@messages errors=errors />
-        <input type="hidden" id="id" name="id"/>
-        
-				<@formGroup labelKey='#i18n{ticketing.create_categorytype.labelLabel}' helpKey='#i18n{ticketing.create_categorytype.labelLabel.help}' mandatory=true>
-					<@input type='text' name='label' value='${categorytype.label!\'\'}' />
-				</@formGroup>
-				
-				<@actionButtons button1Name="action_createCategoryType" button2Name="view_manageCategoryType"/>
-    </@tform>
-	</@boxBody>
-</@box>
+<#include "admin_tabs.html" />
+<@tabsWrapper>
+  <@tabs tab="categorytype" hasTable=false/>
+    <@box>
+        <@boxHeader title='#i18n{ticketing.create_categorytype.title}' />
+        <@boxBody>
+		    <@tform name='create_categorytype' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
+		        <@messages errors=errors />
+		        <input type="hidden" id="id" name="id"/>
+					<@formGroup labelKey='#i18n{ticketing.create_categorytype.labelLabel}' helpKey='#i18n{ticketing.create_categorytype.labelLabel.help}' mandatory=true>
+						<@input type='text' name='label' value='${categorytype.label!\'\'}' />
+                    </@formGroup>
+                <@btnGroup>
+                    <@button type='submit' name='action_createCategoryType' title='#i18n{portal.admin.message.buttonValidate}' />
+                    <@button type='submit' name='view_manageCategories' title='#i18n{portal.admin.message.buttonCancel}' cancel=true />
+                </@btnGroup>
+            </@tform>
+        </@boxBody>
+    </@box>
+</@tabsWrapper>

@@ -48,17 +48,18 @@ public class TicketCategoryType extends AbstractDepth implements Serializable
     // Variables declarations
     private int _nId;
 
+    private int _nDepthNumber;
+    
     @NotEmpty( message = "#i18n{ticketing.validation.categorytype.Label.notEmpty}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.categorytype.Label.size}" )
     private String _strLabel;
-
-    private int _nDepth;
 
     /**
      * Returns the Id
      * 
      * @return The Id
      */
+    @Override
     public int getId( )
     {
         return _nId;
@@ -76,11 +77,30 @@ public class TicketCategoryType extends AbstractDepth implements Serializable
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getDepthNumber( )
+    {
+        return _nDepthNumber;
+    }
+
+    /**
+     * Sets the DepthNumber
+     * 
+     * @param nDepthNumber
+     *            The DepthNumber
+     */
+    public void setDepthNumber( int nDepthNumber )
+    {
+        _nDepthNumber = nDepthNumber;
+    }
+
+    /**
      * Returns the Label
      * 
      * @return The Label
      */
-    @Override
     public String getLabel( )
     {
         return _strLabel;
@@ -95,35 +115,5 @@ public class TicketCategoryType extends AbstractDepth implements Serializable
     public void setLabel( String strLabel )
     {
         _strLabel = strLabel;
-    }
-
-    /**
-     * Returns the Depth
-     * 
-     * @return The Depth
-     */
-    public int getDepth( )
-    {
-        return _nDepth;
-    }
-
-    /**
-     * Sets the Depth
-     * 
-     * @param nDepth
-     *            The Depth
-     */
-    public void setDepth( int nDepth )
-    {
-        _nDepth = nDepth;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getNbDepth( )
-    {
-        return _nDepth;
     }
 }

@@ -33,14 +33,47 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.search;
 
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.IntPoint;
+import org.apache.lucene.document.LongPoint;
+import org.apache.lucene.index.IndexableField;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.BooleanQuery.Builder;
+import org.apache.lucene.search.DocValuesTermsQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
+import org.apache.lucene.search.SortField.Type;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TotalHitCountCollector;
+
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
-import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexWriterUtil;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketSearchUtil;
@@ -72,8 +105,6 @@ public class TicketSearchEngine implements ITicketSearchEngine
 {
     // Constants
     private static final String DESC_CONSTANT = "DESC";
-    private static final int TRUE_VALUE_CONSTANT = 1;
-    private static final int FALSE_VALUE_CONSTANT = 0;
 
     // The map for the association on the filter selected by the user and the Lucene field
     private final Map<String, List<AbstractMap.SimpleEntry<String, Type>>> _mapSortField = TicketSearchUtil.initMapSortField( );
@@ -93,15 +124,11 @@ public class TicketSearchEngine implements ITicketSearchEngine
             result.setId( document.getField( TicketSearchItemConstant.FIELD_TICKET_ID ).numericValue( ).intValue( ) );
             result.setDateCreate( new Timestamp( document.getField( TicketSearchItemConstant.FIELD_DATE_CREATION ).numericValue( ).longValue( ) ) );
             result.setUrl( document.get( TicketSearchItemConstant.FIELD_URL ) );
-            result.setIdTicketType( document.getField( TicketSearchItemConstant.FIELD_TICKET_TYPE_ID ).numericValue( ).intValue( ) );
-            result.setTicketType( document.get( TicketSearchItemConstant.FIELD_TICKET_TYPE ) );
             result.setTicketComment( document.get( TicketSearchItemConstant.FIELD_COMMENT ) );
             result.setCriticality( document.getField( TicketSearchItemConstant.FIELD_CRITICALITY ).numericValue( ).intValue( ) );
             result.setPriority( document.getField( TicketSearchItemConstant.FIELD_PRIORITY ).numericValue( ).intValue( ) );
             result.setReference( document.get( TicketSearchItemConstant.FIELD_REFERENCE ) );
             result.setTicketStatus( Integer.parseInt( document.get( TicketSearchItemConstant.FIELD_STATUS ) ) );
-            result.setIdTicketDomain( Integer.parseInt( document.get( TicketSearchItemConstant.FIELD_DOMAIN_ID ) ) );
-            result.setTicketDomain( document.get( TicketSearchItemConstant.FIELD_DOMAIN ) );
             result.setUserTitle( document.get( TicketSearchItemConstant.FIELD_USER_TITLE ) );
             result.setFirstname( document.get( TicketSearchItemConstant.FIELD_FIRSTNAME ) );
             result.setLastname( document.get( TicketSearchItemConstant.FIELD_LASTNAME ) );
@@ -112,7 +139,14 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
             // TicketCategory
             TicketCategory ticketCategory = new TicketCategory( );
-            ticketCategory.setLabel( document.get( TicketSearchItemConstant.FIELD_CATEGORY ) );
+            if ( StringUtils.isNotEmpty(document.get( TicketSearchItemConstant.FIELD_PRECISION ) ) )
+            {
+                ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( Integer.valueOf( document.get( TicketSearchItemConstant.FIELD_PRECISION_ID ) ) );
+            }
+            else
+            {
+                ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( Integer.valueOf( document.get( TicketSearchItemConstant.FIELD_CATEGORY_ID ) ) );
+            }
             result.setTicketCategory( ticketCategory );
 
             // State

@@ -37,6 +37,9 @@ import java.io.Serializable;
 
 import java.sql.Timestamp;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
+
 /**
  * This is the business class for the object InstantResponse
  */
@@ -46,12 +49,8 @@ public class InstantResponse implements Serializable
 
     // Variables declarations
     private int _nId;
-    private int _nIdTicketCategory;
     private String _strSubject;
-    private String _strType;
-    private String _strDomain;
-    private String _strCategory;
-    private String _strTicketCategoryPrecision;
+    private TicketCategory _ticketCategory;
     private Timestamp _dDateCreate;
     private int _nIdAdminUser;
     private String _strUserFirstname;
@@ -82,24 +81,54 @@ public class InstantResponse implements Serializable
     }
 
     /**
-     * Returns the IdTicketCategory
+     * Returns the TicketType
      * 
-     * @return The IdTicketCategory
+     * @return The TicketType
      */
-    public int getIdTicketCategory( )
+    public TicketCategory getTicketType( )
     {
-        return _nIdTicketCategory;
+        return TicketCategoryService.getInstance().getType( _ticketCategory );
     }
 
     /**
-     * Sets the IdTicketCategory
+     * Returns the TicketDomain
      * 
-     * @param nIdTicketCategory
-     *            The IdTicketCategory
+     * @return The TicketDomain
      */
-    public void setIdTicketCategory( int nIdTicketCategory )
+    public TicketCategory getTicketDomain( )
     {
-        _nIdTicketCategory = nIdTicketCategory;
+        return TicketCategoryService.getInstance().getDomain( _ticketCategory );
+    }
+
+    /**
+     * Returns the Ticket Category
+     * 
+     * @return The TicketCategory
+     */
+    public TicketCategory getTicketCategory( )
+    {
+        return TicketCategoryService.getInstance().getCategory( _ticketCategory );
+    }
+
+    /**
+     * Returns the Ticket Category precision
+     * 
+     * @return The TicketCategory
+     */
+    public TicketCategory getTicketPrecision( )
+    {
+        return TicketCategoryService.getInstance().getPrecision( _ticketCategory );
+    }
+
+    /**
+     * Sets the TicketCategory
+     * 
+     * @param ticketCategory
+     *            The TicketCategory
+     */
+    public void setTicketCategory( TicketCategory ticketCategory )
+    {
+        _ticketCategory = ticketCategory;
     }
 
     /**
@@ -142,90 +171,6 @@ public class InstantResponse implements Serializable
     public void setIdAdminUser( int nIdAdminUser )
     {
         _nIdAdminUser = nIdAdminUser;
-    }
-
-    /**
-     * Returns the Type
-     * 
-     * @return The Type
-     */
-    public String getType( )
-    {
-        return _strType;
-    }
-
-    /**
-     * Sets the Type
-     * 
-     * @param strType
-     *            The Type
-     */
-    public void setType( String strType )
-    {
-        _strType = strType;
-    }
-
-    /**
-     * Returns the Domain
-     * 
-     * @return The Domain
-     */
-    public String getDomain( )
-    {
-        return _strDomain;
-    }
-
-    /**
-     * Sets the Domain
-     * 
-     * @param strDomain
-     *            The Domain
-     */
-    public void setDomain( String strDomain )
-    {
-        _strDomain = strDomain;
-    }
-
-    /**
-     * Returns the Category
-     * 
-     * @return The Category
-     */
-    public String getCategory( )
-    {
-        return _strCategory;
-    }
-
-    /**
-     * Sets the Category
-     * 
-     * @param strCategory
-     *            The Category
-     */
-    public void setCategory( String strCategory )
-    {
-        _strCategory = strCategory;
-    }
-
-    /**
-     * Returns the TicketCategoryPrecision
-     * 
-     * @return the strTicketCategoryPrecision
-     */
-    public String getTicketCategoryPrecision( )
-    {
-        return _strTicketCategoryPrecision;
-    }
-
-    /**
-     * Set the strTicketCategoryPrecision
-     * 
-     * @param strTicketCategoryPrecision
-     *            the strTicketCategoryPrecision to set
-     */
-    public void setTicketCategoryPrecision( String strTicketCategoryPrecision )
-    {
-        this._strTicketCategoryPrecision = strTicketCategoryPrecision;
     }
 
     /**

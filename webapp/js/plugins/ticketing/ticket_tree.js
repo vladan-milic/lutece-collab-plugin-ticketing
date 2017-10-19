@@ -1,276 +1,123 @@
 // The three messages of selections
-var msg_select_type = "-- Choisir une nature --";
-var msg_select_domain = "-- Choisir un domaine --";
-var msg_select_category = "-- Choisir une probl\u00e9matique --";
-var msg_select_precision = "-- Choisir une sous-probl\u00e9matique --";
+var default_msg_select_type = "-- Choisir une nature --";
+var default_msg_select_domain = "-- Choisir un domaine --";
+var default_msg_select_category = "-- Choisir une probl\u00e9matique --";
+var default_msg_select_precision = "-- Choisir une sous-probl\u00e9matique --";
 
 // Turns the 3 combos identified by the jquery selectors into dynamic combos
-function lutece_ticket_tree(type_selector, domain_selector, category_selector, precision_selector, selected_category_id, url) {
-    var base = $('head base').attr('href');
-    $.getJSON( base + "rest/ticketing/type/s?format=json", function( data ) {
-        var types_map = {};
-		var selectedType = undefined;
-        var selectedDomain = undefined;
-        var selectedCategory = undefined;
-        var selectedPrecision = undefined;
-        var idTypeSelected = $("#ticket_type_id").val();
-        var idDomainSelected = $("#ticket_domain_id").val();
-        var idTicketCategorySelected = $("#ticket_category_id").val();
-        var precisionSelected = $("#ticket_precision").val();
+function lutece_ticket_tree(type_selector, domain_selector, category_selector, precision_selector, categories_tree, url) {
+    var idTypeSelected = $("#ticket_type_id").val();
+    var idDomainSelected = $("#ticket_domain_id").val();
+    var idCategorySelected = $("#ticket_category_id").val();
+    var idPrecisionSelected = $("#ticket_precision_id").val();
+	var selectedType = undefined;
+    var selectedDomain = undefined;
+    var selectedCategory = undefined;
+    var selectedPrecision = undefined;
+    
+	if (idTypeSelected > 0)
+	{
+		var index = get_index(categories_tree.categories_depth_1, idTypeSelected);
+		selectedType = categories_tree.categories_depth_1[index];
+	}
+	if (idDomainSelected > 0)
+	{
+		var index = get_index(selectedType.categories_depth_2, idDomainSelected);
+		selectedDomain = selectedType.categories_depth_2[index];
+	}
+	if (idCategorySelected > 0)
+	{
+		var index = get_index(selectedDomain.categories_depth_3, idCategorySelected);
+		selectedCategory = selectedDomain.categories_depth_3[index];
+	}
+	if (idPrecisionSelected > 0)
+	{
+		var index = get_index(selectedCategory.categories_depth_4, idPrecisionSelected);
+		selectedPrecision = selectedCategory.categories_depth_4[index];
+	}
+    
+    // Load all lists (type/domain/category/precision)
+	load_combo(type_selector, categories_tree.categories_depth_1, idTypeSelected, default_msg_select_type, true, false);
+	load_combo(domain_selector, (idTypeSelected > 0 ? selectedType.categories_depth_2 : undefined), idDomainSelected, default_msg_select_domain, false, false);
+	load_combo(category_selector, (idDomainSelected > 0 ? selectedDomain.categories_depth_3 : undefined), idCategorySelected, default_msg_select_category, false, false);
+	if (idCategorySelected > 0 && selectedCategory.categories_depth_4.length == 0)
+	{
+		load_combo(precision_selector, (idCategorySelected > 0 ? selectedCategory.categories_depth_4 : undefined), idPrecisionSelected, default_msg_select_precision, false, true);
+	}
+	else
+	{
+		$(precision_selector).parents(".form-group:first").hide();
+	}
+    
+	loadGenericAttributesForm(url, false, category_selector, true, -1);
 
-        for (var i = 0; i<data.types.length; i++) {
-            var type = data.types[i];
-            types_map[type.id] = type;
-            type.domains_map = {};
-
-            for (var j = 0; j<type.domains.length; j++) {
-                var domain = type.domains[j];
-                type.domains_map[domain.id] = domain;
-                domain.categories_map = {};
-
-                for (var k = 0; k<domain.categories.length; k++) {
-                    var category = domain.categories[k];
-                    domain.categories_map[category.id] = category;
-                    category.precisions_map = {};
-
-                    if(category.precisions != undefined) {
-                    	for (var l = 0; l<category.precisions.length; l++) {
-                    		var precision = category.precisions[l];
-                    		category.precisions_map[precision.id] = precision;
-                    		domain.categories_map[precision.id] = category;
-                    		                    		
-							if (selected_category_id == precision.id && precisionSelected != "-1") {
-								selectedType = type;
-								selectedDomain = domain;
-								selectedCategory = category;
-								selectedPrecision = precision;
-							}
-                    	}
-                        // Add the default message for precision when no selection has been made
-                        if ( selectedPrecision == undefined )
-                        {
-                        	addDefaultValueInList(category.precisions, msg_select_precision);
-                        }
-                	} else {
-						if (selected_category_id == category.id) {
-							selectedType = type;
-							selectedDomain = domain;
-							selectedCategory = category;
-							selectedPrecision = undefined;
-						}
-                    }
-                }
-                // Add the default message for category when no selection has been made
-                if ( selectedCategory == undefined && (!idTicketCategorySelected || idTicketCategorySelected < 1) )
-                {
-                	addDefaultValueInList(domain.categories, msg_select_category);
-                }
-            }
-            // Add the default message for domain when no selection has been made
-            if ( selectedDomain == undefined && (!idDomainSelected || idDomainSelected < 1) )
-            {
-            	addDefaultValueInList(type.domains, msg_select_domain);
-            }
-        }
-        // Add the default message for type when no selection has been made
-        if ( selectedType == undefined && (!idTypeSelected || idTypeSelected < 1) )
-        {
-        	addDefaultValueInList(data.types, msg_select_type);
-        }
-        
-		if (selectedType == undefined) {
-			if (idTypeSelected && idTypeSelected > 0)
-			{
-				// Return from errors during validation case
-				// --- retrieve type selected
-		        for (var i = 0; i<data.types.length; i++)
-		        {
-		            if (data.types[i].id == idTypeSelected)
-		            {
-		            	selectedType = data.types[i];
-		            	break;
-		            }
-		        }
-		        // --- retrieve domain selected
-		        if(selectedType != undefined)
-		        {
-		        	if(idDomainSelected && idDomainSelected > 0)
-		        	{
-		        		// one domain has beeen selected
-		        		for (var j = 0; j<selectedType.domains.length; j++)
-			        	{
-			            	if (selectedType.domains[j].id == idDomainSelected)
-			            	{
-			            		selectedDomain = selectedType.domains[j];
-			            		if(idTicketCategorySelected && idTicketCategorySelected > 0)
-			            		{
-									for(var k = 0; k<selectedDomain.categories.length; k++)
-									{
-										if(selectedDomain.categories[k].id == idTicketCategorySelected)
-										{
-											selectedCategory = selectedDomain.categories[k];
-											break;
-										}
-									}
-			            		}
-			            		else
-			            		{
-			            			selectedCategory = selectedDomain.categories[0];
-			            		}
-								if (selectedCategory != undefined && selectedCategory.precisions != undefined)
-								{
-									selectedPrecision = selectedCategory.precisions[0];
-								}
-			            		break;
-			            	}
-			        	}
-		        	}
-		        	else
-		        	{
-		        		// no domain has been selected
-		        		selectedDomain = selectedType.domains[0];
-						selectedCategory = selectedType.domains[1].categories[0];
-						if (selectedCategory.precisions != undefined) {
-							selectedPrecision = selectedCategory.precisions[0];
-						}
-		        	}
-		        }
-		        // reset the preselected value
-		        $("#ticket_type_id").val("");
-		        $("#ticket_domain_id").val("");
-		        $("#ticket_category_id").val("");
-		        $("#ticket_precision").val("");
-			}
-			else
-			{
-				// Initialisation case
-				selectedType = data.types[0];
-				selectedDomain = data.types[1].domains[0];
-				selectedCategory = data.types[1].domains[1].categories[0];
-				if (selectedCategory.precisions != undefined) {
-					selectedPrecision = selectedCategory.precisions[0];
-				}
-			}
-		}
-
-        var load_messages = function() {
-        	if (selectedCategory!= undefined && selectedCategory.help != undefined) {
-        		$("#help_message_category").html(selectedCategory.help);
-        	} else {
-        		$("#help_message_category").html("");
-        	}
-
-			$("#help_message_precision").html("");
-        	if (selectedPrecision != undefined) {
-				if (selectedPrecision.help != undefined) {
-					$("#help_message_precision").html(selectedPrecision.help);
-				}
-        	}
-        }
-        var setSelectedCategoryId = function() {
-        	if (selectedPrecision != undefined  && selectedPrecision.id != -1 && selectedCategory != undefined) {
-        		$(category_selector + ' option:selected').val(selectedPrecision.id);
-        	}
-        }
-
-        // Load all lists (type/domain/category)
-		load_combo(type_selector, data.types, selectedType);
-		load_combo(domain_selector, selectedType.domains, selectedDomain);
-		load_combo(category_selector, selectedDomain.categories, selectedCategory);
-		if(selectedCategory != undefined)
-		{
-			load_combo(precision_selector, selectedCategory.precisions, selectedPrecision);
-		}
-		else
-		{
-			load_combo(precision_selector, undefined, -1, msg_select_precision);
-		}
-		load_messages();
-		setSelectedCategoryId();
-		var valueIdPrecision = -1;
-		if(selectedCategory != undefined && selectedCategory.precisions != undefined && selectedCategory.precisions.length > 0){
-			valueIdPrecision = undefined;
-		}
-		if(selectedPrecision != undefined && selectedPrecision.id != undefined && selectedPrecision.id != -1){
-			valueIdPrecision = selectedPrecision.id;
-		}
-		loadGenericAttributesForm(url, false, category_selector, true, valueIdPrecision);
-
-		// Change the selected type on click
-		$(type_selector).change(function() {
-			changeTypeList(false);
-        });
-
-		// Change the selected domain on click
-        $(domain_selector).change(function() {
-			changeDomainList(false);
-        });
-
-        // Change the selected category on click
-        $(category_selector).change(function() {
-			changeCategoryList(false);
-        });
-
-        // Change the selected precision on click
-        $(precision_selector).change(function() {
-			changePrecisionList(false)
-        });
-		
-		// Change the selected type
-		function changeTypeList(fromParent)
-		{
-			var typeValue = $(type_selector).val();
-			removeDefaultValue(type_selector, "id_ticket_type", typeValue);
-			selectedType = types_map[typeValue];
-			load_combo(domain_selector, selectedType.domains);
-			changeDomainList(true);
-		}
-		
-		// Change the selected domain
-		function changeDomainList(fromParent)
-		{
-			var domainValue = $(domain_selector).val();
-			manageDefaultValueInList(fromParent, domain_selector, "id_ticket_domain", msg_select_domain, domainValue);
-			selectedDomain = selectedType.domains_map[domainValue];
-			load_combo(category_selector, (selectedDomain == undefined ? selectedDomain : selectedDomain.categories), -1, msg_select_category);
-			changeCategoryList(true);
-		}
-		
-		// Change the selected category
-		function changeCategoryList(fromParent)
-		{
-			var categoryValue = $(category_selector).val();
-			manageDefaultValueInList(fromParent, category_selector, "id_ticket_category", msg_select_category, categoryValue);
-			selectedCategory = (selectedDomain != undefined ? selectedDomain.categories_map[categoryValue] : selectedDomain);
-			load_combo(precision_selector, (selectedCategory == undefined ? selectedCategory : selectedCategory.precisions));
-			if(selectedCategory != undefined && (selectedCategory.precisions == undefined || selectedCategory.precisions.length == 0) )
-			{
-				loadGenericAttributesForm(url, false, category_selector, false, -1);
-			}
-			else
-			{
-				changePrecisionList(true)
-			}	
-		}
-		
-		// Change the selected precision
-		function changePrecisionList(fromParent)
-		{
-			var precisionValue = $(precision_selector).val();
-			manageDefaultValueInList(fromParent, precision_selector, "id_ticket_precision", msg_select_precision, precisionValue);
-			if(selectedCategory != undefined && selectedCategory.precisions_map != undefined && Object.keys(selectedCategory.precisions_map).length > 0)
-			{
-				selectedPrecision = selectedCategory.precisions_map[precisionValue];
-			}
-			else
-			{
-				selectedPrecision = -1;
-			}
-			load_messages();
-			setSelectedCategoryId();
-			loadGenericAttributesForm(url, false, category_selector, false, selectedPrecision);
-		}
+	// Change the selected type on click
+	$(type_selector).change(function() {
+		selectedType = changeTypeList(categories_tree.categories_depth_1);
     });
+
+	// Change the selected domain on click
+    $(domain_selector).change(function() {
+    	selectedDomain = changeDomainList(selectedType.categories_depth_2);
+    });
+
+    // Change the selected category on click
+    $(category_selector).change(function() {
+    	selectedCategory = changeCategoryList(selectedDomain.categories_depth_3);
+    });
+
+    // Change the selected precision on click
+    $(precision_selector).change(function() {
+    	selectedPrecision = changePrecisionList(selectedCategory.categories_depth_4)
+    });
+	
+	// Change the selected type
+	function changeTypeList(categories_depth_1)
+	{
+		var typeValue = $(type_selector).val();
+		removeDefaultValue(type_selector, "id_ticket_type", typeValue);
+		var index = get_index(categories_depth_1, typeValue);
+		var newSelectedType = categories_depth_1[index];
+		load_combo(domain_selector, newSelectedType.categories_depth_2, 0, default_msg_select_domain, true, false);
+		load_combo(category_selector, undefined, 0, default_msg_select_category, false, false);
+		return newSelectedType;
+	}
+	
+	// Change the selected domain
+	function changeDomainList(categories_depth_2)
+	{
+		var domainValue = $(domain_selector).val();
+		removeDefaultValue(domain_selector, "id_ticket_domain", domainValue);
+		var index = get_index(categories_depth_2, domainValue);
+		var newSelectedDomain = categories_depth_2[index];
+		load_combo(category_selector, newSelectedDomain.categories_depth_3, 0, default_msg_select_category, true, false);
+		load_combo(precision_selector, undefined, 0, default_msg_select_precision, false, false);
+		return newSelectedDomain;
+	}
+	
+	// Change the selected category
+	function changeCategoryList(categories_depth_3)
+	{
+		var categoryValue = $(category_selector).val();
+		removeDefaultValue(category_selector, "id_ticket_category", categoryValue);
+		var index = get_index(categories_depth_3, categoryValue);
+		var newSelectedCategory = categories_depth_3[index];
+		load_combo(precision_selector, newSelectedCategory.categories_depth_4, 0, default_msg_select_precision, true, true);
+		loadGenericAttributesForm(url, false, category_selector, false, -1);
+		return newSelectedCategory;
+	}
+	
+	// Change the selected precision
+	function changePrecisionList(categories_depth_4)
+	{
+		var precisionValue = $(precision_selector).val();
+		removeDefaultValue(precision_selector, "id_ticket_precision", precisionValue);
+		var index = get_index(categories_depth_4, precisionValue);
+		var newSelectedPrecision = categories_depth_4[index];
+		loadGenericAttributesForm(url, false, category_selector, false, -1);
+//		load_messages();
+		return newSelectedPrecision;
+	}
 }
 
 
@@ -312,57 +159,64 @@ function loadGenericAttributesForm(url, is_response_reseted, category_selector, 
 	}
 }
 
-function load_combo(id_combo, options, selected_option, text_to_display) {
+function load_combo(id_combo, categories, selected_category_id, default_msg_select, is_next_list_to_select, is_precision) {
+	
 	$(id_combo).children().remove();
-	if (options != undefined)
+	if (categories != undefined)
 	{
-		if (selected_option == undefined)
+		if (selected_category_id > 0)
 		{
-			selected_option = options[0];
+			var index = get_index(categories, selected_category_id);
+			for (var i = 0; i<categories.length; i++)
+			{
+				$(id_combo).append(new Option(categories[i].label, categories[i].id, categories[index].id == categories[i].id, categories[index].id == categories[i].id));
+				$(id_combo).parents(".form-group:first").show();
+			}
 		}
-		for (var i = 0; i<options.length; i++)
+		else
 		{
-			$(id_combo).append(new Option(options[i].label, options[i].id, selected_option.id == options[i].id, selected_option.id == options[i].id));
-			$(id_combo).parents(".form-group:first").show();
+			if (categories.length == 0)
+			{
+				$(id_combo).parents(".form-group:first").hide();
+			}
+			else
+			{
+				$(id_combo).append(new Option(default_msg_select, -1, true));
+				if (is_next_list_to_select)
+				{
+					for (var i = 0; i<categories.length; i++)
+					{
+						$(id_combo).append(new Option(categories[i].label, categories[i].id, false));
+						$(id_combo).parents(".form-group:first").show();
+					}
+				}
+			}
 		}
-	} 
-	else if (selected_option != undefined && (selected_option.id == '-1' || selected_option == -1))
-	{
-			$(id_combo).append(new Option((selected_option.label != undefined ? selected_option.label : text_to_display), -1));
-			$(id_combo).parents(".form-group:first").show();
-	} 
+	}
 	else
 	{
-		$(id_combo).parents(".form-group:first").hide();
+		if (is_precision)
+		{
+			$(id_combo).parents(".form-group:first").hide();
+		}
+		$(id_combo).append(new Option(default_msg_select, -1, true));
+		$(id_combo).parents(".form-group:first").show();
 	}
 }
 
-// Add default value on list with specific message
-function addDefaultValueInList(list, message)
-{
-	var emptyElement = {};
-	emptyElement['id'] = -1;
-	emptyElement['label'] = message;
-	list.unshift(emptyElement);
-}
-
-// Add the default value or remove it in a list if necessary
-function manageDefaultValueInList( fromParent, selector, idField, message, currentValue )
-{
-	removeDefaultValue(selector, idField, currentValue);
-	addDefaultValue(fromParent, selector, idField, message);
-}
-
-// Add the default value in a list
-function addDefaultValue( fromParent, selector, idField, message )
-{
-	if(fromParent && $(selector).find('option[value="-1"]').length < 1 )
+function get_index(categories, category_id) {
+	var i = 0;
+	if (categories != undefined)
 	{
-		var optionMessage = new Option(message, -1);
-		$("#" + idField).prepend(optionMessage);
-		var firstChild = $("#" + idField).prop("selectedIndex",0);
-		firstChild.selected = "selected";
+		while (i < categories.length) {
+			if (categories[i].id == category_id)
+			{
+				break;
+			}
+		    i++;
+		}
 	}
+	return i;
 }
 
 // Remove the default value on a list

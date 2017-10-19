@@ -33,14 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.util;
 
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 
 /**
@@ -48,9 +47,6 @@ import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
  */
 public class TicketCategoryValidator
 {
-    // Constants
-    private static final String LOG_MESSAGE_TYPE_ID_MISSING = "Parameter domain id is missing !";
-
     // Variables
     private HttpServletRequest _request;
 
@@ -72,14 +68,11 @@ public class TicketCategoryValidator
      *            The id of the domain
      * @return the TicketCategoryValidatorResult which represent the result of the validation
      */
-    public TicketCategoryValidatorResult validateTicketCategoryAndPrecision( )
+    public TicketCategoryValidatorResult validateTicketCategory( )
     {
         // Retrieve the TicketCategory
         TicketCategory ticketCategory = retrieveTicketCategoryFromRequest( );
-
-        // Validate if precision has been selected if the selected category has precisions
-        String strIdDomain = _request.getParameter( TicketingConstants.PARAMETER_TICKET_DOMAIN_ID );
-        boolean isValid = isTicketCategoryPrecisionValid( ticketCategory, TicketUtils.manageIntegerParsingFromString( strIdDomain, LOG_MESSAGE_TYPE_ID_MISSING ) );
+        boolean isValid = (ticketCategory != null && ticketCategory.getId( ) != TicketingConstants.PROPERTY_UNSET_INT);
 
         return new TicketCategoryValidatorResult( ticketCategory, isValid );
 
@@ -93,42 +86,23 @@ public class TicketCategoryValidator
     public TicketCategory retrieveTicketCategoryFromRequest( )
     {
         int nIdCategory = TicketingConstants.PROPERTY_UNSET_INT;
-        if ( StringUtils.isNotBlank( _request.getParameter( TicketingConstants.PARAMETER_TICKET_CATEGORY_ID ) ) )
+        if ( StringUtils.isNotBlank( _request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) ) )
+        {
+            nIdCategory = Integer.valueOf( _request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) );
+        }
+        else if ( StringUtils.isNotBlank( _request.getParameter( TicketingConstants.PARAMETER_TICKET_CATEGORY_ID ) ) )
         {
             nIdCategory = Integer.valueOf( _request.getParameter( TicketingConstants.PARAMETER_TICKET_CATEGORY_ID ) );
         }
 
-        TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( nIdCategory );
+        TicketCategory ticketCategory = TicketCategoryService.getInstance().findCategoryById( nIdCategory );
         if ( ticketCategory == null )
         {
             ticketCategory = new TicketCategory( );
             ticketCategory.setId( TicketingConstants.PROPERTY_UNSET_INT );
-            ticketCategory.setIdTicketDomain( TicketingConstants.PROPERTY_UNSET_INT );
+            ticketCategory.setIdParent( TicketingConstants.PROPERTY_UNSET_INT );
         }
         return ticketCategory;
-    }
-
-    /**
-     * Return true if precision has been selected if the selected category has precisions otherwise return false
-     * 
-     * @return true if precision has been selected if the selected category has precisions false otherwise
-     */
-    public boolean isTicketCategoryPrecisionValid( TicketCategory ticketCategory, Integer nIdDomain )
-    {
-        if ( ticketCategory != null && ticketCategory.getId( ) != TicketingConstants.PROPERTY_UNSET_INT )
-        {
-            List<TicketCategory> listTicketCategory = TicketCategoryHome.findByDomainId( nIdDomain );
-            for ( TicketCategory ticketCategoryByDomain : listTicketCategory )
-            {
-                if ( ticketCategoryByDomain.getLabel( ).equals( ticketCategory.getLabel( ) ) && StringUtils.isNotBlank( ticketCategoryByDomain.getPrecision( ) )
-                        && StringUtils.isNotBlank( _request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) )
-                        && _request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ).equals( TicketingConstants.NO_ID_STRING ) )
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
 }

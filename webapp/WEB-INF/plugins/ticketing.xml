@@ -25,7 +25,7 @@
             <feature-title>ticketing.adminFeature.ManageAdminTicketing.name</feature-title>
             <feature-description>ticketing.adminFeature.ManageAdminTicketing.description</feature-description>
             <feature-level>0</feature-level>
-            <feature-url>jsp/admin/plugins/ticketing/admin/ManageTicketCategories.jsp</feature-url>
+            <feature-url>jsp/admin/plugins/ticketing/admin/ManageCategories.jsp</feature-url>
             <feature-icon-url/>
         </admin-feature>
         <admin-feature>
@@ -109,7 +109,7 @@
     <rbac-resource-types>
         <rbac-resource-type>
             <rbac-resource-type-class>
-                fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService
+                fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryIdService
             </rbac-resource-type-class>
         </rbac-resource-type>
     </rbac-resource-types>

@@ -56,7 +56,7 @@ public class SupportEntity implements RBACResource
     private AssigneeUser _user;
     @NotNull( message = "#i18n{ticketing.validation.supportentity.unit.notNull}" )
     private AssigneeUnit _unit;
-    private TicketCategory _ticketCategory;
+    private TicketCategory _ticketDomain;
     @NotEmpty( message = "#i18n{ticketing.validation.supportentity.name.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.supportentity.name.size}" )
     private String _strName;
@@ -120,9 +120,9 @@ public class SupportEntity implements RBACResource
     /**
      * @return the ticketDomain
      */
-    public TicketCategory getTicketCategory( )
+    public TicketCategory getTicketDomain( )
     {
-        return _ticketCategory;
+        return _ticketDomain;
     }
 
     /**
@@ -131,7 +131,7 @@ public class SupportEntity implements RBACResource
      */
     public void setTicketDomain( TicketCategory ticketDomain )
     {
-        _ticketCategory = ticketDomain;
+        _ticketDomain = ticketDomain;
     }
 
     /**

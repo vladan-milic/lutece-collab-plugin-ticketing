@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.ticketing.business.category;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
+
 import java.util.List;
 
 /**
@@ -131,4 +132,57 @@ public interface ITicketCategoryDAO
      */
     ReferenceList selectCategorysReferenceList( Plugin plugin );
 
+    /**
+     * Update order of a category
+     * 
+     * @param nId
+     *            id parent to move
+     * @param nNewPosition
+     *            the order value to update
+     * @param plugin
+     *            the Plugin
+     */
+    void updateCategoryOrder( int nId, int nNewPosition, Plugin _plugin );
+
+    /**
+     * returns the Id of a category for a given position and parent
+     * 
+     * @param nOrder
+     *            Position of the category
+     * @param nIdParent
+     *            Id of the parent
+     * @return the id of category as an integer
+     */
+    int selectCategoryIdByOrder( int nOrder, int nIdParent, Plugin _plugin );
+    
+    /**
+     * Rebuild the order sequence of active TicketCategory for a parent, by substracting 1 to all orders larger than a given value
+     * 
+     * @param nfromOrder
+     *            the order to rebuild sequence from
+     * @param nIdParent
+     *            the parent id
+     */
+    void rebuildCategoryOrders( int nFromOrder, int nIdParent, Plugin _plugin );
+
+    /**
+     * Update the record in the table. The field n_order will be replaced by the next available value for the category parent.
+     * 
+     * @param category
+     *            the reference of the TicketCategory
+     * @param plugin
+     *            the Plugin
+     */
+    void storeWithLastOrder( TicketCategory category, Plugin _plugin );
+    
+    /**
+     * check if category can be removed
+     * 
+     * @param nKey
+     *            The identifier of the category
+     * @param plugin
+     *            the Plugin
+     * @return true if category can be removed, false otherwise
+     */
+    boolean canRemoveCategory( int nKey, Plugin plugin );
 }

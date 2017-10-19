@@ -39,7 +39,6 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.address.TicketAddress;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
@@ -50,7 +49,6 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
-import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryIdService;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
 import fr.paris.lutece.plugins.ticketing.web.search.SearchConstants;
@@ -74,7 +72,6 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
-import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -135,27 +132,23 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String PROPERTY_PAGE_TITLE_RECAP_TICKET    = "ticketing.recap_ticket.pageTitle";
 
     // Markers
-    private static final String MARK_TICKET_LIST            = "ticket_list";
-    private static final String MARK_USER_FACTORY           = "user_factory";
-    private static final String MARK_USER_TITLES_LIST       = "user_titles_list";
-    private static final String MARK_TICKET_TYPES_LIST      = "ticket_types_list";
-    private static final String MARK_TICKET_DOMAINS_LIST    = "ticket_domains_list";
-    private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
-    private static final String MARK_TICKET_PRECISIONS_LIST = "ticket_precisions_list";
-    private static final String MARK_MASS_ACTIONS_LIST      = "mass_actions_list";
-    private static final String MARK_NB_TICKET_AGENT        = "nb_ticket_agent";
-    private static final String MARK_NB_TICKET_GROUP        = "nb_ticket_group";
-    private static final String MARK_NB_TICKET_DOMAIN       = "nb_ticket_domain";
-    private static final String MARK_CONTACT_MODES_LIST     = "contact_modes_list";
-    private static final String MARK_GUID                   = "guid";
-    private static final String MARK_RESPONSE_RECAP_LIST    = "response_recap_list";
-    private static final String MARK_PAGINATOR              = "paginator";
-    private static final String MARK_NB_ITEMS_PER_PAGE      = "nb_items_per_page";
-    private static final String MARK_SELECTED_TAB           = "selected_tab";
-    private static final String MARK_USER_WITH_NO_UNIT      = "user_with_no_unit";
-    private static final String JSP_MANAGE_TICKETS          = TicketingConstants.ADMIN_CONTROLLLER_PATH + "ManageTickets.jsp";
-    private static final String MARK_MANAGE_PAGE_TITLE      = "manage_ticket_page_title";
-    private static final String MARK_CREATE_ASSIGN_RIGHT    = "create_assign_right";
+    private static final String MARK_TICKET_LIST = "ticket_list";
+    private static final String MARK_USER_FACTORY = "user_factory";
+    private static final String MARK_USER_TITLES_LIST = "user_titles_list";
+    private static final String MARK_MASS_ACTIONS_LIST = "mass_actions_list";
+    private static final String MARK_NB_TICKET_AGENT = "nb_ticket_agent";
+    private static final String MARK_NB_TICKET_GROUP = "nb_ticket_group";
+    private static final String MARK_NB_TICKET_DOMAIN = "nb_ticket_domain";
+    private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
+    private static final String MARK_GUID = "guid";
+    private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
+    private static final String MARK_PAGINATOR = "paginator";
+    private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
+    private static final String MARK_SELECTED_TAB = "selected_tab";
+    private static final String MARK_USER_WITH_NO_UNIT = "user_with_no_unit";
+    private static final String JSP_MANAGE_TICKETS = TicketingConstants.ADMIN_CONTROLLLER_PATH + "ManageTickets.jsp";
+    private static final String MARK_MANAGE_PAGE_TITLE = "manage_ticket_page_title";
+    private static final String MARK_CREATE_ASSIGN_RIGHT = "create_assign_right";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET    = "ticketing.message.confirmRemoveTicket";
@@ -437,14 +430,14 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         if ( filter.getIdDomain( ) != -1 )
         {
-            TicketCategory ticketDomain = TicketCategoryService.getInstance( ).findById( filter.getIdDomain( ) );
+            TicketCategory ticketDomain = TicketCategoryService.getInstance( ).findCategoryById( filter.getIdDomain( ) );
             _lstTicketDomain.clear( );
-            _lstTicketDomain.addAll( TicketCategoryHome.getTicketDomainsListByLabel( ticketDomain.getLabel( ) ) );
+            _lstTicketDomain.add( ticketDomain );
         }
         else
         {
             Map<Integer, TicketCategory> mapIdDomainTicketDomain = new LinkedHashMap<>( );
-            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_DETAILS );
+            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_DETAIL );
             addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_LIST );
 
             _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
@@ -599,7 +592,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         if ( ticket == null )
         {
             ticket = new Ticket( );
-            ticket.setTicketCategory( new TicketCategory( ) );
         }
 
         Map<String, Object> model = getModel( );
@@ -639,10 +631,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         ticket.enrich( strIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber, strEmail, strCategoryCode, null, null, null, strGuid, strIdCustomer, strNomenclature );
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
-        model.put( MARK_TICKET_TYPES_LIST, new ReferenceList( ) );
-        model.put( MARK_TICKET_DOMAINS_LIST, new ReferenceList( ) );
-        model.put( MARK_TICKET_CATEGORIES_LIST, new ReferenceList( ) );
-        model.put( MARK_TICKET_PRECISIONS_LIST, new ReferenceList( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getJSONObject( ) );
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale( ) ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_GUID, strGuid );
@@ -716,8 +705,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
             // Check user rights on domain
-            if ( !RBACService.isAuthorized( TicketCategoryService.getInstance( ).findById( ticket.getIdTicketDomain( ) ),
-                    TicketCategory.PERMISSION_VIEW_DETAILS, getUser( ) ) )
+            if ( !RBACService.isAuthorized( TicketCategoryService.getInstance( ).getDomain( ticket.getTicketCategory( ) ),
+                    TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) )
             {
                 return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
             }
@@ -927,8 +916,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         Map<String, Object> model = getModel( );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_RESPONSE_RECAP_LIST, listResponseRecap );
-        model.put( MARK_CREATE_ASSIGN_RIGHT, RBACService.isAuthorized( TicketCategoryService.getInstance( ).findById( ticket.getIdTicketDomain( ) ),
-                TicketCategory.PERMISSION_VIEW_DETAILS, getUser( ) ) );
+        model.put( MARK_CREATE_ASSIGN_RIGHT, RBACService.isAuthorized( TicketCategoryService.getInstance( ).getDomain( ticket.getTicketCategory( ) ),
+                TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) );
 
         return getPage( PROPERTY_PAGE_TITLE_RECAP_TICKET, TEMPLATE_RECAP_TICKET, model );
     }
@@ -961,10 +950,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             return redirectView( request, VIEW_CREATE_TICKET );
         } else
         {
-            TicketCategory ticketDomain = TicketCategoryService.getInstance().findById( ticket.getIdTicketDomain( ) );
-            ticket.setTicketDomain( ticketDomain.getLabel( ) );
-
-            ticket.setTicketType( TicketCategoryService.getInstance().findById( ticket.getIdTicketType( ) ).getLabel( ) );
             ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) ).getCode( ) );
             ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle( ) ).getLabel( ) );
             ticket.setChannel( ChannelHome.findByPrimaryKey( ticket.getChannel( ).getId( ) ) );
@@ -1190,18 +1175,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      */
     private void addTicketDomainToMapFromPermission( Map<Integer, TicketCategory> mapIntegerTicketDomain, String permission )
     {
-        List<TicketCategory> listDomain = TicketCategoryService.getInstance().getCategoriesTree().getRootElements();
-        List<TicketCategory> listAuthorizedDomain = new ArrayList<TicketCategory>( );
-        for ( TicketCategory domain : listDomain )
+        List<TicketCategory> listDomain = TicketCategoryService.getInstance().getAuthorizedDomainsList( getUser( ), permission );
+        
+        if ( mapIntegerTicketDomain != null && listDomain != null && !listDomain.isEmpty( ) )
         {
-            if ( RBACService.isAuthorized( domain, permission, getUser() ) )
-            {
-                listAuthorizedDomain.add( domain );
-            }
-        }
-        if ( mapIntegerTicketDomain != null && listAuthorizedDomain != null && !listAuthorizedDomain.isEmpty( ) )
-        {
-            for ( TicketCategory ticketDomain : listAuthorizedDomain )
+            for ( TicketCategory ticketDomain : listDomain )
             {
                 mapIntegerTicketDomain.put( ticketDomain.getId( ), ticketDomain );
             }
@@ -1233,34 +1211,15 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private boolean validateTicketTypeDomainCategory( HttpServletRequest request, Ticket ticket )
     {
         // Validate if precision has been selected if the selected category has precisions
-        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategoryAndPrecision( );
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( );
 
         boolean bIsFormValid = categoryValidatorResult.isTicketCategoryValid( );
         ticket.setTicketCategory( categoryValidatorResult.getTicketCategory( ) );
 
-        // Validate the precision
+        // Check if a category have been selected
         if ( !bIsFormValid )
         {
-            addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED, getLocale( ) );
-        }
-
-        // Check if a type/domain/category have been selected (made here to sort errors)
-        if ( ticket.getIdTicketType( ) == TicketingConstants.PROPERTY_UNSET_INT )
-        {
-            addError( TicketingConstants.MESSAGE_ERROR_TICKET_TYPE_NOT_SELECTED, getLocale( ) );
-            bIsFormValid = false;
-        }
-
-        if ( ticket.getIdTicketDomain( ) == TicketingConstants.PROPERTY_UNSET_INT )
-        {
-            addError( TicketingConstants.MESSAGE_ERROR_TICKET_DOMAIN_NOT_SELECTED, getLocale( ) );
-            bIsFormValid = false;
-        }
-
-        if ( ticket.getTicketCategory( ) != null && ticket.getTicketCategory( ).getId( ) == TicketingConstants.PROPERTY_UNSET_INT )
-        {
             addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( ) );
-            bIsFormValid = false;
         }
 
         return bIsFormValid;

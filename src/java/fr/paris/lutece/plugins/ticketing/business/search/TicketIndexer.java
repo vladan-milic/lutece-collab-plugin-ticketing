@@ -39,7 +39,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
@@ -60,7 +59,6 @@ import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
-import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchItemConstant;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexWriterUtil;
@@ -258,8 +256,8 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new TextField( TicketSearchItemConstant.FIELD_CONTENTS, manageNullValue( getContentForIndexer( ticket ) ), Store.NO ) );
 
         // --- ticket domain
-        doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN_ID, Integer.toString( ticket.getIdTicketDomain( ) ), Store.YES ) );
-        doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN, manageNullValue( ticket.getTicketDomain( ) ), Store.YES ) );
+        doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN_ID, Integer.toString( ticket.getTicketDomain( ).getId( ) ), Store.YES ) );
+        doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN, manageNullValue( ticket.getTicketDomain( ).getLabel( ) ), Store.YES ) );
 
         // --- ticket reference
         String strReference = manageNullValue( ticket.getReference( ) );
@@ -294,28 +292,22 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_STATUS, ticket.getTicketStatus( ) ) );
 
         // --- ticket type id
-        int nTicketTypeId = ticket.getIdTicketType( );
+        int nTicketTypeId = ticket.getTicketType( ).getId( );
         doc.add( new IntPoint( TicketSearchItemConstant.FIELD_TICKET_TYPE_ID, nTicketTypeId ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_TICKET_TYPE_ID, nTicketTypeId ) );
 
         // --- ticket type
-        doc.add( new StoredField( TicketSearchItemConstant.FIELD_TICKET_TYPE, manageNullValue( ticket.getTicketType( ) ) ) );
+        doc.add( new StoredField( TicketSearchItemConstant.FIELD_TICKET_TYPE, manageNullValue( ticket.getTicketType( ).getLabel( ) ) ) );
 
         // --- ticket category
-        if ( ticket.getTicketCategory( ) != null )
-        {
-            String strCategoryLabel = manageNullValue( ticket.getTicketCategory( ).getLabel( ) );
-            doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY, strCategoryLabel, Store.YES ) );
-            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_CATEGORY, new BytesRef( strCategoryLabel ) ) );
-
-            doc.add( new StoredField( TicketSearchItemConstant.FIELD_PRECISION, manageNullValue( TicketCategoryService.getPrecision( ticket.getTicketCategory( ) ).getLabel( ) ) ) );
-        }
-        else
-        {
-            doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY, StringUtils.EMPTY, Store.YES ) );
-            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_CATEGORY, new BytesRef( StringUtils.EMPTY ) ) );
-            doc.add( new StoredField( TicketSearchItemConstant.FIELD_PRECISION, StringUtils.EMPTY ) );
-        }
+        doc.add( new StringField( TicketSearchItemConstant.FIELD_CATEGORY_ID, Integer.toString( ticket.getTicketCategory( ).getId( ) ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY, ticket.getTicketCategory( ).getLabel( ), Store.YES ) );
+        doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_CATEGORY, new BytesRef( ticket.getTicketCategory( ).getLabel( ) ) ) );
+        
+        // --- ticket precision
+        doc.add( new StringField( TicketSearchItemConstant.FIELD_PRECISION_ID, Integer.toString( ticket.getTicketPrecision( ).getId( ) ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItemConstant.FIELD_PRECISION, ticket.getTicketPrecision( ).getLabel( ), Store.YES ) );
+        doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_PRECISION, new BytesRef( ticket.getTicketPrecision( ).getLabel( ) ) ) );
 
         // --- ticket user title
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_USER_TITLE, manageNullValue( ticket.getUserTitle( ) ) ) );
@@ -741,12 +733,12 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             sb.append( ticket.getMobilePhoneNumber( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotBlank( ticket.getTicketType( ) ) )
+        if ( StringUtils.isNotBlank( ticket.getTicketType( ).getLabel( ) ) )
         {
             sb.append( ticket.getTicketType( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotBlank( ticket.getTicketDomain( ) ) )
+        if ( StringUtils.isNotBlank( ticket.getTicketDomain( ).getLabel( ) ) )
         {
             sb.append( ticket.getTicketDomain( ) ).append( SEPARATOR );
         }
@@ -754,6 +746,11 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         if ( ticket.getTicketCategory( ) != null && StringUtils.isNotBlank( ticket.getTicketCategory( ).getLabel( ) ) )
         {
             sb.append( ticket.getTicketCategory( ).getLabel( ) ).append( SEPARATOR );
+        }
+
+        if ( ticket.getTicketPrecision( ) != null && StringUtils.isNotBlank( ticket.getTicketPrecision( ).getLabel( ) ) )
+        {
+            sb.append( ticket.getTicketPrecision( ).getLabel( ) ).append( SEPARATOR );
         }
 
         if ( StringUtils.isNotBlank( ticket.getNomenclature( ) ) )
@@ -796,11 +793,6 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             if ( state != null && StringUtils.isNotBlank( state.getName( ) ) )
             {
                 sb.append( state.getName( ) ).append( SEPARATOR );
-            }
-
-            if ( StringUtils.isNotBlank( TicketCategoryService.getPrecision( ticketCategory ).getLabel( ) ) )
-            {
-                sb.append( TicketCategoryService.getPrecision( ticketCategory ).getLabel( ) ).append( SEPARATOR );
             }
         }
 

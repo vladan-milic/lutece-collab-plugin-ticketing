@@ -10,16 +10,15 @@
                     	   http://www.springframework.org/schema/util/spring-util-2.5.xsd" >
 
     <bean id="ticketing.ticketRest"  class="fr.paris.lutece.plugins.ticketing.web.rs.TicketRest" />
-    <bean id="ticketing.typeRest"  class="fr.paris.lutece.plugins.ticketing.web.rs.TypeRest" />
     <bean id="ticketing.channelRest"  class="fr.paris.lutece.plugins.ticketing.web.rs.ChannelRest" />
     <bean id="ticketing.contactModeRest"  class="fr.paris.lutece.plugins.ticketing.web.rs.ContactModeRest" />
     <bean id="ticketing.userTitleRest"  class="fr.paris.lutece.plugins.ticketing.web.rs.UserTitleRest" />
 
     <!-- DAO -->
     <bean id="ticketing.ticketDAO"  class="fr.paris.lutece.plugins.ticketing.business.ticket.TicketDAO" />  
-    <bean id="ticketing.ticketTypeDAO"  class="fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeDAO" />  
-    <bean id="ticketing.ticketDomainDAO"  class="fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainDAO" />  
     <bean id="ticketing.ticketCategoryDAO"  class="fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryDAO" />  
+    <bean id="ticketing.ticketCategoryTypeDAO"  class="fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeDAO" />
+    <bean id="ticketing.ticketCategoryInputsDAO"  class="fr.paris.lutece.plugins.ticketing.business.categoryinputs.TicketCategoryInputsDAO" />  
     <bean id="ticketing.userTitleDAO"  class="fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleDAO" />
     <bean id="ticketing.contactModeDAO"  class="fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeDAO" /> 
     <bean id="ticketing.channelDAO"  class="fr.paris.lutece.plugins.ticketing.business.channel.ChannelDAO" /> 

@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.ticketing.business.category;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
@@ -46,7 +47,7 @@ import java.util.List;
 public final class TicketCategoryHome
 {
     // Static variable pointed at the DAO instance
-    private static ITicketCategoryDAO _dao = SpringContextService.getBean( "ticketing.categoryDAO" );
+    private static ITicketCategoryDAO _dao = SpringContextService.getBean( "ticketing.ticketCategoryDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
@@ -79,11 +80,24 @@ public final class TicketCategoryHome
      */
     public static TicketCategory update( TicketCategory category )
     {
-        _dao.store( category, _plugin );
+        TicketCategory currentCategory = findByPrimaryKey( category.getId( ) );
+        int nCurrentParentId = currentCategory.getIdParent( );
+        int nCurrentOrder = currentCategory.getOrder( );
+        int nTargetParentId = category.getIdParent( );
+
+        if ( nCurrentParentId != nTargetParentId )
+        {
+            _dao.storeWithLastOrder( category, _plugin );
+            _dao.rebuildCategoryOrders( nCurrentOrder, nCurrentParentId, _plugin );
+        }
+        else
+        {
+            _dao.store( category, _plugin );
+        }
 
         return category;
     }
-
+    
     /**
      * Remove the category whose identifier is specified in parameter
      * 
@@ -92,9 +106,31 @@ public final class TicketCategoryHome
      */
     public static void remove( int nKey )
     {
-        _dao.delete( nKey, _plugin );
+//        if ( canRemove( nKey ) )
+//        {
+            TicketCategory categoryToRemove = findByPrimaryKey( nKey );
+
+            _dao.delete( nKey, _plugin );
+            _dao.rebuildCategoryOrders( categoryToRemove.getOrder( ), categoryToRemove.getIdParent( ), _plugin );
+//        }
+//        else
+//        {
+//            throw new AppException( "TicketCategory cannot be removed for ID :" + nKey );
+//        }
     }
 
+    /**
+     * return true if category can be removed false otherwise
+     * 
+     * @param nKey
+     *            The category Id
+     * @return true if type can be removed false otherwise
+     */
+    public static boolean canRemove( int nKey )
+    {
+        return _dao.canRemoveCategory( nKey, _plugin );
+    }
+    
     /**
      * Returns an instance of a category whose identifier is specified in parameter
      * 
@@ -151,4 +187,37 @@ public final class TicketCategoryHome
     {
         return _dao.selectCategorysReferenceList( _plugin );
     }
+
+    /**
+     * Change the position of a category
+     *
+     * @param nId
+     *            the if of category to move
+     * @param nCurrentPostion
+     *            the current position of the Type
+     * 
+     * @param nNewPosition
+     *            the target position of the Type
+     */
+    public static void updateCategoryOrder( int nId, boolean bMoveUp )
+    {
+        TicketCategory categoryToRemove = findByPrimaryKey( nId );
+        int nCurrentOrder = categoryToRemove.getOrder( );
+        int nIdParent = categoryToRemove.getIdParent( );
+        int nTargetOrder = bMoveUp ? ( nCurrentOrder - 1 ) : ( nCurrentOrder + 1 );
+
+        int nIdCategoryWhichPlaceIsTaken = _dao.selectCategoryIdByOrder( nTargetOrder, nIdParent, _plugin );
+
+        if ( nIdCategoryWhichPlaceIsTaken != -1 )
+        {
+            _dao.updateCategoryOrder( nId, nTargetOrder, _plugin );
+            _dao.updateCategoryOrder( nIdCategoryWhichPlaceIsTaken, nCurrentOrder, _plugin );
+        }
+        else
+        {
+            AppLogService
+                    .error( "Could not move TicketCategory " + nId + " to position " + nTargetOrder + " : no TicketCategory to replace on position " + nCurrentOrder );
+        }
+    }
+    
 }

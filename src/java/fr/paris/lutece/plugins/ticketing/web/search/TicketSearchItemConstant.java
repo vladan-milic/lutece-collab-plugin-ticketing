@@ -47,7 +47,9 @@ public class TicketSearchItemConstant
     public static final String FIELD_METADATA = "metadata";
 
     public static final String FIELD_CATEGORY = "category";
+    public static final String FIELD_CATEGORY_ID = "category_id";
     public static final String FIELD_PRECISION = "precision";
+    public static final String FIELD_PRECISION_ID = "precision_id";
     public static final String FIELD_DOMAIN_ID = "domain_id";
     public static final String FIELD_DOMAIN = "domain";
     public static final String FIELD_REFERENCE = "reference";

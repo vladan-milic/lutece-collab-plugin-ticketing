@@ -53,7 +53,6 @@ import org.apache.lucene.queryparser.classic.ParseException;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.resourcehistory.IResourceHistoryInformationService;
 import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
@@ -61,7 +60,6 @@ import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerException;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
-import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.search.SearchConstants;
@@ -453,8 +451,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                             Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
                             TicketCategory ticketCategory = ticket.getTicketCategory( );
 
-                            if ( RBACService.isAuthorized( TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) ),
-                                    TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, getUser( ) ) )
+                            if ( RBACService.isAuthorized( ticket.getTicketDomain( ),
+                                    TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) )
                             {
 
                                 if ( _workflowService.canProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, null, request, false ) )

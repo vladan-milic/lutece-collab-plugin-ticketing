@@ -36,16 +36,24 @@ package fr.paris.lutece.plugins.ticketing.service.tree;
 public abstract class AbstractDepth
 {
     /**
+     * Get the id of the depth
+     * 
+     * @return the id of the depth
+     */
+    public abstract int getId( );
+
+    /**
      * The depth number
      * 
      * @return The depth number
      */
-    public abstract int getNbDepth( );
+    public abstract int getDepthNumber( );
 
     /**
-     * The label of the depth
+     * The depth label
      * 
-     * @return the label of the depth
+     * @return The depth label
      */
     public abstract String getLabel( );
+
 }

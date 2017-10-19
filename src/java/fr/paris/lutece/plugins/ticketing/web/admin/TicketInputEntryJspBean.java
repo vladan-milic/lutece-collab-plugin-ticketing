@@ -42,7 +42,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.categoryinputs.TicketCategoryInputsHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.EntryService;
 import fr.paris.lutece.plugins.ticketing.service.EntryTypeService;
@@ -648,7 +648,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
         if ( ( entry != null ) && ( entry.getIdResource( ) >= 0 ) )
         {
-            bIsUsedInput = TicketCategoryHome.checkIfInputIsUsedInCategories( entry.getIdResource( ) );
+            bIsUsedInput = TicketCategoryInputsHome.checkIfInputIsUsedInCategories( entry.getIdResource( ) );
         }
 
         return bIsUsedInput;

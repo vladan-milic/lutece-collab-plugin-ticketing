@@ -86,6 +86,7 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
         if ( categoryTree == null )
         {
             categoryTree = new TicketCategoryTree( TicketCategoryHome.getFullCategorysList( ), TicketCategoryTypeHome.getCategoryTypesList( ) );
+            
             putInCache( KEY_CACHE_TREE, categoryTree );
         }
         return categoryTree;

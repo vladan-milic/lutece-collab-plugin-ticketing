@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.reference;
 
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,7 +50,6 @@ import org.jsoup.helper.StringUtil;
 import fr.paris.lutece.plugins.ticketing.business.reference.ITicketReferenceDAO;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
-import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
@@ -95,10 +92,8 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
     @Override
     public String generateReference( Ticket ticket )
     {
-        TicketCategory ticketType = TicketCategoryService.getInstance( ).findById( ticket.getIdTicketType() );
-
         Date dateToday = new Date( );
-        String strPrefixWithDate = ticketType.getCode( ) + _simpleDateFormat.format( dateToday );
+        String strPrefixWithDate = ticket.getTicketType( ).getCode( ) + _simpleDateFormat.format( dateToday );
 
         String strSequence = _dao.findLastTicketReference( strPrefixWithDate );
         int nSequence = SEQUENCE_INITIAL_VALUE;

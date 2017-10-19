@@ -44,9 +44,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
-import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -109,7 +109,7 @@ public class TicketSearchJspBean extends MVCAdminJspBean
             try
             {
                 listResults = engine.searchTickets( strQuery,
-                        TicketDomainHome.getTicketDomainsList( getUser( ), TicketDomainResourceIdService.PERMISSION_VIEW_LIST ), null );
+                        TicketCategoryService.getInstance( ).getAuthorizedDomainsList( getUser( ), TicketCategory.PERMISSION_VIEW_LIST ), null );
 
                 Paginator paginator = new Paginator( listResults, _nItemsPerPage, url.getUrl( ), SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
 

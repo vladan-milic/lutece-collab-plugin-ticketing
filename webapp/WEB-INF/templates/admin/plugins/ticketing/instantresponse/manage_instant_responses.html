@@ -51,7 +51,7 @@
                       ${instantresponse.dateCreate?string["dd/MM/yyyy HH:mm"]}
                     </td>
                     <td>
-                      ${instantresponse.type} <br>#i18n{ticketing.manage_instantresponses.columnDomain}: ${instantresponse.domain} <br>#i18n{ticketing.manage_instantresponses.columnCategory}: <strong>${instantresponse.category}</strong>
+                      ${instantresponse.ticketType.label} <br>#i18n{ticketing.manage_instantresponses.columnDomain}: ${instantresponse.ticketDomain.label} <br>#i18n{ticketing.manage_instantresponses.columnCategory}: <strong>${instantresponse.ticketCategory.label}<#if instantresponse.ticketPrecision?? && instantresponse.ticketPrecision.label != ''> - ${instantresponse.ticketPrecision.label}</#if></strong>
                     </td>
                     <td>
                       <div class="detail">

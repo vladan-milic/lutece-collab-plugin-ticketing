@@ -59,14 +59,8 @@ public final class FormatConstants
     public static final String KEY_ID = "id";
     public static final String KEY_LABEL = "label";
     public static final String KEY_HELP = "help";
-    public static final String KEY_TICKET_CATEGORY = "category";
-    public static final String KEY_TICKET_CATEGORIES = "categories";
-    public static final String KEY_TICKET_PRECISION = "precision";
-    public static final String KEY_TICKET_PRECISIONS = "precisions";
-    public static final String KEY_TICKET_DOMAIN = "domain";
-    public static final String KEY_TICKET_DOMAINS = "domains";
-    public static final String KEY_TICKET_TYPE = "type";
-    public static final String KEY_TICKET_TYPES = "types";
+    public static final String KEY_DEPTH = "depth";
+    public static final String KEY_CATEGORIES_DEPTH = "categories_depth_";
     public static final String KEY_CHANNEL = "channel";
     public static final String KEY_CHANNELS = "channels";
     public static final String KEY_CONTACT_MODE = "contact_mode";

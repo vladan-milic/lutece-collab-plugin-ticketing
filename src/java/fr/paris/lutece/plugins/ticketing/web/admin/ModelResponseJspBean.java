@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer;
@@ -52,7 +53,6 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.constants.Parameters;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
-import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.sort.AttributeComparator;
@@ -425,20 +425,17 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         Map<String, String> mapDomains = new LinkedHashMap<String, String>( );
 
-        for ( ReferenceItem refType : ReferenceList.convert( TicketCategoryService., _strSortedAttributeName, _strSortedAttributeName, true)TicketTypeHome.getReferenceList( ) )
+        for ( TicketCategory type : TicketCategoryService.getInstance( ).getTypeList( ) )
         {
-            TicketDomain domain = new TicketDomain( );
-
-            for ( ReferenceItem refDomain : TicketDomainHome.getReferenceListByType( Integer.parseInt( refType.getCode( ) ), true ) )
+            for ( TicketCategory domain : type.getChildren( ) )
             {
-                domain.setId( Integer.parseInt( refDomain.getCode( ) ) );
                 // Check user rights
-                if ( RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST, userCurrent )
-                        || RBACService.isAuthorized( domain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL, userCurrent ) )
+                if ( RBACService.isAuthorized( domain, TicketCategory.PERMISSION_VIEW_LIST, userCurrent )
+                        || RBACService.isAuthorized( domain, TicketCategory.PERMISSION_VIEW_DETAIL, userCurrent ) )
                 {
-                    if ( !mapDomains.containsValue( refDomain.getName( ) ) )
+                    if ( !mapDomains.containsValue( domain.getLabel( ) ) )
                     {
-                        mapDomains.put( refDomain.getName( ), refDomain.getName( ) );
+                        mapDomains.put( domain.getLabel( ), domain.getLabel( ) );
                     }
                 }
             }

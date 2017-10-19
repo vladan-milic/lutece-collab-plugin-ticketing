@@ -66,8 +66,8 @@ public class TicketCategoryIdService extends ResourceIdService
         rt.registerPermission( p );
 
         p = new Permission( );
-        p.setPermissionKey(TicketCategory.PERMISSION_VIEW_DETAILS );
-        p.setPermissionTitleKey(TicketCategory.PROPERTY_LABEL_PERMISSION_VIEW_DETAILS );
+        p.setPermissionKey(TicketCategory.PERMISSION_VIEW_DETAIL );
+        p.setPermissionTitleKey(TicketCategory.PROPERTY_LABEL_PERMISSION_VIEW_DETAIL );
         rt.registerPermission( p );
 
         ResourceTypeManager.registerResourceType( rt );
@@ -84,7 +84,7 @@ public class TicketCategoryIdService extends ResourceIdService
         List<TicketCategory> listRootCategories = new ArrayList<>();
         for ( TicketCategory category : listCategory )
         {
-            TicketCategory domain = TicketCategoryService.getDomain( category );
+            TicketCategory domain = TicketCategoryService.getInstance().getDomain( category );
             if ( domain != null )
             {
                 listRootCategories.add( domain );

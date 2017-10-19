@@ -43,7 +43,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponse;
 import fr.paris.lutece.plugins.ticketing.business.instantresponse.InstantResponseHome;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
@@ -51,7 +50,6 @@ import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidatorResult;
-import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -62,7 +60,6 @@ import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
-import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
@@ -87,8 +84,6 @@ public class InstantResponseJspBean extends MVCAdminJspBean
 
     // Parameters
     private static final String PARAMETER_ID_INSTANT_RESPONSE = "id";
-    private static final String LOG_MESSAGE_ID_TYPE_MISSING = "Parameter type id is missing !";
-    private static final String LOG_MESSAGE_ID_DOMAIN_MISSING = "Parameter domain id is missing !";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_INSTANT_RESPONSES = "ticketing.manage_instantresponses.pageTitle";
@@ -98,10 +93,6 @@ public class InstantResponseJspBean extends MVCAdminJspBean
     // Markers
     private static final String MARK_INSTANT_RESPONSE_LIST = "instantresponse_list";
     private static final String MARK_INSTANT_RESPONSE = "instantresponse";
-    private static final String MARK_TICKET_TYPES_LIST = "ticket_types_list";
-    private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
-    private static final String MARK_TICKET_CATEGORIES_LIST = "ticket_categories_list";
-    private static final String MARK_TICKET_PRECISIONS_LIST = "ticket_precisions_list";
     private static final String JSP_MANAGE_INSTANT_RESPONSES = TicketingConstants.ADMIN_CONTROLLLER_PATH + "ManageInstantResponses.jsp";
 
     // Properties
@@ -217,11 +208,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_INSTANT_RESPONSE, _instantresponse );
-        model.put( MARK_TICKET_TYPES_LIST, new ReferenceList( ) );
-        model.put( MARK_TICKET_DOMAINS_LIST, new ReferenceList( ) );
-        model.put( MARK_TICKET_CATEGORIES_LIST, new ReferenceList( ) );
-        model.put( MARK_TICKET_PRECISIONS_LIST, new ReferenceList( ) );
-        model.putAll( injectTypeDomainCategogyToModelFromRequest( request ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getJSONObject( ) );
         ModelUtils.storeChannels( request, model );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_INSTANT_RESPONSE, TEMPLATE_CREATE_INSTANT_RESPONSE, model );
@@ -242,7 +229,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         // Check constraints
         if ( !validateBean( _instantresponse, VALIDATION_ATTRIBUTES_PREFIX ) || !validateInstantResponseTypeDomainCategory( request ) )
         {
-            return redirect( request, VIEW_CREATE_INSTANT_RESPONSE, injectTypeDomainCategogyToModelFromRequest( request ) );
+            return redirectView( request, VIEW_CREATE_INSTANT_RESPONSE);
         }
 
         int nUserId = getUser( ).getUserId( );
@@ -311,11 +298,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_INSTANT_RESPONSE, _instantresponse );
-        model.put( MARK_TICKET_TYPES_LIST, new ReferenceList( ) );
-        model.put( MARK_TICKET_DOMAINS_LIST, new ReferenceList( ) );
-        model.put( MARK_TICKET_CATEGORIES_LIST, new ReferenceList( ) );
-        model.put( MARK_TICKET_PRECISIONS_LIST, new ReferenceList( ) );
-        model.putAll( injectTypeDomainCategogyToModelFromRequest( request ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getJSONObject( ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_INSTANT_RESPONSE, TEMPLATE_MODIFY_INSTANT_RESPONSE, model );
     }
@@ -337,7 +320,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         {
             Map<String, String> model = new LinkedHashMap<>( );
             model.put( PARAMETER_ID_INSTANT_RESPONSE, String.valueOf( _instantresponse.getId( ) ) );
-            model.putAll( injectTypeDomainCategogyToModelFromRequest( request ) );
+            model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getJSONObject( ) );
 
             return redirect( request, VIEW_MODIFY_INSTANT_RESPONSE, model );
         }
@@ -379,54 +362,17 @@ public class InstantResponseJspBean extends MVCAdminJspBean
     private boolean validateInstantResponseTypeDomainCategory( HttpServletRequest request )
     {
         // Validate if precision has been selected if the selected category has precisions
-        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategoryAndPrecision( );
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( );
 
         boolean bIsFormValid = categoryValidatorResult.isTicketCategoryValid( );
-        TicketCategory ticketCategory = categoryValidatorResult.getTicketCategory( );
-        _instantresponse.setIdTicketCategory( ticketCategory.getId( ) );
-        _instantresponse.setCategory( ticketCategory.getLabel( ) );
-        _instantresponse.setTicketCategoryPrecision( TicketCategoryService.getPrecision( ticketCategory ).getLabel( ) );
+        _instantresponse.setTicketCategory( categoryValidatorResult.getTicketCategory( ) );
 
-        // Validate the precision
+        // Check if a type/domain/category have been selected
         if ( !bIsFormValid )
         {
-            addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED, getLocale( ) );
-            _instantresponse.setTicketCategoryPrecision( TicketingConstants.NO_ID_STRING );
-        }
-
-        // Check if a type/domain/category have been selected (made here to sort errors)
-        String strIdTicketType = request.getParameter( TicketingConstants.PARAMETER_TICKET_TYPE_ID );
-        if ( TicketUtils.manageIntegerParsingFromString( strIdTicketType, LOG_MESSAGE_ID_TYPE_MISSING ) == TicketingConstants.PROPERTY_UNSET_INT )
-        {
-            addError( TicketingConstants.MESSAGE_ERROR_TICKET_TYPE_NOT_SELECTED, getLocale( ) );
-            bIsFormValid = false;
-        }
-
-        String strIdTicketDomain = request.getParameter( TicketingConstants.PARAMETER_TICKET_DOMAIN_ID );
-        if ( TicketUtils.manageIntegerParsingFromString( strIdTicketDomain, LOG_MESSAGE_ID_DOMAIN_MISSING ) == TicketingConstants.PROPERTY_UNSET_INT )
-        {
-            addError( TicketingConstants.MESSAGE_ERROR_TICKET_DOMAIN_NOT_SELECTED, getLocale( ) );
-            bIsFormValid = false;
-        }
-
-        if ( _instantresponse.getIdTicketCategory( ) == TicketingConstants.PROPERTY_UNSET_INT )
-        {
             addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( ) );
-            bIsFormValid = false;
         }
 
         return bIsFormValid;
-    }
-
-    private Map<String, String> injectTypeDomainCategogyToModelFromRequest( HttpServletRequest request )
-    {
-        Map<String, String> mapResult = new LinkedHashMap<>( );
-
-        mapResult.put( TicketingConstants.PARAMETER_TICKET_TYPE_ID, request.getParameter( TicketingConstants.PARAMETER_TICKET_TYPE_ID ) );
-        mapResult.put( TicketingConstants.PARAMETER_TICKET_DOMAIN_ID, request.getParameter( TicketingConstants.PARAMETER_TICKET_DOMAIN_ID ) );
-        mapResult.put( TicketingConstants.PARAMETER_TICKET_CATEGORY_ID, request.getParameter( TicketingConstants.PARAMETER_TICKET_CATEGORY_ID ) );
-        mapResult.put( TicketingConstants.PARAMETER_TICKET_PRECISION_ID, request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) );
-
-        return mapResult;
     }
 }

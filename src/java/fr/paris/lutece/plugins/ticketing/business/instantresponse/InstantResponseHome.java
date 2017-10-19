@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.instantresponse;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -106,7 +108,14 @@ public final class InstantResponseHome
      */
     public static InstantResponse findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, _plugin );
+        InstantResponse instantResponse = _dao.load( nKey, _plugin );
+        if ( instantResponse != null )
+        {
+            TicketCategory ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( instantResponse.getTicketCategory( ).getId( ) );
+            instantResponse.setTicketCategory( ticketCategory );
+        }
+
+        return instantResponse;
     }
 
     /**

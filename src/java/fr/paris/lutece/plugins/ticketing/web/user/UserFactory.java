@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.user;
 
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
-import fr.paris.lutece.plugins.ticketing.service.TicketDomainResourceIdService;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -78,7 +78,7 @@ public final class UserFactory
 
         adminUser.setRoles( AdminUserHome.getRolesListForUser( adminUser.getUserId( ) ) );
 
-        List<TicketDomain> listDomains = TicketDomainHome.getTicketDomainsList( adminUser, TicketDomainResourceIdService.PERMISSION_BELONG_TO );
+        List<TicketCategory> listDomains = TicketCategoryService.getInstance( ).getAuthorizedCategoryList( TicketingConstants.DOMAIN_DEPTH, adminUser, TicketCategory.PERMISSION_BELONG_TO );
 
         List<Unit> listUnits = UnitHome.findByIdUser( nIdUser );
 
@@ -92,7 +92,7 @@ public final class UserFactory
 
         user.setUnit( listUnits );
 
-        user.setDomain( listDomains );
+        user.setDomains( listDomains );
 
         return user;
     }

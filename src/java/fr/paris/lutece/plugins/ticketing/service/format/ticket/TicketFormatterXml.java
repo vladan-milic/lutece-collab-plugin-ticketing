@@ -116,7 +116,7 @@ public class TicketFormatterXml implements ITicketingFormatter<Ticket>
         XmlUtil.endElement( sbXML, FormatConstants.KEY_USER );
 
         XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_REFERENCE, ticket.getReference( ) );
-        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_CATEGORY_CODE, ticket.getTicketCategory( ).getLabel( ) );
+        XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_CATEGORY_CODE, ticket.getTicketCategory( ).getCode( ) );
         XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_CONTACT_MODE_ID, ticket.getIdContactMode( ) );
         XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_CHANNEL_ID, ticket.getChannel( ).getId( ) );
         XmlUtil.addElement( sbXML, FormatConstants.KEY_TICKET_COMMENT, ticket.getTicketComment( ) );

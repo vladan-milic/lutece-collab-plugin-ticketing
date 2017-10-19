@@ -99,7 +99,7 @@ public final class SupportEntityDAO implements ISupportEntityDAO
         daoUtil.setInt( 3, supportEntity.getSupportLevel( ).getLevelValue( ) );
         daoUtil.setInt( 4, ( supportEntity.getUnit( ) != null ) ? supportEntity.getUnit( ).getUnitId( ) : ( -1 ) );
         daoUtil.setInt( 5, ( supportEntity.getUser( ) != null ) ? supportEntity.getUser( ).getAdminUserId( ) : ( -1 ) );
-        daoUtil.setInt( 6, ( supportEntity.getTicketCategory( )!= null ) ? supportEntity.getTicketCategory( ).getId( ) : ( -1 ) );
+        daoUtil.setInt( 6, ( supportEntity.getTicketDomain( )!= null ) ? supportEntity.getTicketDomain( ).getId( ) : ( -1 ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -151,7 +151,7 @@ public final class SupportEntityDAO implements ISupportEntityDAO
         daoUtil.setInt( 3, supportEntity.getSupportLevel( ).getLevelValue( ) );
         daoUtil.setInt( 4, ( supportEntity.getUnit( ) != null ) ? supportEntity.getUnit( ).getUnitId( ) : ( -1 ) );
         daoUtil.setInt( 5, ( supportEntity.getUser( ) != null ) ? supportEntity.getUser( ).getAdminUserId( ) : ( -1 ) );
-        daoUtil.setInt( 6, ( supportEntity.getTicketCategory( )!= null ) ? supportEntity.getTicketCategory( ).getId( ) : ( -1 ) );
+        daoUtil.setInt( 6, ( supportEntity.getTicketDomain( )!= null ) ? supportEntity.getTicketDomain( ).getId( ) : ( -1 ) );
         daoUtil.setInt( 7, supportEntity.getId( ) );
         daoUtil.executeUpdate( );
         daoUtil.free( );

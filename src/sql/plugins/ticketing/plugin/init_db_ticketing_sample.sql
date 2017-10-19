@@ -1,29 +1,4 @@
 
-DELETE FROM ticketing_ticket_category ;
-DELETE FROM ticketing_ticket_domain ;
-DELETE FROM ticketing_ticket_type ;
-INSERT INTO ticketing_ticket_type (id_ticket_type, label, reference_prefix, demand_type_id, type_order) VALUES
-(1, "Demande d'information", "INF", 101, 1),
-(2, "Réclamation", "RCL", 102, 2);
-
-INSERT INTO ticketing_ticket_domain (id_ticket_domain, id_ticket_type, label, domain_order) VALUES
-(100, 1, "Autre", 1 ),
-(110, 1, "Mairie", 2 ),
-(120, 1, "Stationnement", 3 ),
-(200, 2, "Autre", 1),
-(210, 2, "Facil'familles", 2 );
-
-INSERT INTO ticketing_ticket_category (id_ticket_category, id_ticket_domain, label, category_code, id_workflow, id_unit, category_precision, category_order ) VALUES
-(1, 100, "Autre" , NULL, 301, 0, NULL, 1 ),
-(2, 110, "Réservation de salle" , NULL, 301, 0, NULL, 1 ),
-(3, 110, "Autre" , NULL, 301, 0, NULL, 2 ),
-(4, 120, "Horaires de stationnement" , "DVDSSVP", 301, 0, NULL, 3 ),
-(5, 120, "Autre" , NULL, 301, 0, NULL, 4 ),
-(6, 200, "Autre" , NULL, 301, 0, NULL, 1 ),
-(7, 210, "Problème tarifaire périscolaire" , "FFTARIFPERISCO", 301, 0, NULL, 1 ),
-(8, 210, "Problème tarifaire petite enfance" , "FFTARIFPE", 301, 0, NULL, 2 ),
-(9, 210, "Autre" , NULL, 301, 0, NULL, 3 );
-
 DELETE FROM ticketing_user_title ;
 INSERT INTO ticketing_user_title (id_user_title, label) VALUES
 (0, ""),
