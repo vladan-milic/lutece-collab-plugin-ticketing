@@ -99,8 +99,6 @@ public class TicketCategoryValidator
         if ( ticketCategory == null )
         {
             ticketCategory = new TicketCategory( );
-            ticketCategory.setId( TicketingConstants.PROPERTY_UNSET_INT );
-            ticketCategory.setIdParent( TicketingConstants.PROPERTY_UNSET_INT );
         }
         return ticketCategory;
     }

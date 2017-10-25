@@ -121,7 +121,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                 TicketCategory ticketCategory = ticket.getTicketCategory( );
                 int nIdWorkflow = ticketCategory.getIdWorkflow( );
 
-                State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+                State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
 
                 if ( state != null )
                 {
@@ -158,7 +158,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         TicketCategory ticketCategory = ticket.getTicketCategory( );
         int nIdWorkflow = ticketCategory.getIdWorkflow( );
 
-        State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+        State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
 
         return state.getId( ) == nStateIdInConf;
     }
@@ -254,11 +254,10 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                     try
                     {
                         Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-                        TicketCategory ticketCategory = ticket.getTicketCategory( );
 
                         if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( request ) ) )
                         {
-                            strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, ticketCategory.getId( ), request,
+                            strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, null, request,
                                     getLocale( request ) );
 
                             if ( strError != null )
@@ -268,7 +267,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                         }
                         else
                         {
-                            _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, ticketCategory.getId( ), request,
+                            _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, null, request,
                                     getLocale( request ), false );
                         }
 
@@ -313,8 +312,8 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         {
             try
             {
-                _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
-                _workflowService.executeActionAutomatic( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+                _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
+                _workflowService.executeActionAutomatic( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
             }
             catch( Exception e )
             {
@@ -347,14 +346,14 @@ public abstract class WorkflowCapableXPage extends MVCApplication
             {
                 try
                 {
-                    _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+                    _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
 
                     Collection<Action> actions = _workflowService.getActions( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, userFront );
 
                     if ( actions.size( ) == 1 )
                     {
                         Action action = actions.iterator( ).next( );
-                        _workflowService.doProcessAction( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, action.getId( ), ticketCategory.getId( ), request,
+                        _workflowService.doProcessAction( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, action.getId( ), null, request,
                                 request.getLocale( ), false );
                     }
                     else

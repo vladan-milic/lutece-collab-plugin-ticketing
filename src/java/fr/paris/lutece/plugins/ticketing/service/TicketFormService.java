@@ -45,8 +45,10 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeUpload;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.categoryinputs.TicketCategoryInputsHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.ResponseRecap;
 import fr.paris.lutece.portal.business.file.File;
@@ -111,7 +113,15 @@ public class TicketFormService implements Serializable
      */
     public static List<Entry> getFilterInputs( int idCategory, List<Integer> listEntryId )
     {
-        List<Integer> listInputs =  TicketCategoryInputsHome.getIdInputListByCategory( idCategory );
+        List<Integer> listInputs =  new ArrayList<Integer>( );
+        List<TicketCategory> listCategoriesBranch = TicketCategoryService.getInstance( ).getBranchOfCategoryId( idCategory );
+        
+        for ( TicketCategory ticketCategory : listCategoriesBranch )
+        {
+            List<Integer> listInputsByCategoryId =  TicketCategoryInputsHome.getIdInputListByCategory( ticketCategory.getId( ) );
+            listInputs.addAll( listInputsByCategoryId );
+        }
+        
         List<Entry> listEntryFirstLevel;
         List<Entry> listEntry = new ArrayList<Entry>( );
 
@@ -421,7 +431,7 @@ public class TicketFormService implements Serializable
 
                     if ( formError != null )
                     {
-                        formError.setUrl( getEntryUrl( entry, ticket.getTicketCategory( ).getId( ) ) );
+                        formError.setUrl( getEntryUrl( entry ) );
                     }
                 }
                 else
@@ -483,11 +493,9 @@ public class TicketFormService implements Serializable
      * 
      * @param entry
      *            the entry
-     * @param nIdform
-     *            id of form
      * @return The URL of the anchor of an entry
      */
-    public String getEntryUrl( Entry entry, int nIdform )
+    public String getEntryUrl( Entry entry )
     {
         UrlItem url = new UrlItem( AppPathService.getPortalUrl( ) );
         url.addParameter( XPageAppService.PARAM_XPAGE_APP, TicketingPlugin.PLUGIN_NAME );

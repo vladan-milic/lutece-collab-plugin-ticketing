@@ -399,7 +399,8 @@ public class TicketXPage extends WorkflowCapableXPage
         request.setAttribute( TicketingConstants.ATTRIBUTE_IS_DISPLAY_FRONT, true );
         if ( ticket.getTicketCategory( ).getId( ) > 0 && bIsSubProbSelected )
         {
-            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory( ).getId( ), null );
+            int nIdCategory = ( ticket.getTicketPrecision( ) != null && StringUtils.isNotBlank( ticket.getTicketPrecision( ).getLabel( ) ) )?ticket.getTicketPrecision( ).getId( ):ticket.getTicketCategory( ).getId( );
+            List<Entry> listEntry = TicketFormService.getFilterInputs( nIdCategory, null );
 
             for ( Entry entry : listEntry )
             {

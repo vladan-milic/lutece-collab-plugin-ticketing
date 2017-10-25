@@ -52,8 +52,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.lang.StringUtils;
-
 public class TicketCategoryService
 {
 
@@ -199,6 +197,8 @@ public class TicketCategoryService
                 subCategory.setCategoryType( childCategoryType );
             }
         }
+        // TODO : temporary, remove when removing idWorkflow from TicketCategory
+        subCategory.setIdWorkflow( 301 );
         TicketCategoryHome.create( subCategory );
         TicketCategoryTreeCacheService.getInstance( ).reloadResource( );
 
@@ -364,6 +364,17 @@ public class TicketCategoryService
     }
     
     /**
+     * Get the branch of a category id (from root to category)
+     * 
+     * @param category id
+     * @return the branch of categories from root to category
+     */
+    public List<TicketCategory> getBranchOfCategoryId( int nId )
+    {
+        return _treeCategories.getBranch( findCategoryById( nId ) );
+    }
+    
+    /**
      * Get the category list corresponding to the depth 
      * 
      * @param depth
@@ -439,7 +450,6 @@ public class TicketCategoryService
         catch ( IndexOutOfBoundsException e )
         {
             TicketCategory emptyCategory = new TicketCategory( );
-            emptyCategory.setLabel( StringUtils.EMPTY );
             return emptyCategory;
         }
     }
@@ -459,7 +469,6 @@ public class TicketCategoryService
         catch ( IndexOutOfBoundsException e )
         {
             TicketCategory emptyCategory = new TicketCategory( );
-            emptyCategory.setLabel( StringUtils.EMPTY );
             return emptyCategory;
         }
     }
@@ -479,7 +488,6 @@ public class TicketCategoryService
         catch ( IndexOutOfBoundsException e )
         {
             TicketCategory emptyCategory = new TicketCategory( );
-            emptyCategory.setLabel( StringUtils.EMPTY );
             return emptyCategory;
         }
     }
@@ -493,13 +501,12 @@ public class TicketCategoryService
     {
         try
         {
-           TicketCategory domainCategory = ticketCategory.getBranch( ).get( TicketingConstants.PRECISION_DEPTH - 1 ); 
-           return domainCategory;
+           TicketCategory precisionCategory = ticketCategory.getBranch( ).get( TicketingConstants.PRECISION_DEPTH - 1 ); 
+           return precisionCategory;
         }
         catch ( IndexOutOfBoundsException e )
         {
             TicketCategory emptyCategory = new TicketCategory( );
-            emptyCategory.setLabel( StringUtils.EMPTY );
             return emptyCategory;
         }
     }

@@ -38,11 +38,9 @@ import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
-import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
-import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -106,8 +104,6 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_FILTER_LASTUPDATE_DATE = " AND a.date_update >= ? AND a.date_update < ? ";
     private static final String SQL_FILTER_LASTUPDATE_START_DATE = " AND a.date_update >= ? ";
     private static final String SQL_FILTER_LASTUPDATE_END_DATE = " AND a.date_update <= ? ";
-    private static final String SQL_FILTER_DOMAIN = " AND d.id_category = ? ";
-    private static final String SQL_FILTER_TYPE = "  AND c.id_category = ?  ";
     private static final String SQL_FILTER_CATEGORY = " AND a.id_category = ?  ";
     private static final String SQL_FILTER_ID_USER = "  AND a.guid = ? ";
     private static final String SQL_FILTER_ID_CHANNEL = " AND x.id_channel = ? ";
@@ -134,12 +130,6 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_FILTER_VIEW_DOMAIN_UNIT_ASSIGNEE = " a.id_unit NOT IN ( ";
     private static final String SQL_FILTER_VIEW_DOMAIN_UNIT_ASSIGNER = " a.id_assigner_unit NOT IN ( ";
     private static final String SQL_FILTER_LIMIT = " LIMIT ?,? ";
-    private static final String SQL_FILTER_RBAC_TICKET_JOIN_CLAUSE = " JOIN core_admin_role_resource k ON k.resource_type = '" + Ticket.TICKET_RESOURCE_TYPE
-            + "' " + " AND (k.permission = '" + TicketResourceIdService.PERMISSION_VIEW + "' OR k.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY + "' )"
-            + " AND (k.resource_id = '" + RBAC.WILDCARD_RESOURCES_ID + "' OR k.resource_id = a.id_ticket ) AND k.role_key IN ( ";
-    private static final String SQL_FILTER_RBAC_DOMAIN_JOIN_CLAUSE = " JOIN core_admin_role_resource l ON l.resource_type = '" + TicketCategory.RESOURCE_TYPE
-            + "' " + " AND (l.permission = '" + TicketCategory.PERMISSION_VIEW_LIST + "' OR l.permission = '" + RBAC.WILDCARD_PERMISSIONS_KEY
-            + "' )" + " AND (l.resource_id = '" + RBAC.WILDCARD_RESOURCES_ID + "' OR l.resource_id = d.id_ticket_domain ) AND l.role_key IN ( ";
 
     private static final String SQL_SELECT_ALL_WORKFLOW_JOIN_CLAUSE = " LEFT JOIN  workflow_resource_workflow i ON i.id_resource=a.id_ticket"
             + " LEFT JOIN workflow_state j ON j.id_state=i.id_state";
@@ -211,7 +201,14 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setString( nIndex++, ticket.getEmail( ) );
         daoUtil.setString( nIndex++, ticket.getFixedPhoneNumber( ) );
         daoUtil.setString( nIndex++, ticket.getMobilePhoneNumber( ) );
-        daoUtil.setInt( nIndex++, ticket.getTicketCategory( ).getId( ) );
+        if ( ticket.getTicketPrecision( ) != null && StringUtils.isNotBlank( ticket.getTicketPrecision( ).getLabel( ) ) )
+        {
+            daoUtil.setInt( nIndex++, ticket.getTicketPrecision( ).getId( ) );
+        }
+        else
+        {
+            daoUtil.setInt( nIndex++, ticket.getTicketCategory( ).getId( ) );
+        }
         daoUtil.setInt( nIndex++, ticket.getIdContactMode( ) );
         daoUtil.setString( nIndex++, ticket.getTicketComment( ) );
         daoUtil.setInt( nIndex++, ticket.getTicketStatus( ) );
@@ -308,7 +305,14 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setString( nIndex++, ticket.getEmail( ) );
         daoUtil.setString( nIndex++, ticket.getFixedPhoneNumber( ) );
         daoUtil.setString( nIndex++, ticket.getMobilePhoneNumber( ) );
-        daoUtil.setInt( nIndex++, ticket.getTicketCategory( ).getId( ) );
+        if ( ticket.getTicketPrecision( ) != null && StringUtils.isNotBlank( ticket.getTicketPrecision( ).getLabel( ) ) )
+        {
+            daoUtil.setInt( nIndex++, ticket.getTicketPrecision( ).getId( ) );
+        }
+        else
+        {
+            daoUtil.setInt( nIndex++, ticket.getTicketCategory( ).getId( ) );
+        }
         daoUtil.setInt( nIndex++, ticket.getIdContactMode( ) );
         daoUtil.setString( nIndex++, ticket.getTicketComment( ) );
         daoUtil.setInt( nIndex++, ticket.getTicketStatus( ) );
@@ -411,24 +415,6 @@ public final class TicketDAO implements ITicketDAO
     {
         StringBuilder sqlQuery = new StringBuilder( );
         boolean bWorkflowAvail = WorkflowService.getInstance( ).isAvailable( );
-
-        if ( filter != null )
-        {
-            if ( TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) )
-            {
-                sqlQuery.append( strBaseQuery.replace( "SELECT", "SELECT DISTINCT" ) );
-                sqlQuery.append( SQL_FILTER_RBAC_TICKET_JOIN_CLAUSE );
-                sqlQuery.append( getInCriteriaClause( filter.getAdminUserRoles( ).size( ) ) );
-                sqlQuery.append( CONSTANT_CLOSE_PARENTHESIS );
-            }
-            else
-            {
-                sqlQuery.append( strBaseQuery );
-            }
-            sqlQuery.append( SQL_FILTER_RBAC_DOMAIN_JOIN_CLAUSE );
-            sqlQuery.append( getInCriteriaClause( filter.getAdminUserRoles( ).size( ) ) );
-            sqlQuery.append( CONSTANT_CLOSE_PARENTHESIS );
-        }
 
         if ( bWorkflowAvail )
         {
@@ -779,8 +765,6 @@ public final class TicketDAO implements ITicketDAO
         sbSQL.append( filter.containsLastUpdateEndDate( ) ? SQL_FILTER_LASTUPDATE_END_DATE : StringUtils.EMPTY );
         sbSQL.append( filter.containsStatus( ) ? SQL_FILTER_STATUS : StringUtils.EMPTY );
         sbSQL.append( filter.containsIdTicket( ) ? SQL_FILTER_ID_TICKET : StringUtils.EMPTY );
-        sbSQL.append( filter.containsIdDomain( ) ? SQL_FILTER_DOMAIN : StringUtils.EMPTY );
-        sbSQL.append( filter.containsIdType( ) ? SQL_FILTER_TYPE : StringUtils.EMPTY );
         sbSQL.append( filter.containsIdCategory( ) ? SQL_FILTER_CATEGORY : StringUtils.EMPTY );
         sbSQL.append( filter.containsIdUser( ) ? SQL_FILTER_ID_USER : StringUtils.EMPTY );
         sbSQL.append( filter.containsEmail( ) ? SQL_FILTER_EMAIL : StringUtils.EMPTY );
@@ -922,33 +906,6 @@ public final class TicketDAO implements ITicketDAO
     {
         int nIndex = 1;
 
-        // RBAC values are in JOIN !
-        int nRoleCount = filter.getAdminUserRoles( ).size( );
-        if ( filter.getAdminUserRoles( ).size( ) > 0 )
-        {
-            if ( TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) )
-            {
-                for ( String strUserRole : filter.getAdminUserRoles( ) )
-                {
-                    // RBAC Ticket
-                    daoUtil.setString( nIndex, strUserRole );
-                    // RBAC Domain
-                    daoUtil.setString( nIndex + nRoleCount, strUserRole );
-                    nIndex++;
-                }
-                nIndex = nIndex + nRoleCount;
-            }
-            else
-            {
-                for ( String strUserRole : filter.getAdminUserRoles( ) )
-                {
-                    // RBAC Domain
-                    daoUtil.setString( nIndex, strUserRole );
-                    nIndex++;
-                }
-            }
-        }
-
         if ( filter.containsCreationDate( ) )
         {
             daoUtil.setDate( nIndex++, new Date( filter.getCreationDate( ).getTime( ) ) );
@@ -989,16 +946,6 @@ public final class TicketDAO implements ITicketDAO
         if ( filter.containsIdTicket( ) )
         {
             daoUtil.setInt( nIndex++, filter.getIdTicket( ) );
-        }
-
-        if ( filter.containsIdDomain( ) )
-        {
-            daoUtil.setInt( nIndex++, filter.getIdDomain( ) );
-        }
-
-        if ( filter.containsIdType( ) )
-        {
-            daoUtil.setInt( nIndex++, filter.getIdType( ) );
         }
 
         if ( filter.containsIdCategory( ) )
@@ -1184,6 +1131,7 @@ public final class TicketDAO implements ITicketDAO
 
         while ( daoUtil.next( ) )
         {
+            
             listIdTickets.add( daoUtil.getInt( 1 ) );
         }
 

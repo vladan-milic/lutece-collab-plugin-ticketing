@@ -138,7 +138,7 @@ public class TicketValidator
 
             TicketCategory ticketCategory = ticket.getTicketCategory( );
 
-            if ( ticketCategory == null )
+            if ( ticketCategory == null || ticketCategory.getId( ) == TicketingConstants.PROPERTY_UNSET_INT )
             {
                 listErrors.add( I18nService.getLocalizedString( ERROR_TICKET_CATEGORY_UNKNOWN, _locale ) );
             }

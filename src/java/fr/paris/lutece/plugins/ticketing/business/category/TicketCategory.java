@@ -37,6 +37,8 @@ import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.service.tree.AbstractNode;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 import javax.validation.constraints.*;
+
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.*;
 import java.io.Serializable;
 import java.util.List;
@@ -93,12 +95,15 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
      */
     public TicketCategory( )
     {
+        _nId = -1;
         _nIdParent = -1;
         _depth = new TicketCategoryType( );
         ( (TicketCategoryType) _depth ).setId( -1 );
         _defaultAssignUnit = new AssigneeUnit( );
         _defaultAssignUnit.setUnitId( -1 );
         _nIdWorkflow = 1;
+        _strLabel = StringUtils.EMPTY;
+
 
     }
 

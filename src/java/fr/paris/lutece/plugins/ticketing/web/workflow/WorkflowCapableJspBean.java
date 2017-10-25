@@ -177,7 +177,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 StateFilter stateFilter = new StateFilter( );
                 stateFilter.setIdWorkflow( nIdWorkflow );
 
-                State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+                State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
 
                 if ( state != null )
                 {
@@ -203,7 +203,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
             StateFilter stateFilter = new StateFilter( );
             stateFilter.setIdWorkflow( nIdWorkflow );
 
-            State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+            State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
 
             if ( state != null )
             {
@@ -375,12 +375,11 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 try
                 {
                     Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-                    TicketCategory ticketCategory = ticket.getTicketCategory( );
 
                     if ( _workflowService.isDisplayTasksForm( _nIdAction, getLocale( ) ) )
 
                     {
-                        strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, ticketCategory.getId( ), request,
+                        strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, null, request,
                                 getLocale( ) );
 
                         if ( strError != null )
@@ -392,7 +391,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                     }
                     else
                     {
-                        _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, ticketCategory.getId( ), request, getLocale( ),
+                        _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, null, request, getLocale( ),
                                 false );
 
                         addInfoWorkflowAction( request, _nIdAction );
@@ -449,7 +448,6 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                         try
                         {
                             Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
-                            TicketCategory ticketCategory = ticket.getTicketCategory( );
 
                             if ( RBACService.isAuthorized( ticket.getTicketDomain( ),
                                     TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) )
@@ -461,7 +459,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                                     if ( _workflowService.isDisplayTasksForm( _nIdAction, getLocale( ) ) )
                                     {
                                         strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction,
-                                                ticketCategory.getId( ), request, getLocale( ) );
+                                                null, request, getLocale( ) );
 
                                         if ( strError != null )
                                         {
@@ -478,7 +476,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                                     }
                                     else
                                     {
-                                        _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, ticketCategory.getId( ), request,
+                                        _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, null, request,
                                                 getLocale( ), false );
 
                                         immediateTicketIndexing( ticket.getId( ) );
@@ -534,8 +532,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         {
             try
             {
-                _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
-                _workflowService.executeActionAutomatic( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+                _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
+                _workflowService.executeActionAutomatic( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
             }
             catch( Exception e )
             {
@@ -564,14 +562,14 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         {
             try
             {
-                _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, ticketCategory.getId( ) );
+                _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
 
                 Collection<Action> actions = _workflowService.getActions( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, getUser( ) );
 
                 if ( actions.size( ) == 1 )
                 {
                     Action action = actions.iterator( ).next( );
-                    _workflowService.doProcessAction( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, action.getId( ), ticketCategory.getId( ), request,
+                    _workflowService.doProcessAction( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, action.getId( ), null, request,
                             request.getLocale( ), false );
                 }
                 else

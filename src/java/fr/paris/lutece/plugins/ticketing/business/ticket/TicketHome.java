@@ -52,6 +52,8 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * This class provides instances management methods (create, find, ...) for Ticket objects
  */
@@ -125,8 +127,16 @@ public final class TicketHome
 
         if ( ticket != null )
         {
-            TicketCategory ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( ticket.getTicketCategory( ).getId( ) );
-            ticket.setTicketCategory( ticketCategory );
+            if ( ticket.getTicketPrecision( ) != null && StringUtils.isNotBlank( ticket.getTicketPrecision( ).getLabel( ) ) )
+            {
+                TicketCategory ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( ticket.getTicketPrecision( ).getId( ) );
+                ticket.setTicketCategory( ticketCategory );
+            }
+            else
+            {
+                TicketCategory ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( ticket.getTicketCategory( ).getId( ) );
+                ticket.setTicketCategory( ticketCategory );
+            }
         }
 
         if ( ticket != null )

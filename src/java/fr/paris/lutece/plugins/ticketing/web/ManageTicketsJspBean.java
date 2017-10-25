@@ -705,7 +705,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
             // Check user rights on domain
-            if ( !RBACService.isAuthorized( TicketCategoryService.getInstance( ).getDomain( ticket.getTicketCategory( ) ),
+            if ( !RBACService.isAuthorized( TicketCategoryService.getInstance( ).getDomain( ticket.getTicketDomain( ) ),
                     TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) )
             {
                 return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
@@ -1022,7 +1022,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             ticket.setListResponse( null );
 
-            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory( ).getId( ), null );
+            int nIdCategory = ( ticket.getTicketPrecision( ) != null && StringUtils.isNotBlank( ticket.getTicketPrecision( ).getLabel( ) ) )?ticket.getTicketPrecision( ).getId( ):ticket.getTicketCategory( ).getId( );
+            List<Entry> listEntry = TicketFormService.getFilterInputs( nIdCategory, null );
 
             for ( Entry entry : listEntry )
             {

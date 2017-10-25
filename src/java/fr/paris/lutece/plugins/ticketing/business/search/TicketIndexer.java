@@ -788,7 +788,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             TicketCategory ticketCategory = ticket.getTicketCategory( );
             State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, ticketCategory.getIdWorkflow( ),
-                    ticketCategory.getId( ) );
+                    null );
 
             if ( state != null && StringUtils.isNotBlank( state.getName( ) ) )
             {

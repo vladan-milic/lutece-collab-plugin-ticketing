@@ -4,7 +4,7 @@ var default_msg_select_domain = "-- Choisir un domaine --";
 var default_msg_select_category = "-- Choisir une probl\u00e9matique --";
 var default_msg_select_precision = "-- Choisir une sous-probl\u00e9matique --";
 
-// Turns the 3 combos identified by the jquery selectors into dynamic combos
+// Turns the combos identified by the jquery selectors into dynamic combos
 function lutece_ticket_tree(type_selector, domain_selector, category_selector, precision_selector, categories_tree, url) {
     var idTypeSelected = $("#ticket_type_id").val();
     var idDomainSelected = $("#ticket_domain_id").val();
@@ -35,21 +35,43 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
 		var index = get_index(selectedCategory.categories_depth_4, idPrecisionSelected);
 		selectedPrecision = selectedCategory.categories_depth_4[index];
 	}
-    
+
+    var load_messages = function() {
+    	if (selectedCategory!= undefined && selectedCategory.help != undefined) {
+    		$("#help_message_category").html(selectedCategory.help);
+    	} else {
+    		$("#help_message_category").html("");
+    	}
+
+    	if (selectedPrecision!= undefined && selectedPrecision.help != undefined) {
+    		$("#help_message_precision").html(selectedPrecision.help);
+    	} else {
+    		$("#help_message_precision").html("");
+    	}
+    }
+	
     // Load all lists (type/domain/category/precision)
 	load_combo(type_selector, categories_tree.categories_depth_1, idTypeSelected, default_msg_select_type, true, false);
 	load_combo(domain_selector, (idTypeSelected > 0 ? selectedType.categories_depth_2 : undefined), idDomainSelected, default_msg_select_domain, false, false);
 	load_combo(category_selector, (idDomainSelected > 0 ? selectedDomain.categories_depth_3 : undefined), idCategorySelected, default_msg_select_category, false, false);
-	if (idCategorySelected > 0 && selectedCategory.categories_depth_4.length == 0)
+	if (idCategorySelected > 0 && selectedCategory.categories_depth_4.length > 0)
 	{
 		load_combo(precision_selector, (idCategorySelected > 0 ? selectedCategory.categories_depth_4 : undefined), idPrecisionSelected, default_msg_select_precision, false, true);
 	}
 	else
 	{
-		$(precision_selector).parents(".form-group:first").hide();
+		hide_precision(precision_selector);
 	}
-    
-	loadGenericAttributesForm(url, false, category_selector, true, -1);
+	
+    // Load generic attributes
+	if (idPrecisionSelected > 0)
+	{
+		loadGenericAttributesForm(url, false, precision_selector, true);
+	}
+	else if (idCategorySelected > 0)
+	{
+		loadGenericAttributesForm(url, false, category_selector, true);
+	}
 
 	// Change the selected type on click
 	$(type_selector).change(function() {
@@ -80,6 +102,7 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
 		var newSelectedType = categories_depth_1[index];
 		load_combo(domain_selector, newSelectedType.categories_depth_2, 0, default_msg_select_domain, true, false);
 		load_combo(category_selector, undefined, 0, default_msg_select_category, false, false);
+		hide_precision(precision_selector);
 		return newSelectedType;
 	}
 	
@@ -91,7 +114,7 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
 		var index = get_index(categories_depth_2, domainValue);
 		var newSelectedDomain = categories_depth_2[index];
 		load_combo(category_selector, newSelectedDomain.categories_depth_3, 0, default_msg_select_category, true, false);
-		load_combo(precision_selector, undefined, 0, default_msg_select_precision, false, false);
+		hide_precision(precision_selector);
 		return newSelectedDomain;
 	}
 	
@@ -103,7 +126,8 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
 		var index = get_index(categories_depth_3, categoryValue);
 		var newSelectedCategory = categories_depth_3[index];
 		load_combo(precision_selector, newSelectedCategory.categories_depth_4, 0, default_msg_select_precision, true, true);
-		loadGenericAttributesForm(url, false, category_selector, false, -1);
+		loadGenericAttributesForm(url, false, category_selector, false);
+		load_messages();
 		return newSelectedCategory;
 	}
 	
@@ -114,18 +138,18 @@ function lutece_ticket_tree(type_selector, domain_selector, category_selector, p
 		removeDefaultValue(precision_selector, "id_ticket_precision", precisionValue);
 		var index = get_index(categories_depth_4, precisionValue);
 		var newSelectedPrecision = categories_depth_4[index];
-		loadGenericAttributesForm(url, false, category_selector, false, -1);
-//		load_messages();
+		loadGenericAttributesForm(url, false, precision_selector, false);
+		load_messages();
 		return newSelectedPrecision;
 	}
 }
 
 
 //load generic attributes form from selected category
-function loadGenericAttributesForm(url, is_response_reseted, category_selector, is_first_call, selectedPrecision) {
-	if (typeof url !== "undefined" && selectedPrecision != undefined) {
+function loadGenericAttributesForm(url, is_response_reseted, selector, is_first_call) {
+	if (typeof url !== "undefined") {
 		$.ajax({
-			url: url+"&id_ticket_category="+$(category_selector).val()+"&reset_response="+is_response_reseted,
+			url: url+"&id_ticket_category="+$(selector).val()+"&reset_response="+is_response_reseted,
 			type: "GET",
 			dataType : "html",
 			success: function( response ) {
@@ -156,6 +180,13 @@ function loadGenericAttributesForm(url, is_response_reseted, category_selector, 
 	else
 	{
 		$('#generic_attributes').replaceWith('<div id="generic_attributes">' + "" + '</div>');
+	}
+}
+
+function hide_precision(precision_selector) {
+	if (precision_selector != undefined)
+	{
+		$(precision_selector).parents(".form-group:first").hide();
 	}
 }
 

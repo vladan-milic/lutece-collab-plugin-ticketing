@@ -50,7 +50,6 @@ import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
-import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
 
 import java.util.List;
@@ -202,11 +201,6 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
         {
             _category.setIdParent( Integer.parseInt( strIdParentCategory ) );
             _category.setParent( TicketCategoryService.getInstance( ).findCategoryById( _category.getIdParent( ) ) );
-        }
-        else
-        {
-            _category.setIdParent( -1 );
-            _category.setParent( null );
         }
 
         Map<String, Object> model = getModel( );
