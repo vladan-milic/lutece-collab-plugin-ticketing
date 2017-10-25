@@ -416,6 +416,7 @@ public final class TicketDAO implements ITicketDAO
         StringBuilder sqlQuery = new StringBuilder( );
         boolean bWorkflowAvail = WorkflowService.getInstance( ).isAvailable( );
 
+        sqlQuery.append( strBaseQuery );
         if ( bWorkflowAvail )
         {
             sqlQuery.append( SQL_SELECT_ALL_WORKFLOW_JOIN_CLAUSE );

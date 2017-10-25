@@ -40,7 +40,6 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.service.tree.Tree;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
-import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTreeCacheService;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -560,17 +559,12 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
 
         List<Entry> listEntry = TicketCategoryService.getInstance( ).getCategoryEntryList( _category );
 
-        Tree<TicketCategory, TicketCategoryType> treeCategories = TicketCategoryTreeCacheService.getInstance( ).getResource( );
-        List<TicketCategory> branch = treeCategories.getBranch( _category );
-        StringBuilder branchLabel = new StringBuilder( );
-        
-        branch.stream( ).forEach( ( node ) -> branchLabel.append( node.getLabel( ) ).append( " / " ) );
-        
         Map<String, Object> model = getModel( );
         model.put( MARK_CATEGORY, _category );
         model.put( MARK_ALL_INPUTS_LIST, TicketCategoryService.getInstance( ).getFilteredRefListInputs( _category ) );
         model.put( MARK_CATEGORY_INPUTS_LIST, listEntry );
-        model.put( MARK_BRANCH_LABEL, branchLabel.substring( 0, branchLabel.length( ) - 3 ) );
+        
+        model.put( MARK_BRANCH_LABEL, TicketCategoryService.getInstance( ).getBranchLabel( _category, " / " ) );
         model.put( MARK_LOCALE, getLocale( ) );
         model.put( MARK_LOCALE_TINY, getLocale( ) );
 

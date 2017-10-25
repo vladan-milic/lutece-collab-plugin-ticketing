@@ -680,4 +680,20 @@ public class TicketCategoryService
         return listAuthorizedDomain;
     }
     
+    /**
+     * Get the branch label of the category 
+     * 
+     * @param category
+     *            admin user
+     * @return the branch label
+     */
+    public String getBranchLabel( TicketCategory category, String separator)
+    {
+        List<TicketCategory> branch = _treeCategories.getBranch( category );
+        StringBuilder branchLabel = new StringBuilder( );
+        branch.stream( ).forEach( ( node ) -> branchLabel.append( node.getLabel( ) ).append( separator ) );
+        
+        return branchLabel.substring( 0, branchLabel.length( ) - separator.length( ) );
+    }
+    
 }

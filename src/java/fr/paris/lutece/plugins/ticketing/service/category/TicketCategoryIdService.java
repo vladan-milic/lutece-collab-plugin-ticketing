@@ -34,13 +34,11 @@
 package fr.paris.lutece.plugins.ticketing.service.category;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.portal.service.rbac.Permission;
 import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
 import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
 import fr.paris.lutece.util.ReferenceList;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -79,19 +77,11 @@ public class TicketCategoryIdService extends ResourceIdService
     @Override
     public ReferenceList getResourceIdList( Locale locale )
     {
-        //Get root elements of category
-        List<TicketCategory> listCategory = TicketCategoryHome.getCategorysList( );
-        List<TicketCategory> listRootCategories = new ArrayList<>();
-        for ( TicketCategory category : listCategory )
-        {
-            TicketCategory domain = TicketCategoryService.getInstance().getDomain( category );
-            if ( domain != null )
-            {
-                listRootCategories.add( domain );
-            }
-        }
-
-        return ReferenceList.convert( listRootCategories, "id", "label", true );
+        List<TicketCategory> listDomain = TicketCategoryService.getInstance( ).getDomainList( );
+        ReferenceList list = new ReferenceList( );
+        listDomain.stream( ).forEach( ( category ) -> list.addItem( category.getId( ), TicketCategoryService.getInstance( ).getBranchLabel( category, "-" ) ) );
+        
+        return list;
     }
 
     /**
@@ -100,8 +90,7 @@ public class TicketCategoryIdService extends ResourceIdService
     @Override
     public String getTitle( String strId, Locale locale )
     {
-        TicketCategory category = TicketCategoryHome.findByPrimaryKey( Integer.parseInt( strId ) );
-        return category.getLabel( );
-    }
+        return TicketCategoryService.getInstance( ).findCategoryById( Integer.parseInt( strId ) ).getLabel( );
+     }
 
 }
