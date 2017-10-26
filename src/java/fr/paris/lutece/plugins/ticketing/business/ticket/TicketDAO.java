@@ -154,23 +154,24 @@ public final class TicketDAO implements ITicketDAO
     // SQL commands to manage ticket's generic attributes responses
     private static final String SQL_QUERY_INSERT_TICKET_RESPONSE = "INSERT INTO ticketing_ticket_response (id_ticket, id_response) VALUES (?,?)";
     private static final String SQL_QUERY_SELECT_TICKET_RESPONSE_LIST = "SELECT id_response FROM ticketing_ticket_response WHERE id_ticket = ?";
-    private static final String SQL_QUERY_DELETE_TICKET_RESPONSE = "DELETE a, b, c, d FROM ticketing_ticket_response a"
+    private static final String SQL_QUERY_DELETE_TICKET_RESPONSE          = "DELETE a, b, c, d FROM ticketing_ticket_response a"
             + " JOIN genatt_response b ON b.id_response = a.id_response LEFT JOIN core_file c ON c.id_file = b.id_file"
             + " LEFT JOIN core_physical_file d ON d.id_physical_file = c.id_physical_file  WHERE a.id_ticket = ? ";
     private static final String SQL_QUERY_REMOVE_FROM_ID_RESPONSE = "DELETE a, b, c, d FROM ticketing_ticket_response a "
             + " JOIN genatt_response b ON b.id_response = a.id_response " + " LEFT JOIN core_file c ON c.id_file = b.id_file"
             + " LEFT JOIN core_physical_file d ON d.id_physical_file = c.id_physical_file  WHERE a.id_response = ? ";
     private static final String SQL_QUERY_FIND_ID_TICKET_FROM_ID_RESPONSE = " SELECT id_ticket FROM ticketing_ticket_response WHERE id_response = ? ";
-    private static final String SQL_QUERY_INSERT_TICKET_ADDRESS = "INSERT INTO ticketing_ticket_address ( id_ticket, address, address_detail, postal_code, city)"
+    private static final String SQL_QUERY_INSERT_TICKET_ADDRESS           = "INSERT INTO ticketing_ticket_address ( id_ticket, address, address_detail, postal_code, city)"
             + " VALUES ( ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_UPDATE_TICKET_ADDRESS = "UPDATE ticketing_ticket_address SET  address = ?, address_detail = ?, postal_code = ?, city = ?"
             + " WHERE id_ticket = ?";
 
-    private static final String SQL_QUERY_SELECT_TICKET_ADDRESS = "SELECT id_ticket from ticketing_ticket_address WHERE id_ticket = ? ";
-    private static final String SQL_QUERY_UPDATE_ID_MARKING = "UPDATE ticketing_ticket SET id_marking = ? WHERE id_ticket = ?";
-    private static final String SQL_QUERY_SELECT_ID_MARKING = "SELECT id_marking FROM ticketing_ticket WHERE id_ticket = ?";
+    private static final String SQL_QUERY_SELECT_TICKET_ADDRESS           = "SELECT id_ticket from ticketing_ticket_address WHERE id_ticket = ? ";
+    private static final String SQL_QUERY_UPDATE_ID_MARKING               = "UPDATE ticketing_ticket SET id_marking = ? WHERE id_ticket = ?";
+    private static final String SQL_QUERY_SELECT_ID_MARKING               = "SELECT id_marking FROM ticketing_ticket WHERE id_ticket = ?";
     private static final String SQL_QUERY_RESET_ID_MARKING = "UPDATE ticketing_ticket SET id_marking = " + TicketingConstants.DEFAULT_MARKING
             + " WHERE id_marking = ?";
+    private static final String SQL_QUERY_SELECT_TICKET_BY_ID_UNIT        = SQL_QUERY_SELECTALL_SELECT_CLAUSE + " WHERE a.id_unit = ?";
 
     /**
      * Generates a new primary key
@@ -1219,5 +1220,28 @@ public final class TicketDAO implements ITicketDAO
         cal.add( Calendar.DATE, 1 );
 
         return new java.util.Date( cal.getTimeInMillis( ) );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Ticket> selectTicketsListByUnitId( int nIdUnit, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_TICKET_BY_ID_UNIT, plugin );
+        daoUtil.setInt( 1, nIdUnit );
+        daoUtil.executeQuery( );
+
+        List<Ticket> listTickets = new ArrayList<Ticket>( );
+
+        if ( daoUtil.next( ) )
+        {
+            Ticket ticket = dataToTicket( daoUtil );
+            listTickets.add( ticket );
+        }
+
+        daoUtil.free( );
+
+        return listTickets;
     }
 }
