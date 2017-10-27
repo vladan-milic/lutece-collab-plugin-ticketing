@@ -91,6 +91,10 @@ public final class ModelUtils
         {
             model.put( TicketingConstants.MARK_TICKET_MODIFICATION_RIGHT, Boolean.TRUE );
         }
+        if ( RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_EXPORT, adminUser ) )
+        {
+            model.put( TicketingConstants.MARK_TICKET_EXPORT_RIGHT, Boolean.TRUE );
+        }
     }
 
     /**

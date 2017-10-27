@@ -95,6 +95,7 @@ public final class TicketingConstants
     public static final String MARK_TICKET_CREATION_RIGHT = "ticket_creation_right";
     public static final String MARK_TICKET_DELETION_RIGHT = "ticket_deletion_right";
     public static final String MARK_TICKET_MODIFICATION_RIGHT = "ticket_modification_right";
+    public static final String MARK_TICKET_EXPORT_RIGHT = "ticket_export_right";
     public static final String MARK_POPIN_MODE = "popin_mode";
     public static final String MARK_JSP_CONTROLLER = "jsp_controller";
     public static final String MARK_CHANNELS_LIST = "channels_list";

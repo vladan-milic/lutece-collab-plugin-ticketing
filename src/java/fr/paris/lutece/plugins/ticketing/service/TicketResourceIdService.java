@@ -62,11 +62,17 @@ public class TicketResourceIdService extends ResourceIdService
 
     /** Permission for deleting a ticket */
     public static final String PERMISSION_VIEW = "VIEW";
+
+    /** Permission for exporting tickets */
+    public static final String PERMISSION_EXPORT = "EXPORT";
+
+
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "ticketing.ticket.resourceType";
     private static final String PROPERTY_LABEL_CREATE = "ticketing.ticket.permission.label.create";
     private static final String PROPERTY_LABEL_MODIFY = "ticketing.ticket.permission.label.modify";
     private static final String PROPERTY_LABEL_DELETE = "ticketing.ticket.permission.label.delete";
     private static final String PROPERTY_LABEL_VIEW = "ticketing.ticket.permission.label.view";
+    private static final String PROPERTY_LABEL_EXPORT = "ticketing.ticket.permission.label.export";
 
     /**
      * Constructor
@@ -105,6 +111,11 @@ public class TicketResourceIdService extends ResourceIdService
         p = new Permission( );
         p.setPermissionKey( PERMISSION_VIEW );
         p.setPermissionTitleKey( PROPERTY_LABEL_VIEW );
+        rt.registerPermission( p );
+
+        p = new Permission( );
+        p.setPermissionKey( PERMISSION_EXPORT );
+        p.setPermissionTitleKey( PROPERTY_LABEL_EXPORT );
         rt.registerPermission( p );
 
         ResourceTypeManager.registerResourceType( rt );

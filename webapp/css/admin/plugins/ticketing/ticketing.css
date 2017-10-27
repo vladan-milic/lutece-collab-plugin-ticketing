@@ -244,6 +244,7 @@ textarea.ticketing.richtext {
 #filter-ticket label.select:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; font-size:18px; right: 5px; top: -2px; position:absolute; pointer-events:none }
 #filter-ticket .btn{ color:#fff; min-width: 50px }
 #filter-ticket .btn span.fa-search{ color:#000; }
+#filter-ticket-export { position: absolute; bottom: -160px; z-index: 50}
 
 #filter-ticket .btn.filter-button{
 	background-color: #DDD;
