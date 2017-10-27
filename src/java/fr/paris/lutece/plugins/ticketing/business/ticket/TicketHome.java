@@ -402,4 +402,16 @@ public final class TicketHome
 
         _cacheService.resetCache( );
     }
+
+    /**
+     * Get every ticket associated with the given unit
+     * 
+     * @param nIdUnit
+     *            The id of the unit
+     * @return The list of ticket associated
+     */
+    public static List<Ticket> findByUnitId( int nIdUnit )
+    {
+        return _dao.selectTicketsListByUnitId( nIdUnit, _plugin );
+    }
 }

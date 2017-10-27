@@ -224,4 +224,15 @@ public interface ITicketDAO
      * @return The id of the ticket, or 0 if no ticket is associated with he given response.
      */
     int findIdTicketByIdResponse( int nIdResponse, Plugin plugin );
+
+    /**
+     * Find the list of ticket by id of their unit
+     * 
+     * @param nIdUnit
+     *            The id of the unit
+     * @param plugin
+     *            The plugin
+     * @return The list of tickets who is associated to the unit
+     */
+    List<Ticket> selectTicketsListByUnitId( int nIdUnit, Plugin plugin );
 }

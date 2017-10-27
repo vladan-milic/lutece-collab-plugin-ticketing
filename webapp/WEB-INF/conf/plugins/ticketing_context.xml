@@ -90,4 +90,7 @@
     <bean id="ticketing.identitystore.service" class="fr.paris.lutece.plugins.identitystore.web.service.IdentityService">
         <constructor-arg ref="ticketing.identitystore.restTransport"/>
     </bean>
+    
+    <!-- Listener -->
+    <bean id="ticketing.RemovalUnitListener" class="fr.paris.lutece.plugins.ticketing.service.TicketingUnitRemovalListener" />
 </beans>
