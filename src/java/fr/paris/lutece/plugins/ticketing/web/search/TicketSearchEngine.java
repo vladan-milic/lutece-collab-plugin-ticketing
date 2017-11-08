@@ -186,6 +186,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
                     Document document = searcher.doc( docId );
                     listResults.add( createTicketFromDocument( document ) );
                 }
+                searcher.getIndexReader( ).close( );
             }
         }
         catch( IOException e )
@@ -248,7 +249,9 @@ public class TicketSearchEngine implements ITicketSearchEngine
                 // Get the number of results documents
                 TotalHitCountCollector totaltHitcountCollector = new TotalHitCountCollector( );
                 searcher.search( query, totaltHitcountCollector );
-                return totaltHitcountCollector.getTotalHits( );
+                int nTotalHits = totaltHitcountCollector.getTotalHits( );
+                searcher.getIndexReader( ).close( );
+                return nTotalHits;
             }
         }
         catch( IOException e )
