@@ -48,7 +48,6 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.identitystore.web.exception.IdentityNotFoundException;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
@@ -155,7 +154,6 @@ public class TicketXPage extends WorkflowCapableXPage
         {
             ticket = new Ticket( );
             TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( request.getSession( ).getId( ) );
-            ticket.setTicketCategory( new TicketCategory( ) );
         }
 
         prefillTicketWithUserInfo( request, ticket );
@@ -165,7 +163,8 @@ public class TicketXPage extends WorkflowCapableXPage
         Map<String, Object> model = getModel( );
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getJSONObject( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
 
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale( ) ) );
 
@@ -349,17 +348,17 @@ public class TicketXPage extends WorkflowCapableXPage
         ticket = ( ticket != null ) ? ticket : new Ticket( );
         populate( ticket, request );
         ticket.setListResponse( new ArrayList<Response>( ) );
-        
+
         // Validate the TicketCategory
         TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( );
-
-        bIsFormValid = categoryValidatorResult.isTicketCategoryValid( );
-        ticket.setTicketCategory( categoryValidatorResult.getTicketCategory( ) );
-
-        // Check if a category have been selected
-        if ( !bIsFormValid )
+        if ( !categoryValidatorResult.isTicketCategoryValid( ) )
         {
-            addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( request ) );
+            categoryValidatorResult.getListValidationErrors( ).stream( ).forEach( ( error ) -> addError( error ) );
+            bIsFormValid = false;
+        }
+        else
+        {
+            ticket.setTicketCategory( categoryValidatorResult.getTicketCategory( ) );
         }
 
         // Check constraints
@@ -376,8 +375,6 @@ public class TicketXPage extends WorkflowCapableXPage
         listValidationErrors.add( formValidator.isPhoneNumberFilled( ) );
         listValidationErrors.add( formValidator.isCommentFilled( ) );
 
-        boolean bIsSubProbSelected = true;
-        
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
         if ( iNbCharcount > 5000 )
         {
@@ -397,17 +394,18 @@ public class TicketXPage extends WorkflowCapableXPage
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
 
         request.setAttribute( TicketingConstants.ATTRIBUTE_IS_DISPLAY_FRONT, true );
-        if ( ticket.getTicketCategory( ).getId( ) > 0 && bIsSubProbSelected )
+        if ( categoryValidatorResult.isTicketCategoryValid( ) )
         {
-            int nIdCategory = ( ticket.getTicketPrecision( ) != null && StringUtils.isNotBlank( ticket.getTicketPrecision( ).getLabel( ) ) )?ticket.getTicketPrecision( ).getId( ):ticket.getTicketCategory( ).getId( );
-            List<Entry> listEntry = TicketFormService.getFilterInputs( nIdCategory, null );
+            ticket.setListResponse( null );
+            
+            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory( ).getId( ), null );
 
             for ( Entry entry : listEntry )
             {
                 listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry( ), getLocale( request ), ticket ) );
             }
         }
-
+        
         if ( listFormErrors.size( ) > 0 )
         {
             bIsFormValid = false;

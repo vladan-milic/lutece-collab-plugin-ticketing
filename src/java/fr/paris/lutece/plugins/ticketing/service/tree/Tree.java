@@ -316,13 +316,16 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
     public List<Node> getBranch( Node node )
     {
         List<Node> listNodes = new ArrayList<>( );
-        listNodes.add( node );
-        while ( node.getParent( ) != null )
+        if (node != null)
         {
-            node = (Node) node.getParent( );
             listNodes.add( node );
+            while ( node.getParent( ) != null )
+            {
+                node = (Node) node.getParent( );
+                listNodes.add( node );
+            }
+            Collections.reverse( listNodes );
         }
-        Collections.reverse( listNodes );
         return listNodes;
     }
     

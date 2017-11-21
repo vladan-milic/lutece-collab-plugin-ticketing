@@ -60,7 +60,11 @@ public final class FormatConstants
     public static final String KEY_LABEL = "label";
     public static final String KEY_HELP = "help";
     public static final String KEY_DEPTH = "depth";
+    public static final String KEY_TYPE_LABEL = "type";
+    public static final String KEY_DEPTH_NUMBER = "depth_number";
     public static final String KEY_CATEGORIES_DEPTH = "categories_depth_";
+    public static final String KEY_CATEGORIES_DEPTHS = "categories_depths";
+    public static final String KEY_CATEGORIES_BRANCH = "categories_branch";
     public static final String KEY_CHANNEL = "channel";
     public static final String KEY_CHANNELS = "channels";
     public static final String KEY_CONTACT_MODE = "contact_mode";

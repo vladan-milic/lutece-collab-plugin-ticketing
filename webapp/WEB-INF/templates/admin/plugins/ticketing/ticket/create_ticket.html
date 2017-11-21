@@ -72,23 +72,13 @@
           </div>
         </div>
         <div class="col-xs-12 col-sm-6">
-          <div class="form-group">
-            <label for="id_ticket_type">#i18n{ticketing.create_ticket.labelTicketType}</label>
-            <@comboWithParams name="id_ticket_type" default_value="${ticket.ticketType.id!''}" additionalParameters=" id=\"id_ticket_type\" class=\"form-control input-lg\" " items=[] />
-          </div>
-          <div class="form-group">
-            <label for="id_ticket_domain">#i18n{ticketing.create_ticket.labelTicketDomain}</label>
-            <@comboWithParams name="id_ticket_domain" default_value="${ticket.ticketDomain.id!''}" additionalParameters=" id=\"id_ticket_domain\" class=\"form-control input-lg\" " items=[] />
-          </div>
-          <div class="form-group">
-            <label for="id_ticket_category">#i18n{ticketing.create_ticket.labelTicketCategory}</label>
-            <@comboWithParams name="id_ticket_category" default_value="${ticket.ticketCategory.id!''}" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=[] />
-            <span class="help-block" id="help_message_category"></span>
-          </div>
-          <div class="form-group">
-            <@comboWithParams name="id_ticket_precision" default_value="${ticket.ticketPrecision.id!''}" additionalParameters=" id=\"id_ticket_precision\" class=\"form-control input-lg\" " items=[] />
-            <span class="help-block" id="help_message_precision"></span>
-		  </div>       
+          <#list categories_depths as depth>
+              <div class="form-group">
+                <label for="id_category_${depth.depthNumber}">${depth.label}</label>
+                <@comboWithParams name="id_category_${depth.depthNumber}" default_value="" additionalParameters=" id=\"id_category_${depth.depthNumber}\" depth=\"${depth.depthNumber}\" class=\"form-control input-lg\" " items=[] />
+                <span class="help-block" id="help_message_${depth.depthNumber}"></span>
+              </div>
+          </#list>
           <div class="form-group">
             <label for="id_contact_mode">#i18n{ticketing.create_ticket.labelContactMode}</label>
             <@comboWithParams name="id_contact_mode" default_value="${ticket.idContactMode!''}" additionalParameters=" id=\"id_contact_mode\" class=\"form-control input-lg\" " items=contact_modes_list />
@@ -132,7 +122,7 @@
 <script language="javascript">
     var url = "jsp/admin/plugins/ticketing/Standalone.jsp?view=ticketForm";
     $(document).ready(function() {
-        lutece_ticket_tree("#id_ticket_type", "#id_ticket_domain", "#id_ticket_category", "#id_ticket_precision", ${categories_tree}, url);
+        lutece_ticket_tree(${ticket.branchJSONObject}, ${categories_tree}, url);
     });
     $(document).ready(function() {
         $('.input-phone').change(function() {

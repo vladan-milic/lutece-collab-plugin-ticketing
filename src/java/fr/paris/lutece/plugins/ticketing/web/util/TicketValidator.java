@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.util;
 
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
@@ -58,7 +57,6 @@ public class TicketValidator
 {
     // Errors
     private static final String ERROR_USER_TITLE_UNKNOWN = "ticketing.error.userTitle.unknown";
-    private static final String ERROR_TICKET_CATEGORY_UNKNOWN = "ticketing.error.ticketCategory.unknown";
     private static final String ERROR_CONTACT_MODE_UNKNOWN = "ticketing.error.contactMode.unknown";
     private static final String ERROR_CHANNEL_UNKNOWN = "ticketing.error.channel.unknown";
 
@@ -134,13 +132,6 @@ public class TicketValidator
             if ( userTitle == null )
             {
                 listErrors.add( I18nService.getLocalizedString( ERROR_USER_TITLE_UNKNOWN, _locale ) );
-            }
-
-            TicketCategory ticketCategory = ticket.getTicketCategory( );
-
-            if ( ticketCategory == null || ticketCategory.getId( ) == TicketingConstants.PROPERTY_UNSET_INT )
-            {
-                listErrors.add( I18nService.getLocalizedString( ERROR_TICKET_CATEGORY_UNKNOWN, _locale ) );
             }
 
             ContactMode contactMode = ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) );

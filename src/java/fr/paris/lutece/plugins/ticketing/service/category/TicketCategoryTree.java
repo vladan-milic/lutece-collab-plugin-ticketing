@@ -84,7 +84,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
      * 
      * @return the JSON Object of the tree
      */
-    public String getJSONObject( )
+    public String getTreeJSONObject( )
     {
         JSONObject json = new JSONObject( );
         
@@ -95,6 +95,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
             JSONObject jsonRootElement = new JSONObject( );
             jsonRootElement.accumulate( FormatConstants.KEY_ID, ticketCategory.getId( ) );
             jsonRootElement.accumulate( FormatConstants.KEY_LABEL, ticketCategory.getLabel( ) );
+            jsonRootElement.accumulate( FormatConstants.KEY_HELP, ticketCategory.getHelpMessage( ) );
             jsonRootElement.accumulate( FormatConstants.KEY_DEPTH, ticketCategory.getDepth( ).getDepthNumber( ) );
             addJSONArraysChildren( jsonRootElement, ticketCategory );
             jsonRootElements.add( jsonRootElement );
@@ -102,6 +103,18 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
         
         json.accumulate( FormatConstants.KEY_CATEGORIES_DEPTH + "1", jsonRootElements );
 
+        JSONArray jsonDepths = new JSONArray( );
+
+        for ( TicketCategoryType ticketCategoryType : this.getDepths( ) )
+        {
+            JSONObject jsonDepth = new JSONObject( );
+            jsonDepth.accumulate( FormatConstants.KEY_DEPTH_NUMBER, ticketCategoryType.getDepthNumber( ) );
+            jsonDepth.accumulate( FormatConstants.KEY_LABEL, ticketCategoryType.getLabel( ) );
+            jsonDepths.add( jsonDepth );
+        }
+        
+        json.accumulate( FormatConstants.KEY_CATEGORIES_DEPTHS, jsonDepths );
+        
         return json.toString( );
     }
     
@@ -128,6 +141,6 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
         }
         
         jsonRootElement.accumulate( FormatConstants.KEY_CATEGORIES_DEPTH + nDepthChildren, jsonElements );
-
     }
+    
 }

@@ -1,151 +1,114 @@
-// The three messages of selections
-var default_msg_select_type = "-- Choisir une nature --";
-var default_msg_select_domain = "-- Choisir un domaine --";
-var default_msg_select_category = "-- Choisir une probl\u00e9matique --";
-var default_msg_select_precision = "-- Choisir une sous-probl\u00e9matique --";
-
 // Turns the combos identified by the jquery selectors into dynamic combos
-function lutece_ticket_tree(type_selector, domain_selector, category_selector, precision_selector, categories_tree, url) {
-    var idTypeSelected = $("#ticket_type_id").val();
-    var idDomainSelected = $("#ticket_domain_id").val();
-    var idCategorySelected = $("#ticket_category_id").val();
-    var idPrecisionSelected = $("#ticket_precision_id").val();
-	var selectedType = undefined;
-    var selectedDomain = undefined;
-    var selectedCategory = undefined;
-    var selectedPrecision = undefined;
-    
-	if (idTypeSelected > 0)
+function lutece_ticket_tree(branch, categories_tree, url) {
+
+	var categories_depths = categories_tree.categories_depths;
+	var arraySelectedCategoryId = new Array();
+	for (var i = 1; i<=categories_depths.length; i++)
 	{
-		var index = get_index(categories_tree.categories_depth_1, idTypeSelected);
-		selectedType = categories_tree.categories_depth_1[index];
-	}
-	if (idDomainSelected > 0)
-	{
-		var index = get_index(selectedType.categories_depth_2, idDomainSelected);
-		selectedDomain = selectedType.categories_depth_2[index];
-	}
-	if (idCategorySelected > 0)
-	{
-		var index = get_index(selectedDomain.categories_depth_3, idCategorySelected);
-		selectedCategory = selectedDomain.categories_depth_3[index];
-	}
-	if (idPrecisionSelected > 0)
-	{
-		var index = get_index(selectedCategory.categories_depth_4, idPrecisionSelected);
-		selectedPrecision = selectedCategory.categories_depth_4[index];
+		arraySelectedCategoryId[i] = undefined;
 	}
 
-    var load_messages = function() {
-    	if (selectedCategory!= undefined && selectedCategory.help != undefined) {
-    		$("#help_message_category").html(selectedCategory.help);
-    	} else {
-    		$("#help_message_category").html("");
-    	}
-
-    	if (selectedPrecision!= undefined && selectedPrecision.help != undefined) {
-    		$("#help_message_precision").html(selectedPrecision.help);
-    	} else {
-    		$("#help_message_precision").html("");
-    	}
-    }
-	
-    // Load all lists (type/domain/category/precision)
-	load_combo(type_selector, categories_tree.categories_depth_1, idTypeSelected, default_msg_select_type, true, false);
-	load_combo(domain_selector, (idTypeSelected > 0 ? selectedType.categories_depth_2 : undefined), idDomainSelected, default_msg_select_domain, false, false);
-	load_combo(category_selector, (idDomainSelected > 0 ? selectedDomain.categories_depth_3 : undefined), idCategorySelected, default_msg_select_category, false, false);
-	if (idCategorySelected > 0 && selectedCategory.categories_depth_4.length > 0)
+	if (branch != undefined && branch.length > 0)
 	{
-		load_combo(precision_selector, (idCategorySelected > 0 ? selectedCategory.categories_depth_4 : undefined), idPrecisionSelected, default_msg_select_precision, false, true);
+		var depthNumber = branch[0].depth_number;
+		var categories = categories_tree["categories_depth_1"];
+		var i = 0;
+		while (i < branch.length)
+		{
+			var selector = "#id_category_" + depthNumber;
+			arraySelectedCategoryId[depthNumber] = branch[i].id;
+			loadCombo(selector, categories, undefined, branch[i].id);
+			loadGenericAttributesForm(url, false, selector, true);
+//			loadHelpMessage("#help_message_" + depthNumber, categories);
+			var index = getIndex(categories, arraySelectedCategoryId[depthNumber]);
+			i++;
+			if (i < branch.length)
+			{
+				depthNumber = branch[i].depth_number;
+				categories = categories[index]["categories_depth_" + depthNumber];
+			}
+		}
+		if (i < categories.length)
+		{
+			var nextDepthNumber = depthNumber + 1;
+			loadCombo("#id_category_" + nextDepthNumber, categories, categories_depths[nextDepthNumber - 1]);
+			hideSelectors(branch.length+2);
+		}
+		else
+		{
+			hideSelectors(branch.length+1);
+		}
+		
 	}
 	else
 	{
-		hide_precision(precision_selector);
+		loadCombo("#id_category_1", categories_tree["categories_depth_1"], categories_depths[0]);
+		hideSelectors(2);
 	}
 	
-    // Load generic attributes
-	if (idPrecisionSelected > 0)
+	// Change a selected category on click
+	if (categories_depths != undefined && categories_depths.length > 0)
 	{
-		loadGenericAttributesForm(url, false, precision_selector, true);
-	}
-	else if (idCategorySelected > 0)
-	{
-		loadGenericAttributesForm(url, false, category_selector, true);
+		for (var i = 0; i<categories_depths.length; i++)
+		{
+			$("#id_category_" + categories_depths[i].depth_number).change(function() {
+				changeSelector(this);
+		    });
+		}
 	}
 
-	// Change the selected type on click
-	$(type_selector).change(function() {
-		selectedType = changeTypeList(categories_tree.categories_depth_1);
-    });
-
-	// Change the selected domain on click
-    $(domain_selector).change(function() {
-    	selectedDomain = changeDomainList(selectedType.categories_depth_2);
-    });
-
-    // Change the selected category on click
-    $(category_selector).change(function() {
-    	selectedCategory = changeCategoryList(selectedDomain.categories_depth_3);
-    });
-
-    // Change the selected precision on click
-    $(precision_selector).change(function() {
-    	selectedPrecision = changePrecisionList(selectedCategory.categories_depth_4)
-    });
-	
-	// Change the selected type
-	function changeTypeList(categories_depth_1)
-	{
-		var typeValue = $(type_selector).val();
-		removeDefaultValue(type_selector, "id_ticket_type", typeValue);
-		var index = get_index(categories_depth_1, typeValue);
-		var newSelectedType = categories_depth_1[index];
-		load_combo(domain_selector, newSelectedType.categories_depth_2, 0, default_msg_select_domain, true, false);
-		load_combo(category_selector, undefined, 0, default_msg_select_category, false, false);
-		hide_precision(precision_selector);
-		return newSelectedType;
+	// Hide the selectors from the depthNumber
+	function hideSelectors(depthNumber) {
+		for (var i = depthNumber; i<=categories_depths.length; i++)
+		{
+			var selector = "#id_category_" + i;
+			if (selector != undefined)
+			{
+				$(selector).parents(".form-group:first").hide();
+			}
+		}
 	}
 	
-	// Change the selected domain
-	function changeDomainList(categories_depth_2)
+	// Change the next selector
+	function changeSelector(selector)
 	{
-		var domainValue = $(domain_selector).val();
-		removeDefaultValue(domain_selector, "id_ticket_domain", domainValue);
-		var index = get_index(categories_depth_2, domainValue);
-		var newSelectedDomain = categories_depth_2[index];
-		load_combo(category_selector, newSelectedDomain.categories_depth_3, 0, default_msg_select_category, true, false);
-		hide_precision(precision_selector);
-		return newSelectedDomain;
-	}
-	
-	// Change the selected category
-	function changeCategoryList(categories_depth_3)
-	{
-		var categoryValue = $(category_selector).val();
-		removeDefaultValue(category_selector, "id_ticket_category", categoryValue);
-		var index = get_index(categories_depth_3, categoryValue);
-		var newSelectedCategory = categories_depth_3[index];
-		load_combo(precision_selector, newSelectedCategory.categories_depth_4, 0, default_msg_select_precision, true, true);
-		loadGenericAttributesForm(url, false, category_selector, false);
-		load_messages();
-		return newSelectedCategory;
-	}
-	
-	// Change the selected precision
-	function changePrecisionList(categories_depth_4)
-	{
-		var precisionValue = $(precision_selector).val();
-		removeDefaultValue(precision_selector, "id_ticket_precision", precisionValue);
-		var index = get_index(categories_depth_4, precisionValue);
-		var newSelectedPrecision = categories_depth_4[index];
-		loadGenericAttributesForm(url, false, precision_selector, false);
-		load_messages();
-		return newSelectedPrecision;
+		var depthNumber = parseInt($(selector).attr('depth'));
+		
+		arraySelectedCategoryId[depthNumber] = $(selector).val();
+		for (var i = depthNumber+1; i<arraySelectedCategoryId.length; i++)
+		{
+			arraySelectedCategoryId[i] = undefined;
+		}
+		
+		removeDefaultValue(selector, arraySelectedCategoryId[depthNumber]);
+		var nextDepthNumber = depthNumber + 1;
+		categories = getCategories(nextDepthNumber, categories_tree, arraySelectedCategoryId)
+		
+		if (categories.length > 0)
+		{
+			loadCombo("#id_category_" + nextDepthNumber, categories, categories_depths[depthNumber], undefined);
+			hideSelectors(nextDepthNumber+1);
+		}
+		else
+		{
+			hideSelectors(nextDepthNumber);
+		}
+		loadGenericAttributesForm(url, false, "#id_category_" + depthNumber, false);
+//		loadHelpMessage("#help_message_" + depthNumber, categories);
 	}
 }
 
+//Load the help message corresponding to the selected category 
+function loadHelpMessage(help_message, selectedCategory)
+{
+	if (selectedCategory!= undefined && selectedCategory.help != undefined) {
+		$(help_message).html(selectedCategory.help);
+	} else {
+		$(help_message).html("");
+	}
+}
 
-//load generic attributes form from selected category
+//Load generic attributes form from selected category
 function loadGenericAttributesForm(url, is_response_reseted, selector, is_first_call) {
 	if (typeof url !== "undefined") {
 		$.ajax({
@@ -183,78 +146,90 @@ function loadGenericAttributesForm(url, is_response_reseted, selector, is_first_
 	}
 }
 
-function hide_precision(precision_selector) {
-	if (precision_selector != undefined)
-	{
-		$(precision_selector).parents(".form-group:first").hide();
-	}
-}
-
-function load_combo(id_combo, categories, selected_category_id, default_msg_select, is_next_list_to_select, is_precision) {
+//Load the combo corresponding to the parameter 'selector' with the parameter 'categories' 
+function loadCombo(selector, categories, depth, idCategoryToSelect) {
 	
-	$(id_combo).children().remove();
-	if (categories != undefined)
+	$(selector).children().remove();
+	if (idCategoryToSelect != undefined && idCategoryToSelect > 0 && categories.length > 0)
 	{
-		if (selected_category_id > 0)
+		var index = getIndex(categories, idCategoryToSelect);
+		for (var i = 0; i<categories.length; i++)
 		{
-			var index = get_index(categories, selected_category_id);
-			for (var i = 0; i<categories.length; i++)
-			{
-				$(id_combo).append(new Option(categories[i].label, categories[i].id, categories[index].id == categories[i].id, categories[index].id == categories[i].id));
-				$(id_combo).parents(".form-group:first").show();
-			}
+			$(selector).append(new Option(categories[i].label, categories[i].id, categories[index].id == categories[i].id, categories[index].id == categories[i].id));
 		}
-		else
-		{
-			if (categories.length == 0)
-			{
-				$(id_combo).parents(".form-group:first").hide();
-			}
-			else
-			{
-				$(id_combo).append(new Option(default_msg_select, -1, true));
-				if (is_next_list_to_select)
-				{
-					for (var i = 0; i<categories.length; i++)
-					{
-						$(id_combo).append(new Option(categories[i].label, categories[i].id, false));
-						$(id_combo).parents(".form-group:first").show();
-					}
-				}
-			}
-		}
+		$(selector).parents(".form-group:first").show();
 	}
 	else
 	{
-		if (is_precision)
+		if (categories.length > 0)
 		{
-			$(id_combo).parents(".form-group:first").hide();
+			var defaultMessage = "-- Valeur par d\u00e9faut --";
+			if (depth != undefined && depth.label != undefined && depth.label != "")
+			{
+				defaultMessage = "-- " + depth.label + " \u00e0 s\u00e9lectionner --";
+			}
+			$(selector).append(new Option(defaultMessage, -1, true));
+			for (var i = 0; i<categories.length; i++)
+			{
+				$(selector).append(new Option(categories[i].label, categories[i].id, false));
+			}
+			$(selector).parents(".form-group:first").show();
 		}
-		$(id_combo).append(new Option(default_msg_select, -1, true));
-		$(id_combo).parents(".form-group:first").show();
 	}
 }
 
-function get_index(categories, category_id) {
+//Get the categories array corresponding to the depthNumber and to the selected categories 
+function getCategories(depthNumber, categories_tree, arraySelectedCategoryId)
+{
+	var categories = categories_tree["categories_depth_1"];
+	if (categories != undefined && arraySelectedCategoryId != undefined && depthNumber != undefined)
+	{
+		var i = 1;
+		while (i < depthNumber)
+		{
+			var index = getIndex(categories, arraySelectedCategoryId[i]);
+			if (index != undefined)
+			{
+			    i++;
+				categories = categories[index]["categories_depth_" + i];
+			}
+			else
+			{
+				categories = undefined;
+				break;
+			}
+		}
+	}
+	else 
+	{
+		categories = undefined;
+	}
+	return categories;
+}
+
+//Get the index of categories array corresponding to the categoryId 
+function getIndex(categories, categoryId) {
+	var result = undefined;
 	var i = 0;
 	if (categories != undefined)
 	{
 		while (i < categories.length) {
-			if (categories[i].id == category_id)
+			if (categories[i].id == categoryId)
 			{
+				result = i;
 				break;
 			}
 		    i++;
 		}
 	}
-	return i;
+	return result;
 }
 
 // Remove the default value on a list
-function removeDefaultValue( selector, idField, currentValue )
+function removeDefaultValue(selector, currentValue)
 {
 	if(currentValue != '-1' && $(selector).find('option[value="-1"]').length > 0 )
 	{
-		document.getElementById(idField).remove(0);
+		selector.remove(0);
 	}
 }

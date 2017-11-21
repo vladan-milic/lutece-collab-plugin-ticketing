@@ -300,14 +300,17 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_TICKET_TYPE, manageNullValue( ticket.getTicketType( ).getLabel( ) ) ) );
 
         // --- ticket category
-        doc.add( new StringField( TicketSearchItemConstant.FIELD_CATEGORY_ID, Integer.toString( ticket.getTicketCategory( ).getId( ) ), Store.YES ) );
-        doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY, ticket.getTicketCategory( ).getLabel( ), Store.YES ) );
-        doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_CATEGORY, new BytesRef( ticket.getTicketCategory( ).getLabel( ) ) ) );
+        doc.add( new StringField( TicketSearchItemConstant.FIELD_CATEGORY_ID, Integer.toString( ticket.getTicketThematic( ).getId( ) ), Store.YES ) );
+        doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY, ticket.getTicketThematic( ).getLabel( ), Store.YES ) );
+        doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_CATEGORY, new BytesRef( ticket.getTicketThematic( ).getLabel( ) ) ) );
         
         // --- ticket precision
-        doc.add( new StringField( TicketSearchItemConstant.FIELD_PRECISION_ID, Integer.toString( ticket.getTicketPrecision( ).getId( ) ), Store.YES ) );
-        doc.add( new TextField( TicketSearchItemConstant.FIELD_PRECISION, ticket.getTicketPrecision( ).getLabel( ), Store.YES ) );
-        doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_PRECISION, new BytesRef( ticket.getTicketPrecision( ).getLabel( ) ) ) );
+        if ( ticket.getTicketPrecision( ) != null && StringUtils.isNotBlank( ticket.getTicketPrecision( ).getLabel( ) ) )
+        {
+            doc.add( new StringField( TicketSearchItemConstant.FIELD_PRECISION_ID, Integer.toString( ticket.getTicketPrecision( ).getId( ) ), Store.YES ) );
+            doc.add( new TextField( TicketSearchItemConstant.FIELD_PRECISION, ticket.getTicketPrecision( ).getLabel( ), Store.YES ) );
+            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_PRECISION, new BytesRef( ticket.getTicketPrecision( ).getLabel( ) ) ) );
+        }
 
         // --- ticket user title
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_USER_TITLE, manageNullValue( ticket.getUserTitle( ) ) ) );
@@ -743,9 +746,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             sb.append( ticket.getTicketDomain( ) ).append( SEPARATOR );
         }
 
-        if ( ticket.getTicketCategory( ) != null && StringUtils.isNotBlank( ticket.getTicketCategory( ).getLabel( ) ) )
+        if ( ticket.getTicketThematic( ) != null && StringUtils.isNotBlank( ticket.getTicketThematic( ).getLabel( ) ) )
         {
-            sb.append( ticket.getTicketCategory( ).getLabel( ) ).append( SEPARATOR );
+            sb.append( ticket.getTicketThematic( ).getLabel( ) ).append( SEPARATOR );
         }
 
         if ( ticket.getTicketPrecision( ) != null && StringUtils.isNotBlank( ticket.getTicketPrecision( ).getLabel( ) ) )

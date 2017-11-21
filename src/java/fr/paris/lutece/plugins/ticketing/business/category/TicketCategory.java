@@ -69,25 +69,26 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     private int _nIdParent;
 
-    @NotEmpty( message = "#i18n{ticketing.validation.category.Label.notEmpty}" )
-    @Size( max = 255, message = "#i18n{ticketing.validation.category.Label.size}" )
+    @NotEmpty( message = "#i18n{ticketing.validation.category.label.notEmpty}" )
+    @Size( max = 255, message = "#i18n{ticketing.validation.category.label.size}" )
     private String _strLabel;
 
     private int _nOrder;
 
     private int _nIdWorkflow;
 
-    @Size( max = 255, message = "#i18n{ticketing.validation.category.Code.size}" )
+    @NotEmpty( message = "#i18n{ticketing.validation.category.code.notEmpty}" )
+    @Size( max = 255, message = "#i18n{ticketing.validation.category.code.size}" )
     private String _strCode;
 
     private AssigneeUnit _defaultAssignUnit;
 
     private List<Integer> _listIdInput;
 
-    @Digits(integer=6, fraction=0, message = "#i18n{ticketing.validation.category.DemandId.int}" )
+    @Digits(integer=6, fraction=0, message = "#i18n{ticketing.validation.category.demandId.int}" )
     private int _nDemandId;
     
-    @Size( max = 500, message = "#i18n{ticketing.validation.category.HelpMessage.size}" )
+    @Size( max = 500, message = "#i18n{ticketing.validation.category.helpMessage.size}" )
     private String _strHelpMessage;
     
     /**

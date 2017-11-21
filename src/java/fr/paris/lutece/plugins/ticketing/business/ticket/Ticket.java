@@ -38,7 +38,6 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -56,9 +55,12 @@ import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
+import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * This is the business class for the object Ticket
@@ -89,7 +91,6 @@ public class Ticket implements Serializable, RBACResource
     private String _strFixedPhoneNumber;
     @Pattern( regexp = PHONE_NUMBER_REGEX, message = "#i18n{ticketing.validation.ticket.MobilePhoneNumber.format}" )
     private String _strMobilePhoneNumber;
-    @NotNull( message = "#i18n{ticketing.validation.ticket.TicketCategory.mandatory}" )
     private TicketCategory _ticketCategory;
     private int _nIdContactMode;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.ContactMode.size}" )
@@ -119,14 +120,6 @@ public class Ticket implements Serializable, RBACResource
     private Channel _channel = new Channel( );
     private String _strNomenclature;
     private int _nIdticketMarking = -1;
-
-    /**
-     * Constructor Ticket
-     */
-    public Ticket( )
-    {
-        _ticketCategory = new TicketCategory( );
-    }
 
     
     /**
@@ -454,9 +447,49 @@ public class Ticket implements Serializable, RBACResource
      */
     public TicketCategory getTicketCategory( )
     {
-        return TicketCategoryService.getInstance().getCategory( _ticketCategory );
+        return _ticketCategory;
     }
 
+    /**
+     * Returns the TicketThematic
+     * 
+     * @return The TicketThematic
+     */
+    public TicketCategory getTicketThematic( )
+    {
+        return TicketCategoryService.getInstance().getThematic( _ticketCategory );
+    }
+
+    /**
+     * Get a JSON Object of the branch
+     * 
+     * @return the JSON Object of the branch
+     */
+    public String getBranchJSONObject( )
+    {
+        JSONArray jsonBranchCategories = new JSONArray( );
+
+        for ( TicketCategory ticketCategory : TicketCategoryService.getInstance().getCategoriesTree( ).getBranch( _ticketCategory ) )
+        {
+            JSONObject jsonTicketCategory = new JSONObject( );
+            jsonTicketCategory.accumulate( FormatConstants.KEY_ID, ticketCategory.getId( ) );
+            jsonTicketCategory.accumulate( FormatConstants.KEY_DEPTH_NUMBER, ticketCategory.getDepth( ).getDepthNumber( ) );
+            jsonBranchCategories.add( jsonTicketCategory );
+        }
+        
+        return jsonBranchCategories.toString( );
+    }
+    
+    /**
+     * Get the branch of the ticketCategory
+     * 
+     * @return the TicketCategory list corresponding to the branch
+     */
+    public List<TicketCategory> getBranch( )
+    {
+        return TicketCategoryService.getInstance().getCategoriesTree( ).getBranch( _ticketCategory );
+    }
+    
     /**
      * Sets the TicketCategory
      * 
@@ -1060,5 +1093,4 @@ public class Ticket implements Serializable, RBACResource
     {
         return TicketHome.getTicketMarking( this );
     }
-
 }

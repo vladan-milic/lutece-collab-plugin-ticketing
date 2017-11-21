@@ -449,8 +449,7 @@ public class TicketCategoryService
         }
         catch ( IndexOutOfBoundsException e )
         {
-            TicketCategory emptyCategory = new TicketCategory( );
-            return emptyCategory;
+            return null;
         }
     }
     
@@ -468,27 +467,25 @@ public class TicketCategoryService
         }
         catch ( IndexOutOfBoundsException e )
         {
-            TicketCategory emptyCategory = new TicketCategory( );
-            return emptyCategory;
+            return null;
         }
     }
     
     /**
-     * Return the ticket category
-     * @param ticketCategory the category of a ticket
-     * @return the category of a ticket
+     * Return the ticket thematic
+     * @param ticketCategory the thematic of a ticket
+     * @return the thematic of a ticket
      */
-    public TicketCategory getCategory( TicketCategory ticketCategory )
+    public TicketCategory getThematic( TicketCategory ticketCategory )
     {
         try
         {
-           TicketCategory categoryCategory = ticketCategory.getBranch( ).get( TicketingConstants.CATEGORY_DEPTH - 1 ); 
+           TicketCategory categoryCategory = ticketCategory.getBranch( ).get( TicketingConstants.THEMATIC_DEPTH - 1 ); 
            return categoryCategory;
         }
         catch ( IndexOutOfBoundsException e )
         {
-            TicketCategory emptyCategory = new TicketCategory( );
-            return emptyCategory;
+            return null;
         }
     }
     
@@ -506,8 +503,7 @@ public class TicketCategoryService
         }
         catch ( IndexOutOfBoundsException e )
         {
-            TicketCategory emptyCategory = new TicketCategory( );
-            return emptyCategory;
+            return null;
         }
     }
     
@@ -695,5 +691,22 @@ public class TicketCategoryService
         
         return branchLabel.substring( 0, branchLabel.length( ) - separator.length( ) );
     }
-    
+
+    /**
+     * Returns the TicketCategory used as RBACResource
+     * 
+     * @return The TicketCategory used as RBACResource
+     */
+    public TicketCategory getTicketCategoryRBACResource( TicketCategory ticketCategory )
+    {
+        try
+        {
+           TicketCategory ticketCategoryRBACResource = ticketCategory.getBranch( ).get( TicketingConstants.CATEGORY_DEPTH_RBAC_RESOURCE - 1 ); 
+           return ticketCategoryRBACResource;
+        }
+        catch ( IndexOutOfBoundsException e )
+        {
+            return null;
+        }
+    }
 }

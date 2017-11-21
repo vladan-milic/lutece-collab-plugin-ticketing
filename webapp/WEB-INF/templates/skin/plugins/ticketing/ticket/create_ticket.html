@@ -55,33 +55,15 @@
                     <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label" for="id_ticket_type" >#i18n{ticketing.xpage.create_ticket.labelTicketType}&#8239;*&#8239;:</label>
+          <#list categories_depths as depth>
+              <div class="form-group">
+                <label class="col-sm-3 control-label" for="id_category_${depth.depthNumber}">${depth.label}&#8239;:</label>
                 <div class="col-sm-9">
-                    <@comboWithParams name="id_ticket_type" default_value="${ticket.ticketType.id!''}"  additionalParameters="class=\"form-control\""  items=[] />
-                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdTicketType.help}</span>
+                     <@comboWithParams name="id_category_${depth.depthNumber}" default_value="" additionalParameters=" id=\"id_category_${depth.depthNumber}\" depth=\"${depth.depthNumber}\" class=\"form-control\"  items=[] />
+                    <span class="help-block" id="help_message_${depth.depthNumber}"></span>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label" for="id_ticket_domain" >#i18n{ticketing.xpage.create_ticket.labelTicketDomain}&#8239;*&#8239;:</label>
-                <div class="col-sm-9">
-                    <@comboWithParams name="id_ticket_domain" default_value="${ticket.ticketDomain.id!''}"  additionalParameters="class=\"form-control\""  items=[] />
-                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelTicketDomain.help}</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label" for="id_ticket_category" >#i18n{ticketing.xpage.create_ticket.labelTicketCategory}&#8239;*&#8239;:</label>
-                <div class="col-sm-9">
-                     <@comboWithParams name="id_ticket_category" default_value="${ticket.ticketCategory.id!''}"  additionalParameters="class=\"form-control\""  items=[] />
-                    <span class="help-block" id="help_message_category"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-9">
-                     <@comboWithParams name="id_ticket_precision" default_value="${ticket.ticketPrecision.id!''}"  additionalParameters="class=\"form-control\""  items=[] />
-                    <span class="help-block" id="help_message_precision"></span>
-                </div>
-            </div>
+              </div>
+          </#list>
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="id_contact_mode" >#i18n{ticketing.xpage.create_ticket.labelContactMode}&#8239;*&#8239;:</label>
                 <div class="col-sm-9">
@@ -115,7 +97,7 @@
 <script language="javascript"> 
     var url = "jsp/site/Portal.jsp?page=ticket&view=ticketForm";
     $(document).ready(function() {
-        lutece_ticket_tree("#id_ticket_type", "#id_ticket_domain", "#id_ticket_category", "#id_ticket_precision", ${categories_tree}, url);
+        lutece_ticket_tree(${ticket.branchJSONObject}, ${categories_tree}, url);
     });
     $(document).ready(function() {
         $('.input-phone').change(function() {

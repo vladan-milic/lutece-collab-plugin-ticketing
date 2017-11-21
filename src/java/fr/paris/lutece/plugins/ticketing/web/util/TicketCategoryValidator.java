@@ -34,6 +34,9 @@
 package fr.paris.lutece.plugins.ticketing.web.util;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -41,6 +44,7 @@ import org.apache.commons.lang.StringUtils;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.portal.service.i18n.I18nService;
 
 /**
  * This class provides utility methods to validate a TicketCategory
@@ -70,37 +74,59 @@ public class TicketCategoryValidator
      */
     public TicketCategoryValidatorResult validateTicketCategory( )
     {
-        // Retrieve the TicketCategory
-        TicketCategory ticketCategory = retrieveTicketCategoryFromRequest( );
-        boolean isValid = (ticketCategory != null && ticketCategory.getId( ) != TicketingConstants.PROPERTY_UNSET_INT);
+        List<String> listValidationErrors = new ArrayList<String>( );
+        boolean isValid = true;
+        
+        int i = 1;
+        int nId = -1;
+        TicketCategory ticketCategory = null;
+        TicketCategory ticketCategoryParent = null;
+        while (i <= TicketCategoryService.getInstance().getCategoriesTree( ).getDepths( ).size( ) && isValid )
+        {
+            if ( StringUtils.isNotBlank( _request.getParameter( TicketingConstants.PARAMETER_CATEGORY_ID + i ) ) )
+            {
+                nId = Integer.valueOf( _request.getParameter( TicketingConstants.PARAMETER_CATEGORY_ID + i ) );
+                ticketCategory = TicketCategoryService.getInstance().findCategoryById( nId );
+                if ( ticketCategory == null )
+                {
+                    if ( i <= TicketingConstants.CATEGORY_DEPTH_MIN )
+                    {
+                        listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED, new String [ ] {
+                                TicketCategoryService.getInstance().getCategoriesTree( ).getDepths( ).get( i - 1 ).getLabel( )
+                        }, this._request.getLocale( ) ) );
+                        isValid = false;
+                    }
+                    break;
+                }
+                else if ( ticketCategory.getLeaf( ) )
+                {
+                    break;
+                }
+            }
+            else
+            {
+                if ( i <= TicketingConstants.CATEGORY_DEPTH_MIN )
+                {
+                    listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED, new String [ ] {
+                            TicketCategoryService.getInstance().getCategoriesTree( ).getDepths( ).get( i - 1 ).getLabel( )
+                    }, this._request.getLocale( ) ) );
+                    isValid = false;
+                }
+                break;
+            }
+            if ( nId != -1)
+            {
+                ticketCategoryParent = TicketCategoryService.getInstance().findCategoryById( nId );
+            }
+            i++;
+        }
+        
+        if ( isValid && ticketCategory == null )
+        {
+            ticketCategory = ticketCategoryParent;
+            ticketCategoryParent = ticketCategory.getParent( );
+        }
 
-        return new TicketCategoryValidatorResult( ticketCategory, isValid );
-
+        return new TicketCategoryValidatorResult( ticketCategory, ticketCategoryParent, isValid, listValidationErrors );
     }
-
-    /**
-     * Return the TicketCategory object associated to the id from the request or an "empty" ticket category object if parameter is missing
-     * 
-     * @return the TicketCategory object associated to the id from the request or an "empty" ticket category object if parameter is missing
-     */
-    public TicketCategory retrieveTicketCategoryFromRequest( )
-    {
-        int nIdCategory = TicketingConstants.PROPERTY_UNSET_INT;
-        if ( StringUtils.isNotBlank( _request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) ) )
-        {
-            nIdCategory = Integer.valueOf( _request.getParameter( TicketingConstants.PARAMETER_TICKET_PRECISION_ID ) );
-        }
-        else if ( StringUtils.isNotBlank( _request.getParameter( TicketingConstants.PARAMETER_TICKET_CATEGORY_ID ) ) )
-        {
-            nIdCategory = Integer.valueOf( _request.getParameter( TicketingConstants.PARAMETER_TICKET_CATEGORY_ID ) );
-        }
-
-        TicketCategory ticketCategory = TicketCategoryService.getInstance().findCategoryById( nIdCategory );
-        if ( ticketCategory == null )
-        {
-            ticketCategory = new TicketCategory( );
-        }
-        return ticketCategory;
-    }
-
 }

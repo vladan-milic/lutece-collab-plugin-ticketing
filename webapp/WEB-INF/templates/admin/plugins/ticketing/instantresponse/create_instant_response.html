@@ -12,31 +12,14 @@
     <form class="form-horizontal" method="post" name="create_instantresponse" action="jsp/admin/plugins/ticketing/ManageInstantResponses.jsp">
       <@messages errors=errors />
       <input type="hidden" id="id" name="id">
-      <div class="form-group">
-        <label class="col-xs-12 col-sm-2 control-label" for="id_ticket_type">#i18n{ticketing.create_instantresponse.labelTicketType}</label>
+      <#list categories_depths as depth>
+        <div class="form-group">
+          <label class="col-xs-12 col-sm-2 control-label" for="id_category_${depth.depthNumber}">${depth.label}</label>
           <div class="col-xs-12 col-sm-9">
-          <@comboWithParams name="id_ticket_type" default_value="" additionalParameters=" id=\"id_ticket_type\" class=\"form-control input-lg\" " items=[] />
+            <@comboWithParams name="id_category_${depth.depthNumber}" default_value="" additionalParameters=" id=\"id_category_${depth.depthNumber}\" depth=\"${depth.depthNumber}\" class=\"form-control input-lg\" " items=[] />
           </div>
         </div>
-        <div class="form-group">
-          <label class="col-xs-12 col-sm-2 control-label" for="id_ticket_domain">#i18n{ticketing.create_instantresponse.labelTicketDomain}</label>
-          <div class="col-xs-12 col-sm-9">
-            <@comboWithParams name="id_ticket_domain" default_value="" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=[] />
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-xs-12 col-sm-2 control-label" for="id_ticket_category">#i18n{ticketing.create_instantresponse.labelTicketCategory}</label>
-          <div class="col-xs-12 col-sm-9">
-            <@comboWithParams name="id_ticket_category" default_value="" additionalParameters=" id=\"id_ticket_category\" class=\"form-control input-lg\" " items=[] />
-            <span class="help-block" id="help_message_category"></span>
-          </div>
-        </div>
-        <div class="form-group">
-        	<div class="col-xs-12 col-sm-offset-2 col-sm-9">
-          		<@comboWithParams name="id_ticket_precision" default_value="" additionalParameters=" id=\"id_ticket_precision\" class=\"form-control input-lg\" " items=[] />
-          		<span class="help-block" id="help_message_precision"></span>
-          	</div>
-		 </div>  
+      </#list>
         <div class="form-group">
           <label class="col-xs-12 col-sm-2 control-label" for="id_channel">#i18n{ticketing.create_instantresponse.labelChannel}</label>
           <div class="col-xs-12 col-sm-9">
@@ -72,6 +55,6 @@
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
 <script>
     $(document).ready(function() {
-        lutece_ticket_tree("#id_ticket_type", "#id_ticket_domain", "#id_ticket_category", "#id_ticket_precision", ${categories_tree});
+        lutece_ticket_tree(${instantresponse.branchJSONObject}, ${categories_tree});
     });
 </script>

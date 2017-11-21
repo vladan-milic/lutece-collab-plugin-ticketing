@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.util;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 
 /**
@@ -40,9 +42,10 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
  */
 public class TicketCategoryValidatorResult
 {
-
     private TicketCategory _ticketCategory;
+    private TicketCategory _ticketCategoryParent;
     private boolean _ticketCategoryValid;
+    private List<String> _listValidationErrors;
 
     /**
      * Constructor
@@ -52,10 +55,12 @@ public class TicketCategoryValidatorResult
      * @param isValid
      *            the ticketCategoryValid to set
      */
-    public TicketCategoryValidatorResult( TicketCategory ticketCategory, boolean ticketCategoryValid )
+    public TicketCategoryValidatorResult( TicketCategory ticketCategory, TicketCategory ticketCategoryParent, boolean ticketCategoryValid, List<String> listValidationErrors )
     {
         this._ticketCategory = ticketCategory;
+        this._ticketCategoryParent = ticketCategoryParent;
         this._ticketCategoryValid = ticketCategoryValid;
+        this._listValidationErrors = listValidationErrors;
     }
 
     /**
@@ -80,6 +85,27 @@ public class TicketCategoryValidatorResult
     }
 
     /**
+     * Return the ticketCategoryParent
+     * 
+     * @return the _ticketCategoryParent
+     */
+    public TicketCategory getTicketCategoryParent( )
+    {
+        return _ticketCategoryParent;
+    }
+
+    /**
+     * Set the ticketCategoryParent
+     * 
+     * @param _ticketCategoryParent
+     *            the ticketCategoryParent to set
+     */
+    public void setTicketCategoryParent( TicketCategory ticketCategoryParent )
+    {
+        this._ticketCategoryParent = ticketCategoryParent;
+    }
+
+    /**
      * Return the _ticketCategoryValid
      * 
      * @return the _ticketCategoryValid
@@ -98,6 +124,27 @@ public class TicketCategoryValidatorResult
     public void setTicketCategoryValid( boolean ticketCategoryValid )
     {
         this._ticketCategoryValid = ticketCategoryValid;
+    }
+
+    /**
+     * Return the listValidationErrors
+     * 
+     * @return the _listValidationErrors
+     */
+    public List<String> getListValidationErrors( )
+    {
+        return _listValidationErrors;
+    }
+
+    /**
+     * Set the _listValidationErrors
+     * 
+     * @param listValidationErrors
+     *            the listValidationErrors to set
+     */
+    public void setListValidationErrors( List<String> listValidationErrors )
+    {
+        this._listValidationErrors = listValidationErrors;
     }
 
 }

@@ -241,7 +241,7 @@ ALTER TABLE ticketing_ticket ADD CONSTRAINT fk_ticketing_ticket_contact_mode FOR
 ALTER TABLE ticketing_ticket ADD CONSTRAINT fk_ticketing_ticket_channel FOREIGN KEY (id_channel)
       REFERENCES ticketing_channel (id_channel) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE ticketing_instant_response ADD CONSTRAINT fk_ticketing_instant_response_category FOREIGN KEY (id_ticket_category)
-      REFERENCES ticketing_ticket_category (id_ticket_category) ON DELETE RESTRICT ON UPDATE RESTRICT;
+      REFERENCES ticketing_category (id_category) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE ticketing_indexer_action ADD CONSTRAINT fk_ticketing_indexer_action_ticket FOREIGN KEY (id_ticket)
       REFERENCES ticketing_ticket (id_ticket) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE ticketing_ticket_address ADD CONSTRAINT fk_ticketing_ticket_address FOREIGN KEY (id_ticket)

@@ -78,7 +78,7 @@ public final class UserFactory
 
         adminUser.setRoles( AdminUserHome.getRolesListForUser( adminUser.getUserId( ) ) );
 
-        List<TicketCategory> listDomains = TicketCategoryService.getInstance( ).getAuthorizedCategoryList( TicketingConstants.DOMAIN_DEPTH, adminUser, TicketCategory.PERMISSION_BELONG_TO );
+        List<TicketCategory> listDomains = TicketCategoryService.getInstance( ).getAuthorizedCategoryList( TicketingConstants.CATEGORY_DEPTH_RBAC_RESOURCE, adminUser, TicketCategory.PERMISSION_BELONG_TO );
 
         List<Unit> listUnits = UnitHome.findByIdUser( nIdUser );
 

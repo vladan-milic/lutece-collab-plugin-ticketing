@@ -170,7 +170,7 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
      * @return The page
      */
     @View( value = VIEW_MANAGE_CATEGORIES, defaultView = true )
-    public String getManageCategorys( HttpServletRequest request )
+    public String getManageCategories( HttpServletRequest request )
     {
         _category = null;
 
@@ -199,7 +199,9 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
         if ( strIdParentCategory != null )
         {
             _category.setIdParent( Integer.parseInt( strIdParentCategory ) );
-            _category.setParent( TicketCategoryService.getInstance( ).findCategoryById( _category.getIdParent( ) ) );
+            TicketCategory categoryParent = TicketCategoryService.getInstance( ).findCategoryById( _category.getIdParent( ) ); 
+            _category.setParent( categoryParent );
+            _category.setDefaultAssignUnit( categoryParent.getDefaultAssignUnit( ) );
         }
 
         Map<String, Object> model = getModel( );

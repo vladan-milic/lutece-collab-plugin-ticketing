@@ -201,14 +201,7 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setString( nIndex++, ticket.getEmail( ) );
         daoUtil.setString( nIndex++, ticket.getFixedPhoneNumber( ) );
         daoUtil.setString( nIndex++, ticket.getMobilePhoneNumber( ) );
-        if ( ticket.getTicketPrecision( ) != null && StringUtils.isNotBlank( ticket.getTicketPrecision( ).getLabel( ) ) )
-        {
-            daoUtil.setInt( nIndex++, ticket.getTicketPrecision( ).getId( ) );
-        }
-        else
-        {
-            daoUtil.setInt( nIndex++, ticket.getTicketCategory( ).getId( ) );
-        }
+        daoUtil.setInt( nIndex++, ticket.getTicketCategory( ).getId( ) );
         daoUtil.setInt( nIndex++, ticket.getIdContactMode( ) );
         daoUtil.setString( nIndex++, ticket.getTicketComment( ) );
         daoUtil.setInt( nIndex++, ticket.getTicketStatus( ) );
@@ -305,14 +298,7 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setString( nIndex++, ticket.getEmail( ) );
         daoUtil.setString( nIndex++, ticket.getFixedPhoneNumber( ) );
         daoUtil.setString( nIndex++, ticket.getMobilePhoneNumber( ) );
-        if ( ticket.getTicketPrecision( ) != null && StringUtils.isNotBlank( ticket.getTicketPrecision( ).getLabel( ) ) )
-        {
-            daoUtil.setInt( nIndex++, ticket.getTicketPrecision( ).getId( ) );
-        }
-        else
-        {
-            daoUtil.setInt( nIndex++, ticket.getTicketCategory( ).getId( ) );
-        }
+        daoUtil.setInt( nIndex++, ticket.getTicketCategory( ).getId( ) );
         daoUtil.setInt( nIndex++, ticket.getIdContactMode( ) );
         daoUtil.setString( nIndex++, ticket.getTicketComment( ) );
         daoUtil.setInt( nIndex++, ticket.getTicketStatus( ) );

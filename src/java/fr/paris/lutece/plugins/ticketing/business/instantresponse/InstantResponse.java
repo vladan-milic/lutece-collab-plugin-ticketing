@@ -36,9 +36,13 @@ package fr.paris.lutece.plugins.ticketing.business.instantresponse;
 import java.io.Serializable;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
+import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * This is the business class for the object InstantResponse
@@ -81,6 +85,16 @@ public class InstantResponse implements Serializable
     }
 
     /**
+     * Returns the Ticket Category
+     * 
+     * @return The TicketCategory
+     */
+    public TicketCategory getTicketCategory( )
+    {
+        return _ticketCategory;
+    }
+
+    /**
      * Returns the TicketType
      * 
      * @return The TicketType
@@ -101,13 +115,13 @@ public class InstantResponse implements Serializable
     }
 
     /**
-     * Returns the Ticket Category
+     * Returns the Ticket Thematic
      * 
      * @return The TicketCategory
      */
-    public TicketCategory getTicketCategory( )
+    public TicketCategory getTicketThematic( )
     {
-        return TicketCategoryService.getInstance().getCategory( _ticketCategory );
+        return TicketCategoryService.getInstance().getThematic( _ticketCategory );
     }
 
     /**
@@ -131,6 +145,36 @@ public class InstantResponse implements Serializable
         _ticketCategory = ticketCategory;
     }
 
+    /**
+     * Get a JSON Object of the branch
+     * 
+     * @return the JSON Object of the branch
+     */
+    public String getBranchJSONObject( )
+    {
+        JSONArray jsonBranchCategories = new JSONArray( );
+
+        for ( TicketCategory ticketCategory : TicketCategoryService.getInstance().getCategoriesTree( ).getBranch( _ticketCategory ) )
+        {
+            JSONObject jsonTicketCategory = new JSONObject( );
+            jsonTicketCategory.accumulate( FormatConstants.KEY_ID, ticketCategory.getId( ) );
+            jsonTicketCategory.accumulate( FormatConstants.KEY_DEPTH_NUMBER, ticketCategory.getDepth( ).getDepthNumber( ) );
+            jsonBranchCategories.add( jsonTicketCategory );
+        }
+        
+        return jsonBranchCategories.toString( );
+    }
+    
+    /**
+     * Get the branch of the ticketCategory
+     * 
+     * @return the TicketCategory list corresponding to the branch
+     */
+    public List<TicketCategory> getBranch( )
+    {
+        return TicketCategoryService.getInstance().getCategoriesTree( ).getBranch( _ticketCategory );
+    }
+    
     /**
      * Returns the Subject
      * 

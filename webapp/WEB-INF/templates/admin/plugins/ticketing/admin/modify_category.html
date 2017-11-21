@@ -13,12 +13,12 @@
 	            <@formGroup labelKey='#i18n{ticketing.modify_category.labelCode}' helpKey='#i18n{ticketing.modify_category.labelCode.help}' mandatory=true>
 	                    <@input type='text' name='code' value='${category.code}' />
 	            </@formGroup>
-                <@formGroup labelKey='#i18n{ticketing.create_category.labelDemandId}' helpKey='#i18n{ticketing.create_category.labelDemandId.help}' mandatory=false>
+                <@formGroup labelKey='#i18n{ticketing.modify_category.labelDemandId}' helpKey='#i18n{ticketing.modify_category.labelDemandId.help}' mandatory=false>
                         <@input type='text' name='demandId' value='${category.demandId!\'\'}' />
                 </@formGroup>
-	            <@formGroup labelKey='#i18n{ticketing.create_category.labelUnit}' helpKey='#i18n{ticketing.create_category.labelUnit.help}'>
+	            <@formGroup labelKey='#i18n{ticketing.modify_category.labelUnit}' helpKey='#i18n{ticketing.modify_category.labelUnit.help}'>
 	                <select id="id_unit" name="id_unit" >
-	                    <option value="-1" >#i18n{ticketing.create_category.unit.noUnit}</option>
+	                    <option value="-1" >#i18n{ticketing.modify_category.unit.noUnit}</option>
 	                <#list unit_list as item>
 	                        <#if category.defaultAssignUnit.unitId?string == item.code >
 	                                <option selected="selected" value="${item.code}" >${item.name}</option>
@@ -28,6 +28,9 @@
 	                </#list>
 	                </select>
 	            </@formGroup>
+                <@formGroup labelKey='#i18n{ticketing.modify_category.labelHelpMessage}' helpKey='#i18n{ticketing.modify_category.labelHelpMessage.help}' mandatory=false>
+                        <@input type='text' name='helpMessage' value='${category.helpMessage!\'\'}' />
+                </@formGroup>
                 <@btnGroup>
                     <@button type='submit' name='action_modifyCategory' title='#i18n{portal.admin.message.buttonValidate}' />
                     <@button type='submit' name='view_manageCategories' title='#i18n{portal.admin.message.buttonCancel}' cancel=true />

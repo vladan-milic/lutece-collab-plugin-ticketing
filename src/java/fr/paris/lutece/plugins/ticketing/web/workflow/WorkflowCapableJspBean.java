@@ -60,6 +60,7 @@ import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerException;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.search.SearchConstants;
@@ -449,7 +450,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                         {
                             Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
 
-                            if ( RBACService.isAuthorized( ticket.getTicketDomain( ),
+                            if ( RBACService.isAuthorized( TicketCategoryService.getInstance( ).getTicketCategoryRBACResource( ticket.getTicketCategory( ) ),
                                     TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) )
                             {
 

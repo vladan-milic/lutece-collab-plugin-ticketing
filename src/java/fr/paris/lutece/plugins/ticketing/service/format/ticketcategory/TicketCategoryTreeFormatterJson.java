@@ -48,7 +48,7 @@ public class TicketCategoryTreeFormatterJson implements ITicketingFormatter<Tick
     @Override
     public String format( TicketCategoryTree ticketCategoryTree )
     {
-        return ticketCategoryTree.getJSONObject( );
+        return ticketCategoryTree.getTreeJSONObject( );
     }
 
     @Override

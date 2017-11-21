@@ -55,6 +55,7 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketPriority;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.service.reference.ITicketReferenceService;
 import fr.paris.lutece.plugins.ticketing.web.filter.SessionFilter;
 import fr.paris.lutece.plugins.ticketing.web.user.UserFactory;
@@ -165,7 +166,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
         // check user rights
         if ( !RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, getUser( ) )
-                || !RBACService.isAuthorized( ticket.getTicketDomain( ), TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) )
+                || !RBACService.isAuthorized( TicketCategoryService.getInstance( ).getTicketCategoryRBACResource( ticket.getTicketCategory( ) ), TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) )
         {
             return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
         }

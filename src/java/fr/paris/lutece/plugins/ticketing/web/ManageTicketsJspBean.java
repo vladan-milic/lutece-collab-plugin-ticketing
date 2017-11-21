@@ -631,7 +631,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         ticket.enrich( strIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber, strEmail, strCategoryCode, null, null, null, strGuid, strIdCustomer, strNomenclature );
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getJSONObject( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
+        
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale( ) ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_GUID, strGuid );
@@ -705,8 +707,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
             // Check user rights on domain
-            if ( !RBACService.isAuthorized( TicketCategoryService.getInstance( ).getDomain( ticket.getTicketDomain( ) ),
-                    TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) )
+            if ( !RBACService.isAuthorized( TicketCategoryService.getInstance( ).getTicketCategoryRBACResource( ticket.getTicketCategory( ) ), TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) )
             {
                 return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
             }
@@ -916,8 +917,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         Map<String, Object> model = getModel( );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_RESPONSE_RECAP_LIST, listResponseRecap );
-        model.put( MARK_CREATE_ASSIGN_RIGHT, RBACService.isAuthorized( TicketCategoryService.getInstance( ).getDomain( ticket.getTicketCategory( ) ),
-                TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) );
+        model.put( MARK_CREATE_ASSIGN_RIGHT, RBACService.isAuthorized( TicketCategoryService.getInstance( ).getTicketCategoryRBACResource( ticket.getTicketCategory( ) ), TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) );
 
         return getPage( PROPERTY_PAGE_TITLE_RECAP_TICKET, TEMPLATE_RECAP_TICKET, model );
     }
@@ -978,15 +978,18 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         populate( ticketAddress, request );
         ticket.setTicketAddress( ticketAddress );
 
-        // Validate the Type, Domain, TicketCategory
-        boolean bIsSubProbSelected = true;
-        boolean isTicketCategoryValid = validateTicketTypeDomainCategory( request, ticket );
-        if ( !isTicketCategoryValid )
+        // Validate the TicketCategory
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( );
+        if ( !categoryValidatorResult.isTicketCategoryValid( ) )
         {
+            categoryValidatorResult.getListValidationErrors( ).stream( ).forEach( ( error ) -> addError( error ) );
             bIsFormValid = false;
-            bIsSubProbSelected = false;
         }
-
+        else
+        {
+            ticket.setTicketCategory( categoryValidatorResult.getTicketCategory( ) );
+        }
+        
         // Validate the bean
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validateBean( ticket );
@@ -1018,12 +1021,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
 
-        if ( ticket.getTicketCategory( ).getId( ) > 0 && bIsSubProbSelected )
+        if ( categoryValidatorResult.isTicketCategoryValid( ) )
         {
             ticket.setListResponse( null );
-
-            int nIdCategory = ( ticket.getTicketPrecision( ) != null && StringUtils.isNotBlank( ticket.getTicketPrecision( ).getLabel( ) ) )?ticket.getTicketPrecision( ).getId( ):ticket.getTicketCategory( ).getId( );
-            List<Entry> listEntry = TicketFormService.getFilterInputs( nIdCategory, null );
+            
+            List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory( ).getId( ), null );
 
             for ( Entry entry : listEntry )
             {
@@ -1200,30 +1202,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         request.getSession( ).setAttribute( TicketingConstants.PARAMETER_SELECTED_TICKETS, request.getParameterValues( TicketingConstants.PARAMETER_ID_TICKET ) );
         request.getSession( ).setAttribute( TicketingConstants.PARAMETER_IS_MASS_ACTION, true );
         return getWorkflowActionForm( request );
-    }
-
-    /**
-     * Populate the TicketCategory object and validate the selected Type, Domain, TicketCategory and Precision from the request parameters
-     *
-     * @param request
-     *         the HttpServletRequest
-     * @return true if the selection is valid false otherwise
-     */
-    private boolean validateTicketTypeDomainCategory( HttpServletRequest request, Ticket ticket )
-    {
-        // Validate if precision has been selected if the selected category has precisions
-        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( );
-
-        boolean bIsFormValid = categoryValidatorResult.isTicketCategoryValid( );
-        ticket.setTicketCategory( categoryValidatorResult.getTicketCategory( ) );
-
-        // Check if a category have been selected
-        if ( !bIsFormValid )
-        {
-            addError( TicketingConstants.MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED, getLocale( ) );
-        }
-
-        return bIsFormValid;
     }
 
 }
