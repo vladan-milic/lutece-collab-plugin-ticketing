@@ -28,9 +28,11 @@ function lutece_ticket_tree(branch, categories_tree, url) {
 				categories = categories[index]["categories_depth_" + depthNumber];
 			}
 		}
-		if (i < categories.length)
+		if (i < categories_depths.length)
 		{
 			var nextDepthNumber = depthNumber + 1;
+			var index = getIndex(categories, arraySelectedCategoryId[depthNumber]);
+			categories = categories[index]["categories_depth_" + nextDepthNumber];
 			loadCombo("#id_category_" + nextDepthNumber, categories, categories_depths[nextDepthNumber - 1]);
 			hideSelectors(branch.length+2);
 		}

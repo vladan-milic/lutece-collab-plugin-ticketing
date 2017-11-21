@@ -121,6 +121,14 @@ public class TicketCategoryValidator
             i++;
         }
         
+        if ( isValid && i < TicketingConstants.CATEGORY_DEPTH_MIN )
+        {
+            listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED, new String [ ] {
+                    TicketCategoryService.getInstance().getCategoriesTree( ).getDepths( ).get( i ).getLabel( )
+            }, this._request.getLocale( ) ) );
+            isValid = false;
+        }
+        
         if ( isValid && ticketCategory == null )
         {
             ticketCategory = ticketCategoryParent;
