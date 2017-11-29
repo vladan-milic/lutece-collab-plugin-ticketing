@@ -508,6 +508,32 @@ public class TicketCategoryService
     }
     
     /**
+     * Get the children category list corresponding to the category and allowed for an admin user according to RBAC provided permission
+     * 
+     * @param ticketCategory
+     * @param adminUser
+     *            admin user
+     * @param strPermission
+     *            TicketCategory permission
+     * @return the category list filtered by RBAC permission
+     */
+    public List<TicketCategory> getAuthorizedCategoryList( TicketCategory ticketCategory, AdminUser adminUser, String strPermission )
+    {
+        List<TicketCategory> listCategories = ticketCategory.getChildren( );
+        List<TicketCategory> listAuthorizedCategories = new ArrayList<TicketCategory>( );
+
+        for ( TicketCategory category : listCategories )
+        {
+            if ( RBACService.isAuthorized( category, strPermission, adminUser ) )
+            {
+                listAuthorizedCategories.add( category );
+            }
+        }
+        
+        return listAuthorizedCategories;
+    }
+
+    /**
      * Get the category list corresponding to the depth and allowed for an admin user according to RBAC provided permission
      * 
      * @param depth

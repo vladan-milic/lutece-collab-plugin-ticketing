@@ -82,7 +82,7 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
     private static final String PARAMETER_ID_CATEGORY_INPUT = "id_input";
 
     // Properties for page titles
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_CATEGORYS = "ticketing.manage_categorys.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MANAGE_CATEGORYS = "ticketing.manage_categories.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_CATEGORY = "ticketing.modify_category.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_CREATE_CATEGORY = "ticketing.create_category.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_CATEGORYTYPE = "ticketing.modify_categorytype.pageTitle";

@@ -230,12 +230,11 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
     public static Document getDocument( Ticket ticket, String strUrl, Plugin plugin )
     {
         // Get the state associate to the ticket
-        TicketCategory ticketCategory = ticket.getTicketCategory( );
         State ticketState = null;
-        if ( ticketCategory != null )
+        if ( ticket.getTicketCategory( ) != null )
         {
             IStateService stateService = SpringContextService.getBean( StateService.BEAN_SERVICE );
-            ticketState = stateService.findByResource( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, ticketCategory.getIdWorkflow( ) );
+            ticketState = stateService.findByResource( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, ticket.getTicketCategory( ).getIdWorkflow( ) );
             ticket.setState( ticketState );
         }
 
@@ -254,10 +253,6 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         // --- field contents
         doc.add( new TextField( TicketSearchItemConstant.FIELD_CONTENTS, manageNullValue( getContentForIndexer( ticket ) ), Store.NO ) );
-
-        // --- ticket domain
-        doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN_ID, Integer.toString( ticket.getTicketDomain( ).getId( ) ), Store.YES ) );
-        doc.add( new StringField( TicketSearchItemConstant.FIELD_DOMAIN, manageNullValue( ticket.getTicketDomain( ).getLabel( ) ), Store.YES ) );
 
         // --- ticket reference
         String strReference = manageNullValue( ticket.getReference( ) );
@@ -291,26 +286,16 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         // --- ticket status
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_STATUS, ticket.getTicketStatus( ) ) );
 
-        // --- ticket type id
-        int nTicketTypeId = ticket.getTicketType( ).getId( );
-        doc.add( new IntPoint( TicketSearchItemConstant.FIELD_TICKET_TYPE_ID, nTicketTypeId ) );
-        doc.add( new StoredField( TicketSearchItemConstant.FIELD_TICKET_TYPE_ID, nTicketTypeId ) );
-
-        // --- ticket type
-        doc.add( new StoredField( TicketSearchItemConstant.FIELD_TICKET_TYPE, manageNullValue( ticket.getTicketType( ).getLabel( ) ) ) );
-
         // --- ticket category
-        doc.add( new StringField( TicketSearchItemConstant.FIELD_CATEGORY_ID, Integer.toString( ticket.getTicketThematic( ).getId( ) ), Store.YES ) );
-        doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY, ticket.getTicketThematic( ).getLabel( ), Store.YES ) );
-        doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_CATEGORY, new BytesRef( ticket.getTicketThematic( ).getLabel( ) ) ) );
-        
-        // --- ticket precision
-        if ( ticket.getTicketPrecision( ) != null && StringUtils.isNotBlank( ticket.getTicketPrecision( ).getLabel( ) ) )
+        for ( TicketCategory ticketCategory : ticket.getBranch( ) ) 
         {
-            doc.add( new StringField( TicketSearchItemConstant.FIELD_PRECISION_ID, Integer.toString( ticket.getTicketPrecision( ).getId( ) ), Store.YES ) );
-            doc.add( new TextField( TicketSearchItemConstant.FIELD_PRECISION, ticket.getTicketPrecision( ).getLabel( ), Store.YES ) );
-            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_PRECISION, new BytesRef( ticket.getTicketPrecision( ).getLabel( ) ) ) );
-        }
+            doc.add( new IntPoint( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + ticketCategory.getDepth( ).getDepthNumber( ), ticketCategory.getId( ) ) );
+            doc.add( new StoredField( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + ticketCategory.getDepth( ).getDepthNumber( ), ticketCategory.getId( ) ) );
+            doc.add( new StringField( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + ticketCategory.getDepth( ).getDepthNumber( ), Integer.toString( ticketCategory.getId( ) ), Store.YES ) );
+            doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY_DEPTHNUMBER + ticketCategory.getDepth( ).getDepthNumber( ), ticketCategory.getLabel( ), Store.YES ) );
+            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_CATEGORY_DEPTHNUMBER + ticketCategory.getDepth( ).getDepthNumber( ), new BytesRef( ticketCategory.getLabel( ) ) ) );
+            doc.add( new StringField( TicketSearchItemConstant.FIELD_CATEGORY_DEPTHNUMBER + ticketCategory.getDepth( ).getDepthNumber( ), manageNullValue( ticketCategory.getLabel( ) ), Store.YES ) );
+        }            
 
         // --- ticket user title
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_USER_TITLE, manageNullValue( ticket.getUserTitle( ) ) ) );
@@ -736,26 +721,14 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             sb.append( ticket.getMobilePhoneNumber( ) ).append( SEPARATOR );
         }
 
-        if ( StringUtils.isNotBlank( ticket.getTicketType( ).getLabel( ) ) )
+        for ( TicketCategory ticketCategory : ticket.getBranch( ) ) 
         {
-            sb.append( ticket.getTicketType( ) ).append( SEPARATOR );
-        }
-
-        if ( StringUtils.isNotBlank( ticket.getTicketDomain( ).getLabel( ) ) )
-        {
-            sb.append( ticket.getTicketDomain( ) ).append( SEPARATOR );
-        }
-
-        if ( ticket.getTicketThematic( ) != null && StringUtils.isNotBlank( ticket.getTicketThematic( ).getLabel( ) ) )
-        {
-            sb.append( ticket.getTicketThematic( ).getLabel( ) ).append( SEPARATOR );
-        }
-
-        if ( ticket.getTicketPrecision( ) != null && StringUtils.isNotBlank( ticket.getTicketPrecision( ).getLabel( ) ) )
-        {
-            sb.append( ticket.getTicketPrecision( ).getLabel( ) ).append( SEPARATOR );
-        }
-
+            if ( ticketCategory != null && StringUtils.isNotBlank( ticketCategory.getLabel( ) ) )
+            {
+                sb.append( ticketCategory.getLabel( ) ).append( SEPARATOR );
+            }
+        }            
+        
         if ( StringUtils.isNotBlank( ticket.getNomenclature( ) ) )
         {
             sb.append( ticket.getNomenclature( ) ).append( SEPARATOR );
@@ -789,8 +762,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         if ( WorkflowService.getInstance( ).isAvailable( ) && ticket.getTicketCategory( ) != null )
         {
-            TicketCategory ticketCategory = ticket.getTicketCategory( );
-            State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, ticketCategory.getIdWorkflow( ),
+            State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, ticket.getTicketCategory( ).getIdWorkflow( ),
                     null );
 
             if ( state != null && StringUtils.isNotBlank( state.getName( ) ) )

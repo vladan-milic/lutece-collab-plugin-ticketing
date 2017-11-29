@@ -104,7 +104,6 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_FILTER_LASTUPDATE_DATE = " AND a.date_update >= ? AND a.date_update < ? ";
     private static final String SQL_FILTER_LASTUPDATE_START_DATE = " AND a.date_update >= ? ";
     private static final String SQL_FILTER_LASTUPDATE_END_DATE = " AND a.date_update <= ? ";
-    private static final String SQL_FILTER_CATEGORY = " AND a.id_category = ?  ";
     private static final String SQL_FILTER_ID_USER = "  AND a.guid = ? ";
     private static final String SQL_FILTER_ID_CHANNEL = " AND x.id_channel = ? ";
     private static final String SQL_FILTER_NOMENCLATURE = " AND a.nomenclature = ? ";
@@ -752,7 +751,6 @@ public final class TicketDAO implements ITicketDAO
         sbSQL.append( filter.containsLastUpdateEndDate( ) ? SQL_FILTER_LASTUPDATE_END_DATE : StringUtils.EMPTY );
         sbSQL.append( filter.containsStatus( ) ? SQL_FILTER_STATUS : StringUtils.EMPTY );
         sbSQL.append( filter.containsIdTicket( ) ? SQL_FILTER_ID_TICKET : StringUtils.EMPTY );
-        sbSQL.append( filter.containsIdCategory( ) ? SQL_FILTER_CATEGORY : StringUtils.EMPTY );
         sbSQL.append( filter.containsIdUser( ) ? SQL_FILTER_ID_USER : StringUtils.EMPTY );
         sbSQL.append( filter.containsEmail( ) ? SQL_FILTER_EMAIL : StringUtils.EMPTY );
         sbSQL.append( filter.containsLastName( ) ? SQL_FILTER_LASTNAME : StringUtils.EMPTY );
@@ -933,11 +931,6 @@ public final class TicketDAO implements ITicketDAO
         if ( filter.containsIdTicket( ) )
         {
             daoUtil.setInt( nIndex++, filter.getIdTicket( ) );
-        }
-
-        if ( filter.containsIdCategory( ) )
-        {
-            daoUtil.setInt( nIndex++, filter.getIdCategory( ) );
         }
 
         if ( filter.containsIdUser( ) )

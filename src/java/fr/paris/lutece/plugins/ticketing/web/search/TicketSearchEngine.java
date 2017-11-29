@@ -138,16 +138,19 @@ public class TicketSearchEngine implements ITicketSearchEngine
             result.setNomenclature( document.get( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE ) );
 
             // TicketCategory
-            TicketCategory ticketCategory = new TicketCategory( );
-            if ( StringUtils.isNotEmpty(document.get( TicketSearchItemConstant.FIELD_PRECISION ) ) )
+            int maxDepthNumber = TicketCategoryService.getInstance( ).getCategoriesTree( ).getMaxDepthNumber( );
+            int i = maxDepthNumber;
+            while ( i >= 1 )
             {
-                ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( Integer.valueOf( document.get( TicketSearchItemConstant.FIELD_PRECISION_ID ) ) );
+                String strCategoryId = document.get( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + i);
+                if ( strCategoryId != null )
+                {
+                    TicketCategory ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( Integer.valueOf( strCategoryId ) );
+                    result.setTicketCategory( ticketCategory );
+                    break;
+                }
+                i--;
             }
-            else
-            {
-                ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( Integer.valueOf( document.get( TicketSearchItemConstant.FIELD_CATEGORY_ID ) ) );
-            }
-            result.setTicketCategory( ticketCategory );
 
             // State
             State state = new State( );
@@ -352,7 +355,8 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
         for ( TicketCategory domain : listUserDomain )
         {
-            TermQuery domQuery = new TermQuery( new Term( TicketSearchItemConstant.FIELD_DOMAIN_ID, Integer.toString( domain.getId( ) ) ) );
+            
+            TermQuery domQuery = new TermQuery( new Term( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + TicketingConstants.DOMAIN_DEPTH, Integer.toString( domain.getId( ) ) ) );
             domainsQueryBuilder.add( new BooleanClause( domQuery, BooleanClause.Occur.SHOULD ) );
         }
 
@@ -484,10 +488,17 @@ public class TicketSearchEngine implements ITicketSearchEngine
                 addUrgencyFilter( booleanQueryBuilderGlobal, filter.getUrgency( ) );
             }
 
-            // Filter on the ticket type
-            if ( filter.getIdType( ) != -1 )
+            // Filter on the ticket category
+            if ( filter.getMapCategoryId( ) != null )
             {
-                addTicketTypeIdFilter( booleanQueryBuilderGlobal, filter.getIdType( ) );
+                for (int i = 1; i <= filter.getMapCategoryId( ).size( ); i++)
+                {
+                    if ( filter.getMapCategoryId( ).get( i ) != -1 )
+                    {
+                        addTicketCategoryIdFilter( booleanQueryBuilderGlobal, filter.getMapCategoryId( ).get( i ), i );
+                    }
+                    
+                }
             }
 
             // Filter on the creation start and end date
@@ -545,20 +556,20 @@ public class TicketSearchEngine implements ITicketSearchEngine
     }
 
     /**
-     * Add a filter for the ticket type id value
+     * Add a filter for the ticket category id value
      * 
      * @param queryBuilder
      *            The query builder to add the new BooleanClause
-     * @param ticketTypeIdValue
+     * @param ticketCategoryIdValue
      *            The value to filter
      */
-    private void addTicketTypeIdFilter( Builder queryBuilder, int ticketTypeIdValue )
+    private void addTicketCategoryIdFilter( Builder queryBuilder, int ticketCategoryIdValue, int nDepthNumber )
     {
         // Create the Query on th Type Id
-        Query queryTypeId = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_TICKET_TYPE_ID, ticketTypeIdValue );
+        Query queryCategoryId = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + nDepthNumber, ticketCategoryIdValue );
 
-        // Add the ticket type id filter to the global filter
-        queryBuilder.add( new BooleanClause( queryTypeId, Occur.MUST ) );
+        // Add the ticket category id filter to the global filter
+        queryBuilder.add( new BooleanClause( queryCategoryId, Occur.MUST ) );
     }
 
     /**

@@ -41,7 +41,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -76,10 +78,7 @@ public class TicketFilter extends OrderByFilter
     private Date _dateCreationEndDate;
     private Date _dateCloseDate;
     private int _nIdUser = CONSTANT_ID_NULL;
-    private int _nIdCategory = CONSTANT_ID_NULL;
-    private int _nIdDomain = CONSTANT_ID_NULL;
     private int _nIdChannel = CONSTANT_ID_NULL;
-    private int _nIdType = CONSTANT_ID_NULL;
     private int _nOpenSincePeriod = CONSTANT_ID_NULL;
     private String _strStatus;
     private String _strEmail;
@@ -98,6 +97,7 @@ public class TicketFilter extends OrderByFilter
     private Set<String> _setAdminUserRoles = null;
     private int _nTicketsLimitStart = CONSTANT_ID_NULL;
     private int _nTicketsLimitCount = CONSTANT_ID_NULL;
+    private Map<Integer, Integer> _mapCategoryId = new LinkedHashMap<Integer, Integer>( );
 
     /**
      * Check if this filter contains a idUser
@@ -381,87 +381,6 @@ public class TicketFilter extends OrderByFilter
     public boolean containsCreationEndDate( )
     {
         return _dateCreationEndDate != null;
-    }
-
-    /**
-     * @return the _nIdCategory
-     */
-    public int getIdCategory( )
-    {
-        return _nIdCategory;
-    }
-
-    /**
-     * @param nIdCategory
-     *            the _nIdCategory to set
-     */
-    public void setIdCategory( int nIdCategory )
-    {
-        this._nIdCategory = nIdCategory;
-    }
-
-    /**
-     * Check if this filter contains a resource id
-     *
-     * @return true if the filter contain an id of category
-     */
-    public boolean containsIdCategory( )
-    {
-        return ( _nIdCategory != CONSTANT_ID_NULL );
-    }
-
-    /**
-     * @return the _nIdDomain
-     */
-    public int getIdDomain( )
-    {
-        return _nIdDomain;
-    }
-
-    /**
-     * @param nIdDomain
-     *            the nIdDomain to set
-     */
-    public void setIdDomain( int nIdDomain )
-    {
-        this._nIdDomain = nIdDomain;
-    }
-
-    /**
-     * Check if this filter contains a resource id
-     *
-     * @return true if the filter contain an id of domain
-     */
-    public boolean containsIdDomain( )
-    {
-        return ( _nIdDomain != CONSTANT_ID_NULL );
-    }
-
-    /**
-     * @return the _nIdType
-     */
-    public int getIdType( )
-    {
-        return _nIdType;
-    }
-
-    /**
-     * @param nIdType
-     *            the nIdType to set
-     */
-    public void setIdType( int nIdType )
-    {
-        this._nIdType = nIdType;
-    }
-
-    /**
-     * Check if this filter contains a resource id
-     *
-     * @return true if the filter contain an id of domain
-     */
-    public boolean containsIdType( )
-    {
-        return ( _nIdType != CONSTANT_ID_NULL );
     }
 
     /**
@@ -897,6 +816,23 @@ public class TicketFilter extends OrderByFilter
     public void setTicketsLimitCount( int nTicketsLimitCount )
     {
         this._nTicketsLimitCount = nTicketsLimitCount;
+    }
+
+    /**
+     * @return the _mapCategoryId
+     */
+    public Map<Integer, Integer> getMapCategoryId( )
+    {
+        return _mapCategoryId;
+    }
+
+    /**
+     * @param mapCategoryId
+     *            the mapCategoryId to set
+     */
+    public void setMapCategoryId( Map<Integer, Integer> mapCategoryId )
+    {
+        this._mapCategoryId = mapCategoryId;
     }
 
     @Override
