@@ -335,3 +335,14 @@ textarea.ticketing.richtext {
 /* Custom, iPhone Retina */
 @media only screen and (max-width : 320px) {
 }
+
+.history-line-over {
+    cursor: pointer;
+    padding: 8px;
+    width: 100%;
+    display: inline-block;
+}
+
+.history-line-over:hover {
+    background: #ddd;
+}

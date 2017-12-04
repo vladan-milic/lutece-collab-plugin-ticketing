@@ -4,16 +4,25 @@
     <div class="panel">
       <#assign defaultUserFrontId=5>
       <#list history_information_list as history_information>
-          <p >
-          <span id="icon-${history_information.resource_history.id?string}" class="glyphicon glyphicon-plus" aria-hidden="true" onclick="open_close_history(${history_information.resource_history.id?string})"></span>
-          <strong class="text-gru">${history_information.resource_history.creationDate!'Date missing'}</strong> &nbsp;
-          <strong>${history_information.resource_history.action.description}</strong>
-          <#if resource_history_channel[history_information.resource_history.id?string]?has_content>
-            <#assign msgTooltip="#i18n{ticketing.view_ticket_history.channel.used}">
-            <span title="${msgTooltip} ${resource_history_channel[history_information.resource_history.id?string].label}" style="float:right;" class="${resource_history_channel[history_information.resource_history.id?string].iconFont}"></span>
-          </#if>
-        </p>
-        <ul id="message-${history_information.resource_history.id?string}" class="timeline" style="display: none">
+		  <#assign lastAction = history_information?index == 0>
+		  <#assign containsComment = false>
+		  <#list history_information.task_information_list as task_information>
+		  	<#if task_information?contains("js/plugins/workflow/modules/comment/comment.js")>
+		  		<#assign containsComment = true>
+		  	</#if>
+		  </#list>
+		  <#assign lineOpened = containsComment || lastAction>
+          <p class="history-line-over" onclick="open_close_history(${history_information.resource_history.id?string})">
+	          <span id="icon-${history_information.resource_history.id?string}" class="glyphicon <#if lineOpened>glyphicon-minus<#else>glyphicon-plus</#if>" aria-hidden="true"></span>
+	          <strong class="text-gru">${history_information.resource_history.creationDate!'Date missing'}</strong> &nbsp;
+	          <strong>${history_information.resource_history.action.description}</strong>
+	          
+	          <#if resource_history_channel[history_information.resource_history.id?string]?has_content>
+	            <#assign msgTooltip="#i18n{ticketing.view_ticket_history.channel.used}">
+	            <span title="${msgTooltip} ${resource_history_channel[history_information.resource_history.id?string].label}" style="float:right;margin-top:3px;" class="${resource_history_channel[history_information.resource_history.id?string].iconFont}"></span>
+	          </#if>
+       	   </p>
+        <ul id="message-${history_information.resource_history.id?string}" class="timeline"<#if !lineOpened>style="display: none"</#if>>
           <li>
             <#if history_information.admin_user_history?exists>
               <#if adminAvatar>
