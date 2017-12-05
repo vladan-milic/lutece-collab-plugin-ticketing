@@ -1,0 +1,45 @@
+<#include "/admin/util/editor/editor.html" />
+<#include "admin_tabs.html" />
+<@tabsWrapper>
+  <@tabs tab="viewing" hasTable=false/>
+  <h3>#i18n{ticketing.create_viewing.pageTitle}</h3>
+  <form class="form-horizontal" method="post" name="create_Viewing" action="jsp/admin/plugins/ticketing/admin/ManageViewing.jsp">
+    <@messages infos=infos />
+    <input type="hidden" id="id" name="id">
+    <@fieldInputText i18nLabelKey="ticketing.manage_viewing.labelTitle" inputName="title" value="${viewing.title!''}" i18nHelpBlockKey="ticketing.manage_viewing.labelTitle.help" />
+    <div class="form-group">
+      <label class="control-label col-xs-12 col-sm-3" for="confirmation_msg">#i18n{ticketing.create_contactmode.labelConfirmationMsg} : </label>
+        <div class="col-xs-12 col-sm-9">
+          <textarea name="message" id="message" class="ticketing richtext form-control"></textarea>
+          <span class="help-block">#i18n{ticketing.message.label_message_comment_confirmation}</span>
+        </div>
+    </div>
+    <@fieldInputText i18nLabelKey="ticketing.manage_viewing.labelValidationButton" inputName="validationButon" value="${viewing.validationButon!''}" i18nHelpBlockKey="ticketing.manage_viewing.labelValidationButton.help" />
+    <@fieldInputText i18nLabelKey="ticketing.manage_viewing.labelChannel" inputName="isChannel" value="${viewing.isChannel!''}" i18nHelpBlockKey="ticketing.manage_viewing.labelChannel.help" />
+	<@fieldInputText i18nLabelKey="ticketing.manage_viewing.labelContactMode" inputName="isContactMode" value="${viewing.isContactMode!''}" i18nHelpBlockKey="ticketing.manage_viewing.labelContactMode.help" />
+	<@fieldInputText i18nLabelKey="ticketing.manage_viewing.labelCivility" inputName="isCivility" value="${viewing.isCivility!''}" i18nHelpBlockKey="ticketing.manage_viewing.labelCivility.help" />
+	<@fieldInputText i18nLabelKey="ticketing.manage_viewing.labelDomain" inputName="isDomain" value="${viewing.isDomain!''}" i18nHelpBlockKey="ticketing.manage_viewing.labelDomain.help" />
+	<@fieldInputText i18nLabelKey="ticketing.manage_viewing.labelThematic" inputName="isThematic" value="${viewing.isThematic!''}" i18nHelpBlockKey="ticketing.manage_viewing.labelThematic.help" />
+	<@fieldInputText i18nLabelKey="ticketing.manage_viewing.labelLocation" inputName="isLocation" value="${viewing.isLocation !''}" i18nHelpBlockKey="ticketing.manage_viewing.labelLocation.help" />
+    
+    <@actionButtons button1Name="action_createViewing" button2Name="view_manageViewing"/>
+    </form>
+</@tabsWrapper>
+<@initEditor />
+<script type="text/javascript">
+var changeIcon = function (){
+  $('span#span_icon').removeClass($('span#span_icon').attr('class')).addClass($("#icon_font").val());
+}
+$(document).ready(function(){
+  $("#icon_font").change(changeIcon);
+  $("#icon_font").click(changeIcon);
+  $("#icon_font").keyup(changeIcon);
+  
+  $(document).ready(function () {
+	  $( "input[name^='is']" ).attr('maxlength', 1).bind('keyup paste', function(){
+	        this.value = this.value.replace(/[^0-1]/g, '');
+	  });
+	});
+  
+})
+</script>
