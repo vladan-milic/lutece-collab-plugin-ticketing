@@ -267,14 +267,14 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-12 filter-ticket-date">
-                            <label class="" for="fltr_open_since"><h4>#i18n{ticketing.manage_tickets.start_date}</h4></label>
-                            <div class="input-group">
+                            <label class="filter" for="fltr_open_since">#i18n{ticketing.manage_tickets.start_date}</label>
+                            <div class="input-group input-group-xs">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                 <input type="text" name="fltr_open_since" id="fltr_open_since" class="form-control"
                                        <#if ticket_filter.creationStartDate??>value="${ticket_filter.creationStartDate?date}"</#if>>
                             </div>
-                            <label class="" for="fltr_open_since"><h4>#i18n{ticketing.manage_tickets.start_end}</h4></label>
-                            <div class="input-group">
+                            <label class="filter" for="fltr_open_since">#i18n{ticketing.manage_tickets.start_end}</label>
+                            <div class="input-group input-group-xs">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                 <input type="text" name="fltr_open_until" id="fltr_open_until" class="form-control"
                                        <#if ticket_filter.creationEndDate??>value="${ticket_filter.creationEndDate?date}"</#if>>
@@ -449,8 +449,10 @@
     $(document).ready(function () {
 
         $(document).ready(function () {
-            $('#fltr_open_since').datepicker({language: 'fr'});
-            $('#fltr_open_until').datepicker({language: 'fr'});
+            $('#fltr_open_since').datepicker({language: 'fr'})
+            	.parent().find('.input-group-addon').click(function() { $('#fltr_open_since').focus(); });
+            $('#fltr_open_until').datepicker({language: 'fr'})
+        		.parent().find('.input-group-addon').click(function() { $('#fltr_open_until').focus(); });
         });
 
         $("#search_clear").click(function () {

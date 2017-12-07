@@ -244,7 +244,7 @@ textarea.ticketing.richtext {
 #filter-ticket label.select:after{ content:'\f107'; color:#606059; font-family: 'FontAwesome'; font-size:18px; right: 5px; top: -2px; position:absolute; pointer-events:none }
 #filter-ticket .btn{ color:#fff; min-width: 50px }
 #filter-ticket .btn span.fa-search{ color:#000; }
-#filter-ticket-export { position: absolute; bottom: -160px; z-index: 50}
+#filter-ticket-export { position: absolute; bottom: -66px; z-index: 50}
 
 #filter-ticket .btn.filter-button{
 	background-color: #DDD;
@@ -345,4 +345,37 @@ textarea.ticketing.richtext {
 
 .history-line-over:hover {
     background: #ddd;
+}
+
+
+label.filter {
+	font-size: 12px;
+	color: white;
+	margin: 0 6px;
+}
+
+label.filter:first-child {
+	margin-left: 0;
+}
+
+.input-group-xs>.form-control,
+.input-group-xs>.input-group-addon,
+.input-group-xs>.input-group-btn>.btn {
+    height: 22px;
+    padding: 1px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.input-group-xs > :first-child {
+	border-radius: 3px 0 0 3px;
+}
+
+.input-group-xs > :last-child {
+	border-radius: 0 3px 3px 0;
+}
+
+.filter-ticket-date .input-group-addon:hover {
+    background: #ddd;
+    cursor: pointer;
 }
