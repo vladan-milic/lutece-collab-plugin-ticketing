@@ -428,14 +428,6 @@
             $("#filter_form").submit();
         });
 
-        $("#fltr_open_since").on('change', function (e) {
-            $("#filter_form").submit();
-        });
-
-        $("#fltr_open_until").on('change', function (e) {
-            $("#filter_form").submit();
-        });
-
     });
 
     function setSelectedTab(tab) {
@@ -449,10 +441,24 @@
     $(document).ready(function () {
 
         $(document).ready(function () {
-            $('#fltr_open_since').datepicker({language: 'fr'})
-            	.parent().find('.input-group-addon').click(function() { $('#fltr_open_since').focus(); });
-            $('#fltr_open_until').datepicker({language: 'fr'})
-        		.parent().find('.input-group-addon').click(function() { $('#fltr_open_until').focus(); });
+            $('#fltr_open_since, #fltr_open_until')
+            	.datepicker({language: 'fr'})
+            	.off('keypress keyup keydown')
+	        	.on('keypress keyup keydown', function(e) {
+	        	    if(e.keyCode === 13) {
+	        	        e.stopPropagation();
+	        	        e.preventDefault();
+		                $("#filter_form").submit();
+	        	        return false;
+	        	    }
+	        	})
+            	.on('changeDate', function (e) {
+	                $("#filter_form").submit();
+	            });
+            
+            $('#fltr_open_since').parent().find('.input-group-addon').click(function() { $('#fltr_open_since').focus(); });
+            $('#fltr_open_until').parent().find('.input-group-addon').click(function() { $('#fltr_open_until').focus(); });  
+
         });
 
         $("#search_clear").click(function () {
