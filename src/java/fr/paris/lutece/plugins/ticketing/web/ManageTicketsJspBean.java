@@ -195,6 +195,21 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private List<TicketDomain> _lstTicketDomain;
     private final TicketFormService  _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
     private final TicketSearchEngine _engine            = ( TicketSearchEngine ) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
+    
+    //Header export
+    private static final String HEADER_REFERENCE = "ticketing.export.header.reference"; 
+    private static final String HEADER_CREATION_DATE = "ticketing.export.header.creation.date";
+    private static final String HEADER_TIME_CREATION = "ticketing.export.header.time.creation";
+    private static final String HEADER_NATURE_SOLICITATION = "ticketing.export.header.nature.solicitation";
+    private static final String HEADER_DOMAIN_SOLICITATION = "ticketing.export.header.domain.solicitation";
+    private static final String HEADER_PROBLEMATIC_SOLICITATION = "ticketing.export.header.problematic.solicitation";
+    private static final String HEADER_SUB_PROBLEMS_SOLLICITATION = "ticketing.export.header.sub.problems.solicitation";
+    private static final String HEADER_OBJECT_SOLICITATION = "ticketing.export.header.object.solicitation";
+    private static final String HEADER_STATUS = "ticketing.export.header.status";
+    private static final String HEADER_NOMENCLATURE = "ticketing.export.header.nomenclature";
+    private static final String HEADER_CHANNEL = "ticketing.export.header.channel";
+    private static final String HEADER_ASSIGNEMENT_ENTITY = "ticketing.export.header.assignement.entity";
+    private static final String HEADER_ASSIGNEMENT_OFFICER = "ticketing.export.header.assignement.officer";
 
     /**
      * Build the Manage View
@@ -255,11 +270,25 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             strQuery = StringUtils.EMPTY;
         }
 
-        Map<Integer, TicketDomain> mapIdDomainTicketDomain = new LinkedHashMap<>( );
-        addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST );
-        addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL );
+//        Map<Integer, TicketDomain> mapIdDomainTicketDomain = new LinkedHashMap<>( );
+//        addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST );
+//        addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL );
+//
+//        _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
+        
+        if ( filter.getIdDomain( ) != -1 )
+        {
+            TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( filter.getIdDomain( ) );
+            _lstTicketDomain.clear( );
+            _lstTicketDomain.addAll( TicketDomainHome.getTicketDomainsListByLabel( ticketDomain.getLabel( ) ) );
+        } else
+        {
+            Map<Integer, TicketDomain> mapIdDomainTicketDomain = new LinkedHashMap<>( );
+            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST );
+            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL );
 
-        _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
+            _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
+        }
 
         SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy" );
         SimpleDateFormat sdf2 = new SimpleDateFormat( "HH:mm" );
@@ -268,8 +297,28 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             List<Ticket> listTickets = _engine.searchTickets( strQuery, _lstTicketDomain, filter );
             File tempFile = File.createTempFile( "ticketing", null );
+            
+            String strReference = I18nService.getLocalizedString( HEADER_REFERENCE, Locale.FRENCH );
+            String strCreationDate = I18nService.getLocalizedString( HEADER_CREATION_DATE, Locale.FRENCH );
+            String strTimeCreation = I18nService.getLocalizedString( HEADER_TIME_CREATION, Locale.FRENCH );
+            String strNatureSolicitation = I18nService.getLocalizedString( HEADER_NATURE_SOLICITATION, Locale.FRENCH );
+            String strDomainSolicitation = I18nService.getLocalizedString( HEADER_DOMAIN_SOLICITATION, Locale.FRENCH );
+            String strProblematicSolicitation = I18nService.getLocalizedString( HEADER_PROBLEMATIC_SOLICITATION, Locale.FRENCH );
+            String strSubProblemsSolicitation = I18nService.getLocalizedString( HEADER_SUB_PROBLEMS_SOLLICITATION, Locale.FRENCH );
+            String strObjectSolicitation = I18nService.getLocalizedString( HEADER_OBJECT_SOLICITATION, Locale.FRENCH );
+            String strStatus = I18nService.getLocalizedString( HEADER_STATUS, Locale.FRENCH );
+            String strNomenclature = I18nService.getLocalizedString( HEADER_NOMENCLATURE, Locale.FRENCH );
+            String strChannel = I18nService.getLocalizedString( HEADER_CHANNEL, Locale.FRENCH );
+            String strAssignementEntity = I18nService.getLocalizedString( HEADER_ASSIGNEMENT_ENTITY, Locale.FRENCH );
+            String strAssignementOfficer = I18nService.getLocalizedString( HEADER_ASSIGNEMENT_OFFICER, Locale.FRENCH );
+            List<String> entries = new ArrayList<String>(Arrays.asList(new String[]{strReference,strCreationDate,strTimeCreation,strNatureSolicitation,strDomainSolicitation,strProblematicSolicitation,strSubProblemsSolicitation,strObjectSolicitation,strStatus,strNomenclature,strChannel,strAssignementEntity,strAssignementOfficer}));
+            
+            // Write header in the temp file
             Writer w = new OutputStreamWriter( new FileOutputStream( tempFile ), StandardCharsets.ISO_8859_1 );
 
+            // Write line in the temp file
+            CSVUtils.writeLine(w, entries);
+            
             for ( Ticket ticket : listTickets )
             {
                 // Data line
@@ -280,6 +329,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 line.add( ticket.getTicketType( ) );
                 line.add( ticket.getTicketDomain( ) );
                 line.add( ticket.getTicketCategory( ).getLabel( ) );
+                line.add( ticket.getTicketCategory( ).getPrecision());
                 line.add( ticket.getTicketComment( ) );
                 line.add( ticket.getState( ).getName( ) );
                 line.add( ticket.getNomenclature( ) );
