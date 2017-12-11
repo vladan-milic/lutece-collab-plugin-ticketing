@@ -11,7 +11,7 @@
         <@messages infos=infos />
         <@messages errors=errors />
         <div class="clearfix"></div>
-        <@table class="table-bordered table-hover">
+        <@table class="table-bordered" hover=false>
             <tr>
                 <#list tree.depths as category_type>
                     <th class="text-center">
@@ -46,6 +46,40 @@
     </@box>
 </@tabsWrapper>
 
+<script>
+	$(function() {
+		var $categories = $('td[data-category-id]');
+		
+		var findRecursiveSubCategories = function($category) {
+			var id = $category.attr('data-category-id');			
+			var $subCategories = $categories.filter('[data-category-parent='+id+']');
+			
+			var $recursiveSubCategories = $subCategories;
+			
+			$subCategories.each(function() {
+				var $subCategory = $(this);
+				$recursiveSubCategories = $recursiveSubCategories.add(findRecursiveSubCategories($subCategory));
+			})
+			
+			return $recursiveSubCategories;
+		};
+		
+		$categories.each(function() {
+			var $category = $(this);
+			
+			var $subCategories = $category.add(findRecursiveSubCategories($category));
+			
+			$category.mouseover(function() {
+				$subCategories.css('background-color', '#f0f0f0');
+			});
+			
+			$category.mouseout(function() {
+				$subCategories.css('background-color', 'transparent');
+			})
+		});
+	})
+</script>
+
 <#macro printNodeRecursive category rootelementssize>
         <#if !(category.parent)??>
             <@printNode category rootelementssize/>
@@ -69,7 +103,7 @@
 </#macro>
                     
 <#macro printNode node rootelementssize>
-    <td class="text-center" style="vertical-align:middle;"  <#if node.children?? && node.children?size gt 0> rowspan="${node.leaves?size!'1'}"</#if>>
+    <td class="text-center" style="vertical-align:middle;" data-category-id="${node.id}" <#if node.parent??>data-category-parent="${node.parent.id}"</#if> <#if node.children?? && node.children?size gt 0> rowspan="${node.leaves?size!'1'}"</#if>>
            <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
                <input type="hidden" id="id_parent_category" name="id_parent_category" value="${node.id}"/>
                <input type="hidden" id="id_category" name="id_category" value="${node.id}"/>
