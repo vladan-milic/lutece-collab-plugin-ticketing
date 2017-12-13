@@ -35,7 +35,9 @@ package fr.paris.lutece.plugins.ticketing.web.util;
 
 import fr.paris.lutece.plugins.ticketing.business.search.IndexerAction;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
+import fr.paris.lutece.portal.service.datastore.DatastoreService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 
@@ -58,8 +60,8 @@ public class TicketIndexerActionUtil
         IndexerAction indexerAction = null;
         if ( ticket != null )
         {
-            State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, ticket.getTicketCategory( ).getIdWorkflow( ),
-                    null );
+            State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE,
+                    Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) ), null );
 
             indexerAction = new IndexerAction( );
             indexerAction.setIdTicket( ticket.getId( ) );
@@ -67,8 +69,7 @@ public class TicketIndexerActionUtil
             if ( state == null || state.getId( ) == AppPropertiesService.getPropertyInt( PROPERTY_WORKFLOW_ACTION_ID_NEW, 301 ) )
             {
                 indexerAction.setIdTask( IndexerAction.TASK_CREATE );
-            }
-            else
+            } else
             {
                 indexerAction.setIdTask( IndexerAction.TASK_MODIFY );
             }

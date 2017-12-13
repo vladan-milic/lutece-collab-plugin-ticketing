@@ -34,6 +34,9 @@
 
 package fr.paris.lutece.plugins.ticketing.business.category;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.categoryinputs.TicketCategoryInputsHome;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
@@ -42,28 +45,25 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * This class provides Data Access methods for Category objects
  */
 public final class TicketCategoryDAO implements ITicketCategoryDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_category ) FROM ticketing_category";
-    private static final String SQL_QUERY_SELECT = "SELECT id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, id_workflow, demand_id, help_message FROM ticketing_category WHERE id_category = ?";
-    private static final String SQL_QUERY_SELECT_BY_CODE = "SELECT id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, id_workflow, demand_id, help_message FROM ticketing_category WHERE code = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_category ( id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, id_workflow, demand_id, help_message ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "UPDATE ticketing_category SET inactive = 1 WHERE id_category = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_category SET id_category = ?, id_parent = ?, label = ?, n_order = ?, code = ?, id_default_assignee_unit = ?, id_category_type = ?, id_workflow = ?, demand_id = ?, help_message = ? WHERE id_category = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, id_workflow, demand_id, help_message FROM ticketing_category WHERE inactive <> 1 ORDER BY id_parent, n_order";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_category FROM ticketing_category WHERE inactive <> 1 ";
-    private static final String SQL_QUERY_MAX_CATEGORY_ORDER_BY_TYPE = "SELECT max(n_order) FROM ticketing_category WHERE id_parent = ? AND inactive <> 1";
+    private static final String SQL_QUERY_NEW_PK                          = "SELECT max( id_category ) FROM ticketing_category";
+    private static final String SQL_QUERY_SELECT                          = "SELECT id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, demand_id, help_message FROM ticketing_category WHERE id_category = ?";
+    private static final String SQL_QUERY_SELECT_BY_CODE                  = "SELECT id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, demand_id, help_message FROM ticketing_category WHERE code = ?";
+    private static final String SQL_QUERY_INSERT                          = "INSERT INTO ticketing_category ( id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, demand_id, help_message ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE                          = "UPDATE ticketing_category SET inactive = 1 WHERE id_category = ? ";
+    private static final String SQL_QUERY_UPDATE                          = "UPDATE ticketing_category SET id_category = ?, id_parent = ?, label = ?, n_order = ?, code = ?, id_default_assignee_unit = ?, id_category_type = ?, demand_id = ?, help_message = ? WHERE id_category = ?";
+    private static final String SQL_QUERY_SELECTALL                       = "SELECT id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, demand_id, help_message FROM ticketing_category WHERE inactive <> 1 ORDER BY id_parent, n_order";
+    private static final String SQL_QUERY_SELECTALL_ID                    = "SELECT id_category FROM ticketing_category WHERE inactive <> 1 ";
+    private static final String SQL_QUERY_MAX_CATEGORY_ORDER_BY_TYPE      = "SELECT max(n_order) FROM ticketing_category WHERE id_parent = ? AND inactive <> 1";
     private static final String SQL_QUERY_REBUILD_CATEGORY_ORDER_SEQUENCE = "UPDATE ticketing_category SET n_order = n_order - 1 WHERE n_order > ? AND id_parent = ? AND inactive <> 1 ";
-    private static final String SQL_QUERY_SELECT_CATEGORYID_BY_ORDER = "SELECT id_category FROM ticketing_category WHERE id_parent = ? AND n_order = ? ";
-    private static final String SQL_QUERY_UPDATE_CATEGORY_ORDER = "UPDATE ticketing_category SET n_order = ? WHERE id_category = ? ";
-    private static final String SQL_QUERY_COUNT_SUB_CATEGORY_BY_CATEGORY = "SELECT COUNT(1) FROM ticketing_category WHERE id_parent = ? AND inactive <> 1 ";
+    private static final String SQL_QUERY_SELECT_CATEGORYID_BY_ORDER      = "SELECT id_category FROM ticketing_category WHERE id_parent = ? AND n_order = ? ";
+    private static final String SQL_QUERY_UPDATE_CATEGORY_ORDER           = "UPDATE ticketing_category SET n_order = ? WHERE id_category = ? ";
+    private static final String SQL_QUERY_COUNT_SUB_CATEGORY_BY_CATEGORY  = "SELECT COUNT(1) FROM ticketing_category WHERE id_parent = ? AND inactive <> 1 ";
 
     /**
      * Generates a new primary key
@@ -106,7 +106,6 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.setString( nIndex++, category.getCode( ) );
         daoUtil.setInt( nIndex++, category.getDefaultAssignUnit( ).getUnitId( ) );
         daoUtil.setInt( nIndex++, category.getCategoryType( ).getId( ) );
-        daoUtil.setInt( nIndex++, category.getIdWorkflow( ) );
         daoUtil.setInt( nIndex++, category.getDemandId( ) );
         daoUtil.setString( nIndex++, category.getHelpMessage( ) );
 
@@ -143,7 +142,6 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
                 category.setDefaultAssignUnit( assigneeUnit );
             }
             category.getCategoryType( ).setId( daoUtil.getInt( nIndex++ ) );
-            category.setIdWorkflow( daoUtil.getInt( nIndex++ ) );
             category.setDemandId( daoUtil.getInt( nIndex++ ) );
             category.setHelpMessage( daoUtil.getString( nIndex++ ) );
             category.setListIdInput( TicketCategoryInputsHome.getIdInputListByCategory( category.getId( ) ) );
@@ -182,11 +180,10 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
                 category.setDefaultAssignUnit( assigneeUnit );
             }
             category.getCategoryType( ).setId( daoUtil.getInt( nIndex++ ) );
-            category.setIdWorkflow( daoUtil.getInt( nIndex++ ) );
             category.setDemandId( daoUtil.getInt( nIndex++ ) );
             category.setHelpMessage( daoUtil.getString( nIndex++ ) );
         }
-        
+
         daoUtil.free( );
         return category;
     }
@@ -219,7 +216,6 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.setString( nIndex++, category.getCode( ) );
         daoUtil.setInt( nIndex++, category.getDefaultAssignUnit( ).getUnitId( ) );
         daoUtil.setInt( nIndex++, category.getCategoryType( ).getId( ) );
-        daoUtil.setInt( nIndex++, category.getIdWorkflow( ) );
         daoUtil.setInt( nIndex++, category.getDemandId( ) );
         daoUtil.setString( nIndex++, category.getHelpMessage( ) );
         daoUtil.setInt( nIndex, category.getId( ) );
@@ -250,7 +246,6 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setCode( daoUtil.getString( nIndex++ ) );
             category.getDefaultAssignUnit( ).setUnitId( daoUtil.getInt( nIndex++ ) );
             category.getCategoryType( ).setId( daoUtil.getInt( nIndex++ ) );
-            category.setIdWorkflow( daoUtil.getInt( nIndex++ ) );
             category.setDemandId( daoUtil.getInt( nIndex++ ) );
             category.setHelpMessage( daoUtil.getString( nIndex++ ) );
             categoryList.add( category );
@@ -288,7 +283,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
                 AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
                 category.setDefaultAssignUnit( assigneeUnit );
             }
-            
+
             TicketCategoryType categoryType = TicketCategoryTypeHome.findByPrimaryKey( daoUtil.getInt( nIndex++ ) );
             if ( categoryType == null )
             {
@@ -298,10 +293,9 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             }
             category.setCategoryType( categoryType );
             category.setListIdInput( TicketCategoryInputsHome.getIdInputListByCategory( category.getId( ) ) );
-            category.setIdWorkflow( daoUtil.getInt( nIndex++ ) );
             category.setDemandId( daoUtil.getInt( nIndex++ ) );
             category.setHelpMessage( daoUtil.getString( nIndex++ ) );
-            
+
             categoryList.add( category );
         }
 

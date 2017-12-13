@@ -67,6 +67,7 @@ import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.service.state.IStateService;
 import fr.paris.lutece.plugins.workflowcore.service.state.StateService;
 import fr.paris.lutece.portal.service.content.XPageAppService;
+import fr.paris.lutece.portal.service.datastore.DatastoreService;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -84,19 +85,19 @@ import fr.paris.lutece.util.url.UrlItem;
  */
 public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 {
-    public static final String PROPERTY_INDEXER_NAME = "ticketing.indexer.name";
-    private static final String PARAMETER_TICKET_ID = "ticket_id";
-    private static final String PLUGIN_NAME = "ticketing";
-    private static final String PROPERTY_PAGE_BASE_URL = "search.pageIndexer.baseUrl";
-    private static final String PROPERTY_DOCUMENT_TYPE = "ticketing.indexer.documentType";
+    public static final String  PROPERTY_INDEXER_NAME        = "ticketing.indexer.name";
+    private static final String PARAMETER_TICKET_ID          = "ticket_id";
+    private static final String PLUGIN_NAME                  = "ticketing";
+    private static final String PROPERTY_PAGE_BASE_URL       = "search.pageIndexer.baseUrl";
+    private static final String PROPERTY_DOCUMENT_TYPE       = "ticketing.indexer.documentType";
     private static final String PROPERTY_INDEXER_DESCRIPTION = "ticketing.indexer.description";
-    private static final String PROPERTY_INDEXER_VERSION = "ticketing.indexer.version";
-    private static final String PROPERTY_INDEXER_ENABLE = "ticketing.indexer.enable";
-    private static final String ENABLE_VALUE_TRUE = "1";
-    private static final String JSP_VIEW_TICKET = "jsp/admin/plugins/ticketing/TicketView.jsp";
-    private static final String JSP_SEARCH_TICKET = "jsp/admin/plugins/ticketing/TicketSearch.jsp?action=search";
-    private static final int CONSTANT_ID_NULL = -1;
-    private static final String SEPARATOR = " ";
+    private static final String PROPERTY_INDEXER_VERSION     = "ticketing.indexer.version";
+    private static final String PROPERTY_INDEXER_ENABLE      = "ticketing.indexer.enable";
+    private static final String ENABLE_VALUE_TRUE            = "1";
+    private static final String JSP_VIEW_TICKET              = "jsp/admin/plugins/ticketing/TicketView.jsp";
+    private static final String JSP_SEARCH_TICKET            = "jsp/admin/plugins/ticketing/TicketSearch.jsp?action=search";
+    private static final int    CONSTANT_ID_NULL             = -1;
+    private static final String SEPARATOR                    = " ";
 
     /**
      * {@inheritDoc }
@@ -168,8 +169,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         boolean bReturn = false;
         String strEnable = AppPropertiesService.getProperty( PROPERTY_INDEXER_ENABLE );
 
-        if ( ( strEnable != null ) && ( strEnable.equalsIgnoreCase( Boolean.TRUE.toString( ) ) || strEnable.equals( ENABLE_VALUE_TRUE ) )
-                && PluginService.isPluginEnable( PLUGIN_NAME ) )
+        if ( ( strEnable != null ) && ( strEnable.equalsIgnoreCase( Boolean.TRUE.toString( ) ) || strEnable.equals( ENABLE_VALUE_TRUE ) ) && PluginService.isPluginEnable( PLUGIN_NAME ) )
         {
             bReturn = true;
         }
@@ -198,8 +198,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         try
         {
             docTicket = getDocument( ticket, urlTicket.getUrl( ), plugin );
-        }
-        catch( Exception e )
+        } catch ( Exception e )
         {
             String strMessage = "Ticket ID : " + ticket.getId( );
             IndexationService.error( this, e, strMessage );
@@ -234,7 +233,8 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         if ( ticket.getTicketCategory( ) != null )
         {
             IStateService stateService = SpringContextService.getBean( StateService.BEAN_SERVICE );
-            ticketState = stateService.findByResource( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, ticket.getTicketCategory( ).getIdWorkflow( ) );
+            ticketState = stateService.findByResource( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE,
+                    Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) ) );
             ticket.setState( ticketState );
         }
 
@@ -287,7 +287,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_STATUS, ticket.getTicketStatus( ) ) );
 
         // --- ticket category
-        for ( TicketCategory ticketCategory : ticket.getBranch( ) ) 
+        for ( TicketCategory ticketCategory : ticket.getBranch( ) )
         {
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + ticketCategory.getDepth( ).getDepthNumber( ), ticketCategory.getId( ) ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + ticketCategory.getDepth( ).getDepthNumber( ), ticketCategory.getId( ) ) );
@@ -295,7 +295,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             doc.add( new TextField( TicketSearchItemConstant.FIELD_CATEGORY_DEPTHNUMBER + ticketCategory.getDepth( ).getDepthNumber( ), ticketCategory.getLabel( ), Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_CATEGORY_DEPTHNUMBER + ticketCategory.getDepth( ).getDepthNumber( ), new BytesRef( ticketCategory.getLabel( ) ) ) );
             doc.add( new StringField( TicketSearchItemConstant.FIELD_CATEGORY_DEPTHNUMBER + ticketCategory.getDepth( ).getDepthNumber( ), manageNullValue( ticketCategory.getLabel( ) ), Store.YES ) );
-        }            
+        }
 
         // --- ticket user title
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_USER_TITLE, manageNullValue( ticket.getUserTitle( ) ) ) );
@@ -330,8 +330,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             String strState = manageNullValue( ticket.getState( ).getName( ) );
             doc.add( new TextField( TicketSearchItemConstant.FIELD_STATE, strState, Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_STATE, new BytesRef( strState ) ) );
-        }
-        else
+        } else
         {
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_STATE_ID, CONSTANT_ID_NULL ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_STATE_ID, TicketSearchUtil.getBytesRef( BigInteger.valueOf( CONSTANT_ID_NULL ) ) ) );
@@ -349,8 +348,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             String strChannelLabel = manageNullValue( ticket.getChannel( ).getLabel( ) );
             doc.add( new TextField( TicketSearchItemConstant.FIELD_CHANNEL_LABEL, strChannelLabel, Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_CHANNEL_LABEL, new BytesRef( strChannelLabel ) ) );
-        }
-        else
+        } else
         {
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_CHANNEL_ICONFONT, StringUtils.EMPTY ) );
 
@@ -363,19 +361,16 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             int nAssigneeUnitId = ticket.getAssigneeUnit( ).getUnitId( );
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, nAssigneeUnitId ) );
-            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger
-                    .valueOf( nAssigneeUnitId ) ) ) );
+            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger.valueOf( nAssigneeUnitId ) ) ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, nAssigneeUnitId ) );
 
             String strAssigneeUnitName = manageNullValue( ticket.getAssigneeUnit( ).getName( ) );
             doc.add( new TextField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, strAssigneeUnitName, Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, new BytesRef( strAssigneeUnitName ) ) );
-        }
-        else
+        } else
         {
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, CONSTANT_ID_NULL ) );
-            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger
-                    .valueOf( CONSTANT_ID_NULL ) ) ) );
+            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger.valueOf( CONSTANT_ID_NULL ) ) ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, CONSTANT_ID_NULL ) );
 
             doc.add( new TextField( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, StringUtils.EMPTY, Store.YES ) );
@@ -394,8 +389,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             String strAssigneeUserLastname = manageNullValue( ticket.getAssigneeUser( ).getLastname( ) );
             doc.add( new TextField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, strAssigneeUserLastname, Store.YES ) );
             doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, new BytesRef( strAssigneeUserLastname ) ) );
-        }
-        else
+        } else
         {
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_ADMIN_ID, CONSTANT_ID_NULL ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_ADMIN_ID, CONSTANT_ID_NULL ) );
@@ -411,15 +405,12 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             int nAssignerUnitId = ticket.getAssignerUnit( ).getUnitId( );
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, nAssignerUnitId ) );
-            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger
-                    .valueOf( nAssignerUnitId ) ) ) );
+            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger.valueOf( nAssignerUnitId ) ) ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, nAssignerUnitId ) );
-        }
-        else
+        } else
         {
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, CONSTANT_ID_NULL ) );
-            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger
-                    .valueOf( CONSTANT_ID_NULL ) ) ) );
+            doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, TicketSearchUtil.getBytesRef( BigInteger.valueOf( CONSTANT_ID_NULL ) ) ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, CONSTANT_ID_NULL ) );
         }
 
@@ -429,8 +420,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             int nAssignerUserId = ticket.getAssignerUser( ).getAdminUserId( );
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNER_USER_ID, nAssignerUserId ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNER_USER_ID, nAssignerUserId ) );
-        }
-        else
+        } else
         {
             doc.add( new IntPoint( TicketSearchItemConstant.FIELD_ASSIGNER_USER_ID, CONSTANT_ID_NULL ) );
             doc.add( new StoredField( TicketSearchItemConstant.FIELD_ASSIGNER_USER_ID, CONSTANT_ID_NULL ) );
@@ -476,18 +466,15 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             indexWriter = TicketSearchService.getInstance( ).getTicketIndexWriter( false );
             indexTicket( indexWriter, ticket );
-        }
-        catch( LockObtainFailedException e )
+        } catch ( LockObtainFailedException e )
         {
             // When a writer is already writing in the index directory
             throw new TicketIndexerException( );
-        }
-        catch( IOException | TicketIndexerException e )
+        } catch ( IOException | TicketIndexerException e )
         {
             AppLogService.error( "Error during the indexation of the ticket : " + e.getMessage( ), e );
             throw new TicketIndexerException( );
-        }
-        finally
+        } finally
         {
             TicketIndexWriterUtil.manageCloseWriter( indexWriter );
         }
@@ -504,18 +491,15 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         {
             indexWriter = TicketSearchService.getInstance( ).getTicketIndexWriter( false );
             indexWriter.deleteDocuments( new Term( TicketSearchItemConstant.FIELD_DOCUMENT_ID, String.valueOf( nTicketId ) ) );
-        }
-        catch( LockObtainFailedException e )
+        } catch ( LockObtainFailedException e )
         {
             // When a writer is already writing in the index directory
             throw new TicketIndexerException( );
-        }
-        catch( IOException e )
+        } catch ( IOException e )
         {
             AppLogService.error( "Error during the indexation of the ticket : " + e.getMessage( ), e );
             throw new TicketIndexerException( );
-        }
-        finally
+        } finally
         {
             TicketIndexWriterUtil.manageCloseWriter( indexWriter );
         }
@@ -561,8 +545,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
                 {
                     indexWriter.deleteDocuments( new Term( TicketSearchItemConstant.FIELD_DOCUMENT_ID, String.valueOf( action.getIdTicket( ) ) ) );
                     IndexerActionHome.remove( action.getIdAction( ) );
-                }
-                catch( IOException e )
+                } catch ( IOException e )
                 {
                     throw new TicketIndexerException( e.getMessage( ) );
                 }
@@ -581,8 +564,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
                     {
                         indexTicket( indexWriter, ticket );
                         IndexerActionHome.remove( action.getIdAction( ) );
-                    }
-                    catch( IOException e )
+                    } catch ( IOException e )
                     {
                         throw new TicketIndexerException( e.getMessage( ) );
                     }
@@ -600,14 +582,12 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
                 {
                     indexTicket( indexWriter, ticket );
                     IndexerActionHome.remove( action.getIdAction( ) );
-                }
-                catch( IOException e )
+                } catch ( IOException e )
                 {
                     throw new TicketIndexerException( e.getMessage( ) );
                 }
             }
-        }
-        else
+        } else
         {
             for ( Integer nIdticket : TicketHome.getIdTicketsList( ) )
             {
@@ -618,8 +598,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
                     sbLogs.append( "\r\n" );
                     sbLogTicket( sbLogs, ticket.getId( ), IndexerAction.TASK_CREATE );
                     indexTicket( indexWriter, ticket );
-                }
-                catch( IOException e )
+                } catch ( IOException e )
                 {
                     throw new TicketIndexerException( e.getMessage( ) );
                 }
@@ -629,8 +608,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         try
         {
             indexWriter.commit( );
-        }
-        catch( IOException e )
+        } catch ( IOException e )
         {
             throw new TicketIndexerException( );
         }
@@ -650,7 +628,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
     {
         sbLogs.append( "Indexing ticket:" );
 
-        switch( nAction )
+        switch ( nAction )
         {
             case IndexerAction.TASK_CREATE:
                 sbLogs.append( "Insert " );
@@ -721,14 +699,14 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             sb.append( ticket.getMobilePhoneNumber( ) ).append( SEPARATOR );
         }
 
-        for ( TicketCategory ticketCategory : ticket.getBranch( ) ) 
+        for ( TicketCategory ticketCategory : ticket.getBranch( ) )
         {
             if ( ticketCategory != null && StringUtils.isNotBlank( ticketCategory.getLabel( ) ) )
             {
                 sb.append( ticketCategory.getLabel( ) ).append( SEPARATOR );
             }
-        }            
-        
+        }
+
         if ( StringUtils.isNotBlank( ticket.getNomenclature( ) ) )
         {
             sb.append( ticket.getNomenclature( ) ).append( SEPARATOR );
@@ -762,8 +740,8 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         if ( WorkflowService.getInstance( ).isAvailable( ) && ticket.getTicketCategory( ) != null )
         {
-            State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, ticket.getTicketCategory( ).getIdWorkflow( ),
-                    null );
+            State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE,
+                    Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) ), null );
 
             if ( state != null && StringUtils.isNotBlank( state.getName( ) ) )
             {

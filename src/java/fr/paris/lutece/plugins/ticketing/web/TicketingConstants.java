@@ -45,31 +45,31 @@ public final class TicketingConstants
     public static final String TEMPLATE_TASKS_FORM_WORKFLOW                                = "admin/plugins/ticketing/workflow/tasks_form_workflow.html";
 
     // Parameters
-    public static final String PARAMETER_ID_TICKET = "id";
-    public static final String PARAMETER_GRU_CUSTOMER_ID = "id_customer";
-    public static final String PARAMETER_CUSTOMER_ID = "cid";
-    public static final String PARAMETER_GUID = "guid";
-    public static final String PARAMETER_WORKFLOW_ID_ACTION = "id_action";
-    public static final String PARAMETER_BACK = "back";
-    public static final String PARAMETER_JSP_CONTROLLER = "jsp";
-    public static final String PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION = "redirect";
-    public static final String PARAMETER_ID_CHANNEL = "id_channel";
-    public static final String PARAMETER_USER_SIGNATURE = "user_signature";
-    public static final String PARAMETER_SELECTABLE_ID_CHANNEL_LIST = "selectable_channels";
-    public static final String PARAMETER_SELECTED_ID_CHANNEL = "selected_channel";
-    public static final String PARAMETER_SIGNATURE = "signature";
-    public static final String PARAMETER_TIMESTAMP = "timestamp";
-    public static final String PARAMETER_FILTER_URGENCY = "fltr_new_urgency";
-    public static final String PARAMETER_FILTER_TYPE_ID = "fltr_id_type";
-    public static final String PARAMETER_FILTER_OPEN_SINCE = "fltr_open_since";
-    public static final String PARAMETER_FILTER_STATE_ID = "fltr_state_ids";
-    public static final String PARAMETER_TICKET_TYPE_ID = "id_ticket_type";
-    public static final String PARAMETER_TICKET_DOMAIN_ID = "id_ticket_domain";
-    public static final String PARAMETER_TICKET_PRECISION_ID = "id_ticket_precision";
-    public static final String PARAMETER_TICKET_CATEGORY_ID = "id_ticket_category";
-    public static final String PARAMETER_SELECTED_TICKETS = "selected_tickets";
-    public static final String PARAMETER_IS_MASS_ACTION = "is_mass_action";
-    public static final String PARAMETER_CATEGORY_ID = "id_category_";
+    public static final String PARAMETER_ID_TICKET                                         = "id";
+    public static final String PARAMETER_GRU_CUSTOMER_ID                                   = "id_customer";
+    public static final String PARAMETER_CUSTOMER_ID                                       = "cid";
+    public static final String PARAMETER_GUID                                              = "guid";
+    public static final String PARAMETER_WORKFLOW_ID_ACTION                                = "id_action";
+    public static final String PARAMETER_BACK                                              = "back";
+    public static final String PARAMETER_JSP_CONTROLLER                                    = "jsp";
+    public static final String PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION                    = "redirect";
+    public static final String PARAMETER_ID_CHANNEL                                        = "id_channel";
+    public static final String PARAMETER_USER_SIGNATURE                                    = "user_signature";
+    public static final String PARAMETER_SELECTABLE_ID_CHANNEL_LIST                        = "selectable_channels";
+    public static final String PARAMETER_SELECTED_ID_CHANNEL                               = "selected_channel";
+    public static final String PARAMETER_SIGNATURE                                         = "signature";
+    public static final String PARAMETER_TIMESTAMP                                         = "timestamp";
+    public static final String PARAMETER_FILTER_URGENCY                                    = "fltr_new_urgency";
+    public static final String PARAMETER_FILTER_TYPE_ID                                    = "fltr_id_type";
+    public static final String PARAMETER_FILTER_OPEN_SINCE                                 = "fltr_open_since";
+    public static final String PARAMETER_FILTER_STATE_ID                                   = "fltr_state_ids";
+    public static final String PARAMETER_TICKET_TYPE_ID                                    = "id_ticket_type";
+    public static final String PARAMETER_TICKET_DOMAIN_ID                                  = "id_ticket_domain";
+    public static final String PARAMETER_TICKET_PRECISION_ID                               = "id_ticket_precision";
+    public static final String PARAMETER_TICKET_CATEGORY_ID                                = "id_ticket_category";
+    public static final String PARAMETER_SELECTED_TICKETS                                  = "selected_tickets";
+    public static final String PARAMETER_IS_MASS_ACTION                                    = "is_mass_action";
+    public static final String PARAMETER_CATEGORY_ID                                       = "id_category_";
 
     // Attributes
     public static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON                             = "hide_next_button";
@@ -118,6 +118,7 @@ public final class TicketingConstants
     public static final String MARK_TICKET_CATEGORIES_DEPTHS = "categories_depths";
 
     // Properties
+    public static final String PROPERTY_POCGRU_URL_360                                     = "ticketing.pocgru.url.360View";
     public static final String PROPERTY_REDIRECT_PREFIX                                    = "ticketing.workflow.redirect.";
     public static final String VALIDATION_ATTRIBUTES_PREFIX                                = "ticketing.model.entity.ticket.attribute.";
     public static final String PROPERTIES_APPLICATION_CODE                                 = "ticketing.application.code";
@@ -126,15 +127,15 @@ public final class TicketingConstants
     public static final String PROPERTIES_ATTRIBUTE_USER_PREFERRED_NAME                    = "ticketing.identity.attribute.user.name.family";
     public static final String PROPERTIES_ATTRIBUTE_USER_HOMEINFO_ONLINE_EMAIL             = "ticketing.identity.attribute.user.home-info.online.email";
     public static final String PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_TELEPHONE_NUMBER = "ticketing.identity.attribute.user.home-info.telecom.telephone.number";
-    public static final String PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_MOBILE_NUMBER = "ticketing.identity.attribute.user.home-info.telecom.mobile.number";
-    public static final String PROPERTIES_CATEGORY_DEPTH_MIN = "ticketing.category.depth.min";
-    public static final String PROPERTIES_CATEGORY_DEPTH_FILTER = "ticketing.category.depth.filter";
-    public static final String PROPERTIES_CATEGORY_DEPTH_RBAC_RESOURCE = "ticketing.category.depth.rbac.resource";
-    public static final String PROPERTIES_DOMAIN_DEPTH = "ticketing.domain.depth";
-    public static final String PROPERTIES_TYPE_DEPTH = "ticketing.type.depth";
-    public static final String PROPERTIES_THEMATIC_DEPTH = "ticketing.thematic.depth";
-    public static final String PROPERTIES_PRECISION_DEPTH = "ticketing.precision.depth";
-    
+    public static final String PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_MOBILE_NUMBER    = "ticketing.identity.attribute.user.home-info.telecom.mobile.number";
+    public static final String PROPERTIES_CATEGORY_DEPTH_MIN                               = "ticketing.category.depth.min";
+    public static final String PROPERTIES_CATEGORY_DEPTH_FILTER                            = "ticketing.category.depth.filter";
+    public static final String PROPERTIES_CATEGORY_DEPTH_RBAC_RESOURCE                     = "ticketing.category.depth.rbac.resource";
+    public static final String PROPERTIES_DOMAIN_DEPTH                                     = "ticketing.domain.depth";
+    public static final String PROPERTIES_TYPE_DEPTH                                       = "ticketing.type.depth";
+    public static final String PROPERTIES_THEMATIC_DEPTH                                   = "ticketing.thematic.depth";
+    public static final String PROPERTIES_PRECISION_DEPTH                                  = "ticketing.precision.depth";
+
     // Session keys
     public static final String SESSION_NOT_VALIDATED_TICKET                                = "ticketing.ticketFormService.notValidatedTicket";
     public static final String SESSION_VALIDATED_TICKET_FORM                               = "ticketing.ticketFormService.validatedTicket";
@@ -154,14 +155,14 @@ public final class TicketingConstants
     public static final String BEAN_ACTION_SERVICE                                         = "workflow.actionService";
 
     // Errors
-    public static final String ERROR_TICKET_CREATION_ABORTED = "ticketing.error.ticket.creation.aborted.backoffice";
-    public static final String ERROR_INDEX_TICKET_FAILED_BACK = "ticketing.error.ticket.indexing.failed.backoffice";
-    public static final String ERROR_INDEX_TICKET_FAILED_FRONT = "ticketing.error.ticket.indexing.failed.frontoffice";
-    public static final String MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED = "ticketing.error.ticketCategory.notSelected";
-    public static final String MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED = "ticketing.error.ticketCategory.precision.notSelected";
-    public static final String MESSAGE_ERROR_TICKET_NOT_EXISTS = "ticketing.error.ticket.notExist";
-    public static final String ERROR_CATEGORY_UNKNOWN = "ticketing.error.category.unknown";
-    public static final String ERROR_CATEGORY_NOT_SELECTED = "ticketing.error.category.notSelected";
+    public static final String ERROR_TICKET_CREATION_ABORTED                               = "ticketing.error.ticket.creation.aborted.backoffice";
+    public static final String ERROR_INDEX_TICKET_FAILED_BACK                              = "ticketing.error.ticket.indexing.failed.backoffice";
+    public static final String ERROR_INDEX_TICKET_FAILED_FRONT                             = "ticketing.error.ticket.indexing.failed.frontoffice";
+    public static final String MESSAGE_ERROR_TICKET_CATEGORY_NOT_SELECTED                  = "ticketing.error.ticketCategory.notSelected";
+    public static final String MESSAGE_ERROR_TICKET_CATEGORY_PRECISION_NOT_SELECTED        = "ticketing.error.ticketCategory.precision.notSelected";
+    public static final String MESSAGE_ERROR_TICKET_NOT_EXISTS                             = "ticketing.error.ticket.notExist";
+    public static final String ERROR_CATEGORY_UNKNOWN                                      = "ticketing.error.category.unknown";
+    public static final String ERROR_CATEGORY_NOT_SELECTED                                 = "ticketing.error.category.notSelected";
 
     // User preferences
     public static final String USER_PREFERENCE_CREATION_DATE_DISPLAY                       = "creationDateDisplay";
@@ -178,10 +179,8 @@ public final class TicketingConstants
     public static final String ATTRIBUTE_IDENTITY_NAME_GIVEN                               = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_NAME_GIVEN );
     public static final String ATTRIBUTE_IDENTITY_NAME_PREFERRED_NAME                      = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_PREFERRED_NAME );
     public static final String ATTRIBUTE_IDENTITY_HOMEINFO_ONLINE_EMAIL                    = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_ONLINE_EMAIL );
-    public static final String ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_TELEPHONE_NUMBER = AppPropertiesService
-            .getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_TELEPHONE_NUMBER );
-    public static final String ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_MOBILE_NUMBER = AppPropertiesService
-            .getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_MOBILE_NUMBER );
+    public static final String ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_TELEPHONE_NUMBER        = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_TELEPHONE_NUMBER );
+    public static final String ATTRIBUTE_IDENTITY_HOMEINFO_TELECOM_MOBILE_NUMBER           = AppPropertiesService.getProperty( PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_MOBILE_NUMBER );
 
     // FIXME : the application code must be provided by the caller
     public static final String APPLICATION_CODE                                            = AppPropertiesService.getProperty( PROPERTIES_APPLICATION_CODE );
@@ -216,17 +215,19 @@ public final class TicketingConstants
     public static final int    DEFAULT_MARKING                                             = 0;
     public static final String MESSAGE_MARK                                                = "<!-- MESSAGE-IN-WORKFLOW -->";
 
-    public static final int CATEGORY_DEPTH = 3;
-    public static final int PRECISION_DEPTH = 4;
+    public static final int    CATEGORY_DEPTH                                              = 3;
+    public static final int    PRECISION_DEPTH                                             = 4;
 
-    public static final int CATEGORY_DEPTH_MIN = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_CATEGORY_DEPTH_MIN ) );
-    public static final int CATEGORY_DEPTH_FILTER = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_CATEGORY_DEPTH_FILTER ) );
-    public static final int CATEGORY_DEPTH_RBAC_RESOURCE = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_CATEGORY_DEPTH_RBAC_RESOURCE ) );
-    public static final int TYPE_DEPTH = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_TYPE_DEPTH ) );
-    public static final int DOMAIN_DEPTH = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_DOMAIN_DEPTH ) );
-    public static final int THEMATIC_DEPTH = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_THEMATIC_DEPTH ) );
-    
-    
+    public static final int    CATEGORY_DEPTH_MIN                                          = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_CATEGORY_DEPTH_MIN ) );
+    public static final int    CATEGORY_DEPTH_FILTER                                       = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_CATEGORY_DEPTH_FILTER ) );
+    public static final int    CATEGORY_DEPTH_RBAC_RESOURCE                                = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_CATEGORY_DEPTH_RBAC_RESOURCE ) );
+    public static final int    TYPE_DEPTH                                                  = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_TYPE_DEPTH ) );
+    public static final int    DOMAIN_DEPTH                                                = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_DOMAIN_DEPTH ) );
+    public static final int    THEMATIC_DEPTH                                              = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_THEMATIC_DEPTH ) );
+
+    public static final String PROPERTY_GLOBAL_WORKFLOW_ID                                 = "ticketing.configuration.global_workflow_id";
+    public static final String DEFAULT_GLOBAL_WORKFLOW_ID                                  = "1";
+
     /**
      * Default constructor
      */

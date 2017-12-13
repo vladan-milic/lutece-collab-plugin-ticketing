@@ -33,7 +33,10 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.category;
 
-import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
@@ -43,20 +46,17 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.categoryinputs.TicketCategoryInputsHome;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.util.ReferenceList;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 public class TicketCategoryService
 {
 
-    private final String KEY_DEFAULT_CATEGORY_TYPE_LABEL = "ticketing.create_categorytype.default.label";
-    private static TicketCategoryTree _treeCategories;
+    private final String                 KEY_DEFAULT_CATEGORY_TYPE_LABEL = "ticketing.create_categorytype.default.label";
+    private static TicketCategoryTree    _treeCategories;
 
     private static TicketCategoryService _instance;
 
@@ -171,13 +171,11 @@ public class TicketCategoryService
                 newCategoryType.setLabel( I18nService.getLocalizedString( KEY_DEFAULT_CATEGORY_TYPE_LABEL, Locale.getDefault( ) ) );
                 TicketCategoryTypeHome.create( newCategoryType );
                 subCategory.setCategoryType( newCategoryType );
-            }
-            else
+            } else
             {
                 subCategory.setCategoryType( childCategoryType );
             }
-        }
-        else
+        } else
         {
             // Try to get child category type
             TicketCategory parentCategory = subCategory.getParent( );
@@ -191,14 +189,11 @@ public class TicketCategoryService
                 newCategoryType.setLabel( I18nService.getLocalizedString( KEY_DEFAULT_CATEGORY_TYPE_LABEL, Locale.getDefault( ) ) );
                 TicketCategoryTypeHome.create( newCategoryType );
                 subCategory.setCategoryType( newCategoryType );
-            }
-            else
+            } else
             {
                 subCategory.setCategoryType( childCategoryType );
             }
         }
-        // TODO : temporary, remove when removing idWorkflow from TicketCategory
-        subCategory.setIdWorkflow( 301 );
         TicketCategoryHome.create( subCategory );
         TicketCategoryTreeCacheService.getInstance( ).reloadResource( );
 
@@ -208,14 +203,14 @@ public class TicketCategoryService
     /**
      * Remove the category
      * 
-     * @param id category
-     *            the id of the category to remove
+     * @param id
+     *            category the id of the category to remove
      */
     public void removeCategory( int nIdCategory )
     {
         TicketCategoryInputsHome.removeAllLinksCategoryInput( nIdCategory );
         TicketCategoryHome.remove( nIdCategory );
-        
+
         TicketCategoryTreeCacheService.getInstance( ).reloadResource( );
     }
 
@@ -234,15 +229,15 @@ public class TicketCategoryService
     /**
      * Update order the category
      * 
-     * @param id category
-     *            the id of the category to order
+     * @param id
+     *            category the id of the category to order
      */
     public void updateCategoryOrder( int nIdCategory, boolean bMoveUp )
     {
         TicketCategoryHome.updateCategoryOrder( nIdCategory, bMoveUp );
         TicketCategoryTreeCacheService.getInstance( ).reloadResource( );
     }
-    
+
     /**
      * Create the category type
      * 
@@ -258,15 +253,16 @@ public class TicketCategoryService
     /**
      * Remove the category type
      * 
-     * @param id category type
-     *            the id of the category type to remove
+     * @param id
+     *            category type the id of the category type to remove
      */
     public void removeCategoryTypeAndSubType( int nIdCategoryType )
     {
         List<TicketCategoryType> listType = TicketCategoryTypeHome.getCategoryTypesList( );
         TicketCategoryType ticketCategoryType = TicketCategoryTypeHome.findByPrimaryKey( nIdCategoryType );
-        
-        listType.stream( ).filter( ( type ) -> ( type.getDepthNumber( ) >= ticketCategoryType.getDepthNumber( ) ) ).forEach( ( type ) -> {
+
+        listType.stream( ).filter( ( type ) -> ( type.getDepthNumber( ) >= ticketCategoryType.getDepthNumber( ) ) ).forEach( ( type ) ->
+        {
             TicketCategoryTypeHome.remove( type.getId( ) );
         } );
 
@@ -288,8 +284,10 @@ public class TicketCategoryService
     /**
      * Create the link of category input
      * 
-     * @param nIdCategory id ticket category
-     * @param nIdInput id input
+     * @param nIdCategory
+     *            id ticket category
+     * @param nIdInput
+     *            id input
      */
     public void createLinkCategoryInput( int nIdCategory, int nIdInput )
     {
@@ -300,8 +298,10 @@ public class TicketCategoryService
     /**
      * Remove the link of category input
      * 
-     * @param nIdCategory id ticket category
-     * @param nIdInput id input
+     * @param nIdCategory
+     *            id ticket category
+     * @param nIdInput
+     *            id input
      */
     public void removeLinkCategoryInput( int nIdCategory, int nIdInput )
     {
@@ -309,7 +309,7 @@ public class TicketCategoryService
         reorganizeCategoryInputs( nIdCategory );
         TicketCategoryTreeCacheService.getInstance( ).reloadResource( );
     }
-    
+
     /**
      * Update the inputs within a given category with consecutive position indexes
      *
@@ -332,9 +332,12 @@ public class TicketCategoryService
     /**
      * Update the category input position
      * 
-     * @param nIdCategory id ticket category
-     * @param nIdInput id input
-     * @param bMoveUp boolean true if up otherwise false
+     * @param nIdCategory
+     *            id ticket category
+     * @param nIdInput
+     *            id input
+     * @param bMoveUp
+     *            boolean true if up otherwise false
      */
     public void updateCategoryInputPosition( int nIdCategory, int nIdInput, boolean bMoveUp )
     {
@@ -362,20 +365,21 @@ public class TicketCategoryService
     {
         return _treeCategories.getBranch( category );
     }
-    
+
     /**
      * Get the branch of a category id (from root to category)
      * 
-     * @param category id
+     * @param category
+     *            id
      * @return the branch of categories from root to category
      */
     public List<TicketCategory> getBranchOfCategoryId( int nId )
     {
         return _treeCategories.getBranch( findCategoryById( nId ) );
     }
-    
+
     /**
-     * Get the category list corresponding to the depth 
+     * Get the category list corresponding to the depth
      * 
      * @param depth
      * @return the category list
@@ -395,118 +399,123 @@ public class TicketCategoryService
     public ReferenceList getReferenceList( List<TicketCategory> ticketCategoryList )
     {
         ReferenceList list = new ReferenceList( );
-        
-        ticketCategoryList.forEach(ticketCategory -> list.addItem( ticketCategory.getId( ), ticketCategory.getLabel( ) ));
+
+        ticketCategoryList.forEach( ticketCategory -> list.addItem( ticketCategory.getId( ), ticketCategory.getLabel( ) ) );
 
         return list;
     }
-    
+
     /**
      * Check if given category is Authorized for given user and given permission
+     * 
      * @param category
      * @param strPermission
      * @param user
      * @return true if authorized, false otherwise
      */
-    public static boolean isAutorized( TicketCategory category, String strPermission,  AdminUser user )
+    public static boolean isAutorized( TicketCategory category, String strPermission, AdminUser user )
     {
-        List<TicketCategory> listCategory = TicketCategoryService.getInstance( ).getBranchOfCategory(TicketCategoryService.getInstance( ).findCategoryById( category.getId( ) ) );
-            for ( TicketCategory categoryBranch : listCategory )
+        List<TicketCategory> listCategory = TicketCategoryService.getInstance( ).getBranchOfCategory( TicketCategoryService.getInstance( ).findCategoryById( category.getId( ) ) );
+        for ( TicketCategory categoryBranch : listCategory )
+        {
+            if ( RBACService.isAuthorized( categoryBranch, strPermission, user ) )
             {
-                if ( RBACService.isAuthorized( categoryBranch, strPermission, user ) )
-                {
-                    return true;
-                }
+                return true;
             }
+        }
         return false;
     }
 
     /**
      * Check if the given category type is not referenced in category
+     * 
      * @param nIdCategoryType
      * @return true if referenced, false otherwise
      */
     public boolean isCategoryTypeNotReferenced( int nIdCategoryType )
     {
-        return TicketCategoryTreeCacheService.getInstance( ).getResource( ).getListNodesOfDepth( TicketCategoryTypeHome.findByPrimaryKey( nIdCategoryType ) ).size( ) == 0 ;
+        return TicketCategoryTreeCacheService.getInstance( ).getResource( ).getListNodesOfDepth( TicketCategoryTypeHome.findByPrimaryKey( nIdCategoryType ) ).size( ) == 0;
     }
-    
-    
+
     ////////
     // FOR TICKETING DOMAIN/TYPE/CATEGORY
-    
+
     /**
      * Return the ticket type
-     * @param ticketCategory the category of a ticket
+     * 
+     * @param ticketCategory
+     *            the category of a ticket
      * @return the type of a ticket
      */
     public TicketCategory getType( TicketCategory ticketCategory )
     {
         try
         {
-           TicketCategory typeCategory = ticketCategory.getBranch( ).get( TicketingConstants.TYPE_DEPTH - 1); 
-           return typeCategory;
-        }
-        catch ( IndexOutOfBoundsException e )
+            TicketCategory typeCategory = ticketCategory.getBranch( ).get( TicketingConstants.TYPE_DEPTH - 1 );
+            return typeCategory;
+        } catch ( IndexOutOfBoundsException e )
         {
             return null;
         }
     }
-    
+
     /**
      * Return the ticket domain
-     * @param ticketCategory the category of a ticket
+     * 
+     * @param ticketCategory
+     *            the category of a ticket
      * @return the ticket domain
      */
     public TicketCategory getDomain( TicketCategory ticketCategory )
     {
         try
         {
-           TicketCategory domainCategory = ticketCategory.getBranch( ).get( TicketingConstants.DOMAIN_DEPTH - 1 ); 
-           return domainCategory;
-        }
-        catch ( IndexOutOfBoundsException e )
+            TicketCategory domainCategory = ticketCategory.getBranch( ).get( TicketingConstants.DOMAIN_DEPTH - 1 );
+            return domainCategory;
+        } catch ( IndexOutOfBoundsException e )
         {
             return null;
         }
     }
-    
+
     /**
      * Return the ticket thematic
-     * @param ticketCategory the thematic of a ticket
+     * 
+     * @param ticketCategory
+     *            the thematic of a ticket
      * @return the thematic of a ticket
      */
     public TicketCategory getThematic( TicketCategory ticketCategory )
     {
         try
         {
-           TicketCategory categoryCategory = ticketCategory.getBranch( ).get( TicketingConstants.THEMATIC_DEPTH - 1 ); 
-           return categoryCategory;
-        }
-        catch ( IndexOutOfBoundsException e )
+            TicketCategory categoryCategory = ticketCategory.getBranch( ).get( TicketingConstants.THEMATIC_DEPTH - 1 );
+            return categoryCategory;
+        } catch ( IndexOutOfBoundsException e )
         {
             return null;
         }
     }
-    
+
     /**
      * Return the ticket category precision
-     * @param ticketCategory the category precision of a ticket
+     * 
+     * @param ticketCategory
+     *            the category precision of a ticket
      * @return the ticket category precision
      */
     public TicketCategory getPrecision( TicketCategory ticketCategory )
     {
         try
         {
-           TicketCategory precisionCategory = ticketCategory.getBranch( ).get( TicketingConstants.PRECISION_DEPTH - 1 ); 
-           return precisionCategory;
-        }
-        catch ( IndexOutOfBoundsException e )
+            TicketCategory precisionCategory = ticketCategory.getBranch( ).get( TicketingConstants.PRECISION_DEPTH - 1 );
+            return precisionCategory;
+        } catch ( IndexOutOfBoundsException e )
         {
             return null;
         }
     }
-    
+
     /**
      * Get the children category list corresponding to the category and allowed for an admin user according to RBAC provided permission
      * 
@@ -529,7 +538,7 @@ public class TicketCategoryService
                 listAuthorizedCategories.add( category );
             }
         }
-        
+
         return listAuthorizedCategories;
     }
 
@@ -546,7 +555,7 @@ public class TicketCategoryService
     public List<TicketCategory> getAuthorizedCategoryList( int nDepth, AdminUser adminUser, String strPermission )
     {
         List<TicketCategory> listCategories = _treeCategories.getListNodesOfDepth( TicketCategoryTypeService.getInstance( ).findByDepthNumber( nDepth ) );
-        List<TicketCategory> listAuthorizedCategories = new ArrayList<TicketCategory>();
+        List<TicketCategory> listAuthorizedCategories = new ArrayList<TicketCategory>( );
 
         for ( TicketCategory category : listCategories )
         {
@@ -555,7 +564,7 @@ public class TicketCategoryService
                 listAuthorizedCategories.add( category );
             }
         }
-        
+
         return listAuthorizedCategories;
     }
 
@@ -599,8 +608,7 @@ public class TicketCategoryService
     }
 
     /**
-     * Build item present in the inputs list combo for each input with the input title and the input type. Except for type comment having not title. For it, the
-     * item combo is build with the technical id
+     * Build item present in the inputs list combo for each input with the input title and the input type. Except for type comment having not title. For it, the item combo is build with the technical id
      *
      * @param entry
      *            The current entry
@@ -613,8 +621,7 @@ public class TicketCategoryService
         if ( entry.getEntryType( ).getComment( ) )
         {
             itemComboInput = new StringBuilder( entry.getCode( ) );
-        }
-        else
+        } else
         {
             itemComboInput = new StringBuilder( entry.getTitle( ) );
         }
@@ -656,9 +663,9 @@ public class TicketCategoryService
 
         return listEntry;
     }
- 
+
     /**
-     * Get the type list 
+     * Get the type list
      * 
      * @return the type list
      */
@@ -668,7 +675,7 @@ public class TicketCategoryService
     }
 
     /**
-     * Get the domain list 
+     * Get the domain list
      * 
      * @return the domain list
      */
@@ -688,7 +695,7 @@ public class TicketCategoryService
      */
     public List<TicketCategory> getAuthorizedDomainsList( AdminUser adminUser, String strPermission )
     {
-        
+
         List<TicketCategory> listDomain = getDomainList( );
         List<TicketCategory> listAuthorizedDomain = new ArrayList<TicketCategory>( );
         for ( TicketCategory domain : listDomain )
@@ -701,20 +708,20 @@ public class TicketCategoryService
 
         return listAuthorizedDomain;
     }
-    
+
     /**
-     * Get the branch label of the category 
+     * Get the branch label of the category
      * 
      * @param category
      *            admin user
      * @return the branch label
      */
-    public String getBranchLabel( TicketCategory category, String separator)
+    public String getBranchLabel( TicketCategory category, String separator )
     {
         List<TicketCategory> branch = _treeCategories.getBranch( category );
         StringBuilder branchLabel = new StringBuilder( );
         branch.stream( ).forEach( ( node ) -> branchLabel.append( node.getLabel( ) ).append( separator ) );
-        
+
         return branchLabel.substring( 0, branchLabel.length( ) - separator.length( ) );
     }
 
@@ -727,10 +734,9 @@ public class TicketCategoryService
     {
         try
         {
-           TicketCategory ticketCategoryRBACResource = ticketCategory.getBranch( ).get( TicketingConstants.CATEGORY_DEPTH_RBAC_RESOURCE - 1 ); 
-           return ticketCategoryRBACResource;
-        }
-        catch ( IndexOutOfBoundsException e )
+            TicketCategory ticketCategoryRBACResource = ticketCategory.getBranch( ).get( TicketingConstants.CATEGORY_DEPTH_RBAC_RESOURCE - 1 );
+            return ticketCategoryRBACResource;
+        } catch ( IndexOutOfBoundsException e )
         {
             return null;
         }
