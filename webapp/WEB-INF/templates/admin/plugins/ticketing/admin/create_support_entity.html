@@ -6,9 +6,27 @@
   <@messages errors=errors />
   <input type="hidden" id="id" name="id">
   <@fieldInputText i18nLabelKey="ticketing.create_supportentity.labelName" inputName="name" mandatory=true value="${supportentity.name!''}" i18nHelpBlockKey="ticketing.create_supportentity.labelName.help" />
-	<@fieldInputCombo i18nLabelKey="ticketing.create_supportentity.labelLevel" inputName="level" mandatory=true  items=level_list value="" i18nHelpBlockKey="ticketing.create_supportentity.labelLevel.help" cssClass='' />
-  <@fieldInputCombo i18nLabelKey="ticketing.create_supportentity.labelUnit" inputName="id_unit" mandatory=true items=unit_list value="" i18nHelpBlockKey="ticketing.create_supportentity.labelUnit.help" cssClass='' />
-  <@fieldInputCombo i18nLabelKey="ticketing.create_supportentity.labelTicketDomain" inputName="id_ticket_domain" items=ticket_domains_list value="" i18nHelpBlockKey="ticketing.create_supportentity.labelTicketDomain.help" cssClass='' />
+  <@fieldInputCombo i18nLabelKey="ticketing.create_supportentity.labelLevel" inputName="level" mandatory=true  items=level_list value="" i18nHelpBlockKey="ticketing.create_supportentity.labelLevel.help" cssClass='form-control' />
+  <@fieldInputCombo i18nLabelKey="ticketing.create_supportentity.labelUnit" inputName="id_unit" mandatory=true items=unit_list value="" i18nHelpBlockKey="ticketing.create_supportentity.labelUnit.help" cssClass='form-control' />
+  
+   <#list categories_depths as depth>
+       <div class="form-group">
+         <label for="id_category_${depth.depthNumber}" class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label">${depth.label} :</label>
+         <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+	         <@comboWithParams name="id_category_${depth.depthNumber}" default_value="" additionalParameters=" id=\"id_category_${depth.depthNumber}\" depth=\"${depth.depthNumber}\" class=\"form-control\" " items=[] />
+	         <span class="help-block" id="help_message_${depth.depthNumber}"></span>
+         </div>
+       </div>
+   </#list>
+  
   <@actionButtons button1Name="action_createSupportEntity" button2Name="view_manageSupportEntities"/>
   </form>
 </@tabsWrapper>
+
+<script src="js/plugins/ticketing/ticket_tree.js"></script>
+<script language="javascript">
+    var url = "jsp/admin/plugins/ticketing/Standalone.jsp?view=ticketForm";
+    $(function() {
+        lutece_ticket_tree(${supportentity.branchJSONObject}, ${categories_tree}, url, true);
+    });
+</script>

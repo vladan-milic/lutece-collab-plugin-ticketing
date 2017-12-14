@@ -33,10 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.supportentity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
@@ -44,21 +47,18 @@ import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * This class provides Data Access methods for SupportEntity objects
  */
 public final class SupportEntityDAO implements ISupportEntityDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_support_entity ) FROM ticketing_support_entity";
-    private static final String SQL_QUERY_SELECT = "SELECT a.id_support_entity, a.name, a.level, a.id_unit, a.id_admin_user, a.id_domain  FROM ticketing_support_entity a "
+    private static final String SQL_QUERY_NEW_PK    = "SELECT max( id_support_entity ) FROM ticketing_support_entity";
+    private static final String SQL_QUERY_SELECT    = "SELECT a.id_support_entity, a.name, a.level, a.id_unit, a.id_admin_user, a.id_domain  FROM ticketing_support_entity a "
             + " WHERE a.id_support_entity = ? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_support_entity ( id_support_entity, name, level, id_unit, id_admin_user, id_domain ) VALUES ( ?, ?, ?, ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_support_entity  WHERE id_support_entity = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_support_entity SET id_support_entity = ?,  name = ?, level = ?, id_unit = ?, id_admin_user = ?, id_domain = ?  WHERE id_support_entity = ?";
+    private static final String SQL_QUERY_INSERT    = "INSERT INTO ticketing_support_entity ( id_support_entity, name, level, id_unit, id_admin_user, id_domain ) VALUES ( ?, ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE    = "DELETE FROM ticketing_support_entity  WHERE id_support_entity = ? ";
+    private static final String SQL_QUERY_UPDATE    = "UPDATE ticketing_support_entity SET id_support_entity = ?,  name = ?, level = ?, id_unit = ?, id_admin_user = ?, id_domain = ?  WHERE id_support_entity = ?";
     private static final String SQL_QUERY_SELECTALL = "SELECT a.id_support_entity, a.name, a.level, a.id_unit, a.id_admin_user, a.id_domain  FROM ticketing_support_entity a ";
 
     /**
@@ -99,7 +99,7 @@ public final class SupportEntityDAO implements ISupportEntityDAO
         daoUtil.setInt( 3, supportEntity.getSupportLevel( ).getLevelValue( ) );
         daoUtil.setInt( 4, ( supportEntity.getUnit( ) != null ) ? supportEntity.getUnit( ).getUnitId( ) : ( -1 ) );
         daoUtil.setInt( 5, ( supportEntity.getUser( ) != null ) ? supportEntity.getUser( ).getAdminUserId( ) : ( -1 ) );
-        daoUtil.setInt( 6, ( supportEntity.getTicketDomain( )!= null ) ? supportEntity.getTicketDomain( ).getId( ) : ( -1 ) );
+        daoUtil.setInt( 6, ( supportEntity.getTicketDomain( ) != null ) ? supportEntity.getTicketDomain( ).getId( ) : ( -1 ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -151,7 +151,7 @@ public final class SupportEntityDAO implements ISupportEntityDAO
         daoUtil.setInt( 3, supportEntity.getSupportLevel( ).getLevelValue( ) );
         daoUtil.setInt( 4, ( supportEntity.getUnit( ) != null ) ? supportEntity.getUnit( ).getUnitId( ) : ( -1 ) );
         daoUtil.setInt( 5, ( supportEntity.getUser( ) != null ) ? supportEntity.getUser( ).getAdminUserId( ) : ( -1 ) );
-        daoUtil.setInt( 6, ( supportEntity.getTicketDomain( )!= null ) ? supportEntity.getTicketDomain( ).getId( ) : ( -1 ) );
+        daoUtil.setInt( 6, ( supportEntity.getTicketDomain( ) != null ) ? supportEntity.getTicketDomain( ).getId( ) : ( -1 ) );
         daoUtil.setInt( 7, supportEntity.getId( ) );
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -206,7 +206,7 @@ public final class SupportEntityDAO implements ISupportEntityDAO
             supportEntity.setUser( new AssigneeUser( adminUser ) );
         }
 
-        TicketCategory ticketDomain = TicketCategoryHome.findByPrimaryKey( daoUtil.getInt( 6 ) );
+        TicketCategory ticketDomain = TicketCategoryService.getInstance( ).findCategoryById( daoUtil.getInt( 6 ) );
 
         if ( ticketDomain != null )
         {

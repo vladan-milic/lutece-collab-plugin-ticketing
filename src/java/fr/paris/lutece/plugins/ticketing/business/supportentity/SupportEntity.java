@@ -33,15 +33,19 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.supportentity;
 
-import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
-import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.portal.service.rbac.RBACResource;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
+import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
+import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
+import fr.paris.lutece.portal.service.rbac.RBACResource;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * SupportEntity
@@ -52,15 +56,17 @@ public class SupportEntity implements RBACResource
     public static final String RESOURCE_TYPE = "SUPPORT_ENTITY";
 
     // Variables declarations
-    private int _nId;
-    private AssigneeUser _user;
+    private int                _nId;
+    private AssigneeUser       _user;
     @NotNull( message = "#i18n{ticketing.validation.supportentity.unit.notNull}" )
-    private AssigneeUnit _unit;
-    private TicketCategory _ticketDomain;
+    private AssigneeUnit       _unit;
+
+    // Can actually be any category
+    private TicketCategory     _ticketDomain;
     @NotEmpty( message = "#i18n{ticketing.validation.supportentity.name.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.supportentity.name.size}" )
-    private String _strName;
-    private SupportLevel _supportLevel;
+    private String             _strName;
+    private SupportLevel       _supportLevel;
 
     /**
      * Returns the Id
@@ -183,4 +189,30 @@ public class SupportEntity implements RBACResource
     {
         return RESOURCE_TYPE;
     }
+
+    public void setTicketCategory( TicketCategory ticketCategory )
+    {
+        this._ticketDomain = ticketCategory;
+    }
+
+    /**
+     * Get a JSON Object of the branch
+     * 
+     * @return the JSON Object of the branch
+     */
+    public String getBranchJSONObject( )
+    {
+        JSONArray jsonBranchCategories = new JSONArray( );
+
+        for ( TicketCategory ticketCategory : TicketCategoryService.getInstance( ).getCategoriesTree( ).getBranch( _ticketDomain ) )
+        {
+            JSONObject jsonTicketCategory = new JSONObject( );
+            jsonTicketCategory.accumulate( FormatConstants.KEY_ID, ticketCategory.getId( ) );
+            jsonTicketCategory.accumulate( FormatConstants.KEY_DEPTH_NUMBER, ticketCategory.getDepth( ).getDepthNumber( ) );
+            jsonBranchCategories.add( jsonTicketCategory );
+        }
+
+        return jsonBranchCategories.toString( );
+    }
+
 }

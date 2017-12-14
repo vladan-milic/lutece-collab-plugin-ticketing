@@ -33,6 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.supportentity.SupportEntity;
@@ -40,6 +47,8 @@ import fr.paris.lutece.plugins.ticketing.business.supportentity.SupportEntityHom
 import fr.paris.lutece.plugins.ticketing.business.supportentity.SupportLevel;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidator;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidatorResult;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -48,13 +57,6 @@ import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.url.UrlItem;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * This class provides the user interface to manage SupportEntity features ( manage, create, modify, remove )
@@ -66,49 +68,49 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_SUPPORT_ENTITIES = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_support_entities.html";
-    private static final String TEMPLATE_CREATE_SUPPORT_ENTITY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_support_entity.html";
-    private static final String TEMPLATE_MODIFY_SUPPORT_ENTITY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_support_entity.html";
+    private static final String     TEMPLATE_MANAGE_SUPPORT_ENTITIES            = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_support_entities.html";
+    private static final String     TEMPLATE_CREATE_SUPPORT_ENTITY              = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_support_entity.html";
+    private static final String     TEMPLATE_MODIFY_SUPPORT_ENTITY              = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_support_entity.html";
 
     // Parameters
-    private static final String PARAMETER_ID_SUPPORT_ENTITY = "id";
-    private static final String PARAMETER_ID_TICKET_DOMAIN = "id_ticket_domain";
-    private static final String PARAMETER_ID_UNIT = "id_unit";
-    private static final String PARAMETER_LEVEL = "level";
+    private static final String     PARAMETER_ID_SUPPORT_ENTITY                 = "id";
+    private static final String     PARAMETER_ID_TICKET_DOMAIN                  = "id_ticket_domain";
+    private static final String     PARAMETER_ID_UNIT                           = "id_unit";
+    private static final String     PARAMETER_LEVEL                             = "level";
 
     // Properties for page titles
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_SUPPORT_ENTITIES = "ticketing.manage_supportentities.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_SUPPORT_ENTITY = "ticketing.modify_supportentity.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_SUPPORT_ENTITY = "ticketing.create_supportentity.pageTitle";
+    private static final String     PROPERTY_PAGE_TITLE_MANAGE_SUPPORT_ENTITIES = "ticketing.manage_supportentities.pageTitle";
+    private static final String     PROPERTY_PAGE_TITLE_MODIFY_SUPPORT_ENTITY   = "ticketing.modify_supportentity.pageTitle";
+    private static final String     PROPERTY_PAGE_TITLE_CREATE_SUPPORT_ENTITY   = "ticketing.create_supportentity.pageTitle";
 
     // Markers
-    private static final String MARK_SUPPORT_ENTITY_LIST = "supportentity_list";
-    private static final String MARK_SUPPORT_ENTITY = "supportentity";
-    private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
-    private static final String MARK_UNIT_LIST = "unit_list";
-    private static final String MARK_LEVEL_LIST = "level_list";
-    private static final String JSP_MANAGE_SUPPORT_ENTITIES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageSupportEntities.jsp";
+    private static final String     MARK_SUPPORT_ENTITY_LIST                    = "supportentity_list";
+    private static final String     MARK_SUPPORT_ENTITY                         = "supportentity";
+    private static final String     MARK_TICKET_DOMAINS_LIST                    = "ticket_domains_list";
+    private static final String     MARK_UNIT_LIST                              = "unit_list";
+    private static final String     MARK_LEVEL_LIST                             = "level_list";
+    private static final String     JSP_MANAGE_SUPPORT_ENTITIES                 = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageSupportEntities.jsp";
 
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_SUPPORT_ENTITY = "ticketing.message.confirmRemoveSupportEntity";
-    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.supportentity.attribute.";
+    private static final String     MESSAGE_CONFIRM_REMOVE_SUPPORT_ENTITY       = "ticketing.message.confirmRemoveSupportEntity";
+    private static final String     VALIDATION_ATTRIBUTES_PREFIX                = "ticketing.model.entity.supportentity.attribute.";
 
     // Views
-    private static final String VIEW_MANAGE_SUPPORT_ENTITIES = "manageSupportEntities";
-    private static final String VIEW_CREATE_SUPPORT_ENTITY = "createSupportEntity";
-    private static final String VIEW_MODIFY_SUPPORT_ENTITY = "modifySupportEntity";
+    private static final String     VIEW_MANAGE_SUPPORT_ENTITIES                = "manageSupportEntities";
+    private static final String     VIEW_CREATE_SUPPORT_ENTITY                  = "createSupportEntity";
+    private static final String     VIEW_MODIFY_SUPPORT_ENTITY                  = "modifySupportEntity";
 
     // Actions
-    private static final String ACTION_CREATE_SUPPORT_ENTITY = "createSupportEntity";
-    private static final String ACTION_MODIFY_SUPPORT_ENTITY = "modifySupportEntity";
-    private static final String ACTION_REMOVE_SUPPORT_ENTITY = "removeSupportEntity";
-    private static final String ACTION_CONFIRM_REMOVE_SUPPORT_ENTITY = "confirmRemoveSupportEntity";
+    private static final String     ACTION_CREATE_SUPPORT_ENTITY                = "createSupportEntity";
+    private static final String     ACTION_MODIFY_SUPPORT_ENTITY                = "modifySupportEntity";
+    private static final String     ACTION_REMOVE_SUPPORT_ENTITY                = "removeSupportEntity";
+    private static final String     ACTION_CONFIRM_REMOVE_SUPPORT_ENTITY        = "confirmRemoveSupportEntity";
 
     // Infos
-    private static final String INFO_SUPPORT_ENTITY_CREATED = "ticketing.info.supportentity.created";
-    private static final String INFO_SUPPORT_ENTITY_UPDATED = "ticketing.info.supportentity.updated";
-    private static final String INFO_SUPPORT_ENTITY_REMOVED = "ticketing.info.supportentity.removed";
-    private static final long serialVersionUID = 1L;
+    private static final String     INFO_SUPPORT_ENTITY_CREATED                 = "ticketing.info.supportentity.created";
+    private static final String     INFO_SUPPORT_ENTITY_UPDATED                 = "ticketing.info.supportentity.updated";
+    private static final String     INFO_SUPPORT_ENTITY_REMOVED                 = "ticketing.info.supportentity.removed";
+    private static final long       serialVersionUID                            = 1L;
 
     // Session variable to store working values
     private transient SupportEntity _supportEntity;
@@ -125,7 +127,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     {
         _supportEntity = null;
 
-        List<SupportEntity> listSupportEntities = (List<SupportEntity>) SupportEntityHome.getSupportEntityList( );
+        List<SupportEntity> listSupportEntities = ( List<SupportEntity> ) SupportEntityHome.getSupportEntityList( );
         Map<String, Object> model = getPaginatedListModel( request, MARK_SUPPORT_ENTITY_LIST, listSupportEntities, JSP_MANAGE_SUPPORT_ENTITIES );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_SUPPORT_ENTITIES, TEMPLATE_MANAGE_SUPPORT_ENTITIES, model );
@@ -145,7 +147,8 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_SUPPORT_ENTITY, _supportEntity );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketCategoryService.getInstance( ).getReferenceList( TicketCategoryService.getInstance( ).getDomainList( ) ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
         model.put( MARK_LEVEL_LIST, SupportLevel.getReferenceList( request.getLocale( ) ) );
         model.put( MARK_UNIT_LIST, getUnitsList( ) );
 
@@ -163,6 +166,14 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     public String doCreateSupportEntity( HttpServletRequest request )
     {
         populate( _supportEntity, request );
+
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( );
+        TicketCategory ticketCategory = categoryValidatorResult.getTicketCategory( );
+        if ( ticketCategory == null )
+        {
+            ticketCategory = categoryValidatorResult.getTicketCategoryParent( );
+        }
+        _supportEntity.setTicketCategory( ticketCategory );
 
         // Check constraints
         if ( !validateBean( _supportEntity, VALIDATION_ATTRIBUTES_PREFIX ) )
@@ -224,8 +235,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_SUPPORT_ENTITY ) );
         url.addParameter( PARAMETER_ID_SUPPORT_ENTITY, nId );
 
-        String strMessageUrl = AdminMessageService
-                .getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_SUPPORT_ENTITY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
+        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_SUPPORT_ENTITY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
     }
@@ -266,7 +276,8 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_SUPPORT_ENTITY, _supportEntity );
-        model.put( MARK_TICKET_DOMAINS_LIST, TicketCategoryService.getInstance( ).getReferenceList( TicketCategoryService.getInstance( ).getDomainList( ) ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
         model.put( MARK_LEVEL_LIST, SupportLevel.getReferenceList( request.getLocale( ) ) );
         model.put( MARK_UNIT_LIST, getUnitsList( ) );
 
@@ -284,6 +295,14 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     public String doModifySupportEntity( HttpServletRequest request )
     {
         populate( _supportEntity, request );
+
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( );
+        TicketCategory ticketCategory = categoryValidatorResult.getTicketCategory( );
+        if ( ticketCategory == null )
+        {
+            ticketCategory = categoryValidatorResult.getTicketCategoryParent( );
+        }
+        _supportEntity.setTicketCategory( ticketCategory );
 
         // Check constraints
         if ( !validateBean( _supportEntity, VALIDATION_ATTRIBUTES_PREFIX ) )

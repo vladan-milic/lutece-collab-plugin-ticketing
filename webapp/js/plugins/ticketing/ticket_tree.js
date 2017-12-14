@@ -1,5 +1,5 @@
 // Turns the combos identified by the jquery selectors into dynamic combos
-function lutece_ticket_tree(branch, categories_tree, url) {
+function lutece_ticket_tree(branch, categories_tree, url, allowNullSelection) {
 
 	var categories_depths = categories_tree.categories_depths;
 	var arraySelectedCategoryId = new Array();
@@ -17,7 +17,7 @@ function lutece_ticket_tree(branch, categories_tree, url) {
 		{
 			var selector = "#id_category_" + depthNumber;
 			arraySelectedCategoryId[depthNumber] = branch[i].id;
-			loadCombo(selector, categories, undefined, branch[i].id);
+			loadCombo(selector, categories, allowNullSelection?categories_depths[depthNumber-1]:undefined, branch[i].id, allowNullSelection);
 			loadGenericAttributesForm(url, false, selector, true);
 //			loadHelpMessage("#help_message_" + depthNumber, categories);
 			var index = getIndex(categories, arraySelectedCategoryId[depthNumber]);
@@ -31,10 +31,17 @@ function lutece_ticket_tree(branch, categories_tree, url) {
 		if (i < categories_depths.length)
 		{
 			var nextDepthNumber = depthNumber + 1;
-			var index = getIndex(categories, arraySelectedCategoryId[depthNumber]);
-			categories = categories[index]["categories_depth_" + nextDepthNumber];
-			loadCombo("#id_category_" + nextDepthNumber, categories, categories_depths[nextDepthNumber - 1]);
-			hideSelectors(branch.length+2);
+			categories = getCategories(nextDepthNumber, categories_tree, arraySelectedCategoryId)
+			
+			if (categories && categories.length > 0)
+			{
+				loadCombo("#id_category_" + nextDepthNumber, categories, categories_depths[depthNumber], undefined, allowNullSelection);
+				hideSelectors(nextDepthNumber+1);
+			}
+			else
+			{
+				hideSelectors(nextDepthNumber);
+			}
 		}
 		else
 		{
@@ -44,7 +51,7 @@ function lutece_ticket_tree(branch, categories_tree, url) {
 	}
 	else
 	{
-		loadCombo("#id_category_1", categories_tree["categories_depth_1"], categories_depths[0]);
+		loadCombo("#id_category_1", categories_tree["categories_depth_1"], categories_depths[0], undefined, allowNullSelection);
 		hideSelectors(2);
 	}
 	
@@ -82,13 +89,15 @@ function lutece_ticket_tree(branch, categories_tree, url) {
 			arraySelectedCategoryId[i] = undefined;
 		}
 		
-		removeDefaultValue(selector, arraySelectedCategoryId[depthNumber]);
+		if(!allowNullSelection) {
+			removeDefaultValue(selector, arraySelectedCategoryId[depthNumber]);
+		}
 		var nextDepthNumber = depthNumber + 1;
 		categories = getCategories(nextDepthNumber, categories_tree, arraySelectedCategoryId)
 		
-		if (categories.length > 0)
+		if (categories && categories.length > 0)
 		{
-			loadCombo("#id_category_" + nextDepthNumber, categories, categories_depths[depthNumber], undefined);
+			loadCombo("#id_category_" + nextDepthNumber, categories, categories_depths[depthNumber], undefined, allowNullSelection);
 			hideSelectors(nextDepthNumber+1);
 		}
 		else
@@ -149,34 +158,37 @@ function loadGenericAttributesForm(url, is_response_reseted, selector, is_first_
 }
 
 //Load the combo corresponding to the parameter 'selector' with the parameter 'categories' 
-function loadCombo(selector, categories, depth, idCategoryToSelect) {
+function loadCombo(selector, categories, depth, idCategoryToSelect, allowNullSelection) {
 	
 	$(selector).children().remove();
-	if (idCategoryToSelect != undefined && idCategoryToSelect > 0 && categories.length > 0)
+	if (categories.length > 0 )
 	{
-		var index = getIndex(categories, idCategoryToSelect);
-		for (var i = 0; i<categories.length; i++)
-		{
-			$(selector).append(new Option(categories[i].label, categories[i].id, categories[index].id == categories[i].id, categories[index].id == categories[i].id));
+		var existingSelectedCategory = idCategoryToSelect !== undefined;
+
+		var selectedCategoryIndexId = null;
+		if(existingSelectedCategory) {
+			var index = getIndex(categories, idCategoryToSelect);
+			selectedCategoryIndexId = index !== undefined && categories[index] && categories[index].id;
 		}
-		$(selector).parents(".form-group:first").show();
-	}
-	else
-	{
-		if (categories.length > 0)
+		
+		if (!existingSelectedCategory || allowNullSelection)
 		{
 			var defaultMessage = "-- Valeur par d\u00e9faut --";
 			if (depth != undefined && depth.label != undefined && depth.label != "")
 			{
 				defaultMessage = "-- " + depth.label + " \u00e0 s\u00e9lectionner --";
 			}
-			$(selector).append(new Option(defaultMessage, -1, true));
-			for (var i = 0; i<categories.length; i++)
-			{
-				$(selector).append(new Option(categories[i].label, categories[i].id, false));
-			}
-			$(selector).parents(".form-group:first").show();
+
+			$(selector).append(new Option(defaultMessage, -1, !selectedCategoryIndexId));
 		}
+		
+		for (var i = 0; i<categories.length; i++)
+		{
+			var isSelected = selectedCategoryIndexId == categories[i].id;
+			$(selector).append(new Option(categories[i].label, categories[i].id, isSelected, isSelected));
+		}
+		
+		$(selector).parents(".form-group:first").show();
 	}
 }
 
