@@ -170,7 +170,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     {
         if ( _workflowService.isAvailable( ) )
         {
-            int nIdWorkflow = Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) );
+            int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
 
             for ( Ticket ticket : listTicket )
             {
@@ -197,7 +197,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     {
         if ( _workflowService.isAvailable( ) )
         {
-            int nIdWorkflow = Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) );
+            int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
 
             StateFilter stateFilter = new StateFilter( );
             stateFilter.setIdWorkflow( nIdWorkflow );
@@ -504,7 +504,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
      */
     protected void doProcessWorkflowAutomaticAction( Ticket ticket )
     {
-        int nIdWorkflow = Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) );
+        int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
 
         if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable( ) )
         {
@@ -531,7 +531,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
      */
     protected void doProcessNextWorkflowAction( Ticket ticket, HttpServletRequest request )
     {
-        int nIdWorkflow = Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) );
+        int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
 
         if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable( ) )
         {
@@ -586,7 +586,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
      */
     protected String getDisplayDocumentHistory( HttpServletRequest request, Ticket ticket )
     {
-        int nWorkflowId = Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) );
+        int nWorkflowId = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
 
         Map<String, Channel> mapHistoryChannel = _resourceHistoryTicketingInformationService.getChannelHistoryMap( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nWorkflowId );
 

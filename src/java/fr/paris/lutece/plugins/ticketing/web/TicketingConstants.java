@@ -225,9 +225,6 @@ public final class TicketingConstants
     public static final int    DOMAIN_DEPTH                                                = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_DOMAIN_DEPTH ) );
     public static final int    THEMATIC_DEPTH                                              = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_THEMATIC_DEPTH ) );
 
-    public static final String PROPERTY_GLOBAL_WORKFLOW_ID                                 = "ticketing.configuration.global_workflow_id";
-    public static final String DEFAULT_GLOBAL_WORKFLOW_ID                                  = "1";
-
     /**
      * Default constructor
      */

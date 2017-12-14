@@ -59,6 +59,7 @@ import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchItemConstant;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexWriterUtil;
@@ -67,7 +68,6 @@ import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.service.state.IStateService;
 import fr.paris.lutece.plugins.workflowcore.service.state.StateService;
 import fr.paris.lutece.portal.service.content.XPageAppService;
-import fr.paris.lutece.portal.service.datastore.DatastoreService;
 import fr.paris.lutece.portal.service.message.SiteMessageException;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -233,8 +233,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         if ( ticket.getTicketCategory( ) != null )
         {
             IStateService stateService = SpringContextService.getBean( StateService.BEAN_SERVICE );
-            ticketState = stateService.findByResource( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE,
-                    Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) ) );
+
+            int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
+            ticketState = stateService.findByResource( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow );
             ticket.setState( ticketState );
         }
 
@@ -740,8 +741,8 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         if ( WorkflowService.getInstance( ).isAvailable( ) && ticket.getTicketCategory( ) != null )
         {
-            State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE,
-                    Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) ), null );
+            int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
+            State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
 
             if ( state != null && StringUtils.isNotBlank( state.getName( ) ) )
             {

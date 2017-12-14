@@ -61,11 +61,11 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
+import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexerActionUtil;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
-import fr.paris.lutece.portal.service.datastore.DatastoreService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 
@@ -229,7 +229,8 @@ public class TicketRest extends TicketingRest
     private List<String> create( Ticket ticket )
     {
         List<String> errors = new ArrayList<String>( );
-        int nIdWorkflow = Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) );
+
+        int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
 
         if ( _workflowService == null )
         {

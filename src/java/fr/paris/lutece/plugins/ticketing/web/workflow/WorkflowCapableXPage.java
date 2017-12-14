@@ -48,6 +48,7 @@ import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerException;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexerActionUtil;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
@@ -56,7 +57,6 @@ import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
-import fr.paris.lutece.portal.service.datastore.DatastoreService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -118,8 +118,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         {
             if ( _workflowService.isAvailable( ) )
             {
-                int nIdWorkflow = Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) );
-
+                int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
                 State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
 
                 if ( state != null )
@@ -152,7 +151,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
     protected boolean isInState( Ticket ticket, String strStateProperty )
     {
         int nStateIdInConf = AppPropertiesService.getPropertyInt( strStateProperty, -1 );
-        int nIdWorkflow = Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) );
+        int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
 
         State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
 
@@ -289,7 +288,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
      */
     protected void doProcessWorkflowAutomaticAction( Ticket ticket )
     {
-        int nIdWorkflow = Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) );
+        int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
 
         if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable( ) )
         {
@@ -320,7 +319,7 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
         try
         {
-            int nIdWorkflow = Integer.parseInt( DatastoreService.getDataValue( TicketingConstants.PROPERTY_GLOBAL_WORKFLOW_ID, TicketingConstants.DEFAULT_GLOBAL_WORKFLOW_ID ) );
+            int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
 
             if ( ( nIdWorkflow > 0 ) && _workflowService.isAvailable( ) )
             {
