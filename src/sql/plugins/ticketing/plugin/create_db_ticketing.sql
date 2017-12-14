@@ -214,23 +214,24 @@ CREATE TABLE ticketing_markings (
 	PRIMARY KEY (id_marking)
 );
 
--- Structure for table ticketing_viewing
---
-
-DROP TABLE IF EXISTS ticketing_viewing;
-CREATE TABLE ticketing_viewing (
-id_viewing int(6) NOT NULL,
-title varchar(50) default '',
-message varchar(5000) default '',
-buton_label varchar(50) default '',
-channel varchar(50) default '',
-contact_mode varchar(50) default '',
-civility varchar(50) default '',
-domain varchar(50) default '',
-thematic varchar(50) default '',
-location varchar(50) default '',
-PRIMARY KEY (id_viewing)
+-- Structure for table ticketing_viewing 
+-- 
+ 
+DROP TABLE IF EXISTS ticketing_viewing; 
+CREATE TABLE ticketing_viewing ( 
+id_viewing int(6) NOT NULL, 
+title varchar(50) default '', 
+message varchar(5000) default '', 
+buton_label varchar(50) default '', 
+channel varchar(50) default '', 
+contact_mode varchar(50) default '', 
+civility varchar(50) default '', 
+domain varchar(50) default '', 
+thematic varchar(50) default '', 
+location varchar(50) default '', 
+PRIMARY KEY (id_viewing) 
 );
+
 
 ALTER TABLE ticketing_ticket ADD CONSTRAINT fk_ticketing_ticket_user_title FOREIGN KEY (id_user_title)
       REFERENCES ticketing_user_title (id_user_title) ON DELETE RESTRICT ON UPDATE RESTRICT;
