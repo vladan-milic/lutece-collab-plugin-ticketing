@@ -489,7 +489,14 @@ public class Ticket implements Serializable, RBACResource
 
     public TicketCategory getCategoryOfDepth( int depth )
     {
-        return _ticketCategory.getBranch( ).get( depth - 1 );
+        if(_ticketCategory.getDepth().getDepthNumber() >= depth )
+    	{
+        	return _ticketCategory.getBranch( ).get( depth - 1 );
+    	}else
+    	{
+    		return new TicketCategory();
+    	}
+    		
     }
 
     /**
