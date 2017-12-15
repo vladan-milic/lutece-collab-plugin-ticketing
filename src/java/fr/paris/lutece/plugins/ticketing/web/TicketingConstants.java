@@ -129,6 +129,7 @@ public final class TicketingConstants
     public static final String PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_TELEPHONE_NUMBER = "ticketing.identity.attribute.user.home-info.telecom.telephone.number";
     public static final String PROPERTIES_ATTRIBUTE_USER_HOMEINFO_TELECOM_MOBILE_NUMBER    = "ticketing.identity.attribute.user.home-info.telecom.mobile.number";
     public static final String PROPERTIES_CATEGORY_DEPTH_MIN                               = "ticketing.category.depth.min";
+    public static final String PROPERTIES_CATEGORY_DEPTH_MAX                               = "ticketing.category.depth.max";
     public static final String PROPERTIES_CATEGORY_DEPTH_FILTER                            = "ticketing.category.depth.filter";
     public static final String PROPERTIES_CATEGORY_DEPTH_RBAC_RESOURCE                     = "ticketing.category.depth.rbac.resource";
     public static final String PROPERTIES_DOMAIN_DEPTH                                     = "ticketing.domain.depth";
@@ -219,6 +220,7 @@ public final class TicketingConstants
     public static final int    PRECISION_DEPTH                                             = 4;
 
     public static final int    CATEGORY_DEPTH_MIN                                          = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_CATEGORY_DEPTH_MIN ) );
+    public static final int    CATEGORY_DEPTH_MAX                                          = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_CATEGORY_DEPTH_MAX ) );
     public static final int    CATEGORY_DEPTH_FILTER                                       = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_CATEGORY_DEPTH_FILTER ) );
     public static final int    CATEGORY_DEPTH_RBAC_RESOURCE                                = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_CATEGORY_DEPTH_RBAC_RESOURCE ) );
     public static final int    TYPE_DEPTH                                                  = Integer.parseInt( AppPropertiesService.getProperty( PROPERTIES_TYPE_DEPTH ) );
