@@ -105,7 +105,10 @@ function lutece_ticket_tree(branch, categories_tree, url, allowNullSelection) {
 			hideSelectors(nextDepthNumber);
 		}
 		loadGenericAttributesForm(url, false, "#id_category_" + depthNumber, false);
-//		loadHelpMessage("#help_message_" + depthNumber, categories);
+		
+		categories = getCategories(depthNumber, categories_tree, arraySelectedCategoryId);
+		var category = categories[getIndex(categories, arraySelectedCategoryId[depthNumber])];
+		loadHelpMessage("#help_message_" + depthNumber, category);
 	}
 }
 
@@ -171,6 +174,8 @@ function loadCombo(selector, categories, depth, idCategoryToSelect, allowNullSel
 			selectedCategoryIndexId = index !== undefined && categories[index] && categories[index].id;
 		}
 		
+		loadHelpMessage("#help_message_" + depth.depth_number, undefined);
+
 		if (!existingSelectedCategory || allowNullSelection)
 		{
 			var defaultMessage = "-- Valeur par d\u00e9faut --";
