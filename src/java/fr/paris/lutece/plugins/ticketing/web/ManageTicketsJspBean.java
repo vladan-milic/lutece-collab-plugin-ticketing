@@ -428,7 +428,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         List<Ticket> listTickets = new ArrayList<>( );
         List<Integer> listIdTickets = new ArrayList<>( );
 
-        if ( filter.getMapCategoryId( ) != null && filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != -1 )
+        if ( filter.getMapCategoryId( ) != null &&  filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != null && filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != -1)
         {
             TicketCategory ticketDomain = TicketCategoryService.getInstance( ).findCategoryById( filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) );
             _lstTicketDomain.clear( );
