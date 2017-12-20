@@ -34,8 +34,10 @@
 package fr.paris.lutece.plugins.ticketing.service.category;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
@@ -56,6 +58,9 @@ public class TicketCategoryService
 {
 
     private final String                 KEY_DEFAULT_CATEGORY_TYPE_LABEL = "ticketing.create_categorytype.default.label";
+
+    private final String                 KEY_HERITED_MESSAGE             = "ticketing.modify_category_inputs.herited";
+    private final String                 KEY_BLOCKED_MESSAGE             = "ticketing.modify_category_inputs.blocked";
     private static TicketCategoryTree    _treeCategories;
 
     private static TicketCategoryService _instance;
@@ -583,7 +588,10 @@ public class TicketCategoryService
         entryFilter.setFieldDependNull( EntryFilter.FILTER_TRUE );
 
         List<Entry> listReferenceEntry = EntryHome.getEntryList( entryFilter );
-        List<Entry> listExistingEntries = getCategoryEntryList( category );
+        Set<Entry> listExistingEntries = new HashSet<>( );
+        listExistingEntries.addAll( getCategoryEntryList( category ) );
+        listExistingEntries.addAll( getCategoryEntryHeritedList( category, Locale.getDefault( ) ) );
+        listExistingEntries.addAll( getCategoryEntryBlockedList( category, Locale.getDefault( ) ) );
         ReferenceList refListInputs = new ReferenceList( );
 
         for ( Entry entry : listReferenceEntry )
@@ -659,6 +667,61 @@ public class TicketCategoryService
                     listEntry.add( listEntryFound.get( 0 ) );
                 }
             }
+        }
+
+        return listEntry;
+    }
+
+    /**
+     * Return a list of Entries herited from parent categories
+     * 
+     * @param _category
+     * @param locale
+     * @return
+     */
+    public List<Entry> getCategoryEntryHeritedList( TicketCategory _category, Locale locale )
+    {
+        List<Entry> listEntry = new ArrayList<Entry>( );
+
+        if ( _category != null )
+        {
+            _category.getBranch( ).stream( ).forEach( cat ->
+            {
+                if ( cat.getId( ) != _category.getId( ) )
+                {
+                    List<Entry> listEntryOfCategory = getCategoryEntryList( cat );
+                    listEntryOfCategory.stream( ).forEach( entry -> entry.setErrorMessage( I18nService.getLocalizedString( KEY_HERITED_MESSAGE, locale ) + getBranchLabel( cat, " -> " ) ) );
+
+                    listEntry.addAll( listEntryOfCategory );
+
+                }
+            } );
+        }
+
+        return listEntry;
+    }
+
+    /**
+     * Return a list of Entries bocked by children categories
+     * 
+     * @param _category
+     * @return
+     */
+    public List<Entry> getCategoryEntryBlockedList( TicketCategory _category, Locale locale )
+    {
+        List<Entry> listEntry = new ArrayList<Entry>( );
+
+        if ( _category != null )
+        {
+            _category.getChildren( ).stream( ).forEach( cat ->
+            {
+                List<Entry> listEntryOfCategory = getCategoryEntryList( cat );
+                listEntryOfCategory.stream( ).forEach( entry -> entry.setErrorMessage( I18nService.getLocalizedString( KEY_BLOCKED_MESSAGE, locale ) + getBranchLabel( cat, " -> " ) ) );
+                listEntryOfCategory.addAll( getCategoryEntryBlockedList( cat, locale ) );
+
+                listEntry.addAll( listEntryOfCategory );
+
+            } );
         }
 
         return listEntry;

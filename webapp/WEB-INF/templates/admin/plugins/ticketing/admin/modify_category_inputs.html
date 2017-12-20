@@ -8,11 +8,15 @@
             <form method="get" class="form-inline pull-right col-md-5 col-sm-12 col-xs-12" action="jsp/admin/plugins/ticketing/admin/ManageCategories.jsp">
                 <input type="hidden" value="addCategoryInput" name="action">
                 <input name="id_category" value="${category.id}" type="hidden" />
+                <#if inputs_list?size &gt; 0>
                 <label for="id_input">#i18n{ticketing.modify_category_inputs.labelInsertInput} :&#160;&#160;</label>
                 <@btnGroup>
                     <@comboWithParams name="id_input" items=inputs_list default_value="-1" additionalParameters="class='form-control input-sm'" />
                     <@button class="pull-right" type='submit' name='action_addCategoryInput' buttonIcon='plus' title='#i18n{ticketing.modify_category_inputs.labelInsertInput}' />
                 </@btnGroup>
+                <#else>
+                	#i18n{ticketing.modify_category_inputs.noInputAvailable}
+                </#if>
             </form>
 			</div>
         </div>
@@ -57,6 +61,23 @@
                              </a>
                          </td>
                         </tr>
+                    </#list>
+                	<#list category_inputs_herited_list+category_inputs_blocked_list as entry>
+                    <tr>
+                        <td>
+                            <#if entry.entryType.comment>
+                                ${entry.comment}
+                            <#else>
+                                ${entry.title}
+                            </#if>
+                            <p>
+                            	<span class="badge">${entry.entryType.title}</span>
+                            	<span class="badge label-primary">${entry.errorMessage}</span>
+                           	</p>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     </#list>
                 </tbody>
             </table>
