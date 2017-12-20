@@ -135,6 +135,25 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
         return _nodes;
     }
 
+    private void addChildrenToList( Node root, List<Node> list )
+    {
+        list.add( root );
+        root.getChildren( ).stream( ).forEach( node ->
+        {
+            node.setParent( root );
+            addChildrenToList( ( Node ) node, list );
+        } );
+    }
+
+    public List<Node> getSortedNodes( )
+    {
+        List<Node> nodes = new ArrayList<>( );
+
+        _rootNodes.stream( ).forEach( root -> addChildrenToList( root, nodes ) );
+
+        return nodes;
+    }
+
     /**
      * Set the list of nodes of the tree
      * 

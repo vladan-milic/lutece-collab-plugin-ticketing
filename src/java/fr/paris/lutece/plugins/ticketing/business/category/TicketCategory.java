@@ -92,6 +92,8 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     @Size( max = 500, message = "#i18n{ticketing.validation.category.helpMessage.size}" )
     private String             _strHelpMessage;
 
+    private boolean            _bManageable;
+
     /**
      * Constructor TicketCategory
      */
@@ -366,5 +368,15 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     public String getResourceId( )
     {
         return Integer.toString( _nId );
+    }
+
+    public boolean isManageable( )
+    {
+        return _bManageable;
+    }
+
+    public void setManageable( boolean manageable )
+    {
+        _bManageable = manageable;
     }
 }

@@ -33,14 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.category;
 
+import java.util.List;
+import java.util.Locale;
+
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.portal.service.rbac.Permission;
 import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
 import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
 import fr.paris.lutece.util.ReferenceList;
-import java.util.List;
-import java.util.Locale;
 
 public class TicketCategoryIdService extends ResourceIdService
 {
@@ -53,19 +54,19 @@ public class TicketCategoryIdService extends ResourceIdService
     public void register( )
     {
         ResourceType rt = new ResourceType( );
-        rt.setResourceIdServiceClass(TicketCategoryIdService.class.getName( ) );
+        rt.setResourceIdServiceClass( TicketCategoryIdService.class.getName( ) );
         rt.setPluginName( PLUGIN_NAME );
-        rt.setResourceTypeKey(TicketCategory.RESOURCE_TYPE );
-        rt.setResourceTypeLabelKey(TicketCategory.PROPERTY_LABEL_RESOURCE_TYPE );
+        rt.setResourceTypeKey( TicketCategory.RESOURCE_TYPE );
+        rt.setResourceTypeLabelKey( TicketCategory.PROPERTY_LABEL_RESOURCE_TYPE );
 
         Permission p = new Permission( );
-        p.setPermissionKey(TicketCategory.PERMISSION_VIEW_LIST );
-        p.setPermissionTitleKey(TicketCategory.PROPERTY_LABEL_PERMISSION_VIEW );
+        p.setPermissionKey( TicketCategory.PERMISSION_VIEW_LIST );
+        p.setPermissionTitleKey( TicketCategory.PROPERTY_LABEL_PERMISSION_VIEW );
         rt.registerPermission( p );
 
         p = new Permission( );
-        p.setPermissionKey(TicketCategory.PERMISSION_VIEW_DETAIL );
-        p.setPermissionTitleKey(TicketCategory.PROPERTY_LABEL_PERMISSION_VIEW_DETAIL );
+        p.setPermissionKey( TicketCategory.PERMISSION_VIEW_DETAIL );
+        p.setPermissionTitleKey( TicketCategory.PROPERTY_LABEL_PERMISSION_VIEW_DETAIL );
         rt.registerPermission( p );
 
         ResourceTypeManager.registerResourceType( rt );
@@ -77,10 +78,11 @@ public class TicketCategoryIdService extends ResourceIdService
     @Override
     public ReferenceList getResourceIdList( Locale locale )
     {
-        List<TicketCategory> listDomain = TicketCategoryService.getInstance( ).getDomainList( );
         ReferenceList list = new ReferenceList( );
-        listDomain.stream( ).forEach( ( category ) -> list.addItem( category.getId( ), TicketCategoryService.getInstance( ).getBranchLabel( category, "-" ) ) );
-        
+
+        List<TicketCategory> categories = TicketCategoryTypeService.getInstance( ).getManageableCategories( );
+        categories.stream( ).forEach( ( category ) -> list.addItem( category.getId( ), TicketCategoryService.getInstance( ).getBranchLabel( category, " -> " ) ) );
+
         return list;
     }
 
@@ -91,6 +93,6 @@ public class TicketCategoryIdService extends ResourceIdService
     public String getTitle( String strId, Locale locale )
     {
         return TicketCategoryService.getInstance( ).findCategoryById( Integer.parseInt( strId ) ).getLabel( );
-     }
+    }
 
 }

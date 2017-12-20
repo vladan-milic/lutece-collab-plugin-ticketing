@@ -33,11 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.category;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
 
 public class TicketCategoryTypeService
 {
-    private static TicketCategoryTree _treeCategories;
+    private static TicketCategoryTree        _treeCategories;
 
     private static TicketCategoryTypeService _instance;
 
@@ -70,5 +74,10 @@ public class TicketCategoryTypeService
     {
         return _treeCategories.findDepthByDepthNumber( nDepth );
     }
-    
+
+    public List<TicketCategory> getManageableCategories( )
+    {
+        return _treeCategories.getSortedNodes( ).stream( ).filter( category -> category.isManageable( ) ).collect( Collectors.toList( ) );
+    }
+
 }
