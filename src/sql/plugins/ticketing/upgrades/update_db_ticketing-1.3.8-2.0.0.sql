@@ -15,3 +15,5 @@ thematic varchar(50) default '',
 location varchar(50) default '', 
 PRIMARY KEY (id_viewing) 
 );
+
+ALTER TABLE ticketing.ticketing_category ADD is_manageable BOOL DEFAULT false NOT NULL;
