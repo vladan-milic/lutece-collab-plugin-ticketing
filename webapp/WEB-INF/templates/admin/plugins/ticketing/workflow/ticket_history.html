@@ -6,12 +6,16 @@
       <#list history_information_list as history_information>
 		  <#assign lastAction = history_information?index == 0>
 		  <#assign containsComment = false>
+		  <#assign containsMessage = false>
 		  <#list history_information.task_information_list as task_information>
 		  	<#if task_information?contains("js/plugins/workflow/modules/comment/comment.js")>
 		  		<#assign containsComment = true>
 		  	</#if>
+		  	<#if task_information?contains("<!-- MESSAGE-IN-WORKFLOW -->")>
+		  		<#assign containsMessage = true>
+		  	</#if>
 		  </#list>
-		  <#assign lineOpened = containsComment || lastAction>
+		  <#assign lineOpened = containsComment || containsMessage || lastAction>
           <p class="history-line-over" onclick="open_close_history(${history_information.resource_history.id?string})">
 	          <span id="icon-${history_information.resource_history.id?string}" class="glyphicon <#if lineOpened>glyphicon-minus<#else>glyphicon-plus</#if>" aria-hidden="true"></span>
 	          <strong class="text-gru">${history_information.resource_history.creationDate!'Date missing'}</strong> &nbsp;
