@@ -11,7 +11,7 @@
 		  	<#if task_information?contains("js/plugins/workflow/modules/comment/comment.js")>
 		  		<#assign containsComment = true>
 		  	</#if>
-		  	<#if task_information?contains("<!-- MESSAGE-IN-WORKFLOW -->")>
+		  	<#if task_information?contains(message_mark)>
 		  		<#assign containsMessage = true>
 		  	</#if>
 		  </#list>

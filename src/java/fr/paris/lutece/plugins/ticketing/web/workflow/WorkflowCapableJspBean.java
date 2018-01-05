@@ -104,6 +104,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     private static final String MARK_MASS_ACTION_SUCCESS_TICKETS = "success_tickets";
     private static final String MARK_MASS_ACTION_FAILED_TICKETS = "failed_tickets";
     private static final String MARK_MASS_ACTION_NOT_ALLOWED_TICKETS = "notallowed_tickets";
+    private static final String MARK_MESSAGE_MARK = "message_mark";
 
     // Properties
     private static final String PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW = "ticketing.taskFormWorkflow.pageTitle";
@@ -627,6 +628,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
         modelToAdd.put( MARK_RESOURCE_HISTORY_CHANNEL, mapHistoryChannel );
         modelToAdd.put( MARK_USER_FACTORY, UserFactory.getInstance( ) );
+        modelToAdd.put( MARK_MESSAGE_MARK, TicketingConstants.MESSAGE_MARK );
 
         return _workflowService.getDisplayDocumentHistory( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nWorkflowId, request, getLocale( ), modelToAdd,
                 TEMPLATE_RESOURCE_HISTORY );
