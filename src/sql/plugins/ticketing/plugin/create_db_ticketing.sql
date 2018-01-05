@@ -95,7 +95,7 @@ id_category_type int(6) NOT NULL default '0',
 id_workflow int(6) NOT NULL default '0',
 demand_id int(6) NOT NULL default '0',
 help_message varchar(500) NULL,
-is_manageable int(1) NOT NULL DEFAULT '0',
+is_manageable int(1) DEFAULT 0 NOT NULL,
 inactive int(1)  NOT NULL default '0',
 PRIMARY KEY (id_category)
 );
