@@ -39,6 +39,8 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.address.TicketAddress;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
@@ -85,6 +87,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * ManageTickets JSP Bean abstract class for JSP Bean
@@ -267,21 +270,20 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 //        addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL );
 //
 //        _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
-        
-        if ( filter.getIdDomain( ) != -1 )
+
+        if ( filter.getMapCategoryId( ) != null &&  filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != null && filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != -1)
         {
-            TicketDomain ticketDomain = TicketDomainHome.findByPrimaryKey( filter.getIdDomain( ) );
+            TicketCategory ticketDomain = TicketCategoryService.getInstance( ).findCategoryById( filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) );
             _lstTicketDomain.clear( );
-            _lstTicketDomain.addAll( TicketDomainHome.getTicketDomainsListByLabel( ticketDomain.getLabel( ) ) );
+            _lstTicketDomain.add( ticketDomain );
         } else
         {
-            Map<Integer, TicketDomain> mapIdDomainTicketDomain = new LinkedHashMap<>( );
-            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST );
-            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL );
+            Map<Integer, TicketCategory> mapIdDomainTicketDomain = new LinkedHashMap<>( );
+            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_DETAIL );
+            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_LIST );
 
             _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
         }
-
         SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy" );
         SimpleDateFormat sdf2 = new SimpleDateFormat( "HH:mm" );
 
@@ -289,27 +291,35 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             List<Ticket> listTickets = _engine.searchTickets( strQuery, _lstTicketDomain, filter );
             File tempFile = File.createTempFile( "ticketing", null );
+                        
+            List<String> titlesUntranslated = new ArrayList<>();
+            titlesUntranslated.add( HEADER_REFERENCE );
+            titlesUntranslated.add( HEADER_CREATION_DATE );
+            titlesUntranslated.add( HEADER_TIME_CREATION );
+            // Insert here category types after being translated
+            Integer indexWhereCategoryWillBeAdded = 2;
+            titlesUntranslated.add( HEADER_NATURE_SOLICITATION );
+            titlesUntranslated.add( HEADER_DOMAIN_SOLICITATION );
+            titlesUntranslated.add( HEADER_PROBLEMATIC_SOLICITATION );
+            titlesUntranslated.add( HEADER_SUB_PROBLEMS_SOLLICITATION );
+            titlesUntranslated.add( HEADER_OBJECT_SOLICITATION );
+            titlesUntranslated.add( HEADER_STATUS );
+            titlesUntranslated.add( HEADER_NOMENCLATURE );
+            titlesUntranslated.add( HEADER_CHANNEL );
+            titlesUntranslated.add( HEADER_ASSIGNEMENT_ENTITY );
+            titlesUntranslated.add( HEADER_ASSIGNEMENT_OFFICER );
             
-            String strReference = I18nService.getLocalizedString( HEADER_REFERENCE, Locale.FRENCH );
-            String strCreationDate = I18nService.getLocalizedString( HEADER_CREATION_DATE, Locale.FRENCH );
-            String strTimeCreation = I18nService.getLocalizedString( HEADER_TIME_CREATION, Locale.FRENCH );
-            String strNatureSolicitation = I18nService.getLocalizedString( HEADER_NATURE_SOLICITATION, Locale.FRENCH );
-            String strDomainSolicitation = I18nService.getLocalizedString( HEADER_DOMAIN_SOLICITATION, Locale.FRENCH );
-            String strProblematicSolicitation = I18nService.getLocalizedString( HEADER_PROBLEMATIC_SOLICITATION, Locale.FRENCH );
-            String strSubProblemsSolicitation = I18nService.getLocalizedString( HEADER_SUB_PROBLEMS_SOLLICITATION, Locale.FRENCH );
-            String strObjectSolicitation = I18nService.getLocalizedString( HEADER_OBJECT_SOLICITATION, Locale.FRENCH );
-            String strStatus = I18nService.getLocalizedString( HEADER_STATUS, Locale.FRENCH );
-            String strNomenclature = I18nService.getLocalizedString( HEADER_NOMENCLATURE, Locale.FRENCH );
-            String strChannel = I18nService.getLocalizedString( HEADER_CHANNEL, Locale.FRENCH );
-            String strAssignementEntity = I18nService.getLocalizedString( HEADER_ASSIGNEMENT_ENTITY, Locale.FRENCH );
-            String strAssignementOfficer = I18nService.getLocalizedString( HEADER_ASSIGNEMENT_OFFICER, Locale.FRENCH );
-            List<String> entries = new ArrayList<String>(Arrays.asList(new String[]{strReference,strCreationDate,strTimeCreation,strNatureSolicitation,strDomainSolicitation,strProblematicSolicitation,strSubProblemsSolicitation,strObjectSolicitation,strStatus,strNomenclature,strChannel,strAssignementEntity,strAssignementOfficer}));
+            List<String> titlesTranslated = titlesUntranslated.stream( ).map( title -> I18nService.getLocalizedString( title, Locale.FRENCH ) ).collect( Collectors.toList( ) );
+
+            for(TicketCategoryType category : TicketCategoryTypeHome.getCategoryTypesList( )) {
+                titlesTranslated.add( indexWhereCategoryWillBeAdded + category.getDepthNumber( ), category.getLabel( ) );
+            }
             
             // Write header in the temp file
             Writer w = new OutputStreamWriter( new FileOutputStream( tempFile ), StandardCharsets.ISO_8859_1 );
 
             // Write line in the temp file
-            CSVUtils.writeLine(w, entries);
+            CSVUtils.writeLine(w, titlesTranslated);
             
             for ( Ticket ticket : listTickets )
             {
@@ -318,10 +328,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 line.add( ticket.getReference( ) );
                 line.add( sdf.format( ticket.getDateCreate( ) ) );
                 line.add( sdf2.format( ticket.getDateCreate( ) ) );
-                line.add( ticket.getTicketType( ) );
-                line.add( ticket.getTicketDomain( ) );
-                line.add( ticket.getTicketCategory( ).getLabel( ) );
-                line.add( ticket.getTicketCategory( ).getPrecision());
+                for(TicketCategory category : ticket.getBranch( )) {
+                    line.add( category.getLabel( ) );
+                }
                 line.add( ticket.getTicketComment( ) );
                 line.add( ticket.getState( ).getName( ) );
                 line.add( ticket.getNomenclature( ) );

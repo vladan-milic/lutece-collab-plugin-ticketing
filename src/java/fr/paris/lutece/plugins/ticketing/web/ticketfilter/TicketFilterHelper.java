@@ -388,8 +388,6 @@ public final class TicketFilterHelper
      */
     public static void setModel( Map<String, Object> mapModel, TicketFilter fltrFilter, HttpServletRequest request, AdminUser user )
     {
-        mapModel.put( MARK_FILTER_PERIOD_LIST, TicketFilterPeriod.getReferenceList( request.getLocale( ) ) );
-        
         Map<Integer,LinkedHashMap<String,String>> mapTypeCategoryList = new LinkedHashMap<Integer, LinkedHashMap<String, String>>( );
         for (int i = 1; i <= getMaxNumberFilter( ); i++)
         {
