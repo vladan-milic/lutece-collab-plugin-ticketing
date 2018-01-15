@@ -1,4 +1,4 @@
-<script xmlns="http://www.w3.org/1999/html">$(".content-header").hide();</script>
+<script>$(".content-header").hide();</script>
 <#include "/admin/plugins/ticketing/commons.html" />
 <#include "/admin/plugins/ticketing/include/user_info.html"/>
 <#include "/admin/plugins/ticketing/include/popins.html" />
@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css"/>
 
 <#macro sortColumn field=''>
-<i class="fa fa-chevron-up" onclick="sortList('${field}','asc')"></i>&nbsp;<i class="fa fa-chevron-down" onclick="sortList('${field}','desc')"></i>
+    <i class="fa fa-chevron-up" onclick="sortList('${field}','asc')"></i>&nbsp;<i class="fa fa-chevron-down" onclick="sortList('${field}','desc')"></i>
 </#macro>
 
 <#macro renderTabPanel panel_list active=false id=''>
@@ -184,137 +184,35 @@
       </div>
     </#if>
     </div>
+  </div>
 </div>
 </#macro>
 
 <!-- TEMPLATE -->
 <div class="gru-wrapper">
-    <div id="customer-panel" class="bg-gru-light">
-        <div class="row">
-            <div class="col-xs-12 col-sm-offset-1 col-sm-8">
-                <h2>#i18n{ticketing.manage_tickets.pageTitle}</h2>
-            </div>
-            <div class="col-xs-12 col-sm-3">
-            <#if ticket_creation_right?? && ticket_creation_right>
-                <form method="post" class="form" name="manage_tickets" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
-                    <h2>
-                        <button name="view_createTicket" type="submit" class="btn btn-border bg-gru-light">
-                            <i class="fa fa-plus"></i> <span>#i18n{ticketing.manage_tickets.buttonAdd}</span>
-                        </button>
-                    </h2>
-                </form>
-            </#if>
-            </div>
-        </div>
-        <div id="filter-ticket" class="row">
-            <div class="col-xs-12 col-sm-offset-1 col-sm-3">
-                <h3 style="margin-top:0px;">${manage_ticket_page_title}</h3>
-            </div>
-            <form id="filter_form" class="form-inline" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
-                <div class="col-xs-12 col-sm-5">
-                    <input type="hidden" name="submitted_form" value="1">
-                    <input type="hidden" name="fltr_urgency" value="${ticket_filter.urgency!}">
-                    <input type="hidden" name="selected_tab" value="<#if selected_tab?? && selected_tab?has_content>${selected_tab}<#else>agent</#if>">
-                    <input type="hidden" name="fltr_order_sort" value="${ticket_filter.orderSort!}">
-                    <input type="hidden" name="fltr_order_by" value="${ticket_filter.orderBy!}">
-                    <input type="hidden" id="hidden_query_value" name="query" value="${query!}">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <button type="submit" name="fltr_new_urgency" value="-1"
-                                    class="btn btn-link btn-xs <#if ticket_filter.urgency==-1>btn-primary border-gru<#else>border-gru text-gru btn-default</#if>">
-                                #i18n{ticketing.manage_tickets.urgency.all}
-                            </button>
-                            <button type="submit" name="fltr_new_urgency" value="2" class="btn btn-link btn-xs <#if ticket_filter.urgency==2>btn-danger<#else>border-red text-red btn-default</#if>">
-                                #i18n{ticketing.manage_tickets.urgency.high}
-                            </button>
-                            <button type="submit" name="fltr_new_urgency" value="1"
-                                    class="btn btn-link btn-xs <#if ticket_filter.urgency==1>btn-warning<#else>border-orange text-orange btn-default</#if>">
-                                #i18n{ticketing.manage_tickets.urgency.medium}
-                            </button>
-                            <button type="submit" name="fltr_new_urgency" value="0" class="btn btn-link btn-xs <#if ticket_filter.urgency==0>btn-info<#else>border-info text-aqua btn-default</#if>">
-                                #i18n{ticketing.manage_tickets.urgency.low}
-                            </button>
-                            <!-- multi select state list -->
-                        <#if state_list?? && state_list?size != 0>
-                            <select name="fltr_state_ids" id="fltr_state_ids" multiple="multiple">
-                                <#list state_list as state>
-                                    <#if state.checked ?? && state.checked == true>
-                                        <option value="${state.code!}" selected> ${state.name!}</option>
-                                    <#else>
-                                        <option value="${state.code!}">${state.name!}</option>
-                                    </#if>
-                                </#list>
-                            </select>
-                        </#if>
-                            <button type="submit" class="filter-button btn btn-border bg-gru-light">
-                                #i18n{ticketing.manage_tickets.filter.label}
-                            </button>
-                        </div>
-                    </div>
-                    <br/>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <label class="select" for="nature">
-                            <@comboWithParams name="fltr_id_type" default_value="${ticket_filter.idType}" additionalParameters=" id=\"fltr_id_type\" class=\"form-control input-xs\" " items=type_list />
-                            </label>
-                            <label class="select" for="domain">
-                            <@comboWithParams name="fltr_id_domain" default_value="${ticket_filter.idDomain}" additionalParameters=" id=\"fltr_id_domain\" class=\"form-control input-xs\" " items=domain_list />
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 filter-ticket-date">
-                            <label class="filter" for="fltr_open_since">#i18n{ticketing.manage_tickets.start_date}</label>
-                            <div class="input-group input-group-xs">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                <input type="text" name="fltr_open_since" id="fltr_open_since" class="form-control"
-                                       <#if ticket_filter.creationStartDate??>value="${ticket_filter.creationStartDate?date}"</#if>>
-                            </div>
-                            <label class="filter" for="fltr_open_since">#i18n{ticketing.manage_tickets.start_end}</label>
-                            <div class="input-group input-group-xs">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                <input type="text" name="fltr_open_until" id="fltr_open_until" class="form-control"
-                                       <#if ticket_filter.creationEndDate??>value="${ticket_filter.creationEndDate?date}"</#if>>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <#if ticket_export_right?? && ticket_export_right>
-                <div class="col-xs-12 col-sm-3">
-                    <button id="filter-ticket-export" name="action_exportTicket" type="submit" class="btn btn-info">
-                        <span>#i18n{ticketing.manage_tickets.buttonExport}</span>
-                    </button>
-                </div>
-            </#if>
-            </form>
-            <div class="col-xs-12 col-sm-3">
-                <form class="form-inline" method="post" action="jsp/admin/plugins/ticketing/ManageTickets.jsp?page_index=1">
-                    <input type="hidden" id="searched_field" name="searched_field" value="contents">
-                    <div class="input-group">
-                        <label class="sr-only">#i18n{ticketing.manage_tickets.searchDefaultTxt}</label>
-                        <div class="input-group-btn">
-                            <input id="search_input" class="form-control input-xs btn-group" type="text" name="query" placeholder="#i18n{ticketing.manage_tickets.searchDefaultTxt}"
-                                   value="<#if query?has_content>${query}</#if>">
-                        <#if query?has_content>
-                            <span id="search_clear" class="glyphicon glyphicon-remove-circle"></span>
-                        </#if>
-                        </div>
-                        <div class="input-group-btn">
-                            <button class="btn btn-xs" type="submit">
-                                <span class="fa fa-search"></span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+  <div id="customer-panel" class="bg-gru-light">
+    <div class="row">
+      <div class="col-xs-12 col-sm-offset-1 col-sm-8">
+        <h2>#i18n{ticketing.manage_tickets.pageTitle}</h2>
+      </div>
+      <div class="col-xs-12 col-sm-3">
+      <#if ticket_creation_right?? && ticket_creation_right>
+        <form method="post" class="form" name="manage_tickets" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+          <h2>
+          <button name="view_createTicket" type="submit" class="btn btn-border bg-gru-light">
+            <i class="fa fa-plus"></i> <span>#i18n{ticketing.manage_tickets.buttonAdd}</span>
+          </button>
+        </h2>
+        </form>
+      </#if>
+      </div>
     </div>
     <div id="filter-ticket" class="row">
       <div class="col-xs-12 col-sm-offset-1 col-sm-3">
         <h3 style="margin-top:0px;">${manage_ticket_page_title}</h3>
       </div>
+      <form id="filter_form" class="form-inline" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
       <div class="col-xs-12 col-sm-5">
-        <form id="filter_form" class="form-inline" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
         <input type="hidden" name="submitted_form" value="1">
         <input type="hidden" name="fltr_urgency" value="${ticket_filter.urgency!}">
         <input type="hidden" name="selected_tab" value="<#if selected_tab?? && selected_tab?has_content>${selected_tab}<#else>agent</#if>">
@@ -359,13 +257,33 @@
                     </label>
                 </#if>
               </#list>
-                <label class="select" for="since">
-                    <@comboWithParams name="fltr_open_since" default_value="${ticket_filter.openSincePeriod}" additionalParameters=" id=\"fltr_open_since\" class=\"form-control input-xs\" " items=period_list/>
-                </label>
             </div>
         </div>
-        </form>
-      </div>
+        <div class="row">
+            <div class="col-xs-12 filter-ticket-date">
+                <label class="filter" for="fltr_open_since">#i18n{ticketing.manage_tickets.start_date}</label>
+                <div class="input-group input-group-xs">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    <input type="text" name="fltr_open_since" id="fltr_open_since" class="form-control"
+                           <#if ticket_filter.creationStartDate??>value="${ticket_filter.creationStartDate?date}"</#if>>
+                </div>
+                <label class="filter" for="fltr_open_since">#i18n{ticketing.manage_tickets.start_end}</label>
+                <div class="input-group input-group-xs">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    <input type="text" name="fltr_open_until" id="fltr_open_until" class="form-control"
+                           <#if ticket_filter.creationEndDate??>value="${ticket_filter.creationEndDate?date}"</#if>>
+                </div>
+            </div>
+        </div>
+    </div>
+	<#if ticket_export_right?? && ticket_export_right>
+	    <div class="col-xs-12 col-sm-3">
+	        <button id="filter-ticket-export" name="action_exportTicket" type="submit" class="btn btn-info">
+	            <span>#i18n{ticketing.manage_tickets.buttonExport}</span>
+	        </button>
+	    </div>
+	</#if>
+    </form>
       <div class="col-xs-12 col-sm-3">
     <form class="form-inline" method="post" action="jsp/admin/plugins/ticketing/ManageTickets.jsp?page_index=1">
         <input type="hidden" id="searched_field" name="searched_field" value="contents">
@@ -448,11 +366,12 @@
         </#if>
       </div>
     </div>
+  </div>
 </div>
 <script src="js/plugins/ticketing/ticketing.js"></script>
 <script type="text/javascript" src="js/plugins/ticketing/action_mass.js"></script>
 <script>
-    $(function () {
+$( function(){
 
     // Set link on whole tr
     $("tbody > tr").on( 'click', function(e){
@@ -462,36 +381,36 @@
     });
 
     // Tooltip
-  	$('[data-toggle="tooltip"]').tooltip();
+  $('[data-toggle="tooltip"]').tooltip();
 
-    // Order Management
-    // Init Order
-    var sort_order = $("input[name=fltr_order_sort]").val();
-    var sort_field = $("input[name=fltr_order_by]").val() == "" ? 'th[data-field="date_create"]' : 'th[data-field="' + $("input[name=fltr_order_by]").val() + '"]';
-    $(sort_field).addClass("th-sort-" + sort_order);
+  // Order Management
+  // Init Order
+  var sort_order = $("input[name=fltr_order_sort]").val();
+  var sort_field = $("input[name=fltr_order_by]").val()=="" ? 'th[data-field="date_create"]' : 'th[data-field="' + $("input[name=fltr_order_by]").val() + '"]';
+  $(sort_field).addClass( "th-sort-" + sort_order );
 
-	// Column order
-	$("th").on( 'click', function( e ){
-	    var field = $(this).attr('data-field');
-	    if(field != 'mass_selection'){
-	        var oldField = $("input[name=fltr_order_by]").val();
-	        var order;
-	        if( field === oldField ){
-	            order = sort_order=="asc" ? "desc" : "asc";
-	        }
-	        else{
-	            order = "asc";
-	        }
-	        sortList( field, order);
-	    }
-  	});
+  // Column order
+  $("th").on( 'click', function( e ){
+    var field = $(this).attr('data-field');
+    if(field != 'mass_selection'){
+        var oldField = $("input[name=fltr_order_by]").val();
+        var order;
+        if( field === oldField ){
+            order = sort_order=="asc" ? "desc" : "asc";
+        }
+        else{
+            order = "asc";
+        }
+        sortList( field, order);
+    }
+  });
 
-  	function sortList(field, order){
+  function sortList(field, order){
         $("input[name=fltr_order_sort]").val(order);
         $("input[name=fltr_order_by]").val(field);
         $("#filter_form").submit( );
     }
-
+    
     loadFilter(${ticket_filter.mapCategoryId?size});
 });
 
@@ -530,25 +449,24 @@ function loadFilter(mapSize){
 <script type="text/javascript">
  // initialization functions for multiselect state list
     $(document).ready(function() {
-    	
         $('#fltr_open_since, #fltr_open_until')
-        	.datepicker({language: 'fr'})
-        	.off('keypress keyup keydown')
-     	.on('keypress keyup keydown', function(e) {
-     	    if(e.keyCode === 13) {
-     	        e.stopPropagation();
-     	        e.preventDefault();
-            	$("#filter_form").submit();
-     	        return false;
-     	    }
-     	})
-       	.on('changeDate', function (e) {
-     		$("#filter_form").submit();
+    	.datepicker({language: 'fr'})
+    	.off('keypress keyup keydown')
+    	.on('keypress keyup keydown', function(e) {
+    	    if(e.keyCode === 13) {
+    	        e.stopPropagation();
+    	        e.preventDefault();
+                $("#filter_form").submit();
+    	        return false;
+    	    }
+    	})
+    	.on('changeDate', function (e) {
+            $("#filter_form").submit();
         });
-        
-        $('#fltr_open_since').parent().find('.input-group-addon').click(function() { $('#fltr_open_since').focus(); });
-        $('#fltr_open_until').parent().find('.input-group-addon').click(function() { $('#fltr_open_until').focus(); });  
-
+    
+	    $('#fltr_open_since').parent().find('.input-group-addon').click(function() { $('#fltr_open_since').focus(); });
+	    $('#fltr_open_until').parent().find('.input-group-addon').click(function() { $('#fltr_open_until').focus(); });  
+    
         $("#search_clear").click(function(){
             $("#search_input").val('');
             $("#hidden_query_value").val('');
