@@ -31,6 +31,11 @@
                 <@formGroup labelKey='#i18n{ticketing.create_category.labelHelpMessage}' helpKey='#i18n{ticketing.create_category.labelHelpMessage.help}' mandatory=false>
                         <@input type='text' name='helpMessage' value='${category.helpMessage!\'\'}' />
                 </@formGroup>
+                
+                <@formGroup labelKey='#i18n{ticketing.modify_category.labelManageable}' helpKey='#i18n{ticketing.modify_category.labelManageable.help}' mandatory=false>
+                        <input type="checkbox" name="manageable" >
+                </@formGroup>
+                
                 <@btnGroup>
                     <@button type='submit' name='action_createCategory' title='#i18n{portal.admin.message.buttonValidate}' />
                     <@button type='submit' name='view_manageCategories' title='#i18n{portal.admin.message.buttonCancel}' cancel=true />
