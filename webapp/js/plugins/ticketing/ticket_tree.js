@@ -174,7 +174,9 @@ function loadCombo(selector, categories, depth, idCategoryToSelect, allowNullSel
 			selectedCategoryIndexId = index !== undefined && categories[index] && categories[index].id;
 		}
 		
-		loadHelpMessage("#help_message_" + depth.depth_number, undefined);
+		if(depth  != undefined) {
+			loadHelpMessage("#help_message_" + depth.depth_number, undefined);
+		}
 
 		if (!existingSelectedCategory || allowNullSelection)
 		{
