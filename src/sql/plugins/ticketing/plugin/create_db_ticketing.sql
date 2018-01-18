@@ -257,7 +257,7 @@ id_form int(11) default '0' NOT NULL,
 id_champ varchar(50) default '' NOT NULL,
 hidden SMALLINT NOT NULL,
 mandatory SMALLINT NOT NULL,
-order int(11) default '0' NOT NULL,
+hierarchy int(11) default '0' NOT NULL,
 PRIMARY KEY (id_formentry)
 );
 
