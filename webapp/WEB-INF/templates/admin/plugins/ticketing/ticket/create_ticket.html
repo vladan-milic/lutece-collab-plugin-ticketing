@@ -1,5 +1,6 @@
 <script>$(".content-header").hide();</script>
 <#include "/skin/plugins/asynchronousupload/upload_commons.html" />
+<#include "/admin/plugins/address/modules/autocomplete/include/suggestPOI.html" />
 
 <link rel="stylesheet" href="css/plugins/ticketing/ticketing.css" type="text/css"/>
 <div class="gru-wrapper">
@@ -16,6 +17,7 @@
       <input type="hidden" id="id" name="id"/>
       <input type="hidden" id="guid" name="guid" value="${ticket.guid!''}"/>
       <input type="hidden" id="customer_id" name="customer_id" value="${ticket.customerId!''}"/>
+      
       <div class="row">
         <div class="col-xs-12 col-sm-6">
           <div class="form-group">
@@ -73,11 +75,11 @@
         </div>
         <div class="col-xs-12 col-sm-6">
           <#list categories_depths as depth>
-              <div class="form-group">
-                <label for="id_category_${depth.depthNumber}">${depth.label}</label>
-                <@comboWithParams name="id_category_${depth.depthNumber}" default_value="" additionalParameters=" id=\"id_category_${depth.depthNumber}\" depth=\"${depth.depthNumber}\" class=\"form-control input-lg\" " items=[] />
+	          <div class="form-group">
+	            <label for="id_category_${depth.depthNumber}">${depth.label}</label>
+	            <@comboWithParams name="id_category_${depth.depthNumber}" default_value="" additionalParameters=" id=\"id_category_${depth.depthNumber}\" depth=\"${depth.depthNumber}\" class=\"form-control input-lg\" " items=[] />
                 <span class="help-block" id="help_message_${depth.depthNumber}"></span>
-              </div>
+	          </div>
           </#list>
           <div class="form-group">
             <label for="id_contact_mode">#i18n{ticketing.create_ticket.labelContactMode}</label>
@@ -92,7 +94,7 @@
                 <@comboWithParams name="channel.id" default_value="" additionalParameters=" id=\"channel.id\" class=\"form-control input-lg\" " items=selectable_channels_list />
               </#if>
             <#else>
-              <@comboWithParams name="channel.id" default_value="${ticket.channel.id!''}" additionalParameters=" id=\"channel.id\" class=\"form-control input-lg\" " items=channels_list />
+              <@comboWithParams name="channel.id" default_value="" additionalParameters=" id=\"channel.id\" class=\"form-control input-lg\" " items=channels_list />
             </#if>
           </div>
           <div class="form-group">
@@ -120,7 +122,9 @@
 </div>
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
 <script language="javascript">
+
     var url = "jsp/admin/plugins/ticketing/Standalone.jsp?view=ticketForm";
+    
     $(document).ready(function() {
         lutece_ticket_tree(${ticket.branchJSONObject}, ${categories_tree}, url);
     });
@@ -130,6 +134,22 @@
             $(this).val(result);
         });
     });
+</script>
+
+<@setupSuggestPOI />
+<script type="text/javascript">
+  $(window).load(function() {
+   var jAdresse = $('#address');
+   var jAdressePostalcode =  $('#postal_code');
+   var jAdresseCity = $('#city');
+   jAdresse.suggestPOI();
+   jAdresse.bind($.suggestPOI.EVT_SELECT, function(event) {
+   //Use properties from BAN apiinput type. Would not work with suggestPOI.
+   jAdresse.val(event.poi.sourcePOI.properties.name);
+   jAdressePostalcode.val(event.poi.sourcePOI.properties.postcode);
+   jAdresseCity.val(event.poi.sourcePOI.properties.city);
+   });
+  });
 </script>
 
 <@addRequiredJsFiles />

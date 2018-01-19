@@ -1,4 +1,5 @@
 <script>$(".content-header").hide();</script>
+<#include "/admin/plugins/address/modules/autocomplete/include/suggestPOI.html" />
 
 <div class="gru-wrapper">
   <div id="customer-panel" class="row ticket-head bg-gru-light">
@@ -88,7 +89,6 @@
     </div>
   </div>
 </div>
-
 <script language="javascript">
     $(document).ready(function() {
         $('.input-phone').change(function() {
@@ -96,4 +96,20 @@
             $(this).val(result);
         });
     });
+</script>
+
+<@setupSuggestPOI />
+<script type="text/javascript">
+  $(window).load(function() {
+   var jAdresse = $('#address');
+   var jAdressePostalcode =  $('#postal_code');
+   var jAdresseCity = $('#city');
+   jAdresse.suggestPOI();
+   jAdresse.bind($.suggestPOI.EVT_SELECT, function(event) {
+   //Use properties from BAN apiinput type. Would not work with suggestPOI.
+   jAdresse.val(event.poi.sourcePOI.properties.name);
+   jAdressePostalcode.val(event.poi.sourcePOI.properties.postcode);
+   jAdresseCity.val(event.poi.sourcePOI.properties.city);
+   });
+  });
 </script>

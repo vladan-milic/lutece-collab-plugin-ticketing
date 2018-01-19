@@ -2,18 +2,18 @@
 <#include "/skin/plugins/ticketing/include/popins.html" />
 <#include "/skin/plugins/asynchronousupload/upload_commons.html" />
 <div class="form-group">
-	<label class="control-label col-sm-3" for="attribute${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory>	*</#if> :</label>
-	<div class="controls col-sm-9">
+	<label class="" for="attribute${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory> (obligatoire)</#if></label>
+	<div class="">
 		<#assign fieldName='attribute'+entry.idEntry >
 		<#assign cssClass=entry.CSSClass!'' >
-	<#if list_responses?has_content>
-		<#list list_responses as response>
-			<#if response.entry.error??>
-				<#assign cssClass=cssClass+' error'>
-				<#break>
-			</#if>
-		</#list>
-	</#if>
+		<#if list_responses?has_content>
+			<#list list_responses as response>
+				<#if response.entry.error??>
+					<#assign cssClass=cssClass+'error' >
+					<#break>
+				</#if>
+			</#list>
+		</#if>
 		<@addFileInput fieldName=fieldName handler=uploadHandler cssClass=cssClass multiple=true />
 		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
 			<span class="help-block">${entry.helpMessage}</span>
@@ -23,8 +23,8 @@
 <#if list_responses?has_content>
 	<#list list_responses as response>
 		<#if response.entry.error?? && response.entry.error.isDisplayableError>
-    <div class="alert alert-error alert-danger">${response.entry.error.errorMessage}</div>
-       	</#if>
+			<div class="alert alert-error alert-danger">${response.entry.error.errorMessage}</div>
+		</#if>
 		<#if response.file?? && response.file.title?? && response.file.title != ''>
 			<#if listFiles??>
 				<#assign listFiles = listFiles + [response.file] >

@@ -1,110 +1,163 @@
-<#include "/skin/plugins/asynchronousupload/upload_commons.html" />
-<script src="js/bootstrap-datepicker.js"></script>
-<script src="js/locales/bootstrap-datepicker.fr.js" charset="utf-8"></script>
-<div class="row" >
-    <div class="col-sm-12">
-    <form class="form-horizontal" role="form" method="post" action="jsp/site/Portal.jsp?page=ticket" enctype="multipart/form-data">
-        <fieldset>
-            <legend>#i18n{ticketing.xpage.create_ticket.title}</legend>
-
+<div id="create_ticket" class="row">
+    <div class="col-xs-12 col-sm-12">
+	<form id="create_ticket_form" class="form" role="form" method="post" action="jsp/site/Portal.jsp?page=ticket" enctype="multipart/form-data">
             <@messages errors=errors />
-            
-			<input name="page" value="ticket" type="hidden">
+            <input name="page" value="ticket" type="hidden">
 			<input name="action" value="recapTicket" type="hidden">
-            <input type="hidden" id="id" name="id"/>  
-            <input type="hidden" id="guid" name="guid" value="${ticket.guid!}"/>
+            <input type="hidden" id="id" name="id">  
+            <input type="hidden" id="guid" name="guid" value="${ticket.guid!}">
+      		
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="id_user_title" >#i18n{ticketing.xpage.create_ticket.labelIdUserTitle}&#8239;*&#8239;:</label>
-                <div class="col-sm-9">
-                    <@comboWithParams name="id_user_title" default_value="${ticket.idUserTitle!''}"  additionalParameters="class=\"form-control\""  items=user_titles_list />
-                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelIdUserTitle.help}</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label" for="lastname" >#i18n{ticketing.xpage.create_ticket.labelLastname}&#8239;*&#8239;:</label>
-                <div class="col-sm-9">
-                    <input class="form-control" type="text" id="lastname" name="lastname" value="${ticket.lastname!''}"  maxlength="50" />
-                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelLastname.help}</span>
-                </div>
+                <label for="id_user_title" >#i18n{ticketing.xpage.create_ticket.labelIdUserTitle} (obligatoire)</label>
+				<#list user_titles_list as user_title>
+					<label class="radio-inline" for="id_user_title_${user_title.code}">
+						<input type="radio" name="id_user_title" id="id_user_title_${user_title.code}" value="${user_title.code}" <#if ticket.idUserTitle?string==user_title.code>checked</#if>> 
+						<span class="radio-label">${user_title.name}</span>
+					</label>
+				</#list>
+                 <span class="help-block sr-only">#i18n{ticketing.xpage.create_ticket.labelIdUserTitle.help}</span>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="firstname" >#i18n{ticketing.xpage.create_ticket.labelFirstname}&#8239;*&#8239;:</label>
-                <div class="col-sm-9">
-                    <input class="form-control" type="text" id="firstname" name="firstname" value="${ticket.firstname!}"  maxlength="50" />
-                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelFirstname.help}</span>
-                </div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-6">
+						<label  for="lastname" >#i18n{ticketing.xpage.create_ticket.labelLastname} (obligatoire)</label>
+						<input class="form-control" type="text" id="lastname" name="lastname" value="${ticket.lastname!''}"  maxlength="50">
+						<span class="help-block sr-only">#i18n{ticketing.xpage.create_ticket.labelLastname.help}</span>
+					</div>	
+					<div class="col-xs-12 col-sm-6">
+						<label  for="firstname" >#i18n{ticketing.xpage.create_ticket.labelFirstname} (obligatoire)</label>
+						<input class="form-control" type="text" id="firstname" name="firstname" value="${ticket.firstname!}"  maxlength="50">
+						<span class="help-block sr-only">#i18n{ticketing.xpage.create_ticket.labelFirstname.help}</span>
+					</div>
+				</div>	
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="email" >#i18n{ticketing.xpage.create_ticket.labelEmail}&#8239;*&#8239;:</label>
-                <div class="col-sm-9">
-                    <input class="form-control" type="text" id="email" name="email" value="${ticket.email!''}"  maxlength="255" />
-                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelEmail.help}</span>
-                </div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-6">
+						<label  for="email" >#i18n{ticketing.xpage.create_ticket.labelEmail} (obligatoire)</label>
+						<input class="form-control" type="text" id="email" name="email" value="${ticket.email!''}"  maxlength="255">
+						<span class="help-block v">#i18n{ticketing.xpage.create_ticket.labelEmail.help}</span>
+					</div>
+				</div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="fixed_phone_number" >#i18n{ticketing.xpage.create_ticket.labelFixedPhoneNumber}&#8239;:</label>
-                <div class="col-sm-9">
-                    <input class="form-control input-phone" type="text" id="fixed_phone_number" name="fixed_phone_number" value="${ticket.fixedPhoneNumber!''}"  maxlength="10" />
-                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span>
-                </div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-6">
+						<label  for="fixed_phone_number" >#i18n{ticketing.xpage.create_ticket.labelFixedPhoneNumber}</label>
+						<input class="form-control input-phone" type="text" id="fixed_phone_number" name="fixed_phone_number" value="${ticket.fixedPhoneNumber!''}"  maxlength="10" />
+						<span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<label  for="mobile_phone_number" >#i18n{ticketing.xpage.create_ticket.labelMobilePhoneNumber}</label>
+						<input class="form-control input-phone" type="text" id="mobile_phone_number" name="mobile_phone_number" value="${ticket.mobilePhoneNumber!''}"  maxlength="10" />
+						<span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span>
+					</div>
+				</div>
             </div>
+			<div class="form-group" style="display: none;">
+				<#-- undo default selected on index==0 when display:none is remove-->
+                <label for="id_contact_mode" >#i18n{ticketing.xpage.create_ticket.labelContactMode}</label>
+				<p>
+				<#list contact_modes_list as contact_mode>
+					<label class="radio-inline" for="id_contact_mode_${contact_mode.code}">
+						<input type="radio" name="id_contact_mode" id="id_contact_mode_${contact_mode.code}" value="${contact_mode.code}" <#if contact_mode_index==0 || ticket.idContactMode?string==contact_mode.code>checked</#if>> 
+						<span class="radio-label">${contact_mode.name}</span>
+					</label>
+				</#list>
+				</p>
+                <span class="help-block sr-only">#i18n{ticketing.xpage.create_ticket.labelContactMode.help}</span>
+            </div>
+			<hr>
+            <#list categories_depths as depth>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="mobile_phone_number" >#i18n{ticketing.xpage.create_ticket.labelMobilePhoneNumber}&#8239;:</label>
-                <div class="col-sm-9">
-                    <input class="form-control input-phone" type="text" id="mobile_phone_number" name="mobile_phone_number" value="${ticket.mobilePhoneNumber!''}"  maxlength="10" />
-                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span>
+                <label for="id_category_${depth.depthNumber}">${depth.label} (obligatoire)</label>
+                <div class="select">
+                    <@comboWithParams name="id_category_${depth.depthNumber}" default_value="" additionalParameters=" id=\"id_category_${depth.depthNumber}\" depth=\"${depth.depthNumber}\" class=\"select-control\" " items=[] />
                 </div>
-            </div>
-          <#list categories_depths as depth>
-              <div class="form-group">
-                <label class="col-sm-3 control-label" for="id_category_${depth.depthNumber}">${depth.label}&#8239;:</label>
-                <div class="col-sm-9">
-                     <@comboWithParams name="id_category_${depth.depthNumber}" default_value="" additionalParameters=" id=\"id_category_${depth.depthNumber}\" depth=\"${depth.depthNumber}\" class=\"form-control\"  items=[] />
-                    <span class="help-block" id="help_message_${depth.depthNumber}"></span>
-                </div>
-              </div>
-          </#list>
+                <span class="help-block" id="help_message_${depth.depthNumber}"></span>
+	   		</div>
+	        </#list>
             <div class="form-group">
-                <label class="col-sm-3 control-label" for="id_contact_mode" >#i18n{ticketing.xpage.create_ticket.labelContactMode}&#8239;*&#8239;:</label>
-                <div class="col-sm-9">
-                    <@comboWithParams name="id_contact_mode" default_value="${ticket.idContactMode!''}"  additionalParameters="class=\"form-control\""  items=contact_modes_list />
-                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelContactMode.help}</span>
-                </div>
+               <label for="ticket_comment" >#i18n{ticketing.xpage.create_ticket.labelTicketComment} (obligatoire)</label>
+               <textarea class="ticketing form-control" id="ticket_comment" name="ticket_comment" >${ticket.ticketComment!''}</textarea>
+	 	       <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelTicketComment.help}</span>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label" for="ticket_comment" >#i18n{ticketing.xpage.create_ticket.labelTicketComment}&#8239;*&#8239;:</label>
-                <div class="col-sm-9">
-                    <textarea class="ticketing form-control" id="ticket_comment" name="ticket_comment" maxlength="5000">${ticket.ticketComment!''}</textarea>
-                    <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelTicketComment.help}</span>
-                </div>
+			<div class="form-group" id="generic_attributes"></div>
+			<div class="clearfix"></div>
+            <div class="form-group text-center" style="margin-top:20px;">
+                <button id="submit_create_ticket" name="action_recapTicket" class="btn btn-primary" type="submit">
+                    #i18n{ticketing.xpage.create_ticket.labelButtonCreate}
+                 </button>
             </div>
-            <div class="form-group" id="generic_attributes">          
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-9">
-                    <button name="action_recapTicket" class="btn btn-primary" type="submit">
-                        #i18n{ticketing.xpage.create_ticket.labelButtonCreate}
-                    </button>
-               </div>
-            </div>
-        </fieldset>
-    </form>
+		</form>
     </div>
 </div>
-
-
+<script src="js/bootstrap-datepicker.js"></script>
+<script src="js/locales/bootstrap-datepicker.fr.js" charset="utf-8"></script>
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
 <script language="javascript"> 
     var url = "jsp/site/Portal.jsp?page=ticket&view=ticketForm";
-    $(document).ready(function() {
-        lutece_ticket_tree(${ticket.branchJSONObject}, ${categories_tree}, url);
-    });
-    $(document).ready(function() {
-        $('.input-phone').change(function() {
-            var result = $(this).val().replace(/\s/g,"");
-            $(this).val(result);
-        });
+
+	var templateSection = $('<li class="sections-list-item">'+
+    	'<a class="sections-list-button">'+
+    		'<strong class="sections-list-button-title">Titre</strong>'+
+    		'<div class="sections-list-button-text">Description</div>'+
+    	'</a>'+
+    '</li>');
+	
+	var sectionContainer = $('#first-depth');
+    var selectSection = $("#id_category_1");
+    
+	var categoriesTree = ${categories_tree};
+
+    $( function() {
+        var tree = lutece_ticket_tree(${ticket.branchJSONObject}, categoriesTree, url);
+	    
+		/* Check maxlength for textarea input */
+		var maxObjet = 5000;
+		$("#ticket_comment").keypress(function(e) {
+			if( e.charCode >= 48 ){
+			var nCar = $(this).val().length;
+				$(this).next().html( "<stong>" + nCar + " caract&egrave;res</strong>");
+				if( nCar >= maxObjet){
+					$(this).next().html('<strong class="label label-warning">Attention limite de '+ maxObjet +' caract&egrave;res atteinte !</strong>');
+					return false;
+				}
+			}
+		});
+	
+		$("#ticket_comment").blur(function(e) {
+			var txt = $(this).val();
+			if( txt.length > maxObjet){
+				$(this).next().html('<span class="label label-warning">Attention limite de '+ maxObjet +' caract&egrave;res atteinte ! <i class="fa fa-exclamation-triangle fa-fw"></i> Votre texte a &eacute;t&eacute; tronqu&eacute; &agrave; '+ maxObjet +' caract&egrave;res</span>');
+				$(this).val( txt.substr(0,maxObjet) );
+			} else {
+				var nCar = $(this).val().length;
+				$(this).next().html( "<strong>" + nCar + " caract&egrave;res</strong>");
+			}
+		});
+			
+		/* Phone */		
+		$('.input-phone').change(function() {
+		    var result = $(this).val().replace(/\s/g,"");
+		    $(this).val(result);
+		});
+		
+		<#if ticket.guid?has_content >
+			var ticketingPostData = {};
+			ticketingPostData["gender"] = "${ticket.idUserTitle!''}";
+			ticketingPostData["first_name"] = "${ticket.firstname!''}";
+			ticketingPostData["preferred_username"] = "${ticket.lastname!''}";
+			ticketingPostData["fixed_phone"] = "${ticket.fixedPhoneNumber!''}";
+			ticketingPostData["mobile_phone"] = "${ticket.mobilePhoneNumber!''}";
+			$.ajax({
+				url : "jsp/site/plugins/ticketing/personaldata/InitPersonalData.jsp",
+				type: 'POST',
+				data: ticketingPostData,
+				async: false,
+				cache:false
+			});
+		</#if>
     });
 </script>
-<@addRequiredJsFiles />
 <script type="text/javascript" src="jsp/site/plugins/asynchronousupload/GetMainUploadJs.jsp?handler=ticketAsynchronousUploadHandler" ></script>
