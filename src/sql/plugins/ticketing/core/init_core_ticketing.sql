@@ -82,6 +82,11 @@ DELETE FROM core_admin_right WHERE id_right = 'TICKETING_PLUGIN_CONFIGURATION';
 INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is_updatable,plugin_name,id_feature_group,icon_url,documentation_url, id_order ) VALUES 
 ('TICKETING_PLUGIN_CONFIGURATION','ticketing.adminFeature.ConfigurePlugin.name',1,'jsp/admin/plugins/ticketing/config/ConfigurePlugin.jsp','ticketing.adminFeature.ConfigurePlugin.description',0,'ticketing','APPLICATIONS',NULL,NULL,4);
 
+DELETE FROM core_admin_right WHERE id_right = 'TICKETING_TICKETS_MANAGEMENT_FORMS';
+INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is_updatable,plugin_name,id_feature_group,icon_url,documentation_url, id_order ) VALUES 
+('TICKETING_TICKETS_MANAGEMENT_FORMS','ticketing.adminFeature.ManageAdminTicketingForms.name',1,'jsp/admin/plugins/ticketing/ManageForms.jsp','ticketing.adminFeature.ManageAdminTicketingForms.description',0,'ticketing','TICKETING',NULL,NULL,7);
+
+
 --
 -- Data for table core_user_right
 --

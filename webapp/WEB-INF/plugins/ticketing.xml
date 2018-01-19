@@ -29,6 +29,14 @@
             <feature-icon-url/>
         </admin-feature>
         <admin-feature>
+            <feature-id>TICKETING_TICKETS_MANAGEMENT_FORMS</feature-id>
+            <feature-title>ticketing.adminFeature.ManageAdminTicketingForms.name</feature-title>
+            <feature-description>ticketing.adminFeature.ManageAdminTicketingForms.description</feature-description>
+            <feature-level>0</feature-level>
+            <feature-url>jsp/admin/plugins/ticketing/admin/ManageForms.jsp</feature-url>
+            <feature-icon-url/>
+        </admin-feature>
+        <admin-feature>
             <feature-id>TICKETING_TICKETS_MANAGEMENT</feature-id>
             <feature-title>ticketing.adminFeature.ManageTickets.name</feature-title>
             <feature-description>ticketing.adminFeature.ManageTickets.description</feature-description>

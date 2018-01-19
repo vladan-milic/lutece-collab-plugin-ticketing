@@ -1,0 +1,50 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+		<div class="box box-primary">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{ticketing.manage_form.title}</h3>
+				<div class="box-tools pull-right">
+					<form class="form-inline" method="post" name="manage_form" action="jsp/admin/plugins/ticketing/admin/ManageForms.jsp">
+						<button class="btn btn-primary" name="view_createForm" type="submit">
+                            <i class="fa fa-plus"> </i> <span class="hidden-xs"> #i18n{ticketing.manage_form.buttonAdd}</span>
+                        </button>
+        			</form>
+				</div>
+			</div>     
+    		<div class="box-body table-responsive">
+				<table class="table table-hover table-striped">
+				<thead>
+					<tr>			            
+			           <th width="75%" >
+			            	#i18n{ticketing.manage_form.columnTitle}
+			            </th>
+			           <th width="5%" style="text-align:center">#i18n{ticketing.manage_form.columnEdit}</th>	
+			           <th width="5%" style="text-align:center">#i18n{ticketing.manage_form.columnDelete}</th>	
+	       			</tr>
+        		</thead>
+        		<tbody>
+            		<#list form_list as form >
+        			<tr>
+             			<td>${form.title}</td>	
+				        <td style="text-align:center">
+				            <a href="jsp/admin/plugins/ticketing/admin/ManageForms.jsp?view=modifyForm&id=${form.id}"
+				               class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
+				                <i class="fa fa-pencil"></i>
+				            </a>
+				        </td>
+                                          <td style="text-align:center">				         
+
+				            <a href="jsp/admin/plugins/ticketing/admin/ManageForms.jsp?action=confirmRemoveForm&id=${form.id}"
+				               class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
+				                <i class="fa fa-trash"></i>
+				            </a>
+				        </td>
+        			</tr>
+        			</#list>
+        		</tbody>
+                </table>
+        	</div>
+        	<@paginationAdmin paginator=paginator combo=1 />
+		</div>
+	</div>
+</div>
