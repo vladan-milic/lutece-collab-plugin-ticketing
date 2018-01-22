@@ -136,6 +136,24 @@
     });
 </script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+         document.getElementById("channel.id").value = sessionStorage.channel || 1;    // set the value to this input
+        
+        $(document).ready(function(){
+        	$('#channel\\.id').on('change', function() { 
+            	sessionStorage.channel = document.getElementById("channel.id").value;
+        	});
+        });
+
+        function getSavedValue  (v){
+            if (localStorage.getItem(v) === null) {
+                return ${preferred_id_channel};
+            }
+            return localStorage.getItem(v);
+        }
+</script>
+
 <@setupSuggestPOI />
 <script type="text/javascript">
   $(window).load(function() {
