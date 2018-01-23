@@ -46,12 +46,15 @@ public class Form implements Serializable
 
     // Variables declarations 
     private int _nId;
-    
+    @NotEmpty( message = "#i18n{ticketing.validation.form.Title.notEmpty}" )
+    @Size( max = 500, message = "#i18n{ticketing.validation.form.Title.size}" )
     private String _strTitle;
-    
+    @Size( max = 500, message = "#i18n{ticketing.validation.form.Message.size}" )
     private String _strMessage;
+    @Size( max = 500, message = "#i18n{ticketing.validation.form.ButtonLabel.size}" )
+    private String _strButtonLabel;
     
-    private int _nButtonLabel;
+    private boolean _bConnection;
 
     /**
      * Returns the Id
@@ -111,17 +114,35 @@ public class Form implements Serializable
      * Returns the ButtonLabel
      * @return The ButtonLabel
      */
-    public int getButtonLabel( )
+    public String getButtonLabel( )
     {
-        return _nButtonLabel;
+        return _strButtonLabel;
     }
 
     /**
      * Sets the ButtonLabel
-     * @param nButtonLabel The ButtonLabel
+     * @param strButtonLabel The ButtonLabel
      */ 
-    public void setButtonLabel( int nButtonLabel )
+    public void setButtonLabel( String strButtonLabel )
     {
-        _nButtonLabel = nButtonLabel;
+        _strButtonLabel = strButtonLabel;
+    }
+    
+    /**
+     * Returns the Connection
+     * @return The Connection
+     */
+    public boolean getConnection( )
+    {
+        return _bConnection;
+    }
+
+    /**
+     * Sets the Connection
+     * @param bConnection The Connection
+     */ 
+    public void setConnection( boolean bConnection )
+    {
+        _bConnection = bConnection;
     }
 }

@@ -48,11 +48,11 @@ public final class FormDAO implements IFormDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_form ) FROM ticketing_form";
-    private static final String SQL_QUERY_SELECT = "SELECT id_form, title, message, button_label FROM ticketing_form WHERE id_form = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_form ( id_form, title, message, button_label ) VALUES ( ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_form, title, message, button_label, connection FROM ticketing_form WHERE id_form = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_form ( id_form, title, message, button_label, connection ) VALUES ( ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_form WHERE id_form = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_form SET id_form = ?, title = ?, message = ?, button_label = ? WHERE id_form = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_form, title, message, button_label FROM ticketing_form";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_form SET id_form = ?, title = ?, message = ?, button_label = ?, connection = ? WHERE id_form = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_form, title, message, button_label, connection FROM ticketing_form";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_form FROM ticketing_form";
 
     /**
@@ -88,7 +88,8 @@ public final class FormDAO implements IFormDAO
         daoUtil.setInt( nIndex++ , form.getId( ) );
         daoUtil.setString( nIndex++ , form.getTitle( ) );
         daoUtil.setString( nIndex++ , form.getMessage( ) );
-        daoUtil.setInt( nIndex++ , form.getButtonLabel( ) );
+        daoUtil.setString( nIndex++ , form.getButtonLabel( ) );
+        daoUtil.setBoolean( nIndex++ , form.getConnection( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -113,7 +114,8 @@ public final class FormDAO implements IFormDAO
             form.setId( daoUtil.getInt( nIndex++ ) );
             form.setTitle( daoUtil.getString( nIndex++ ) );
             form.setMessage( daoUtil.getString( nIndex++ ) );
-            form.setButtonLabel( daoUtil.getInt( nIndex++ ) );
+            form.setButtonLabel( daoUtil.getString( nIndex++ ) );
+            form.setConnection( daoUtil.getBoolean( nIndex++ ) );
         }
 
         daoUtil.free( );
@@ -144,7 +146,8 @@ public final class FormDAO implements IFormDAO
         daoUtil.setInt( nIndex++ , form.getId( ) );
         daoUtil.setString( nIndex++ , form.getTitle( ) );
         daoUtil.setString( nIndex++ , form.getMessage( ) );
-        daoUtil.setInt( nIndex++ , form.getButtonLabel( ) );
+        daoUtil.setString( nIndex++ , form.getButtonLabel( ) );
+        daoUtil.setBoolean( nIndex++ , form.getConnection( ) );
         daoUtil.setInt( nIndex , form.getId( ) );
 
         daoUtil.executeUpdate( );
@@ -169,7 +172,8 @@ public final class FormDAO implements IFormDAO
             form.setId( daoUtil.getInt( nIndex++ ) );
             form.setTitle( daoUtil.getString( nIndex++ ) );
             form.setMessage( daoUtil.getString( nIndex++ ) );
-            form.setButtonLabel( daoUtil.getInt( nIndex++ ) );
+            form.setButtonLabel( daoUtil.getString( nIndex++ ) );
+            form.setConnection( daoUtil.getBoolean( nIndex++ ) );
 
             formList.add( form );
         }

@@ -9,22 +9,28 @@
 	            <form class="form-horizontal" method="post" name="create_form" action="jsp/admin/plugins/ticketing/admin/ManageForms.jsp">
 	               <@messages errors=errors />
 	               <input type="hidden" id="id" name="id"/>
-	            
-	               <@fieldInputText i18nLabelKey="ticketing.create_form.labelTitle" inputName="title" mandatory=true value="${form.title!''}" i18nHelpBlockKey="ticketing.create_form.labelTitle.help" />
-	               <@fieldInputText i18nLabelKey="ticketing.create_form.labelColor" inputName="labelColor" mandatory=true value="${marking.labelColor!''}" i18nHelpBlockKey="ticketing.create_form.labelColor.help" />
-	               <@fieldInputText i18nLabelKey="ticketing.create_form.labelBackgroundColor" inputName="backgroundColor" mandatory=true value="${form.backgroundColor!''}" i18nHelpBlockKey="ticketing.create_form.labelBackgroundColor.help" />
-	               <div class="form-group">
-	               		<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label" for="markingPreview">#i18n{ticketing.create_form.labelPreview} : </label>
-						<div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
-							<div id="formPreview" style="position: absolute;padding: 2px 5px;border-radius: 5px;" title=""></div>
+	         <@fieldInputText i18nLabelKey="ticketing.manage_viewing.labelTitle" inputName="title" mandatory=true value="${form.title!''}" i18nHelpBlockKey="ticketing.manage_viewing.labelTitle.help" /> 
+    <div class="form-group"> 
+      <label class="control-label col-xs-12 col-sm-3" for="confirmation_msg">#i18n{ticketing.create_contactmode.labelConfirmationMsg} : </label> 
+        <div class="col-xs-12 col-sm-9"> 
+          <textarea name="message" id="message" class="ticketing richtext form-control">${form.message!''}</textarea> 
+          <span class="help-block">#i18n{ticketing.manage_viewing.labelMessage.help}</span>
+        </div> 
+    </div>   
+    <@fieldInputText i18nLabelKey="ticketing.manage_viewing.labelValidationButton" inputName="buttonLabel" value="${form.buttonLabel!''}" i18nHelpBlockKey="ticketing.manage_viewing.labelValidationButton.help" /> 
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label" for="mandatory">#i18n{ticketing.create_form.labelConnection}</label>
+			        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" id="connection" name="connection" value="1" >
+							</label>
 						</div>
 					</div>
-	               <@actionButtons button1Name="action_createMarking" button2Name="view_manageForms"/>
+				</div>
+	               <@actionButtons button1Name="action_createForm" button2Name="view_manageForms"/>
 	            </form>
             </div>
-            <div class="col-md-4">
-				<#include "/admin/plugins/ticketing/admin/color_table.html" />
-			</div>
          </div>
       </div>
    </div>
