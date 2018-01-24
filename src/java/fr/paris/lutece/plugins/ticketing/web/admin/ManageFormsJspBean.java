@@ -11,6 +11,7 @@ import fr.paris.lutece.plugins.ticketing.business.form.FormHome;
 import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
 import fr.paris.lutece.plugins.ticketing.business.marking.MarkingHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -154,7 +155,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
 
         Map<String, Object> model = getModel( );
         model.put( MARK_FORM, _form );
-
+        ModelUtils.storeRichText( request, model );
         return getPage( PROPERTY_PAGE_TITLE_CREATE_FORM, TEMPLATE_CREATE_FORM, model );
     }
 
@@ -240,7 +241,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
 
         Map<String, Object> model = getModel( );
         model.put( MARK_FORM, _form );
-
+        ModelUtils.storeRichText( request, model );
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_FORM, TEMPLATE_MODIFY_FORM, model );
     }
     
