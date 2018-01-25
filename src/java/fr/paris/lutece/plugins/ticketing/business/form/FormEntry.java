@@ -57,7 +57,7 @@ public class FormEntry implements Serializable
     
     private boolean _bMandatory;
     
-    private int _nOrder;
+    private int _nHierarchy;
 
     /**
      * Returns the Id
@@ -117,7 +117,7 @@ public class FormEntry implements Serializable
      * Returns the Hidden
      * @return The Hidden
      */
-    public boolean getHidden( )
+    public boolean isHidden( )
     {
         return _bHidden;
     }
@@ -135,7 +135,7 @@ public class FormEntry implements Serializable
      * Returns the Mandatory
      * @return The Mandatory
      */
-    public boolean getMandatory( )
+    public boolean isMandatory( )
     {
         return _bMandatory;
     }
@@ -153,17 +153,17 @@ public class FormEntry implements Serializable
      * Returns the Order
      * @return The Order
      */
-    public int getOrder( )
+    public int getHierarchy( )
     {
-        return _nOrder;
+        return _nHierarchy;
     }
 
     /**
      * Sets the Order
      * @param nOrder The Order
      */ 
-    public void setOrder( int nOrder )
+    public void setHierarchy( int nOrder )
     {
-        _nOrder = nOrder;
+        _nHierarchy = nOrder;
     }
 }

@@ -89,7 +89,7 @@ public final class FormDAO implements IFormDAO
         daoUtil.setString( nIndex++ , form.getTitle( ) );
         daoUtil.setString( nIndex++ , form.getMessage( ) );
         daoUtil.setString( nIndex++ , form.getButtonLabel( ) );
-        daoUtil.setBoolean( nIndex++ , form.getConnection( ) );
+        daoUtil.setBoolean( nIndex++ , form.requiresConnection( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -147,7 +147,7 @@ public final class FormDAO implements IFormDAO
         daoUtil.setString( nIndex++ , form.getTitle( ) );
         daoUtil.setString( nIndex++ , form.getMessage( ) );
         daoUtil.setString( nIndex++ , form.getButtonLabel( ) );
-        daoUtil.setBoolean( nIndex++ , form.getConnection( ) );
+        daoUtil.setBoolean( nIndex++ , form.requiresConnection( ) );
         daoUtil.setInt( nIndex , form.getId( ) );
 
         daoUtil.executeUpdate( );

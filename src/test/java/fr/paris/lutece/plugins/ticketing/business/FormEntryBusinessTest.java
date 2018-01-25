@@ -60,30 +60,30 @@ public class FormEntryBusinessTest extends LuteceTestCase
         formEntry.setIdChamp( IDCHAMP1 );
         formEntry.setHidden( HIDDEN1 );
         formEntry.setMandatory( MANDATORY1 );
-        formEntry.setOrder( ORDER1 );
+        formEntry.setHierarchy( ORDER1 );
 
         // Create test
         FormEntryHome.create( formEntry );
         FormEntry formEntryStored = FormEntryHome.findByPrimaryKey( formEntry.getId( ) );
         assertEquals( formEntryStored.getIdForm() , formEntry.getIdForm( ) );
         assertEquals( formEntryStored.getIdChamp() , formEntry.getIdChamp( ) );
-        assertEquals( formEntryStored.getHidden() , formEntry.getHidden( ) );
-        assertEquals( formEntryStored.getMandatory() , formEntry.getMandatory( ) );
-        assertEquals( formEntryStored.getOrder() , formEntry.getOrder( ) );
+        assertEquals( formEntryStored.isHidden() , formEntry.isHidden( ) );
+        assertEquals( formEntryStored.isMandatory() , formEntry.isMandatory( ) );
+        assertEquals( formEntryStored.getHierarchy() , formEntry.getHierarchy( ) );
 
         // Update test
         formEntry.setIdForm( IDFORM2 );
         formEntry.setIdChamp( IDCHAMP2 );
         formEntry.setHidden( HIDDEN2 );
         formEntry.setMandatory( MANDATORY2 );
-        formEntry.setOrder( ORDER2 );
+        formEntry.setHierarchy( ORDER2 );
         FormEntryHome.update( formEntry );
         formEntryStored = FormEntryHome.findByPrimaryKey( formEntry.getId( ) );
         assertEquals( formEntryStored.getIdForm() , formEntry.getIdForm( ) );
         assertEquals( formEntryStored.getIdChamp() , formEntry.getIdChamp( ) );
-        assertEquals( formEntryStored.getHidden() , formEntry.getHidden( ) );
-        assertEquals( formEntryStored.getMandatory() , formEntry.getMandatory( ) );
-        assertEquals( formEntryStored.getOrder() , formEntry.getOrder( ) );
+        assertEquals( formEntryStored.isHidden() , formEntry.isHidden( ) );
+        assertEquals( formEntryStored.isMandatory() , formEntry.isMandatory( ) );
+        assertEquals( formEntryStored.getHierarchy() , formEntry.getHierarchy( ) );
 
         // List test
         FormEntryHome.getFormEntrysList();

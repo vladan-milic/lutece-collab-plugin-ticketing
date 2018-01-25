@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.ticketing.business.form;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * This is the business class for the object Form
@@ -53,8 +54,9 @@ public class Form implements Serializable
     private String _strMessage;
     @Size( max = 500, message = "#i18n{ticketing.validation.form.ButtonLabel.size}" )
     private String _strButtonLabel;
-    
-    private boolean _bConnection;
+
+    private boolean _bConnection = true;
+    private List<FormEntry> formEntries;
 
     /**
      * Returns the Id
@@ -73,7 +75,7 @@ public class Form implements Serializable
     {
         _nId = nId;
     }
-    
+
     /**
      * Returns the Title
      * @return The Title
@@ -91,7 +93,7 @@ public class Form implements Serializable
     {
         _strTitle = strTitle;
     }
-    
+
     /**
      * Returns the Message
      * @return The Message
@@ -109,7 +111,7 @@ public class Form implements Serializable
     {
         _strMessage = strMessage;
     }
-    
+
     /**
      * Returns the ButtonLabel
      * @return The ButtonLabel
@@ -127,12 +129,12 @@ public class Form implements Serializable
     {
         _strButtonLabel = strButtonLabel;
     }
-    
+
     /**
      * Returns the Connection
      * @return The Connection
      */
-    public boolean getConnection( )
+    public boolean requiresConnection( )
     {
         return _bConnection;
     }
@@ -144,5 +146,28 @@ public class Form implements Serializable
     public void setConnection( boolean bConnection )
     {
         _bConnection = bConnection;
+    }
+
+    public FormEntry getEntry( String entryName )
+    {
+        FormEntry formEntry = getFormEntries( ).stream( ).filter( entry -> entry.getIdChamp( ).equals( entryName ) ).findFirst( ).orElse( null );
+        if ( formEntry == null )
+        {
+            formEntry = new FormEntry( );
+            formEntry.setHidden( true );
+            formEntry.setMandatory( false );
+            formEntry.setIdChamp( entryName );
+        }
+        return formEntry;
+    }
+
+    private List<FormEntry> getFormEntries( )
+    {
+        if ( this.formEntries == null )
+        {
+            formEntries = FormEntryHome.findByFormId( _nId );
+        }
+
+        return formEntries;
     }
 }

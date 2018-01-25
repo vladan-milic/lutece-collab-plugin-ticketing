@@ -95,4 +95,15 @@ public interface IFormEntryDAO
      * @return The referenceList which contains the data of all the formEntry objects
      */
     ReferenceList selectFormEntrysReferenceList( Plugin plugin );
+
+    /**
+     * Load the data of the formEntry objects related to a form
+     * 
+     * @param nKey
+     *            the key of the form
+     * @param plugin
+     *            the plugin
+     * @return The list which contains the data of all the formEntry objects
+     */
+    List<FormEntry> loadByForm( int nKey, Plugin plugin );
 }

@@ -65,7 +65,7 @@ public class FormBusinessTest extends LuteceTestCase
         assertEquals( formStored.getTitle() , form.getTitle( ) );
         assertEquals( formStored.getMessage() , form.getMessage( ) );
         assertEquals( formStored.getButtonLabel() , form.getButtonLabel( ) );
-        assertEquals( formStored.getConnection() , form.getConnection( ) );
+        assertEquals( formStored.requiresConnection() , form.requiresConnection( ) );
 
         // Update test
         form.setTitle( TITLE2 );
@@ -77,7 +77,7 @@ public class FormBusinessTest extends LuteceTestCase
         assertEquals( formStored.getTitle() , form.getTitle( ) );
         assertEquals( formStored.getMessage() , form.getMessage( ) );
         assertEquals( formStored.getButtonLabel() , form.getButtonLabel( ) );
-        assertEquals( formStored.getConnection() , form.getConnection( ) );
+        assertEquals( formStored.requiresConnection() , form.requiresConnection( ) );
 
         // List test
         FormHome.getFormsList();

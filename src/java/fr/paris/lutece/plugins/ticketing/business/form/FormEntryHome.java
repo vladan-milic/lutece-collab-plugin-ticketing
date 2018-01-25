@@ -56,6 +56,11 @@ public final class FormEntryHome
     {
     }
 
+    public static List<FormEntry> findByFormId( Integer formId )
+    {
+        return _dao.loadByForm( formId, _plugin );
+    }
+
     /**
      * Create an instance of the formEntry class
      * @param formEntry The instance of the FormEntry which contains the informations to store

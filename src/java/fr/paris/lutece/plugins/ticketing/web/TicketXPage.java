@@ -51,6 +51,9 @@ import fr.paris.lutece.plugins.identitystore.web.exception.IdentityNotFoundExcep
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
+import fr.paris.lutece.plugins.ticketing.business.form.Form;
+import fr.paris.lutece.plugins.ticketing.business.form.FormEntryType;
+import fr.paris.lutece.plugins.ticketing.business.form.FormHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
@@ -77,13 +80,16 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import freemarker.template.TemplateModelException;
 
 /**
  * This class provides the user interface to manage Ticket xpages ( manage, create, modify, remove )
  */
-@Controller( xpageName = "ticket", pageTitleI18nKey = "ticketing.xpage.ticket.pageTitle", pagePathI18nKey = "ticketing.xpage.ticket.pagePathLabel" )
+@Controller( xpageName = TicketXPage.TICKET_XPAGE_NAME, pageTitleI18nKey = "ticketing.xpage.ticket.pageTitle", pagePathI18nKey = "ticketing.xpage.ticket.pagePathLabel" )
 public class TicketXPage extends WorkflowCapableXPage
 {
+    public static final String TICKET_XPAGE_NAME = "ticket";
+
     private static final long serialVersionUID = 1L;
 
     // Templates
@@ -92,6 +98,7 @@ public class TicketXPage extends WorkflowCapableXPage
     private static final String TEMPLATE_RECAP_TICKET = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "recap_ticket.html";
     private static final String TEMPLATE_CONFIRM_TICKET = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "confirm_ticket.html";
     private static final String TEMPLATE_MESSAGE_CONFIRM = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "message_confirm_ticket.html";
+    private static final String TEMPLATE_CREATE_TICKET_DYNAMIC_FORM = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "create_ticket_dynamic_form.html";
 
     // Marks
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";
@@ -106,9 +113,12 @@ public class TicketXPage extends WorkflowCapableXPage
     private static final String MARK_FIX_PHONE_NUMBER = "fixedPhoneNumber";
     private static final String MARK_MOBILE_PHONE_NUMBER = "mobilePhoneNumber";
     private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
+    private static final String MARK_FORM = "form";
+    private static final String MARK_FORMENTRYTYPE = "formEntryType";
 
     // Parameters
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
+    public static final String PARAMETER_ID_FORM = "form";
     private static final String PARAMETER_RESET_RESPONSE = "reset_response";
 
     // Views
@@ -117,6 +127,7 @@ public class TicketXPage extends WorkflowCapableXPage
     private static final String VIEW_CONFIRM_TICKET = "confirmTicket";
     private static final String VIEW_REDIRECT_AFTER_CREATE_ACTION = "redirectAfterCreateAction";
     private static final String VIEW_TICKET_FORM = "ticketForm";
+    private static final String VIEW_CREATE_TICKET_DYNAMIC_FORM = "create";
 
     // Actions
     private static final String ACTION_CREATE_TICKET = "createTicket";
@@ -128,6 +139,7 @@ public class TicketXPage extends WorkflowCapableXPage
     // Errors
     private static final String ERROR_TICKET_CREATION_ABORTED = "ticketing.error.ticket.creation.aborted.frontoffice";
     private static final String MESSAGE_ERROR_COMMENT_VALIDATION = "ticketing.validation.ticket.TicketComment.size";
+    private static final String ERROR_NO_FORM_EXISTS = "ticketing.error.no.form";
 
     // Session keys
     private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
@@ -144,8 +156,68 @@ public class TicketXPage extends WorkflowCapableXPage
      * @param request
      *            The Http request
      * @return the html code of the ticket form
+     * @throws TemplateModelException
      */
-    @View( value = VIEW_CREATE_TICKET, defaultView = true )
+    @View( value = VIEW_CREATE_TICKET_DYNAMIC_FORM, defaultView = true )
+    public XPage getCreateTicketDynamicForm( HttpServletRequest request )
+    {
+        Map<String, Object> model = new HashMap<>( );
+
+        String formId = request.getParameter( PARAMETER_ID_FORM );
+        Form form = null;
+
+        try
+        {
+            form = FormHome.findByPrimaryKey( Integer.parseInt( formId ) );
+        }
+        catch ( NumberFormatException e )
+        {
+            AppLogService.info( formId );
+        }
+
+        if ( form == null || form.getId( ) == 0 )
+        {
+            addError( ERROR_NO_FORM_EXISTS, request.getLocale( ) );
+        }
+        else
+        {
+            Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), formId );
+
+            if ( ticket == null )
+            {
+                ticket = new Ticket( );
+                TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( request.getSession( ).getId( ) );
+            }
+
+            prefillTicketWithUserInfo( request, ticket );
+
+            _ticketFormService.saveTicketInSession( request.getSession( ), ticket, formId );
+
+            model.put( TicketingConstants.MARK_TICKET, ticket );
+        }
+
+        model.put( MARK_FORM, form );
+        model.put( MARK_FORMENTRYTYPE, new FormEntryType( ) );
+
+        model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
+        model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale( ) ) );
+
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
+
+        saveActionTypeInSession( request.getSession( ), ACTION_CREATE_TICKET );
+
+        return getXPage( TEMPLATE_CREATE_TICKET_DYNAMIC_FORM, request.getLocale( ), model );
+    }
+
+    /**
+     * Returns the form to create a ticket
+     *
+     * @param request
+     *            The Http request
+     * @return the html code of the ticket form
+     */
+    @View( value = VIEW_CREATE_TICKET )
     public XPage getCreateTicket( HttpServletRequest request )
     {
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
@@ -390,14 +462,14 @@ public class TicketXPage extends WorkflowCapableXPage
                 bIsFormValid = false;
             }
         }
-        
+
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
 
         request.setAttribute( TicketingConstants.ATTRIBUTE_IS_DISPLAY_FRONT, true );
         if ( categoryValidatorResult.isTicketCategoryValid( ) )
         {
             ticket.setListResponse( null );
-            
+
             List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory( ).getId( ), null );
 
             for ( Entry entry : listEntry )
@@ -405,7 +477,7 @@ public class TicketXPage extends WorkflowCapableXPage
                 listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry( ), getLocale( request ), ticket ) );
             }
         }
-        
+
         if ( listFormErrors.size( ) > 0 )
         {
             bIsFormValid = false;

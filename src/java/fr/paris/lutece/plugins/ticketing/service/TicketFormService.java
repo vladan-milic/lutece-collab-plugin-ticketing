@@ -73,6 +73,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Service for ticketing forms
@@ -572,9 +573,34 @@ public class TicketFormService implements Serializable
      * @param ticket
      *            The ticketing to save
      */
+    public void saveTicketInSession( HttpSession session, Ticket ticket, String formId )
+    {
+        session.setAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET + "-" + formId, ticket );
+    }
+
+    /**
+     * Save an ticketing in the session of the user
+     *
+     * @param session
+     *            The session
+     * @param ticket
+     *            The ticketing to save
+     */
     public void saveTicketInSession( HttpSession session, Ticket ticket )
     {
-        session.setAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET, ticket );
+        saveTicketInSession( session, ticket, StringUtils.EMPTY );
+    }
+
+    /**
+     * Get the current ticketing form from the session
+     * 
+     * @param session
+     *            The session of the user
+     * @return The ticketing form
+     */
+    public Ticket getTicketFromSession( HttpSession session, String formId )
+    {
+        return ( Ticket ) session.getAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET + "-" + formId );
     }
 
     /**
@@ -586,7 +612,7 @@ public class TicketFormService implements Serializable
      */
     public Ticket getTicketFromSession( HttpSession session )
     {
-        return (Ticket) session.getAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET );
+        return getTicketFromSession( session, StringUtils.EMPTY );
     }
 
     /**
