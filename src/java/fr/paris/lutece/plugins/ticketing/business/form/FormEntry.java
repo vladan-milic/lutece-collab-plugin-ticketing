@@ -46,18 +46,21 @@ public class FormEntry implements Serializable
 
     // Variables declarations 
     private int _nId;
-    
+
     private int _nIdForm;
-    
+
     @NotEmpty( message = "#i18n{ticketing.validation.formentry.IdChamp.notEmpty}" )
     @Size( max = 50 , message = "#i18n{ticketing.validation.formentry.IdChamp.size}" ) 
     private String _strIdChamp;
-    
+
     private boolean _bHidden;
-    
+
     private boolean _bMandatory;
-    
+
     private int _nHierarchy;
+
+    @Size( max = 500, message = "#i18n{ticketing.validation.formentry.DefaultValue.size}" )
+    private String _strDefaultValue;
 
     /**
      * Returns the Id
@@ -76,7 +79,7 @@ public class FormEntry implements Serializable
     {
         _nId = nId;
     }
-    
+
     /**
      * Returns the IdForm
      * @return The IdForm
@@ -94,7 +97,7 @@ public class FormEntry implements Serializable
     {
         _nIdForm = nIdForm;
     }
-    
+
     /**
      * Returns the IdChamp
      * @return The IdChamp
@@ -112,7 +115,7 @@ public class FormEntry implements Serializable
     {
         _strIdChamp = strIdChamp;
     }
-    
+
     /**
      * Returns the Hidden
      * @return The Hidden
@@ -130,7 +133,7 @@ public class FormEntry implements Serializable
     {
         _bHidden = bHidden;
     }
-    
+
     /**
      * Returns the Mandatory
      * @return The Mandatory
@@ -148,7 +151,7 @@ public class FormEntry implements Serializable
     {
         _bMandatory = bMandatory;
     }
-    
+
     /**
      * Returns the Order
      * @return The Order
@@ -165,5 +168,15 @@ public class FormEntry implements Serializable
     public void setHierarchy( int nOrder )
     {
         _nHierarchy = nOrder;
+    }
+
+    public void setDefaultValue( String defaultValue )
+    {
+        _strDefaultValue = defaultValue;
+    }
+
+    public String getDefaultValue( )
+    {
+        return _strDefaultValue;
     }
 }

@@ -73,7 +73,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Service for ticketing forms
@@ -116,13 +115,13 @@ public class TicketFormService implements Serializable
     {
         List<Integer> listInputs =  new ArrayList<Integer>( );
         List<TicketCategory> listCategoriesBranch = TicketCategoryService.getInstance( ).getBranchOfCategoryId( idCategory );
-        
+
         for ( TicketCategory ticketCategory : listCategoriesBranch )
         {
             List<Integer> listInputsByCategoryId =  TicketCategoryInputsHome.getIdInputListByCategory( ticketCategory.getId( ) );
             listInputs.addAll( listInputsByCategoryId );
         }
-        
+
         List<Entry> listEntryFirstLevel;
         List<Entry> listEntry = new ArrayList<Entry>( );
 
@@ -573,9 +572,9 @@ public class TicketFormService implements Serializable
      * @param ticket
      *            The ticketing to save
      */
-    public void saveTicketInSession( HttpSession session, Ticket ticket, String formId )
+    public void saveTicketInSession( HttpSession session, Ticket ticket, int idTicket )
     {
-        session.setAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET + "-" + formId, ticket );
+        session.setAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET + "-" + idTicket, ticket );
     }
 
     /**
@@ -588,7 +587,7 @@ public class TicketFormService implements Serializable
      */
     public void saveTicketInSession( HttpSession session, Ticket ticket )
     {
-        saveTicketInSession( session, ticket, StringUtils.EMPTY );
+        saveTicketInSession( session, ticket, 0 );
     }
 
     /**
@@ -598,9 +597,9 @@ public class TicketFormService implements Serializable
      *            The session of the user
      * @return The ticketing form
      */
-    public Ticket getTicketFromSession( HttpSession session, String formId )
+    public Ticket getTicketFromSession( HttpSession session, int idTicket )
     {
-        return ( Ticket ) session.getAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET + "-" + formId );
+        return ( Ticket ) session.getAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET + "-" + idTicket );
     }
 
     /**
@@ -612,7 +611,7 @@ public class TicketFormService implements Serializable
      */
     public Ticket getTicketFromSession( HttpSession session )
     {
-        return getTicketFromSession( session, StringUtils.EMPTY );
+        return getTicketFromSession( session, 0 );
     }
 
     /**

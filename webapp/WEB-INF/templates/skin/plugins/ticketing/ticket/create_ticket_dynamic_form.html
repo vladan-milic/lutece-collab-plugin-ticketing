@@ -8,9 +8,14 @@
             <input type="hidden" id="id" name="id">  
             <input type="hidden" id="guid" name="guid" value="${ticket.guid!}">
       		
+      		<div class="component component-text">
+      			${form.message}
+      		</div>
+      		
+      		<hr>
+      		
       		<#assign entryUserTitle = form.getEntry(formEntryType.userTitle)>
-      		<#if !entryUserTitle.hidden>
-            <div class="form-group">
+            <div class="form-group <#if entryUserTitle.hidden>hidden</#if>">
                 <label for="id_user_title" >#i18n{ticketing.xpage.create_ticket.labelIdUserTitle} <#if entryUserTitle.mandatory>#i18n{ticketing.xpage.mandatory_field}</#if></label>
 				<#list user_titles_list as user_title>
 					<label class="radio-inline" for="id_user_title_${user_title.code}">
@@ -20,34 +25,26 @@
 				</#list>
                  <span class="help-block sr-only">#i18n{ticketing.xpage.create_ticket.labelIdUserTitle.help}</span>
             </div>
-            </#if>
             
       		<#assign entryLastName = form.getEntry(formEntryType.lastName)>
       		<#assign entryFirstName = form.getEntry(formEntryType.firstName)>
-      		<#if !entryLastName.hidden && !entryFirstName.hidden>
-            <div class="form-group">
+            <div class="form-group <#if entryLastName.hidden && entryFirstName.hidden>hidden</#if>">
 				<div class="row">
-		      		<#if !entryLastName.hidden>
-					<div class="col-xs-12 col-sm-6">
+					<div class="col-xs-12 col-sm-6 <#if entryLastName.hidden>hidden</#if>">
 						<label  for="lastname" >#i18n{ticketing.xpage.create_ticket.labelLastname} <#if entryLastName.mandatory>#i18n{ticketing.xpage.mandatory_field}</#if></label>
 						<input class="form-control" type="text" id="lastname" name="lastname" value="${ticket.lastname!''}"  maxlength="50">
 						<span class="help-block sr-only">#i18n{ticketing.xpage.create_ticket.labelLastname.help}</span>
 					</div>
-					</#if>
-		      		<#if !entryFirstName.hidden>
-					<div class="col-xs-12 col-sm-6">
+					<div class="col-xs-12 col-sm-6 <#if entryFirstName.hidden>hidden</#if>">
 						<label  for="firstname" >#i18n{ticketing.xpage.create_ticket.labelFirstname} <#if entryFirstName.mandatory>#i18n{ticketing.xpage.mandatory_field}</#if></label>
 						<input class="form-control" type="text" id="firstname" name="firstname" value="${ticket.firstname!}"  maxlength="50">
 						<span class="help-block sr-only">#i18n{ticketing.xpage.create_ticket.labelFirstname.help}</span>
 					</div>
-					</#if>
 				</div>	
             </div>
-            </#if>
             
       		<#assign entryEmail = form.getEntry(formEntryType.email)>
-      		<#if !entryEmail.hidden>
-            <div class="form-group">
+            <div class="form-group <#if entryEmail.hidden>hidden</#if>">
 				<div class="row">
 					<div class="col-xs-12 col-sm-6">
 						<label  for="email" >#i18n{ticketing.xpage.create_ticket.labelEmail} <#if entryEmail.mandatory>#i18n{ticketing.xpage.mandatory_field}</#if></label>
@@ -56,11 +53,9 @@
 					</div>
 				</div>
             </div>
-            </#if>
             
       		<#assign entryPhones = form.getEntry(formEntryType.phoneNumbers)>
-      		<#if !entryPhones.hidden>
-            <div class="form-group">
+            <div class="form-group <#if entryPhones.hidden>hidden</#if>">
 				<div class="row">
 					<div class="col-xs-12 col-sm-6">
 						<label  for="fixed_phone_number" >#i18n{ticketing.xpage.create_ticket.labelFixedPhoneNumber}</label>
@@ -74,12 +69,9 @@
 					</div>
 				</div>
             </div>
-            </#if>
             
       		<#assign entryContactMode = form.getEntry(formEntryType.contactMode)>
-      		<#if !entryContactMode.hidden>
-			<div class="form-group" style="display: none;">
-				<#-- undo default selected on index==0 when display:none is remove-->
+			<div class="form-group <#if entryContactMode.hidden>hidden</#if>">
                 <label for="id_contact_mode" >#i18n{ticketing.xpage.create_ticket.labelContactMode} <#if entryContactMode.mandatory>#i18n{ticketing.xpage.mandatory_field}</#if></label>
 				<p>
 				<#list contact_modes_list as contact_mode>
@@ -91,9 +83,6 @@
 				</p>
                 <span class="help-block sr-only">#i18n{ticketing.xpage.create_ticket.labelContactMode.help}</span>
             </div>
-            </#if>
-            
-			<hr>
 			
             <#list categories_depths as depth>
       		<#assign entryCategory = form.getEntry(formEntryType.category + depth.depthNumber)>
@@ -107,20 +96,18 @@
 	        </#list>
 	        
       		<#assign entryComment = form.getEntry(formEntryType.comment)>
-      		<#if !entryComment.hidden>
-            <div class="form-group">
+            <div class="form-group <#if entryComment.hidden>hidden</#if>">
                <label for="ticket_comment" >#i18n{ticketing.xpage.create_ticket.labelTicketComment} <#if entryComment.mandatory>#i18n{ticketing.xpage.mandatory_field}</#if></label>
                <textarea class="ticketing form-control" id="ticket_comment" name="ticket_comment" >${ticket.ticketComment!''}</textarea>
 	 	       <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelTicketComment.help}</span>
             </div>
-            </#if>
             
 			<div class="form-group" id="generic_attributes"></div>
 			<div class="clearfix"></div>
             <div class="form-group text-center" style="margin-top:20px;">
                 <button id="submit_create_ticket" name="action_recapTicket" class="btn btn-primary" type="submit">
-                    #i18n{ticketing.xpage.create_ticket.labelButtonCreate}
-                 </button>
+                    ${form.buttonLabel}
+                </button>
             </div>
 		</form>
 		<#else>
@@ -133,11 +120,12 @@
 <script src="js/locales/bootstrap-datepicker.fr.js" charset="utf-8"></script>
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
 <script language="javascript"> 
-    var url = "jsp/site/Portal.jsp?page=ticket&view=ticketForm";
+    var url = "jsp/site/Portal.jsp?page=ticket&view=ticketForm&form=${form.id}";
 
 	var categoriesTree = ${categories_tree};
 
     $( function() {
+    	document.getElementById('form-title').innerHTML = "${form.title}";
         var tree = lutece_ticket_tree(${ticket.branchJSONObject}, categoriesTree, url);
 
   		<#if !entryComment.hidden>
@@ -146,7 +134,7 @@
 		$("#ticket_comment").keypress(function(e) {
 			if( e.charCode >= 48 ){
 			var nCar = $(this).val().length;
-				$(this).next().html( "<stong>" + nCar + " caract&egrave;res</strong>");
+				$(this).next().html( "<strong>" + nCar + " caract&egrave;res</strong>");
 				if( nCar >= maxObjet){
 					$(this).next().html('<strong class="label label-warning">Attention limite de '+ maxObjet +' caract&egrave;res atteinte !</strong>');
 					return false;

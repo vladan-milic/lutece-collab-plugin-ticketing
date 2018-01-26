@@ -48,12 +48,12 @@ public final class FormEntryDAO implements IFormEntryDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_formentry ) FROM ticketing_formentry";
-    private static final String SQL_QUERY_SELECT = "SELECT id_formentry, id_form, id_champ, hidden, mandatory, hierarchy FROM ticketing_formentry WHERE id_formentry = ?";
-    private static final String SQL_QUERY_SELECT_BY_FORM = "SELECT id_formentry, id_form, id_champ, hidden, mandatory, hierarchy FROM ticketing_formentry WHERE id_form = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_formentry ( id_formentry, id_form, id_champ, hidden, mandatory, hierarchy ) VALUES ( ?, ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_formentry, id_form, id_champ, hidden, mandatory, hierarchy, default_value FROM ticketing_formentry WHERE id_formentry = ?";
+    private static final String SQL_QUERY_SELECT_BY_FORM = "SELECT id_formentry, id_form, id_champ, hidden, mandatory, hierarchy, default_value FROM ticketing_formentry WHERE id_form = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_formentry ( id_formentry, id_form, id_champ, hidden, mandatory, hierarchy, default_value ) VALUES ( ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_formentry WHERE id_formentry = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_formentry SET id_formentry = ?, id_form = ?, id_champ = ?, hidden = ?, mandatory = ?, hierarchy = ? WHERE id_formentry = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_formentry, id_form, id_champ, hidden, mandatory, hierarchy FROM ticketing_formentry";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_formentry SET id_formentry = ?, id_form = ?, id_champ = ?, hidden = ?, mandatory = ?, hierarchy = ?, default_value = ? WHERE id_formentry = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_formentry, id_form, id_champ, hidden, mandatory, hierarchy, default_value FROM ticketing_formentry";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_formentry FROM ticketing_formentry";
 
     /**
@@ -92,6 +92,7 @@ public final class FormEntryDAO implements IFormEntryDAO
         daoUtil.setBoolean( nIndex++ , formEntry.isHidden( ) );
         daoUtil.setBoolean( nIndex++ , formEntry.isMandatory( ) );
         daoUtil.setInt( nIndex++ , formEntry.getHierarchy( ) );
+        daoUtil.setString( nIndex++, formEntry.getDefaultValue( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -103,14 +104,14 @@ public final class FormEntryDAO implements IFormEntryDAO
     @Override
     public List<FormEntry> loadByForm( int nKey, Plugin plugin )
     {
+        List<FormEntry> formEntryList = new ArrayList<FormEntry>(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_FORM, plugin );
         daoUtil.setInt( 1, nKey );
         daoUtil.executeQuery( );
-        List<FormEntry> formEntryList = new ArrayList<FormEntry>( );
 
-        if ( daoUtil.next( ) )
+        while ( daoUtil.next(  ) )
         {
-            FormEntry formEntry = new FormEntry( );
+            FormEntry formEntry = new FormEntry(  );
             int nIndex = 1;
 
             formEntry.setId( daoUtil.getInt( nIndex++ ) );
@@ -119,6 +120,7 @@ public final class FormEntryDAO implements IFormEntryDAO
             formEntry.setHidden( daoUtil.getBoolean( nIndex++ ) );
             formEntry.setMandatory( daoUtil.getBoolean( nIndex++ ) );
             formEntry.setHierarchy( daoUtil.getInt( nIndex++ ) );
+            formEntry.setDefaultValue( daoUtil.getString( nIndex++ ) );
 
             formEntryList.add( formEntry );
         }
@@ -149,6 +151,7 @@ public final class FormEntryDAO implements IFormEntryDAO
             formEntry.setHidden( daoUtil.getBoolean( nIndex++ ) );
             formEntry.setMandatory( daoUtil.getBoolean( nIndex++ ) );
             formEntry.setHierarchy( daoUtil.getInt( nIndex++ ) );
+            formEntry.setDefaultValue( daoUtil.getString( nIndex++ ) );
         }
 
         daoUtil.free( );
@@ -182,6 +185,7 @@ public final class FormEntryDAO implements IFormEntryDAO
         daoUtil.setBoolean( nIndex++ , formEntry.isHidden( ) );
         daoUtil.setBoolean( nIndex++ , formEntry.isMandatory( ) );
         daoUtil.setInt( nIndex++ , formEntry.getHierarchy( ) );
+        daoUtil.setString( nIndex++, formEntry.getDefaultValue( ) );
         daoUtil.setInt( nIndex , formEntry.getId( ) );
 
         daoUtil.executeUpdate( );
@@ -209,6 +213,7 @@ public final class FormEntryDAO implements IFormEntryDAO
             formEntry.setHidden( daoUtil.getBoolean( nIndex++ ) );
             formEntry.setMandatory( daoUtil.getBoolean( nIndex++ ) );
             formEntry.setHierarchy( daoUtil.getInt( nIndex++ ) );
+            formEntry.setDefaultValue( daoUtil.getString( nIndex++ ) );
 
             formEntryList.add( formEntry );
         }

@@ -48,8 +48,11 @@ import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.identitystore.web.exception.IdentityNotFoundException;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
+import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.form.Form;
 import fr.paris.lutece.plugins.ticketing.business.form.FormEntryType;
@@ -163,17 +166,7 @@ public class TicketXPage extends WorkflowCapableXPage
     {
         Map<String, Object> model = new HashMap<>( );
 
-        String formId = request.getParameter( PARAMETER_ID_FORM );
-        Form form = null;
-
-        try
-        {
-            form = FormHome.findByPrimaryKey( Integer.parseInt( formId ) );
-        }
-        catch ( NumberFormatException e )
-        {
-            AppLogService.info( formId );
-        }
+        Form form = getFormFromRequest( request );
 
         if ( form == null || form.getId( ) == 0 )
         {
@@ -181,7 +174,7 @@ public class TicketXPage extends WorkflowCapableXPage
         }
         else
         {
-            Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), formId );
+            Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form.getId( ) );
 
             if ( ticket == null )
             {
@@ -190,8 +183,9 @@ public class TicketXPage extends WorkflowCapableXPage
             }
 
             prefillTicketWithUserInfo( request, ticket );
+            prefillTicketWithDefaultForm( request, ticket, form );
 
-            _ticketFormService.saveTicketInSession( request.getSession( ), ticket, formId );
+            _ticketFormService.saveTicketInSession( request.getSession( ), ticket, form.getId( ) );
 
             model.put( TicketingConstants.MARK_TICKET, ticket );
         }
@@ -208,6 +202,31 @@ public class TicketXPage extends WorkflowCapableXPage
         saveActionTypeInSession( request.getSession( ), ACTION_CREATE_TICKET );
 
         return getXPage( TEMPLATE_CREATE_TICKET_DYNAMIC_FORM, request.getLocale( ), model );
+    }
+
+
+    /**
+     * Retrieve form from request
+     * 
+     * @param request
+     *            the request to parse
+     * @return
+     */
+    private Form getFormFromRequest( HttpServletRequest request )
+    {
+        String formId = request.getParameter( PARAMETER_ID_FORM );
+        Form form = null;
+
+        try
+        {
+            form = FormHome.findByPrimaryKey( Integer.parseInt( formId ) );
+        }
+        catch ( NumberFormatException e )
+        {
+            AppLogService.info( formId );
+        }
+
+        return form;
     }
 
     /**
@@ -243,6 +262,59 @@ public class TicketXPage extends WorkflowCapableXPage
         saveActionTypeInSession( request.getSession( ), ACTION_CREATE_TICKET );
 
         return getXPage( TEMPLATE_CREATE_TICKET, request.getLocale( ), model );
+    }
+
+    /**
+     * Prefill ticket with form default values
+     * 
+     * @param request
+     *            the http request
+     * @param form
+     *            the form
+     */
+    private void prefillTicketWithDefaultForm( HttpServletRequest request, Ticket ticket, Form form )
+    {
+        FormEntryType formEntryType = new FormEntryType();
+
+        ContactMode contactMode = null;
+        try
+        {
+            String contactModeId = form.getEntry( formEntryType.getContactMode( ) ).getDefaultValue( );
+            contactMode = ContactModeHome.findByPrimaryKey( Integer.parseInt( contactModeId ) );
+        }
+        catch ( NumberFormatException e )
+        {
+            // do nothing, default value can be empty or not valid
+        }
+
+        if ( contactMode != null )
+        {
+            ticket.setIdContactMode( contactMode.getId( ) );
+            ticket.setContactMode( contactMode.getCode( ) );
+            ticket.setConfirmationMsg( contactMode.getConfirmationMsg( ) );
+        }
+
+        for ( TicketCategoryType depth : TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) )
+        {
+            TicketCategory category = null;
+            try
+            {
+                String categoryId = form.getEntry( formEntryType.getCategory( ) + depth.getDepthNumber( ) ).getDefaultValue( );
+                category = TicketCategoryService.getInstance( ).findCategoryById( Integer.parseInt( categoryId ) );
+            }
+            catch ( NumberFormatException e )
+            {
+                // do nothing, default value can be empty or not valid
+            }
+
+            if ( category != null )
+            {
+                ticket.setTicketCategory( category );
+            }
+        }
+
+        ticket.setTicketComment( form.getEntry( formEntryType.getComment( ) ).getDefaultValue( ) );
+
     }
 
     /**
