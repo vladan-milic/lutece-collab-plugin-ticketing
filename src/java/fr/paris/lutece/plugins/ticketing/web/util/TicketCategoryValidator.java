@@ -42,6 +42,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.form.Form;
+import fr.paris.lutece.plugins.ticketing.business.form.FormEntryType;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -74,9 +76,15 @@ public class TicketCategoryValidator
      */
     public TicketCategoryValidatorResult validateTicketCategory( )
     {
+        return validateTicketCategory( null );
+    }
+
+    public TicketCategoryValidatorResult validateTicketCategory( Form form )
+    {
+        FormEntryType formEntryType = new FormEntryType( );
         List<String> listValidationErrors = new ArrayList<String>( );
         boolean isValid = true;
-        
+
         int i = 1;
         int nId = -1;
         TicketCategory ticketCategory = null;
@@ -87,7 +95,11 @@ public class TicketCategoryValidator
             {
                 nId = Integer.valueOf( _request.getParameter( TicketingConstants.PARAMETER_CATEGORY_ID + i ) );
                 ticketCategory = TicketCategoryService.getInstance().findCategoryById( nId );
-                if ( ticketCategory == null )
+
+                boolean ticketCategoryIsMissing = ticketCategory == null;
+                boolean ticketCategoryIsRequired = form == null || form.getEntry( formEntryType.getCategory( ) + i ).isMandatory( );
+
+                if ( ticketCategoryIsMissing && ticketCategoryIsRequired )
                 {
                     if ( i <= TicketingConstants.CATEGORY_DEPTH_MIN )
                     {
@@ -98,7 +110,7 @@ public class TicketCategoryValidator
                     }
                     break;
                 }
-                else if ( ticketCategory.getLeaf( ) )
+                else if ( ticketCategory == null || ticketCategory.getLeaf( ) )
                 {
                     break;
                 }
@@ -120,7 +132,7 @@ public class TicketCategoryValidator
             }
             i++;
         }
-        
+
         if ( isValid && i < TicketingConstants.CATEGORY_DEPTH_MIN )
         {
             listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED, new String [ ] {
@@ -128,7 +140,7 @@ public class TicketCategoryValidator
             }, this._request.getLocale( ) ) );
             isValid = false;
         }
-        
+
         if ( isValid && ticketCategory == null )
         {
             ticketCategory = ticketCategoryParent;

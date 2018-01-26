@@ -78,10 +78,8 @@ public class Ticket implements Serializable, RBACResource
     private int                          _nIdUserTitle;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.UserTitle.size}" )
     private String                       _strUserTitle;
-    @NotEmpty( message = "#i18n{ticketing.validation.ticket.Firstname.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.Firstname.size}" )
     private String                       _strFirstname;
-    @NotEmpty( message = "#i18n{ticketing.validation.ticket.Lastname.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.Lastname.size}" )
     private String                       _strLastname;
     @Email( message = "#i18n{ticketing.validation.ticket.Email.badFormat}" )

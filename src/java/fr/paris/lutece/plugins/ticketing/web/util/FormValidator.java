@@ -35,6 +35,8 @@ package fr.paris.lutece.plugins.ticketing.web.util;
 
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
@@ -52,6 +54,9 @@ import javax.servlet.http.HttpServletRequest;
 public class FormValidator
 {
     // Parameters
+    private static final String PARAMETER_USER_TITLE_ID = "id_user_title";
+    private static final String PARAMETER_FIRST_NAME = "firstname";
+    private static final String PARAMETER_LAST_NAME = "lastname";
     private static final String PARAMETER_CONTACT_MODE_ID = "id_contact_mode";
     private static final String PARAMETER_EMAIL = "email";
     private static final String PARAMETER_FIXED_PHONE_NUMBER = "fixed_phone_number";
@@ -64,6 +69,9 @@ public class FormValidator
     private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
     private static final String CONTACT_MODE_LABEL_I18N = "ticketing.contactmodes.label.";
     private static final String ERROR_EMPTY_COMMENT = "ticketing.error.comment.empty";
+    private static final String ERROR_USER_TITLE_UNKNOWN = "ticketing.error.userTitle.unknown";
+    private static final String ERROR_FIRST_NAME_NOT_FILLED = "ticketing.validation.ticket.Firstname.notEmpty";
+    private static final String ERROR_LAST_NAME_NOT_FILLED = "ticketing.validation.ticket.Lastname.notEmpty";
     private HttpServletRequest _request;
 
     // Pattern
@@ -119,10 +127,73 @@ public class FormValidator
 
         if ( !bIsValid )
         {
-            Object [ ] args = {
-                I18nService.getLocalizedString( CONTACT_MODE_LABEL_I18N + contactMode.getCode( ), _request.getLocale( ) )
-            };
+            Object[] args = { I18nService.getLocalizedString( CONTACT_MODE_LABEL_I18N + contactMode.getId( ), _request.getLocale( ) ) };
             strError = I18nService.getLocalizedString( ERROR_CONTACT_MODE_NOT_FILLED, args, _request.getLocale( ) );
+        }
+
+        return strError;
+    }
+
+    /**
+     * Tests if the user title is filled
+     *
+     * @return the localized error message if the user title is not filled, {@code null} otherwise
+     */
+    public String isUserTitleFilled( )
+    {
+        String strError = null;
+        UserTitle userTitle = null;
+        String strUserTitle = _request.getParameter( PARAMETER_USER_TITLE_ID );
+
+        try
+        {
+            if ( !StringUtils.isEmpty( strUserTitle ) )
+            {
+                userTitle = UserTitleHome.findByPrimaryKey( Integer.parseInt( strUserTitle ) );
+            }
+        }
+        catch ( Exception e )
+        {
+            AppLogService.error( "Unabled to retrieve contact mode" );
+        }
+
+        if ( userTitle == null )
+        {
+            strError = I18nService.getLocalizedString( ERROR_USER_TITLE_UNKNOWN, _request.getLocale( ) );
+        }
+
+        return strError;
+    }
+
+    /**
+     * Tests if the first name is filled
+     *
+     * @return the localized error message if the first name is not filled, {@code null} otherwise
+     */
+    public String isFirstNameFilled( )
+    {
+        String strError = null;
+
+        if ( StringUtils.isBlank( _request.getParameter( PARAMETER_FIRST_NAME ) ) )
+        {
+            strError = I18nService.getLocalizedString( ERROR_FIRST_NAME_NOT_FILLED, _request.getLocale( ) );
+        }
+
+        return strError;
+    }
+
+    /**
+     * Tests if the last name is filled
+     *
+     * @return the localized error message if the last name is not filled, {@code null} otherwise
+     */
+    public String isLastNameFilled( )
+    {
+        String strError = null;
+
+        if ( StringUtils.isBlank( _request.getParameter( PARAMETER_LAST_NAME ) ) )
+        {
+            strError = I18nService.getLocalizedString( ERROR_LAST_NAME_NOT_FILLED, _request.getLocale( ) );
         }
 
         return strError;

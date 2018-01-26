@@ -1,12 +1,13 @@
 <div id="create_ticket" class="row">
     <div class="col-xs-12 col-sm-12">
     <#if form?? && form.id??>
-	<form id="create_ticket_form" class="form" role="form" method="post" action="jsp/site/Portal.jsp?page=ticket" enctype="multipart/form-data">
+	<form id="create_ticket_form" class="form" role="form" method="post" action="jsp/site/Portal.jsp?page=ticket&form=${form.id}" enctype="multipart/form-data">
             <@messages errors=errors />
             <input name="page" value="ticket" type="hidden">
 			<input name="action" value="recapTicket" type="hidden">
             <input type="hidden" id="id" name="id">  
             <input type="hidden" id="guid" name="guid" value="${ticket.guid!}">
+            <input type="hidden" id="form" name="form" value="${form.id}">
       		
       		<div class="component component-text">
       			${form.message}

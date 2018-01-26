@@ -80,9 +80,11 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
+import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.util.url.UrlItem;
 import freemarker.template.TemplateModelException;
 
 /**
@@ -152,6 +154,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
     // Other constants
     private static final String LUTECE_USER_INFO_CUSTOMER_ID = "user.id.customer";
+    private static final String URL_PORTAL = "Portal.jsp";
 
     /**
      * Returns the form to create a ticket
@@ -164,7 +167,7 @@ public class TicketXPage extends WorkflowCapableXPage
     @View( value = VIEW_CREATE_TICKET_DYNAMIC_FORM, defaultView = true )
     public XPage getCreateTicketDynamicForm( HttpServletRequest request )
     {
-        Map<String, Object> model = new HashMap<>( );
+        Map<String, Object> model = getModel( );
 
         Form form = getFormFromRequest( request );
 
@@ -471,6 +474,7 @@ public class TicketXPage extends WorkflowCapableXPage
         model.put( MARK_TICKET_ACTION, getActionTypeFromSession( request.getSession( ) ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_RESPONSE_RECAP_LIST, listResponseRecap );
+        model.put( MARK_FORM, getFormFromRequest( request ) );
 
         removeActionTypeFromSession( request.getSession( ) );
 
@@ -493,8 +497,11 @@ public class TicketXPage extends WorkflowCapableXPage
         populate( ticket, request );
         ticket.setListResponse( new ArrayList<Response>( ) );
 
+        Form form = getFormFromRequest( request );
+        FormEntryType formEntryType = new FormEntryType( );
+
         // Validate the TicketCategory
-        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( );
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( form );
         if ( !categoryValidatorResult.isTicketCategoryValid( ) )
         {
             categoryValidatorResult.getListValidationErrors( ).stream( ).forEach( ( error ) -> addError( error ) );
@@ -515,9 +522,41 @@ public class TicketXPage extends WorkflowCapableXPage
         List<String> listValidationErrors = ticketValidator.validate( ticket, false );
 
         FormValidator formValidator = new FormValidator( request );
-        listValidationErrors.add( formValidator.isEmailFilled( ) );
-        listValidationErrors.add( formValidator.isPhoneNumberFilled( ) );
-        listValidationErrors.add( formValidator.isCommentFilled( ) );
+
+        if ( defaultOptional( form, formEntryType.getUserTitle( ) ) )
+        {
+            listValidationErrors.add( formValidator.isUserTitleFilled( ) );
+        }
+
+        if ( defaultRequired( form, formEntryType.getFirstName( ) ) )
+        {
+            listValidationErrors.add( formValidator.isFirstNameFilled( ) );
+        }
+
+        if ( defaultRequired( form, formEntryType.getLastName( ) ) )
+        {
+            listValidationErrors.add( formValidator.isLastNameFilled( ) );
+        }
+
+        if ( defaultRequired( form, formEntryType.getEmail( ) ) )
+        {
+            listValidationErrors.add( formValidator.isEmailFilled( ) );
+        }
+
+        if ( defaultRequired( form, formEntryType.getPhoneNumbers( ) ) )
+        {
+            listValidationErrors.add( formValidator.isPhoneNumberFilled( ) );
+        }
+
+        if ( defaultOptional( form, formEntryType.getContactMode( ) ) )
+        {
+            listValidationErrors.add( formValidator.isContactModeFilled( ) );
+        }
+
+        if ( defaultRequired( form, formEntryType.getComment( ) ) )
+        {
+            listValidationErrors.add( formValidator.isCommentFilled( ) );
+        }
 
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
         if ( iNbCharcount > 5000 )
@@ -563,12 +602,68 @@ public class TicketXPage extends WorkflowCapableXPage
 
         if ( !bIsFormValid && getActionTypeFromSession( request.getSession( ) ).equals( ACTION_CREATE_TICKET ) )
         {
-            return redirectView( request, VIEW_CREATE_TICKET );
+            if ( form == null )
+            {
+                return redirectView( request, VIEW_CREATE_TICKET, form );
+            }
+            else
+            {
+                return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
+            }
         }
         else
         {
-            return redirectView( request, VIEW_RECAP_TICKET );
+            return redirectView( request, VIEW_RECAP_TICKET, form );
         }
+    }
+
+    /**
+     * Redirect to requested view
+     *
+     * @param request
+     *            the http request
+     * @param strView
+     *            the targeted view
+     * @return the page requested
+     */
+    protected XPage redirectView( HttpServletRequest request, String strView, Form form )
+    {
+        return redirect( request, getViewUrl( strView, form ) );
+    }
+
+    /**
+     * Get a View URL
+     * 
+     * @param strView
+     *            The view name
+     * @return The URL
+     */
+    protected String getViewUrl( String strView, Form form )
+    {
+        UrlItem url = new UrlItem( URL_PORTAL );
+        url.addParameter( MVCUtils.PARAMETER_PAGE, getXPageName( ) );
+        url.addParameter( MVCUtils.PARAMETER_VIEW, strView );
+        if ( form != null )
+        {
+            url.addParameter( PARAMETER_ID_FORM, form.getId( ) );
+        }
+
+        return url.getUrl( );
+    }
+
+    private boolean defaultRequired( Form form, String entryType )
+    {
+        return form == null || isMandatoryEntry( form, entryType );
+    }
+
+    private boolean defaultOptional( Form form, String entryType )
+    {
+        return isMandatoryEntry( form, entryType );
+    }
+
+    private boolean isMandatoryEntry( Form form, String entry )
+    {
+        return form != null && form.getEntry( entry ).isMandatory( );
     }
 
     /**
@@ -725,18 +820,42 @@ public class TicketXPage extends WorkflowCapableXPage
     @Override
     protected XPage redirectAfterWorkflowAction( HttpServletRequest request )
     {
-        return redirectView( request, VIEW_CREATE_TICKET );
+        Form form = getFormFromRequest( request );
+        if ( form == null )
+        {
+            return redirectView( request, VIEW_CREATE_TICKET );
+        }
+        else
+        {
+            return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
+        }
     }
 
     @Override
     protected XPage redirectWorkflowActionCancelled( HttpServletRequest request )
     {
-        return redirectView( request, VIEW_CREATE_TICKET );
+        Form form = getFormFromRequest( request );
+        if ( form == null )
+        {
+            return redirectView( request, VIEW_CREATE_TICKET );
+        }
+        else
+        {
+            return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
+        }
     }
 
     @Override
     protected XPage defaultRedirectWorkflowAction( HttpServletRequest request )
     {
-        return redirectView( request, VIEW_CREATE_TICKET );
+        Form form = getFormFromRequest( request );
+        if ( form == null )
+        {
+            return redirectView( request, VIEW_CREATE_TICKET );
+        }
+        else
+        {
+            return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
+        }
     }
 }
