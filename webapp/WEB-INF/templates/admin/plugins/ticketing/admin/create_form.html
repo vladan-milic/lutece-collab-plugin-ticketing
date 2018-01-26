@@ -1,4 +1,25 @@
 <#include "/admin/util/editor/editor.html" />
+<#global form=form>
+<#macro formEntryLine entryType label="">
+<#assign entry = form.getEntry(entryType)>
+<#if label = "">
+	<#assign label = i18n('ticketing.xpage.create_ticket.'+entryType+'.label')>
+</#if>
+<div class="form-group">
+	<div class="row">
+		<div class="col-xs-12 col-sm-3">
+			<label for="id_user_title" >${label}</label>
+		</div>
+		<div class="col-xs-12 col-sm-3">
+			<input type="checkbox" name="formEntries.${entryType}.hidden" value="${entry.hidden?then('1','0')}">
+		</div>
+		<div class="col-xs-12 col-sm-3">
+			<input type="checkbox" name="formEntries.${entryType}.mandatory" value="${entry.mandatory?then('1','0')}">
+		</div>
+	</div>
+</div>
+</#macro>
+
 <div class="row">
    <div class="col-xs-12 col-sm-12 col-md-12">
       <div class="box box-solid box-primary">
@@ -29,6 +50,31 @@
 						</div>
 					</div>
 				</div>
+				
+      		<#assign entryUserTitle = form.getEntry(formEntryType.userTitle)>
+      		<#assign entryLastName = form.getEntry(formEntryType.lastName)>
+      		<#assign entryFirstName = form.getEntry(formEntryType.firstName)>
+      		<#assign entryEmail = form.getEntry(formEntryType.email)>
+      		<#assign entryPhones = form.getEntry(formEntryType.phoneNumbers)>
+      		<#assign entryContactMode = form.getEntry(formEntryType.contactMode)>
+      		<#assign entryComment = form.getEntry(formEntryType.comment)>
+      		
+      		<#list formEntryType.entryTypes() as entryType>
+				<@formEntryLine entryType=entryType/>
+            </#list>
+            
+            <#list categories_depths as depth>
+            <#assign entryCategory = form.getEntry(formEntryType.category + depth.depthNumber)>
+             <div class="form-group >
+                <label for="id_category_${depth.depthNumber}">${depth.label} </label>
+                <div class="select">
+                    <@comboWithParams name="id_category_${depth.depthNumber}" default_value="" additionalParameters=" id=\"id_category_${depth.depthNumber}\" depth=\"${depth.depthNumber}\" class=\"select-control\" " items=[] />
+                </div>
+                <span class="help-block" id="help_message_${depth.depthNumber}"></span>
+	   		</div>
+            </#list>
+           
+                                               		
 	               <@actionButtons button1Name="action_createForm" button2Name="view_manageForms"/>
 	            </form>
             </div>

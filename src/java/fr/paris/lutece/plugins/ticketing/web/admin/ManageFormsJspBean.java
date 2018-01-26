@@ -7,10 +7,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.ticketing.business.form.Form;
+import fr.paris.lutece.plugins.ticketing.business.form.FormEntryType;
 import fr.paris.lutece.plugins.ticketing.business.form.FormHome;
 import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
 import fr.paris.lutece.plugins.ticketing.business.marking.MarkingHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -67,6 +70,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     // Markers
     private static final String MARK_FORM_LIST = "form_list";
     private static final String MARK_FORM = "form";
+    private static final String MARK_FORMENTRYTYPE = "formEntryType";
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
     private static final String JSP_MANAGE_FORMS = "jsp/admin/plugins/ticketing/admin/ManageForms.jsp";
@@ -87,6 +91,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
 
     // Session variable to store working values
     private Form _form;
+    private FormEntryType _formEntryType;
     
     /**
      * Return a model that contains the list and paginator infos
@@ -152,9 +157,11 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     public String getCreateForm( HttpServletRequest request )
     {
         _form = new Form( );
-
+        _formEntryType = new FormEntryType();
         Map<String, Object> model = getModel( );
         model.put( MARK_FORM, _form );
+        model.put( MARK_FORMENTRYTYPE, _formEntryType );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
         ModelUtils.storeRichText( request, model );
         return getPage( PROPERTY_PAGE_TITLE_CREATE_FORM, TEMPLATE_CREATE_FORM, model );
     }
