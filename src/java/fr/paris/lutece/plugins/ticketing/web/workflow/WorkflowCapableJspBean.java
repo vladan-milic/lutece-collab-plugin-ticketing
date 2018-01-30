@@ -70,12 +70,13 @@ import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexerActionUtil;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
+import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
 import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
+import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
 import fr.paris.lutece.plugins.workflowcore.service.state.StateService;
 import fr.paris.lutece.portal.business.user.AdminUser;
-import fr.paris.lutece.portal.service.datastore.DatastoreService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -111,6 +112,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     // Bean
     private static final String                BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE = "workflow-ticketing.resourceHistoryService";
+    private static final String                BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE_CORE = "workflow.resourceHistoryService";
 
     // Templates
     private static final String                TEMPLATE_RESOURCE_HISTORY                 = "admin/plugins/ticketing/workflow/ticket_history.html";
@@ -145,6 +147,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     // Services
     private static WorkflowService                    _workflowService                            = WorkflowService.getInstance( );
     private static IResourceHistoryInformationService _resourceHistoryTicketingInformationService = SpringContextService.getBean( BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE );
+    private static IResourceHistoryService _resourceHistoryTicketingInformationServiceCORE = SpringContextService.getBean( BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE_CORE );
     private final TicketSearchEngine                  _engine                                     = ( TicketSearchEngine ) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
     private final IActionService                      _actionService                              = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
     private static StateService                       _stateService                               = SpringContextService.getBean( StateService.BEAN_SERVICE );
@@ -373,8 +376,14 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                     if ( _workflowService.isDisplayTasksForm( _nIdAction, getLocale( ) ) )
 
                     {
-                        strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, null, request, getLocale( ) );
-
+                        List<ResourceHistory> listTicketHistory = _resourceHistoryTicketingInformationServiceCORE.getAllHistoryByResource(nIdTicket, "ticket", 301);
+                        if(listTicketHistory.get(0).getAction( ).getId( ) != 312) {
+                            strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, null, request, getLocale( ) );
+                        }else {
+                            addErrorWorkflowAction( request, _nIdAction );
+                            return redirectWorkflowActionCancelled( request );
+                        }
+                        
                         if ( strError != null )
                         {
                             return redirect( request, strError );
