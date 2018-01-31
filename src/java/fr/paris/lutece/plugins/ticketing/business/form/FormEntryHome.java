@@ -93,6 +93,15 @@ public final class FormEntryHome
     {
         _dao.delete( nKey, _plugin );
     }
+    
+    /**
+     * Remove the formEntry whose identifier is specified in parameter
+     * @param nKey The form Id
+     */
+    public static void removeByIdForm( int nKey )
+    {
+        _dao.deleteByIdForm( nKey, _plugin );
+    }
 
     /**
      * Returns an instance of a formEntry whose identifier is specified in parameter

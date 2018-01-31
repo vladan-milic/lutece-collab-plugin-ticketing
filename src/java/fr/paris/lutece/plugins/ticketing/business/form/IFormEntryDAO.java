@@ -106,4 +106,11 @@ public interface IFormEntryDAO
      * @return The list which contains the data of all the formEntry objects
      */
     List<FormEntry> loadByForm( int nKey, Plugin plugin );
+
+    /**
+     * Delete a record from the table
+     * @param nKey The identifier of the Form to delete
+     * @param plugin the Plugin
+     */
+	void deleteByIdForm(int nKey, Plugin _plugin);
 }

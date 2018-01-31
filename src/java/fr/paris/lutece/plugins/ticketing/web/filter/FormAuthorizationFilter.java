@@ -298,7 +298,7 @@ public class FormAuthorizationFilter implements Filter
             }
 
             // if form exists and doesn't require connection, form is not restricted
-            if ( form != null && !form.requiresConnection( ) )
+            if ( form != null && !form.isConnection() )
             {
                 return false;
             }
