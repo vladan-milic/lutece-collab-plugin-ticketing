@@ -288,6 +288,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     public String doModifyForm( HttpServletRequest request )
     {
         populate( _form, request );
+        _form.setFormEntries(_form.getFormEntries());
         // Check constraints
         if ( !validateBean( _form, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
