@@ -1,5 +1,6 @@
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -7,11 +8,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.ticketing.business.form.Form;
+import fr.paris.lutece.plugins.ticketing.business.form.FormEntry;
+import fr.paris.lutece.plugins.ticketing.business.form.FormEntryHome;
 import fr.paris.lutece.plugins.ticketing.business.form.FormEntryType;
 import fr.paris.lutece.plugins.ticketing.business.form.FormHome;
-import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
-import fr.paris.lutece.plugins.ticketing.business.marking.MarkingHome;
-import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
@@ -39,9 +39,9 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
 	
     // Templates
     private static final String TEMPLATE_MANAGE_FORMS = "/admin/plugins/ticketing/admin/manage_forms.html";
-    private static final String TEMPLATE_CREATE_FORM = "/admin/plugins/ticketing/admin/create_form.html";
-    private static final String TEMPLATE_MODIFY_FORM = "/admin/plugins/ticketing/admin/modify_form.html";
-
+//    private static final String TEMPLATE_CREATE_FORM = "/admin/plugins/ticketing/admin/create_form.html";
+//    private static final String TEMPLATE_MODIFY_FORM = "/admin/plugins/ticketing/admin/modify_form.html";
+    private static final String TEMPLATE_EDIT_FORM = "/admin/plugins/ticketing/admin/edit_form.html";
     // Views
     private static final String VIEW_MANAGE_FORMS = "manageForms";
     private static final String VIEW_CREATE_FORM = "createForm";
@@ -88,10 +88,12 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     // Parameters
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String PARAMETER_ID_FORM = "id";
+    private static final String PARAMETER_ROLE = "roles";
 
     // Session variable to store working values
     private Form _form;
     private FormEntryType _formEntryType;
+    private FormEntry _formEntry;
     
     /**
      * Return a model that contains the list and paginator infos
@@ -163,7 +165,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         model.put( MARK_FORMENTRYTYPE, _formEntryType );
         model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
         ModelUtils.storeRichText( request, model );
-        return getPage( PROPERTY_PAGE_TITLE_CREATE_FORM, TEMPLATE_CREATE_FORM, model );
+        return getPage( PROPERTY_PAGE_TITLE_CREATE_FORM, TEMPLATE_EDIT_FORM, model );
     }
 
     /**
@@ -172,9 +174,10 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
      * @param request
      *            The Http Request
      * @return The Jsp URL of the process result
+     * @throws IOException 
      */
     @Action( ACTION_CREATE_FORM )
-    public String doCreateForm( HttpServletRequest request )
+    public String doCreateForm( HttpServletRequest request ) throws IOException
     {
         populate( _form, request );
 
@@ -182,9 +185,29 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         if ( !validateBean( _form, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
             return redirectView( request, VIEW_CREATE_FORM );
-        }
-
+        }      
+      
         FormHome.create( _form );
+        
+		FormEntry formEntry;
+        for ( int i = 0; i < _formEntryType.entryTypes().size(); i++ )
+        {
+        	formEntry = new FormEntry(0, 0, "", false, false, 0, "");
+        	String strValue = _formEntryType.entryTypes().get(i);
+        	String strHidden = "formEntry."+strValue+".hidden" ;
+			String strMandatory = "formEntry."+strValue+".mandatory" ;
+			
+			if(request.getParameterValues( strHidden) != null ) {
+				formEntry.setHidden(true);
+			}
+			if(request.getParameterValues( strMandatory)  != null ) {
+				formEntry.setMandatory(true);
+			}
+			
+			formEntry.setIdChamp(strValue); 
+			formEntry.setIdForm(_form.getId());
+			FormEntryHome.create(formEntry);
+        }
 
         addInfo( INFO_FORM_CREATED, getLocale( ) );
 
@@ -222,6 +245,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     {
         int nIdForm = Integer.parseInt( request.getParameter( PARAMETER_ID_FORM ) );
 
+        FormEntryHome.removeByIdForm( nIdForm );
         FormHome.remove( nIdForm );
 
         addInfo( INFO_FORM_REMOVED, getLocale( ) );
@@ -240,16 +264,17 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     public String getModifyForm( HttpServletRequest request )
     {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_FORM ) );
-
         if ( ( _form == null ) || ( _form.getId( ) != nId ) )
         {
-        	_form = FormHome.findByPrimaryKey( nId );
+        	_form = FormHome.findByPrimaryKey( nId );        	
         }
-
+        _formEntryType = new FormEntryType();
         Map<String, Object> model = getModel( );
         model.put( MARK_FORM, _form );
+        model.put( MARK_FORMENTRYTYPE, _formEntryType );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
         ModelUtils.storeRichText( request, model );
-        return getPage( PROPERTY_PAGE_TITLE_MODIFY_FORM, TEMPLATE_MODIFY_FORM, model );
+        return getPage( PROPERTY_PAGE_TITLE_MODIFY_FORM, TEMPLATE_EDIT_FORM, model );
     }
     
     /**
@@ -263,16 +288,37 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     public String doModifyForm( HttpServletRequest request )
     {
         populate( _form, request );
-
         // Check constraints
         if ( !validateBean( _form, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
             return redirect( request, VIEW_MODIFY_FORM, PARAMETER_ID_FORM, _form.getId( ) );
         }
-
+        
+        for (FormEntry entries: _form.getFormEntries())
+        {
+        	String strValue = entries.getIdChamp();
+        	String strHidden = "formEntry."+strValue+".hidden" ;
+			String strMandatory = "formEntry."+strValue+".mandatory" ;
+			
+			if(request.getParameterValues( strHidden) != null ) {
+				entries.setHidden(true);
+			}else {
+				entries.setHidden(false);
+			}
+			if(request.getParameterValues( strMandatory)  != null ) {
+				entries.setMandatory(true);
+			}else {
+				entries.setMandatory(false);
+			}			
+			FormEntryHome.update(entries);
+        }
+        
         FormHome.update( _form );
+        
         addInfo( INFO_FORM_UPDATED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_FORMS );
     }
+    
+
 }

@@ -1,23 +1,24 @@
 <#include "/admin/util/editor/editor.html" />
 <#global form=form>
+
 <#macro formEntryLine entryType label="">
-<#assign entry = form.getEntry(entryType)>
-<#if label = "">
-	<#assign label = i18n('ticketing.xpage.create_ticket.'+entryType+'.label')>
-</#if>
-<div class="form-group">
-	<div class="row">
-		<div class="col-xs-12 col-sm-3">
-			<label for="id_user_title" >${label}</label>
-		</div>
-		<div class="col-xs-12 col-sm-3">
-			<input type="checkbox" name="formEntries.${entryType}.hidden" value="${entry.hidden?then('1','0')}">
-		</div>
-		<div class="col-xs-12 col-sm-3">
-			<input type="checkbox" name="formEntries.${entryType}.mandatory" value="${entry.mandatory?then('1','0')}">
+	<#assign entry = form.getEntry(entryType)>
+	<#if label = "">
+		${i18n('ticketing.xpage.create_ticket.'+entryType+'.label')}
+	</#if>
+	<div class="form-group">
+		<div class="row">
+			<div class="col-xs-12 col-sm-3">
+				<label for="id_user_title" >${label}</label>
+			</div>
+			<div class="col-xs-12 col-sm-3">
+				<input type="checkbox" name="formEntry.${entryType}.hidden" <#if entry.hidden>checked="checked"</#if>>
+			</div>
+			<div class="col-xs-12 col-sm-3">
+				<input type="checkbox" name="formEntry.${entryType}.mandatory" <#if entry.mandatory>checked="checked"</#if>>
+			</div>
 		</div>
 	</div>
-</div>
 </#macro>
 
 <div class="row">
@@ -30,7 +31,7 @@
 	         <div class="col-md-8">
 	            <form class="form-horizontal" method="post" name="create_form" action="jsp/admin/plugins/ticketing/admin/ManageForms.jsp">
 	               <@messages errors=errors />
-	               <input type="hidden" id="id" name="id"/>
+	               	               <input type="hidden" id="id" name="id" value="${form.id}"/>
 	         <@fieldInputText i18nLabelKey="ticketing.manage_viewing.labelTitle" inputName="title" mandatory=true value="${form.title!''}" i18nHelpBlockKey="ticketing.manage_viewing.labelTitle.help" /> 
     <div class="form-group"> 
       <label class="control-label col-xs-12 col-sm-3" for="confirmation_msg">#i18n{ticketing.create_contactmode.labelConfirmationMsg} : </label> 
@@ -45,7 +46,7 @@
 			        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 						<div class="checkbox">
 							<label>
-								<input type="checkbox" id="connection" name="connection" value="1" >
+								<input type="checkbox" id="connection" name="connection" <#if form.connection>checked="checked"</#if> >
 							</label>
 						</div>
 					</div>
@@ -61,22 +62,13 @@
       		
       		<#list formEntryType.entryTypes() as entryType>
 				<@formEntryLine entryType=entryType/>
-            </#list>
-            
-            <#list categories_depths as depth>
-            <#assign entryCategory = form.getEntry(formEntryType.category + depth.depthNumber)>
-             <div class="form-group >
-                <label for="id_category_${depth.depthNumber}">${depth.label} </label>
-                <div class="select">
-                    <@comboWithParams name="id_category_${depth.depthNumber}" default_value="" additionalParameters=" id=\"id_category_${depth.depthNumber}\" depth=\"${depth.depthNumber}\" class=\"select-control\" " items=[] />
-                </div>
-                <span class="help-block" id="help_message_${depth.depthNumber}"></span>
-	   		</div>
-            </#list>
-           
-                                               		
-	               <@actionButtons button1Name="action_createForm" button2Name="view_manageForms"/>
-	            </form>
+            </#list>           
+            <#if form.id gt 0 > 
+				<@actionButtons button1Name="action_modifyForm" button2Name="view_manageForms"/>
+            <#else>
+            	<@actionButtons button1Name="action_createForm" button2Name="view_manageForms"/>               	
+            </#if>
+	           </form>
             </div>
          </div>
       </div>
@@ -84,13 +76,5 @@
 </div>
 <@initEditor />
 <script type="text/javascript">
-	$("#title").change(function(){
-		$("#formPreview").html($("#title").val());
-	});
-	$("#labelColor").change(function(){
-		$("#formPreview").css("color", $("#labelColor").val());
-	});
-	$("#backgroundColor").change(function(){
-		$("#formPreview").css("background-color", $("#backgroundColor").val());
-	});
+
 </script>

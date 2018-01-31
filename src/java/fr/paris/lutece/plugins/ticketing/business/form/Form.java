@@ -131,10 +131,11 @@ public class Form implements Serializable
     }
 
     /**
-     * Returns the Connection
-     * @return The Connection
+     * Check if this entry is mandatory or not
+     * 
+     * @return true if the question is mandatory
      */
-    public boolean requiresConnection( )
+    public boolean isConnection( )
     {
         return _bConnection;
     }
@@ -154,20 +155,28 @@ public class Form implements Serializable
         if ( formEntry == null )
         {
             formEntry = new FormEntry( );
-            formEntry.setHidden( true );
+            formEntry.setHidden( false );
             formEntry.setMandatory( false );
             formEntry.setIdChamp( entryName );
         }
         return formEntry;
     }
 
-    private List<FormEntry> getFormEntries( )
+    public List<FormEntry> getFormEntries( )
     {
-        if ( this.formEntries == null )
+        if ( this.formEntries == null || this.formEntries.isEmpty())
         {
             formEntries = FormEntryHome.findByFormId( _nId );
         }
 
         return formEntries;
     }
+
+	/**
+	 * @param formEntries the formEntries to set
+	 */
+	public void setFormEntries(List<FormEntry> formEntries) {
+		this.formEntries = formEntries;
+	}
+    
 }
