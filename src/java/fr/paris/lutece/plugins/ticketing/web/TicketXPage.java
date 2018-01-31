@@ -516,7 +516,7 @@ public class TicketXPage extends WorkflowCapableXPage
         // Count the number of characters in the ticket comment
         int iNbCharcount = FormValidator.countCharTicketComment( ticket.getTicketComment( ) );
 
-        bIsFormValid = validateBean( ticket );
+        bIsFormValid &= validateBean( ticket );
 
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validate( ticket, false );
@@ -577,7 +577,7 @@ public class TicketXPage extends WorkflowCapableXPage
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
 
         request.setAttribute( TicketingConstants.ATTRIBUTE_IS_DISPLAY_FRONT, true );
-        if ( categoryValidatorResult.isTicketCategoryValid( ) )
+        if ( categoryValidatorResult.isTicketCategoryValid( ) && ticket.getTicketCategory( ) != null )
         {
             ticket.setListResponse( null );
 

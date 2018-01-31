@@ -127,7 +127,7 @@
 
     $( function() {
     	document.getElementById('form-title').innerHTML = "${form.title}";
-        var tree = lutece_ticket_tree(${ticket.branchJSONObject}, categoriesTree, url);
+        var tree = lutece_ticket_tree(${ticket.branchJSONObject}, categoriesTree, url, true);
 
   		<#if !entryComment.hidden>
 		/* Check maxlength for textarea input */

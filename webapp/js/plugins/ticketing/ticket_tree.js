@@ -73,6 +73,7 @@ function lutece_ticket_tree(branch, categories_tree, url, allowNullSelection) {
 			var selector = "#id_category_" + i;
 			if (selector != undefined)
 			{
+				$(selector).val(-1);
 				$(selector).parents(".form-group:first").hide();
 			}
 		}

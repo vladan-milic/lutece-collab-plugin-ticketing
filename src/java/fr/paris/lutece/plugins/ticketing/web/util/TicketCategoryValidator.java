@@ -39,9 +39,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.form.Form;
 import fr.paris.lutece.plugins.ticketing.business.form.FormEntryType;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
@@ -89,43 +88,39 @@ public class TicketCategoryValidator
         int nId = -1;
         TicketCategory ticketCategory = null;
         TicketCategory ticketCategoryParent = null;
-        while (i <= TicketCategoryService.getInstance().getCategoriesTree( ).getDepths( ).size( ) && isValid )
+
+        while ( i <= TicketCategoryTypeHome.getCategoryTypesList( ).size( ) && isValid )
         {
-            if ( StringUtils.isNotBlank( _request.getParameter( TicketingConstants.PARAMETER_CATEGORY_ID + i ) ) )
+            try
             {
                 nId = Integer.valueOf( _request.getParameter( TicketingConstants.PARAMETER_CATEGORY_ID + i ) );
-                ticketCategory = TicketCategoryService.getInstance().findCategoryById( nId );
-
-                boolean ticketCategoryIsMissing = ticketCategory == null;
-                boolean ticketCategoryIsRequired = form == null || form.getEntry( formEntryType.getCategory( ) + i ).isMandatory( );
-
-                if ( ticketCategoryIsMissing && ticketCategoryIsRequired )
-                {
-                    if ( i <= TicketingConstants.CATEGORY_DEPTH_MIN )
-                    {
-                        listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED, new String [ ] {
-                                TicketCategoryService.getInstance().getCategoriesTree( ).getDepths( ).get( i - 1 ).getLabel( )
-                        }, this._request.getLocale( ) ) );
-                        isValid = false;
-                    }
-                    break;
-                }
-                else if ( ticketCategory == null || ticketCategory.getLeaf( ) )
-                {
-                    break;
-                }
             }
-            else
+            catch ( NumberFormatException e )
             {
-                if ( i <= TicketingConstants.CATEGORY_DEPTH_MIN )
-                {
-                    listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED, new String [ ] {
-                            TicketCategoryService.getInstance().getCategoriesTree( ).getDepths( ).get( i - 1 ).getLabel( )
-                    }, this._request.getLocale( ) ) );
-                    isValid = false;
-                }
+                nId = -1;
+            }
+
+            ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( nId );
+
+            boolean ticketCategoryIsMissing = ticketCategory == null;
+            boolean ticketCategoryWithoutFormIsRequired = form == null && i <= TicketingConstants.CATEGORY_DEPTH_MIN;
+            boolean ticketCategoryWithFormIsRequired = form != null && form.getEntry( formEntryType.getCategory( ) + i ).isMandatory( );
+            boolean ticketCategoryIsRequired = ticketCategoryWithoutFormIsRequired || ticketCategoryWithFormIsRequired;
+
+            if ( ticketCategoryIsMissing && ticketCategoryIsRequired )
+            {
+                listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED,
+                        new String[] { TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( i - 1 ).getLabel( ) }, this._request.getLocale( ) ) );
+                isValid = false;
                 break;
             }
+
+            boolean ticketCategoryIsLeaf = form == null && ticketCategory != null && ticketCategory.getLeaf( );
+            if ( ticketCategoryIsLeaf )
+            {
+                break;
+            }
+
             if ( nId != -1)
             {
                 ticketCategoryParent = TicketCategoryService.getInstance().findCategoryById( nId );
@@ -141,7 +136,7 @@ public class TicketCategoryValidator
             isValid = false;
         }
 
-        if ( isValid && ticketCategory == null )
+        if ( isValid && ticketCategory == null && ticketCategoryParent != null )
         {
             ticketCategory = ticketCategoryParent;
             ticketCategoryParent = ticketCategory.getParent( );
