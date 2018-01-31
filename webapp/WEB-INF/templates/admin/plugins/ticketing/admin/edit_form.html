@@ -4,7 +4,7 @@
 <#macro formEntryLine entryType label="">
 	<#assign entry = form.getEntry(entryType)>
 	<#if label = "">
-		<#assign label = i18n('ticketing.xpage.create_ticket.'+entryType+'.label')>
+		${i18n('ticketing.xpage.create_ticket.'+entryType+'.label')}
 	</#if>
 	<div class="form-group">
 		<div class="row">
