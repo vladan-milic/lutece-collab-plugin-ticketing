@@ -86,8 +86,8 @@ public class TicketCategoryValidator
 
         int i = 1;
         int nId = -1;
-        TicketCategory ticketCategory = null;
         TicketCategory ticketCategoryParent = null;
+        TicketCategory lastValidTicketCategory = null;
 
         while ( i <= TicketCategoryTypeHome.getCategoryTypesList( ).size( ) && isValid )
         {
@@ -100,31 +100,35 @@ public class TicketCategoryValidator
                 nId = -1;
             }
 
-            ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( nId );
+            TicketCategory ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( nId );
 
-            boolean ticketCategoryIsMissing = ticketCategory == null;
+            boolean ticketCategoryIsProvided = ticketCategory != null;
             boolean ticketCategoryWithoutFormIsRequired = form == null && i <= TicketingConstants.CATEGORY_DEPTH_MIN;
             boolean ticketCategoryWithFormIsRequired = form != null && form.getEntry( formEntryType.getCategory( ) + i ).isMandatory( );
             boolean ticketCategoryIsRequired = ticketCategoryWithoutFormIsRequired || ticketCategoryWithFormIsRequired;
 
-            if ( ticketCategoryIsMissing && ticketCategoryIsRequired )
+            if ( ticketCategoryIsProvided )
+            {
+                lastValidTicketCategory = ticketCategory;
+            }
+            else if ( ticketCategoryIsRequired )
             {
                 listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED,
                         new String[] { TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( i - 1 ).getLabel( ) }, this._request.getLocale( ) ) );
                 isValid = false;
-                break;
             }
 
             boolean ticketCategoryIsLeaf = form == null && ticketCategory != null && ticketCategory.getLeaf( );
-            if ( ticketCategoryIsLeaf )
+            if ( !isValid || ticketCategoryIsLeaf )
             {
                 break;
             }
 
-            if ( nId != -1)
+            if ( ticketCategoryIsProvided )
             {
-                ticketCategoryParent = TicketCategoryService.getInstance().findCategoryById( nId );
+                ticketCategoryParent = ticketCategory;
             }
+
             i++;
         }
 
@@ -136,12 +140,12 @@ public class TicketCategoryValidator
             isValid = false;
         }
 
-        if ( isValid && ticketCategory == null && ticketCategoryParent != null )
+        if ( isValid && lastValidTicketCategory == null && ticketCategoryParent != null )
         {
-            ticketCategory = ticketCategoryParent;
-            ticketCategoryParent = ticketCategory.getParent( );
+            lastValidTicketCategory = ticketCategoryParent;
+            ticketCategoryParent = lastValidTicketCategory.getParent( );
         }
 
-        return new TicketCategoryValidatorResult( ticketCategory, ticketCategoryParent, isValid, listValidationErrors );
+        return new TicketCategoryValidatorResult( lastValidTicketCategory, ticketCategoryParent, isValid, listValidationErrors );
     }
 }

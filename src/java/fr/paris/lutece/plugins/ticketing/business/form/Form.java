@@ -155,7 +155,8 @@ public class Form implements Serializable
         if ( formEntry == null )
         {
             formEntry = new FormEntry( );
-            formEntry.setHidden( false );
+            // By default, a field is hidden and optional
+            formEntry.setHidden( true );
             formEntry.setMandatory( false );
             formEntry.setIdChamp( entryName );
         }
@@ -172,11 +173,11 @@ public class Form implements Serializable
         return formEntries;
     }
 
-	/**
-	 * @param formEntries the formEntries to set
-	 */
-	public void setFormEntries(List<FormEntry> formEntries) {
-		this.formEntries = formEntries;
-	}
-    
+    /**
+     * @param formEntries the formEntries to set
+     */
+    public void setFormEntries(List<FormEntry> formEntries) {
+        this.formEntries = formEntries;
+    }
+
 }

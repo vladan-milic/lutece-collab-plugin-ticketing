@@ -183,10 +183,11 @@ public class TicketXPage extends WorkflowCapableXPage
             {
                 ticket = new Ticket( );
                 TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( request.getSession( ).getId( ) );
+
+                prefillTicketWithUserInfo( request, ticket );
+                prefillTicketWithDefaultForm( request, ticket, form );
             }
 
-            prefillTicketWithUserInfo( request, ticket );
-            prefillTicketWithDefaultForm( request, ticket, form );
 
             _ticketFormService.saveTicketInSession( request.getSession( ), ticket, form.getId( ) );
 
@@ -467,14 +468,24 @@ public class TicketXPage extends WorkflowCapableXPage
     @View( value = VIEW_RECAP_TICKET )
     public XPage getRecapTicket( HttpServletRequest request )
     {
-        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
+        Form form = getFormFromRequest( request );
+        Ticket ticket = null;
+        if ( form == null )
+        {
+            ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
+        }
+        else
+        {
+            ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form.getId( ) );
+        }
         List<ResponseRecap> listResponseRecap = _ticketFormService.getListResponseRecap( ticket.getListResponse( ) );
 
         Map<String, Object> model = getModel( );
         model.put( MARK_TICKET_ACTION, getActionTypeFromSession( request.getSession( ) ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_RESPONSE_RECAP_LIST, listResponseRecap );
-        model.put( MARK_FORM, getFormFromRequest( request ) );
+        model.put( MARK_FORM, form );
+        model.put( MARK_FORMENTRYTYPE, new FormEntryType( ) );
 
         removeActionTypeFromSession( request.getSession( ) );
 
@@ -507,7 +518,8 @@ public class TicketXPage extends WorkflowCapableXPage
             categoryValidatorResult.getListValidationErrors( ).stream( ).forEach( ( error ) -> addError( error ) );
             bIsFormValid = false;
         }
-        else
+
+        if ( categoryValidatorResult.getTicketCategory( ) != null )
         {
             ticket.setTicketCategory( categoryValidatorResult.getTicketCategory( ) );
         }
@@ -598,7 +610,14 @@ public class TicketXPage extends WorkflowCapableXPage
         ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle( ) ).getLabel( ) );
         ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) ).getConfirmationMsg( ) );
 
-        _ticketFormService.saveTicketInSession( request.getSession( ), ticket );
+        if ( form == null )
+        {
+            _ticketFormService.saveTicketInSession( request.getSession( ), ticket );
+        }
+        else
+        {
+            _ticketFormService.saveTicketInSession( request.getSession( ), ticket, form.getId( ) );
+        }
 
         if ( !bIsFormValid && getActionTypeFromSession( request.getSession( ) ).equals( ACTION_CREATE_TICKET ) )
         {
