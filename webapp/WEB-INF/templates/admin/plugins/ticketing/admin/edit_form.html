@@ -1,26 +1,26 @@
 <#include "/admin/util/editor/editor.html" />
 <#global form=form>
-
 <#macro formEntryLine entryType label="">
+	<th scope="row">
 	<#assign entry = form.getEntry(entryType)>
 	<#if label = "">
 		${i18n('ticketing.xpage.create_ticket.'+entryType+'.label')}
 	</#if>
+	</th>
 	<div class="form-group">
 		<div class="row">
-			<div class="col-xs-12 col-sm-3">
-				<label for="id_user_title" >${label}</label>
+		
 			</div>
 			<div class="col-xs-12 col-sm-3">
-				<input type="checkbox" name="formEntry.${entryType}.hidden" <#if entry.hidden>checked="checked"</#if>>
+				<td><input type="checkbox" name="formEntry.${entryType}.hidden" <#if entry.hidden>checked="checked"</#if>></td>
 			</div>
 			<div class="col-xs-12 col-sm-3">
-				<input type="checkbox" name="formEntry.${entryType}.mandatory" <#if entry.mandatory>checked="checked"</#if>>
+				<td><input type="checkbox" name="formEntry.${entryType}.mandatory" <#if entry.mandatory>checked="checked"</#if>></td>
 			</div>
 		</div>
 	</div>
+	</th>
 </#macro>
-
 <div class="row">
    <div class="col-xs-12 col-sm-12 col-md-12">
       <div class="box box-solid box-primary">
@@ -50,19 +50,32 @@
 							</label>
 						</div>
 					</div>
-				</div>
-				
-      		<#assign entryUserTitle = form.getEntry(formEntryType.userTitle)>
+				</div>      		
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Masquer/Afficher</th>
+      <th scope="col">Non Obligatoire/Obligatoire</th>
+    </tr>
+  </thead>
+  <tbody>
+        		<#assign entryUserTitle = form.getEntry(formEntryType.userTitle)>
       		<#assign entryLastName = form.getEntry(formEntryType.lastName)>
       		<#assign entryFirstName = form.getEntry(formEntryType.firstName)>
       		<#assign entryEmail = form.getEntry(formEntryType.email)>
       		<#assign entryPhones = form.getEntry(formEntryType.phoneNumbers)>
       		<#assign entryContactMode = form.getEntry(formEntryType.contactMode)>
       		<#assign entryComment = form.getEntry(formEntryType.comment)>
-      		
+      		      		
       		<#list formEntryType.entryTypes() as entryType>
+      		  <tr>
 				<@formEntryLine entryType=entryType/>
-            </#list>           
+				</tr>
+            </#list> 
+  
+    </tbody>
+</table>  
             <#if form.id gt 0 > 
 				<@actionButtons button1Name="action_modifyForm" button2Name="view_manageForms"/>
             <#else>
