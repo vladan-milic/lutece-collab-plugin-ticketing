@@ -7,11 +7,18 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
+
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.form.Form;
 import fr.paris.lutece.plugins.ticketing.business.form.FormEntry;
 import fr.paris.lutece.plugins.ticketing.business.form.FormEntryHome;
 import fr.paris.lutece.plugins.ticketing.business.form.FormEntryType;
 import fr.paris.lutece.plugins.ticketing.business.form.FormHome;
+import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
@@ -32,15 +39,15 @@ import fr.paris.lutece.util.url.UrlItem;
 @Controller( controllerJsp = "ManageForms.jsp", controllerPath = "jsp/admin/plugins/ticketing/admin/", right = "TICKETING_TICKETS_MANAGEMENT_FORMS" )
 public class ManageFormsJspBean extends MVCAdminJspBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3672494350924238271L;
-	
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 3672494350924238271L;
+
     // Templates
     private static final String TEMPLATE_MANAGE_FORMS = "/admin/plugins/ticketing/admin/manage_forms.html";
-//    private static final String TEMPLATE_CREATE_FORM = "/admin/plugins/ticketing/admin/create_form.html";
-//    private static final String TEMPLATE_MODIFY_FORM = "/admin/plugins/ticketing/admin/modify_form.html";
+    //    private static final String TEMPLATE_CREATE_FORM = "/admin/plugins/ticketing/admin/create_form.html";
+    //    private static final String TEMPLATE_MODIFY_FORM = "/admin/plugins/ticketing/admin/modify_form.html";
     private static final String TEMPLATE_EDIT_FORM = "/admin/plugins/ticketing/admin/edit_form.html";
     // Views
     private static final String VIEW_MANAGE_FORMS = "manageForms";
@@ -70,6 +77,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     // Markers
     private static final String MARK_FORM_LIST = "form_list";
     private static final String MARK_FORM = "form";
+    private static final String MARK_TICKET = "ticket";
     private static final String MARK_FORMENTRYTYPE = "formEntryType";
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
@@ -94,7 +102,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     private Form _form;
     private FormEntryType _formEntryType;
     private FormEntry _formEntry;
-    
+
     /**
      * Return a model that contains the list and paginator infos
      * 
@@ -129,7 +137,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
 
         return model;    	
     }
-    
+
     /**
      * Build the Form View
      * 
@@ -147,7 +155,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_FORMS, TEMPLATE_MANAGE_FORMS, model );
     }
-    
+
     /**
      * Returns the form to create a modelresponse
      *
@@ -160,10 +168,13 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     {
         _form = new Form( );
         _formEntryType = new FormEntryType();
+
         Map<String, Object> model = getModel( );
         model.put( MARK_FORM, _form );
         model.put( MARK_FORMENTRYTYPE, _formEntryType );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
         model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
+        model.put( MARK_TICKET, createFakeTicketFromForm( _form ) );
         ModelUtils.storeRichText( request, model );
         return getPage( PROPERTY_PAGE_TITLE_CREATE_FORM, TEMPLATE_EDIT_FORM, model );
     }
@@ -186,34 +197,34 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         {
             return redirectView( request, VIEW_CREATE_FORM );
         }      
-      
+
         FormHome.create( _form );
-        
-		FormEntry formEntry;
+
+        FormEntry formEntry;
         for ( int i = 0; i < _formEntryType.entryTypes().size(); i++ )
         {
-        	formEntry = new FormEntry(0, 0, "", false, false, 0, "");
-        	String strValue = _formEntryType.entryTypes().get(i);
-        	String strHidden = "formEntry."+strValue+".hidden" ;
-			String strMandatory = "formEntry."+strValue+".mandatory" ;
-			
-			if(request.getParameterValues( strHidden) != null ) {
-				formEntry.setHidden(true);
-			}
-			if(request.getParameterValues( strMandatory)  != null ) {
-				formEntry.setMandatory(true);
-			}
-			
-			formEntry.setIdChamp(strValue); 
-			formEntry.setIdForm(_form.getId());
-			FormEntryHome.create(formEntry);
+            formEntry = new FormEntry(0, 0, "", false, false, 0, "");
+            String strValue = _formEntryType.entryTypes().get(i);
+            String strHidden = "formEntry."+strValue+".hidden" ;
+            String strMandatory = "formEntry."+strValue+".mandatory" ;
+
+            if(request.getParameterValues( strHidden) != null ) {
+                formEntry.setHidden(true);
+            }
+            if(request.getParameterValues( strMandatory)  != null ) {
+                formEntry.setMandatory(true);
+            }
+
+            formEntry.setIdChamp(strValue); 
+            formEntry.setIdForm(_form.getId());
+            FormEntryHome.create(formEntry);
         }
 
         addInfo( INFO_FORM_CREATED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_FORMS );
     }
-    
+
     /**
      * Manages the removal form of a modelresponse whose identifier is in the http request
      *
@@ -232,7 +243,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
 
         return redirect( request, strMessageUrl );
     }
-        
+
     /**
      * Handles the removal form of a modelresponse
      *
@@ -252,7 +263,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
 
         return redirectView( request, VIEW_MANAGE_FORMS );
     }
-    
+
     /**
      * Returns the form to update info about a modelresponse
      *
@@ -266,17 +277,37 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_FORM ) );
         if ( ( _form == null ) || ( _form.getId( ) != nId ) )
         {
-        	_form = FormHome.findByPrimaryKey( nId );        	
+            _form = FormHome.findByPrimaryKey( nId );        	
         }
         _formEntryType = new FormEntryType();
         Map<String, Object> model = getModel( );
         model.put( MARK_FORM, _form );
         model.put( MARK_FORMENTRYTYPE, _formEntryType );
+        model.put( MARK_TICKET, createFakeTicketFromForm( _form ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
         model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
+
         ModelUtils.storeRichText( request, model );
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_FORM, TEMPLATE_EDIT_FORM, model );
     }
-    
+
+    // Method used to create a fake ticket to have category choice
+    private Ticket createFakeTicketFromForm( Form form )
+    {
+        Ticket fakeTicket = new Ticket( );
+        for ( TicketCategoryType categoryType : TicketCategoryTypeHome.getCategoryTypesList( ) )
+        {
+            FormEntry formEntry = form.getEntry( _formEntryType.getCategory( ) + categoryType.getDepthNumber( ) );
+            if ( StringUtils.isNotEmpty( formEntry.getDefaultValue( ) ) )
+            {
+                TicketCategory ticketCategory = TicketCategoryHome.findByPrimaryKey( Integer.parseInt( formEntry.getDefaultValue( ) ) );
+                fakeTicket.setTicketCategory( ticketCategory );
+            }
+        }
+
+        return fakeTicket;
+    }
+
     /**
      * Process the change form of a modelresponse
      *
@@ -294,32 +325,32 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         {
             return redirect( request, VIEW_MODIFY_FORM, PARAMETER_ID_FORM, _form.getId( ) );
         }
-        
+
         for (FormEntry entries: _form.getFormEntries())
         {
-        	String strValue = entries.getIdChamp();
-        	String strHidden = "formEntry."+strValue+".hidden" ;
-			String strMandatory = "formEntry."+strValue+".mandatory" ;
-			
-			if(request.getParameterValues( strHidden) != null ) {
-				entries.setHidden(true);
-			}else {
-				entries.setHidden(false);
-			}
-			if(request.getParameterValues( strMandatory)  != null ) {
-				entries.setMandatory(true);
-			}else {
-				entries.setMandatory(false);
-			}			
-			FormEntryHome.update(entries);
+            String strValue = entries.getIdChamp();
+            String strHidden = "formEntry."+strValue+".hidden" ;
+            String strMandatory = "formEntry."+strValue+".mandatory" ;
+
+            if(request.getParameterValues( strHidden) != null ) {
+                entries.setHidden(true);
+            }else {
+                entries.setHidden(false);
+            }
+            if(request.getParameterValues( strMandatory)  != null ) {
+                entries.setMandatory(true);
+            }else {
+                entries.setMandatory(false);
+            }			
+            FormEntryHome.update(entries);
         }
-        
+
         FormHome.update( _form );
-        
+
         addInfo( INFO_FORM_UPDATED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_FORMS );
     }
-    
+
 
 }
