@@ -27,7 +27,7 @@ id_champ varchar(50) default '' NOT NULL,
 hidden SMALLINT default '0' NOT NULL,
 mandatory SMALLINT default '0' NOT NULL,
 hierarchy int(11) default '0' NOT NULL,
-default_value varchar(500) default '' NOT NULL,
+default_value varchar(500) default '',
 PRIMARY KEY (id_formentry)
 );
 
