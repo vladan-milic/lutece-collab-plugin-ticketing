@@ -103,30 +103,32 @@
 </#macro>
                     
 <#macro printNode node rootelementssize>
-    <td class="text-center" style="vertical-align:middle;" data-category-id="${node.id}" <#if node.parent??>data-category-parent="${node.parent.id}"</#if> <#if node.children?? && node.children?size gt 0> rowspan="${node.leaves?size!'1'}"</#if>>
-           <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
-               <input type="hidden" id="id_parent_category" name="id_parent_category" value="${node.id}"/>
-               <input type="hidden" id="id_category" name="id_category" value="${node.id}"/>
-               <span><strong>${node.label}</strong></span> 
-               <@button class="pull-right" type='submit' size='xs' name='view_createCategory' buttonIcon='plus' />
-               <@button class="pull-right" type='submit' size='xs' name='view_modifyCategoryInputs' buttonIcon='wpforms' />
-               <@button class="pull-right" type='submit' size='xs' name='view_modifyCategory' buttonIcon='pencil'/>
-               <@button class="pull-right" type='submit' size='xs' color='btn-danger' name='action_confirmRemoveCategory' buttonIcon='trash'/>
-               </br>
-               <span>${node.code}</span>
-               <#if !node.parent?? && node.order lt rootelementssize >
-                 <@button class="pull-right" type='submit' size='xs' name='action_doMoveCategoryDown' buttonIcon='chevron-down'/>
-               </#if>
-               <#if node.parent?? && node.parent.children?? && node.order lt node.parent.children?size >
-                 <@button class="pull-right" type='submit' size='xs' name='action_doMoveCategoryDown' buttonIcon='chevron-down'/>
-               </#if>
-               <#if node.order gt 1 >
-                 <@button class="pull-right" type='submit' size='xs' name='action_doMoveCategoryUp' buttonIcon='chevron-up'/>
-               </#if>
-               </br>
-               <#if node.defaultAssignUnit?? && node.defaultAssignUnit.unitId gte 0 >
-                <span><i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> ${(node.defaultAssignUnit.name)!''}</span>
-               </#if >
-            </@tform>
-    </td>       
+	<#if !node.inactive>
+	    <td class="text-center" style="vertical-align:middle;" data-category-id="${node.id}" <#if node.parent??>data-category-parent="${node.parent.id}"</#if> <#if node.children?? && node.children?size gt 0> rowspan="${node.leaves?size!'1'}"</#if>>
+	           <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
+	               <input type="hidden" id="id_parent_category" name="id_parent_category" value="${node.id}"/>
+	               <input type="hidden" id="id_category" name="id_category" value="${node.id}"/>
+	               <span><strong>${node.label}</strong></span> 
+	               <@button class="pull-right" type='submit' size='xs' name='view_createCategory' buttonIcon='plus' />
+	               <@button class="pull-right" type='submit' size='xs' name='view_modifyCategoryInputs' buttonIcon='wpforms' />
+	               <@button class="pull-right" type='submit' size='xs' name='view_modifyCategory' buttonIcon='pencil'/>
+	               <@button class="pull-right" type='submit' size='xs' color='btn-danger' name='action_confirmRemoveCategory' buttonIcon='trash'/>
+	               </br>
+	               <span>${node.code}</span>
+	               <#if !node.parent?? && node.order lt rootelementssize >
+	                 <@button class="pull-right" type='submit' size='xs' name='action_doMoveCategoryDown' buttonIcon='chevron-down'/>
+	               </#if>
+	               <#if node.parent?? && node.parent.children?? && node.order lt node.parent.children?size >
+	                 <@button class="pull-right" type='submit' size='xs' name='action_doMoveCategoryDown' buttonIcon='chevron-down'/>
+	               </#if>
+	               <#if node.order gt 1 >
+	                 <@button class="pull-right" type='submit' size='xs' name='action_doMoveCategoryUp' buttonIcon='chevron-up'/>
+	               </#if>
+	               </br>
+	               <#if node.defaultAssignUnit?? && node.defaultAssignUnit.unitId gte 0 >
+	                <span><i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> ${(node.defaultAssignUnit.name)!''}</span>
+	               </#if >
+	            </@tform>
+	    </td>    
+	</#if>	       
 </#macro>

@@ -93,6 +93,8 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     private String             _strHelpMessage;
 
     private boolean            _bManageable;
+    
+    private boolean            _bInactive;
 
     /**
      * Constructor TicketCategory
@@ -378,5 +380,15 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     public void setManageable( boolean manageable )
     {
         _bManageable = manageable;
+    }
+    
+    public boolean isInactive( )
+    {
+        return _bInactive;
+    }
+
+    public void setInactive( boolean inactive )
+    {
+    	_bInactive = inactive;
     }
 }

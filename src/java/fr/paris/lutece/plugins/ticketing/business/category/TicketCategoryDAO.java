@@ -57,7 +57,8 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
     private static final String SQL_QUERY_INSERT                          = "INSERT INTO ticketing_category ( id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, demand_id, help_message, is_manageable ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE                          = "UPDATE ticketing_category SET inactive = 1 WHERE id_category = ? ";
     private static final String SQL_QUERY_UPDATE                          = "UPDATE ticketing_category SET id_category = ?, id_parent = ?, label = ?, n_order = ?, code = ?, id_default_assignee_unit = ?, id_category_type = ?, demand_id = ?, help_message = ?, is_manageable = ? WHERE id_category = ?";
-    private static final String SQL_QUERY_SELECTALL                       = "SELECT id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, demand_id, help_message, is_manageable FROM ticketing_category WHERE inactive <> 1 ORDER BY id_parent, n_order";
+//    private static final String SQL_QUERY_SELECTALL                       = "SELECT id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, demand_id, help_message, is_manageable FROM ticketing_category WHERE inactive <> 1 ORDER BY id_parent, n_order";
+    private static final String SQL_QUERY_SELECTALL                       = "SELECT id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, demand_id, help_message, is_manageable, inactive FROM ticketing_category ORDER BY id_parent, n_order";
     private static final String SQL_QUERY_SELECTALL_ID                    = "SELECT id_category FROM ticketing_category WHERE inactive <> 1 ";
     private static final String SQL_QUERY_MAX_CATEGORY_ORDER_BY_TYPE      = "SELECT max(n_order) FROM ticketing_category WHERE id_parent = ? AND inactive <> 1";
     private static final String SQL_QUERY_REBUILD_CATEGORY_ORDER_SEQUENCE = "UPDATE ticketing_category SET n_order = n_order - 1 WHERE n_order > ? AND id_parent = ? AND inactive <> 1 ";
@@ -253,6 +254,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setDemandId( daoUtil.getInt( nIndex++ ) );
             category.setHelpMessage( daoUtil.getString( nIndex++ ) );
             category.setManageable( daoUtil.getBoolean( nIndex++ ) );
+            category.setInactive(daoUtil.getBoolean( nIndex++ ));
             categoryList.add( category );
         }
 
@@ -301,6 +303,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setDemandId( daoUtil.getInt( nIndex++ ) );
             category.setHelpMessage( daoUtil.getString( nIndex++ ) );
             category.setManageable( daoUtil.getBoolean( nIndex++ ) );
+            category.setInactive( daoUtil.getBoolean( nIndex++ ) );
 
             categoryList.add( category );
         }
