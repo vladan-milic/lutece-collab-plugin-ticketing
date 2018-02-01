@@ -44,3 +44,4 @@ INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is
 --
 UPDATE core_datastore SET entity_value='false' WHERE entity_key='mylutece.portal.authentication.required';
 DELETE FROM core_datastore WHERE entity_key = 'mylutece.security.public_url.ticketing';
+INSERT INTO core_datastore (entity_key, entity_value) VALUES ('mylutece.security.public_url.confirmticket', 'jsp/site/Portal.jsp?page=ticket&view=confirmTicket');

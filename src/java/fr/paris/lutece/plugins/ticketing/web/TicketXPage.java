@@ -439,9 +439,10 @@ public class TicketXPage extends WorkflowCapableXPage
     @Action( ACTION_CREATE_TICKET )
     public XPage doCreateTicket( HttpServletRequest request )
     {
+        Form form = getFormFromRequest( request );
         try
         {
-            Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
+            Ticket ticket = getTicketFromRequest( request, form );
 
             Channel channelFront = ChannelHome.findByPrimaryKey( Integer.valueOf( PluginConfigurationService.getInt(
                     PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT, TicketingConstants.PROPERTY_UNSET_INT ) ) );
@@ -474,7 +475,14 @@ public class TicketXPage extends WorkflowCapableXPage
             addError( ERROR_TICKET_CREATION_ABORTED, request.getLocale( ) );
             AppLogService.error( e );
 
-            return redirectView( request, VIEW_CREATE_TICKET );
+            if ( form == null )
+            {
+                return redirectView( request, VIEW_CREATE_TICKET );
+            }
+            else
+            {
+                return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
+            }
         }
 
         return redirectView( request, VIEW_CONFIRM_TICKET );
@@ -491,15 +499,7 @@ public class TicketXPage extends WorkflowCapableXPage
     public XPage getRecapTicket( HttpServletRequest request )
     {
         Form form = getFormFromRequest( request );
-        Ticket ticket = null;
-        if ( form == null )
-        {
-            ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
-        }
-        else
-        {
-            ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form.getId( ) );
-        }
+        Ticket ticket = getTicketFromRequest( request, form );
         List<ResponseRecap> listResponseRecap = _ticketFormService.getListResponseRecap( ticket.getListResponse( ) );
 
         Map<String, Object> model = getModel( );
@@ -512,6 +512,21 @@ public class TicketXPage extends WorkflowCapableXPage
         removeActionTypeFromSession( request.getSession( ) );
 
         return getXPage( TEMPLATE_RECAP_TICKET, request.getLocale( ), model );
+    }
+
+
+    private Ticket getTicketFromRequest( HttpServletRequest request, Form form )
+    {
+        Ticket ticket = null;
+        if ( form == null )
+        {
+            ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
+        }
+        else
+        {
+            ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form.getId( ) );
+        }
+        return ticket;
     }
 
     /**
