@@ -184,8 +184,8 @@ public class TicketXPage extends WorkflowCapableXPage
                 ticket = new Ticket( );
                 TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( request.getSession( ).getId( ) );
 
-                prefillTicketWithUserInfo( request, ticket );
                 prefillTicketWithDefaultForm( request, ticket, form );
+                prefillTicketWithUserInfo( request, ticket );
             }
 
 
@@ -279,6 +279,28 @@ public class TicketXPage extends WorkflowCapableXPage
     private void prefillTicketWithDefaultForm( HttpServletRequest request, Ticket ticket, Form form )
     {
         FormEntryType formEntryType = new FormEntryType();
+
+        UserTitle userTitle = null;
+        try
+        {
+            String userTitleId = form.getEntry( formEntryType.getUserTitle( ) ).getDefaultValue( );
+            userTitle = UserTitleHome.findByPrimaryKey( Integer.parseInt( userTitleId ) );
+        }
+        catch ( NumberFormatException e )
+        {
+            // do nothing, default value can be empty or not valid
+        }
+
+        if ( userTitle != null )
+        {
+            ticket.setIdUserTitle( userTitle.getId( ) );
+            ticket.setUserTitle( userTitle.getLabel( ) );
+        }
+
+        ticket.setLastname( form.getEntry( formEntryType.getLastName( ) ).getDefaultValue( ) );
+        ticket.setFirstname( form.getEntry( formEntryType.getFirstName( ) ).getDefaultValue( ) );
+        ticket.setEmail( form.getEntry( formEntryType.getEmail( ) ).getDefaultValue( ) );
+        ticket.setFixedPhoneNumber( form.getEntry( formEntryType.getPhoneNumbers( ) ).getDefaultValue( ) );
 
         ContactMode contactMode = null;
         try

@@ -1,7 +1,11 @@
 package fr.paris.lutece.plugins.ticketing.business.form;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeHome;
 
 public class FormEntryType
 {
@@ -16,6 +20,18 @@ public class FormEntryType
 
     public List<String> entryTypes() {
         return Arrays.asList( USER_TITLE, LAST_NAME, FIRST_NAME, EMAIL, PHONE_NUMBERS, CONTACT_MODE, COMMENT );
+    }
+
+    public List<String> entryTypesWithCategories( )
+    {
+        List<String> entryTypes = new ArrayList<>( entryTypes( ) );
+
+        for ( TicketCategoryType categoryType : TicketCategoryTypeHome.getCategoryTypesList( ) )
+        {
+            entryTypes.add( CATEGORY + categoryType.getDepthNumber( ) );
+        }
+
+        return entryTypes;
     }
 
     public String getUserTitle( )

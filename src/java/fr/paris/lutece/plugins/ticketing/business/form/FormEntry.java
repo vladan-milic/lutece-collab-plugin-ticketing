@@ -69,28 +69,6 @@ public class FormEntry implements Serializable
 	 */
 	public FormEntry() {
 		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param _nId
-	 * @param _nIdForm
-	 * @param _strIdChamp
-	 * @param _bHidden
-	 * @param _bMandatory
-	 * @param _nHierarchy
-	 * @param _strDefaultValue
-	 */
-	public FormEntry(int _nId, int _nIdForm, String _strIdChamp, boolean _bHidden, boolean _bMandatory, int _nHierarchy,
-			String _strDefaultValue) {
-		super();
-		this._nId = _nId;
-		this._nIdForm = _nIdForm;
-		this._strIdChamp = _strIdChamp;
-		this._bHidden = _bHidden;
-		this._bMandatory = _bMandatory;
-		this._nHierarchy = _nHierarchy;
-		this._strDefaultValue = _strDefaultValue;
 	}
 
 	/**

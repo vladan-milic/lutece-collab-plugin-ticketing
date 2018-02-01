@@ -1,5 +1,6 @@
 <#include "/admin/util/editor/editor.html" />
 <#global form=form>
+<#global formEntryType=formEntryType>
 
 <#macro formEntryLine entryType>
 	<#assign entry=form.getEntry(entryType)>
@@ -14,7 +15,27 @@
 			<input id="mandatory_${entryType}" type="checkbox" name="formEntry.${entryType}.mandatory" <#if entry.mandatory>checked="checked"</#if>>
 			<label for="mandatory_${entryType}"></label>
 		</td>
-		<td></td>
+		<td>
+			<#if entryType == formEntryType.userTitle>
+				<select name="formEntry.${entryType}.defaultValue"> 
+					<option></option>
+					<#list user_titles_list as user_title>
+						<option value="${user_title.code}" <#if (entry.defaultValue!'') == user_title.code>selected="selected"</#if>>${user_title.name}</option>
+					</#list>
+				</select>
+			<#elseif entryType == formEntryType.contactMode>
+				<select name="formEntry.${entryType}.defaultValue"> 
+					<option></option>
+					<#list contact_modes_list as contact_mode>
+						<option value="${contact_mode.code}" <#if (entry.defaultValue!'') == contact_mode.code>selected="selected"</#if>>${contact_mode.name}</option>
+					</#list>
+				</select>
+			<#elseif entryType == formEntryType.comment>
+				<textarea style="width: 100%; height: 150px" maxlength="5000" name="formEntry.${entryType}.defaultValue">${entry.defaultValue!''}</textarea>
+			<#else>
+				<input type="text" name="formEntry.${entryType}.defaultValue" value="${entry.defaultValue!''}" />
+			</#if>
+		</td>
 	</tr>
 </#macro>
 
@@ -72,6 +93,7 @@
 					            <#list categories_depths as depth>
 					            <#assign entryType = formEntryType.category + depth.depthNumber>
       							<#assign entryCategory = form.getEntry(entryType)>
+					            ${entryCategory.hidden?then('oui', 'non')}
 					      		<tr>
 					      			<th scope="row">${depth.label}</th>
 									<td>
@@ -121,7 +143,7 @@
 		padding: 0;
 		cursor: pointer;
 		background: #ccc;
-		transition: all .2s;
+		transition: background .2s;
 	}
 	input[type=checkbox] + label::after {
 		content: '';
@@ -133,7 +155,7 @@
 		height: 18px;
 		border-radius: 100%;
 		background: #fff;
-		transition: all .2s;
+		transition: left .2s;
 	}
 	input[type=checkbox]:checked + label {
 		background: #3c8dbc;
