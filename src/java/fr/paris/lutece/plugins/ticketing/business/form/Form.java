@@ -52,6 +52,7 @@ public class Form implements Serializable
     private String _strTitle;
     @Size( max = 500, message = "#i18n{ticketing.validation.form.Message.size}" )
     private String _strMessage;
+    @NotEmpty( message = "#i18n{ticketing.validation.form.ButtonLabel.notEmpty}" )
     @Size( max = 500, message = "#i18n{ticketing.validation.form.ButtonLabel.size}" )
     private String _strButtonLabel;
 
