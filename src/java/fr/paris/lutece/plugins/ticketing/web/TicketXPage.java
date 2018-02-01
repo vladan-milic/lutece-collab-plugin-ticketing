@@ -485,7 +485,7 @@ public class TicketXPage extends WorkflowCapableXPage
             }
         }
 
-        return redirectView( request, VIEW_CONFIRM_TICKET );
+        return redirectView( request, VIEW_CONFIRM_TICKET, form );
     }
 
     /**
@@ -733,14 +733,31 @@ public class TicketXPage extends WorkflowCapableXPage
     public XPage getConfirmTicket( HttpServletRequest request )
     {
         Map<String, Object> model = getModel( );
-        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
+        Form form = getFormFromRequest( request );
+        Ticket ticket = null;
+        if ( form == null )
+        {
+            ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
+        }
+        else
+        {
+            ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form.getId( ) );
+        }
+
         model.put( TicketingConstants.MARK_TICKET, ticket );
         String strContent = (String) request.getSession( ).getAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE );
 
         if ( ticket != null )
         {
             strContent = fillTemplate( request, ticket );
-            _ticketFormService.removeTicketFromSession( request.getSession( ) );
+            if ( form == null )
+            {
+                _ticketFormService.removeTicketFromSession( request.getSession( ) );
+            }
+            else
+            {
+                _ticketFormService.removeTicketFromSession( request.getSession( ), form.getId( ) );
+            }
             removeActionTypeFromSession( request.getSession( ) );
         }
         model.put( MARK_MESSAGE, strContent );

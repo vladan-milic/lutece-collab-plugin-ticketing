@@ -572,9 +572,9 @@ public class TicketFormService implements Serializable
      * @param ticket
      *            The ticketing to save
      */
-    public void saveTicketInSession( HttpSession session, Ticket ticket, int idTicket )
+    public void saveTicketInSession( HttpSession session, Ticket ticket, int idForm )
     {
-        session.setAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET + "-" + idTicket, ticket );
+        session.setAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET + "-" + idForm, ticket );
     }
 
     /**
@@ -597,9 +597,9 @@ public class TicketFormService implements Serializable
      *            The session of the user
      * @return The ticketing form
      */
-    public Ticket getTicketFromSession( HttpSession session, int idTicket )
+    public Ticket getTicketFromSession( HttpSession session, int idForm )
     {
-        return ( Ticket ) session.getAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET + "-" + idTicket );
+        return ( Ticket ) session.getAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET + "-" + idForm );
     }
 
     /**
@@ -620,9 +620,20 @@ public class TicketFormService implements Serializable
      * @param session
      *            The session
      */
+    public void removeTicketFromSession( HttpSession session, int idForm )
+    {
+        session.removeAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET + "-" + idForm );
+    }
+
+    /**
+     * Remove any ticketing form responses stored in the session of the user
+     * 
+     * @param session
+     *            The session
+     */
     public void removeTicketFromSession( HttpSession session )
     {
-        session.removeAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET );
+        removeTicketFromSession( session, 0 );
     }
 
     /**
