@@ -92,13 +92,16 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
 
         for ( TicketCategory ticketCategory : this.getRootElements( ) )
         {
-            JSONObject jsonRootElement = new JSONObject( );
-            jsonRootElement.accumulate( FormatConstants.KEY_ID, ticketCategory.getId( ) );
-            jsonRootElement.accumulate( FormatConstants.KEY_LABEL, ticketCategory.getLabel( ) );
-            jsonRootElement.accumulate( FormatConstants.KEY_HELP, ticketCategory.getHelpMessage( ) );
-            jsonRootElement.accumulate( FormatConstants.KEY_DEPTH, ticketCategory.getDepth( ).getDepthNumber( ) );
-            addJSONArraysChildren( jsonRootElement, ticketCategory );
-            jsonRootElements.add( jsonRootElement );
+            if(!ticketCategory.isInactive()) {
+	        	JSONObject jsonRootElement = new JSONObject( );
+	            jsonRootElement.accumulate( FormatConstants.KEY_ID, ticketCategory.getId( ) );
+	            jsonRootElement.accumulate( FormatConstants.KEY_LABEL, ticketCategory.getLabel( ) );
+	            jsonRootElement.accumulate( FormatConstants.KEY_HELP, ticketCategory.getHelpMessage( ) );
+	            jsonRootElement.accumulate( FormatConstants.KEY_DEPTH, ticketCategory.getDepth( ).getDepthNumber( ) );
+	            addJSONArraysChildren( jsonRootElement, ticketCategory );
+	            jsonRootElements.add( jsonRootElement );
+            }
+            
         }
         
         json.accumulate( FormatConstants.KEY_CATEGORIES_DEPTH + "1", jsonRootElements );
@@ -131,13 +134,15 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
 
         for ( TicketCategory children : ticketCategory.getChildren( ) )
         {
-            JSONObject jsonElement = new JSONObject( );
-            jsonElement.accumulate( FormatConstants.KEY_ID, children.getId( ) );
-            jsonElement.accumulate( FormatConstants.KEY_LABEL, children.getLabel( ) );
-            jsonElement.accumulate( FormatConstants.KEY_DEPTH, children.getDepth( ).getDepthNumber( ) );
-            jsonElement.accumulate( FormatConstants.KEY_HELP, children.getHelpMessage( ) );
-            addJSONArraysChildren( jsonElement, children );
-            jsonElements.add( jsonElement );
+        	if(!children.isInactive()) {
+	        	JSONObject jsonElement = new JSONObject( );
+	            jsonElement.accumulate( FormatConstants.KEY_ID, children.getId( ) );
+	            jsonElement.accumulate( FormatConstants.KEY_LABEL, children.getLabel( ) );
+	            jsonElement.accumulate( FormatConstants.KEY_DEPTH, children.getDepth( ).getDepthNumber( ) );
+	            jsonElement.accumulate( FormatConstants.KEY_HELP, children.getHelpMessage( ) );
+	            addJSONArraysChildren( jsonElement, children );
+	            jsonElements.add( jsonElement );
+        	}
         }
         
         jsonRootElement.accumulate( FormatConstants.KEY_CATEGORIES_DEPTH + nDepthChildren, jsonElements );
