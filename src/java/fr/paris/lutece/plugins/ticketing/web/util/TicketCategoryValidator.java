@@ -88,6 +88,7 @@ public class TicketCategoryValidator
         int nId = -1;
         TicketCategory ticketCategoryParent = null;
         TicketCategory lastValidTicketCategory = null;
+        int lastValidI = 1;
 
         while ( i <= TicketCategoryTypeHome.getCategoryTypesList( ).size( ) && isValid )
         {
@@ -103,15 +104,16 @@ public class TicketCategoryValidator
             TicketCategory ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( nId );
 
             boolean ticketCategoryIsProvided = ticketCategory != null;
-            boolean ticketCategoryWithoutFormIsRequired = form == null && i <= TicketingConstants.CATEGORY_DEPTH_MIN;
+            boolean ticketCategoryWithoutFormIsRequired = form == null;
             boolean ticketCategoryWithFormIsRequired = form != null && form.getEntry( formEntryType.getCategory( ) + i ).isMandatory( );
             boolean ticketCategoryIsRequired = ticketCategoryWithoutFormIsRequired || ticketCategoryWithFormIsRequired;
 
             if ( ticketCategoryIsProvided )
             {
                 lastValidTicketCategory = ticketCategory;
+                lastValidI = i;
             }
-            else if ( ticketCategoryIsRequired )
+            else if ( ticketCategoryIsRequired || i <= TicketingConstants.CATEGORY_DEPTH_MIN )
             {
                 listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED,
                         new String[] { TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( i - 1 ).getLabel( ) }, this._request.getLocale( ) ) );
@@ -132,10 +134,10 @@ public class TicketCategoryValidator
             i++;
         }
 
-        if ( isValid && i < TicketingConstants.CATEGORY_DEPTH_MIN )
+        if ( isValid && lastValidI < TicketingConstants.CATEGORY_DEPTH_MIN )
         {
             listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED, new String [ ] {
-                    TicketCategoryService.getInstance().getCategoriesTree( ).getDepths( ).get( i ).getLabel( )
+                    TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( lastValidI + 1 ).getLabel( )
             }, this._request.getLocale( ) ) );
             isValid = false;
         }

@@ -41,6 +41,7 @@ import fr.paris.lutece.util.url.UrlItem;
 @Controller( controllerJsp = "ManageForms.jsp", controllerPath = "jsp/admin/plugins/ticketing/admin/", right = "TICKETING_TICKETS_MANAGEMENT_FORMS" )
 public class ManageFormsJspBean extends MVCAdminJspBean {
 
+
     /**
      * 
      */
@@ -83,6 +84,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     private static final String MARK_FORMENTRYTYPE = "formEntryType";
     private static final String MARK_PAGINATOR = "paginator";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
+    private static final String MARK_MIN_DEPTH = "minDepth";
     private static final String JSP_MANAGE_FORMS = "jsp/admin/plugins/ticketing/admin/ManageForms.jsp";
 
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";
@@ -181,6 +183,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale( ) ) );
         model.put( MARK_TICKET, createFakeTicketFromForm( _form ) );
+        model.put( MARK_MIN_DEPTH, TicketingConstants.CATEGORY_DEPTH_MIN );
         ModelUtils.storeRichText( request, model );
         return getPage( PROPERTY_PAGE_TITLE_CREATE_FORM, TEMPLATE_EDIT_FORM, model );
     }
@@ -217,24 +220,45 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     {
         FormEntryHome.removeByIdForm( _form.getId( ) );
         FormEntry formEntry;
-        for ( String entryType : _formEntryType.entryTypesWithCategories( ) )
+
+        // update entries not related to categories
+        for ( String entryType : _formEntryType.entryTypes( ) )
         {
-            formEntry = new FormEntry( );
+            formEntry = createFormEntry( request, entryType );
+            FormEntryHome.create( formEntry );
+        }
 
-            formEntry.setIdChamp( entryType );
-            formEntry.setIdForm( _form.getId( ) );
+        // update entries related to categories
+        for ( TicketCategoryType categoryType : TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) )
+        {
+            int depth = categoryType.getDepthNumber( );
+            formEntry = createFormEntry( request, _formEntryType.getCategory( ) + depth );
 
-            // get parameters
-            String strHidden = request.getParameter( "formEntry." + entryType + ".hidden" );
-            String strMandatory = request.getParameter( "formEntry." + entryType + ".mandatory" );
-            String strDefaultValue = request.getParameter( "formEntry." + entryType + ".defaultValue" );
-
-            formEntry.setHidden( strHidden != null );
-            formEntry.setMandatory( strMandatory != null );
-            formEntry.setDefaultValue( strDefaultValue );
+            // force mandatory if category depth is not high enough
+            formEntry.setMandatory( formEntry.isMandatory( ) || depth <= TicketingConstants.CATEGORY_DEPTH_MIN );
 
             FormEntryHome.create( formEntry );
         }
+    }
+
+    private FormEntry createFormEntry( HttpServletRequest request, String entryType )
+    {
+        FormEntry formEntry;
+        formEntry = new FormEntry( );
+
+        formEntry.setIdChamp( entryType );
+        formEntry.setIdForm( _form.getId( ) );
+
+        // get parameters
+        String strHidden = request.getParameter( "formEntry." + entryType + ".hidden" );
+        String strMandatory = request.getParameter( "formEntry." + entryType + ".mandatory" );
+        String strDefaultValue = request.getParameter( "formEntry." + entryType + ".defaultValue" );
+
+        formEntry.setHidden( strHidden != null );
+        formEntry.setMandatory( strMandatory != null );
+        formEntry.setDefaultValue( strDefaultValue );
+
+        return formEntry;
     }
 
     /**
@@ -296,6 +320,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         model.put( MARK_TICKET, createFakeTicketFromForm( _form ) );
         model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
         model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
+        model.put( MARK_MIN_DEPTH, TicketingConstants.CATEGORY_DEPTH_MIN );
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale( ) ) );

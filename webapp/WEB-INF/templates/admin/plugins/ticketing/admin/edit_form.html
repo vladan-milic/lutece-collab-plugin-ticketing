@@ -93,7 +93,8 @@
 					            <#list categories_depths as depth>
 					            <#assign entryType = formEntryType.category + depth.depthNumber>
       							<#assign entryCategory = form.getEntry(entryType)>
-					            ${entryCategory.hidden?then('oui', 'non')}
+   								<#assign entryCategoryForcedMandatory = depth.depthNumber lte minDepth>
+   								<#assign entryCategoryMandatory = entryCategory.mandatory || entryCategoryForcedMandatory>
 					      		<tr>
 					      			<th scope="row">${depth.label}</th>
 									<td>
@@ -101,7 +102,10 @@
 										<label for="hidden_${entryType}"></label>
 									</td>
 									<td>
-										<input id="mandatory_${entryType}" type="checkbox" name="formEntry.${entryType}.mandatory" <#if entryCategory.mandatory>checked="checked"</#if>>
+										
+										<input id="mandatory_${entryType}" type="checkbox" name="formEntry.${entryType}.mandatory"
+											<#if entryCategoryMandatory>checked="checked"</#if>
+											<#if entryCategoryForcedMandatory>disabled="disabled"</#if>>
 										<label for="mandatory_${entryType}"></label>
 									</td>
 					      			<td>
@@ -157,11 +161,27 @@
 		background: #fff;
 		transition: left .2s;
 	}
+	
+	input[type=checkbox]:disabled + label {
+		cursor: not-allowed;
+	}
+	input[type=checkbox]:disabled + label::before {
+		content: '🚫 ';
+		position: absolute;
+		width: 18px;
+		height: 18px;
+		top: 0px;
+		left: 24px;
+	}
+	
 	input[type=checkbox]:checked + label {
 		background: #3c8dbc;
 	}
 	input[type=checkbox]:checked + label::after {
 		left: 24px;
+	}
+	input[type=checkbox]:checked + label::before {
+		left: 0px;
 	}
 </style>
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
