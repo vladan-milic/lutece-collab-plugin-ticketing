@@ -499,6 +499,11 @@ public class TicketXPage extends WorkflowCapableXPage
     public XPage getRecapTicket( HttpServletRequest request )
     {
         Form form = getFormFromRequest( request );
+        if ( form == null )
+        {
+            form = new Form( );
+        }
+        
         Ticket ticket = getTicketFromRequest( request, form );
         List<ResponseRecap> listResponseRecap = _ticketFormService.getListResponseRecap( ticket.getListResponse( ) );
 
