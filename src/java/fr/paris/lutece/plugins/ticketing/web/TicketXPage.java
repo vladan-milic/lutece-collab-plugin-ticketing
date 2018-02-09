@@ -177,7 +177,8 @@ public class TicketXPage extends WorkflowCapableXPage
         }
         else
         {
-            Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form.getId( ) );
+            // Get ticket from session or create one
+            Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
 
             if ( ticket == null )
             {
@@ -188,10 +189,12 @@ public class TicketXPage extends WorkflowCapableXPage
                 prefillTicketWithUserInfo( request, ticket );
             }
 
-
-            _ticketFormService.saveTicketInSession( request.getSession( ), ticket, form.getId( ) );
-
             model.put( TicketingConstants.MARK_TICKET, ticket );
+
+            // remove ticket from session
+            // -> on refresh, ticket will be reset
+            // -> we pass the ticket via the form
+            _ticketFormService.removeTicketFromSession( request.getSession( ), form );
         }
 
         model.put( MARK_FORM, form );
@@ -204,6 +207,7 @@ public class TicketXPage extends WorkflowCapableXPage
         model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
 
         saveActionTypeInSession( request.getSession( ), ACTION_CREATE_TICKET );
+
 
         return getXPage( TEMPLATE_CREATE_TICKET_DYNAMIC_FORM, request.getLocale( ), model );
     }
@@ -442,7 +446,7 @@ public class TicketXPage extends WorkflowCapableXPage
         Form form = getFormFromRequest( request );
         try
         {
-            Ticket ticket = getTicketFromRequest( request, form );
+            Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
 
             Channel channelFront = ChannelHome.findByPrimaryKey( Integer.valueOf( PluginConfigurationService.getInt(
                     PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT, TicketingConstants.PROPERTY_UNSET_INT ) ) );
@@ -503,8 +507,8 @@ public class TicketXPage extends WorkflowCapableXPage
         {
             form = new Form( );
         }
-        
-        Ticket ticket = getTicketFromRequest( request, form );
+
+        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
         List<ResponseRecap> listResponseRecap = _ticketFormService.getListResponseRecap( ticket.getListResponse( ) );
 
         Map<String, Object> model = getModel( );
@@ -519,21 +523,6 @@ public class TicketXPage extends WorkflowCapableXPage
         return getXPage( TEMPLATE_RECAP_TICKET, request.getLocale( ), model );
     }
 
-
-    private Ticket getTicketFromRequest( HttpServletRequest request, Form form )
-    {
-        Ticket ticket = null;
-        if ( form == null )
-        {
-            ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
-        }
-        else
-        {
-            ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form.getId( ) );
-        }
-        return ticket;
-    }
-
     /**
      * Process the data capture form of a new ticket
      *
@@ -545,8 +534,7 @@ public class TicketXPage extends WorkflowCapableXPage
     public XPage doRecapTicket( HttpServletRequest request )
     {
         boolean bIsFormValid = true;
-        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
-        ticket = ( ticket != null ) ? ticket : new Ticket( );
+        Ticket ticket = new Ticket( );
         populate( ticket, request );
         ticket.setListResponse( new ArrayList<Response>( ) );
 
@@ -652,14 +640,7 @@ public class TicketXPage extends WorkflowCapableXPage
         ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle( ) ).getLabel( ) );
         ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) ).getConfirmationMsg( ) );
 
-        if ( form == null )
-        {
-            _ticketFormService.saveTicketInSession( request.getSession( ), ticket );
-        }
-        else
-        {
-            _ticketFormService.saveTicketInSession( request.getSession( ), ticket, form.getId( ) );
-        }
+        _ticketFormService.saveTicketInSession( request.getSession( ), ticket, form );
 
         if ( !bIsFormValid && getActionTypeFromSession( request.getSession( ) ).equals( ACTION_CREATE_TICKET ) )
         {
@@ -739,15 +720,7 @@ public class TicketXPage extends WorkflowCapableXPage
     {
         Map<String, Object> model = getModel( );
         Form form = getFormFromRequest( request );
-        Ticket ticket = null;
-        if ( form == null )
-        {
-            ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
-        }
-        else
-        {
-            ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form.getId( ) );
-        }
+        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
 
         model.put( TicketingConstants.MARK_TICKET, ticket );
         String strContent = (String) request.getSession( ).getAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE );
@@ -755,14 +728,7 @@ public class TicketXPage extends WorkflowCapableXPage
         if ( ticket != null )
         {
             strContent = fillTemplate( request, ticket );
-            if ( form == null )
-            {
-                _ticketFormService.removeTicketFromSession( request.getSession( ) );
-            }
-            else
-            {
-                _ticketFormService.removeTicketFromSession( request.getSession( ), form.getId( ) );
-            }
+            _ticketFormService.removeTicketFromSession( request.getSession( ), form );
             removeActionTypeFromSession( request.getSession( ) );
         }
         model.put( MARK_MESSAGE, strContent );

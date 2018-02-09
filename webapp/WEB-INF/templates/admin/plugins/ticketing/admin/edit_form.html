@@ -4,15 +4,15 @@
 
 <#macro formEntryLine entryType>
 	<#assign entry=form.getEntry(entryType)>
-
+	<#assign entryForcedMandatory = entryType = formEntryType.email>
 	<tr>	
 		<th scope="row">${i18n('ticketing.xpage.create_ticket.'+entryType+'.label')}</th>
 		<td>
-			<input id="hidden_${entryType}" type="checkbox" name="formEntry.${entryType}.hidden" <#if entry.hidden>checked="checked"</#if>>
+			<input id="hidden_${entryType}" type="checkbox" name="formEntry.${entryType}.shown" <#if !entry.hidden>checked="checked"</#if>>
 			<label for="hidden_${entryType}"></label>
 		</td>
 		<td>
-			<input id="mandatory_${entryType}" type="checkbox" name="formEntry.${entryType}.mandatory" <#if entry.mandatory>checked="checked"</#if>>
+			<input id="mandatory_${entryType}" type="checkbox" name="formEntry.${entryType}.mandatory" <#if entry.mandatory || entryForcedMandatory>checked="checked"</#if> <#if entryForcedMandatory>disabled="disabled"</#if>>
 			<label for="mandatory_${entryType}"></label>
 		</td>
 		<td>
@@ -80,9 +80,9 @@
 							<thead>
 								<tr>
 									<th scope="col" width="30%"></th>
-									<th scope="col" width="100">Masquée</th>
-									<th scope="col" width="100">Obligatoire</th>
-									<th scope="col">Valeur par défaut</th>
+									<th scope="col" width="100">#i18n{ticketing.manage_forms.displayed}</th>
+									<th scope="col" width="100">#i18n{ticketing.manage_forms.mandatory}</th>
+									<th scope="col">#i18n{ticketing.manage_forms.default_value}</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -98,7 +98,7 @@
 					      		<tr>
 					      			<th scope="row">${depth.label}</th>
 									<td>
-										<input id="hidden_${entryType}" type="checkbox" name="formEntry.${entryType}.hidden" <#if entryCategory.hidden>checked="checked"</#if>>
+										<input id="hidden_${entryType}" type="checkbox" name="formEntry.${entryType}.shown" <#if !entryCategory.hidden>checked="checked"</#if>>
 										<label for="hidden_${entryType}"></label>
 									</td>
 									<td>

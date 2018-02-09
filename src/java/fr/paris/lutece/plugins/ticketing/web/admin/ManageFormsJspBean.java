@@ -250,11 +250,11 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         formEntry.setIdForm( _form.getId( ) );
 
         // get parameters
-        String strHidden = request.getParameter( "formEntry." + entryType + ".hidden" );
+        String strShown = request.getParameter( "formEntry." + entryType + ".shown" );
         String strMandatory = request.getParameter( "formEntry." + entryType + ".mandatory" );
         String strDefaultValue = request.getParameter( "formEntry." + entryType + ".defaultValue" );
 
-        formEntry.setHidden( strHidden != null );
+        formEntry.setHidden( strShown == null );
         formEntry.setMandatory( strMandatory != null );
         formEntry.setDefaultValue( strDefaultValue );
 

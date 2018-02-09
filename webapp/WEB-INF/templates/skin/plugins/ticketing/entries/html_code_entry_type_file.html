@@ -2,7 +2,7 @@
 <#include "/skin/plugins/ticketing/include/popins.html" />
 <#include "/skin/plugins/asynchronousupload/upload_commons.html" />
 <div class="form-group">
-	<label class="" for="attribute${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if entry.mandatory> (obligatoire)</#if></label>
+	<label class="" for="attribute${entry.idEntry}" id="form${entry.idEntry}">${entry.title}<#if !entry.mandatory> #i18n{ticketing.xpage.optional_field}</#if></label>
 	<div class="">
 		<#assign fieldName='attribute'+entry.idEntry >
 		<#assign cssClass=entry.CSSClass!'' >

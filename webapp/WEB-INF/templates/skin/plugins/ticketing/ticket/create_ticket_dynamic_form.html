@@ -17,7 +17,7 @@
       		
       		<#assign entryUserTitle = form.getEntry(formEntryType.userTitle)>
             <div class="form-group <#if entryUserTitle.hidden>hidden</#if>">
-                <label for="id_user_title" >#i18n{ticketing.xpage.create_ticket.labelIdUserTitle} <#if entryUserTitle.mandatory>#i18n{ticketing.xpage.mandatory_field}</#if></label>
+                <label for="id_user_title" >#i18n{ticketing.xpage.create_ticket.labelIdUserTitle} <#if !entryUserTitle.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
 				<#list user_titles_list as user_title>
 					<label class="radio-inline" for="id_user_title_${user_title.code}">
 						<input type="radio" name="id_user_title" id="id_user_title_${user_title.code}" value="${user_title.code}" <#if ticket.idUserTitle?string==user_title.code>checked</#if>> 
@@ -32,12 +32,12 @@
             <div class="form-group <#if entryLastName.hidden && entryFirstName.hidden>hidden</#if>">
 				<div class="row">
 					<div class="col-xs-12 col-sm-6 <#if entryLastName.hidden>hidden</#if>">
-						<label  for="lastname" >#i18n{ticketing.xpage.create_ticket.labelLastname} <#if entryLastName.mandatory>#i18n{ticketing.xpage.mandatory_field}</#if></label>
+						<label  for="lastname" >#i18n{ticketing.xpage.create_ticket.labelLastname} <#if !entryLastName.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
 						<input class="form-control" type="text" id="lastname" name="lastname" value="${ticket.lastname!''}"  maxlength="50">
 						<span class="help-block sr-only">#i18n{ticketing.xpage.create_ticket.labelLastname.help}</span>
 					</div>
 					<div class="col-xs-12 col-sm-6 <#if entryFirstName.hidden>hidden</#if>">
-						<label  for="firstname" >#i18n{ticketing.xpage.create_ticket.labelFirstname} <#if entryFirstName.mandatory>#i18n{ticketing.xpage.mandatory_field}</#if></label>
+						<label  for="firstname" >#i18n{ticketing.xpage.create_ticket.labelFirstname} <#if !entryFirstName.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
 						<input class="form-control" type="text" id="firstname" name="firstname" value="${ticket.firstname!}"  maxlength="50">
 						<span class="help-block sr-only">#i18n{ticketing.xpage.create_ticket.labelFirstname.help}</span>
 					</div>
@@ -48,7 +48,7 @@
             <div class="form-group <#if entryEmail.hidden>hidden</#if>">
 				<div class="row">
 					<div class="col-xs-12 col-sm-6">
-						<label  for="email" >#i18n{ticketing.xpage.create_ticket.labelEmail} <#if entryEmail.mandatory>#i18n{ticketing.xpage.mandatory_field}</#if></label>
+						<label  for="email" >#i18n{ticketing.xpage.create_ticket.labelEmail} <#if !entryEmail.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
 						<input class="form-control" type="text" id="email" name="email" value="${ticket.email!''}"  maxlength="255">
 						<span class="help-block v">#i18n{ticketing.xpage.create_ticket.labelEmail.help}</span>
 					</div>
@@ -59,21 +59,21 @@
             <div class="form-group <#if entryPhones.hidden>hidden</#if>">
 				<div class="row">
 					<div class="col-xs-12 col-sm-6">
-						<label  for="fixed_phone_number" >#i18n{ticketing.xpage.create_ticket.labelFixedPhoneNumber}</label>
+						<label  for="fixed_phone_number" >#i18n{ticketing.xpage.create_ticket.labelFixedPhoneNumber} <#if !entryPhones.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
 						<input class="form-control input-phone" type="text" id="fixed_phone_number" name="fixed_phone_number" value="${ticket.fixedPhoneNumber!''}"  maxlength="10" />
-						<span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span>
+						<#if entryPhones.mandatory><span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span></#if>
 					</div>
 					<div class="col-xs-12 col-sm-6">
-						<label  for="mobile_phone_number" >#i18n{ticketing.xpage.create_ticket.labelMobilePhoneNumber}</label>
+						<label  for="mobile_phone_number" >#i18n{ticketing.xpage.create_ticket.labelMobilePhoneNumber} <#if !entryPhones.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
 						<input class="form-control input-phone" type="text" id="mobile_phone_number" name="mobile_phone_number" value="${ticket.mobilePhoneNumber!''}"  maxlength="10" />
-						<span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span>
+						<#if entryPhones.mandatory><span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span></#if>
 					</div>
 				</div>
             </div>
             
       		<#assign entryContactMode = form.getEntry(formEntryType.contactMode)>
 			<div class="form-group <#if entryContactMode.hidden>hidden</#if>">
-                <label for="id_contact_mode" >#i18n{ticketing.xpage.create_ticket.labelContactMode} <#if entryContactMode.mandatory>#i18n{ticketing.xpage.mandatory_field}</#if></label>
+                <label for="id_contact_mode" >#i18n{ticketing.xpage.create_ticket.labelContactMode} <#if !entryContactMode.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
 				<p>
 				<#list contact_modes_list as contact_mode>
 					<label class="radio-inline" for="id_contact_mode_${contact_mode.code}">
@@ -88,7 +88,7 @@
             <#list categories_depths as depth>
       		<#assign entryCategory = form.getEntry(formEntryType.category + depth.depthNumber)>
             <div class="form-group <#if entryCategory.hidden>hidden</#if>">
-                <label for="id_category_${depth.depthNumber}">${depth.label} <#if entryCategory.mandatory>#i18n{ticketing.xpage.mandatory_field}</#if></label>
+                <label for="id_category_${depth.depthNumber}">${depth.label} <#if !entryCategory.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
                 <div class="select">
                     <@comboWithParams name="id_category_${depth.depthNumber}" default_value="" additionalParameters=" id=\"id_category_${depth.depthNumber}\" depth=\"${depth.depthNumber}\" class=\"select-control\" " items=[] />
                 </div>
@@ -98,7 +98,7 @@
 	        
       		<#assign entryComment = form.getEntry(formEntryType.comment)>
             <div class="form-group <#if entryComment.hidden>hidden</#if>">
-               <label for="ticket_comment" >#i18n{ticketing.xpage.create_ticket.labelTicketComment} <#if entryComment.mandatory>#i18n{ticketing.xpage.mandatory_field}</#if></label>
+               <label for="ticket_comment" >#i18n{ticketing.xpage.create_ticket.labelTicketComment} <#if !entryComment.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
                <textarea class="ticketing form-control" id="ticket_comment" name="ticket_comment" >${ticket.ticketComment!''}</textarea>
 	 	       <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelTicketComment.help}</span>
             </div>

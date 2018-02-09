@@ -47,6 +47,7 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServ
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.categoryinputs.TicketCategoryInputsHome;
+import fr.paris.lutece.plugins.ticketing.business.form.Form;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
@@ -79,10 +80,12 @@ import org.apache.commons.fileupload.FileItem;
  */
 public class TicketFormService implements Serializable
 {
+
     /**
      * Name of the bean of the service
      */
     public static final String BEAN_NAME = "ticketing.ticketFormService";
+    public static final int NULL_FORM_ID = 0;
 
     /**
      * Serial version UID
@@ -572,8 +575,9 @@ public class TicketFormService implements Serializable
      * @param ticket
      *            The ticketing to save
      */
-    public void saveTicketInSession( HttpSession session, Ticket ticket, int idForm )
+    public void saveTicketInSession( HttpSession session, Ticket ticket, Form form )
     {
+        int idForm = form == null ? NULL_FORM_ID : form.getId( );
         session.setAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET + "-" + idForm, ticket );
     }
 
@@ -587,7 +591,7 @@ public class TicketFormService implements Serializable
      */
     public void saveTicketInSession( HttpSession session, Ticket ticket )
     {
-        saveTicketInSession( session, ticket, 0 );
+        saveTicketInSession( session, ticket, null );
     }
 
     /**
@@ -597,8 +601,9 @@ public class TicketFormService implements Serializable
      *            The session of the user
      * @return The ticketing form
      */
-    public Ticket getTicketFromSession( HttpSession session, int idForm )
+    public Ticket getTicketFromSession( HttpSession session, Form form )
     {
+        int idForm = form == null ? NULL_FORM_ID : form.getId( );
         return ( Ticket ) session.getAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET + "-" + idForm );
     }
 
@@ -611,7 +616,7 @@ public class TicketFormService implements Serializable
      */
     public Ticket getTicketFromSession( HttpSession session )
     {
-        return getTicketFromSession( session, 0 );
+        return getTicketFromSession( session, null );
     }
 
     /**
@@ -620,8 +625,9 @@ public class TicketFormService implements Serializable
      * @param session
      *            The session
      */
-    public void removeTicketFromSession( HttpSession session, int idForm )
+    public void removeTicketFromSession( HttpSession session, Form form )
     {
+        int idForm = form == null ? NULL_FORM_ID : form.getId( );
         session.removeAttribute( TicketingConstants.SESSION_NOT_VALIDATED_TICKET + "-" + idForm );
     }
 
@@ -633,7 +639,7 @@ public class TicketFormService implements Serializable
      */
     public void removeTicketFromSession( HttpSession session )
     {
-        removeTicketFromSession( session, 0 );
+        removeTicketFromSession( session, null );
     }
 
     /**
