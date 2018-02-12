@@ -34,13 +34,14 @@
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.portal.business.user.AdminUser;
-import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
@@ -97,7 +98,6 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     private static final String PROPERTY_PAGE_TITLE_MANAGE_MODELRESPONSES = "ticketing.manage_modelresponse.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_MODELRESPONSE = "ticketing.modify_modelresponse.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_CREATE_MODELRESPONSE = "ticketing.create_modelresponse.pageTitle";
-    private static final String PROPERTY_TICKET_DOMAIN_LABEL = "ticketing.model.entity.ticket.attribute.ticketDomain";
 
     // Properties
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
@@ -148,6 +148,8 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     private ModelResponse _modelResponse;
     private IModelResponseIndexer _modelResponseIndexer = SpringContextService.getBean( IModelResponseIndexer.BEAN_SERVICE );
 
+    private static final String NO_TYPE_SELECTED = "-1";
+
     /**
      * Return a model that contains the list and paginator infos
      * 
@@ -193,26 +195,17 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     @View( value = VIEW_MANAGE_MODELRESPONSES, defaultView = true )
     public String getManageModelResponses( HttpServletRequest request )
     {
-        Map<String, String> mapDomains = new LinkedHashMap<String, String>( );
-        String strDefaultDomainLabel = I18nService.getLocalizedString( PROPERTY_TICKET_DOMAIN_LABEL, request.getLocale( ) );
-        mapDomains.put( strDefaultDomainLabel, strDefaultDomainLabel );
-        mapDomains.putAll( getFilteredDomainList( ) );
+        Map<String, String> mapDomains = new LinkedHashMap<>( );
+        TicketCategoryType type = TicketCategoryTypeHome.findByDepth( 1 );
+        mapDomains.put( NO_TYPE_SELECTED, type.getLabel( ) );
+        mapDomains.putAll( getFilteredCategoryList( ) );
 
         _modelResponse = null;
         List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>( );
 
         String strSelectedDomain = request.getParameter( PARAMETER_FILTER_ID_DOMAIN );
 
-        if ( StringUtils.isNotEmpty( strSelectedDomain ) )
-        {
-            _strSelectedDomain = strSelectedDomain;
-        }
-
-        if ( !strDefaultDomainLabel.equals( _strSelectedDomain ) && StringUtils.isNotEmpty( _strSelectedDomain ) )
-        {
-            listModelResponses = ModelResponseHome.getModelResponsesListByDomain( _strSelectedDomain );
-        }
-        else
+        if ( StringUtils.isEmpty( strSelectedDomain ) || NO_TYPE_SELECTED.equals( strSelectedDomain ) )
         {
             for ( ModelResponse modelResponse : ModelResponseHome.getModelResponsesList( ) )
             {
@@ -221,6 +214,11 @@ public class ModelResponseJspBean extends MVCAdminJspBean
                     listModelResponses.add( modelResponse );
                 }
             }
+        }
+        else
+        {
+            _strSelectedDomain = strSelectedDomain;
+            listModelResponses = ModelResponseHome.getModelResponsesListByDomain( _strSelectedDomain );
         }
 
         // SORT
@@ -264,7 +262,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_MODELRESPONSE, _modelResponse );
-        model.put( MARK_TICKET_DOMAINS_LIST, ReferenceList.convert( getFilteredDomainList( ) ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, ReferenceList.convert( getFilteredCategoryList( ) ) );
 
         ModelUtils.storeRichText( request, model );
 
@@ -371,7 +369,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         Map<String, Object> model = getModel( );
         model.put( MARK_MODELRESPONSE, _modelResponse );
 
-        model.put( MARK_TICKET_DOMAINS_LIST, ReferenceList.convert( getFilteredDomainList( ) ) );
+        model.put( MARK_TICKET_DOMAINS_LIST, ReferenceList.convert( getFilteredCategoryList( ) ) );
 
         ModelUtils.storeRichText( request, model );
 
@@ -419,24 +417,20 @@ public class ModelResponseJspBean extends MVCAdminJspBean
      * 
      * @return filtered referenceList
      */
-    private Map<String, String> getFilteredDomainList( )
+    private Map<String, String> getFilteredCategoryList( )
     {
         AdminUser userCurrent = getUser( );
 
-        Map<String, String> mapDomains = new LinkedHashMap<String, String>( );
+        Map<String, String> mapDomains = new LinkedHashMap<>( );
 
         for ( TicketCategory type : TicketCategoryService.getInstance( ).getTypeList( ) )
         {
-            for ( TicketCategory domain : type.getChildren( ) )
+            // Check user rights
+            if ( RBACService.isAuthorized( type, TicketCategory.PERMISSION_VIEW_LIST, userCurrent ) || RBACService.isAuthorized( type, TicketCategory.PERMISSION_VIEW_DETAIL, userCurrent ) )
             {
-                // Check user rights
-                if ( RBACService.isAuthorized( domain, TicketCategory.PERMISSION_VIEW_LIST, userCurrent )
-                        || RBACService.isAuthorized( domain, TicketCategory.PERMISSION_VIEW_DETAIL, userCurrent ) )
+                if ( !mapDomains.containsValue( type.getLabel( ) ) )
                 {
-                    if ( !mapDomains.containsValue( domain.getLabel( ) ) )
-                    {
-                        mapDomains.put( domain.getLabel( ), domain.getLabel( ) );
-                    }
+                    mapDomains.put( String.valueOf( type.getId( ) ), type.getLabel( ) );
                 }
             }
         }

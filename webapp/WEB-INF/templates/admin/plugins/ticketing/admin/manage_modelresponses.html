@@ -15,41 +15,36 @@
     		<div class="box-body table-responsive">
 				<table class="table table-hover table-striped">
 				<thead>
-				<tr>			            
-			           		           
-			            <th width="75%" >
+					<tr>           
+			            <th width="75%">
 			            	#i18n{ticketing.manage_modelresponse.columnTitle}
 			            	<@sort jsp_url="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp" attribute="title" />
 			            </th>
-                        <th width="15%" >
-                        	<form id="filter_form" class="form-inline" method="post" name="manage_modelresponse" action="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp">
+	                       <th width="15%">
+	                       	<form id="filter_form" class="form-inline" method="post" name="manage_modelresponse" action="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp">
 								<label class="select" for="domain">
 									<@comboWithParams name="fltr_id_domain" default_value="${selected_domain!}" additionalParameters=" id=\"fltr_id_domain\" class=\"form-control input-xs\" " items=domain_list />
 								</label>
 							</form>
-                        	#i18n{ticketing.manage_modelresponse.columnDomain}
-                        	<@sort jsp_url="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp" attribute="domain" />
-                        </th>	
+	                       	${domain_list[0].name}
+	                       	<@sort jsp_url="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp" attribute="domain" />
+	                       </th>
 			           <th width="5%" style="text-align:center">#i18n{ticketing.manage_modelresponse.columnEdit}</th>	
 			           <th width="5%" style="text-align:center">#i18n{ticketing.manage_modelresponse.columnDelete}</th>	
-        			</tr>
+	       			</tr>
         		</thead>
         		<tbody>
             		<#list modelresponse_list as modelresponse >
         			<tr>
-             			   
-           				
-           			
-			            <td>${modelresponse.title}</td>	
-                                    <td >${modelresponse.domain}</td>
+			            <td>${modelresponse.title}</td>
+                        <td>${modelresponse.domainLabel}</td>
 				        <td style="text-align:center">
 				            <a href="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp?view=modifyModelResponse&id=${modelresponse.id}"
 				               class="btn btn-primary btn-sm" title="#i18n{portal.util.labelModify}">
 				                <i class="fa fa-pencil"></i>
 				            </a>
 				        </td>
-                                          <td style="text-align:center">				         
-
+                        <td style="text-align:center">
 				            <a href="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp?action=confirmRemoveModelResponse&id=${modelresponse.id}"
 				               class="btn btn-danger btn-sm" title="#i18n{portal.util.labelDelete}" >
 				                <i class="fa fa-trash"></i>

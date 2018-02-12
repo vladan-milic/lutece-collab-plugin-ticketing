@@ -192,7 +192,7 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
                 Ticket ticket = TicketHome.findByPrimaryKey( StringUtils.isNumeric( idTicket ) ? Integer.parseInt( idTicket ) : -1 );
                 if ( ticket != null )
                 {
-                    setDomain.add( ticket.getTicketDomain().getLabel( ) );
+                    setDomain.add( String.valueOf( ticket.getTicketDomain( ).getId( ) ) );
                 }
             }
         }

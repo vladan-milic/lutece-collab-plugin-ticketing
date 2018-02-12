@@ -58,6 +58,7 @@ public class ModelResponse implements Serializable
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Keyword.notEmpty}" )
     private String _strKeyword;
     private String _strDomain;
+    private String _strDomainLabel;
 
     /**
      * Returns the Id
@@ -141,6 +142,16 @@ public class ModelResponse implements Serializable
     public void setDomain( String strDomain )
     {
         _strDomain = strDomain;
+    }
+
+    public String getDomainLabel( )
+    {
+        return _strDomainLabel;
+    }
+
+    public void setDomainLabel( String domainLabel )
+    {
+        _strDomainLabel = domainLabel;
     }
 
     /**
