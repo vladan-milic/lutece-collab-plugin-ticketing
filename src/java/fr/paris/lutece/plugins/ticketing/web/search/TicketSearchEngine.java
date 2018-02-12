@@ -142,7 +142,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
             // TicketCategory
             TicketCategoryTree categoriesTree = TicketCategoryService.getInstance( ).getCategoriesTree() ;
-            categoriesTree.getDepths().removeIf(c -> c.getDepthNumber() < TicketingConstants.CATEGORY_DEPTH_MIN  || c.getDepthNumber() > TicketingConstants.CATEGORY_DEPTH_MAX );
+            categoriesTree.getDepths().removeIf(c -> c.getDepthNumber() > TicketingConstants.CATEGORY_DEPTH_MAX );
             
             int maxDepthNumber = categoriesTree.getMaxDepthNumber( );
             int i = maxDepthNumber;
