@@ -732,6 +732,7 @@ public class TicketXPage extends WorkflowCapableXPage
             removeActionTypeFromSession( request.getSession( ) );
         }
         model.put( MARK_MESSAGE, strContent );
+        model.put( MARK_FORM, form );
         request.getSession( ).setAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE, strContent );
 
         return getXPage( TEMPLATE_CONFIRM_TICKET, request.getLocale( ), model );
@@ -754,7 +755,15 @@ public class TicketXPage extends WorkflowCapableXPage
             return redirect( request, strRedirectUrl );
         }
 
-        return redirectView( request, VIEW_CREATE_TICKET );
+        Form form = getFormFromRequest( request );
+        if ( form == null )
+        {
+            return redirectView( request, VIEW_CREATE_TICKET );
+        }
+        else
+        {
+            return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
+        }
     }
 
     /**
