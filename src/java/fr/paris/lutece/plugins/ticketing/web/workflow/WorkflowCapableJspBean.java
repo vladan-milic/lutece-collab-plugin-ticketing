@@ -43,7 +43,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -69,6 +71,8 @@ import fr.paris.lutece.plugins.ticketing.web.user.UserFactory;
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexerActionUtil;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
+import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
@@ -77,6 +81,7 @@ import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
 import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
 import fr.paris.lutece.plugins.workflowcore.service.state.StateService;
 import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -109,6 +114,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     // Properties
     private static final String                PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW   = "ticketing.taskFormWorkflow.pageTitle";
+    private static final String ACCESS_CODE_USER_FRONT = "ticketing_userfront";
 
     // Bean
     private static final String                BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE = "workflow-ticketing.resourceHistoryService";
@@ -373,8 +379,24 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 {
                     Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
 
-                    if ( _workflowService.isDisplayTasksForm( _nIdAction, getLocale( ) ) )
+                    AdminUser user = AdminUserService.getAdminUser( request );
+                    List<Unit> unitsList = UnitHome.findByIdUser( user.getUserId( ) );
 
+                    // Check if user is in same unit tree as unit assigned to ticket
+                    Set<Integer> subUnits = unitsList.stream( ).map( unit -> unit.getIdUnit( ) ).collect( Collectors.toSet( ) );
+                    unitsList.stream( ).forEach( unit -> subUnits.addAll( UnitHome.getAllSubUnitsId( unit.getIdUnit( ) ) ) );
+                    boolean ticketInSubUnit = true;
+                    if ( ticket.getAssigneeUnit( ) != null )
+                    {
+                        ticketInSubUnit = subUnits.stream( ).anyMatch( unitId -> ticket.getAssigneeUnit( ).getUnitId( ) == unitId );
+                    }
+
+                    if ( !ticketInSubUnit && !ACCESS_CODE_USER_FRONT.equals( user.getAccessCode( ) ) )
+                    {
+                        throw new TicketTaskException( );
+                    }
+                    
+                    if ( _workflowService.isDisplayTasksForm( _nIdAction, getLocale( ) ) )
                     {
                         List<ResourceHistory> listTicketHistory = _resourceHistoryTicketingInformationServiceCORE.getAllHistoryByResource(nIdTicket, "ticket", 301);
                         if(listTicketHistory.get(0).getAction( ).getId( ) != 312) {
@@ -383,7 +405,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                             addErrorWorkflowAction( request, _nIdAction );
                             return redirectWorkflowActionCancelled( request );
                         }
-                        
+
                         if ( strError != null )
                         {
                             return redirect( request, strError );
