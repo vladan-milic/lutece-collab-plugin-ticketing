@@ -93,12 +93,11 @@ function lutece_ticket_tree(branch, categories_tree, url, allowNullSelection) {
 		// remove all inactives not selected
 		var selfCategories = getCategories(depthNumber, categories_tree, arraySelectedCategoryId);
 		if(selfCategories) {
-			debugger;
 			selfCategories
 				.filter(function(category) { return category.inactive; })
 				.map(function(category) { return $(selector).find('option[value='+category.id+']') })
 				.filter(function($option) { return !$option.selected; })
-				.forEach(function($option) { debugger; $option.remove(); });
+				.forEach(function($option) { $option.remove(); });
 		}
 		
 		var nextDepthNumber = depthNumber + 1;
@@ -197,16 +196,22 @@ function loadCombo(selector, categories, depth, idCategoryToSelect, allowNullSel
 			$(selector).append(new Option(defaultMessage, -1, !selectedCategoryIndexId));
 		}
 		
+		var optionsCount = 0;
 		for (var i = 0; i<categories.length; i++)
 		{
 			var isSelected = selectedCategoryIndexId == categories[i].id;
 			var option = new Option(categories[i].label, categories[i].id, isSelected, isSelected);
 			if(!categories[i].inactive || isSelected) {
+				optionsCount++;
 				$(selector).append(option);
 			}
 		}
-		
-		$(selector).parents(".form-group:first").show();
+		if(optionsCount > 0) {
+			$(selector).parents(".form-group:first").show();
+		} else {
+			$(selector).parents(".form-group:first").hide();
+			$(selector).children().remove();
+		}
 	}
 }
 
