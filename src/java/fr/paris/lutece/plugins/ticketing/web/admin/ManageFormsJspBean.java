@@ -318,8 +318,8 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         model.put( MARK_FORM, _form );
         model.put( MARK_FORMENTRYTYPE, _formEntryType );
         model.put( MARK_TICKET, createFakeTicketFromForm( _form ) );
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( true ).getCategoriesTree( ).getTreeJSONObject( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( true ).getCategoriesTree( ).getDepths( ) );
         model.put( MARK_MIN_DEPTH, TicketingConstants.CATEGORY_DEPTH_MIN );
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );

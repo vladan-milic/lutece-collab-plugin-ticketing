@@ -97,7 +97,7 @@ public final class TicketCategoryHome
 
         return category;
     }
-    
+
     /**
      * Remove the category whose identifier is specified in parameter
      * 
@@ -106,17 +106,17 @@ public final class TicketCategoryHome
      */
     public static void remove( int nKey )
     {
-//        if ( canRemove( nKey ) )
-//        {
-            TicketCategory categoryToRemove = findByPrimaryKey( nKey );
+        //        if ( canRemove( nKey ) )
+        //        {
+        TicketCategory categoryToRemove = findByPrimaryKey( nKey );
 
-            _dao.delete( nKey, _plugin );
-            _dao.rebuildCategoryOrders( categoryToRemove.getOrder( ), categoryToRemove.getIdParent( ), _plugin );
-//        }
-//        else
-//        {
-//            throw new AppException( "TicketCategory cannot be removed for ID :" + nKey );
-//        }
+        _dao.delete( nKey, _plugin );
+        _dao.rebuildCategoryOrders( categoryToRemove.getOrder( ), categoryToRemove.getIdParent( ), _plugin );
+        //        }
+        //        else
+        //        {
+        //            throw new AppException( "TicketCategory cannot be removed for ID :" + nKey );
+        //        }
     }
 
     /**
@@ -130,7 +130,7 @@ public final class TicketCategoryHome
     {
         return _dao.canRemoveCategory( nKey, _plugin );
     }
-    
+
     /**
      * Returns an instance of a category whose identifier is specified in parameter
      * 
@@ -161,11 +161,13 @@ public final class TicketCategoryHome
     /**
      * Load the list of categories (full, with java objects filled)
      * 
+     * @param withInactives
+     * 
      * @return
      */
-    public static List<TicketCategory> getFullCategorysList( )
+    public static List<TicketCategory> getFullCategorysList( boolean withInactives )
     {
-        return _dao.selectFullCategorysList( _plugin );
+        return _dao.selectFullCategorysList( _plugin, withInactives );
     }
 
     /**
@@ -216,8 +218,8 @@ public final class TicketCategoryHome
         else
         {
             AppLogService
-                    .error( "Could not move TicketCategory " + nId + " to position " + nTargetOrder + " : no TicketCategory to replace on position " + nCurrentOrder );
+            .error( "Could not move TicketCategory " + nId + " to position " + nTargetOrder + " : no TicketCategory to replace on position " + nCurrentOrder );
         }
     }
-    
+
 }

@@ -39,7 +39,6 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeHome;
-import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.test.LuteceTestCase;
 import fr.paris.lutece.util.ReferenceList;
 
@@ -66,18 +65,18 @@ public class TicketCategoryBusinessTest extends LuteceTestCase
         TicketCategory newTicketCategory = new TicketCategory( );
         newTicketCategory.setLabel( "Réclamations" );
         newTicketCategory.setCode( "RCLs" );
-        
+
         newTicketCategory.setCategoryType( TicketCategoryTypeHome.findByDepth( 1 ) );
         System.out.println("Type newTicketCategory=" + newTicketCategory.getCategoryType().getLabel( ) + " " + newTicketCategory.getCategoryType().getDepthNumber( ) );
-        
+
         TicketCategoryHome.create( newTicketCategory );
-        
+
         TicketCategory ticketCategoryStored = TicketCategoryHome.findByCode( "RCLs" );
         assertEquals( ticketCategoryStored.getLabel( ), newTicketCategory.getLabel( ) );
         assertEquals( ticketCategoryStored.getCode( ), newTicketCategory.getCode( ) );
         assertEquals( ticketCategoryStored.getCode( ), "RCLs" );
-//        assertEquals( ticketCategoryStored.getCategoryType( ).getLabel( ), newTicketCategory.getCategoryType( ).getLabel( ) );
-//        assertEquals( ticketCategoryStored.getCategoryType( ).getNbDepth( ), newTicketCategory.getCategoryType( ).getNbDepth( ) );
+        //        assertEquals( ticketCategoryStored.getCategoryType( ).getLabel( ), newTicketCategory.getCategoryType( ).getLabel( ) );
+        //        assertEquals( ticketCategoryStored.getCategoryType( ).getNbDepth( ), newTicketCategory.getCategoryType( ).getNbDepth( ) );
 
         // Update test
         newTicketCategory.setLabel( "Réclamation" );
@@ -108,82 +107,82 @@ public class TicketCategoryBusinessTest extends LuteceTestCase
         newTicketCategory.setCategoryType( TicketCategoryTypeHome.findByDepth( 2 ) );
         newTicketCategory.setIdParent( 1 );
         TicketCategoryHome.create( newTicketCategory );
-        
+
         newTicketCategory = new TicketCategory( );
         newTicketCategory.setLabel( "Stationnement" );
         newTicketCategory.setCode( "STA" );
         newTicketCategory.setCategoryType( TicketCategoryTypeHome.findByDepth( 2 ) );
         newTicketCategory.setIdParent( 1 );
         TicketCategoryHome.create( newTicketCategory );
-        
+
         newTicketCategory = new TicketCategory( );
         newTicketCategory.setLabel( "Facil'Familles" );
         newTicketCategory.setCode( "FFINF" );
         newTicketCategory.setCategoryType( TicketCategoryTypeHome.findByDepth( 2 ) );
         newTicketCategory.setIdParent( 2 );
         TicketCategoryHome.create( newTicketCategory );
-        
+
         newTicketCategory = new TicketCategory( );
         newTicketCategory.setLabel( "Mairie" );
         newTicketCategory.setCode( "MDP" );
         newTicketCategory.setCategoryType( TicketCategoryTypeHome.findByDepth( 2 ) );
         newTicketCategory.setIdParent( 2 );
         TicketCategoryHome.create( newTicketCategory );
-        
+
         newTicketCategory = new TicketCategory( );
         newTicketCategory.setLabel( "Pb Petite Enfance" );
         newTicketCategory.setCode( "PPE" );
         newTicketCategory.setCategoryType( TicketCategoryTypeHome.findByDepth( 3 ) );
         newTicketCategory.setIdParent( 3 );
         TicketCategoryHome.create( newTicketCategory );
-        
+
         newTicketCategory = new TicketCategory( );
         newTicketCategory.setLabel( "Pb Périscolaire" );
         newTicketCategory.setCode( "PSCO" );
         newTicketCategory.setCategoryType( TicketCategoryTypeHome.findByDepth( 3 ) );
         newTicketCategory.setIdParent( 3 );
         TicketCategoryHome.create( newTicketCategory );
-        
+
         newTicketCategory = new TicketCategory( );
         newTicketCategory.setLabel( "Horaires" );
         newTicketCategory.setCode( "HOS" );
         newTicketCategory.setCategoryType( TicketCategoryTypeHome.findByDepth( 3 ) );
         newTicketCategory.setIdParent( 4 );
         TicketCategoryHome.create( newTicketCategory );
-        
+
         newTicketCategory = new TicketCategory( );
         newTicketCategory.setLabel( "Obtention info" );
         newTicketCategory.setCode( "OBT" );
         newTicketCategory.setCategoryType( TicketCategoryTypeHome.findByDepth( 3 ) );
         newTicketCategory.setIdParent( 5 );
         TicketCategoryHome.create( newTicketCategory );
-        
+
         newTicketCategory = new TicketCategory( );
         newTicketCategory.setLabel( "Poubelles" );
         newTicketCategory.setCode( "POU" );
         newTicketCategory.setCategoryType( TicketCategoryTypeHome.findByDepth( 3 ) );
         newTicketCategory.setIdParent( 6 );
         TicketCategoryHome.create( newTicketCategory );
-        
+
         ReferenceList referenceList = TicketCategoryHome.getCategorysReferenceList( );
         assertEquals( referenceList.size( ), 11 );
         referenceList.forEach(reference -> System.out.println(reference.getCode( ) + " " + reference.getName( ) ) );
-        
+
         List<Integer> listCategoryId = TicketCategoryHome.getIdCategorysList( );
         assertEquals( listCategoryId.size( ), 11 );
         listCategoryId.forEach(categoryId -> System.out.println(categoryId));
-        
-        List<TicketCategory> listCategory = TicketCategoryHome.getFullCategorysList( );
+
+        List<TicketCategory> listCategory = TicketCategoryHome.getFullCategorysList( false );
         assertEquals( listCategory.size( ), 11 );
         listCategory.forEach(category -> System.out.println(category.getLabel( ) + "  " + category.getCode( ) + " " + category.getCategoryType( ).getLabel( ) ) );
-        
+
         listCategory = TicketCategoryHome.getCategorysList( );
         assertEquals( listCategory.size( ), 11 );
         listCategory.forEach(category -> System.out.println(category.getLabel( ) + "  " + category.getCode( ) + " " + category.getCategoryType( ).getLabel( ) ) );
 
-//        // Delete test
-//        listCategoryType.forEach(categoryType -> TicketCategoryTypeHome.remove( categoryType.getId( ) ) );
-//        listCategoryType = TicketCategoryTypeHome.getCategoryTypesList( );
-//        assertEquals( listCategoryType.size( ), 0 );
+        //        // Delete test
+        //        listCategoryType.forEach(categoryType -> TicketCategoryTypeHome.remove( categoryType.getId( ) ) );
+        //        listCategoryType = TicketCategoryTypeHome.getCategoryTypesList( );
+        //        assertEquals( listCategoryType.size( ), 0 );
     }
 }

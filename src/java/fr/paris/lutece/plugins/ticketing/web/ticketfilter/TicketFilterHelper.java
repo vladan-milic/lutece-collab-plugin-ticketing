@@ -154,7 +154,7 @@ public final class TicketFilterHelper
         {
             fltrFiltre.setOrderSort( request.getParameter( PARAMETER_FILTER_ORDER_SORT ) );
         }
-        
+
         Map<Integer, Integer> mapCategoryId = new LinkedHashMap<Integer, Integer>( );
         for(int i = 1; i <= getMaxNumberFilter( ); i++)
         {
@@ -363,11 +363,11 @@ public final class TicketFilterHelper
         }
 
         filter.setListIdWorkflowState( lstIdWorkflowState );
-        
+
         Map<Integer, Integer> mapCategoryId = new LinkedHashMap<Integer, Integer>( );
         for(int i = 1; i <= getMaxNumberFilter( ); i++)
         {
-           mapCategoryId.put( i, TicketFilter.CONSTANT_ID_NULL );
+            mapCategoryId.put( i, TicketFilter.CONSTANT_ID_NULL );
         };
         filter.setMapCategoryId( mapCategoryId );
 
@@ -392,29 +392,29 @@ public final class TicketFilterHelper
         for (int i = 1; i <= getMaxNumberFilter( ); i++)
         {
             Map<String, String> mapCategories = new LinkedHashMap<String, String>( );
-            if ( TicketCategoryService.getInstance( ).getCategoriesTree( ).findDepthByDepthNumber( i ) != null )
+            if ( TicketCategoryService.getInstance( true ).getCategoriesTree( ).findDepthByDepthNumber( i ) != null )
             {
-                mapCategories.put( StringUtils.EMPTY, TicketCategoryService.getInstance( ).getCategoriesTree( ).findDepthByDepthNumber( i ).getLabel( ) );
+                mapCategories.put( StringUtils.EMPTY, TicketCategoryService.getInstance( true ).getCategoriesTree( ).findDepthByDepthNumber( i ).getLabel( ) );
             }
             mapTypeCategoryList.put( i, (LinkedHashMap<String, String>) mapCategories );
         };
-            
+
         int nParentId = TicketFilter.CONSTANT_ID_NULL;
         for (int i = 1; i <= getMaxNumberFilter( ); i++)
         {
             ArrayList<TicketCategory> ticketCategoryList = new ArrayList<TicketCategory>( );
             if ( nParentId ==  TicketFilter.CONSTANT_ID_NULL )
             {
-                
-                ticketCategoryList = (ArrayList<TicketCategory>) TicketCategoryService.getInstance( ).getAuthorizedCategoryList( i, user, TicketCategory.PERMISSION_VIEW_LIST );
+
+                ticketCategoryList = ( ArrayList<TicketCategory> ) TicketCategoryService.getInstance( true ).getAuthorizedCategoryList( i, user, TicketCategory.PERMISSION_VIEW_LIST );
             }
             else
             {
                 TicketCategory ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( nParentId );
-                ticketCategoryList = (ArrayList<TicketCategory>) TicketCategoryService.getInstance( ).getAuthorizedCategoryList( ticketCategory, user, TicketCategory.PERMISSION_VIEW_LIST );
+                ticketCategoryList = ( ArrayList<TicketCategory> ) TicketCategoryService.getInstance( true ).getAuthorizedCategoryList( ticketCategory, user, TicketCategory.PERMISSION_VIEW_LIST );
             }
             nParentId = ( fltrFilter.getMapCategoryId( ).get( i ) != null ) ? fltrFilter.getMapCategoryId( ).get( i ) : TicketFilter.CONSTANT_ID_NULL;
-            
+
             for ( TicketCategory ticketCategory : ticketCategoryList ) 
             {
                 mapTypeCategoryList.get( i ).put( String.valueOf (ticketCategory.getId( ) ), ticketCategory.getLabel( ) );
@@ -429,10 +429,10 @@ public final class TicketFilterHelper
         Map<String,ReferenceList> mapTypeCategoryReferenceList = new LinkedHashMap<String, ReferenceList>( );
         for (int i = 1; i <= mapTypeCategoryList.size( ); i++)
         {
-          mapTypeCategoryReferenceList.put( String.valueOf (i ), ReferenceList.convert( mapTypeCategoryList.get( i ) ) );  
+            mapTypeCategoryReferenceList.put( String.valueOf (i ), ReferenceList.convert( mapTypeCategoryList.get( i ) ) );  
         }
         mapModel.put( MARK_FULL_CATEGORY_MAP, mapTypeCategoryReferenceList );
-               
+
         mapModel.put( MARK_FULL_STATE_LIST, refListStates );
     }
 
@@ -538,7 +538,7 @@ public final class TicketFilterHelper
 
         filter.setAdminUserRoles( user.getRoles( ).keySet( ) );
     }
-    
+
     /**
      * Returns the Max Number of Filter
      * 
@@ -546,7 +546,8 @@ public final class TicketFilterHelper
      */
     private static int getMaxNumberFilter( )
     {
-        return ( TicketingConstants.CATEGORY_DEPTH_FILTER <= TicketCategoryService.getInstance( ).getCategoriesTree( ).getMaxDepthNumber( ) ) ? TicketingConstants.CATEGORY_DEPTH_FILTER : TicketCategoryService.getInstance( ).getCategoriesTree( ).getMaxDepthNumber( );
+        return ( TicketingConstants.CATEGORY_DEPTH_FILTER <= TicketCategoryService.getInstance( true ).getCategoriesTree( ).getMaxDepthNumber( ) ) ? TicketingConstants.CATEGORY_DEPTH_FILTER
+                : TicketCategoryService.getInstance( ).getCategoriesTree( ).getMaxDepthNumber( );
     }
 
 }

@@ -69,6 +69,7 @@ public final class FormatConstants
     public static final String KEY_CHANNELS = "channels";
     public static final String KEY_CONTACT_MODE = "contact_mode";
     public static final String KEY_CONTACT_MODES = "contact_modes";
+    public static final String KEY_INACTIVE = "inactive";
     public static final int INDENT = 4;
     public static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
 

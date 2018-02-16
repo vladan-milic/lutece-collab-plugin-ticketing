@@ -41,14 +41,17 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
 {
     private static final String SERVICE_NAME = "TREE_CAT_CACHE_SERVICE";
     private static final String KEY_CACHE_TREE = "TREE_CAT";
+    private static final String KEY_CACHE_TREE_WITH_INACTIVES = "TREE_CAT_WITH_INACTIVES";
 
     private static TicketCategoryTreeCacheService _instance;
+    private final boolean _bWithInactives;
 
     /**
      * Private constructor
      */
-    private TicketCategoryTreeCacheService( )
+    private TicketCategoryTreeCacheService( boolean withInactives )
     {
+        this._bWithInactives = withInactives;
         initCache( );
     }
 
@@ -59,9 +62,19 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
      */
     public static TicketCategoryTreeCacheService getInstance( )
     {
+        return getInstance( false );
+    }
+
+    /**
+     * Return the instance of CategoryTreeCacheService
+     * 
+     * @return the CategoryTreeCacheService
+     */
+    public static TicketCategoryTreeCacheService getInstance( boolean withInactives )
+    {
         if ( _instance == null )
         {
-            _instance = new TicketCategoryTreeCacheService( );
+            _instance = new TicketCategoryTreeCacheService( withInactives );
         }
         return _instance;
     }
@@ -82,12 +95,12 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
      */
     public TicketCategoryTree getResource( )
     {
-        TicketCategoryTree categoryTree = (TicketCategoryTree) getFromCache( KEY_CACHE_TREE );
+        TicketCategoryTree categoryTree = ( TicketCategoryTree ) getFromCache( _bWithInactives ? KEY_CACHE_TREE_WITH_INACTIVES : KEY_CACHE_TREE );
         if ( categoryTree == null )
         {
-            categoryTree = new TicketCategoryTree( TicketCategoryHome.getFullCategorysList( ), TicketCategoryTypeHome.getCategoryTypesList( ) );
-            
-            putInCache( KEY_CACHE_TREE, categoryTree );
+            categoryTree = new TicketCategoryTree( TicketCategoryHome.getFullCategorysList( _bWithInactives ), TicketCategoryTypeHome.getCategoryTypesList( ) );
+
+            putInCache( _bWithInactives ? KEY_CACHE_TREE_WITH_INACTIVES : KEY_CACHE_TREE, categoryTree );
         }
         return categoryTree;
     }
@@ -97,6 +110,7 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
      */
     public void reloadResource( )
     {
-        putInCache(KEY_CACHE_TREE, new TicketCategoryTree( TicketCategoryHome.getFullCategorysList( ), TicketCategoryTypeHome.getCategoryTypesList( ) ) );
+        putInCache( KEY_CACHE_TREE, new TicketCategoryTree( TicketCategoryHome.getFullCategorysList( false ), TicketCategoryTypeHome.getCategoryTypesList( ) ) );
+        putInCache( KEY_CACHE_TREE_WITH_INACTIVES, new TicketCategoryTree( TicketCategoryHome.getFullCategorysList( true ), TicketCategoryTypeHome.getCategoryTypesList( ) ) );
     }
 }

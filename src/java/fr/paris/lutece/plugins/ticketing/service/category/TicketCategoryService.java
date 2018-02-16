@@ -76,11 +76,21 @@ public class TicketCategoryService
      */
     public static TicketCategoryService getInstance( )
     {
+        return getInstance( false );
+    }
+
+    /**
+     * Get the instance of CategoryService
+     * 
+     * @return the instance of categoryService
+     */
+    public static TicketCategoryService getInstance( boolean withInactives )
+    {
         if ( _instance == null )
         {
             _instance = new TicketCategoryService( );
         }
-        _treeCategories = TicketCategoryTreeCacheService.getInstance( ).getResource( );
+        _treeCategories = TicketCategoryTreeCacheService.getInstance( withInactives ).getResource( );
         return _instance;
     }
 
@@ -559,7 +569,7 @@ public class TicketCategoryService
      */
     public List<TicketCategory> getAuthorizedCategoryList( int nDepth, AdminUser adminUser, String strPermission )
     {
-        List<TicketCategory> listCategories = _treeCategories.getListNodesOfDepth( TicketCategoryTypeService.getInstance( ).findByDepthNumber( nDepth ) );
+        List<TicketCategory> listCategories = _treeCategories.getListNodesOfDepth( TicketCategoryTypeService.getInstance( true ).findByDepthNumber( nDepth ) );
         List<TicketCategory> listAuthorizedCategories = new ArrayList<TicketCategory>( );
 
         for ( TicketCategory category : listCategories )
@@ -744,7 +754,7 @@ public class TicketCategoryService
      */
     public List<TicketCategory> getDomainList( )
     {
-        return _treeCategories.getListNodesOfDepth( TicketCategoryTypeService.getInstance( ).findByDepthNumber( TicketingConstants.DOMAIN_DEPTH ) );
+        return _treeCategories.getListNodesOfDepth( TicketCategoryTypeService.getInstance( true ).findByDepthNumber( TicketingConstants.DOMAIN_DEPTH ) );
     }
 
     /**

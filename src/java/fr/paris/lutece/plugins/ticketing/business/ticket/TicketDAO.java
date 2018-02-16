@@ -77,7 +77,7 @@ public final class TicketDAO implements ITicketDAO
             + " LEFT JOIN ticketing_ticket_address ad ON ad.id_ticket=a.id_ticket"
             + " JOIN ticketing_user_title b ON a.id_user_title = b.id_user_title"
             + " JOIN ticketing_contact_mode f ON a.id_contact_mode = f.id_contact_mode" + " JOIN ticketing_channel x ON a.id_channel = x.id_channel";
-    
+
     private static final String SQL_SELECT_ALL_ID_TICKET = "SELECT a.id_ticket " + " FROM ticketing_ticket a"
             + " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user" + " LEFT JOIN unittree_unit h ON h.id_unit=a.id_unit"
             + " LEFT JOIN ticketing_ticket_address ad ON ad.id_ticket=a.id_ticket" + " JOIN ticketing_user_title b ON a.id_user_title = b.id_user_title"
@@ -646,7 +646,7 @@ public final class TicketDAO implements ITicketDAO
         ticket.setMobilePhoneNumber( daoUtil.getString( nIndex++ ) );
         ticket.setIdTicketMarking( daoUtil.getInt( nIndex++ ) );
 
-        TicketCategory ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( daoUtil.getInt( nIndex++ ) );
+        TicketCategory ticketCategory = TicketCategoryService.getInstance( true ).findCategoryById( daoUtil.getInt( nIndex++ ) );
         ticket.setTicketCategory( ticketCategory );
 
         ticket.setIdContactMode( daoUtil.getInt( nIndex++ ) );
@@ -1111,7 +1111,7 @@ public final class TicketDAO implements ITicketDAO
 
         while ( daoUtil.next( ) )
         {
-            
+
             listIdTickets.add( daoUtil.getInt( 1 ) );
         }
 

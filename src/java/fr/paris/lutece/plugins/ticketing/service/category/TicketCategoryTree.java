@@ -57,7 +57,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
     {
         super( listCategory, listCategoryType );
         listCategory.stream( ).forEach( ( category ) -> 
-            category.setListIdInput( TicketCategoryInputsHome.getIdInputListByCategory( category.getId( ) ) ) );
+        category.setListIdInput( TicketCategoryInputsHome.getIdInputListByCategory( category.getId( ) ) ) );
     }
 
     /**
@@ -87,40 +87,42 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
     public String getTreeJSONObject( )
     {
         JSONObject json = new JSONObject( );
-        
+
         JSONArray jsonRootElements = new JSONArray( );
 
+        int maxDepth = 0;
         for ( TicketCategory ticketCategory : this.getRootElements( ) )
         {
-            if(!ticketCategory.isInactive()) {
-	        	JSONObject jsonRootElement = new JSONObject( );
-	            jsonRootElement.accumulate( FormatConstants.KEY_ID, ticketCategory.getId( ) );
-	            jsonRootElement.accumulate( FormatConstants.KEY_LABEL, ticketCategory.getLabel( ) );
-	            jsonRootElement.accumulate( FormatConstants.KEY_HELP, ticketCategory.getHelpMessage( ) );
-	            jsonRootElement.accumulate( FormatConstants.KEY_DEPTH, ticketCategory.getDepth( ).getDepthNumber( ) );
-	            addJSONArraysChildren( jsonRootElement, ticketCategory );
-	            jsonRootElements.add( jsonRootElement );
-            }
-            
+            JSONObject jsonRootElement = new JSONObject( );
+            jsonRootElement.accumulate( FormatConstants.KEY_ID, ticketCategory.getId( ) );
+            jsonRootElement.accumulate( FormatConstants.KEY_LABEL, ticketCategory.getLabel( ) );
+            jsonRootElement.accumulate( FormatConstants.KEY_HELP, ticketCategory.getHelpMessage( ) );
+            jsonRootElement.accumulate( FormatConstants.KEY_DEPTH, ticketCategory.getDepth( ).getDepthNumber( ) );
+            jsonRootElement.accumulate( FormatConstants.KEY_INACTIVE, ticketCategory.isInactive( ) );
+            addJSONArraysChildren( jsonRootElement, ticketCategory );
+            jsonRootElements.add( jsonRootElement );
+
+            maxDepth = Math.max( ticketCategory.getDepth( ).getDepthNumber( ), maxDepth );
         }
-        
+
         json.accumulate( FormatConstants.KEY_CATEGORIES_DEPTH + "1", jsonRootElements );
 
         JSONArray jsonDepths = new JSONArray( );
 
-        for ( TicketCategoryType ticketCategoryType : this.getDepths( ) )
+        for ( int depth = 1; depth <= maxDepth; depth++ )
         {
+            TicketCategoryType ticketCategoryType = findDepthByDepthNumber( depth );
             JSONObject jsonDepth = new JSONObject( );
             jsonDepth.accumulate( FormatConstants.KEY_DEPTH_NUMBER, ticketCategoryType.getDepthNumber( ) );
             jsonDepth.accumulate( FormatConstants.KEY_LABEL, ticketCategoryType.getLabel( ) );
             jsonDepths.add( jsonDepth );
         }
-        
+
         json.accumulate( FormatConstants.KEY_CATEGORIES_DEPTHS, jsonDepths );
-        
+
         return json.toString( );
     }
-    
+
     /**
      * Add a JSON Array of the ticketCategory children
      * 
@@ -134,18 +136,17 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
 
         for ( TicketCategory children : ticketCategory.getChildren( ) )
         {
-        	if(!children.isInactive()) {
-	        	JSONObject jsonElement = new JSONObject( );
-	            jsonElement.accumulate( FormatConstants.KEY_ID, children.getId( ) );
-	            jsonElement.accumulate( FormatConstants.KEY_LABEL, children.getLabel( ) );
-	            jsonElement.accumulate( FormatConstants.KEY_DEPTH, children.getDepth( ).getDepthNumber( ) );
-	            jsonElement.accumulate( FormatConstants.KEY_HELP, children.getHelpMessage( ) );
-	            addJSONArraysChildren( jsonElement, children );
-	            jsonElements.add( jsonElement );
-        	}
+            JSONObject jsonElement = new JSONObject( );
+            jsonElement.accumulate( FormatConstants.KEY_ID, children.getId( ) );
+            jsonElement.accumulate( FormatConstants.KEY_LABEL, children.getLabel( ) );
+            jsonElement.accumulate( FormatConstants.KEY_DEPTH, children.getDepth( ).getDepthNumber( ) );
+            jsonElement.accumulate( FormatConstants.KEY_HELP, children.getHelpMessage( ) );
+            jsonElement.accumulate( FormatConstants.KEY_INACTIVE, children.isInactive( ) );
+            addJSONArraysChildren( jsonElement, children );
+            jsonElements.add( jsonElement );
         }
-        
+
         jsonRootElement.accumulate( FormatConstants.KEY_CATEGORIES_DEPTH + nDepthChildren, jsonElements );
     }
-    
+
 }

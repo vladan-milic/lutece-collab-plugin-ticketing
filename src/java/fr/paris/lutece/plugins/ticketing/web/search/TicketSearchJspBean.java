@@ -87,7 +87,7 @@ public class TicketSearchJspBean extends MVCAdminJspBean
      */
     @Action( value = ACTION_SEARCH_TICKET )
     @SuppressWarnings( {
-            "rawtypes", "unchecked"
+        "rawtypes", "unchecked"
     } )
     public String searchTickets( HttpServletRequest request )
     {
@@ -109,7 +109,7 @@ public class TicketSearchJspBean extends MVCAdminJspBean
             try
             {
                 listResults = engine.searchTickets( strQuery,
-                        TicketCategoryService.getInstance( ).getAuthorizedDomainsList( getUser( ), TicketCategory.PERMISSION_VIEW_LIST ), null );
+                        TicketCategoryService.getInstance( true ).getAuthorizedDomainsList( getUser( ), TicketCategory.PERMISSION_VIEW_LIST ), null );
 
                 Paginator paginator = new Paginator( listResults, _nItemsPerPage, url.getUrl( ), SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
 

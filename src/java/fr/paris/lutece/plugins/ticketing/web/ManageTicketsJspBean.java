@@ -190,7 +190,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private List<TicketCategory> _lstTicketDomain;
     private final TicketFormService  _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
     private final TicketSearchEngine _engine            = ( TicketSearchEngine ) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
-    
+
     //Header export
     private static final String HEADER_REFERENCE = "ticketing.export.header.reference"; 
     private static final String HEADER_CREATION_DATE = "ticketing.export.header.creation.date";
@@ -265,11 +265,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             strQuery = StringUtils.EMPTY;
         }
 
-//        Map<Integer, TicketDomain> mapIdDomainTicketDomain = new LinkedHashMap<>( );
-//        addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST );
-//        addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL );
-//
-//        _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
+        //        Map<Integer, TicketDomain> mapIdDomainTicketDomain = new LinkedHashMap<>( );
+        //        addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST );
+        //        addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL );
+        //
+        //        _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
 
         if ( filter.getMapCategoryId( ) != null &&  filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != null && filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != -1)
         {
@@ -291,7 +291,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             List<Ticket> listTickets = _engine.searchTickets( strQuery, _lstTicketDomain, filter );
             File tempFile = File.createTempFile( "ticketing", null );
-                        
+
             List<String> titlesUntranslated = new ArrayList<>();
             titlesUntranslated.add( HEADER_REFERENCE );
             titlesUntranslated.add( HEADER_CREATION_DATE );
@@ -308,19 +308,19 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             titlesUntranslated.add( HEADER_CHANNEL );
             titlesUntranslated.add( HEADER_ASSIGNEMENT_ENTITY );
             titlesUntranslated.add( HEADER_ASSIGNEMENT_OFFICER );
-            
+
             List<String> titlesTranslated = titlesUntranslated.stream( ).map( title -> I18nService.getLocalizedString( title, Locale.FRENCH ) ).collect( Collectors.toList( ) );
 
             for(TicketCategoryType category : TicketCategoryTypeHome.getCategoryTypesList( )) {
                 titlesTranslated.add( indexWhereCategoryWillBeAdded + category.getDepthNumber( ), category.getLabel( ) );
             }
-            
+
             // Write header in the temp file
             Writer w = new OutputStreamWriter( new FileOutputStream( tempFile ), StandardCharsets.ISO_8859_1 );
 
             // Write line in the temp file
             CSVUtils.writeLine(w, titlesTranslated);
-            
+
             for ( Ticket ticket : listTickets )
             {
                 // Data line
@@ -408,8 +408,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // Check if a user belong to a unit
         boolean bUserWithNoUnit = ( filter.getFilterIdAssigneeUnit( ) == null || filter.getFilterIdAssigneeUnit( ).isEmpty( ) || filter.getFilterIdAssignerUnit( ) == null || filter
                 .getFilterIdAssignerUnit( ).isEmpty( ) ) ?
-                true :
-                false;
+                        true :
+                            false;
 
         _strCurrentPageIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
@@ -424,132 +424,132 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         String strPreviousSelectedTab = ( request.getSession( ).getAttribute( PARAMETER_SELECTED_TAB ) != null ) ?
                 ( String ) request.getSession( ).getAttribute( PARAMETER_SELECTED_TAB ) :
-                TabulationEnum.AGENT.getLabel( );
-        String strSelectedTab = getSelectedTab( request );
+                    TabulationEnum.AGENT.getLabel( );
+                String strSelectedTab = getSelectedTab( request );
 
-        if ( !strPreviousSelectedTab.equals( strSelectedTab ) || StringUtils.isEmpty( _strCurrentPageIndex ) )
-        {
-            // tab changes we reset index
-            _strCurrentPageIndex = "1";
-        }
-        int nCurrentPageIndex = Integer.parseInt( _strCurrentPageIndex );
-
-        List<Ticket> listTickets = new ArrayList<>( );
-        List<Integer> listIdTickets = new ArrayList<>( );
-
-        if ( filter.getMapCategoryId( ) != null &&  filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != null && filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != -1)
-        {
-            TicketCategory ticketDomain = TicketCategoryService.getInstance( ).findCategoryById( filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) );
-            _lstTicketDomain.clear( );
-            _lstTicketDomain.add( ticketDomain );
-        }
-        else
-        {
-            Map<Integer, TicketCategory> mapIdDomainTicketDomain = new LinkedHashMap<>( );
-            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_DETAIL );
-            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_LIST );
-
-            _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
-        }
-
-        // Set the limit for the number of ticket to display
-        filter.setTicketsLimitStart( ( nCurrentPageIndex - 1 ) * _nItemsPerPage );
-        filter.setTicketsLimitCount( _nItemsPerPage );
-
-        // The number of tickets for AGENT and GROUP category
-        int nAgentTickets = 0;
-        int nGroupTickets = 0;
-
-        // Get the seleted tab name
-        String strUpperSelectedTab = StringUtils.isBlank( StringUtils.upperCase( strSelectedTab ) ) ? StringUtils.EMPTY : StringUtils.upperCase( strSelectedTab );
-        try
-        {
-            filter.setFilterView( TicketFilterViewEnum.valueOf( strUpperSelectedTab ) );
-        } catch ( IllegalArgumentException e )
-        {
-            // The default view
-            filter.setFilterView( TicketFilterViewEnum.AGENT );
-        }
-
-        try
-        {
-            listTickets = _engine.searchTickets( strQuery, _lstTicketDomain, filter );
-            if ( listTickets != null && !listTickets.isEmpty( ) )
-            {
-                for ( Ticket ticket : listTickets )
+                if ( !strPreviousSelectedTab.equals( strSelectedTab ) || StringUtils.isEmpty( _strCurrentPageIndex ) )
                 {
-                    listIdTickets.add( ticket.getId( ) );
+                    // tab changes we reset index
+                    _strCurrentPageIndex = "1";
                 }
-            }
+                int nCurrentPageIndex = Integer.parseInt( _strCurrentPageIndex );
 
-            // Compute the number of ticket for the AGENT and GROUP filter
-            if ( strUpperSelectedTab.equals( TicketFilterViewEnum.AGENT.toString( ) ) )
-            {
-                nAgentTickets = listIdTickets.size( );
-                filter.setFilterView( TicketFilterViewEnum.GROUP );
-                nGroupTickets = getNbTicketsWithLucene( strQuery, _lstTicketDomain, filter );
-            } else if ( strUpperSelectedTab.equals( TicketFilterViewEnum.GROUP.toString( ) ) )
-            {
-                nGroupTickets = listIdTickets.size( );
-                filter.setFilterView( TicketFilterViewEnum.AGENT );
-                nAgentTickets = getNbTicketsWithLucene( strQuery, _lstTicketDomain, filter );
-            } else
-            {
-                filter.setFilterView( TicketFilterViewEnum.AGENT );
-                nAgentTickets = getNbTicketsWithLucene( strQuery, _lstTicketDomain, filter );
-                filter.setFilterView( TicketFilterViewEnum.GROUP );
-                nGroupTickets = getNbTicketsWithLucene( strQuery, _lstTicketDomain, filter );
-            }
-        } catch ( ParseException e )
-        {
-            AppLogService.error( "Error while parsing query " + strQuery, e );
-            addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
-        }
+                List<Ticket> listTickets = new ArrayList<>( );
+                List<Integer> listIdTickets = new ArrayList<>( );
 
-        // Clean filter view for save in session
-        filter.setTicketsLimitStart( TicketFilter.CONSTANT_ID_NULL );
-        filter.setTicketsLimitCount( TicketFilter.CONSTANT_ID_NULL );
-        filter.setFilterView( TicketFilterViewEnum.ALL );
+                if ( filter.getMapCategoryId( ) != null &&  filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != null && filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != -1)
+                {
+                    TicketCategory ticketDomain = TicketCategoryService.getInstance( ).findCategoryById( filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) );
+                    _lstTicketDomain.clear( );
+                    _lstTicketDomain.add( ticketDomain );
+                }
+                else
+                {
+                    Map<Integer, TicketCategory> mapIdDomainTicketDomain = new LinkedHashMap<>( );
+                    addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_DETAIL );
+                    addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_LIST );
 
-        // Store list tickets for navigation in view details
-        request.getSession( ).setAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION, listIdTickets );
+                    _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
+                }
 
-        // PAGINATORS
-        LocalizedPaginator<Ticket> paginatorTickets = new LocalizedPaginator<Ticket>( listTickets, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
+                // Set the limit for the number of ticket to display
+                filter.setTicketsLimitStart( ( nCurrentPageIndex - 1 ) * _nItemsPerPage );
+                filter.setTicketsLimitCount( _nItemsPerPage );
 
-        Map<String, Object> model = getModel( );
-        model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
-        model.put( SearchConstants.MARK_QUERY, StringEscapeUtils.escapeHtml( strQuery ) );
-        model.put( MARK_TICKET_LIST, paginatorTickets.getPageItems( ) );
-        model.put( MARK_PAGINATOR, paginatorTickets );
-        model.put( MARK_NB_TICKET_AGENT, nAgentTickets );
-        model.put( MARK_NB_TICKET_GROUP, nGroupTickets );
-        model.put( MARK_NB_TICKET_DOMAIN, strSelectedTab.equals( TabulationEnum.DOMAIN.getLabel( ) ) ? listIdTickets.size( ) : null );
-        model.put( MARK_SELECTED_TAB, strSelectedTab );
-        model.put( MARK_USER_WITH_NO_UNIT, bUserWithNoUnit );
-        model.put( MARK_USER_FACTORY, UserFactory.getInstance( ) );
-        model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
-        model.put( MARK_MANAGE_PAGE_TITLE, ( _bSearchMode ?
-                I18nService.getLocalizedString( PROPERTY_PAGE_SEARCH_TILE, getLocale( ) ) :
-                I18nService.getLocalizedString( PROPERTY_PAGE_MANAGE_TITLE, getLocale( ) ) ) );
-        model.put( TicketingConstants.MARK_JSP_CONTROLLER, getControllerJsp( ) );
-        TicketFilterHelper.setModel( model, filter, request, userCurrent );
-        ModelUtils.storeTicketRights( model, userCurrent );
+                // The number of tickets for AGENT and GROUP category
+                int nAgentTickets = 0;
+                int nGroupTickets = 0;
 
-        String strCreationDateDisplay = AdminUserPreferencesService.instance( ).get( String.valueOf( userCurrent.getUserId( ) ), TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY,
-                StringUtils.EMPTY );
-        model.put( TicketingConstants.MARK_CREATION_DATE_AS_DATE, TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY_DATE.equals( strCreationDateDisplay ) );
-        model.put( MARK_MASS_ACTIONS_LIST, getListMassActions( userCurrent, filter ) );
+                // Get the seleted tab name
+                String strUpperSelectedTab = StringUtils.isBlank( StringUtils.upperCase( strSelectedTab ) ) ? StringUtils.EMPTY : StringUtils.upperCase( strSelectedTab );
+                try
+                {
+                    filter.setFilterView( TicketFilterViewEnum.valueOf( strUpperSelectedTab ) );
+                } catch ( IllegalArgumentException e )
+                {
+                    // The default view
+                    filter.setFilterView( TicketFilterViewEnum.AGENT );
+                }
 
-        String messageInfo = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
+                try
+                {
+                    listTickets = _engine.searchTickets( strQuery, _lstTicketDomain, filter );
+                    if ( listTickets != null && !listTickets.isEmpty( ) )
+                    {
+                        for ( Ticket ticket : listTickets )
+                        {
+                            listIdTickets.add( ticket.getId( ) );
+                        }
+                    }
 
-        if ( StringUtils.isNotEmpty( messageInfo ) )
-        {
-            addInfo( messageInfo );
-            fillCommons( model );
-        }
+                    // Compute the number of ticket for the AGENT and GROUP filter
+                    if ( strUpperSelectedTab.equals( TicketFilterViewEnum.AGENT.toString( ) ) )
+                    {
+                        nAgentTickets = listIdTickets.size( );
+                        filter.setFilterView( TicketFilterViewEnum.GROUP );
+                        nGroupTickets = getNbTicketsWithLucene( strQuery, _lstTicketDomain, filter );
+                    } else if ( strUpperSelectedTab.equals( TicketFilterViewEnum.GROUP.toString( ) ) )
+                    {
+                        nGroupTickets = listIdTickets.size( );
+                        filter.setFilterView( TicketFilterViewEnum.AGENT );
+                        nAgentTickets = getNbTicketsWithLucene( strQuery, _lstTicketDomain, filter );
+                    } else
+                    {
+                        filter.setFilterView( TicketFilterViewEnum.AGENT );
+                        nAgentTickets = getNbTicketsWithLucene( strQuery, _lstTicketDomain, filter );
+                        filter.setFilterView( TicketFilterViewEnum.GROUP );
+                        nGroupTickets = getNbTicketsWithLucene( strQuery, _lstTicketDomain, filter );
+                    }
+                } catch ( ParseException e )
+                {
+                    AppLogService.error( "Error while parsing query " + strQuery, e );
+                    addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
+                }
 
-        return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
+                // Clean filter view for save in session
+                filter.setTicketsLimitStart( TicketFilter.CONSTANT_ID_NULL );
+                filter.setTicketsLimitCount( TicketFilter.CONSTANT_ID_NULL );
+                filter.setFilterView( TicketFilterViewEnum.ALL );
+
+                // Store list tickets for navigation in view details
+                request.getSession( ).setAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION, listIdTickets );
+
+                // PAGINATORS
+                LocalizedPaginator<Ticket> paginatorTickets = new LocalizedPaginator<Ticket>( listTickets, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
+
+                Map<String, Object> model = getModel( );
+                model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
+                model.put( SearchConstants.MARK_QUERY, StringEscapeUtils.escapeHtml( strQuery ) );
+                model.put( MARK_TICKET_LIST, paginatorTickets.getPageItems( ) );
+                model.put( MARK_PAGINATOR, paginatorTickets );
+                model.put( MARK_NB_TICKET_AGENT, nAgentTickets );
+                model.put( MARK_NB_TICKET_GROUP, nGroupTickets );
+                model.put( MARK_NB_TICKET_DOMAIN, strSelectedTab.equals( TabulationEnum.DOMAIN.getLabel( ) ) ? listIdTickets.size( ) : null );
+                model.put( MARK_SELECTED_TAB, strSelectedTab );
+                model.put( MARK_USER_WITH_NO_UNIT, bUserWithNoUnit );
+                model.put( MARK_USER_FACTORY, UserFactory.getInstance( ) );
+                model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
+                model.put( MARK_MANAGE_PAGE_TITLE, ( _bSearchMode ?
+                        I18nService.getLocalizedString( PROPERTY_PAGE_SEARCH_TILE, getLocale( ) ) :
+                            I18nService.getLocalizedString( PROPERTY_PAGE_MANAGE_TITLE, getLocale( ) ) ) );
+                model.put( TicketingConstants.MARK_JSP_CONTROLLER, getControllerJsp( ) );
+                TicketFilterHelper.setModel( model, filter, request, userCurrent );
+                ModelUtils.storeTicketRights( model, userCurrent );
+
+                String strCreationDateDisplay = AdminUserPreferencesService.instance( ).get( String.valueOf( userCurrent.getUserId( ) ), TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY,
+                        StringUtils.EMPTY );
+                model.put( TicketingConstants.MARK_CREATION_DATE_AS_DATE, TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY_DATE.equals( strCreationDateDisplay ) );
+                model.put( MARK_MASS_ACTIONS_LIST, getListMassActions( userCurrent, filter ) );
+
+                String messageInfo = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_WORKFLOW_ACTION_MESSAGE_INFO );
+
+                if ( StringUtils.isNotEmpty( messageInfo ) )
+                {
+                    addInfo( messageInfo );
+                    fillCommons( model );
+                }
+
+                return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
     }
 
     /**
@@ -640,9 +640,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         ticket.enrich( strIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber, strEmail, strCategoryCode, null, null, null, strGuid, strIdCustomer, strNomenclature );
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
-        
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( true ).getCategoriesTree( ).getTreeJSONObject( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( true ).getCategoriesTree( ).getDepths( ) );
+
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale( ) ) );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_GUID, strGuid );
@@ -998,7 +998,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             ticket.setTicketCategory( categoryValidatorResult.getTicketCategory( ) );
         }
-        
+
         // Validate the bean
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validateBean( ticket );
@@ -1033,7 +1033,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         if ( categoryValidatorResult.isTicketCategoryValid( ) )
         {
             ticket.setListResponse( null );
-            
+
             List<Entry> listEntry = TicketFormService.getFilterInputs( ticket.getTicketCategory( ).getId( ), null );
 
             for ( Entry entry : listEntry )
@@ -1187,8 +1187,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      */
     private void addTicketDomainToMapFromPermission( Map<Integer, TicketCategory> mapIntegerTicketDomain, String permission )
     {
-        List<TicketCategory> listDomain = TicketCategoryService.getInstance().getAuthorizedDomainsList( getUser( ), permission );
-        
+        List<TicketCategory> listDomain = TicketCategoryService.getInstance( true ).getAuthorizedDomainsList( getUser( ), permission );
+
         if ( mapIntegerTicketDomain != null && listDomain != null && !listDomain.isEmpty( ) )
         {
             for ( TicketCategory ticketDomain : listDomain )

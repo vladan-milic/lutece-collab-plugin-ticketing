@@ -110,9 +110,10 @@ public interface ITicketCategoryDAO
      * Load the list of categories (full with java objects filled)
      * 
      * @param plugin
+     * @param withInactives
      * @return the full categories list
      */
-    List<TicketCategory> selectFullCategorysList( Plugin plugin );
+    List<TicketCategory> selectFullCategorysList( Plugin plugin, boolean withInactives );
 
     /**
      * Load the id of all the category objects and returns them as a list
@@ -154,7 +155,7 @@ public interface ITicketCategoryDAO
      * @return the id of category as an integer
      */
     int selectCategoryIdByOrder( int nOrder, int nIdParent, Plugin _plugin );
-    
+
     /**
      * Rebuild the order sequence of active TicketCategory for a parent, by substracting 1 to all orders larger than a given value
      * 
@@ -174,7 +175,7 @@ public interface ITicketCategoryDAO
      *            the Plugin
      */
     void storeWithLastOrder( TicketCategory category, Plugin _plugin );
-    
+
     /**
      * check if category can be removed
      * 

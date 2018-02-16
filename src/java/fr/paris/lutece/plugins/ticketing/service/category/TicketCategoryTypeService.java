@@ -54,14 +54,24 @@ public class TicketCategoryTypeService
      * 
      * @return the category type service
      */
-    public static TicketCategoryTypeService getInstance( )
+    public static TicketCategoryTypeService getInstance( boolean withInactives )
     {
         if ( _instance == null )
         {
             _instance = new TicketCategoryTypeService( );
         }
-        _treeCategories = TicketCategoryTreeCacheService.getInstance( ).getResource( );
+        _treeCategories = TicketCategoryTreeCacheService.getInstance( withInactives ).getResource( );
         return _instance;
+    }
+
+    /**
+     * Get the instance of CategoryType service
+     * 
+     * @return the category type service
+     */
+    public static TicketCategoryTypeService getInstance( )
+    {
+        return getInstance( false );
     }
 
     /**

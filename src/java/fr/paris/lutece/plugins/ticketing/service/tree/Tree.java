@@ -38,6 +38,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
+
 public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDepth> 
 {
     protected List<Node> _rootNodes;
@@ -287,7 +291,11 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
                 return depth;
             }
         }
-        return null;
+        // Default depth
+        TicketCategoryType defaultDepth = new TicketCategoryType( );
+        defaultDepth.setDepthNumber( nDepth );
+        defaultDepth.setLabel( StringUtils.EMPTY );
+        return ( Depth ) defaultDepth;
     }
 
     /**
@@ -347,7 +355,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
         }
         return listNodes;
     }
-    
+
     /**
      * Get the list of nodes of a given depth
      * @param depth

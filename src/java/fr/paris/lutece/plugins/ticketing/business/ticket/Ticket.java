@@ -43,8 +43,6 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
-
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.ticketing.business.address.TicketAddress;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
@@ -464,11 +462,12 @@ public class Ticket implements Serializable, RBACResource
     {
         JSONArray jsonBranchCategories = new JSONArray( );
 
-        for ( TicketCategory ticketCategory : TicketCategoryService.getInstance( ).getCategoriesTree( ).getBranch( _ticketCategory ) )
+        for ( TicketCategory ticketCategory : TicketCategoryService.getInstance( true ).getCategoriesTree( ).getBranch( _ticketCategory ) )
         {
             JSONObject jsonTicketCategory = new JSONObject( );
             jsonTicketCategory.accumulate( FormatConstants.KEY_ID, ticketCategory.getId( ) );
             jsonTicketCategory.accumulate( FormatConstants.KEY_DEPTH_NUMBER, ticketCategory.getDepth( ).getDepthNumber( ) );
+            jsonTicketCategory.accumulate( FormatConstants.KEY_INACTIVE, ticketCategory.isInactive( ) );
             jsonBranchCategories.add( jsonTicketCategory );
         }
 
@@ -482,19 +481,19 @@ public class Ticket implements Serializable, RBACResource
      */
     public List<TicketCategory> getBranch( )
     {
-        return TicketCategoryService.getInstance( ).getCategoriesTree( ).getBranch( _ticketCategory );
+        return TicketCategoryService.getInstance( true ).getCategoriesTree( ).getBranch( _ticketCategory );
     }
 
     public TicketCategory getCategoryOfDepth( int depth )
     {
         if(_ticketCategory.getDepth().getDepthNumber() >= depth )
-    	{
-        	return _ticketCategory.getBranch( ).get( depth - 1 );
-    	}else
-    	{
-    		return new TicketCategory();
-    	}
-    		
+        {
+            return _ticketCategory.getBranch( ).get( depth - 1 );
+        }else
+        {
+            return new TicketCategory();
+        }
+
     }
 
     /**

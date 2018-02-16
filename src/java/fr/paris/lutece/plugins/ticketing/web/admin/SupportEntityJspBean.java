@@ -276,8 +276,8 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_SUPPORT_ENTITY, _supportEntity );
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( true ).getCategoriesTree( ).getTreeJSONObject( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( true ).getCategoriesTree( ).getDepths( ) );
         model.put( MARK_LEVEL_LIST, SupportLevel.getReferenceList( request.getLocale( ) ) );
         model.put( MARK_UNIT_LIST, getUnitsList( ) );
 

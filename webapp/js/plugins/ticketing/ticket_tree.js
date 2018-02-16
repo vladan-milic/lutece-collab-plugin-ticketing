@@ -1,6 +1,5 @@
 // Turns the combos identified by the jquery selectors into dynamic combos
 function lutece_ticket_tree(branch, categories_tree, url, allowNullSelection) {
-
 	var categories_depths = categories_tree.categories_depths;
 	var arraySelectedCategoryId = new Array();
 	for (var i = 1; i<=categories_depths.length; i++)
@@ -56,27 +55,24 @@ function lutece_ticket_tree(branch, categories_tree, url, allowNullSelection) {
 	}
 	
 	// Change a selected category on click
-	if (categories_depths != undefined && categories_depths.length > 0)
+	var i = 1;
+	while((category = $("#id_category_" + i)).length)
 	{
-		for (var i = 0; i<categories_depths.length; i++)
-		{
-			$("#id_category_" + categories_depths[i].depth_number).change(function() {
-				changeSelector(this);
-		    });
-		}
+		category.change(function() {
+			changeSelector(this);
+	    });
+		i++;
 	}
 
 	// Hide the selectors from the depthNumber
 	function hideSelectors(depthNumber) {
-		for (var i = depthNumber; i<=categories_depths.length; i++)
+		var i = depthNumber;
+		while((category = $("#id_category_" + i)).length)
 		{
-			var selector = "#id_category_" + i;
-			if (selector != undefined)
-			{
-				$(selector).val(-1);
-				$(selector).parents(".form-group:first").hide();
-			}
-		}
+			category.val(-1);
+			category.parents(".form-group:first").hide();
+			i++;
+		};
 	}
 	
 	// Change the next selector
@@ -93,6 +89,18 @@ function lutece_ticket_tree(branch, categories_tree, url, allowNullSelection) {
 		if(!allowNullSelection) {
 			removeDefaultValue(selector, arraySelectedCategoryId[depthNumber]);
 		}
+
+		// remove all inactives not selected
+		var selfCategories = getCategories(depthNumber, categories_tree, arraySelectedCategoryId);
+		if(selfCategories) {
+			debugger;
+			selfCategories
+				.filter(function(category) { return category.inactive; })
+				.map(function(category) { return $(selector).find('option[value='+category.id+']') })
+				.filter(function($option) { return !$option.selected; })
+				.forEach(function($option) { debugger; $option.remove(); });
+		}
+		
 		var nextDepthNumber = depthNumber + 1;
 		categories = getCategories(nextDepthNumber, categories_tree, arraySelectedCategoryId)
 		
@@ -163,7 +171,6 @@ function loadGenericAttributesForm(url, is_response_reseted, selector, is_first_
 
 //Load the combo corresponding to the parameter 'selector' with the parameter 'categories' 
 function loadCombo(selector, categories, depth, idCategoryToSelect, allowNullSelection) {
-	
 	$(selector).children().remove();
 	if (categories.length > 0 )
 	{
@@ -193,7 +200,10 @@ function loadCombo(selector, categories, depth, idCategoryToSelect, allowNullSel
 		for (var i = 0; i<categories.length; i++)
 		{
 			var isSelected = selectedCategoryIndexId == categories[i].id;
-			$(selector).append(new Option(categories[i].label, categories[i].id, isSelected, isSelected));
+			var option = new Option(categories[i].label, categories[i].id, isSelected, isSelected);
+			if(!categories[i].inactive || isSelected) {
+				$(selector).append(option);
+			}
 		}
 		
 		$(selector).parents(".form-group:first").show();

@@ -228,7 +228,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
 
         // Validate the TicketCategory
         TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( );
-        
+
         // Check constraints
         if ( !validateBean( _instantresponse, VALIDATION_ATTRIBUTES_PREFIX ) || !categoryValidatorResult.isTicketCategoryValid( ) )
         {
@@ -302,8 +302,8 @@ public class InstantResponseJspBean extends MVCAdminJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_INSTANT_RESPONSE, _instantresponse );
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( true ).getCategoriesTree( ).getTreeJSONObject( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( true ).getCategoriesTree( ).getDepths( ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_INSTANT_RESPONSE, TEMPLATE_MODIFY_INSTANT_RESPONSE, model );
     }
@@ -322,14 +322,14 @@ public class InstantResponseJspBean extends MVCAdminJspBean
 
         // Validate the TicketCategory
         TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( );
-        
+
         // Check constraints
         if ( !validateBean( _instantresponse, VALIDATION_ATTRIBUTES_PREFIX ) || !categoryValidatorResult.isTicketCategoryValid( ) )
         {
             Map<String, Object> model = getModel( );
             model.put( PARAMETER_ID_INSTANT_RESPONSE, String.valueOf( _instantresponse.getId( ) ) );
-            model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
-            model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
+            model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( true ).getCategoriesTree( ).getTreeJSONObject( ) );
+            model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( true ).getCategoriesTree( ).getDepths( ) );
 
             return redirectView( request, VIEW_MODIFY_INSTANT_RESPONSE );
         }

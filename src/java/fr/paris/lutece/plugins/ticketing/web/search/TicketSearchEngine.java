@@ -38,7 +38,6 @@ import java.sql.Timestamp;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +69,6 @@ import org.apache.lucene.search.TotalHitCountCollector;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketSearchService;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
@@ -83,23 +81,6 @@ import fr.paris.lutece.plugins.ticketing.web.util.TicketSearchUtil;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
 import fr.paris.lutece.portal.service.util.AppLogService;
-import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.IntPoint;
-import org.apache.lucene.document.LongPoint;
-import org.apache.lucene.index.IndexableField;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.*;
-import org.apache.lucene.search.BooleanClause.Occur;
-import org.apache.lucene.search.BooleanQuery.Builder;
-import org.apache.lucene.search.SortField.Type;
-
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.*;
 
 /**
  * TicketSearchEngine
@@ -141,9 +122,11 @@ public class TicketSearchEngine implements ITicketSearchEngine
             result.setNomenclature( document.get( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE ) );
 
             // TicketCategory
-            TicketCategoryTree categoriesTree = TicketCategoryService.getInstance( ).getCategoriesTree() ;
+            TicketCategoryService ticketCategoryInstance = TicketCategoryService.getInstance( true );
+
+            TicketCategoryTree categoriesTree = ticketCategoryInstance.getCategoriesTree( );
             categoriesTree.getDepths().removeIf(c -> c.getDepthNumber() > TicketingConstants.CATEGORY_DEPTH_MAX );
-            
+
             int maxDepthNumber = categoriesTree.getMaxDepthNumber( );
             int i = maxDepthNumber;
             while ( i >= 1 )
@@ -151,7 +134,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
                 String strCategoryId = document.get( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + i);
                 if ( strCategoryId != null )
                 {
-                    TicketCategory ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( Integer.valueOf( strCategoryId ) );
+                    TicketCategory ticketCategory = ticketCategoryInstance.findCategoryById( Integer.valueOf( strCategoryId ) );
                     result.setTicketCategory( ticketCategory );
                     break;
                 }
@@ -361,7 +344,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
         for ( TicketCategory domain : listUserDomain )
         {
-            
+
             TermQuery domQuery = new TermQuery( new Term( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + TicketingConstants.DOMAIN_DEPTH, Integer.toString( domain.getId( ) ) ) );
             domainsQueryBuilder.add( new BooleanClause( domQuery, BooleanClause.Occur.SHOULD ) );
         }
@@ -503,7 +486,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
                     {
                         addTicketCategoryIdFilter( booleanQueryBuilderGlobal, filter.getMapCategoryId( ).get( i ), i );
                     }
-                    
+
                 }
             }
 

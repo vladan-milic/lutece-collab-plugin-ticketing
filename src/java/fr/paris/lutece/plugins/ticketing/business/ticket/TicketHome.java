@@ -125,7 +125,7 @@ public final class TicketHome
 
         if ( ticket != null )
         {
-            TicketCategory ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( ticket.getTicketCategory( ).getId( ) );
+            TicketCategory ticketCategory = TicketCategoryService.getInstance( true ).findCategoryById( ticket.getTicketCategory( ).getId( ) );
             ticket.setTicketCategory( ticketCategory );
         }
 
