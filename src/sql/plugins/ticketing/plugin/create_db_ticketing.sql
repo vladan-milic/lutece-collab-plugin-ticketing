@@ -280,4 +280,5 @@ ALTER TABLE ticketing_indexer_action ADD CONSTRAINT fk_ticketing_indexer_action_
 ALTER TABLE ticketing_ticket_address ADD CONSTRAINT fk_ticketing_ticket_address FOREIGN KEY (id_ticket)
       REFERENCES ticketing_ticket (id_ticket) ON DELETE CASCADE;
 
+DROP FUNCTION IF EXISTS getCategoryChilds;
       
