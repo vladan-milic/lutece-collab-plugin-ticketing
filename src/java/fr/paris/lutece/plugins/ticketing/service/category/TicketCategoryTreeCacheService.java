@@ -40,10 +40,12 @@ import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 public class TicketCategoryTreeCacheService extends AbstractCacheableService
 {
     private static final String SERVICE_NAME = "TREE_CAT_CACHE_SERVICE";
+    private static final String SERVICE_NAME_WITH_INACTIVES = "TREE_CAT_CACHE_SERVICE_WITH_INACTIVES";
     private static final String KEY_CACHE_TREE = "TREE_CAT";
     private static final String KEY_CACHE_TREE_WITH_INACTIVES = "TREE_CAT_WITH_INACTIVES";
 
     private static TicketCategoryTreeCacheService _instance;
+    private static TicketCategoryTreeCacheService _instanceWithInactives;
     private final boolean _bWithInactives;
 
     /**
@@ -72,11 +74,22 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
      */
     public static TicketCategoryTreeCacheService getInstance( boolean withInactives )
     {
-        if ( _instance == null )
+        if ( withInactives )
         {
-            _instance = new TicketCategoryTreeCacheService( withInactives );
+            if ( _instanceWithInactives == null )
+            {
+                _instanceWithInactives = new TicketCategoryTreeCacheService( withInactives );
+            }
+            return _instanceWithInactives;
         }
-        return _instance;
+        else
+        {
+            if ( _instance == null )
+            {
+                _instance = new TicketCategoryTreeCacheService( withInactives );
+            }
+            return _instance;
+        }
     }
 
     /**
@@ -85,7 +98,7 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
     @Override
     public String getName( )
     {
-        return SERVICE_NAME;
+        return _bWithInactives ? SERVICE_NAME_WITH_INACTIVES : SERVICE_NAME;
     }
 
     /**
