@@ -1,6 +1,7 @@
 -- This function must be pass manualy. Ant don't support it
 
 DROP FUNCTION IF EXISTS getCategoryChilds;
+DELIMITER //
 CREATE FUNCTION getCategoryChilds(categoryName varchar(1000))
 RETURNS varchar(1000)  
  BEGIN 
@@ -15,4 +16,5 @@ RETURNS varchar(1000)
          SELECT group_concat(id_category) INTO sTempChd FROM ticketing_category where FIND_IN_SET(id_parent,sTempChd)>0;  
     END WHILE;  
     RETURN sTemp;  
-END
+END //
+DELIMITER ;
