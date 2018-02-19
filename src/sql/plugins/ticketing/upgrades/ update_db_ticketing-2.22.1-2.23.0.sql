@@ -8,7 +8,7 @@ RETURNS varchar(1000)
 	DECLARE rootId INT;
     DECLARE sTemp VARCHAR(1000);  
     DECLARE sTempChd VARCHAR(1000); 
-	SELECT id_category INTO rootId FROM ticketing_category WHERE label = categoryName;
+	SELECT DISTINCT id_category INTO rootId FROM ticketing_category WHERE label = categoryName AND id_parent = -1 AND inactive = 0;
     SET sTemp = '$';  
     SET sTempChd =cast(rootId as CHAR);  
     WHILE sTempChd is not null DO  
