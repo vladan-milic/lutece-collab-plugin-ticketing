@@ -43,6 +43,8 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.ticketing.business.address.TicketAddress;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
@@ -77,8 +79,10 @@ public class Ticket implements Serializable, RBACResource
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.UserTitle.size}" )
     private String                       _strUserTitle;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.Firstname.size}" )
+    @NotEmpty( message = "#i18n{ticketing.validation.ticket.Firstname.notEmpty}" )
     private String                       _strFirstname;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.Lastname.size}" )
+    @NotEmpty( message = "#i18n{ticketing.validation.ticket.Lastname.notEmpty}" )
     private String                       _strLastname;
     @Email( message = "#i18n{ticketing.validation.ticket.Email.badFormat}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.ticket.Email.size}" )
