@@ -642,7 +642,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
         _ticketFormService.saveTicketInSession( request.getSession( ), ticket, form );
 
-        if ( !bIsFormValid && getActionTypeFromSession( request.getSession( ) ).equals( ACTION_CREATE_TICKET ) )
+        if ( !bIsFormValid && ACTION_CREATE_TICKET.equals( getActionTypeFromSession( request.getSession( ) ) ) )
         {
             if ( form == null )
             {
