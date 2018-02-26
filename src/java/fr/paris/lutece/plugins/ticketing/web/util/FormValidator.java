@@ -127,7 +127,7 @@ public class FormValidator
 
         if ( !bIsValid )
         {
-            Object[] args = { I18nService.getLocalizedString( CONTACT_MODE_LABEL_I18N + contactMode.getId( ), _request.getLocale( ) ) };
+            Object[] args = { I18nService.getLocalizedString( CONTACT_MODE_LABEL_I18N + contactMode.getCode(), _request.getLocale( ) ) };
             strError = I18nService.getLocalizedString( ERROR_CONTACT_MODE_NOT_FILLED, args, _request.getLocale( ) );
         }
 

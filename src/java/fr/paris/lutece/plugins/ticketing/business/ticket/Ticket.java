@@ -86,6 +86,7 @@ public class Ticket implements Serializable, RBACResource
     private String                       _strLastname;
     @Email( message = "#i18n{ticketing.validation.ticket.Email.badFormat}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.ticket.Email.size}" )
+    @NotEmpty( message = "#i18n{ticketing.validation.ticket.Email.notEmpty}" )
     private String                       _strEmail;
     @Pattern( regexp = PHONE_NUMBER_REGEX, message = "#i18n{ticketing.validation.ticket.FixedPhoneNumber.format}" )
     private String                       _strFixedPhoneNumber;

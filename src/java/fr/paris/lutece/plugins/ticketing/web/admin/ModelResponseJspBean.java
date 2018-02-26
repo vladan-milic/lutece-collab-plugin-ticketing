@@ -204,6 +204,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>( );
 
         String strSelectedDomain = request.getParameter( PARAMETER_FILTER_ID_DOMAIN );
+        _strSelectedDomain = strSelectedDomain;
 
         if ( StringUtils.isEmpty( strSelectedDomain ) || NO_TYPE_SELECTED.equals( strSelectedDomain ) )
         {
@@ -217,10 +218,9 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         }
         else
         {
-            _strSelectedDomain = strSelectedDomain;
             listModelResponses = ModelResponseHome.getModelResponsesListByDomain( _strSelectedDomain );
         }
-
+        
         // SORT
         String strSortedAttributeName = request.getParameter( Parameters.SORTED_ATTRIBUTE_NAME );
 
@@ -423,7 +423,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         Map<String, String> mapDomains = new LinkedHashMap<>( );
 
-        for ( TicketCategory type : TicketCategoryService.getInstance( ).getTypeList( ) )
+        for ( TicketCategory type : TicketCategoryService.getInstance( ).getDomainList( ) )
         {
             // Check user rights
             if ( RBACService.isAuthorized( type, TicketCategory.PERMISSION_VIEW_LIST, userCurrent ) || RBACService.isAuthorized( type, TicketCategory.PERMISSION_VIEW_DETAIL, userCurrent ) )
