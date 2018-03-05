@@ -36,6 +36,18 @@
                         <input type="checkbox" name="manageable" <#if category.manageable>checked="checked"</#if>>
                 </@formGroup>
                 
+				<#if category.idParent == -1>
+	                <@fieldInputText i18nLabelKey="ticketing.modify_channel.labelIconFont" inputName="icon_font" mandatory=false value="${category.iconFont}" i18nHelpBlockKey="ticketing.modify_channel.labelIconFont.help" />
+				    <div class="form-group">
+				      <label class="col-xs-12 col-sm-3 control-label">#i18n{ticketing.modify_channel.labelIcon}&nbsp; :</label>
+				      <div class="col-xs-12 col-sm-9">
+				        <p class="form-control-static" id="icon">
+				          <span id="span_icon" class="${category.iconFont}"></span>
+				        </p>
+				      </div>
+				    </div>
+				</#if>
+                
                 <@btnGroup>
                     <@button type='submit' name='action_modifyCategory' title='#i18n{portal.admin.message.buttonValidate}' />
                     <@button type='submit' name='view_manageCategories' title='#i18n{portal.admin.message.buttonCancel}' cancel=true />
@@ -44,5 +56,15 @@
 	    </@boxBody>
 	</@box>
 </@tabsWrapper>
+<script type="text/javascript">
+var changeIcon = function (){
+  $('span#span_icon').removeClass($('span#span_icon').attr('class')).addClass($("#icon_font").val());
+}
+$(document).ready(function(){
+  $("#icon_font").change(changeIcon);
+  $("#icon_font").click(changeIcon);
+  $("#icon_font").keyup(changeIcon);
+})
+</script>
 
 

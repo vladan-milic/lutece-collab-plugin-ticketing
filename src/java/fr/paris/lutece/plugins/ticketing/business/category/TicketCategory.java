@@ -95,6 +95,9 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     private boolean            _bManageable;
     
     private boolean            _bInactive;
+    
+    @Size( max = 50, message = "#i18n{ticketing.validation.channel.IconFont.size}" )
+    private String _strIconFont;
 
     /**
      * Constructor TicketCategory
@@ -108,7 +111,6 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
         _defaultAssignUnit = new AssigneeUnit( );
         _defaultAssignUnit.setUnitId( -1 );
         _strLabel = StringUtils.EMPTY;
-
     }
 
     /**
@@ -390,5 +392,26 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     public void setInactive( boolean inactive )
     {
     	_bInactive = inactive;
+    }
+    
+    /**
+     * Returns the Icon font label
+     * 
+     * @return The Icon font label
+     */
+    public String getIconFont( )
+    {
+        return _strIconFont;
+    }
+
+    /**
+     * Sets the Icon font label
+     * 
+     * @param strIconFont
+     *            The Icon font label
+     */
+    public void setIconFont( String strIconFont )
+    {
+        _strIconFont = strIconFont;
     }
 }

@@ -50,7 +50,7 @@ import fr.paris.lutece.util.sql.DAOUtil;
  */
 public final class TicketCategoryDAO implements ITicketCategoryDAO
 {
-    private static final String SQL_COLUMNS_SELECT = "id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, demand_id, help_message, is_manageable, inactive";
+    private static final String SQL_COLUMNS_SELECT = "id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, demand_id, help_message, is_manageable, inactive, icon_font";
 
     // Constants
     private static final String SQL_QUERY_NEW_PK                          = "SELECT max( id_category ) FROM ticketing_category";
@@ -58,9 +58,9 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
     private static final String SQL_QUERY_SELECT = "SELECT " + SQL_COLUMNS_SELECT + " FROM ticketing_category WHERE id_category = ?";
     private static final String SQL_QUERY_SELECT_BY_CODE = "SELECT " + SQL_COLUMNS_SELECT + " FROM ticketing_category WHERE code = ?";
 
-    private static final String SQL_QUERY_INSERT                          = "INSERT INTO ticketing_category ( id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, demand_id, help_message, is_manageable ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_INSERT                          = "INSERT INTO ticketing_category ( id_category, id_parent, label, n_order, code, id_default_assignee_unit, id_category_type, demand_id, help_message, is_manageable, icon_font ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE                          = "UPDATE ticketing_category SET inactive = 1 WHERE id_category = ? ";
-    private static final String SQL_QUERY_UPDATE                          = "UPDATE ticketing_category SET id_category = ?, id_parent = ?, label = ?, n_order = ?, code = ?, id_default_assignee_unit = ?, id_category_type = ?, demand_id = ?, help_message = ?, is_manageable = ? WHERE id_category = ?";
+    private static final String SQL_QUERY_UPDATE                          = "UPDATE ticketing_category SET id_category = ?, id_parent = ?, label = ?, n_order = ?, code = ?, id_default_assignee_unit = ?, id_category_type = ?, demand_id = ?, help_message = ?, is_manageable = ?, icon_font = ? WHERE id_category = ?";
 
     private static final String SQL_QUERY_SELECTALL = "SELECT " + SQL_COLUMNS_SELECT + " FROM ticketing_category WHERE inactive <> 1 ORDER BY id_parent, n_order";
     private static final String SQL_QUERY_SELECTALL_WITH_INACTIVES = "SELECT " + SQL_COLUMNS_SELECT + " FROM ticketing_category ORDER BY id_parent, n_order";
@@ -116,7 +116,8 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.setInt( nIndex++, category.getDemandId( ) );
         daoUtil.setString( nIndex++, category.getHelpMessage( ) );
         daoUtil.setBoolean( nIndex++, category.isManageable( ) );
-
+        daoUtil.setString( nIndex++, category.getIconFont());
+        		
         daoUtil.executeUpdate( );
         daoUtil.free( );
     }
@@ -154,6 +155,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setHelpMessage( daoUtil.getString( nIndex++ ) );
             category.setListIdInput( TicketCategoryInputsHome.getIdInputListByCategory( category.getId( ) ) );
             category.setManageable( daoUtil.getBoolean( nIndex++ ) );
+            category.setIconFont(daoUtil.getString(nIndex++));
         }
 
         daoUtil.free( );
@@ -192,6 +194,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setDemandId( daoUtil.getInt( nIndex++ ) );
             category.setHelpMessage( daoUtil.getString( nIndex++ ) );
             category.setManageable( daoUtil.getBoolean( nIndex++ ) );
+            category.setIconFont(daoUtil.getString( nIndex++ ));
         }
 
         daoUtil.free( );
@@ -229,6 +232,8 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
         daoUtil.setInt( nIndex++, category.getDemandId( ) );
         daoUtil.setString( nIndex++, category.getHelpMessage( ) );
         daoUtil.setBoolean( nIndex++, category.isManageable( ) );
+        daoUtil.setString( nIndex++ , category.getIconFont( ));
+
         daoUtil.setInt( nIndex, category.getId( ) );
 
         daoUtil.executeUpdate( );
@@ -261,6 +266,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setHelpMessage( daoUtil.getString( nIndex++ ) );
             category.setManageable( daoUtil.getBoolean( nIndex++ ) );
             category.setInactive(daoUtil.getBoolean( nIndex++ ));
+            category.setIconFont( daoUtil.getString( nIndex++ ) );
             categoryList.add( category );
         }
 
@@ -310,6 +316,7 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setHelpMessage( daoUtil.getString( nIndex++ ) );
             category.setManageable( daoUtil.getBoolean( nIndex++ ) );
             category.setInactive( daoUtil.getBoolean( nIndex++ ) );
+            category.setIconFont( daoUtil.getString( nIndex++ ) );
 
             categoryList.add( category );
         }

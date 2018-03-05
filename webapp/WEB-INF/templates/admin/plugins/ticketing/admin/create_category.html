@@ -35,7 +35,17 @@
                 <@formGroup labelKey='#i18n{ticketing.modify_category.labelManageable}' helpKey='#i18n{ticketing.modify_category.labelManageable.help}' mandatory=false>
                         <input type="checkbox" name="manageable" >
                 </@formGroup>
-                
+                <#if category.idParent == -1>
+				    <@fieldInputText i18nLabelKey="ticketing.create_channel.labelIconFont" inputName="icon_font" mandatory=false value="" i18nHelpBlockKey="ticketing.create_channel.labelIconFont.help" />
+				    <div class="form-group">
+				      <label class="col-xs-12 col-sm-3 control-label">#i18n{ticketing.create_channel.labelIcon}&nbsp; :</label>
+				      <div class="col-xs-12 col-sm-9">
+				        <p class="form-control-static" id="icon">
+				          <span id="span_icon" class=""></span>
+				        </p>
+				      </div>
+				    </div>     
+				</#if>           
                 <@btnGroup>
                     <@button type='submit' name='action_createCategory' title='#i18n{portal.admin.message.buttonValidate}' />
                     <@button type='submit' name='view_manageCategories' title='#i18n{portal.admin.message.buttonCancel}' cancel=true />
@@ -44,3 +54,13 @@
 	    </@boxBody>
 	</@box>
 </@tabsWrapper>
+<script type="text/javascript">
+var changeIcon = function (){
+  $('span#span_icon').removeClass($('span#span_icon').attr('class')).addClass($("#icon_font").val());
+}
+$(document).ready(function(){
+  $("#icon_font").change(changeIcon);
+  $("#icon_font").click(changeIcon);
+  $("#icon_font").keyup(changeIcon);
+})
+</script>
