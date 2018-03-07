@@ -1,29 +1,30 @@
 <#include "/skin/plugins/ticketing/include/popin_save_personal_info.html" />
 <@addPopinSavePersonalInfo i18nTitleKey="ticketing.savepersonaldata.popin.title" i18nMessageKey="ticketing.savepersonaldata.popin.message" i18nYesKey="ticketing.savepersonaldata.popin.yes" i18nNoKey="ticketing.savepersonaldata.popin.no" />
-<div id="recap_ticket" class="row">
-    <div class="col-xs-12 col-sm-12">
-		<h1 class="text-center">#i18n{ticketing.xpage.confirm_ticket.title}</h1>
-		<form class="form" role="form" method="post" action="jsp/site/Portal.jsp?page=ticket">
+<div class="mademande">
+    <div class="recap">
+		<form role="form" method="post" action="jsp/site/Portal.jsp?page=ticket">
 			<input type="hidden" id="id" name="id">
         	<input type="hidden" id="form" name="form" value="${(form.id)!}">
 			<input type="hidden" name="view" value="redirectAfterCreateAction">
-			<#if message?has_content>
-			<div class="form-group">
-				<label for="confirmationMsg" class="sr-only">#i18n{ticketing.xpage.confirm_ticket.labelMessage}</span></label>
-				<div class="well well-sm">${message}</div>
-			</div>
-			</#if> 
-			<div class="form-group text-center">
-				<button class="btn btn-primary" type="submit">
-					#i18n{ticketing.xpage.confirm_ticket.labelButtonReturn}
-				</button>
-			</div>
-		</form>
-	</div>
+	        <div class="container">
+	            <div class="row">
+	                <div class="col-md-12 text-center">
+	                    <img src="images/skin/plugins/ticketing/success.png" alt="demande enregistrée" />
+	                    <p class="title white">#i18n{ticketing.xpage.confirm_ticket.title}</p>
+	                    <div class="save-details">${message}</div>
+	                    <button type="submit" class="button btn-red" type="submit">#i18n{ticketing.xpage.confirm_ticket.labelButtonReturn}</button>
+	                </div>
+	            </div>
+	        </div>
+	    </form>
+    </div>
 </div>
+<script src="js/plugins/ticketing/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plugins/ticketing/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 <script language="javascript"> 
     $( function() {
-       $("#mcinfo").hide(); 
+    	document.getElementById('form-title').innerHTML = "${form.title}";
+        $("#mcinfo").hide(); 
    		openPopinSavePersonalInfo();
 	});
 </script>	

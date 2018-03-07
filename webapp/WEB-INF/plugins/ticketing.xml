@@ -182,6 +182,10 @@
     <css-stylesheets>
         <css-stylesheets-scope>portal</css-stylesheets-scope>
         <css-stylesheet>ticketing/ticketing.css</css-stylesheet>
+        <!-- Multiforms skin -->
+        <css-stylesheet>ticketing/bootstrap.min.css</css-stylesheet>
+        <css-stylesheet>ticketing/mademande.css</css-stylesheet>
+        <css-stylesheet>ticketing/fontawesome-all.css</css-stylesheet>
     </css-stylesheets>
     
     <!-- Dashboard  components -->

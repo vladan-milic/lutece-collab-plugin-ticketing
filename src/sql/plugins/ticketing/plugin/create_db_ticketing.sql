@@ -97,7 +97,7 @@ demand_id int(6) NOT NULL default '0',
 help_message varchar(500) NULL,
 is_manageable int(1) DEFAULT 0 NOT NULL,
 inactive int(1)  NOT NULL default '0',
-icon_font VARCHAR(50)  NULL default ''
+icon_font VARCHAR(50)  NULL default '',
 PRIMARY KEY (id_category)
 );
 

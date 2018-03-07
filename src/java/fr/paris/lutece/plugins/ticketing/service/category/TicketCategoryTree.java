@@ -99,6 +99,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
             jsonRootElement.accumulate( FormatConstants.KEY_HELP, ticketCategory.getHelpMessage( ) );
             jsonRootElement.accumulate( FormatConstants.KEY_DEPTH, ticketCategory.getDepth( ).getDepthNumber( ) );
             jsonRootElement.accumulate( FormatConstants.KEY_INACTIVE, ticketCategory.isInactive( ) );
+            jsonRootElement.accumulate( FormatConstants.KEY_ICON, ticketCategory.getIconFont( ) );
             addJSONArraysChildren( jsonRootElement, ticketCategory );
             jsonRootElements.add( jsonRootElement );
 

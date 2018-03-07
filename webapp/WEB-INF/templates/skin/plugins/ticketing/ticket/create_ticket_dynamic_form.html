@@ -1,122 +1,173 @@
-<div id="create_ticket" class="row">
-    <div class="col-xs-12 col-sm-12">
+<div class="mademande">
+	<div class="hero">
+	    <div class="container">
+	        <div class="main-heading vertical-align">
+	            <img src="images/skin/plugins/ticketing/conversations.png" alt="">
+	        </div>
+	    </div>
+	</div>
     <#if form?? && form.id??>
-	<form id="create_ticket_form" class="form" role="form" method="post" action="jsp/site/Portal.jsp?page=ticket&form=${form.id}" enctype="multipart/form-data">
-            <@messages errors=errors />
-            <input name="page" value="ticket" type="hidden">
-			<input name="action" value="recapTicket" type="hidden">
-            <input type="hidden" id="id" name="id">  
-            <input type="hidden" id="guid" name="guid" value="${ticket.guid!}">
-            <input type="hidden" id="form" name="form" value="${form.id}">
-      		
-      		<div class="component component-text">
-      			${form.message}
-      		</div>
-      		
-      		<hr>
-      		
-      		<#assign entryUserTitle = form.getEntry(formEntryType.userTitle)>
-            <div class="form-group <#if entryUserTitle.hidden>hidden</#if>">
-                <label for="id_user_title" >#i18n{ticketing.xpage.create_ticket.labelIdUserTitle} <#if !entryUserTitle.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
-				<#list user_titles_list as user_title>
-					<label class="radio-inline" for="id_user_title_${user_title.code}">
-						<input type="radio" name="id_user_title" id="id_user_title_${user_title.code}" value="${user_title.code}" <#if ticket.idUserTitle?string==user_title.code>checked</#if>> 
-						<span class="radio-label">${user_title.name}</span>
-					</label>
-				</#list>
-                 <span class="help-block sr-only">#i18n{ticketing.xpage.create_ticket.labelIdUserTitle.help}</span>
-            </div>
-            
-      		<#assign entryLastName = form.getEntry(formEntryType.lastName)>
-      		<#assign entryFirstName = form.getEntry(formEntryType.firstName)>
-            <div class="form-group <#if entryLastName.hidden && entryFirstName.hidden>hidden</#if>">
-				<div class="row">
-					<div class="col-xs-12 col-sm-6 <#if entryLastName.hidden>hidden</#if>">
-						<label  for="lastname" >#i18n{ticketing.xpage.create_ticket.labelLastname} <#if !entryLastName.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
-						<input class="form-control" type="text" id="lastname" name="lastname" value="${ticket.lastname!''}"  maxlength="50">
-						<span class="help-block sr-only">#i18n{ticketing.xpage.create_ticket.labelLastname.help}</span>
-					</div>
-					<div class="col-xs-12 col-sm-6 <#if entryFirstName.hidden>hidden</#if>">
-						<label  for="firstname" >#i18n{ticketing.xpage.create_ticket.labelFirstname} <#if !entryFirstName.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
-						<input class="form-control" type="text" id="firstname" name="firstname" value="${ticket.firstname!}"  maxlength="50">
-						<span class="help-block sr-only">#i18n{ticketing.xpage.create_ticket.labelFirstname.help}</span>
-					</div>
-				</div>	
-            </div>
-            
-      		<#assign entryEmail = form.getEntry(formEntryType.email)>
-            <div class="form-group <#if entryEmail.hidden>hidden</#if>">
-				<div class="row">
-					<div class="col-xs-12 col-sm-6">
-						<label  for="email" >#i18n{ticketing.xpage.create_ticket.labelEmail} <#if !entryEmail.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
-						<input class="form-control" type="text" id="email" name="email" value="${ticket.email!''}"  maxlength="255">
-						<span class="help-block v">#i18n{ticketing.xpage.create_ticket.labelEmail.help}</span>
-					</div>
-				</div>
-            </div>
-            
-      		<#assign entryPhones = form.getEntry(formEntryType.phoneNumbers)>
-            <div class="form-group <#if entryPhones.hidden>hidden</#if>">
-				<div class="row">
-					<div class="col-xs-12 col-sm-6">
-						<label  for="fixed_phone_number" >#i18n{ticketing.xpage.create_ticket.labelFixedPhoneNumber} <#if !entryPhones.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
-						<input class="form-control input-phone" type="text" id="fixed_phone_number" name="fixed_phone_number" value="${ticket.fixedPhoneNumber!''}"  maxlength="10" />
-						<#if entryPhones.mandatory><span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span></#if>
-					</div>
-					<div class="col-xs-12 col-sm-6">
-						<label  for="mobile_phone_number" >#i18n{ticketing.xpage.create_ticket.labelMobilePhoneNumber} <#if !entryPhones.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
-						<input class="form-control input-phone" type="text" id="mobile_phone_number" name="mobile_phone_number" value="${ticket.mobilePhoneNumber!''}"  maxlength="10" />
-						<#if entryPhones.mandatory><span class="help-block">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span></#if>
-					</div>
-				</div>
-            </div>
-            
-      		<#assign entryContactMode = form.getEntry(formEntryType.contactMode)>
-			<div class="form-group <#if entryContactMode.hidden>hidden</#if>">
-                <label for="id_contact_mode" >#i18n{ticketing.xpage.create_ticket.labelContactMode} <#if !entryContactMode.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
-				<p>
-				<#list contact_modes_list as contact_mode>
-					<label class="radio-inline" for="id_contact_mode_${contact_mode.code}">
-						<input type="radio" name="id_contact_mode" id="id_contact_mode_${contact_mode.code}" value="${contact_mode.code}" <#if contact_mode_index==0 || ticket.idContactMode?string==contact_mode.code>checked</#if>> 
-						<span class="radio-label">${contact_mode.name}</span>
-					</label>
-				</#list>
-				</p>
-                <span class="help-block sr-only">#i18n{ticketing.xpage.create_ticket.labelContactMode.help}</span>
-            </div>
-			
-            <#list categories_depths as depth>
-      		<#assign entryCategory = form.getEntry(formEntryType.category + depth.depthNumber)>
-            <div class="form-group <#if entryCategory.hidden>hidden</#if>">
-                <label for="id_category_${depth.depthNumber}">${depth.label} <#if !entryCategory.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
-                <div class="select">
-                    <@comboWithParams name="id_category_${depth.depthNumber}" default_value="" additionalParameters=" id=\"id_category_${depth.depthNumber}\" depth=\"${depth.depthNumber}\" class=\"select-control\" " items=[] />
-                </div>
-                <span class="help-block" id="help_message_${depth.depthNumber}"></span>
-	   		</div>
-	        </#list>
-	        
-      		<#assign entryComment = form.getEntry(formEntryType.comment)>
-            <div class="form-group <#if entryComment.hidden>hidden</#if>">
-               <label for="ticket_comment" >#i18n{ticketing.xpage.create_ticket.labelTicketComment} <#if !entryComment.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
-               <textarea class="ticketing form-control" id="ticket_comment" name="ticket_comment" >${ticket.ticketComment!''}</textarea>
-	 	       <span class="help-block">#i18n{ticketing.xpage.create_ticket.labelTicketComment.help}</span>
-            </div>
-            
-			<div class="form-group" id="generic_attributes"></div>
-			<div class="clearfix"></div>
-            <div class="form-group text-center" style="margin-top:20px;">
-                <button id="submit_create_ticket" name="action_recapTicket" class="btn btn-primary" type="submit">
-                    ${form.buttonLabel}
-                </button>
-            </div>
-		</form>
-		<#else>
+	<form id="create_ticket_form" role="form" method="post" action="jsp/site/Portal.jsp?page=ticket&form=${form.id}" enctype="multipart/form-data">
         <@messages errors=errors />
-		</#if>
-    </div>
+        <input name="page" value="ticket" type="hidden">
+		<input name="action" value="recapTicket" type="hidden">
+        <input type="hidden" id="id" name="id">  
+        <input type="hidden" id="guid" name="guid" value="${ticket.guid!}">
+        <input type="hidden" id="form" name="form" value="${form.id}">
+	   		
+	    <div class="container">
+	    	<#if form.message?has_content>
+	        <div class="row">
+	            <div class="col-sm-12">
+	                <p class="description">${form.message}</p>
+	            </div>
+	        </div>
+	        </#if>
+	        <div class="row">
+	            <div class="col-sm-12">
+	                <span class="text-muted">
+	                    Tous les champs sont obligatoires sauf mention contraire.
+	                </span>
+	                <div class="form">
+	                    <span class="title">Identité du demandeur</span>
+	                    
+      					<#assign entryUserTitle = form.getEntry(formEntryType.userTitle)>
+	                    <div class="row <#if entryUserTitle.hidden>hidden</#if>">
+	                        <div class="form-group col-md-12 radio-buttons">
+	                            <label class="control-label">#i18n{ticketing.xpage.create_ticket.labelIdUserTitle} <#if !entryUserTitle.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
+	                            <div class="custom-radio group space">
+									<#list user_titles_list as user_title>
+										<label class="radio-inline">
+											<input type="radio" name="id_user_title" id="id_user_title_${user_title.code}" value="${user_title.code}" <#if ticket.idUserTitle?string==user_title.code>checked</#if>> 
+											<label for="id_user_title_${user_title.code}">${user_title.name}</label>
+										</label>
+									</#list>
+	                            </div>
+	                            <span class="subtitle">#i18n{ticketing.xpage.create_ticket.labelIdUserTitle.help}</span>
+	                        </div>
+	                    </div>
+	                    
+			      		<#assign entryLastName = form.getEntry(formEntryType.lastName)>
+			      		<#assign entryFirstName = form.getEntry(formEntryType.firstName)>
+	                    <div class="row <#if entryLastName.hidden && entryFirstName.hidden>hidden</#if>">
+	                        <div class="form-group col-md-6 <#if entryLastName.hidden>hidden</#if>">
+	                            <label for="lastname" class="control-label">#i18n{ticketing.xpage.create_ticket.labelLastname} <#if !entryLastName.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
+								<input class="form-control" type="text" id="lastname" name="lastname" value="${ticket.lastname!''}"  maxlength="50">
+	                            <span class="subtitle">#i18n{ticketing.xpage.create_ticket.labelLastname.help}</span>
+	                        </div>
+	                        <div class="form-group col-md-6 <#if entryFirstName.hidden>hidden</#if>">
+	                            <label for="firstname" class="control-label">#i18n{ticketing.xpage.create_ticket.labelFirstname} <#if !entryFirstName.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
+								<input class="form-control" type="text" id="firstname" name="firstname" value="${ticket.firstname!}"  maxlength="50">
+	                            <span class="subtitle">#i18n{ticketing.xpage.create_ticket.labelFirstname.help}</span>
+	                        </div>
+                        </div>
+                        
+	      				<#assign entryEmail = form.getEntry(formEntryType.email)>
+	                    <div class="row <#if entryEmail.hidden>hidden</#if>">
+	                        <div class="form-group col-md-6">
+	                            <label for="email" class="control-label">#i18n{ticketing.xpage.create_ticket.labelEmail} <#if !entryEmail.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
+								<input class="form-control" type="text" id="email" name="email" value="${ticket.email!''}"  maxlength="255">
+								<span class="subtitle">#i18n{ticketing.xpage.create_ticket.labelEmail.help}</span>
+	                        </div>
+	                    </div>
+	                    
+			      		<#assign entryPhones = form.getEntry(formEntryType.phoneNumbers)>
+	                    <div class="row <#if entryPhones.hidden>hidden</#if>">
+	                        <div class="form-group col-md-6">
+	                            <label for="fixed_phone_number" class="control-label">#i18n{ticketing.xpage.create_ticket.labelFixedPhoneNumber} <#if !entryPhones.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
+								<input class="form-control input-phone" type="text" id="fixed_phone_number" name="fixed_phone_number" value="${ticket.fixedPhoneNumber!''}"  maxlength="10" />
+								<#if entryPhones.mandatory><span class="subtitle">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span></#if>
+	                        </div>
+	                        <div class="form-group col-md-6">
+	                            <label for="mobile_phone_number" class="control-label">#i18n{ticketing.xpage.create_ticket.labelMobilePhoneNumber} <#if !entryPhones.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
+								<input class="form-control input-phone" type="text" id="mobile_phone_number" name="mobile_phone_number" value="${ticket.mobilePhoneNumber!''}"  maxlength="10" />
+								<#if entryPhones.mandatory><span class="subtitle">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span></#if>
+	                        </div>
+	                    </div>
+	                    
+			      		<#assign entryContactMode = form.getEntry(formEntryType.contactMode)>
+	                    <div class="row <#if entryContactMode.hidden>hidden</#if>">
+	                        <div class="form-group col-md-12 radio-buttons">
+	                            <label class="control-label">#i18n{ticketing.xpage.create_ticket.labelContactMode} <#if !entryContactMode.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
+	                            <div class="custom-radio group space">
+									<#list contact_modes_list as contact_mode>
+										<label class="radio-inline">
+											<input type="radio" name="id_contact_mode" id="id_contact_mode_${contact_mode.code}" value="${contact_mode.code}" <#if contact_mode_index==0 || ticket.idContactMode?string==contact_mode.code>checked</#if>> 
+											<label for="id_contact_mode_${contact_mode.code}">${contact_mode.name}</label>
+										</label>
+									</#list>
+	                            </div>
+	                            <span class="subtitle">#i18n{ticketing.xpage.create_ticket.labelContactMode.help}</span>
+	                        </div>
+	                    </div>
+	                </div>
+	                
+	                <!--choix domaine-->
+		            <#list categories_depths as depth>
+		      		<#if depth.depthNumber == 1>
+	      			<#assign entryCategory = form.getEntry(formEntryType.category + 1)>
+	                <div class="form <#if entryCategory.hidden>hidden</#if>">
+	                    <span class="title domaine">${depth.label} <#if !entryCategory.mandatory>#i18n{ticketing.xpage.optional_field}</#if></span>
+	                    <span class="precision" id="help_message_1"></span>
+		                
+		                <div class="select hidden">
+	                    	<@comboWithParams name="id_category_1" default_value="" additionalParameters=" id=\"id_category_1\" depth=\"1\" class=\"select-control\" " items=[] />
+	                    </div>
+		                
+	                    <div class="row">
+	                        <div class="custom-radio group" id="first-level-container"></div>
+	                    </div>
+	                </div>
+	                </#if>
+	                </#list>
+	                
+	                <!--second part-->
+	                <div class="second-part">
+	                    <div class="form last">
+	                        <span class="title">Précision de la demande</span>
+	                        
+				            <#list categories_depths as depth>
+				            <#if depth.depthNumber != 1>
+				      		<#assign entryCategory = form.getEntry(formEntryType.category + depth.depthNumber)>
+	                        <div class="row <#if entryCategory.hidden>hidden</#if>">
+	                            <div class="form-group col-md-6">
+	                                <label for="id_category_${depth.depthNumber}" class="control-label">${depth.label} <#if !entryCategory.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
+				                    <@comboWithParams name="id_category_${depth.depthNumber}" default_value="" additionalParameters=" id=\"id_category_${depth.depthNumber}\" depth=\"${depth.depthNumber}\" class=\"form-control\" " items=[] />
+	                            </div>
+	                        </div>
+	                        </#if>
+					        </#list>
+					        
+	      					<#assign entryComment = form.getEntry(formEntryType.comment)>
+	                        <div class="row <#if entryComment.hidden>hidden</#if>">
+	                            <div class="form-group col-md-12">
+	                                <label for="ticket_comment" class="control-label">#i18n{ticketing.xpage.create_ticket.labelTicketComment} <#if !entryComment.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
+	               					<textarea class="ticketing form-control" id="ticket_comment" name="ticket_comment" rows="6">${ticket.ticketComment!''}</textarea>
+	                                <span class="subtitle">#i18n{ticketing.xpage.create_ticket.labelTicketComment.help}</span>
+	                            </div>
+	                        </div>
+	                        
+							<div class="form-group" id="generic_attributes"></div>
+	                    </div>
+						
+	                    <div class="row">
+	                        <div class="col-md-12 col-sm-12 col-xs-12 button-centered">
+	                            <button id="submit_create_ticket" name="action_recapTicket" class="button btn-red" type="submit">${form.buttonLabel}</button>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</form>
+	<#else>
+		<!-- error if no form selected -->
+      	<@messages errors=errors />
+	</#if>
 </div>
 <#if form?? && form.id??>
+<script src="js/plugins/ticketing/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plugins/ticketing/mademande.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/bootstrap-datepicker.js"></script>
 <script src="js/locales/bootstrap-datepicker.fr.js" charset="utf-8"></script>
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
@@ -125,10 +176,52 @@
 
 	var categoriesTree = ${categories_tree};
 
+    var createTemplate = function(elId) {
+        return $('<div class="col-md-3 col-sm-6 col-xs-12">'+
+            '<label class="radio-custo">'+
+                '<input type="radio" id="first_lvl_'+elId+'">'+
+                '<label for="first_lvl_'+elId+'">'+
+                    '<i class="fas element-icon"></i><span class="element-title"></span>'+
+                '</label>'+
+            '</label>'+
+        '</div>').clone();
+    };
+       
+    var sectionContainer = $('#first-level-container');
+    var selectSection = $("#id_category_1");
+    var linkSelector = '.radio-custo';
+    var tplIndex = 0;
+
     $( function() {
     	document.getElementById('form-title').innerHTML = "${form.title}";
         var tree = lutece_ticket_tree(${ticket.branchJSONObject}, categoriesTree, url, true);
 
+        // Create first sections of depth 1
+        categoriesTree['categories_depth_1'].forEach(function(category) {
+               var element = createTemplate(tplIndex++);
+               var linkElement = element.find(linkSelector);
+               
+               element.find('.element-title').text(category.label);
+               element.find('.element-icon').addClass(category.icon);
+               if(selectSection.val() == ""+category.id) {
+                      linkElement.addClass('selected');
+               }
+               
+               linkElement.click(function(event) {
+                      // Cancel default click event
+                      event.preventDefault();
+
+                      // Remove selected classes and add it to self
+                      sectionContainer.find(linkSelector).removeClass('selected');
+                      linkElement.addClass('selected');
+                      
+                      // Trigger change
+                      selectSection.val(category.id).trigger('change');
+               });
+               
+               sectionContainer.append(element);
+        });
+        
   		<#if !entryComment.hidden>
 		/* Check maxlength for textarea input */
 		var maxObjet = 5000;

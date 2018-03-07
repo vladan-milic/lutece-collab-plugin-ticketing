@@ -1,8 +1,27 @@
 <#-- required Jquery to work -->
 <#macro addPopinSavePersonalInfo i18nTitleKey i18nMessageKey i18nYesKey i18nNoKey prefix="" yesActionUrl="jsp/site/plugins/ticketing/personaldata/SavePersonalData.jsp" noActionUrl="" yesBtnClass="btn-primary" noBtnClass="btn-default">
+<div id="${prefix}popin_update" class="update" style="display: none">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="update-title">
+                    <i class="fas fa-arrow-alt-circle-up"></i>
+                    <span>#i18n{${i18nTitleKey}}</span>
+                </div>
+                <p class="update-text">#i18n{${i18nMessageKey}}</p>
+                <div class="actions-btn">
+                    <button type="button" class="button btn-grey" id="${prefix}popin-save-personal-info-no">#i18n{${i18nNoKey}}</button>
+                    <button type="button" class="button btn-blue" id="${prefix}popin-save-personal-info-yes">#i18n{${i18nYesKey}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type='text/javascript'>
 var ${prefix}popinCallback;
+
+var callBacksOnHide = [];
 
 function ${prefix}openPopinSavePersonalInfo( callback, onhide ) {
 	${prefix}popinCallback = callback;
@@ -14,10 +33,8 @@ function ${prefix}openPopinSavePersonalInfo( callback, onhide ) {
 	    cache:false,
 	    success: function(data) {
 	    	if(!jQuery.isEmptyObject(data)) {
-	    		$("#${prefix}popin-save-personal-info").modal('show');
-	    		if(onhide) {
-	    			$("#${prefix}popin-save-personal-info").on('hidden.bs.modal', onhide);
-	    		}
+	    		$("#${prefix}popin_update").slideDown();
+	    		callBacksOnHide.push(onhide);
 	    	}
 	    }
 	});
@@ -48,41 +65,14 @@ function ${prefix}callPopinCallback(result) {
 }
 
 $(document).on("click", "#${prefix}popin-save-personal-info-yes", function(event){
-	$("#${prefix}popin-save-personal-info").modal('hide');
+	$("#${prefix}popin_update").slideUp();
+	callBacksOnHide.forEach(function(cb){ cb(); });
 	${prefix}callPopinCallback(true);
 });
 $(document).on("click", "#${prefix}popin-save-personal-info-no", function(event){
-	$("#${prefix}popin-save-personal-info").modal('hide');
+	$("#${prefix}popin_update").slideUp();
+	callBacksOnHide.forEach(function(cb){ cb(); });
 	${prefix}callPopinCallback(false);
 });
-
 </script>
-
-<div class="modal modal-static fade modal-save-personal-info" id="${prefix}popin-save-personal-info" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-       <div class="modal-content color-secondary-background-variant">
-		  <div class="modal-header">
-			<h3 class="modal-title text-center text-uppercase" id="myModalLabel">#i18n{${i18nTitleKey}}</h3>
-		  </div>
-		  <div class="modal-body">
-			<div class="row">
-				<div style="font-size:1.8rem" class="col-xs-12">
-				#i18n{${i18nMessageKey}}
-				<br/>
-				<br/>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-6">
-					<span id="${prefix}popin-save-personal-info-yes" class="btn ${yesBtnClass} btn-block">#i18n{${i18nYesKey}}</span>
-				</div>
-				<div class="col-xs-6">
-					<span id="${prefix}popin-save-personal-info-no" class="btn ${noBtnClass} btn-block">#i18n{${i18nNoKey}}</span>
-				</div>
-			</div>
-		  </div>
-	  </div>
-	</div>
-</div>
-
 </#macro>

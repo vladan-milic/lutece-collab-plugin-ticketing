@@ -1,0 +1,650 @@
+/*fonts*/
+@font-face {
+    font-family: 'Montserrat';
+    src: url("../fonts/Montserrat-Light-webfont.eot");
+    src: url("../fonts/Montserrat-Light-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/Montserrat-Light-webfont.woff2") format("woff2"), url("../fonts/Montserrat-Light-webfont.woff") format("woff"), url("../fonts/Montserrat-Light-webfont.ttf") format("truetype"), url("../fonts/Montserrat-Light-webfont.svg#montserratlight") format("svg");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url("../fonts/Montserrat-Regular-webfont.eot");
+    src: url("../fonts/Montserrat-Regular-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/Montserrat-Regular-webfont.woff2") format("woff2"), url("../fonts/Montserrat-Regular-webfont.woff") format("woff"), url("../fonts/Montserrat-Regular-webfont.ttf") format("truetype"), url("../fonts/Montserrat-Regular-webfont.svg#montserratregular") format("svg");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url("../fonts/Montserrat-Bold-webfont.eot");
+    src: url("../fonts/Montserrat-Bold-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/Montserrat-Bold-webfont.woff2") format("woff2"), url("../fonts/Montserrat-Bold-webfont.woff") format("woff"), url("../fonts/Montserrat-Bold-webfont.ttf") format("truetype"), url("../fonts/Montserrat-Bold-webfont.svg#montserratbold") format("svg");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url("../fonts/Montserrat-Light-webfont.eot");
+    src: url("../fonts/Montserrat-Light-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/Montserrat-Light-webfont.woff2") format("woff2"), url("../fonts/Montserrat-Light-webfont.woff") format("woff"), url("../fonts/Montserrat-Light-webfont.ttf") format("truetype"), url("../fonts/Montserrat-Light-webfont.svg#montserratlight") format("svg");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url("../fonts/Montserrat-Regular-webfont.eot");
+    src: url("../fonts/Montserrat-Regular-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/Montserrat-Regular-webfont.woff2") format("woff2"), url("../fonts/Montserrat-Regular-webfont.woff") format("woff"), url("../fonts/Montserrat-Regular-webfont.ttf") format("truetype"), url("../fonts/Montserrat-Regular-webfont.svg#montserratregular") format("svg");
+    font-weight: 400;
+    font-style: normal;
+}
+
+/*general*/
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 1.4rem;
+    background-color: #fff;
+    font-family: 'Montserrat', sans-serif;
+}
+
+header {
+	height: auto;
+}
+
+a:focus,
+a:hover {
+    text-decoration: none;
+}
+
+.page-navigation {
+    display: flex;
+    justify-content: center;
+    background-color: #0a4770;
+    height: 60px;
+    line-height: 60px;
+}
+
+.header-logo {
+    display: inline-block;
+}
+
+.header-logo a {
+    display: flex;
+    align-items: center;
+}
+
+.parislogo {
+    display: inline-block;
+}
+
+.site-title {
+    margin-left: 20px;
+    font-size: 2.4rem;
+    font-size: 24px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.connexion {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    padding: 0 20px;
+    font-size: 1.3rem;
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: #ffffff;
+    background-color: #305286;
+}
+
+.connexion:hover {
+    color: #ffffff;
+}
+
+.account {
+    display: flex;
+    align-items: center;
+}
+
+.account img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.mademande {
+    background-color: #f2f2f2;
+}
+
+.mademande .hero {
+    background-color: #053657;
+    height: 175px;
+}
+
+.mademande .hero .main-heading {
+    text-align: center;
+    line-height: 175px;
+}
+
+.description {
+    margin: 35px 0;
+    font-weight: 300;
+    font-size: 1.8rem;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #333333;
+}
+
+.text-muted {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 300;
+    font-size: 1.4rem;
+    font-size: 14px;
+    color: #666666;
+}
+
+.mademande .form {
+    margin-bottom: 18px;
+    border: 1px solid #c7c3c3;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    padding: 20px 25px 15px 25px;
+}
+
+.mademande .form.recapitulatif {
+    margin-top: 3rem;
+}
+
+.mademande .form.last {
+    margin-bottom: 0;
+}
+
+.title {
+    display: block;
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 2rem;
+    font-size: 20px;
+    color: #333333;
+}
+
+.form .title.domaine {
+    margin-bottom: 15px;
+}
+
+.control-label, .form-group label.control-label {
+    font-size: 16px;
+    font-weight: 400;
+    color: #0c518a;
+    text-align: left !important;
+}
+	
+.custom-radio.group {
+    display: inline-block;
+    margin: 0;
+}
+
+#first-level-container {
+	width: 100%;
+}
+
+.custom-radio.group.space {
+    margin-left: 30px;
+}
+
+.custom-radio.group label {
+    font-size: 1.6rem;
+    font-size: 16px;
+    font-weight: 300;
+    color: #333333;
+    border: 0 !important;
+}
+
+.custom-radio.group label.radio-custo {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    padding: 0 10px;
+    margin-bottom: 23px;
+    border: 1px solid #cccccc !important;
+    border-radius: 5px;
+    background-color: #ffffff;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+}
+
+.custom-radio.group label.radio-custo::before {
+    content: '';
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 100%;
+	bottom: 0;
+    background-color: rgb(12, 81, 138);
+    transition: all .3s;
+}
+
+.custom-radio.group label.radio-custo.selected::before {
+	right: 0;
+}
+
+.custom-radio.group label.radio-custo label {
+	margin: 0;
+}
+
+.form-control {
+    height: 45px;
+}
+
+.form-group .subtitle {
+    display: block;
+    margin-top: 8px;
+    font-size: 1.2rem;
+    font-size: 12px;
+    font-weight: 300;
+    color: #4d4d4d;
+}
+
+.precision {
+    display: block;
+    margin-bottom: 30px;
+    font-size: 1.6rem;
+    font-size: 16px;
+    color: #333333;
+}
+
+.button-centered {
+    margin: 40px 0;
+    text-align: center;
+}
+
+button {
+    font: inherit;
+    margin: 0;
+    -webkit-appearance: button;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 15px;
+    line-height: 20px;
+    position: relative;
+    text-decoration: none;
+    z-index: 1;
+    padding: 15px 20px;
+    min-width: 230px;
+    overflow: hidden;
+    border: 0;
+}
+
+.btn {
+	border: 0;
+}
+
+.btn-red,
+.btn-blue,
+.btn-grey {
+    vertical-align: middle;
+    border-radius: 3px;
+    text-align: center;
+    border: none;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.btn-red {
+    background-color: #DF225A;
+    color: white;
+}
+
+.btn-blue {
+    background-color: #0c518a;
+    color: white;
+}
+
+.btn-grey {
+    background-color: #f2f2f2;
+    color: #0c518a;
+}
+
+.button::after {
+    border-radius: 3px;
+    content: "";
+    display: block;
+    height: 100%;
+    left: -1px;
+    position: absolute;
+    top: 0;
+    transition: width 0.35s ease 0s;
+    width: 1px;
+    z-index: -1;
+}
+
+.btn-red::after {
+    background-color: #B41A48;
+    color: white;
+}
+
+.btn-blue::after {
+    background-color: #0f4573;
+    color: white;
+}
+
+.button:hover::after,
+.button:focus::after {
+    width: 100%;
+}
+
+.btn-red:hover,
+.btn-blue:hover {
+    color: white;
+}
+
+/* custom radiobuttons */
+
+.custom-radio input[type="radio"] {
+    position: absolute;
+    height: 50px;
+    opacity: 0;
+    -moz-opacity: 0;
+    -webkit-opacity: 0;
+    -o-opacity: 0;
+}
+
+.custom-radio input[type="radio"]+label {
+    display: flex;
+    position: relative;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.2;
+    color: rgb(12, 81, 138);
+    transition: color .3s;
+}
+
+.custom-radio input[type="radio"]+label::before {
+    content: "";
+    display: inline-block;
+    height: 25px;
+    width: 25px;
+    min-width: 25px;
+    max-width: 25px;
+    border: 1px solid rgb(149, 152, 154);
+    box-shadow: inset 0px 0px 0px 5px rgb(255, 255, 255);
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+}
+
+.custom-radio input[type="radio"]:checked+label::before {
+    background-color: rgb(12, 81, 138);
+}
+
+.custom-radio.group label.radio-custo.selected {
+    border-color: rgb(12, 81, 138);
+}
+
+.custom-radio .radio-custo.selected input[type="radio"]+label {
+    color: #ffffff;
+}
+
+.radio-custo i {
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+/* custom radiobuttons */
+
+footer {
+    background: #EEEEEE;
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
+	position: static;
+}
+
+.site-links {
+    padding-left: 0px;
+    display: table-cell;
+    height: 71px;
+    vertical-align: middle;
+}
+
+.site-links li {
+    margin: 0 10px;
+    list-style: none;
+    display: inline;
+}
+
+.site-links li:first-child {
+    margin-left: 0px;
+}
+
+.site-links li:first-child {
+    padding-right: 10px;
+}
+
+.site-links li a {
+    font-size: 15px;
+    color: #333;
+}
+
+/*part 4*/
+
+.update {
+    padding: 20px 0;
+    background-color: #ffffff;
+}
+
+.recap {
+    padding-top: 60px;
+    padding-bottom: 160px;
+    background-color: #053657;
+    color: #ffffff;
+}
+
+.recap img {
+    display: inline-block;
+    margin-bottom: 60px;
+}
+
+.white {
+    color: #ffffff;
+}
+
+.save-details {
+    margin-bottom: 35px;
+    font-size: 1.6rem;
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 300;
+}
+
+.actions-btn button {
+    margin: 0 7px;
+}
+
+.update-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    color: #0c518a;
+}
+
+.update-title i {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.update-title span {
+    font-size: 1.3rem;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.update-text {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-size: 15px;
+    line-height: 1.4;
+    font-weight: 300;
+    color: #0c518a;
+}
+
+.mademande .btn-toolbar.validation-block {
+    display: table;
+    margin: 3rem auto 5rem auto;
+}
+
+.mademande .btn-toolbar.validation-block button {
+    font-size: 13px;
+}
+
+.mademande .btn-toolbar.validation-block button:first-child {
+    margin-right: 3rem;
+}
+
+.mademande .btn-toolbar.validation-block button.validate span {
+    padding-left: 2.3rem;
+}
+
+.mademande .btn-toolbar.validation-block button.validate::before {
+    background-image: url('../../../images/skin/plugins/ticketing/check.png');
+    content: '';
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 12px;
+    background-repeat: no-repeat;
+}
+
+.logo-responsive {
+    display: none;
+}
+
+.connexion-mobile {
+    display: none;
+}
+
+@media (min-width: 1580px) {
+	.header-logo {
+		margin-left: -192px;
+	}
+}
+
+@media (min-width: 769px) {
+	.header-logo a {
+		height: 60px;
+		line-height: 24px;
+	}
+	
+	.header-logo .site-title {
+		margin-bottom: -14px;
+	}
+}
+
+/*mobile*/
+
+@media (min-width: 320px) and (max-width: 768px) {
+    .parislogo {
+        display: none;
+    }
+    #monCompte {
+        display: none;
+    }
+    .header-logo a {
+        position: relative;
+    }
+    .header-logo a:after {
+        content: "";
+        position: absolute;
+        bottom: -25px;
+        width: 100%;
+        border-bottom: 4px solid #f1e077;
+    }
+    .site-title {
+        margin: 0;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 26px;
+        font-size: 18px;
+        line-height: 1.2;
+        white-space: nowrap;
+    }
+    .alignment {
+        text-align: center;
+    }
+    .logo-responsive {
+        display: block;
+        height: 29px;
+        width: auto;
+    }
+    .custom-radio.group.space {
+        margin: 0;
+    }
+    .control-label,
+    .radio-inline {
+        display: block;
+    }
+    .radio-inline,
+    .checkbox-inline+.checkbox-inline,
+    .radio-inline+.radio-inline {
+        margin: 0;
+        padding: 0;
+    }
+    .radio-inline label {
+        margin-bottom: 10px;
+    }
+    .footer {
+        padding: 20px 0;
+        text-align: center;
+    }
+    .site-links {
+        display: block;
+        text-align: center;
+    }
+    .site-links li {
+        display: block;
+        margin-top: 8px;
+    }
+    .page-navigation {
+        position: relative;
+    }
+    #monCompte-mobile {
+        display: table;
+        vertical-align: middle;
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 60px;
+        width: 60px;
+    }
+    #monCompte-mobile .account {
+        display: table-cell;
+        text-align: center;
+    }
+    .mademande .btn-toolbar.validation-block {
+        text-align: center;
+    }
+    .mademande .btn-toolbar.validation-block button:first-child {
+        margin: 0 0 15px 0;
+    }
+    .mademande .btn-toolbar.validation-block {
+        margin: 20px auto 30px auto;
+    }
+    .actions-btn button:first-child {
+        margin-bottom: 15px;
+    }
+}

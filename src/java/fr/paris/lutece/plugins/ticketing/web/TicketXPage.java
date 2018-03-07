@@ -98,7 +98,6 @@ public class TicketXPage extends WorkflowCapableXPage
     private static final long serialVersionUID = 1L;
 
     // Templates
-    private static final String TEMPLATE_CREATE_TICKET = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "create_ticket.html";
     private static final String TEMPLATE_TICKET_FORM = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "ticket_form.html";
     private static final String TEMPLATE_RECAP_TICKET = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "recap_ticket.html";
     private static final String TEMPLATE_CONFIRM_TICKET = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "confirm_ticket.html";
@@ -234,6 +233,11 @@ public class TicketXPage extends WorkflowCapableXPage
             AppLogService.info( formId );
         }
 
+        if ( form == null )
+        {
+            form = FormHome.findByPrimaryKey( 1 );
+        }
+
         return form;
     }
 
@@ -247,29 +251,7 @@ public class TicketXPage extends WorkflowCapableXPage
     @View( value = VIEW_CREATE_TICKET )
     public XPage getCreateTicket( HttpServletRequest request )
     {
-        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
-
-        if ( ticket == null )
-        {
-            ticket = new Ticket( );
-            TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( request.getSession( ).getId( ) );
-        }
-
-        prefillTicketWithUserInfo( request, ticket );
-
-        _ticketFormService.saveTicketInSession( request.getSession( ), ticket );
-
-        Map<String, Object> model = getModel( );
-        model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
-        model.put( TicketingConstants.MARK_TICKET, ticket );
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
-
-        model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale( ) ) );
-
-        saveActionTypeInSession( request.getSession( ), ACTION_CREATE_TICKET );
-
-        return getXPage( TEMPLATE_CREATE_TICKET, request.getLocale( ), model );
+        return getCreateTicketDynamicForm( request );
     }
 
     /**
@@ -479,14 +461,7 @@ public class TicketXPage extends WorkflowCapableXPage
             addError( ERROR_TICKET_CREATION_ABORTED, request.getLocale( ) );
             AppLogService.error( e );
 
-            if ( form == null )
-            {
-                return redirectView( request, VIEW_CREATE_TICKET );
-            }
-            else
-            {
-                return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
-            }
+            return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
         }
 
         return redirectView( request, VIEW_CONFIRM_TICKET, form );
@@ -644,14 +619,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
         if ( !bIsFormValid && ACTION_CREATE_TICKET.equals( getActionTypeFromSession( request.getSession( ) ) ) )
         {
-            if ( form == null )
-            {
-                return redirectView( request, VIEW_CREATE_TICKET, form );
-            }
-            else
-            {
-                return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
-            }
+            return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
         }
         else
         {
@@ -756,14 +724,7 @@ public class TicketXPage extends WorkflowCapableXPage
         }
 
         Form form = getFormFromRequest( request );
-        if ( form == null )
-        {
-            return redirectView( request, VIEW_CREATE_TICKET );
-        }
-        else
-        {
-            return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
-        }
+        return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
     }
 
     /**
@@ -874,41 +835,20 @@ public class TicketXPage extends WorkflowCapableXPage
     protected XPage redirectAfterWorkflowAction( HttpServletRequest request )
     {
         Form form = getFormFromRequest( request );
-        if ( form == null )
-        {
-            return redirectView( request, VIEW_CREATE_TICKET );
-        }
-        else
-        {
-            return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
-        }
+        return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
     }
 
     @Override
     protected XPage redirectWorkflowActionCancelled( HttpServletRequest request )
     {
         Form form = getFormFromRequest( request );
-        if ( form == null )
-        {
-            return redirectView( request, VIEW_CREATE_TICKET );
-        }
-        else
-        {
-            return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
-        }
+        return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
     }
 
     @Override
     protected XPage defaultRedirectWorkflowAction( HttpServletRequest request )
     {
         Form form = getFormFromRequest( request );
-        if ( form == null )
-        {
-            return redirectView( request, VIEW_CREATE_TICKET );
-        }
-        else
-        {
-            return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
-        }
+        return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
     }
 }

@@ -297,8 +297,13 @@ public class FormAuthorizationFilter implements Filter
                 AppLogService.info( formId );
             }
 
+            if ( form == null )
+            {
+                form = FormHome.findByPrimaryKey( 1 );
+            }
+
             // if form exists and doesn't require connection, form is not restricted
-            if ( form != null && !form.isConnection() )
+            if ( form != null && !form.isConnection( ) )
             {
                 return false;
             }
