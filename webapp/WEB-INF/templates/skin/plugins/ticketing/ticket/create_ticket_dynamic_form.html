@@ -16,13 +16,11 @@
         <input type="hidden" id="form" name="form" value="${form.id}">
 	   		
 	    <div class="container">
-	    	<#if form.message?has_content>
 	        <div class="row">
 	            <div class="col-sm-12">
-	                <p class="description">${form.message}</p>
+	                <p class="description">${form.message!''}</p>
 	            </div>
 	        </div>
-	        </#if>
 	        <div class="row">
 	            <div class="col-sm-12">
 	                <span class="text-muted">
