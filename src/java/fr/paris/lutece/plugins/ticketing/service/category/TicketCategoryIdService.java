@@ -92,7 +92,7 @@ public class TicketCategoryIdService extends ResourceIdService
     @Override
     public String getTitle( String strId, Locale locale )
     {
-        return TicketCategoryService.getInstance( ).findCategoryById( Integer.parseInt( strId ) ).getLabel( );
+        return TicketCategoryService.getInstance( ).getBranchLabel( TicketCategoryService.getInstance( ).findCategoryById( Integer.parseInt( strId ) ), " -> " );
     }
 
 }
