@@ -33,6 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import fr.paris.lutece.plugins.ticketing.business.form.Form;
+import fr.paris.lutece.plugins.ticketing.business.form.FormHome;
+import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.formcategory.TicketFormCategory;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -41,11 +50,6 @@ import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
-
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * ManageAdminTicketing JSP Bean abstract class for JSP Bean
@@ -119,5 +123,17 @@ public abstract class ManageAdminTicketingJspBean extends MVCAdminJspBean
         }
 
         return lstRef;
+    }
+    
+    /**
+     * 
+     */
+    public List<Form> getListForm( )
+    {
+        return FormHome.getFormsList( );
+    }
+    
+    public List<TicketFormCategory> getListFormCategoryByIdCategory( int nIdCategory ){
+        return FormCategoryHome.findByCategory(nIdCategory);
     }
 }

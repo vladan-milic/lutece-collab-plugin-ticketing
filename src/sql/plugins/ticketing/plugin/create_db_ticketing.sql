@@ -282,4 +282,11 @@ ALTER TABLE ticketing_ticket_address ADD CONSTRAINT fk_ticketing_ticket_address 
       REFERENCES ticketing_ticket (id_ticket) ON DELETE CASCADE;
 
 DROP FUNCTION IF EXISTS getCategoryChilds;
+
+--
+-- Structure for table ticketing_form_category
+--
+DROP TABLE IF EXISTS ticketing_form_category;
+CREATE TABLE ticketing_form_category (id_form int(11) default '0' NOT NULL, id_category int(11) default '0' NOT NULL, PRIMARY KEY (id_form, id_category));
+
       

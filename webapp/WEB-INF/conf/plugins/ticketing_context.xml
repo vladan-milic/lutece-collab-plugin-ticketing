@@ -28,6 +28,7 @@
 	<bean id="ticketing.markingDAO" class=" fr.paris.lutece.plugins.ticketing.business.marking.MarkingDAO" />
     <bean id="ticketing.viewingDAO" class=" fr.paris.lutece.plugins.ticketing.business.viewing.ViewingDAO" />
     <bean id="ticketing.formDAO" class=" fr.paris.lutece.plugins.ticketing.business.form.FormDAO" />
+    <bean id="ticketing.formCategoryDAO" class=" fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategoryDao" />
     <bean id="ticketing.formEntryDAO" class=" fr.paris.lutece.plugins.ticketing.business.form.FormEntryDAO" />
     
     <bean id="ticketing.ticketFormService" class="fr.paris.lutece.plugins.ticketing.service.TicketFormService" />         

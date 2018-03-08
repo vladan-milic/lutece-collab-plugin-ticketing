@@ -97,6 +97,8 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
     public static final String  MARK_ID_PARENT_CATEGORY                    = "id_parent_category";
     public static final String  MARK_ID_CATEGORY                           = "id_category";
     public static final String  MARK_ASSIGNEE_UNIT_LIST                    = "unit_list";
+    public static final String  MARK_FORM_LIST                             = "form_list";
+    public static final String MARK_FORM_CATEGORY_LIST                     = "form_category_list";
     private static final String MARK_CATEGORYTYPE                          = "categorytype";
 
     private static final String MARK_ALL_INPUTS_LIST                       = "inputs_list";
@@ -315,6 +317,8 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_ASSIGNEE_UNIT_LIST, getUnitsList( ) );
+        model.put( MARK_FORM_LIST, getListForm( ) );
+        model.put( MARK_FORM_CATEGORY_LIST, getListFormCategoryByIdCategory( _category.getId( ) ) );
         model.put( MARK_CATEGORY, _category );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_CATEGORY, TEMPLATE_MODIFY_CATEGORY, model );
