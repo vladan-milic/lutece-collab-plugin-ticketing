@@ -64,7 +64,6 @@ a:hover {
 
 .page-navigation {
     display: flex;
-    justify-content: center;
     background-color: #0a4770;
     height: 60px;
     line-height: 60px;
@@ -537,12 +536,6 @@ footer {
     display: none;
 }
 
-@media (min-width: 1580px) {
-	.header-logo {
-		margin-left: -192px;
-	}
-}
-
 @media (min-width: 769px) {
 	.header-logo a {
 		height: 60px;
@@ -550,7 +543,7 @@ footer {
 	}
 	
 	.header-logo .site-title {
-		margin-bottom: -14px;
+		margin-bottom: -4px;
 	}
 }
 
