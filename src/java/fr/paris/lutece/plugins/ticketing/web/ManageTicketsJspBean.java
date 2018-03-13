@@ -79,18 +79,13 @@ import fr.paris.lutece.plugins.ticketing.web.search.SearchConstants;
 import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchEngine;
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.user.UserFactory;
-import fr.paris.lutece.plugins.ticketing.web.util.CSVUtils;
-import fr.paris.lutece.plugins.ticketing.web.util.FormValidator;
-import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
-import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
-import fr.paris.lutece.plugins.ticketing.web.util.ResponseRecap;
-import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidator;
-import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidatorResult;
-import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
-import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
-import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
+import fr.paris.lutece.plugins.ticketing.web.util.*;
+import fr.paris.lutece.plugins.ticketing.web.workflow.TicketTaskException;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
+import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -1236,4 +1231,21 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         return getWorkflowActionForm( request );
     }
 
+    @Override
+    protected boolean checkAccessToTicket( HttpServletRequest request, Ticket ticket )
+    {
+        AdminUser user = AdminUserService.getAdminUser( request );
+        List<Unit> unitsList = UnitHome.findByIdUser( user.getUserId( ) );
+
+        // Check if user is in same unit tree as unit assigned to ticket
+        Set<Integer> subUnits = unitsList.stream( ).map( unit -> unit.getIdUnit( ) ).collect( Collectors.toSet( ) );
+        unitsList.stream( ).forEach( unit -> subUnits.addAll( UnitHome.getAllSubUnitsId( unit.getIdUnit( ) ) ) );
+        boolean ticketInSubUnit = true;
+        if ( ticket.getAssigneeUnit( ) != null )
+        {
+            ticketInSubUnit = subUnits.stream( ).anyMatch( unitId -> ticket.getAssigneeUnit( ).getUnitId( ) == unitId );
+        }
+
+        return ticketInSubUnit;
+    }
 }
