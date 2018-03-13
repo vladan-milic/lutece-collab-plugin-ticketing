@@ -395,11 +395,12 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                     {
                         throw new TicketTaskException( );
                     }
-                    
+
                     if ( _workflowService.isDisplayTasksForm( _nIdAction, getLocale( ) ) )
                     {
                         List<ResourceHistory> listTicketHistory = _resourceHistoryTicketingInformationServiceCORE.getAllHistoryByResource(nIdTicket, "ticket", 301);
-                        if(listTicketHistory.get(0).getAction( ).getId( ) != 312) {
+                        if ( listTicketHistory.isEmpty( ) || listTicketHistory.get( 0 ).getAction( ).getId( ) != 312 )
+                        {
                             strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, null, request, getLocale( ) );
                         }else {
                             addErrorWorkflowAction( request, _nIdAction );
