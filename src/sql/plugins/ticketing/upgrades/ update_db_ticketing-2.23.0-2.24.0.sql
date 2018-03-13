@@ -16,3 +16,10 @@ INSERT INTO ticketing_formentry (id_formentry,id_form,id_champ,hidden,mandatory,
 (9,1,'category_level_2',0,1,0,NULL),
 (10,1,'category_level_3',0,1,0,NULL);
 
+
+
+--
+-- Structure for table ticketing_form_category
+--
+DROP TABLE IF EXISTS ticketing_form_category;
+CREATE TABLE ticketing_form_category (id_form int(11) default '0' NOT NULL, id_category int(11) default '0' NOT NULL, PRIMARY KEY (id_form, id_category));

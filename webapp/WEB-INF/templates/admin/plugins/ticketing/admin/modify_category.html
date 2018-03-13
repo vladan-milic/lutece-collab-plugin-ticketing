@@ -32,10 +32,6 @@
                         <@input type='text' name='helpMessage' value='${category.helpMessage!\'\'}' />
                 </@formGroup>
                 
-                <@formGroup labelKey='#i18n{ticketing.modify_category.labelManageable}' helpKey='#i18n{ticketing.modify_category.labelManageable.help}' mandatory=false>
-                        <input type="checkbox" name="manageable" <#if category.manageable>checked="checked"</#if>>
-                </@formGroup>
-                
 				<#if category.idParent == -1>
 	                <@fieldInputText i18nLabelKey="ticketing.modify_channel.labelIconFont" inputName="icon_font" mandatory=false value="${category.iconFont}" i18nHelpBlockKey="ticketing.modify_channel.labelIconFont.help" />
 				    <div class="form-group">
@@ -47,7 +43,24 @@
 				      </div>
 				    </div>
 				</#if>
+				
+                <@formGroup labelKey='#i18n{ticketing.modify_category.labelManageable}' helpKey='#i18n{ticketing.modify_category.labelManageable.help}' mandatory=false>
+                        <input type="checkbox" name="manageable" <#if category.manageable>checked="checked"</#if>>
+                </@formGroup>
                 
+                <#if category.idParent == -1>
+                <@formGroup labelKey='#i18n{ticketing.modify_category.form}' helpKey='#i18n{ticketing.modify_category.form.help}' mandatory=false>
+                	<#list form_list as form>
+					    <div>
+					      	<label class="control-label">
+	                        	<input type="checkbox" name="form_${form.id}" <#if form.selected>checked="checked"</#if>>
+	                        	${form.title}
+	                        </label>
+                        </div>
+                    </#list>
+                </@formGroup>
+                </#if>
+                                
                 <@btnGroup>
                     <@button type='submit' name='action_modifyCategory' title='#i18n{portal.admin.message.buttonValidate}' />
                     <@button type='submit' name='view_manageCategories' title='#i18n{portal.admin.message.buttonCancel}' cancel=true />

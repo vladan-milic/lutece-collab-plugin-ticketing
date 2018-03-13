@@ -52,6 +52,13 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     protected List<Depth> _depths;
 
+    public Tree( Tree<Node, Depth> treeSource )
+    {
+        setDepths( treeSource.getDepths( ) );
+        setLeaves( treeSource.getLeaves( ) );
+        setNodes( treeSource.getNodes( ) );
+        setRootElements( treeSource.getRootElements( ) );
+    }
     /**
      * The main constructor of the tree
      * 
@@ -178,6 +185,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
     {
         return _depths;
     }
+
 
     /**
      * Set the depths java obj of the tree

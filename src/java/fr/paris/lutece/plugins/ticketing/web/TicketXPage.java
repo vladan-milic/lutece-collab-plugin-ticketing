@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -57,6 +58,8 @@ import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.form.Form;
 import fr.paris.lutece.plugins.ticketing.business.form.FormEntryType;
 import fr.paris.lutece.plugins.ticketing.business.form.FormHome;
+import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategory;
+import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
@@ -169,6 +172,7 @@ public class TicketXPage extends WorkflowCapableXPage
         Map<String, Object> model = getModel( );
 
         Form form = getFormFromRequest( request );
+        List<Integer> restrictedCategoriesId = null;
 
         if ( form == null || form.getId( ) == 0 )
         {
@@ -194,6 +198,9 @@ public class TicketXPage extends WorkflowCapableXPage
             // -> on refresh, ticket will be reset
             // -> we pass the ticket via the form
             _ticketFormService.removeTicketFromSession( request.getSession( ), form );
+
+            List<FormCategory> restrictedCategories = FormCategoryHome.findByForm( form.getId( ) );
+            restrictedCategoriesId = restrictedCategories.stream( ).map( category -> category.getIdCategory( ) ).collect( Collectors.toList( ) );
         }
 
         model.put( MARK_FORM, form );
@@ -202,8 +209,8 @@ public class TicketXPage extends WorkflowCapableXPage
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale( ) ) );
 
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( ).getTreeJSONObject( ) );
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( restrictedCategoriesId ).getTreeJSONObject( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( restrictedCategoriesId ).getDepths( ) );
 
         saveActionTypeInSession( request.getSession( ), ACTION_CREATE_TICKET );
 

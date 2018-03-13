@@ -11,7 +11,22 @@
         <@messages infos=infos />
         <@messages errors=errors />
         <div class="clearfix"></div>
-        <@table class="table-bordered" hover=false>
+        <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
+         <div class="dropdown">
+		  <button class="btn dropdown-toggle" type="button"><span class="filter-form-name">#i18n{ticketing.manage_categories.allForms}</span> <span class="caret"></span></button>
+		  <button class="btn btn-primary" name="view_manageCategories" type="submit">#i18n{ticketing.manage_categories.buttonFilter}</button>
+		  <ul class="dropdown-menu" id="selectedForms">
+			<li class="formfilter"><label><input type="checkbox" name="selectedForms" value="all"> #i18n{ticketing.manage_categories.allForms}</label></li>
+			<#list form_list as form>
+				<li class="formfilter"><label><input type="checkbox" name="selectedForms" value="${form.id}"> ${form.title}</label></li>
+			</#list>
+			<li class="formfilter"><label><input type="checkbox" name="selectedForms" value="none"> #i18n{ticketing.manage_categories.noForm}</label></li>
+		  </ul>
+		</div>
+        </@tform>
+
+        <@table class="table-bordered" hover=false id="managecategoriestable">
+        <thead>
             <tr>
                 <#list tree.depths as category_type>
                     <th class="text-center">
@@ -24,7 +39,8 @@
                     </th>
                 </#list>
             </tr>
-            <@tableHeadBodySeparator />
+        </thead>
+		<tbody>
             <#list tree.rootElements as root >
                 <tr>
                     <@printNodeRecursive root tree.rootElements?size />
@@ -41,6 +57,7 @@
                     </td>
                 </tr>
             </#if>
+        </tbody>
         </@table>
       </@boxBody>
     </@box>
@@ -77,7 +94,102 @@
 				$subCategories.css('background-color', 'transparent');
 			})
 		});
+		
+		var formcategories = {};
+		<#list formcategory_list as formcat>
+			var formId = ${formcat.idForm};
+			var catId = ${formcat.idCategory};
+			
+			formcategories[formId] = formcategories[formId] || [];
+			formcategories[formId].push(catId);
+		</#list>
+		
+		var $selectedForms = $('#selectedForms');
+		var $checkboxesSelectedForms = $selectedForms.find('input[type=checkbox]');
+		var $filterFormName = $('.filter-form-name');
+		
+		var $lines = $('#managecategoriestable tbody tr:not(:last-child)');
+		var $categoriesFirstLevel = $('td[data-category-id]:not([data-category-parent])');
+		
+		var getLinesOfCategory = function(categoryId) {
+			var $category = $categoriesFirstLevel.filter('[data-category-id='+categoryId+']');
+			
+			var $lines = $category.parent();
+			var lastLine = $category.parent();
+			
+			var i = 0;
+			do {
+				$lines = $lines.add(lastLine);
+				lastLine = lastLine.next();
+			} while(i++ < $category.attr('rowspan'));
+			
+			return $lines;
+		}
+		
+		const FORM_ID_ATTRIBUTE = 'value', FORM_SELECTOR = function(value) { return '['+FORM_ID_ATTRIBUTE+'='+value+']'; };
+		const FORM_ALL = 'all', FORM_NONE = 'none';
+		const FORM_ALL_SELECTOR = FORM_SELECTOR(FORM_ALL);
+		const FORM_NONE_SELECTOR = FORM_SELECTOR(FORM_NONE);
+		
+		$checkboxesSelectedForms.change(function(event) {
+			var $checkbox = $(event.target);
+			var selectedFormId = $checkbox.attr(FORM_ID_ATTRIBUTE);
+			
+			var $selecteds = $checkboxesSelectedForms.not(FORM_ALL_SELECTOR).filter(':checked');
+			var numberOfSelected = $selecteds.size();
+
+			var allSelected = selectedFormId == FORM_ALL && $checkbox.is(':checked');
+			var allUnselected = selectedFormId == FORM_ALL && $checkbox.is(':not(:checked)') || numberOfSelected == 0;
+			var noneUnselected = selectedFormId == FORM_NONE && $checkbox.is(':not(:checked)');
+			
+			if(allSelected || noneUnselected) {
+				$checkboxesSelectedForms.not(FORM_ALL_SELECTOR).removeProp('checked').parents('li.formfilter').removeClass('selected');
+			} else if(allUnselected) {
+				$checkboxesSelectedForms.not(FORM_NONE_SELECTOR).removeProp('checked').parents('li.formfilter').removeClass('selected');
+				$checkboxesSelectedForms.filter(FORM_NONE_SELECTOR).prop('checked', 'checked').parents('li.formfilter').addClass('selected');
+			} else {
+				$checkboxesSelectedForms.filter(FORM_ALL_SELECTOR).removeProp('checked').parents('li.formfilter').removeClass('selected');
+			}
+			
+			if($checkbox.is(':checked')) {
+				$checkbox.prop('checked', 'checked').parents('li.formfilter').addClass('selected');
+			} else {
+				$checkbox.removeProp('checked').parents('li.formfilter').removeClass('selected');
+			}
+			
+			if(allSelected || noneUnselected) {
+				$filterFormName.text('#i18n{ticketing.manage_categories.allForms}');
+			} else if(allUnselected) {
+				$filterFormName.text('#i18n{ticketing.manage_categories.noForm}');
+			} else if(numberOfSelected == 1) {
+				$filterFormName.text($selecteds.parent().text());
+			} else {
+				$filterFormName.text(numberOfSelected + ' formulaires...');
+			}
+		});
+		
+		<#if selected_forms??>
+		<#list selected_forms as selected_form>
+			$checkboxesSelectedForms.filter(FORM_SELECTOR('${selected_form}')).prop('checked', 'checked').trigger('change');
+			<#if selected_form == 'all'><#break></#if>
+		</#list>
+		<#else>
+			$checkboxesSelectedForms.filter(FORM_ALL_SELECTOR).prop('checked', 'checked').trigger('change');
+		</#if>
 	})
+	
+	$('button.dropdown-toggle').on('click', function (event) {
+	    $(this).parent().toggleClass('open');
+	});
+	
+	$('body').on('click', function (e) {
+	    if (!$('button.dropdown-toggle').is(e.target) 
+	        && $('button.dropdown-toggle').has(e.target).length === 0 
+	        && $('.open').has(e.target).length === 0
+	    ) {
+	        $('button.dropdown-toggle').parent().removeClass('open');
+	    }
+	});
 </script>
 
 <#macro printNodeRecursive category rootelementssize>

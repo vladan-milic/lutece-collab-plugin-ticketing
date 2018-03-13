@@ -33,19 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.form;
 
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategoryHome;
+import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategory;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
-
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.util.ReferenceList;
-
-import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * This class provides instances management methods (create, find, ...) for Form objects
@@ -114,7 +111,32 @@ public final class FormHome
     {
         return _dao.selectFormsList( _plugin );
     }
-    
+
+    /**
+     * Load the data of all the form objects and returns them as a list
+     * 
+     * @return the list which contains the data of all the form objects
+     */
+    public static List<Form> getFormsList( TicketCategory category )
+    {
+        List<Form> allForms = getFormsList( );
+
+        if ( category != null )
+        {
+            List<FormCategory> formCategories = FormCategoryHome.findByCategory( category.getId( ) );
+
+            Consumer<? super Form> updateSelected = form ->
+            {
+                boolean selected = formCategories.stream( ).anyMatch( formCat -> formCat.getIdForm( ) == form.getId( ) );
+                form.setSelected( selected );
+            };
+
+            allForms.forEach( updateSelected );
+
+        }
+        return allForms;
+    }
+
     /**
      * Load the id of all the form objects and returns them as a list
      * @return the list which contains the id of all the form objects
@@ -123,7 +145,7 @@ public final class FormHome
     {
         return _dao.selectIdFormsList( _plugin );
     }
-    
+
     /**
      * Load the data of all the form objects and returns them as a referenceList
      * @return the referenceList which contains the data of all the form objects

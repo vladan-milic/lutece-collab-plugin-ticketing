@@ -59,6 +59,8 @@ public class Form implements Serializable
     private boolean _bConnection = true;
     private List<FormEntry> formEntries;
 
+    private boolean _bSelected = false;
+
     /**
      * Returns the Id
      * @return The Id
@@ -179,6 +181,16 @@ public class Form implements Serializable
      */
     public void setFormEntries(List<FormEntry> formEntries) {
         this.formEntries = formEntries;
+    }
+
+    public boolean isSelected( )
+    {
+        return _bSelected;
+    }
+
+    public void setSelected( boolean selected )
+    {
+        _bSelected = selected;
     }
 
 }
