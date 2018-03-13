@@ -1,14 +1,15 @@
 package fr.paris.lutece.plugins.ticketing.business.formcategory;
 
-public class TicketFormCategory
+public class FormCategory
 {
     private int _nIdForm;
     private int _nIdCategory;
-    
+
     /**
      * Constructor TicketFormCategory
      */
-    TicketFormCategory(){
+    public FormCategory( )
+    {
         setIdForm( -1 );
         setIdCategory( -1 );
     }
@@ -48,6 +49,6 @@ public class TicketFormCategory
     {
         this._nIdCategory = _nIdCategory;
     }
-    
-    
+
+
 }

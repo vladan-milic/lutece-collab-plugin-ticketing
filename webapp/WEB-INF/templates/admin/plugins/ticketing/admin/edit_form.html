@@ -4,7 +4,7 @@
 
 <#macro formEntryLine entryType>
 	<#assign entry=form.getEntry(entryType)>
-	<#assign entryForcedMandatory = entryType = formEntryType.email>
+ 	<#assign entryForcedMandatory = entryType = formEntryType.email || entryType == formEntryType.firstName || entryType == formEntryType.lastName>
 	<tr>	
 		<th scope="row">${i18n('ticketing.xpage.create_ticket.'+entryType+'.label')}</th>
 		<td>

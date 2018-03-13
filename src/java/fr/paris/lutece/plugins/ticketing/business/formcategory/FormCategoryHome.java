@@ -11,7 +11,7 @@ public class FormCategoryHome
     // Static variable pointed at the DAO instance
     private static IFormCategoryDao _dao = SpringContextService.getBean( "ticketing.formCategoryDAO" );
     private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
-    
+
     /**
      * Create an instance of the form class
      * 
@@ -46,11 +46,24 @@ public class FormCategoryHome
     }
 
     /**
+     * Remove the formCategory by id category
+     * 
+     * @param nKey
+     *            The category Id
+     */
+    public static void removeByIdCategory( int nKey )
+    {
+        _dao.deleteByIdCategory( nKey, _plugin );
+    }
+
+    /**
      * Returns an instance of a form whose identifier is specified in parameter
-     * @param nKey The form primary key
+     * 
+     * @param nKey
+     *            The form primary key
      * @return an instance of Form
      */
-    public static List<TicketFormCategory> findByForm( int nIdForm )
+    public static List<FormCategory> findByForm( int nIdForm )
     {
         return _dao.loadByForm( nIdForm, _plugin);
     }
@@ -60,11 +73,11 @@ public class FormCategoryHome
      * @param nKey The form primary key
      * @return an instance of Form
      */
-    public static List<TicketFormCategory> findByCategory( int nIdCategory )
+    public static List<FormCategory> findByCategory( int nIdCategory )
     {
         return _dao.loadByCategory( nIdCategory, _plugin);
     }
-    
+
     /**
      * Load the data of all the category objects and returns them as a list
      * 
@@ -72,7 +85,7 @@ public class FormCategoryHome
      *            the Plugin
      * @return The list which contains the data of all the category objects
      */
-    public static List<TicketFormCategory> findAll(  )
+    public static List<FormCategory> findAll(  )
     {
         return _dao.selectAll(_plugin );
     }

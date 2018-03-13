@@ -15,7 +15,7 @@ public interface IFormCategoryDao
      * @param plugin
      */
     public void insert(int nIdCategory, int nIdForm, Plugin plugin);
-    
+
     /**
      * Update the record in the table
      * 
@@ -24,7 +24,7 @@ public interface IFormCategoryDao
      * @param plugin
      */
     void store( int nIdCategory, int nIdForm, Plugin plugin );
-    
+
     /**
      * Delete a record from the table
      * 
@@ -33,7 +33,15 @@ public interface IFormCategoryDao
      * @param plugin
      */
     void delete( int nIdCategory, int nIdForm, Plugin plugin );
-    
+
+    /**
+     * Delete a record from the table by formulaire id
+     * 
+     * @param nIdForm
+     * @param plugin
+     */
+    void deleteByIdCategory( int nIdForm, Plugin plugin );
+
     /**
      * load list by formulaire id
      * 
@@ -41,16 +49,16 @@ public interface IFormCategoryDao
      * @param plugin
      * @return
      */
-    public List<TicketFormCategory> loadByForm( int nIdForm, Plugin plugin );
-    
+    public List<FormCategory> loadByForm( int nIdForm, Plugin plugin );
+
     /**
      * 
      * @param nIdCategory
      * @param plugin
      * @return
      */
-    public List<TicketFormCategory> loadByCategory( int nIdCategory, Plugin plugin );
-    
+    public List<FormCategory> loadByCategory( int nIdCategory, Plugin plugin );
+
     /**
      * Load the data of all the category objects and returns them as a list
      * 
@@ -58,5 +66,5 @@ public interface IFormCategoryDao
      *            the Plugin
      * @return The list which contains the data of all the category objects
      */
-    public List<TicketFormCategory> selectAll( Plugin plugin );
+    public List<FormCategory> selectAll( Plugin plugin );
 }

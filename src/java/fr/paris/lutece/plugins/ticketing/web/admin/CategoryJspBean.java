@@ -33,8 +33,10 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,6 +46,10 @@ import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
+import fr.paris.lutece.plugins.ticketing.business.form.Form;
+import fr.paris.lutece.plugins.ticketing.business.form.FormHome;
+import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategory;
+import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategoryHome;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.service.tree.Tree;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
@@ -77,6 +83,7 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
     private static final String PARAMETER_ASSIGNEE_UNIT                    = "id_unit";
     private static final String PARAMETER_ID_PARENT_CATEGORY               = "id_parent_category";
     private static final String PARAMETER_ID_CATEGORYTYPE                  = "id_category_type";
+    private static final String PARAMETER_SELECTED_FORM = "selectedForm";
 
     private static final String PARAMETER_ID_CATEGORY_INPUT                = "id_input";
 
@@ -98,7 +105,7 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
     public static final String  MARK_ID_CATEGORY                           = "id_category";
     public static final String  MARK_ASSIGNEE_UNIT_LIST                    = "unit_list";
     public static final String  MARK_FORM_LIST                             = "form_list";
-    public static final String MARK_FORM_CATEGORY_LIST                     = "form_category_list";
+    public static final String MARK_FORMCATEGORY_LIST = "formcategory_list";
     private static final String MARK_CATEGORYTYPE                          = "categorytype";
 
     private static final String MARK_ALL_INPUTS_LIST                       = "inputs_list";
@@ -108,6 +115,7 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_CATEGORY_INPUTS_HERITED_LIST          = "category_inputs_herited_list";
     private static final String MARK_CATEGORY_INPUTS_BLOCKED_LIST          = "category_inputs_blocked_list";
     private static final String MARK_BRANCH_LABEL                          = "branch_label";
+    private static final String MARK_SELECTED_FORMS = "selected_forms";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_CATEGORY            = "ticketing.message.confirmRemoveCategory";
@@ -177,10 +185,52 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
     {
         _category = null;
 
-        Tree<TicketCategory, TicketCategoryType> treeCategories = TicketCategoryService.getInstance( ).getCategoriesTree( );
-
         Map<String, Object> model = getModel( );
-        model.put( MARK_CATEGORIES_TREE, treeCategories );
+        model.put( MARK_FORM_LIST, FormHome.getFormsList( ) );
+
+        List<Integer> restrictedCategoriesId = null;
+
+        String[] selectedForms = request.getParameterValues( "selectedForms" );
+        if ( selectedForms != null )
+        {
+            restrictedCategoriesId = new ArrayList<>( );
+            for ( String formId : selectedForms )
+            {
+                if ( "all".equals( formId ) )
+                {
+                    restrictedCategoriesId = null;
+                    break;
+                }
+                else if ( "none".equals( formId ) )
+                {
+                    // We get all categories of first depth
+                    List<TicketCategory> firstDepths = TicketCategoryService.getInstance( ).getCategoriesTree( ).getRootElements( );
+                    // We get all categories restricted in forms
+                    List<FormCategory> allCategoriesRestrictedInForms = FormCategoryHome.findAll( );
+
+                    // We only add categories which are not in forms.
+                    List<TicketCategory> restrictedCategories = new ArrayList<>( );
+                    for ( TicketCategory ticketCategory : firstDepths )
+                    {
+                        if ( !allCategoriesRestrictedInForms.stream( ).anyMatch( formCategory -> formCategory.getIdCategory( ) == ticketCategory.getId( ) ) )
+                        {
+                            restrictedCategories.add( ticketCategory );
+                        }
+                    }
+
+                    restrictedCategoriesId.addAll( restrictedCategories.stream( ).map( category -> category.getId( ) ).collect( Collectors.toList( ) ) );
+                }
+                else
+                {
+                    List<FormCategory> restrictedCategories = FormCategoryHome.findByForm( Integer.parseInt( formId ) );
+                    restrictedCategoriesId.addAll( restrictedCategories.stream( ).map( category -> category.getIdCategory( ) ).collect( Collectors.toList( ) ) );
+                }
+            }
+        }
+
+        model.put( MARK_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( restrictedCategoriesId ) );
+        model.put( MARK_SELECTED_FORMS, selectedForms );
+        model.put( MARK_FORMCATEGORY_LIST, FormCategoryHome.findAll( ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_CATEGORYS, TEMPLATE_MANAGE_CATEGORIES, model );
     }
@@ -209,6 +259,7 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_ASSIGNEE_UNIT_LIST, getUnitsList( ) );
+        model.put( MARK_FORM_LIST, FormHome.getFormsList( ) );
         model.put( MARK_CATEGORY, _category );
 
         return getPage( PROPERTY_PAGE_TITLE_CREATE_CATEGORY, TEMPLATE_CREATE_CATEGORY, model );
@@ -250,6 +301,8 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
         }
 
         TicketCategoryService.getInstance( ).createSubCategory( _category );
+
+        updateFormCategories( request );
 
         addInfo( INFO_CATEGORY_CREATED, getLocale( ) );
 
@@ -317,8 +370,7 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
 
         Map<String, Object> model = getModel( );
         model.put( MARK_ASSIGNEE_UNIT_LIST, getUnitsList( ) );
-        model.put( MARK_FORM_LIST, getListForm( ) );
-        model.put( MARK_FORM_CATEGORY_LIST, getListFormCategoryByIdCategory( _category.getId( ) ) );
+        model.put( MARK_FORM_LIST, FormHome.getFormsList( _category ) );
         model.put( MARK_CATEGORY, _category );
 
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_CATEGORY, TEMPLATE_MODIFY_CATEGORY, model );
@@ -360,8 +412,27 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
         }
 
         TicketCategoryService.getInstance( ).updateCategory( _category );
+
+        updateFormCategories( request );
+
         addInfo( INFO_CATEGORY_UPDATED, getLocale( ) );
         return redirectView( request, VIEW_MANAGE_CATEGORIES );
+    }
+
+    private void updateFormCategories( HttpServletRequest request )
+    {
+        FormCategoryHome.removeByIdCategory( _category.getId( ) );
+
+        // update entries related to categories
+        for ( Form form : FormHome.getFormsList( ) )
+        {
+            String strChecked = request.getParameter( "form_" + form.getId( ) );
+
+            if ( strChecked != null )
+            {
+                FormCategoryHome.create( _category.getId( ), form.getId( ) );
+            }
+        }
     }
 
     /**

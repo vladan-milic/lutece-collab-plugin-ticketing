@@ -42,9 +42,12 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
 import fr.paris.lutece.plugins.ticketing.business.categoryinputs.TicketCategoryInputsHome;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType> 
 {
+    private List<Integer> _restrictedCategoriesId = null;
+
     /**
      * Constructor for category tree
      * 
@@ -58,6 +61,21 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
         super( listCategory, listCategoryType );
         listCategory.stream( ).forEach( ( category ) -> 
         category.setListIdInput( TicketCategoryInputsHome.getIdInputListByCategory( category.getId( ) ) ) );
+    }
+
+    /**
+     * Constructor for category tree
+     * 
+     * @param listCategory
+     *            the list of Categories
+     * @param listCategoryType
+     *            the list of Category types
+     */
+    public TicketCategoryTree( TicketCategoryTree treeSource, List<Integer> restrictedCategoriesId )
+    {
+        super( treeSource );
+        this._restrictedCategoriesId = restrictedCategoriesId;
+        setRootElements( _rootNodes.stream( ).filter( root -> _restrictedCategoriesId == null || _restrictedCategoriesId.contains( root.getId( ) ) ).collect( Collectors.toList( ) ) );
     }
 
     /**

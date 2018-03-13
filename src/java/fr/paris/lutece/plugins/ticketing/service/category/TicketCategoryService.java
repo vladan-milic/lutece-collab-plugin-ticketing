@@ -99,9 +99,19 @@ public class TicketCategoryService
      * 
      * @return the category tree
      */
+    public TicketCategoryTree getCategoriesTree( List<Integer> restrictedCategoriesId )
+    {
+        return new TicketCategoryTree( _treeCategories, restrictedCategoriesId );
+    }
+
+    /**
+     * Return the category tree
+     * 
+     * @return the category tree
+     */
     public TicketCategoryTree getCategoriesTree( )
     {
-        return _treeCategories;
+        return getCategoriesTree( null );
     }
 
     /**

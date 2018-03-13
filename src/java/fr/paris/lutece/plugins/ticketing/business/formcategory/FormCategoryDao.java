@@ -11,10 +11,11 @@ public class FormCategoryDao implements IFormCategoryDao
     private static final String SQL_QUERY_FORM_CATEGORY                   = "INSERT INTO ticketing_form_category (id_form, id_category) VALUES ( ?, ? ) ";
     private static final String SQL_QUERY_UPDATE                          = "UPDATE ticketing_form_category SET id_form = ?, id_category = ?";
     private static final String SQL_QUERY_DELETE                          = "DELETE FROM ticketing_form_category WHERE id_form = ? AND id_category = ?";
+    private static final String SQL_QUERY_DELETE_BY_ID_CATEGORY = "DELETE FROM ticketing_form_category WHERE id_category = ? ";
     private static final String SQL_QUERY_LOAD_BY_FORM                    = "SELECT id_form, id_category FROM ticketing_form_category WHERE id_form = ?";
     private static final String SQL_QUERY_LOAD_BY_CATEGORY                = "SELECT id_form, id_category FROM ticketing_form_category WHERE id_category = ?"; 
     private static final String SQL_QUERY_LOAD                            = "SELECT id_form, id_category FROM ticketing_form_category";
-    
+
     /**
      * {@inheritDoc }
      */
@@ -22,10 +23,10 @@ public class FormCategoryDao implements IFormCategoryDao
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FORM_CATEGORY, plugin );
         daoUtil.setInt( 1, nIdForm );
         daoUtil.setInt( 2, nIdCategory );
-        daoUtil.executeQuery( );
+        daoUtil.executeUpdate( );
         daoUtil.free( );
     }
-    
+
     /**
      * {@inheritDoc }
      */
@@ -36,7 +37,7 @@ public class FormCategoryDao implements IFormCategoryDao
         daoUtil.executeQuery( );
         daoUtil.free( );
     }
-    
+
     /**
      * {@inheritDoc }
      */
@@ -47,69 +48,81 @@ public class FormCategoryDao implements IFormCategoryDao
         daoUtil.executeQuery( );
         daoUtil.free( );
     }
-    
+
     /**
      * {@inheritDoc }
      */
-    public List<TicketFormCategory> loadByForm( int nIdForm, Plugin plugin ) {
-        List<TicketFormCategory> formCategoryList = new ArrayList<TicketFormCategory>( );
-        
+    @Override
+    public void deleteByIdCategory( int nKey, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_ID_CATEGORY, plugin );
+        daoUtil.setInt( 1, nKey );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    public List<FormCategory> loadByForm( int nIdForm, Plugin plugin ) {
+        List<FormCategory> formCategoryList = new ArrayList<FormCategory>( );
+
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_LOAD_BY_FORM, plugin );
         daoUtil.setInt( 1, nIdForm );
         daoUtil.executeQuery( );
-        
+
         while(daoUtil.next( )) {
-            TicketFormCategory formCategory = new TicketFormCategory();
+            FormCategory formCategory = new FormCategory();
             int nIndex = 1;
-            
+
             formCategory.setIdForm( daoUtil.getInt(nIndex++) );
             formCategory.setIdCategory( daoUtil.getInt(nIndex++) );
             formCategoryList.add( formCategory );
         }
-        
+
         return formCategoryList;
     }
-    
+
     /**
      * {@inheritDoc }
      */
-    public List<TicketFormCategory> loadByCategory( int nIdCategory, Plugin plugin ) {
-        List<TicketFormCategory> formCategoryList = new ArrayList<TicketFormCategory>( );
-        
+    public List<FormCategory> loadByCategory( int nIdCategory, Plugin plugin ) {
+        List<FormCategory> formCategoryList = new ArrayList<FormCategory>( );
+
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_LOAD_BY_CATEGORY, plugin );
         daoUtil.setInt( 1, nIdCategory );
         daoUtil.executeQuery( );
-        
+
         while(daoUtil.next( )) {
-            TicketFormCategory formCategory = new TicketFormCategory();
+            FormCategory formCategory = new FormCategory();
             int nIndex = 1;
-            
+
             formCategory.setIdForm( daoUtil.getInt(nIndex++) );
             formCategory.setIdCategory( daoUtil.getInt(nIndex++) );
             formCategoryList.add( formCategory );
         }
-        
+
         return formCategoryList;
     }
-    
+
     /**
      * {@inheritDoc }
      */
-    public List<TicketFormCategory> selectAll( Plugin plugin ){
-List<TicketFormCategory> formCategoryList = new ArrayList<TicketFormCategory>( );
-        
+    public List<FormCategory> selectAll( Plugin plugin ){
+        List<FormCategory> formCategoryList = new ArrayList<FormCategory>( );
+
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_LOAD, plugin );
         daoUtil.executeQuery( );
-        
+
         while(daoUtil.next( )) {
-            TicketFormCategory formCategory = new TicketFormCategory();
+            FormCategory formCategory = new FormCategory();
             int nIndex = 1;
-            
+
             formCategory.setIdForm( daoUtil.getInt(nIndex++) );
             formCategory.setIdCategory( daoUtil.getInt(nIndex++) );
             formCategoryList.add( formCategory );
         }
-        
+
         return formCategoryList;
     }
 }

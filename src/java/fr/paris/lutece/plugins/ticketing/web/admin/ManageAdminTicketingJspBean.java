@@ -38,10 +38,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import fr.paris.lutece.plugins.ticketing.business.form.Form;
-import fr.paris.lutece.plugins.ticketing.business.form.FormHome;
 import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategoryHome;
-import fr.paris.lutece.plugins.ticketing.business.formcategory.TicketFormCategory;
+import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategory;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -124,16 +122,8 @@ public abstract class ManageAdminTicketingJspBean extends MVCAdminJspBean
 
         return lstRef;
     }
-    
-    /**
-     * 
-     */
-    public List<Form> getListForm( )
-    {
-        return FormHome.getFormsList( );
-    }
-    
-    public List<TicketFormCategory> getListFormCategoryByIdCategory( int nIdCategory ){
+
+    public List<FormCategory> getListFormCategoryByIdCategory( int nIdCategory ){
         return FormCategoryHome.findByCategory(nIdCategory);
     }
 }
