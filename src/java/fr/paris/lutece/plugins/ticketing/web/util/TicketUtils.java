@@ -33,10 +33,23 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
@@ -47,20 +60,11 @@ import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.admin.AdminAuthenticationService;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.prefs.AdminUserPreferencesService;
+import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Class providing helper for Ticket web management
@@ -450,5 +454,22 @@ public final class TicketUtils
             }
             return TicketingConstants.PROPERTY_UNSET_INT;
         }
+    }
+
+    /**
+     * Check if a ticket is authorized
+     * @param ticket
+     * @param strPermission
+     * @param user
+     * @return
+     */
+    public static boolean isAuthorized( Ticket ticket, String strPermission, AdminUser user )
+    {
+        List<TicketCategory> listTicketCategory = TicketCategoryService.getInstance().getBranchOfCategory( ticket.getTicketCategory( ) );
+
+        boolean ticketAuthorized = RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, user );
+        boolean allCategoriesAuthorized = listTicketCategory.stream( ).allMatch( category -> !category.isManageable( ) || RBACService.isAuthorized( category, strPermission, user ) );
+        
+        return ticketAuthorized && allCategoriesAuthorized;
     }
 }

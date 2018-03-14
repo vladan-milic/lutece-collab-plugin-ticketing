@@ -33,6 +33,28 @@
  */
 package fr.paris.lutece.plugins.ticketing.web;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.queryparser.classic.ParseException;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.GenericAttributeError;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
@@ -57,7 +79,16 @@ import fr.paris.lutece.plugins.ticketing.web.search.SearchConstants;
 import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchEngine;
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.user.UserFactory;
-import fr.paris.lutece.plugins.ticketing.web.util.*;
+import fr.paris.lutece.plugins.ticketing.web.util.CSVUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.FormValidator;
+import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.ResponseRecap;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidator;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidatorResult;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -76,18 +107,6 @@ import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.queryparser.classic.ParseException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * ManageTickets JSP Bean abstract class for JSP Bean
@@ -473,7 +492,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
                 try
                 {
-                    listTickets = _engine.searchTickets( strQuery, _lstTicketDomain, filter );
+                    List<Ticket> ticketsUnrestricted = _engine.searchTickets( strQuery, _lstTicketDomain, filter );
+                    
+                    // Filter all tickets that are authorized
+                    listTickets = ticketsUnrestricted.stream( ).filter( ticket -> TicketUtils.isAuthorized(ticket, TicketCategory.PERMISSION_VIEW_LIST, userCurrent) ).collect( Collectors.toList( ) );
+                    
                     if ( listTickets != null && !listTickets.isEmpty( ) )
                     {
                         for ( Ticket ticket : listTickets )
