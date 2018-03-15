@@ -80,6 +80,7 @@ public class FormCategoryDao implements IFormCategoryDao
             formCategoryList.add( formCategory );
         }
 
+        daoUtil.free( );
         return formCategoryList;
     }
 
@@ -102,6 +103,7 @@ public class FormCategoryDao implements IFormCategoryDao
             formCategoryList.add( formCategory );
         }
 
+        daoUtil.free( );
         return formCategoryList;
     }
 
@@ -123,6 +125,7 @@ public class FormCategoryDao implements IFormCategoryDao
             formCategoryList.add( formCategory );
         }
 
+        daoUtil.free( );
         return formCategoryList;
     }
 }
