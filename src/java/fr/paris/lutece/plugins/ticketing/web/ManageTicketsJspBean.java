@@ -46,6 +46,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -79,13 +80,20 @@ import fr.paris.lutece.plugins.ticketing.web.search.SearchConstants;
 import fr.paris.lutece.plugins.ticketing.web.search.TicketSearchEngine;
 import fr.paris.lutece.plugins.ticketing.web.ticketfilter.TicketFilterHelper;
 import fr.paris.lutece.plugins.ticketing.web.user.UserFactory;
-import fr.paris.lutece.plugins.ticketing.web.util.*;
-import fr.paris.lutece.plugins.ticketing.web.workflow.TicketTaskException;
+import fr.paris.lutece.plugins.ticketing.web.util.CSVUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.FormValidator;
+import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.ResponseRecap;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidator;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidatorResult;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
+import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
-import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -489,8 +497,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 {
                     List<Ticket> ticketsUnrestricted = _engine.searchTickets( strQuery, _lstTicketDomain, filter );
                     
-                    // Filter all tickets that are authorized
-                    listTickets = ticketsUnrestricted.stream( ).filter( ticket -> TicketUtils.isAuthorized(ticket, TicketCategory.PERMISSION_VIEW_LIST, userCurrent) ).collect( Collectors.toList( ) );
+                    listTickets = filterAuthorizedTickets( ticketsUnrestricted );
                     
                     if ( listTickets != null && !listTickets.isEmpty( ) )
                     {
@@ -568,6 +575,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 }
 
                 return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
+    }
+
+    private List<Ticket> filterAuthorizedTickets( List<Ticket> ticketsUnrestricted )
+    {
+        return ticketsUnrestricted.stream( ).filter( ticket -> TicketUtils.isAuthorized( ticket, TicketCategory.PERMISSION_VIEW_LIST, getUser( ) ) ).collect( Collectors.toList( ) );
     }
 
     /**
@@ -1232,9 +1244,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     }
 
     @Override
-    protected boolean checkAccessToTicket( HttpServletRequest request, Ticket ticket )
+    protected boolean checkAccessToTicket( Ticket ticket )
     {
-        AdminUser user = AdminUserService.getAdminUser( request );
+        AdminUser user = getUser( );
         List<Unit> unitsList = UnitHome.findByIdUser( user.getUserId( ) );
 
         // Check if user is in same unit tree as unit assigned to ticket

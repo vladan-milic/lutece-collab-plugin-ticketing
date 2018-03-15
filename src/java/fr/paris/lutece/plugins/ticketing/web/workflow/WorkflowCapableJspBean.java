@@ -372,7 +372,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 {
                     Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
 
-                    if ( !checkAccessToTicket( request, ticket ) )
+                    if ( !checkAccessToTicket( ticket ) )
                     {
                         throw new TicketTaskException( );
                     }
@@ -419,7 +419,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         return redirectAfterWorkflowAction( request );
     }
 
-    protected abstract boolean checkAccessToTicket( HttpServletRequest request, Ticket ticket );
+    protected abstract boolean checkAccessToTicket( Ticket ticket );
 
     /**
      * Do process a workflow mass action over a list of tickets

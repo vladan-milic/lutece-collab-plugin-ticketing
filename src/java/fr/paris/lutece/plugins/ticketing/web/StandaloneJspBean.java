@@ -120,7 +120,7 @@ public class StandaloneJspBean extends WorkflowCapableJspBean
     }
 
     @Override
-    protected boolean checkAccessToTicket( HttpServletRequest request, Ticket ticket )
+    protected boolean checkAccessToTicket( Ticket ticket )
     {
         return true;
     }
