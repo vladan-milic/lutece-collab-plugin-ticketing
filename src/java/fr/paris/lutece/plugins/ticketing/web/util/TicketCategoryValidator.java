@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.ticketing.web.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -54,16 +55,20 @@ public class TicketCategoryValidator
 {
     // Variables
     private HttpServletRequest _request;
+    private Locale _locale;
 
     /**
      * Constructor
      * 
      * @param request
      *            the request containing the parameter to validate
+     * @param locale
+     *            TODO
      */
-    public TicketCategoryValidator( HttpServletRequest request )
+    public TicketCategoryValidator( HttpServletRequest request, Locale locale )
     {
         this._request = request;
+        this._locale = locale;
     }
 
     /**
@@ -116,7 +121,7 @@ public class TicketCategoryValidator
             else if ( ticketCategoryIsRequired || i <= TicketingConstants.CATEGORY_DEPTH_MIN )
             {
                 listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED,
-                        new String[] { TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( i - 1 ).getLabel( ) }, this._request.getLocale( ) ) );
+                        new String[] { TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( i - 1 ).getLabel( ) }, this._locale ) );
                 isValid = false;
             }
 
@@ -138,7 +143,7 @@ public class TicketCategoryValidator
         {
             listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED, new String [ ] {
                     TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( lastValidI + 1 ).getLabel( )
-            }, this._request.getLocale( ) ) );
+            }, this._locale ) );
             isValid = false;
         }
 

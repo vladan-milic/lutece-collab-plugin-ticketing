@@ -524,7 +524,7 @@ public class TicketXPage extends WorkflowCapableXPage
         FormEntryType formEntryType = new FormEntryType( );
 
         // Validate the TicketCategory
-        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( form );
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, request.getLocale( ) ).validateTicketCategory( form );
         if ( !categoryValidatorResult.isTicketCategoryValid( ) )
         {
             categoryValidatorResult.getListValidationErrors( ).stream( ).forEach( ( error ) -> addError( error ) );

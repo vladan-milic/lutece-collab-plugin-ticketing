@@ -227,7 +227,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         populate( _instantresponse, request );
 
         // Validate the TicketCategory
-        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( );
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, getLocale() ).validateTicketCategory( );
 
         // Check constraints
         if ( !validateBean( _instantresponse, VALIDATION_ATTRIBUTES_PREFIX ) || !categoryValidatorResult.isTicketCategoryValid( ) )
@@ -321,7 +321,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         populate( _instantresponse, request );
 
         // Validate the TicketCategory
-        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( );
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, getLocale() ).validateTicketCategory( );
 
         // Check constraints
         if ( !validateBean( _instantresponse, VALIDATION_ATTRIBUTES_PREFIX ) || !categoryValidatorResult.isTicketCategoryValid( ) )

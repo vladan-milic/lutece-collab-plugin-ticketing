@@ -1018,7 +1018,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         ticket.setTicketAddress( ticketAddress );
 
         // Validate the TicketCategory
-        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request ).validateTicketCategory( );
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, getLocale( ) ).validateTicketCategory( );
         if ( !categoryValidatorResult.isTicketCategoryValid( ) )
         {
             categoryValidatorResult.getListValidationErrors( ).stream( ).forEach( ( error ) -> addError( error ) );
@@ -1030,7 +1030,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
 
         // Validate the bean
-        TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
+        TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validateBean( ticket );
         for ( String error : listValidationErrors )
         {
