@@ -352,4 +352,10 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
         return redirect( request, VIEW_DETAILS, mapParams );
     }
+
+    @Override
+    protected boolean checkAccessToTicket( Ticket ticket )
+    {
+        return true;
+    }
 }

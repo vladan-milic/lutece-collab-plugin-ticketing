@@ -46,6 +46,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -90,6 +91,8 @@ import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
+import fr.paris.lutece.plugins.unittree.business.unit.Unit;
+import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -494,8 +497,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 {
                     List<Ticket> ticketsUnrestricted = _engine.searchTickets( strQuery, _lstTicketDomain, filter );
                     
-                    // Filter all tickets that are authorized
-                    listTickets = ticketsUnrestricted.stream( ).filter( ticket -> TicketUtils.isAuthorized(ticket, TicketCategory.PERMISSION_VIEW_LIST, userCurrent) ).collect( Collectors.toList( ) );
+                    listTickets = filterAuthorizedTickets( ticketsUnrestricted );
                     
                     if ( listTickets != null && !listTickets.isEmpty( ) )
                     {
@@ -573,6 +575,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 }
 
                 return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
+    }
+
+    private List<Ticket> filterAuthorizedTickets( List<Ticket> ticketsUnrestricted )
+    {
+        return ticketsUnrestricted.stream( ).filter( ticket -> TicketUtils.isAuthorized( ticket, TicketCategory.PERMISSION_VIEW_LIST, getUser( ) ) ).collect( Collectors.toList( ) );
     }
 
     /**
@@ -1236,4 +1243,21 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         return getWorkflowActionForm( request );
     }
 
+    @Override
+    protected boolean checkAccessToTicket( Ticket ticket )
+    {
+        AdminUser user = getUser( );
+        List<Unit> unitsList = UnitHome.findByIdUser( user.getUserId( ) );
+
+        // Check if user is in same unit tree as unit assigned to ticket
+        Set<Integer> subUnits = unitsList.stream( ).map( unit -> unit.getIdUnit( ) ).collect( Collectors.toSet( ) );
+        unitsList.stream( ).forEach( unit -> subUnits.addAll( UnitHome.getAllSubUnitsId( unit.getIdUnit( ) ) ) );
+        boolean ticketInSubUnit = true;
+        if ( ticket.getAssigneeUnit( ) != null )
+        {
+            ticketInSubUnit = subUnits.stream( ).anyMatch( unitId -> ticket.getAssigneeUnit( ).getUnitId( ) == unitId );
+        }
+
+        return ticketInSubUnit;
+    }
 }
