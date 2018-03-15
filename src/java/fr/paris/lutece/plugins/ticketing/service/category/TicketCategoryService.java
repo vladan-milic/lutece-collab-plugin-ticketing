@@ -438,17 +438,10 @@ public class TicketCategoryService
      * @param user
      * @return true if authorized, false otherwise
      */
-    public static boolean isAutorized( TicketCategory category, String strPermission, AdminUser user )
+    public static boolean isAuthorized( TicketCategory category, String strPermission, AdminUser user )
     {
-        List<TicketCategory> listCategory = TicketCategoryService.getInstance( ).getBranchOfCategory( TicketCategoryService.getInstance( ).findCategoryById( category.getId( ) ) );
-        for ( TicketCategory categoryBranch : listCategory )
-        {
-            if ( RBACService.isAuthorized( categoryBranch, strPermission, user ) )
-            {
-                return true;
-            }
-        }
-        return false;
+        List<TicketCategory> listTicketCategory = TicketCategoryService.getInstance( ).getBranchOfCategory( category );
+        return listTicketCategory.stream( ).allMatch( cat -> !cat.isManageable( ) || RBACService.isAuthorized( cat, strPermission, user ) );
     }
 
     /**
@@ -558,7 +551,7 @@ public class TicketCategoryService
 
         for ( TicketCategory category : listCategories )
         {
-            if ( RBACService.isAuthorized( category, strPermission, adminUser ) )
+            if ( !category.isManageable( ) || RBACService.isAuthorized( category, strPermission, adminUser ) )
             {
                 listAuthorizedCategories.add( category );
             }
@@ -584,7 +577,7 @@ public class TicketCategoryService
 
         for ( TicketCategory category : listCategories )
         {
-            if ( RBACService.isAuthorized( category, strPermission, adminUser ) )
+            if ( !category.isManageable( ) || RBACService.isAuthorized( category, strPermission, adminUser ) )
             {
                 listAuthorizedCategories.add( category );
             }
@@ -783,7 +776,7 @@ public class TicketCategoryService
         List<TicketCategory> listAuthorizedDomain = new ArrayList<TicketCategory>( );
         for ( TicketCategory domain : listDomain )
         {
-            if ( RBACService.isAuthorized( domain, strPermission, adminUser ) )
+            if ( !domain.isManageable( ) || RBACService.isAuthorized( domain, strPermission, adminUser ) )
             {
                 listAuthorizedDomain.add( domain );
             }

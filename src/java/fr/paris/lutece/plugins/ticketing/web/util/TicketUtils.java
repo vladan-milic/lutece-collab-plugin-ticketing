@@ -43,7 +43,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
@@ -465,11 +464,9 @@ public final class TicketUtils
      */
     public static boolean isAuthorized( Ticket ticket, String strPermission, AdminUser user )
     {
-        List<TicketCategory> listTicketCategory = TicketCategoryService.getInstance().getBranchOfCategory( ticket.getTicketCategory( ) );
-
         boolean ticketAuthorized = RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, user );
-        boolean allCategoriesAuthorized = listTicketCategory.stream( ).allMatch( category -> !category.isManageable( ) || RBACService.isAuthorized( category, strPermission, user ) );
-        
-        return ticketAuthorized && allCategoriesAuthorized;
+        boolean categoriesBranchAuthorized = TicketCategoryService.isAuthorized( ticket.getTicketCategory( ), strPermission, user );
+
+        return ticketAuthorized && categoriesBranchAuthorized;
     }
 }
