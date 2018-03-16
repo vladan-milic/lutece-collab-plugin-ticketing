@@ -69,14 +69,17 @@ public class TicketSearchUtil
     public static DocValuesTermsQuery createTermsFilter( String strFieldForTerm, Collection<Integer> collectionInteger )
     {
         List<BytesRef> listBytesRefIdAssignUnit = new ArrayList<BytesRef>( );
-        if ( collectionInteger != null && !collectionInteger.isEmpty( ) )
+        if ( collectionInteger != null )
         {
             for ( Integer currentId : collectionInteger )
             {
                 listBytesRefIdAssignUnit.add( getBytesRef( BigInteger.valueOf( currentId ) ) );
             }
+
+            return new DocValuesTermsQuery( strFieldForTerm, listBytesRefIdAssignUnit );
         }
-        return listBytesRefIdAssignUnit.isEmpty( ) ? null : new DocValuesTermsQuery( strFieldForTerm, listBytesRefIdAssignUnit );
+
+        return null;
     }
 
     /**
@@ -133,7 +136,7 @@ public class TicketSearchUtil
         // Sort on assignee unit label and on the lastname of the assignee user
         mapSortField.put( "assignee", Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME,
                 SortField.Type.STRING ), new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME,
-                SortField.Type.STRING ) ) );
+                        SortField.Type.STRING ) ) );
 
         return mapSortField;
     }

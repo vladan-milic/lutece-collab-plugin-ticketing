@@ -87,7 +87,6 @@ import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.ResponseRecap;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketCategoryValidatorResult;
-import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidator;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketValidatorFactory;
 import fr.paris.lutece.plugins.ticketing.web.workflow.WorkflowCapableJspBean;
@@ -459,21 +458,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 List<Ticket> listTickets = new ArrayList<>( );
                 List<Integer> listIdTickets = new ArrayList<>( );
 
-                if ( filter.getMapCategoryId( ) != null &&  filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != null && filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != -1)
-                {
-                    TicketCategory ticketDomain = TicketCategoryService.getInstance( ).findCategoryById( filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) );
-                    _lstTicketDomain.clear( );
-                    _lstTicketDomain.add( ticketDomain );
-                }
-                else
-                {
-                    Map<Integer, TicketCategory> mapIdDomainTicketDomain = new LinkedHashMap<>( );
-                    addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_DETAIL );
-                    addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_LIST );
-
-                    _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
-                }
-
                 // Set the limit for the number of ticket to display
                 filter.setTicketsLimitStart( ( nCurrentPageIndex - 1 ) * _nItemsPerPage );
                 filter.setTicketsLimitCount( _nItemsPerPage );
@@ -496,8 +480,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 try
                 {
                     listTickets = _engine.searchTickets( strQuery, getUser( ), filter );
-
-                    // listTickets = filterAuthorizedTickets( ticketsUnrestricted );
 
                     if ( listTickets != null && !listTickets.isEmpty( ) )
                     {
@@ -575,11 +557,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 }
 
                 return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
-    }
-
-    private List<Ticket> filterAuthorizedTickets( List<Ticket> ticketsUnrestricted )
-    {
-        return ticketsUnrestricted.stream( ).filter( ticket -> TicketUtils.isAuthorized( ticket, TicketCategory.PERMISSION_VIEW_LIST, getUser( ) ) ).collect( Collectors.toList( ) );
     }
 
     /**

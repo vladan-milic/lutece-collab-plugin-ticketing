@@ -428,17 +428,15 @@ public class TicketSearchEngine implements ITicketSearchEngine
                     booleanQueryBuilderGlobal.add( booleanQueryBuilderIdUser.build( ), Occur.MUST );
                     break;
                 case GROUP:
-                    if ( docValuesTermsQueryIdAssigneeUnit != null && docValuesTermsQueryIdAssignerUnit != null )
-                    {
-                        booleanQueryBuilderGlobal.add( queryIdAdminUser, Occur.MUST_NOT );
-                        booleanQueryBuilderGlobal.add( queryIdAssignerUser, Occur.MUST_NOT );
+                    booleanQueryBuilderGlobal.add( queryIdAdminUser, Occur.MUST_NOT );
+                    booleanQueryBuilderGlobal.add( queryIdAssignerUser, Occur.MUST_NOT );
 
-                        Builder booleanQueryBuilderIdUnit = new Builder( );
-                        booleanQueryBuilderIdUnit.add( docValuesTermsQueryIdAssigneeUnit, Occur.SHOULD );
-                        booleanQueryBuilderIdUnit.add( docValuesTermsQueryIdAssignerUnit, Occur.SHOULD );
+                    Builder booleanQueryBuilderIdUnit = new Builder( );
+                    booleanQueryBuilderIdUnit.add( docValuesTermsQueryIdAssigneeUnit, Occur.SHOULD );
+                    booleanQueryBuilderIdUnit.add( docValuesTermsQueryIdAssignerUnit, Occur.SHOULD );
 
-                        booleanQueryBuilderGlobal.add( booleanQueryBuilderIdUnit.build( ), Occur.MUST );
-                    }
+                    booleanQueryBuilderGlobal.add( booleanQueryBuilderIdUnit.build( ), Occur.MUST );
+
                     break;
                 case DOMAIN:
                     if ( docValuesTermsQueryIdAssigneeUnit != null && docValuesTermsQueryIdAssignerUnit != null )
