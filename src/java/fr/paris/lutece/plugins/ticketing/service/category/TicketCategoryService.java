@@ -816,8 +816,8 @@ public class TicketCategoryService
         }
     }
 
-    public List<TicketCategory> getRestrictedCategories( )
+    public List<TicketCategory> getAllCategories( )
     {
-        return _treeCategories.getNodes( ).stream( ).filter( category -> category.isManageable( ) ).collect( Collectors.toList( ) );
+        return _treeCategories.getNodes( );
     }
 }

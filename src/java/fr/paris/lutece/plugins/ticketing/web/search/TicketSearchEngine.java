@@ -343,9 +343,9 @@ public class TicketSearchEngine implements ITicketSearchEngine
     {
         Builder categoriesQueryBuilder = new Builder( );
 
-        List<TicketCategory> restrictedCategories = TicketCategoryService.getInstance( ).getRestrictedCategories( );
+        List<TicketCategory> categories = TicketCategoryService.getInstance( ).getAllCategories( );
 
-        for ( TicketCategory category : restrictedCategories )
+        for ( TicketCategory category : categories )
         {
             TermQuery domQuery = new TermQuery( new Term( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + category.getDepth( ).getDepthNumber( ), Integer.toString( category.getId( ) ) ) );
 
@@ -439,14 +439,11 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
                     break;
                 case DOMAIN:
-                    if ( docValuesTermsQueryIdAssigneeUnit != null && docValuesTermsQueryIdAssignerUnit != null )
-                    {
-                        booleanQueryBuilderGlobal.add( queryIdAdminUser, Occur.MUST_NOT );
-                        booleanQueryBuilderGlobal.add( queryIdAssignerUser, Occur.MUST_NOT );
+                    booleanQueryBuilderGlobal.add( queryIdAdminUser, Occur.MUST_NOT );
+                    booleanQueryBuilderGlobal.add( queryIdAssignerUser, Occur.MUST_NOT );
 
-                        booleanQueryBuilderGlobal.add( docValuesTermsQueryIdAssigneeUnit, Occur.MUST_NOT );
-                        booleanQueryBuilderGlobal.add( docValuesTermsQueryIdAssignerUnit, Occur.MUST_NOT );
-                    }
+                    booleanQueryBuilderGlobal.add( docValuesTermsQueryIdAssigneeUnit, Occur.MUST_NOT );
+                    booleanQueryBuilderGlobal.add( docValuesTermsQueryIdAssignerUnit, Occur.MUST_NOT );
                     break;
                 case ALL:
                 default:
