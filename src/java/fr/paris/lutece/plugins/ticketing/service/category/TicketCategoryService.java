@@ -38,6 +38,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
@@ -431,20 +432,6 @@ public class TicketCategoryService
     }
 
     /**
-     * Check if given category is Authorized for given user and given permission
-     * 
-     * @param category
-     * @param strPermission
-     * @param user
-     * @return true if authorized, false otherwise
-     */
-    public static boolean isAuthorized( TicketCategory category, String strPermission, AdminUser user )
-    {
-        List<TicketCategory> listTicketCategory = TicketCategoryService.getInstance( ).getBranchOfCategory( category );
-        return listTicketCategory.stream( ).allMatch( cat -> !cat.isManageable( ) || RBACService.isAuthorized( cat, strPermission, user ) );
-    }
-
-    /**
      * Check if the given category type is not referenced in category
      * 
      * @param nIdCategoryType
@@ -535,6 +522,48 @@ public class TicketCategoryService
     }
 
     /**
+     * Check if given category is Authorized for given user and given permission
+     * 
+     * @param category
+     * @param user
+     * @param strPermission
+     * @return true if authorized, false otherwise
+     */
+    public static boolean isAuthorizedBranch( TicketCategory category, AdminUser user, String strPermission )
+    {
+        List<TicketCategory> listTicketCategory = TicketCategoryService.getInstance( ).getBranchOfCategory( category );
+        return listTicketCategory.stream( ).allMatch( cat -> isAuthorizedCategory( cat, user, strPermission ) );
+    }
+
+    /**
+     * Check if given category is Authorized for given user and given permission
+     * 
+     * @param category
+     * @param user
+     * @param strPermission
+     * @return true if authorized, false otherwise
+     */
+    public static boolean isAuthorizedCategory( TicketCategory category, AdminUser user, String strPermission )
+    {
+        return !category.isManageable( ) || RBACService.isAuthorized( category, strPermission, user );
+    }
+
+    /**
+     * Get the children category list corresponding to the category and allowed for an admin user according to RBAC provided permission
+     * 
+     * @param ticketCategories
+     * @param adminUser
+     *            admin user
+     * @param strPermission
+     *            TicketCategory permission
+     * @return the category list filtered by RBAC permission
+     */
+    public List<TicketCategory> filterAuthorizedCategoryList( List<TicketCategory> ticketCategories, AdminUser user, String strPermission )
+    {
+        return ticketCategories.stream( ).filter( cat -> isAuthorizedCategory( cat, user, strPermission ) ).collect( Collectors.toList( ) );
+    }
+
+    /**
      * Get the children category list corresponding to the category and allowed for an admin user according to RBAC provided permission
      * 
      * @param ticketCategory
@@ -546,18 +575,7 @@ public class TicketCategoryService
      */
     public List<TicketCategory> getAuthorizedCategoryList( TicketCategory ticketCategory, AdminUser adminUser, String strPermission )
     {
-        List<TicketCategory> listCategories = ticketCategory.getChildren( );
-        List<TicketCategory> listAuthorizedCategories = new ArrayList<TicketCategory>( );
-
-        for ( TicketCategory category : listCategories )
-        {
-            if ( !category.isManageable( ) || RBACService.isAuthorized( category, strPermission, adminUser ) )
-            {
-                listAuthorizedCategories.add( category );
-            }
-        }
-
-        return listAuthorizedCategories;
+        return filterAuthorizedCategoryList( ticketCategory.getChildren( ), adminUser, strPermission );
     }
 
     /**
@@ -573,17 +591,8 @@ public class TicketCategoryService
     public List<TicketCategory> getAuthorizedCategoryList( int nDepth, AdminUser adminUser, String strPermission )
     {
         List<TicketCategory> listCategories = _treeCategories.getListNodesOfDepth( TicketCategoryTypeService.getInstance( true ).findByDepthNumber( nDepth ) );
-        List<TicketCategory> listAuthorizedCategories = new ArrayList<TicketCategory>( );
 
-        for ( TicketCategory category : listCategories )
-        {
-            if ( !category.isManageable( ) || RBACService.isAuthorized( category, strPermission, adminUser ) )
-            {
-                listAuthorizedCategories.add( category );
-            }
-        }
-
-        return listAuthorizedCategories;
+        return filterAuthorizedCategoryList( listCategories, adminUser, strPermission );
     }
 
     /**
@@ -771,18 +780,7 @@ public class TicketCategoryService
      */
     public List<TicketCategory> getAuthorizedDomainsList( AdminUser adminUser, String strPermission )
     {
-
-        List<TicketCategory> listDomain = getDomainList( );
-        List<TicketCategory> listAuthorizedDomain = new ArrayList<TicketCategory>( );
-        for ( TicketCategory domain : listDomain )
-        {
-            if ( !domain.isManageable( ) || RBACService.isAuthorized( domain, strPermission, adminUser ) )
-            {
-                listAuthorizedDomain.add( domain );
-            }
-        }
-
-        return listAuthorizedDomain;
+        return getAuthorizedCategoryList( TicketingConstants.DOMAIN_DEPTH, adminUser, strPermission );
     }
 
     /**
@@ -816,5 +814,10 @@ public class TicketCategoryService
         {
             return null;
         }
+    }
+
+    public List<TicketCategory> getRestrictedCategories( )
+    {
+        return _treeCategories.getNodes( ).stream( ).filter( category -> category.isManageable( ) ).collect( Collectors.toList( ) );
     }
 }

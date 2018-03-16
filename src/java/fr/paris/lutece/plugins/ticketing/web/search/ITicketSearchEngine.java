@@ -33,13 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.search;
 
-import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import java.util.List;
 
 import org.apache.lucene.queryparser.classic.ParseException;
 
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
+import fr.paris.lutece.portal.business.user.AdminUser;
 
 /**
  * SearchEngine for tickets document
@@ -64,7 +64,7 @@ public interface ITicketSearchEngine
      * @throws ParseException
      *             exception occurs while parsing input query
      */
-    List<Ticket> searchTickets( String strQuery, List<TicketCategory> listTicketCategory, TicketFilter filter ) throws ParseException;
+    List<Ticket> searchTickets( String strQuery, AdminUser user, TicketFilter filter ) throws ParseException;
 
     /**
      * search the count of tickets which contains strQuery in lucene contents field
@@ -79,7 +79,7 @@ public interface ITicketSearchEngine
      * @throws ParseException
      *             exception occurs while parsing input query
      */
-    int searchCountTickets( String strQuery, List<TicketCategory> listTicketCategory, TicketFilter filter ) throws ParseException;
+    int searchCountTickets( String strQuery, AdminUser user, TicketFilter filter ) throws ParseException;
 
     /**
      * search the tickets which contains id from the provided listIdsTickets in lucene contents fields

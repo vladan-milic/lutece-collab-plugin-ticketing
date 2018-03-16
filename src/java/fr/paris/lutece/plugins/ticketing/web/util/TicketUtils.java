@@ -465,7 +465,7 @@ public final class TicketUtils
     public static boolean isAuthorized( Ticket ticket, String strPermission, AdminUser user )
     {
         boolean ticketAuthorized = RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, user );
-        boolean categoriesBranchAuthorized = TicketCategoryService.isAuthorized( ticket.getTicketCategory( ), strPermission, user );
+        boolean categoriesBranchAuthorized = TicketCategoryService.isAuthorizedBranch( ticket.getTicketCategory( ), user, strPermission );
 
         return ticketAuthorized && categoriesBranchAuthorized;
     }

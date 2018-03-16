@@ -79,6 +79,7 @@ import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketIndexWriterUtil;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketSearchUtil;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
+import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
@@ -226,9 +227,9 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * {@inheritDoc}
      */
     @Override
-    public List<Ticket> searchTickets( String strQuery, List<TicketCategory> listTicketCategory, TicketFilter filter ) throws ParseException
+    public List<Ticket> searchTickets( String strQuery, AdminUser user, TicketFilter filter ) throws ParseException
     {
-        return search( createMainSearchQuery( strQuery, listTicketCategory, filter ), filter );
+        return search( createMainSearchQuery( strQuery, user, filter ), filter );
     }
 
     /**
@@ -291,9 +292,9 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * {@inheritDoc}
      */
     @Override
-    public int searchCountTickets( String strQuery, List<TicketCategory> listTicketCategory, TicketFilter filter ) throws ParseException
+    public int searchCountTickets( String strQuery, AdminUser user, TicketFilter filter ) throws ParseException
     {
-        return searchCount( createMainSearchQuery( strQuery, listTicketCategory, filter ), filter );
+        return searchCount( createMainSearchQuery( strQuery, user, filter ), filter );
     }
 
     /**
@@ -306,7 +307,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * @return the main query constructed for the search
      * @throws ParseException
      */
-    private BooleanQuery createMainSearchQuery( String strQuery, List<TicketCategory> listTicketDomain, TicketFilter filter ) throws ParseException
+    private BooleanQuery createMainSearchQuery( String strQuery, AdminUser user, TicketFilter filter ) throws ParseException
     {
         Builder mainQuery = new Builder( );
 
@@ -318,7 +319,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             mainQuery.add( queryTicket, BooleanClause.Occur.MUST );
         }
 
-        addQueryDomainClause( mainQuery, listTicketDomain );
+        addQueryCategoriesClause( mainQuery, user );
 
         // Construct the final query with the selected filter
         Builder finalGlobalQueryBuilder = new Builder( );
@@ -338,18 +339,21 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * @throws ParseException
      *             exception while parsing document type
      */
-    private void addQueryDomainClause( Builder booleanQueryBuilder, List<TicketCategory> listUserDomain ) throws ParseException
+    private void addQueryCategoriesClause( Builder booleanQueryBuilder, AdminUser user ) throws ParseException
     {
-        Builder domainsQueryBuilder = new Builder( );
+        Builder categoriesQueryBuilder = new Builder( );
 
-        for ( TicketCategory domain : listUserDomain )
+        List<TicketCategory> restrictedCategories = TicketCategoryService.getInstance( ).getRestrictedCategories( );
+
+        for ( TicketCategory category : restrictedCategories )
         {
+            TermQuery domQuery = new TermQuery( new Term( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + category.getDepth( ).getDepthNumber( ), Integer.toString( category.getId( ) ) ) );
 
-            TermQuery domQuery = new TermQuery( new Term( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + TicketingConstants.DOMAIN_DEPTH, Integer.toString( domain.getId( ) ) ) );
-            domainsQueryBuilder.add( new BooleanClause( domQuery, BooleanClause.Occur.SHOULD ) );
+            boolean isAuthorized = TicketCategoryService.isAuthorizedCategory( category, user, TicketCategory.PERMISSION_VIEW_LIST );
+            categoriesQueryBuilder.add( new BooleanClause( domQuery, isAuthorized ? BooleanClause.Occur.SHOULD : BooleanClause.Occur.MUST_NOT ) );
         }
 
-        booleanQueryBuilder.add( new BooleanClause( domainsQueryBuilder.build( ), BooleanClause.Occur.MUST ) );
+        booleanQueryBuilder.add( new BooleanClause( categoriesQueryBuilder.build( ), BooleanClause.Occur.MUST ) );
     }
 
     /**

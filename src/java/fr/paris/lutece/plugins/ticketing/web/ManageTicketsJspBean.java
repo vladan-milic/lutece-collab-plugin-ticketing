@@ -311,7 +311,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         try
         {
-            List<Ticket> listTickets = _engine.searchTickets( strQuery, _lstTicketDomain, filter );
+            List<Ticket> listTickets = _engine.searchTickets( strQuery, getUser( ), filter );
             File tempFile = File.createTempFile( "ticketing", null );
 
             List<String> titlesUntranslated = new ArrayList<>();
@@ -495,10 +495,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
                 try
                 {
-                    List<Ticket> ticketsUnrestricted = _engine.searchTickets( strQuery, _lstTicketDomain, filter );
-                    
-                    listTickets = filterAuthorizedTickets( ticketsUnrestricted );
-                    
+                    listTickets = _engine.searchTickets( strQuery, getUser( ), filter );
+
+                    // listTickets = filterAuthorizedTickets( ticketsUnrestricted );
+
                     if ( listTickets != null && !listTickets.isEmpty( ) )
                     {
                         for ( Ticket ticket : listTickets )
@@ -512,18 +512,18 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                     {
                         nAgentTickets = listIdTickets.size( );
                         filter.setFilterView( TicketFilterViewEnum.GROUP );
-                        nGroupTickets = getNbTicketsWithLucene( strQuery, _lstTicketDomain, filter );
+                        nGroupTickets = getNbTicketsWithLucene( strQuery, filter );
                     } else if ( strUpperSelectedTab.equals( TicketFilterViewEnum.GROUP.toString( ) ) )
                     {
                         nGroupTickets = listIdTickets.size( );
                         filter.setFilterView( TicketFilterViewEnum.AGENT );
-                        nAgentTickets = getNbTicketsWithLucene( strQuery, _lstTicketDomain, filter );
+                        nAgentTickets = getNbTicketsWithLucene( strQuery, filter );
                     } else
                     {
                         filter.setFilterView( TicketFilterViewEnum.AGENT );
-                        nAgentTickets = getNbTicketsWithLucene( strQuery, _lstTicketDomain, filter );
+                        nAgentTickets = getNbTicketsWithLucene( strQuery, filter );
                         filter.setFilterView( TicketFilterViewEnum.GROUP );
-                        nGroupTickets = getNbTicketsWithLucene( strQuery, _lstTicketDomain, filter );
+                        nGroupTickets = getNbTicketsWithLucene( strQuery, filter );
                     }
                 } catch ( ParseException e )
                 {
@@ -1192,15 +1192,14 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Return the number of tickets from Lucene index with filter
      *
      * @param strQuery
-     * @param listTicketDomain
      * @param filter
      * @return
      */
-    private int getNbTicketsWithLucene( String strQuery, List<TicketCategory> listTicketDomain, TicketFilter filter )
+    private int getNbTicketsWithLucene( String strQuery, TicketFilter filter )
     {
         try
         {
-            return _engine.searchCountTickets( strQuery, listTicketDomain, filter );
+            return _engine.searchCountTickets( strQuery, getUser( ), filter );
         } catch ( ParseException e )
         {
             AppLogService.error( "Error while parsing query " + strQuery, e );
