@@ -54,8 +54,6 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.TicketCriticality;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketPriority;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormService;
-import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
-import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.service.reference.ITicketReferenceService;
 import fr.paris.lutece.plugins.ticketing.web.filter.SessionFilter;
 import fr.paris.lutece.plugins.ticketing.web.user.UserFactory;
@@ -68,7 +66,6 @@ import fr.paris.lutece.portal.service.content.ContentPostProcessor;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
@@ -165,8 +162,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         }
 
         // check user rights
-        if ( !RBACService.isAuthorized( ticket, TicketResourceIdService.PERMISSION_VIEW, getUser( ) )
-                || !RBACService.isAuthorized( TicketCategoryService.getInstance( ).getTicketCategoryRBACResource( ticket.getTicketCategory( ) ), TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) )
+        if ( !TicketUtils.isAuthorized( ticket, TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) )
         {
             return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
         }
@@ -298,24 +294,24 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
                 .getAttribute( TicketingConstants.ATTRIBUTE_REDIRECT_AFTER_WORKFLOW_ACTION ) : request
                 .getParameter( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION );
 
-        String strRedirectUrl = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_RETURN_URL );
+                String strRedirectUrl = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_RETURN_URL );
 
-        if ( StringUtils.isNotEmpty( strRedirect ) && StringUtils.isNotEmpty( strRedirectUrl ) )
-        {
-            return redirect( request, strRedirectUrl );
-        }
-        else
-        {
-            if ( StringUtils.isNotEmpty( strRedirect ) )
-            {
-                if ( _mapRedirectUrl.containsKey( strRedirect ) )
+                if ( StringUtils.isNotEmpty( strRedirect ) && StringUtils.isNotEmpty( strRedirectUrl ) )
                 {
-                    return redirect( request, _mapRedirectUrl.get( strRedirect ) );
+                    return redirect( request, strRedirectUrl );
                 }
-            }
-        }
+                else
+                {
+                    if ( StringUtils.isNotEmpty( strRedirect ) )
+                    {
+                        if ( _mapRedirectUrl.containsKey( strRedirect ) )
+                        {
+                            return redirect( request, _mapRedirectUrl.get( strRedirect ) );
+                        }
+                    }
+                }
 
-        return defaultRedirect( request );
+                return defaultRedirect( request );
     }
 
     /**
