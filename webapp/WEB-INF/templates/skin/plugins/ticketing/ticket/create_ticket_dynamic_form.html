@@ -106,7 +106,7 @@
 	      			<#assign entryCategory = form.getEntry(formEntryType.category + 1)>
 	                <div class="form <#if entryCategory.hidden>hidden</#if>">
 	                    <span class="title domaine">${depth.label} <#if !entryCategory.mandatory>#i18n{ticketing.xpage.optional_field}</#if></span>
-	                    <span class="precision" id="help_message_1"></span>
+		                <span class="precision">Sélectionnez un ${depth.label} pour progresser dans votre demande</span>
 		                
 		                <div class="select hidden">
 	                    	<@comboWithParams name="id_category_1" default_value="" additionalParameters=" id=\"id_category_1\" depth=\"1\" class=\"select-control\" " items=[] />
@@ -115,6 +115,7 @@
 	                    <div class="row">
 	                        <div class="custom-radio group" id="first-level-container"></div>
 	                    </div>
+	                    <span class="subtitle" id="help_message_1"></span>
 	                </div>
 	                </#if>
 	                </#list>
