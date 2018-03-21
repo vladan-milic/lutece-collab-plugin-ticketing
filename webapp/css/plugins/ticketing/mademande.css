@@ -196,6 +196,10 @@ a:hover {
 	width: 100%;
 }
 
+label.radio-inline {
+	padding: 0 !important;	
+}
+
 .custom-radio.group.space {
     margin-left: 30px;
 }
