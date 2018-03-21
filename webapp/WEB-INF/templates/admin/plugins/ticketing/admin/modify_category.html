@@ -33,19 +33,22 @@
                 </@formGroup>
                 
 				<#if category.idParent == -1>
-	                <@fieldInputText i18nLabelKey="ticketing.modify_channel.labelIconFont" inputName="icon_font" mandatory=false value="${category.iconFont}" i18nHelpBlockKey="ticketing.modify_channel.labelIconFont.help" />
-				    <div class="form-group">
-				      <label class="col-xs-12 col-sm-3 control-label">#i18n{ticketing.modify_channel.labelIcon}&nbsp; :</label>
-				      <div class="col-xs-12 col-sm-9">
+	                <@formGroup labelKey='#i18n{ticketing.modify_channel.labelIconFont}' helpKey='#i18n{ticketing.modify_channel.labelIconFont.help}' mandatory=false>
+	                	<@input type='text' name="icon_font" value="${category.iconFont}" />
+	                </@formGroup>
+	                <@formGroup labelKey='#i18n{ticketing.modify_channel.labelIcon}' helpKey='' mandatory=false>
 				        <p class="form-control-static" id="icon">
 				          <span id="span_icon" class="fa ${category.iconFont}"></span>
 				        </p>
-				      </div>
-				    </div>
+				     </@formGroup>
 				</#if>
 				
                 <@formGroup labelKey='#i18n{ticketing.modify_category.labelManageable}' helpKey='#i18n{ticketing.modify_category.labelManageable.help}' mandatory=false>
-                        <input type="checkbox" name="manageable" <#if category.manageable>checked="checked"</#if>>
+                    <div>
+                     <label class="control-label">
+                        <input type="checkbox" name="manageable" <#if category.manageable>checked="checked"</#if>> #i18n{ticketing.modify_category.labelUserRights}
+                     </label>
+                    </div>
                 </@formGroup>
                 
                 <#if category.idParent == -1>

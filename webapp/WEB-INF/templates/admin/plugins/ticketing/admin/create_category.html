@@ -33,19 +33,22 @@
                 </@formGroup>
                 
                 <#if category.idParent == -1>
-				    <@fieldInputText i18nLabelKey="ticketing.create_channel.labelIconFont" inputName="icon_font" mandatory=false value="" i18nHelpBlockKey="ticketing.create_channel.labelIconFont.help" />
-				    <div class="form-group">
-				      <label class="col-xs-12 col-sm-3 control-label">#i18n{ticketing.create_channel.labelIcon}</label>
-				      <div class="col-xs-12 col-sm-9">
+	                <@formGroup labelKey='#i18n{ticketing.modify_channel.labelIconFont}' helpKey='#i18n{ticketing.modify_channel.labelIconFont.help}' mandatory=false>
+	                	<@input type='text' name="icon_font" value="" />
+	                </@formGroup>
+	                <@formGroup labelKey='#i18n{ticketing.modify_channel.labelIcon}' helpKey='' mandatory=false>
 				        <p class="form-control-static" id="icon">
 				          <span id="span_icon" class="fa"></span>
 				        </p>
-				      </div>
-				    </div>     
+				     </@formGroup>
 				</#if>           
 				
                 <@formGroup labelKey='#i18n{ticketing.modify_category.labelManageable}' helpKey='#i18n{ticketing.modify_category.labelManageable.help}' mandatory=false>
-                        <input type="checkbox" name="manageable" >
+                	<div>
+                     <label class="control-label">
+                        <input type="checkbox" name="manageable"> #i18n{ticketing.modify_category.labelUserRights}
+                     </label>
+                    </div>
                 </@formGroup>
                 
                 <#if category.idParent == -1>
