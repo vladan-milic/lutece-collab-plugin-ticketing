@@ -74,12 +74,12 @@
 </@tabsWrapper>
 <script type="text/javascript">
 var changeIcon = function (){
-  $('span#span_icon').attr('class', 'fa').addClass($("#icon_font").val());
+  $('span#span_icon').attr('class', 'fa').addClass($("[name=icon_font]").val());
 }
 $(document).ready(function(){
-  $("#icon_font").change(changeIcon);
-  $("#icon_font").click(changeIcon);
-  $("#icon_font").keyup(changeIcon);
+  $("[name=icon_font]").change(changeIcon);
+  $("[name=icon_font]").click(changeIcon);
+  $("[name=icon_font]").keyup(changeIcon);
 })
 </script>
 
