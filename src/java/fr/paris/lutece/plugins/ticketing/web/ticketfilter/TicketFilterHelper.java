@@ -410,7 +410,7 @@ public final class TicketFilterHelper
             }
             else
             {
-                TicketCategory ticketCategory = TicketCategoryService.getInstance( true ).findCategoryById( nParentId );
+                TicketCategory ticketCategory = TicketCategoryService.getInstance( ).findCategoryById( nParentId );
                 ticketCategoryList = ( ArrayList<TicketCategory> ) TicketCategoryService.getInstance( true ).getAuthorizedCategoryList( ticketCategory, user, TicketCategory.PERMISSION_VIEW_LIST );
             }
             nParentId = ( fltrFilter.getMapCategoryId( ).get( i ) != null ) ? fltrFilter.getMapCategoryId( ).get( i ) : TicketFilter.CONSTANT_ID_NULL;
