@@ -24,10 +24,10 @@
 	        <div class="row">
 	            <div class="col-sm-12">
 	                <span class="text-muted">
-	                    Tous les champs sont obligatoires sauf mention contraire.
+	                    #i18n{ticketing.xpage.create_ticket.mandatory_fields}
 	                </span>
 	                <div class="form">
-	                    <span class="title">Identité du demandeur</span>
+	                    <span class="title">#i18n{ticketing.xpage.create_ticket.title_bloc1}</span>
 	                    
       					<#assign entryUserTitle = form.getEntry(formEntryType.userTitle)>
 	                    <div class="row <#if entryUserTitle.hidden>hidden</#if>">
@@ -106,7 +106,7 @@
 	      			<#assign entryCategory = form.getEntry(formEntryType.category + 1)>
 	                <div class="form <#if entryCategory.hidden>hidden</#if>">
 	                    <span class="title domaine">${depth.label} <#if !entryCategory.mandatory>#i18n{ticketing.xpage.optional_field}</#if></span>
-		                <span class="precision">Sélectionnez un ${depth.label} pour progresser dans votre demande</span>
+		                <span class="precision">#i18n{ticketing.xpage.create_ticket.select} ${depth.label} #i18n{ticketing.xpage.create_ticket.toprogress}</span>
 		                
 		                <div class="select hidden">
 	                    	<@comboWithParams name="id_category_1" default_value="" additionalParameters=" id=\"id_category_1\" depth=\"1\" class=\"select-control\" " items=[] />
@@ -123,7 +123,7 @@
 	                <!--second part-->
 	                <div class="second-part">
 	                    <div class="form last">
-	                        <span class="title">Précision de la demande</span>
+	                        <span class="title">#i18n{ticketing.xpage.create_ticket.title_bloc2}</span>
 	                        
 				            <#list categories_depths as depth>
 				            <#if depth.depthNumber != 1>
