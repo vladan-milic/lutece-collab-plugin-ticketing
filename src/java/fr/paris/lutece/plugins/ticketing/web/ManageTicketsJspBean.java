@@ -226,6 +226,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String HEADER_CHANNEL = "ticketing.export.header.channel";
     private static final String HEADER_ASSIGNEMENT_ENTITY = "ticketing.export.header.assignement.entity";
     private static final String HEADER_ASSIGNEMENT_OFFICER = "ticketing.export.header.assignement.officer";
+    private static final String HEADER_FINAL_RESPONSE_DATE= "ticketing.export.header.final.response.date";
 
     /**
      * Build the Manage View
@@ -329,6 +330,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             titlesUntranslated.add( HEADER_CHANNEL );
             titlesUntranslated.add( HEADER_ASSIGNEMENT_ENTITY );
             titlesUntranslated.add( HEADER_ASSIGNEMENT_OFFICER );
+            titlesUntranslated.add( HEADER_FINAL_RESPONSE_DATE );
 
             List<String> titlesTranslated = titlesUntranslated.stream( ).map( title -> I18nService.getLocalizedString( title, Locale.FRENCH ) ).collect( Collectors.toList( ) );
 
@@ -358,6 +360,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 line.add( ticket.getChannel( ) != null ? ticket.getChannel( ).getLabel( ) : "" );
                 line.add( ticket.getAssigneeUnit( ) != null ? ticket.getAssigneeUnit( ).getName( ) : "" );
                 line.add( ticket.getAssigneeUser( ) != null ? ticket.getAssigneeUser( ).getFirstname( ) + " " + ticket.getAssigneeUser( ).getLastname( ) : "" );
+                if ( ticket.getTicketStatus() == 1 ) {
+                	line.add( ticket.getDateClose( ) != null ? sdf2.format( ticket.getDateClose( ) ) : "" );
+                }
 
                 // Write line in the temp file
                 CSVUtils.writeLine( w, line );
