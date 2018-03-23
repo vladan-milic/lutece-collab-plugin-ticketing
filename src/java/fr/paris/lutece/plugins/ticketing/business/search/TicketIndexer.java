@@ -265,6 +265,12 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new LongPoint( TicketSearchItemConstant.FIELD_DATE_CREATION, longCreationDate ) );
         doc.add( new NumericDocValuesField( TicketSearchItemConstant.FIELD_DATE_CREATION, longCreationDate ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_DATE_CREATION, longCreationDate ) );
+        
+        // --- ticket date close
+        Long longCloseDate = ticket.getDateClose( ) == null ? 0 : ticket.getDateClose().getTime();
+        doc.add( new LongPoint( TicketSearchItemConstant.FIELD_DATE_CLOSE, longCloseDate ) );
+        doc.add( new NumericDocValuesField( TicketSearchItemConstant.FIELD_DATE_CLOSE, longCloseDate ) );
+        doc.add( new StoredField( TicketSearchItemConstant.FIELD_DATE_CLOSE, longCloseDate ) );
 
         // --- ticket comment
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_COMMENT, manageNullValue( ticket.getTicketComment( ) ) ) );

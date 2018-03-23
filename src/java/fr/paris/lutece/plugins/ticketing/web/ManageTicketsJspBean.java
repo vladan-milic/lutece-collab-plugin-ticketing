@@ -361,7 +361,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 line.add( ticket.getAssigneeUnit( ) != null ? ticket.getAssigneeUnit( ).getName( ) : "" );
                 line.add( ticket.getAssigneeUser( ) != null ? ticket.getAssigneeUser( ).getFirstname( ) + " " + ticket.getAssigneeUser( ).getLastname( ) : "" );
                 if ( ticket.getTicketStatus() == 1 ) {
-                	line.add( ticket.getDateClose( ) != null ? sdf2.format( ticket.getDateClose( ) ) : "" );
+                	line.add( ticket.getDateClose( ) != null ? sdf.format( ticket.getDateClose( ) ) : "" );
                 }
 
                 // Write line in the temp file
