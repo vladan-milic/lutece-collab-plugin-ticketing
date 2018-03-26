@@ -216,10 +216,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String HEADER_REFERENCE = "ticketing.export.header.reference"; 
     private static final String HEADER_CREATION_DATE = "ticketing.export.header.creation.date";
     private static final String HEADER_TIME_CREATION = "ticketing.export.header.time.creation";
-    private static final String HEADER_NATURE_SOLICITATION = "ticketing.export.header.nature.solicitation";
-    private static final String HEADER_DOMAIN_SOLICITATION = "ticketing.export.header.domain.solicitation";
-    private static final String HEADER_PROBLEMATIC_SOLICITATION = "ticketing.export.header.problematic.solicitation";
-    private static final String HEADER_SUB_PROBLEMS_SOLLICITATION = "ticketing.export.header.sub.problems.solicitation";
     private static final String HEADER_OBJECT_SOLICITATION = "ticketing.export.header.object.solicitation";
     private static final String HEADER_STATUS = "ticketing.export.header.status";
     private static final String HEADER_NOMENCLATURE = "ticketing.export.header.nomenclature";
