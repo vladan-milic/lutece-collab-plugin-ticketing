@@ -74,4 +74,9 @@ public class FormEntryType
         return CATEGORY;
     }
 
+    public boolean isForcedMandatory( String entryType )
+    {
+        return Arrays.asList( EMAIL, FIRST_NAME, LAST_NAME ).contains( entryType );
+    }
+
 }

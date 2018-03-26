@@ -226,9 +226,6 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         {
             formEntry = createFormEntry( request, entryType );
 
-            // force mandatory if email, firstname or lastname
-            formEntry.setMandatory( _formEntryType.getEmail( ).equals( entryType ) || _formEntryType.getFirstName( ).equals( entryType ) || _formEntryType.getLastName( ).equals( entryType ) );
-
             FormEntryHome.create( formEntry );
         }
 
@@ -258,8 +255,10 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         String strMandatory = request.getParameter( "formEntry." + entryType + ".mandatory" );
         String strDefaultValue = request.getParameter( "formEntry." + entryType + ".defaultValue" );
 
+        boolean forcedMandatory = _formEntryType.isForcedMandatory( entryType );
+
         formEntry.setHidden( strShown == null );
-        formEntry.setMandatory( strMandatory != null );
+        formEntry.setMandatory( strMandatory != null || forcedMandatory );
         formEntry.setDefaultValue( strDefaultValue );
 
         return formEntry;
