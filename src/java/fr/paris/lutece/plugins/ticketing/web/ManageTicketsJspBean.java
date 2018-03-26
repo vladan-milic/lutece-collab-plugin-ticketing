@@ -320,10 +320,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             titlesUntranslated.add( HEADER_TIME_CREATION );
             // Insert here category types after being translated
             Integer indexWhereCategoryWillBeAdded = 2;
-            titlesUntranslated.add( HEADER_NATURE_SOLICITATION );
-            titlesUntranslated.add( HEADER_DOMAIN_SOLICITATION );
-            titlesUntranslated.add( HEADER_PROBLEMATIC_SOLICITATION );
-            titlesUntranslated.add( HEADER_SUB_PROBLEMS_SOLLICITATION );
             titlesUntranslated.add( HEADER_OBJECT_SOLICITATION );
             titlesUntranslated.add( HEADER_STATUS );
             titlesUntranslated.add( HEADER_NOMENCLATURE );
@@ -334,7 +330,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
             List<String> titlesTranslated = titlesUntranslated.stream( ).map( title -> I18nService.getLocalizedString( title, Locale.FRENCH ) ).collect( Collectors.toList( ) );
 
-            for(TicketCategoryType category : TicketCategoryTypeHome.getCategoryTypesList( )) {
+            List<TicketCategoryType> categoryTypesList = TicketCategoryTypeHome.getCategoryTypesList( );
+			for(TicketCategoryType category : categoryTypesList) {
                 titlesTranslated.add( indexWhereCategoryWillBeAdded + category.getDepthNumber( ), category.getLabel( ) );
             }
 
@@ -354,6 +351,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 for(TicketCategory category : ticket.getBranch( )) {
                     line.add( category.getLabel( ) );
                 }
+                for ( int index=0; index < categoryTypesList.size() - ticket.getBranch( ).size( ); index++  )
+                {
+                	line.add( "" );
+                }
                 line.add( ticket.getTicketComment( ) );
                 line.add( ticket.getState( ).getName( ) );
                 line.add( ticket.getNomenclature( ) );
@@ -362,6 +363,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 line.add( ticket.getAssigneeUser( ) != null ? ticket.getAssigneeUser( ).getFirstname( ) + " " + ticket.getAssigneeUser( ).getLastname( ) : "" );
                 if ( ticket.getTicketStatus() == 1 ) {
                 	line.add( ticket.getDateClose( ) != null ? sdf.format( ticket.getDateClose( ) ) : "" );
+                } else {
+                	line.add( "" );
                 }
 
                 // Write line in the temp file
