@@ -82,7 +82,17 @@ public class FormAuthorizationFilter implements Filter
                 }
                 else
                 {
-                    resp.sendRedirect( PortalJspBean.redirectLogin( req ) );
+                    Form form = getFormFromRequest( request );
+
+                    // if form exists and doesn't require connection, form is not restricted
+                    if ( form != null )
+                    {
+                        resp.sendRedirect( AppPathService.getAbsoluteUrl( req, SecurityService.getInstance( ).getLoginPageUrl( ) + "&form=" + form.getId( ) ) );
+                    }
+                    else
+                    {
+                        resp.sendRedirect( PortalJspBean.redirectLogin( req ) );
+                    }
                 }
 
                 return;
@@ -284,23 +294,7 @@ public class FormAuthorizationFilter implements Filter
         // Only apply filter to ticket xpage
         if ( TicketXPage.TICKET_XPAGE_NAME.equals( strXPage ) )
         {
-            // get form data
-            String formId = request.getParameter( TicketXPage.PARAMETER_ID_FORM );
-            Form form = null;
-
-            try
-            {
-                form = FormHome.findByPrimaryKey( Integer.parseInt( formId ) );
-            }
-            catch ( NumberFormatException e )
-            {
-                AppLogService.info( formId );
-            }
-
-            if ( form == null )
-            {
-                form = FormHome.findByPrimaryKey( 1 );
-            }
+            Form form = getFormFromRequest( request );
 
             // if form exists and doesn't require connection, form is not restricted
             if ( form != null && !form.isConnection( ) )
@@ -310,5 +304,27 @@ public class FormAuthorizationFilter implements Filter
         }
 
         return true;
+    }
+
+    private Form getFormFromRequest( ServletRequest request )
+    {
+        // get form data
+        String formId = request.getParameter( TicketXPage.PARAMETER_ID_FORM );
+        Form form = null;
+
+        try
+        {
+            form = FormHome.findByPrimaryKey( Integer.parseInt( formId ) );
+        }
+        catch ( NumberFormatException e )
+        {
+            AppLogService.info( formId );
+        }
+
+        if ( form == null )
+        {
+            form = FormHome.findByPrimaryKey( 1 );
+        }
+        return form;
     }
 }
