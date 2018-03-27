@@ -31,3 +31,40 @@ textarea.ticketing {
 	word-wrap:break-word;
 	height:100%;
 }
+
+#messages_errors_div {
+    background: #c50e44;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    outline: 0;
+    color: white;
+    font-variant: all-small-caps;
+    font-size: 16px;
+    text-align: center;
+    position: relative;
+}
+
+#messages_errors_div .fa {
+    display: none;
+}
+
+#messages_errors_div .close {
+    color: transparent;
+    text-shadow: none;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-family: FontAwesome;
+    opacity: 1;
+    width: 20px;
+    height: 20px;
+}
+
+#messages_errors_div .close::before {
+    content: '\f00d';
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
