@@ -37,6 +37,9 @@ import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
+import fr.paris.lutece.plugins.ticketing.business.form.Form;
+import fr.paris.lutece.plugins.ticketing.business.form.FormEntryType;
+import fr.paris.lutece.plugins.ticketing.business.form.FormHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
@@ -48,6 +51,8 @@ import fr.paris.lutece.util.beanvalidation.ValidationError;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * This class permits to validate a ticket
@@ -150,5 +155,74 @@ public class TicketValidator
         }
 
         return listErrors;
+    }
+
+    /**
+     * Validate fields and return errors
+     * 
+     * @param request
+     * @param form
+     * @param listValidationErrors
+     *            populate
+     */
+    public List<String> validateDynamicFields( HttpServletRequest request )
+    {
+        List<String> listValidationErrors = new ArrayList<>( );
+
+        FormValidator formValidator = new FormValidator( request );
+        Form form = FormHome.getFormFromRequest( request );
+
+        FormEntryType formEntryType = new FormEntryType( );
+        if ( defaultOptional( form, formEntryType.getUserTitle( ) ) )
+        {
+            listValidationErrors.add( formValidator.isUserTitleFilled( ) );
+        }
+
+        if ( defaultRequired( form, formEntryType.getFirstName( ) ) )
+        {
+            listValidationErrors.add( formValidator.isFirstNameFilled( ) );
+        }
+
+        if ( defaultRequired( form, formEntryType.getLastName( ) ) )
+        {
+            listValidationErrors.add( formValidator.isLastNameFilled( ) );
+        }
+
+        if ( defaultRequired( form, formEntryType.getEmail( ) ) )
+        {
+            listValidationErrors.add( formValidator.isEmailFilled( ) );
+        }
+
+        if ( defaultRequired( form, formEntryType.getPhoneNumbers( ) ) )
+        {
+            listValidationErrors.add( formValidator.isPhoneNumberFilled( ) );
+        }
+
+        if ( defaultOptional( form, formEntryType.getContactMode( ) ) )
+        {
+            listValidationErrors.add( formValidator.isContactModeFilled( ) );
+        }
+
+        if ( defaultRequired( form, formEntryType.getComment( ) ) )
+        {
+            listValidationErrors.add( formValidator.isCommentFilled( ) );
+        }
+
+        return listValidationErrors;
+    }
+
+    private boolean defaultRequired( Form form, String entryType )
+    {
+        return form == null || isMandatoryEntry( form, entryType );
+    }
+
+    private boolean defaultOptional( Form form, String entryType )
+    {
+        return isMandatoryEntry( form, entryType );
+    }
+
+    private boolean isMandatoryEntry( Form form, String entry )
+    {
+        return form != null && form.getEntry( entry ).isMandatory( );
     }
 }

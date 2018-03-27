@@ -171,7 +171,7 @@ public class TicketXPage extends WorkflowCapableXPage
     {
         Map<String, Object> model = getModel( );
 
-        Form form = getFormFromRequest( request );
+        Form form = FormHome.getFormFromRequest( request );
         List<Integer> restrictedCategoriesId = null;
 
         if ( form == null || form.getId( ) == 0 )
@@ -218,35 +218,6 @@ public class TicketXPage extends WorkflowCapableXPage
         return getXPage( TEMPLATE_CREATE_TICKET_DYNAMIC_FORM, request.getLocale( ), model );
     }
 
-
-    /**
-     * Retrieve form from request
-     * 
-     * @param request
-     *            the request to parse
-     * @return
-     */
-    private Form getFormFromRequest( HttpServletRequest request )
-    {
-        String formId = request.getParameter( PARAMETER_ID_FORM );
-        Form form = null;
-
-        try
-        {
-            form = FormHome.findByPrimaryKey( Integer.parseInt( formId ) );
-        }
-        catch ( NumberFormatException e )
-        {
-            AppLogService.info( formId );
-        }
-
-        if ( form == null )
-        {
-            form = FormHome.findByPrimaryKey( 1 );
-        }
-
-        return form;
-    }
 
     /**
      * Returns the form to create a ticket
@@ -432,7 +403,7 @@ public class TicketXPage extends WorkflowCapableXPage
     @Action( ACTION_CREATE_TICKET )
     public XPage doCreateTicket( HttpServletRequest request )
     {
-        Form form = getFormFromRequest( request );
+        Form form = FormHome.getFormFromRequest( request );
         try
         {
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
@@ -484,7 +455,7 @@ public class TicketXPage extends WorkflowCapableXPage
     @View( value = VIEW_RECAP_TICKET )
     public XPage getRecapTicket( HttpServletRequest request )
     {
-        Form form = getFormFromRequest( request );
+        Form form = FormHome.getFormFromRequest( request );
         if ( form == null )
         {
             form = new Form( );
@@ -520,8 +491,7 @@ public class TicketXPage extends WorkflowCapableXPage
         populate( ticket, request );
         ticket.setListResponse( new ArrayList<Response>( ) );
 
-        Form form = getFormFromRequest( request );
-        FormEntryType formEntryType = new FormEntryType( );
+        Form form = FormHome.getFormFromRequest( request );
 
         // Validate the TicketCategory
         TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, request.getLocale( ) ).validateTicketCategory( form );
@@ -545,42 +515,7 @@ public class TicketXPage extends WorkflowCapableXPage
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( request.getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validate( ticket, false );
 
-        FormValidator formValidator = new FormValidator( request );
-
-        if ( defaultOptional( form, formEntryType.getUserTitle( ) ) )
-        {
-            listValidationErrors.add( formValidator.isUserTitleFilled( ) );
-        }
-
-        if ( defaultRequired( form, formEntryType.getFirstName( ) ) )
-        {
-            listValidationErrors.add( formValidator.isFirstNameFilled( ) );
-        }
-
-        if ( defaultRequired( form, formEntryType.getLastName( ) ) )
-        {
-            listValidationErrors.add( formValidator.isLastNameFilled( ) );
-        }
-
-        if ( defaultRequired( form, formEntryType.getEmail( ) ) )
-        {
-            listValidationErrors.add( formValidator.isEmailFilled( ) );
-        }
-
-        if ( defaultRequired( form, formEntryType.getPhoneNumbers( ) ) )
-        {
-            listValidationErrors.add( formValidator.isPhoneNumberFilled( ) );
-        }
-
-        if ( defaultOptional( form, formEntryType.getContactMode( ) ) )
-        {
-            listValidationErrors.add( formValidator.isContactModeFilled( ) );
-        }
-
-        if ( defaultRequired( form, formEntryType.getComment( ) ) )
-        {
-            listValidationErrors.add( formValidator.isCommentFilled( ) );
-        }
+        listValidationErrors.addAll( ticketValidator.validateDynamicFields( request ) );
 
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
         if ( iNbCharcount > 5000 )
@@ -639,6 +574,7 @@ public class TicketXPage extends WorkflowCapableXPage
         }
     }
 
+
     /**
      * Redirect to requested view
      *
@@ -673,20 +609,6 @@ public class TicketXPage extends WorkflowCapableXPage
         return url.getUrl( );
     }
 
-    private boolean defaultRequired( Form form, String entryType )
-    {
-        return form == null || isMandatoryEntry( form, entryType );
-    }
-
-    private boolean defaultOptional( Form form, String entryType )
-    {
-        return isMandatoryEntry( form, entryType );
-    }
-
-    private boolean isMandatoryEntry( Form form, String entry )
-    {
-        return form != null && form.getEntry( entry ).isMandatory( );
-    }
 
     /**
      * Returns the form to confirm a ticket
@@ -699,7 +621,7 @@ public class TicketXPage extends WorkflowCapableXPage
     public XPage getConfirmTicket( HttpServletRequest request )
     {
         Map<String, Object> model = getModel( );
-        Form form = getFormFromRequest( request );
+        Form form = FormHome.getFormFromRequest( request );
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
 
         model.put( TicketingConstants.MARK_TICKET, ticket );
@@ -735,7 +657,7 @@ public class TicketXPage extends WorkflowCapableXPage
             return redirect( request, strRedirectUrl );
         }
 
-        Form form = getFormFromRequest( request );
+        Form form = FormHome.getFormFromRequest( request );
         return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
     }
 
@@ -846,21 +768,21 @@ public class TicketXPage extends WorkflowCapableXPage
     @Override
     protected XPage redirectAfterWorkflowAction( HttpServletRequest request )
     {
-        Form form = getFormFromRequest( request );
+        Form form = FormHome.getFormFromRequest( request );
         return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
     }
 
     @Override
     protected XPage redirectWorkflowActionCancelled( HttpServletRequest request )
     {
-        Form form = getFormFromRequest( request );
+        Form form = FormHome.getFormFromRequest( request );
         return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
     }
 
     @Override
     protected XPage defaultRedirectWorkflowAction( HttpServletRequest request )
     {
-        Form form = getFormFromRequest( request );
+        Form form = FormHome.getFormFromRequest( request );
         return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
     }
 }

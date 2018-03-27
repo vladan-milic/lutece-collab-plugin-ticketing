@@ -70,6 +70,7 @@ public final class TicketingConstants
     public static final String PARAMETER_SELECTED_TICKETS                                  = "selected_tickets";
     public static final String PARAMETER_IS_MASS_ACTION                                    = "is_mass_action";
     public static final String PARAMETER_CATEGORY_ID                                       = "id_category_";
+    public static final String PARAMETER_ID_FORM = "form";
 
     // Attributes
     public static final String ATTRIBUTE_HIDE_NEXT_STEP_BUTTON                             = "hide_next_button";

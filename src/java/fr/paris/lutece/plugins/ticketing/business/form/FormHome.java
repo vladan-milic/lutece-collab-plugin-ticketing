@@ -35,14 +35,18 @@ package fr.paris.lutece.plugins.ticketing.business.form;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategoryHome;
+import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategory;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
 
 import java.util.List;
 import java.util.function.Consumer;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * This class provides instances management methods (create, find, ...) for Form objects
@@ -154,5 +158,35 @@ public final class FormHome
     {
         return _dao.selectFormsReferenceList(_plugin );
     }
+
+    /**
+     * Retrieve form from request
+     * 
+     * @param request
+     *            the request to parse
+     * @return
+     */
+    public static Form getFormFromRequest( HttpServletRequest request )
+    {
+        String formId = request.getParameter( TicketingConstants.PARAMETER_ID_FORM );
+        Form form = null;
+
+        try
+        {
+            form = FormHome.findByPrimaryKey( Integer.parseInt( formId ) );
+        }
+        catch ( NumberFormatException e )
+        {
+            AppLogService.info( formId );
+        }
+
+        if ( form == null )
+        {
+            form = FormHome.findByPrimaryKey( 1 );
+        }
+
+        return form;
+    }
+
 }
 

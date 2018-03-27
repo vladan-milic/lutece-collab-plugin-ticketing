@@ -678,4 +678,5 @@ public class TicketFormService implements Serializable
     {
         session.removeAttribute( TicketingConstants.SESSION_VALIDATED_TICKET_FORM );
     }
+
 }

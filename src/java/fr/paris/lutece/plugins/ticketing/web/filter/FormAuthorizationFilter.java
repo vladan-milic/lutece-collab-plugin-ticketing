@@ -20,7 +20,6 @@ import fr.paris.lutece.portal.service.message.SiteMessageService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
-import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.web.PortalJspBean;
 import fr.paris.lutece.portal.web.constants.Messages;
@@ -61,7 +60,7 @@ public class FormAuthorizationFilter implements Filter
         HttpServletRequest req = ( HttpServletRequest ) request;
         HttpServletResponse resp = ( HttpServletResponse ) response;
 
-        if ( SecurityService.isAuthenticationEnable( ) && isPrivateUrl( req ) && isFormRestricted( request ) )
+        if ( SecurityService.isAuthenticationEnable( ) && isPrivateUrl( req ) && isFormRestricted( req ) )
         {
             try
             {
@@ -82,7 +81,7 @@ public class FormAuthorizationFilter implements Filter
                 }
                 else
                 {
-                    Form form = getFormFromRequest( request );
+                    Form form = FormHome.getFormFromRequest( req );
 
                     // if form exists and doesn't require connection, form is not restricted
                     if ( form != null )
@@ -287,14 +286,14 @@ public class FormAuthorizationFilter implements Filter
         return AppPathService.getBaseUrl( request ) + request.getServletPath( ).substring( 1 );
     }
 
-    public boolean isFormRestricted( ServletRequest request ) throws IOException, ServletException
+    public boolean isFormRestricted( HttpServletRequest request ) throws IOException, ServletException
     {
         String strXPage = request.getParameter( PARAMETER_XPAGE );
 
         // Only apply filter to ticket xpage
         if ( TicketXPage.TICKET_XPAGE_NAME.equals( strXPage ) )
         {
-            Form form = getFormFromRequest( request );
+            Form form = FormHome.getFormFromRequest( request );
 
             // if form exists and doesn't require connection, form is not restricted
             if ( form != null && !form.isConnection( ) )
@@ -304,27 +303,5 @@ public class FormAuthorizationFilter implements Filter
         }
 
         return true;
-    }
-
-    private Form getFormFromRequest( ServletRequest request )
-    {
-        // get form data
-        String formId = request.getParameter( TicketXPage.PARAMETER_ID_FORM );
-        Form form = null;
-
-        try
-        {
-            form = FormHome.findByPrimaryKey( Integer.parseInt( formId ) );
-        }
-        catch ( NumberFormatException e )
-        {
-            AppLogService.info( formId );
-        }
-
-        if ( form == null )
-        {
-            form = FormHome.findByPrimaryKey( 1 );
-        }
-        return form;
     }
 }

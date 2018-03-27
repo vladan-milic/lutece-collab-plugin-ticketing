@@ -327,7 +327,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             List<String> titlesTranslated = titlesUntranslated.stream( ).map( title -> I18nService.getLocalizedString( title, Locale.FRENCH ) ).collect( Collectors.toList( ) );
 
             List<TicketCategoryType> categoryTypesList = TicketCategoryTypeHome.getCategoryTypesList( );
-			for(TicketCategoryType category : categoryTypesList) {
+            for(TicketCategoryType category : categoryTypesList) {
                 titlesTranslated.add( indexWhereCategoryWillBeAdded + category.getDepthNumber( ), category.getLabel( ) );
             }
 
@@ -349,7 +349,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 }
                 for ( int index=0; index < categoryTypesList.size() - ticket.getBranch( ).size( ); index++  )
                 {
-                	line.add( "" );
+                    line.add( "" );
                 }
                 line.add( ticket.getTicketComment( ) );
                 line.add( ticket.getState( ).getName( ) );
@@ -358,9 +358,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 line.add( ticket.getAssigneeUnit( ) != null ? ticket.getAssigneeUnit( ).getName( ) : "" );
                 line.add( ticket.getAssigneeUser( ) != null ? ticket.getAssigneeUser( ).getFirstname( ) + " " + ticket.getAssigneeUser( ).getLastname( ) : "" );
                 if ( ticket.getTicketStatus() == 1 ) {
-                	line.add( ticket.getDateClose( ) != null ? sdf.format( ticket.getDateClose( ) ) : "" );
+                    line.add( ticket.getDateClose( ) != null ? sdf.format( ticket.getDateClose( ) ) : "" );
                 } else {
-                	line.add( "" );
+                    line.add( "" );
                 }
 
                 // Write line in the temp file
@@ -1013,6 +1013,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // Validate the bean
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validateBean( ticket );
+
+        listValidationErrors.addAll( ticketValidator.validateDynamicFields( request ) );
+
         for ( String error : listValidationErrors )
         {
             if ( !StringUtils.isEmpty( error ) )
@@ -1020,13 +1023,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 addError( error );
                 bIsFormValid = false;
             }
-        }
-
-        String errorModeContactFilled = new FormValidator( request ).isContactModeFilled( );
-        if ( errorModeContactFilled != null )
-        {
-            addError( errorModeContactFilled );
-            bIsFormValid = false;
         }
 
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
