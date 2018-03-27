@@ -39,6 +39,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.categoryinputs.TicketCategoryInputsHome;
 
 import java.util.List;
@@ -108,7 +109,6 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
 
         JSONArray jsonRootElements = new JSONArray( );
 
-        int maxDepth = 0;
         for ( TicketCategory ticketCategory : this.getRootElements( ) )
         {
             JSONObject jsonRootElement = new JSONObject( );
@@ -120,17 +120,14 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
             jsonRootElement.accumulate( FormatConstants.KEY_ICON, ticketCategory.getIconFont( ) );
             addJSONArraysChildren( jsonRootElement, ticketCategory );
             jsonRootElements.add( jsonRootElement );
-
-            maxDepth = Math.max( ticketCategory.getDepth( ).getDepthNumber( ), maxDepth );
         }
 
         json.accumulate( FormatConstants.KEY_CATEGORIES_DEPTH + "1", jsonRootElements );
 
         JSONArray jsonDepths = new JSONArray( );
 
-        for ( int depth = 1; depth <= maxDepth; depth++ )
+        for ( TicketCategoryType ticketCategoryType : TicketCategoryTypeHome.getCategoryTypesList( ) )
         {
-            TicketCategoryType ticketCategoryType = findDepthByDepthNumber( depth );
             JSONObject jsonDepth = new JSONObject( );
             jsonDepth.accumulate( FormatConstants.KEY_DEPTH_NUMBER, ticketCategoryType.getDepthNumber( ) );
             jsonDepth.accumulate( FormatConstants.KEY_LABEL, ticketCategoryType.getLabel( ) );
