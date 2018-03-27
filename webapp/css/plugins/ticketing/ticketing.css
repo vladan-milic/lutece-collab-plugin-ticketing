@@ -32,7 +32,7 @@ textarea.ticketing {
 	height:100%;
 }
 
-#messages_errors_div {
+#create_ticket_form #messages_errors_div {
     background: #c50e44;
     margin: 0;
     border: 0;
@@ -45,11 +45,11 @@ textarea.ticketing {
     position: relative;
 }
 
-#messages_errors_div .fa {
+#create_ticket_form #messages_errors_div .fa {
     display: none;
 }
 
-#messages_errors_div .close {
+#create_ticket_form #messages_errors_div .close {
     color: transparent;
     text-shadow: none;
     position: absolute;
@@ -61,7 +61,7 @@ textarea.ticketing {
     height: 20px;
 }
 
-#messages_errors_div .close::before {
+#create_ticket_form #messages_errors_div .close::before {
     content: '\f00d';
     color: #fff;
     position: absolute;
