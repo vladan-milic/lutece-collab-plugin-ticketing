@@ -305,8 +305,8 @@ button {
     font-weight: 700;
 }
 
-.btn-red {
-    background-color: #DF225A;
+.btn-red, .btn-danger {
+    background-color: #DF225A !important;
     color: white;
 }
 
@@ -333,7 +333,7 @@ button {
     z-index: -1;
 }
 
-.btn-red::after {
+.btn-red::after, .btn-danger::after {
     background-color: #B41A48;
     color: white;
 }
@@ -351,6 +351,21 @@ button {
 .btn-red:hover,
 .btn-blue:hover {
     color: white;
+}
+
+.up-btn-del {
+    margin-top: 6px;
+}
+
+[id^="_file_deletion_label_attribute"] {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+/* modify colors */
+
+.text-danger {
+    color: #DF225A;
 }
 
 /* custom radiobuttons */
@@ -444,6 +459,16 @@ footer {
 
 /*part 4*/
 
+#generic_attributes::after, #generic_attributes::before {
+	content: '';
+	display: table;
+	clear: both;
+}
+
+.form-group label {
+	font-weight: normal !important;
+}
+
 .update {
     padding: 20px 0;
     background-color: #ffffff;
@@ -471,6 +496,9 @@ footer {
     font-size: 16px;
     line-height: 1.6;
     font-weight: 300;
+    width: 750px;
+	margin: auto;
+	text-align: center;
 }
 
 .actions-btn button {

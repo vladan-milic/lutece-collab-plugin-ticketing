@@ -138,7 +138,7 @@ function loadGenericAttributesForm(url, is_response_reseted, selector, is_first_
 			type: "GET",
 			dataType : "html",
 			success: function( response ) {
-				$('#generic_attributes').replaceWith('<div id="generic_attributes">' + response + '</div>');
+				$('#generic_attributes').html(response);
 				
 				if(is_first_call && $('.alert.alert-danger').length > 0 && $('#messages_errors_div').length == 0)
 				{
@@ -164,7 +164,7 @@ function loadGenericAttributesForm(url, is_response_reseted, selector, is_first_
 	}
 	else
 	{
-		$('#generic_attributes').replaceWith('<div id="generic_attributes">' + "" + '</div>');
+		$('#generic_attributes').html('');
 	}
 }
 
@@ -190,7 +190,7 @@ function loadCombo(selector, categories, depth, idCategoryToSelect, allowNullSel
 			var defaultMessage = "-- Valeur par d\u00e9faut --";
 			if (depth != undefined && depth.label != undefined && depth.label != "")
 			{
-				defaultMessage = "-- " + depth.label + " \u00e0 s\u00e9lectionner --";
+				defaultMessage = "-- S\u00e9lectionnez une " + depth.label.toLowerCase() + " --";
 			}
 
 			$(selector).append(new Option(defaultMessage, -1, !selectedCategoryIndexId));

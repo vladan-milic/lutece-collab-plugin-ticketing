@@ -615,6 +615,11 @@ public class TicketXPage extends WorkflowCapableXPage
 
         if ( listFormErrors.size( ) > 0 )
         {
+            for ( GenericAttributeError error : listFormErrors )
+            {
+                addError( error.getMessage( ) );
+            }
+
             bIsFormValid = false;
         }
 

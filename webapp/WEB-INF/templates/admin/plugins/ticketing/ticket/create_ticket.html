@@ -148,7 +148,7 @@
 
         function getSavedValue  (v){
             if (localStorage.getItem(v) === null) {
-                return ${preferred_id_channel};
+                return ${preferred_id_channel!''};
             }
             return localStorage.getItem(v);
         }

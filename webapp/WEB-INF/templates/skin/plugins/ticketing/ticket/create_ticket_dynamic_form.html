@@ -1,4 +1,6 @@
 <div class="mademande">
+    <#if form?? && form.id??>
+    <#if form.id != 2>
 	<div class="hero">
 	    <div class="container">
 	        <div class="main-heading vertical-align">
@@ -6,7 +8,7 @@
 	        </div>
 	    </div>
 	</div>
-    <#if form?? && form.id??>
+	</#if>
 	<form id="create_ticket_form" role="form" method="post" action="jsp/site/Portal.jsp?page=ticket&form=${form.id}" enctype="multipart/form-data">
         <@messages errors=errors />
         <input name="page" value="ticket" type="hidden">
@@ -35,7 +37,7 @@
 	                            <label class="control-label">#i18n{ticketing.xpage.create_ticket.labelIdUserTitle} <#if !entryUserTitle.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
 	                            <div class="custom-radio group space">
 									<#list user_titles_list as user_title>
-										<label class="radio-inline">
+										<label class="radio-inline <#if user_title.code == "0">hidden</#if>">
 											<input type="radio" name="id_user_title" id="id_user_title_${user_title.code}" value="${user_title.code}" <#if ticket.idUserTitle?string==user_title.code>checked</#if>> 
 											<label for="id_user_title_${user_title.code}">${user_title.name}</label>
 										</label>
@@ -105,8 +107,8 @@
 		      		<#if depth.depthNumber == 1>
 	      			<#assign entryCategory = form.getEntry(formEntryType.category + 1)>
 	                <div class="form <#if entryCategory.hidden>hidden</#if>">
-	                    <span class="title domaine">${depth.label} <#if !entryCategory.mandatory>#i18n{ticketing.xpage.optional_field}</#if></span>
-		                <span class="precision">#i18n{ticketing.xpage.create_ticket.select} ${depth.label} #i18n{ticketing.xpage.create_ticket.toprogress}</span>
+	                    <span class="title domaine">#i18n{ticketing.xpage.create_ticket.title_bloc_sujet}</span>
+		                <span class="precision">#i18n{ticketing.xpage.create_ticket.select}</span>
 		                
 		                <div class="select hidden">
 	                    	<@comboWithParams name="id_category_1" default_value="" additionalParameters=" id=\"id_category_1\" depth=\"1\" class=\"select-control\" " items=[] />
@@ -142,7 +144,7 @@
 	                            <div class="form-group col-md-12">
 	                                <label for="ticket_comment" class="control-label">#i18n{ticketing.xpage.create_ticket.labelTicketComment} <#if !entryComment.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
 	               					<textarea class="ticketing form-control" id="ticket_comment" name="ticket_comment" rows="6">${ticket.ticketComment!''}</textarea>
-	                                <span class="subtitle">#i18n{ticketing.xpage.create_ticket.labelTicketComment.help}</span>
+	                                <span class="subtitle"></span>
 	                            </div>
 	                        </div>
 	                        
