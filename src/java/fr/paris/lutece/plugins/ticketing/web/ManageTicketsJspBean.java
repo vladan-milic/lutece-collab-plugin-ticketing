@@ -357,7 +357,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 line.add( ticket.getChannel( ) != null ? ticket.getChannel( ).getLabel( ) : "" );
                 line.add( ticket.getAssigneeUnit( ) != null ? ticket.getAssigneeUnit( ).getName( ) : "" );
                 line.add( ticket.getAssigneeUser( ) != null ? ticket.getAssigneeUser( ).getFirstname( ) + " " + ticket.getAssigneeUser( ).getLastname( ) : "" );
-                if ( ticket.getTicketStatus() == 1 ) {
+                if ( ticket.getTicketStatus() == TicketingConstants.TICKET_STATUS_CLOSED ) {
                     line.add( ticket.getDateClose( ) != null ? sdf.format( ticket.getDateClose( ) ) : "" );
                 } else {
                     line.add( "" );
