@@ -125,7 +125,7 @@ public class TicketCategoryValidator
                 isValid = false;
             }
 
-            boolean ticketCategoryIsLeaf = form == null && ticketCategory != null && ticketCategory.getLeaf( );
+            boolean ticketCategoryIsLeaf = ticketCategory != null && ticketCategory.getLeaf( );
             if ( !isValid || ticketCategoryIsLeaf )
             {
                 break;
