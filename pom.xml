@@ -10,7 +10,7 @@
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>plugin-ticketing</artifactId>
     <packaging>lutece-plugin</packaging>
-    <version>2.0.6-SNAPSHOT</version>
+    <version>2.0.6</version>
     <name>Lutece ticketing plugin</name>
 
     <repositories>
@@ -110,7 +110,7 @@
         <connection>scm:git:https://github.com/lutece-platform/lutece-collab-plugin-ticketing.git</connection>
         <developerConnection>scm:git:https://github.com/lutece-platform/lutece-collab-plugin-ticketing.git</developerConnection>
         <url>https://github.com/lutece-platform/lutece-collab-plugin-ticketing.git</url>
-      <tag>HEAD</tag>
+      <tag>lutece-collab-plugin-ticketing-2.0.6</tag>
   </scm>
     
 </project>
