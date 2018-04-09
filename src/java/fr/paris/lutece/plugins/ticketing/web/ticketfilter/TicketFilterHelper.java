@@ -49,6 +49,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
@@ -392,9 +393,11 @@ public final class TicketFilterHelper
         for (int i = 1; i <= getMaxNumberFilter( ); i++)
         {
             Map<String, String> mapCategories = new LinkedHashMap<String, String>( );
-            if ( TicketCategoryService.getInstance( true ).getCategoriesTree( ).findDepthByDepthNumber( i ) != null )
+
+            TicketCategoryType depth = TicketCategoryService.getInstance( true ).getCategoriesTree( ).findDepthByDepthNumber( i );
+            if ( depth != null )
             {
-                mapCategories.put( StringUtils.EMPTY, TicketCategoryService.getInstance( true ).getCategoriesTree( ).findDepthByDepthNumber( i ).getLabel( ) );
+                mapCategories.put( StringUtils.EMPTY, depth.getLabel( ) );
             }
             mapTypeCategoryList.put( i, (LinkedHashMap<String, String>) mapCategories );
         };
@@ -405,13 +408,12 @@ public final class TicketFilterHelper
             ArrayList<TicketCategory> ticketCategoryList = new ArrayList<TicketCategory>( );
             if ( nParentId ==  TicketFilter.CONSTANT_ID_NULL )
             {
-
-                ticketCategoryList = ( ArrayList<TicketCategory> ) TicketCategoryService.getInstance( true ).getAuthorizedCategoryList( i, user, TicketCategory.PERMISSION_VIEW_LIST );
+                ticketCategoryList = ( ArrayList<TicketCategory> ) TicketCategoryService.getInstance( false ).getAuthorizedCategoryList( i, user, TicketCategory.PERMISSION_VIEW_LIST );
             }
             else
             {
                 TicketCategory ticketCategory = TicketCategoryService.getInstance( true ).findCategoryById( nParentId );
-                ticketCategoryList = ( ArrayList<TicketCategory> ) TicketCategoryService.getInstance( true ).getAuthorizedCategoryList( ticketCategory, user, TicketCategory.PERMISSION_VIEW_LIST );
+                ticketCategoryList = ( ArrayList<TicketCategory> ) TicketCategoryService.getInstance( false ).getAuthorizedCategoryList( ticketCategory, user, TicketCategory.PERMISSION_VIEW_LIST );
             }
             nParentId = ( fltrFilter.getMapCategoryId( ).get( i ) != null ) ? fltrFilter.getMapCategoryId( ).get( i ) : TicketFilter.CONSTANT_ID_NULL;
 

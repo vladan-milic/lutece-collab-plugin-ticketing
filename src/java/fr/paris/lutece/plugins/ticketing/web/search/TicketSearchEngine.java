@@ -344,7 +344,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
     {
         Builder categoriesQueryBuilder = new Builder( );
 
-        List<TicketCategory> categories = TicketCategoryService.getInstance( ).getAllCategories( );
+        List<TicketCategory> categories = TicketCategoryService.getInstance( true ).getAllCategories( );
 
         for ( TicketCategory category : categories )
         {

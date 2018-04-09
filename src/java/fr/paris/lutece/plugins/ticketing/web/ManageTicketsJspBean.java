@@ -42,7 +42,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -208,7 +207,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private String _strCurrentPageIndex;
     private int    _nItemsPerPage;
     private boolean _bSearchMode = false;
-    private List<TicketCategory> _lstTicketDomain;
     private final TicketFormService  _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
     private final TicketSearchEngine _engine            = ( TicketSearchEngine ) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
 
@@ -283,25 +281,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             strQuery = StringUtils.EMPTY;
         }
 
-        //        Map<Integer, TicketDomain> mapIdDomainTicketDomain = new LinkedHashMap<>( );
-        //        addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_LIST );
-        //        addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketDomainResourceIdService.PERMISSION_VIEW_DETAIL );
-        //
-        //        _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
-
-        if ( filter.getMapCategoryId( ) != null &&  filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != null && filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) != -1)
-        {
-            TicketCategory ticketDomain = TicketCategoryService.getInstance( ).findCategoryById( filter.getMapCategoryId( ).get( TicketingConstants.DOMAIN_DEPTH ) );
-            _lstTicketDomain.clear( );
-            _lstTicketDomain.add( ticketDomain );
-        } else
-        {
-            Map<Integer, TicketCategory> mapIdDomainTicketDomain = new LinkedHashMap<>( );
-            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_DETAIL );
-            addTicketDomainToMapFromPermission( mapIdDomainTicketDomain, TicketCategory.PERMISSION_VIEW_LIST );
-
-            _lstTicketDomain = new ArrayList<>( mapIdDomainTicketDomain.values( ) );
-        }
         SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy" );
         SimpleDateFormat sdf2 = new SimpleDateFormat( "HH:mm" );
 
