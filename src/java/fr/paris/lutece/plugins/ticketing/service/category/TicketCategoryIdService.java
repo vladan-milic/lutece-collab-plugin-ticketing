@@ -69,6 +69,11 @@ public class TicketCategoryIdService extends ResourceIdService
         p.setPermissionTitleKey( TicketCategory.PROPERTY_LABEL_PERMISSION_VIEW_DETAIL );
         rt.registerPermission( p );
 
+        p = new Permission( );
+        p.setPermissionKey( TicketCategory.PERMISSION_BELONG_TO );
+        p.setPermissionTitleKey( TicketCategory.PROPERTY_LABEL_BELONG_TO );
+        rt.registerPermission( p );
+
         ResourceTypeManager.registerResourceType( rt );
     }
 
