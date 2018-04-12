@@ -210,7 +210,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         {
             for ( ModelResponse modelResponse : ModelResponseHome.getModelResponsesList( ) )
             {
-                if ( mapDomains.containsValue( modelResponse.getDomain( ) ) )
+                if ( mapDomains.containsKey( modelResponse.getDomain( ) ) )
                 {
                     listModelResponses.add( modelResponse );
                 }
