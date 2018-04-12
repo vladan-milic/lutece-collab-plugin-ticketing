@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import java.io.Serializable;
 
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * This is the business class for the object TypeResponse

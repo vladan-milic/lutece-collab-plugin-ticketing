@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -46,13 +47,13 @@ public final class ModelResponseDAO implements IModelResponseDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK = "SELECT max( id_model_response ) FROM ticketing_model_reponses";
-    private static final String SQL_QUERY_SELECT = "SELECT id_model_response, label_ticket_domain, title, reponse, keyword, label_ticket_domain FROM ticketing_model_reponses res WHERE res.id_model_response = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_model_reponses ( id_model_response, label_ticket_domain, title, reponse, keyword ) VALUES ( ?, ?, ?, ?,? ) ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_model_response, id_ticket_category, title, reponse, keyword, cat.label FROM ticketing_model_reponses res INNER JOIN ticketing_category cat ON cat.id_category = res.id_ticket_category WHERE res.id_model_response = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_model_reponses ( id_model_response, id_ticket_category, title, reponse, keyword ) VALUES ( ?, ?, ?, ?,? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_model_reponses WHERE id_model_response = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_model_reponses SET id_model_response = ?, label_ticket_domain = ?, title = ?, reponse = ?, keyword =? WHERE id_model_response = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_model_response, label_ticket_domain, title, reponse, keyword, label_ticket_domain FROM ticketing_model_reponses res";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_model_reponses SET id_model_response = ?, id_ticket_category = ?, title = ?, reponse = ?, keyword =? WHERE id_model_response = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_model_response, id_ticket_category, title, reponse, keyword, cat.label FROM ticketing_model_reponses res INNER JOIN ticketing_category cat ON cat.id_category = res.id_ticket_category";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_model_response FROM ticketing_model_reponses";
-    private static final String SQL_QUERY_SELECT_BY_DOMAIN = "SELECT res.id_model_response, label_ticket_domain, res.title, res.reponse, res.keyword, label_ticket_domain FROM ticketing_model_reponses res WHERE res.label_ticket_domain = ?";
+    private static final String SQL_QUERY_SELECT_BY_DOMAIN = "SELECT res.id_model_response, id_ticket_category, res.title, res.reponse, res.keyword,cat.label FROM ticketing_model_reponses res INNER JOIN ticketing_category cat ON cat.id_category = res.id_ticket_category WHERE res.id_ticket_category = ?";
 
     /**
      * Generates a new primary key
