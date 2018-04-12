@@ -16,4 +16,4 @@ location varchar(50) default '',
 PRIMARY KEY (id_viewing) 
 );
 
-ALTER TABLE ticketing_category ADD is_manageable int(1) DEFAULT 0 NOT NULL;
+-- ALTER TABLE ticketing_category ADD is_manageable int(1) DEFAULT 0 NOT NULL;

@@ -1,14 +1,3 @@
--- Delete old constraints
-ALTER TABLE ticketing_ticket_domain DROP FOREIGN KEY fk_ticketing_ticket_domain_type; 
-ALTER TABLE ticketing_ticket_category DROP FOREIGN KEY fk_ticketing_ticket_category_domain; 
-ALTER TABLE ticketing_ticket DROP FOREIGN KEY fk_ticketing_ticket_category; 
-ALTER TABLE ticketing_instant_response DROP FOREIGN KEY fk_ticketing_instant_response_category; 
--- Delete old tables
-DROP TABLE IF EXISTS ticketing_ticket_category; 
-DROP TABLE IF EXISTS ticketing_ticket_domain; 
-DROP TABLE IF EXISTS ticketing_ticket_type; 
-DROP TABLE IF EXISTS ticketing_ticket_category_input; 
-
 --
 -- Structure for table ticketing_category
 --
@@ -54,11 +43,11 @@ CREATE TABLE ticketing_category_input (
 --
 -- Update constraints
 --
-ALTER TABLE ticketing_ticket ADD CONSTRAINT fk_ticketing_ticket_category FOREIGN KEY (id_ticket_category)
-      REFERENCES ticketing_category (id_category) ON DELETE RESTRICT ON UPDATE RESTRICT; 
-      
-ALTER TABLE ticketing_instant_response ADD CONSTRAINT fk_ticketing_instant_response_category FOREIGN KEY (id_ticket_category)
-      REFERENCES ticketing_category (id_category) ON DELETE RESTRICT ON UPDATE RESTRICT; 
+-- ALTER TABLE ticketing_ticket ADD CONSTRAINT fk_ticketing_ticket_category FOREIGN KEY (id_ticket_category)
+--      REFERENCES ticketing_category (id_category) ON DELETE RESTRICT ON UPDATE RESTRICT; 
+--      
+-- ALTER TABLE ticketing_instant_response ADD CONSTRAINT fk_ticketing_instant_response_category FOREIGN KEY (id_ticket_category)
+--      REFERENCES ticketing_category (id_category) ON DELETE RESTRICT ON UPDATE RESTRICT; 
 
 --
 -- Update rights 
@@ -70,10 +59,10 @@ INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is
 --
 -- Update generic attributes
 --
-DELETE genatt_verify_by FROM genatt_verify_by INNER JOIN genatt_field ON genatt_field.id_field = genatt_verify_by.id_field WHERE genatt_field.id_entry in (201,202);
-DELETE FROM genatt_field WHERE id_entry in (201,202);
-DELETE FROM genatt_response WHERE id_entry in (201,202);
-DELETE FROM genatt_entry WHERE id_entry in (201,202);
-INSERT INTO genatt_entry (id_entry, id_resource, resource_type, id_type, id_parent, title, help_message, comment, mandatory, fields_in_line, pos, id_field_depend, confirm_field, confirm_field_title, field_unique, map_provider, css_class, pos_conditional, error_message, num_row, num_column, is_role_associated, code) VALUES 
-(201, 1, "TICKET_INPUT", 215, NULL, "Relevé d'imposition sur le revenu de l'année N-2", "Veuillez transmettre votre relevé d'imposition sur le revenu de l'année N-2. Si vous ne disposez pas de ce document, vous pourrez le transmettre à nos services ultérieurement.", "", 0, 0, 1, NULL, 0, NULL, 0, "", "", 0, NULL, 0, 0, 0, "IncomeRevenue-Year-2"),  
-(202, 2, "TICKET_INPUT", 206, NULL, "Numéro de compte facil'familles", "Numéro de compte facil'familles", "", 0, 0, 2, NULL, 0, NULL, 0, "", "", 0, NULL, 0, 0, 0, "FFAccountNumber");  
+-- DELETE genatt_verify_by FROM genatt_verify_by INNER JOIN genatt_field ON genatt_field.id_field = genatt_verify_by.id_field WHERE genatt_field.id_entry in (201,202);
+-- DELETE FROM genatt_field WHERE id_entry in (201,202);
+-- DELETE FROM genatt_response WHERE id_entry in (201,202);
+-- DELETE FROM genatt_entry WHERE id_entry in (201,202);
+-- INSERT INTO genatt_entry (id_entry, id_resource, resource_type, id_type, id_parent, title, help_message, comment, mandatory, fields_in_line, pos, id_field_depend, confirm_field, confirm_field_title, field_unique, map_provider, css_class, pos_conditional, error_message, num_row, num_column, is_role_associated, code) VALUES 
+-- (201, 1, "TICKET_INPUT", 215, NULL, "Relevé d'imposition sur le revenu de l'année N-2", "Veuillez transmettre votre relevé d'imposition sur le revenu de l'année N-2. Si vous ne disposez pas de ce document, vous pourrez le transmettre à nos services ultérieurement.", "", 0, 0, 1, NULL, 0, NULL, 0, "", "", 0, NULL, 0, 0, 0, "IncomeRevenue-Year-2"),  
+-- (202, 2, "TICKET_INPUT", 206, NULL, "Numéro de compte facil'familles", "Numéro de compte facil'familles", "", 0, 0, 2, NULL, 0, NULL, 0, "", "", 0, NULL, 0, 0, 0, "FFAccountNumber");  
