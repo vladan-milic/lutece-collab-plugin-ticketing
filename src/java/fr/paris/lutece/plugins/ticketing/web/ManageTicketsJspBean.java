@@ -992,9 +992,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // Validate the bean
         TicketValidator ticketValidator = TicketValidatorFactory.getInstance( ).create( getLocale( ) );
         List<String> listValidationErrors = ticketValidator.validateBean( ticket );
-
-        listValidationErrors.addAll( ticketValidator.validateDynamicFields( request ) );
-
         for ( String error : listValidationErrors )
         {
             if ( !StringUtils.isEmpty( error ) )
@@ -1002,6 +999,27 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 addError( error );
                 bIsFormValid = false;
             }
+        }
+
+        String errorModeContactFilled = new FormValidator( request ).isContactModeFilled( );
+        if ( errorModeContactFilled != null )
+        {
+            addError( errorModeContactFilled );
+            bIsFormValid = false;
+        }
+        
+        String errorFirstNameFilled = new FormValidator( request ).isFirstNameFilled( );
+        if ( errorFirstNameFilled != null )
+        {
+            addError( errorFirstNameFilled );
+            bIsFormValid = false;
+        }
+        
+        String errorLastNameFilled= new FormValidator( request ).isLastNameFilled( );
+        if ( errorLastNameFilled != null )
+        {
+            addError( errorLastNameFilled );
+            bIsFormValid = false;
         }
 
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
