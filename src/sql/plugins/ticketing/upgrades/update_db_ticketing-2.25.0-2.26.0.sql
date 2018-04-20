@@ -1,3 +1,2 @@
--- Change name
-ALTER TABLE `ticketing_model_reponses`
-	CHANGE COLUMN `label_ticket_domain` `id_ticket_category` VARCHAR(50) NULL DEFAULT '' COLLATE 'utf8_unicode_ci' AFTER `keyword`; 
+ALTER TABLE `ticketing_model_reponses` CHANGE COLUMN `label_ticket_domain` `id_ticket_category` VARCHAR(50) NULL DEFAULT '' COLLATE 'utf8_unicode_ci' AFTER `keyword`; 
+UPDATE workflow_task SET task_type_key = 'taskTicketingComment' WHERE task_type_key = 'taskTypeComment';
