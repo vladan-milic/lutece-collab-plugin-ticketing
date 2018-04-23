@@ -420,7 +420,7 @@ public class Ticket implements Serializable, RBACResource
      */
     public TicketCategory getTicketType( )
     {
-        return TicketCategoryService.getInstance( ).getType( _ticketCategory );
+        return TicketCategoryService.getInstance( true ).getType( _ticketCategory );
     }
 
     /**
@@ -430,7 +430,7 @@ public class Ticket implements Serializable, RBACResource
      */
     public TicketCategory getTicketDomain( )
     {
-        return TicketCategoryService.getInstance( ).getDomain( _ticketCategory );
+        return TicketCategoryService.getInstance( true ).getDomain( _ticketCategory );
     }
 
     /**
@@ -450,7 +450,7 @@ public class Ticket implements Serializable, RBACResource
      */
     public TicketCategory getTicketThematic( )
     {
-        return TicketCategoryService.getInstance( ).getThematic( _ticketCategory );
+        return TicketCategoryService.getInstance( true ).getThematic( _ticketCategory );
     }
 
     /**
