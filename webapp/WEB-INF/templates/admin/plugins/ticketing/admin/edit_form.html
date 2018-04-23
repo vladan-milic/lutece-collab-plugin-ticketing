@@ -5,10 +5,11 @@
 <#macro formEntryLine entryType>
 	<#assign entry=form.getEntry(entryType)>
  	<#assign entryForcedMandatory = formEntryType.isForcedMandatory(entryType)>
+ 	<#assign entryForcedHidden = formEntryType.isForcedHidden(entryType)>
 	<tr>	
 		<th scope="row">${i18n('ticketing.xpage.create_ticket.'+entryType+'.label')}</th>
 		<td>
-			<input id="hidden_${entryType}" type="checkbox" name="formEntry.${entryType}.shown" <#if !entry.hidden>checked="checked"</#if>>
+			<input id="hidden_${entryType}" type="checkbox" name="formEntry.${entryType}.shown" <#if !entry.hidden && !entryForcedHidden>checked="checked"</#if> <#if entryForcedHidden>disabled="disabled"</#if>>
 			<label for="hidden_${entryType}"></label>
 		</td>
 		<td>
@@ -28,6 +29,13 @@
 					<option></option>
 					<#list contact_modes_list as contact_mode>
 						<option value="${contact_mode.code}" <#if (entry.defaultValue!'') == contact_mode.code>selected="selected"</#if>>${contact_mode.name}</option>
+					</#list>
+				</select>
+			<#elseif entryType == formEntryType.channel>
+				<select name="formEntry.${entryType}.defaultValue"> 
+					<option></option>
+					<#list channels_list as channel>
+						<option value="${channel.code}" <#if (entry.defaultValue!'') == channel.code>selected="selected"</#if>>${channel.name}</option>
 					</#list>
 				</select>
 			<#elseif entryType == formEntryType.comment>
@@ -76,6 +84,7 @@
 								<label for="connection"></label>
 							</div>
 						</div>
+						
 						<table class="table table-striped">
 							<thead>
 								<tr>

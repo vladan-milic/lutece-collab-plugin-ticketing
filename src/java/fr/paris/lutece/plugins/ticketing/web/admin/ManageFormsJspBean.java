@@ -13,6 +13,7 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeHome;
+import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.form.Form;
 import fr.paris.lutece.plugins.ticketing.business.form.FormEntry;
@@ -89,6 +90,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
 
     private static final String MARK_USER_TITLES_LIST = "user_titles_list";
     private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
+    private static final String MARK_CHANNELS_LIST = "channels_list";
     // Infos
     private static final String INFO_FORM_CREATED = "ticketing.info.form.created";
     private static final String INFO_FORM_UPDATED = "ticketing.info.form.updated";
@@ -182,6 +184,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) );
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale( ) ) );
+        model.put( MARK_CHANNELS_LIST, ChannelHome.getReferenceList( ) );
         model.put( MARK_TICKET, createFakeTicketFromForm( _form ) );
         model.put( MARK_MIN_DEPTH, TicketingConstants.CATEGORY_DEPTH_MIN );
         ModelUtils.storeRichText( request, model );
@@ -327,6 +330,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale( ) ) );
+        model.put( MARK_CHANNELS_LIST, ChannelHome.getReferenceList( ) );
 
         ModelUtils.storeRichText( request, model );
         return getPage( PROPERTY_PAGE_TITLE_MODIFY_FORM, TEMPLATE_EDIT_FORM, model );

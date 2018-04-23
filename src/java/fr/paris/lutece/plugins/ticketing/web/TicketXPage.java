@@ -284,6 +284,22 @@ public class TicketXPage extends WorkflowCapableXPage
             ticket.setConfirmationMsg( contactMode.getConfirmationMsg( ) );
         }
 
+        Channel channel = null;
+        try
+        {
+            String channelId = form.getEntry( formEntryType.getChannel( ) ).getDefaultValue( );
+            channel = ChannelHome.findByPrimaryKey( Integer.parseInt( channelId ) );
+        }
+        catch ( NumberFormatException e )
+        {
+            // do nothing, default value can be empty or not valid
+        }
+
+        if ( channel != null )
+        {
+            ticket.setChannel( channel );
+        }
+
         for ( TicketCategoryType depth : TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ) )
         {
             TicketCategory category = null;
@@ -408,10 +424,6 @@ public class TicketXPage extends WorkflowCapableXPage
         {
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
 
-            Channel channelFront = ChannelHome.findByPrimaryKey( Integer.valueOf( PluginConfigurationService.getInt(
-                    PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT, TicketingConstants.PROPERTY_UNSET_INT ) ) );
-
-            ticket.setChannel( channelFront );
             TicketHome.create( ticket );
 
             if ( ( ticket.getListResponse( ) != null ) && !ticket.getListResponse( ).isEmpty( ) )
@@ -492,6 +504,7 @@ public class TicketXPage extends WorkflowCapableXPage
         ticket.setListResponse( new ArrayList<Response>( ) );
 
         Form form = FormHome.getFormFromRequest( request );
+        FormEntryType formEntryType = new FormEntryType( );
 
         // Validate the TicketCategory
         TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, request.getLocale( ) ).validateTicketCategory( form );
@@ -556,6 +569,29 @@ public class TicketXPage extends WorkflowCapableXPage
             }
 
             bIsFormValid = false;
+        }
+
+        Channel channel = null;
+        try
+        {
+            String channelId = form.getEntry( formEntryType.getChannel( ) ).getDefaultValue( );
+            channel = ChannelHome.findByPrimaryKey( Integer.parseInt( channelId ) );
+        }
+        catch ( NumberFormatException e )
+        {
+            // do nothing, default value can be empty or not valid
+        }
+
+        if ( channel != null )
+        {
+            ticket.setChannel( channel );
+        }
+        else
+        {
+            int nIdChannel = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT, TicketingConstants.PROPERTY_UNSET_INT );
+            channel = ChannelHome.findByPrimaryKey( nIdChannel );
+            ticket.setChannel( channel );
+
         }
 
         ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) ).getCode( ) );
