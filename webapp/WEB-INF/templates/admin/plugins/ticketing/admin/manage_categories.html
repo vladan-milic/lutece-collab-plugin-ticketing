@@ -11,7 +11,6 @@
         <@messages infos=infos />
         <@messages errors=errors />
         <div class="clearfix"></div>
-
         <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
          <div class="dropdown">
 		  <button class="btn dropdown-toggle" type="button"><span class="filter-form-name">#i18n{ticketing.manage_categories.allForms}</span> <span class="caret"></span></button>
@@ -26,17 +25,16 @@
 		</div>
         </@tform>
 
-        <table width="100%" id="managecategoriestable">
+        <@table class="table-bordered" hover=false id="managecategoriestable">
+        <thead>
             <tr>
                 <#list tree.depths as category_type>
-                    <th class="text-center category-type">
+                    <th class="text-center">
                         <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
                             <input type="hidden" id="id_category_type" name="id_category_type" value="${category_type.id}"/>
                             <span class="h4"><strong>${category_type.label}</strong></span>
-                            <div class="category-type-actions">
-	                            <@button type='submit' size='xs' name='view_modifyCategoryType' buttonIcon='pencil' showTitle=false title='Modifier'/>
-	                            <@button type='submit' size='xs' color='btn-danger' name='action_confirmRemoveCategoryType' buttonIcon='trash' showTitle=false title='Supprimer'/>
-                            </div>
+                            <@button type='submit' class="pull-right" size='xs' name='view_modifyCategoryType' buttonIcon='pencil'/>
+                          <@button type='submit' class="pull-right" size='xs' color='btn-danger' name='action_confirmRemoveCategoryType' buttonIcon='trash'/>
                         </@tform>
                     </th>
                 </#list>
@@ -47,10 +45,11 @@
                 <tr>
                     <@printNodeRecursive root tree.rootElements?size />
                 </tr>
+            
             </#list>
             <#if tree.depths?size gt 0 > 
                 <tr>
-                    <td class="text-center" style="height: 80px; vertical-align:middle;" >
+                    <td class="text-center" style="vertical-align:middle;" >
                         <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
                             <input type="hidden" id="id_category_type" name="id_category_type" value="${tree.depths[0].id}"/>
                             <@button type='submit' name='view_createCategory' buttonIcon='plus' title='#i18n{ticketing.manage_categories.buttonAdd} ${tree.depths[0].label}' />
@@ -59,13 +58,14 @@
                 </tr>
             </#if>
         </tbody>
-        </table>
+        </@table>
       </@boxBody>
     </@box>
 </@tabsWrapper>
+
 <script>
 	$(function() {
-		var $categories = $('td.category-container');
+		var $categories = $('td[data-category-id]');
 		
 		var findRecursiveSubCategories = function($category) {
 			var id = $category.attr('data-category-id');			
@@ -81,30 +81,17 @@
 			return $recursiveSubCategories;
 		};
 		
-		var findRecursiveParentCategories = function($category) {
-			var parentId = $category.attr('data-category-parent');
-			if(parentId) {
-				var $parentCategory = $categories.filter('[data-category-id='+parentId+']');
-				
-				var $recursiveParentCategories = $parentCategory;
-				
-				$recursiveParentCategories = $recursiveParentCategories.add(findRecursiveParentCategories($parentCategory));
-				
-				return $recursiveParentCategories;
-			}
-		}
-		
 		$categories.each(function() {
 			var $category = $(this);
 			
-			var $subCategories = $category.add(findRecursiveSubCategories($category)).add(findRecursiveParentCategories($category));
+			var $subCategories = $category.add(findRecursiveSubCategories($category));
 			
-			$category.find('.category-box').mouseover(function() {
-				$subCategories.find('.category-box').addClass('category-hover');
+			$category.mouseover(function() {
+				$subCategories.css('background-color', '#f0f0f0');
 			});
 			
-			$category.find('.category-box').mouseout(function() {
-				$subCategories.find('.category-box').removeClass('category-hover');
+			$category.mouseout(function() {
+				$subCategories.css('background-color', 'transparent');
 			})
 		});
 		
@@ -229,149 +216,31 @@
                     
 <#macro printNode node rootelementssize>
 	<#if !node.inactive>
-		<#assign firstChild=node.order = 1>
-		<#assign nbSiblings=(node.parent??)?then((node.parent.children![])?size, rootelementssize)>
-		<#assign lastChild=node.order=nbSiblings>
-		<#assign containerClasses=firstChild?then(' container-first', '') + lastChild?then(' container-last', '')>
-	    <td class="category-container ${containerClasses}" style="vertical-align:middle;" data-category-id="${node.id}" <#if node.parent??>data-category-parent="${node.parent.id}"</#if> <#if node.children?? && node.children?size gt 0> rowspan="${node.leaves?size!'1'}"</#if>>
-           <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
-               	<input type="hidden" id="id_parent_category" name="id_parent_category" value="${node.id}"/>
-               	<input type="hidden" id="id_category" name="id_category" value="${node.id}"/>
-               	<div class="category-box">
-               		<span class="category-title">${node.label}</span>
-	               	<#if node.defaultAssignUnit?? && node.defaultAssignUnit.unitId gte 0 >
-	                	<span class="category-unit"><i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> ${(node.defaultAssignUnit.name)!''}</span>
-	               	</#if>
-               		<span class="category-actions">
-		               	<@button type='submit' size='xs' name='view_modifyCategory' buttonIcon='pencil' showTitle=false title='Modifier'/>
-		               	<@button type='submit' size='xs' name='view_modifyCategoryInputs' buttonIcon='wpforms' showTitle=false title='Modifier les entrées du formulaire' />
-
-		               	<#if node.order gt 1 >
-		                 	<@button type='submit' size='xs' name='action_doMoveCategoryUp' buttonIcon='chevron-up' showTitle=false title='Monter'/>
-		               	</#if>
-		               	
-		               	<#if !node.parent?? && node.order lt rootelementssize >
-		                	<@button type='submit' size='xs' name='action_doMoveCategoryDown' buttonIcon='chevron-down' showTitle=false title='Descendre'/>
-		               	</#if>
-		               	<#if node.parent?? && node.parent.children?? && node.order lt node.parent.children?size >
-		                 	<@button type='submit' size='xs' name='action_doMoveCategoryDown' buttonIcon='chevron-down' showTitle=false title='Descendre'/>
-		               	</#if>
-		               	
-		               	<@button type='submit' size='xs' color='btn-danger' name='action_confirmRemoveCategory' buttonIcon='trash' showTitle=false title='Supprimer'/>
-               		</div>
-               	</div>
-               	<div class="category-addsub">
-          				<@button type='submit' size='xs' name='view_createCategory' buttonIcon='plus' showTitle=false title='Ajouter une sous-catégorie' />
-               	</div>
-            </@tform>
+	    <td class="text-center" style="vertical-align:middle;" data-category-id="${node.id}" <#if node.parent??>data-category-parent="${node.parent.id}"</#if> <#if node.children?? && node.children?size gt 0> rowspan="${node.leaves?size!'1'}"</#if>>
+	           <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
+	               <input type="hidden" id="id_parent_category" name="id_parent_category" value="${node.id}"/>
+	               <input type="hidden" id="id_category" name="id_category" value="${node.id}"/>
+	               <span><strong>${node.label}</strong></span> 
+	               <@button class="pull-right" type='submit' size='xs' name='view_createCategory' buttonIcon='plus' />
+	               <@button class="pull-right" type='submit' size='xs' name='view_modifyCategoryInputs' buttonIcon='wpforms' />
+	               <@button class="pull-right" type='submit' size='xs' name='view_modifyCategory' buttonIcon='pencil'/>
+	               <@button class="pull-right" type='submit' size='xs' color='btn-danger' name='action_confirmRemoveCategory' buttonIcon='trash'/>
+	               </br>
+	               <span>${node.code}</span>
+	               <#if !node.parent?? && node.order lt rootelementssize >
+	                 <@button class="pull-right" type='submit' size='xs' name='action_doMoveCategoryDown' buttonIcon='chevron-down'/>
+	               </#if>
+	               <#if node.parent?? && node.parent.children?? && node.order lt node.parent.children?size >
+	                 <@button class="pull-right" type='submit' size='xs' name='action_doMoveCategoryDown' buttonIcon='chevron-down'/>
+	               </#if>
+	               <#if node.order gt 1 >
+	                 <@button class="pull-right" type='submit' size='xs' name='action_doMoveCategoryUp' buttonIcon='chevron-up'/>
+	               </#if>
+	               </br>
+	               <#if node.defaultAssignUnit?? && node.defaultAssignUnit.unitId gte 0 >
+	                <span><i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> ${(node.defaultAssignUnit.name)!''}</span>
+	               </#if >
+	            </@tform>
 	    </td>    
 	</#if>	       
 </#macro>
-<style>
-
-	.category-type {
-		position: relative;
-	}
-	
-	.category-type .h4 {
-		border-bottom: 1px solid #ccc;
-		display: block;
-		padding: 10px 0;
-		margin: 0 10px;
-	}
-	
-	.category-type-actions {
-		position: absolute;
-		top: 10px;
-		right: 10px;
-	}
-	
-	.category-container {
-		position: relative;
-		padding: 10px 40px;
-	}
-	
-	.category-box {
-		border: 1px solid #ccc;
-		padding: 30px 10px 20px 10px;
-		margin: auto;
-		text-align: center;
-		position: relative;
-		transition: all .3s;
-	}
-	
-	.category-title, .category-unit {
-		display: block;
-	}
-	
-	.category-actions {
-		position: absolute;
-		top: 3px;
-		right: 3px;
-	}
-	
-	.category-addsub {
-		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
-		right: 15px;
-	}
-	
-	.category-box::before {
-		content: '';
-		position: absolute;
-		display: block;
-		top: 50%;
-		left: -41px;
-		width: 41px;
-		border-bottom: 1px solid black;
-	}
-	
-	.category-box::after {
-		content: '';
-		position: absolute;
-		display: block;
-		top: 50%;
-		right: -41px;
-		width: 41px;
-		border-bottom: 1px solid black;
-	}
-	
-	td.category-container::before {
-		content: '';
-		display: block;
-		border-left: 1px solid black;
-		position: absolute;
-		top: 0;
-		left: 0;
-		bottom: 0;
-	}
-	
-	td.category-container:not([data-category-parent])::before,
-	td.category-container:not([data-category-parent]) .category-box::before {
-		display: none;
-	}
-	
-	td.category-container.container-first::before {
-		top: 50%;
-	}
-	
-	td.category-container.container-last::before {
-		bottom: 50%;
-	}
-	
-	.category-box.category-hover {
-		background: #eee;
-		border: 1px solid #000;
-	}
-	
-	td.category-container:last-child .category-box::after {
-		right: -20px;
-		width: 20px;
-	}
-	
-	.fa-chevron-down, .fa-chevron-up {
-		margin: -1px;
-	}
-	
-</style>
