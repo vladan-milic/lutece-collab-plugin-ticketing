@@ -15,12 +15,11 @@ public class FormEntryType
     private static final String EMAIL = "email";
     private static final String PHONE_NUMBERS = "phone_numbers";
     private static final String CONTACT_MODE = "contact_mode";
-    private static final String CHANNEL = "channel";
     private static final String COMMENT = "comment";
     private static final String CATEGORY = "category_level_";
 
     public List<String> entryTypes() {
-        return Arrays.asList( USER_TITLE, LAST_NAME, FIRST_NAME, EMAIL, PHONE_NUMBERS, CONTACT_MODE, CHANNEL, COMMENT );
+        return Arrays.asList( USER_TITLE, LAST_NAME, FIRST_NAME, EMAIL, PHONE_NUMBERS, CONTACT_MODE, COMMENT );
     }
 
     public List<String> entryTypesWithCategories( )
@@ -75,19 +74,9 @@ public class FormEntryType
         return CATEGORY;
     }
 
-    public String getChannel( )
-    {
-        return CHANNEL;
-    }
-
     public boolean isForcedMandatory( String entryType )
     {
-        return Arrays.asList( EMAIL, FIRST_NAME, LAST_NAME, CHANNEL ).contains( entryType );
-    }
-
-    public boolean isForcedHidden( String entryType )
-    {
-        return Arrays.asList( CHANNEL ).contains( entryType );
+        return Arrays.asList( EMAIL, FIRST_NAME, LAST_NAME ).contains( entryType );
     }
 
 }
