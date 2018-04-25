@@ -417,6 +417,10 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 return redirectWorkflowActionCancelled( request );
             }
         }
+        else
+        {
+            return redirectWorkflowActionCancelled( request );
+        }
 
         return redirectAfterWorkflowAction( request );
     }
