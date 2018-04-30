@@ -116,6 +116,7 @@ public class Ticket implements Serializable, RBACResource
     private Channel                      _channel             = new Channel( );
     private String                       _strNomenclature;
     private int                          _nIdticketMarking    = -1;
+    private int 						 _nIdDemand = -1;
 
     /**
      * Enriches empty ticket attributes with specified values
@@ -1098,4 +1099,20 @@ public class Ticket implements Serializable, RBACResource
     {
         return TicketHome.getTicketMarking( this );
     }
+    
+    
+    /**
+     * @return load and return the ticket demand id
+     */
+	public int getDemandId( ) 
+	{
+		return _nIdDemand;
+	}
+
+	public void setDemandId( int _nIdDemand ) 
+	{
+		this._nIdDemand = _nIdDemand;
+	}
+    
+    
 }

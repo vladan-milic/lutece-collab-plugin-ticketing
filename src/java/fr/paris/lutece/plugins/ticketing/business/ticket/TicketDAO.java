@@ -33,6 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.ticket;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.ticketing.business.address.TicketAddress;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
@@ -44,17 +54,6 @@ import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.sql.DAOUtil;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-
-import java.sql.Date;
-import java.sql.Timestamp;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * This class provides Data Access methods for Ticket objects
@@ -69,7 +68,7 @@ public final class TicketDAO implements ITicketDAO
             + " a.fixed_phone_number, a.mobile_phone_number, a.id_marking, "
             + " a.id_ticket_category, a.id_contact_mode, f.code, a.ticket_comment, "
             + " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, g.first_name, g.last_name, a.id_unit, h.label, a.id_assigner_user, a.id_assigner_unit, h2.label, a.user_message, a.url, a.id_channel, x.label, x.icon_font, a.nomenclature, "
-            + " ad.address, ad.address_detail, ad.postal_code, ad.city"
+            + " ad.address, ad.address_detail, ad.postal_code, ad.city, a.demand_id"
             + " FROM ticketing_ticket a"
             + " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user"
             + " LEFT JOIN unittree_unit h ON h.id_unit=a.id_unit"
@@ -87,8 +86,8 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket ( id_ticket, ticket_reference , guid, id_user_title, firstname, lastname, email, "
             + " fixed_phone_number, mobile_phone_number, id_ticket_category, "
             + " id_contact_mode, ticket_comment, ticket_status, ticket_status_text, date_update, date_create, "
-            + " priority, criticality, id_customer, id_admin_user, id_unit, id_assigner_user, id_assigner_unit, user_message, url, id_channel, nomenclature ) "
-            + " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
+            + " priority, criticality, id_customer, id_admin_user, id_unit, id_assigner_user, id_assigner_unit, user_message, url, id_channel, nomenclature, demand_id ) "
+            + " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE t, ad FROM ticketing_ticket t LEFT JOIN ticketing_ticket_address ad ON ad.id_ticket = t.id_ticket WHERE t.id_ticket = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket SET id_ticket = ?, ticket_reference = ?, guid = ?, id_user_title = ?, firstname = ?, lastname = ?, email = ?, fixed_phone_number = ?, mobile_phone_number = ?, "
             + " id_ticket_category = ?, id_contact_mode = ?, ticket_comment = ?, ticket_status = ?, ticket_status_text = ?, date_update = ?,"
@@ -231,6 +230,7 @@ public final class TicketDAO implements ITicketDAO
         }
 
         daoUtil.setString( nIndex++, ticket.getNomenclature( ) );
+        daoUtil.setInt( nIndex++,  TicketCategoryService.getInstance( ).findCategoryById( ticket.getTicketType( ).getId( ) ).getDemandId( )  );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -728,6 +728,8 @@ public final class TicketDAO implements ITicketDAO
         {
             ticket.setTicketAddress( ticketAddress );
         }
+        
+        ticket.setDemandId( daoUtil.getInt( nIndex++ ) );
 
         return ticket;
     }
