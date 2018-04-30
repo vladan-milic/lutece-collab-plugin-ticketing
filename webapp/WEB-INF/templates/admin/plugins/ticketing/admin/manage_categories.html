@@ -214,7 +214,7 @@
                <#if i gt 0 >
                     <tr>
                 </#if>
-                  <@printNode category.children[i] 0/>
+                  <@printNode category.children[i] 0 i/>
                
                 <#if category.children[i].leaf == false>
                     <@printNodeRecursive category.children[i] 0/>
@@ -227,11 +227,11 @@
 
 </#macro>
                     
-<#macro printNode node rootelementssize>
+<#macro printNode node rootelementssize index=0>
 	<#if !node.inactive>
-		<#assign firstChild=node.order = 1>
+		<#assign firstChild=index = 0>
 		<#assign nbSiblings=(node.parent??)?then((node.parent.children![])?size, rootelementssize)>
-		<#assign lastChild=node.order=nbSiblings>
+		<#assign lastChild=index=nbSiblings -1>
 		<#assign containerClasses=firstChild?then(' container-first', '') + lastChild?then(' container-last', '')>
 	    <td class="category-container ${containerClasses}" style="vertical-align:middle;" data-category-id="${node.id}" <#if node.parent??>data-category-parent="${node.parent.id}"</#if> <#if node.children?? && node.children?size gt 0> rowspan="${node.leaves?size!'1'}"</#if>>
            <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
