@@ -297,13 +297,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             // Insert here category types after being translated
             Integer indexWhereCategoryWillBeAdded = 2;
             titlesUntranslated.add( HEADER_OBJECT_SOLICITATION );
+            titlesUntranslated.add( HEADER_NUM_FACIL_FAMILLE );
             titlesUntranslated.add( HEADER_STATUS );
             titlesUntranslated.add( HEADER_NOMENCLATURE );
             titlesUntranslated.add( HEADER_CHANNEL );
             titlesUntranslated.add( HEADER_ASSIGNEMENT_ENTITY );
             titlesUntranslated.add( HEADER_ASSIGNEMENT_OFFICER );
             titlesUntranslated.add( HEADER_FINAL_RESPONSE_DATE );
-            titlesUntranslated.add( HEADER_NUM_FACIL_FAMILLE );
 
             List<String> titlesTranslated = titlesUntranslated.stream( ).map( title -> I18nService.getLocalizedString( title, Locale.FRENCH ) ).collect( Collectors.toList( ) );
 
@@ -333,6 +333,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                     line.add( "" );
                 }
                 line.add( ticket.getTicketComment( ) );
+                line.add( ticket.getFacilFamilleNumber( ) != null? "=\"" + ticket.getFacilFamilleNumber( ) + "\"" : "" );
                 line.add( ticket.getState( ).getName( ) );
                 line.add( ticket.getNomenclature( ) );
                 line.add( ticket.getChannel( ) != null ? ticket.getChannel( ).getLabel( ) : "" );
@@ -343,7 +344,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 } else {
                     line.add( "" );
                 }
-                line.add( ticket.getFacilFamilleNumber( ) != null? "=\"" + ticket.getFacilFamilleNumber( ) + "\"" : "" );
 
                 // Write line in the temp file
                 CSVUtils.writeLine( w, line );
