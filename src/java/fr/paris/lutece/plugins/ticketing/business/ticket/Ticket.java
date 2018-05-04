@@ -117,6 +117,8 @@ public class Ticket implements Serializable, RBACResource
     private String                       _strNomenclature;
     private int                          _nIdticketMarking    = -1;
     private int 						 _nIdDemand = -1;
+    private String                       _strFacilFamilleNumber;
+    
 
     /**
      * Enriches empty ticket attributes with specified values
@@ -1113,6 +1115,15 @@ public class Ticket implements Serializable, RBACResource
 	{
 		this._nIdDemand = _nIdDemand;
 	}
+    public String getFacilFamilleNumber( )
+    {
+        return _strFacilFamilleNumber;
+    }
+
+    public void setFacilFamilleNumber( String _strFacilFamilleNumber )
+    {
+        this._strFacilFamilleNumber = _strFacilFamilleNumber;
+    } 
     
     
 }

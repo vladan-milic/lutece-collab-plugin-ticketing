@@ -122,6 +122,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             result.setFixedPhoneNumber( document.get( TicketSearchItemConstant.FIELD_FIXED_PHONE_NUMBER ) );
             result.setNomenclature( document.get( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE ) );
             result.setDateClose( new Timestamp( document.getField( TicketSearchItemConstant.FIELD_DATE_CLOSE ).numericValue( ).longValue( ) ) );
+            result.setFacilFamilleNumber( document.get( TicketSearchItemConstant.FIELD_FACIL_FAMILLE ) );
 
             // TicketCategory
             TicketCategoryService ticketCategoryInstance = TicketCategoryService.getInstance( true );

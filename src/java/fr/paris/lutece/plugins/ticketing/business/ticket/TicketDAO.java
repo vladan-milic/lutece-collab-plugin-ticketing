@@ -68,14 +68,17 @@ public final class TicketDAO implements ITicketDAO
             + " a.fixed_phone_number, a.mobile_phone_number, a.id_marking, "
             + " a.id_ticket_category, a.id_contact_mode, f.code, a.ticket_comment, "
             + " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, g.first_name, g.last_name, a.id_unit, h.label, a.id_assigner_user, a.id_assigner_unit, h2.label, a.user_message, a.url, a.id_channel, x.label, x.icon_font, a.nomenclature, "
-            + " ad.address, ad.address_detail, ad.postal_code, ad.city, a.demand_id"
+            + " ad.address, ad.address_detail, ad.postal_code, ad.city, a.demand_id, ar.response_value as facilfamilles"
             + " FROM ticketing_ticket a"
             + " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user"
             + " LEFT JOIN unittree_unit h ON h.id_unit=a.id_unit"
             + " LEFT JOIN unittree_unit h2 ON h2.id_unit=a.id_assigner_unit"
             + " LEFT JOIN ticketing_ticket_address ad ON ad.id_ticket=a.id_ticket"
             + " JOIN ticketing_user_title b ON a.id_user_title = b.id_user_title"
-            + " JOIN ticketing_contact_mode f ON a.id_contact_mode = f.id_contact_mode" + " JOIN ticketing_channel x ON a.id_channel = x.id_channel";
+            + " JOIN ticketing_contact_mode f ON a.id_contact_mode = f.id_contact_mode" + " JOIN ticketing_channel x ON a.id_channel = x.id_channel"
+            + " LEFT JOIN ticketing_ticket_response r ON r.id_ticket = a.id_ticket\r\n" 
+            + " LEFT JOIN genatt_entry e ON e.resource_type = 'TICKET_INPUT' AND e.code = 'FFAccountNumber'\r\n" 
+             +" LEFT JOIN genatt_response ar ON ar.id_response = r.id_response AND ar.id_entry = e.id_entry";
 
     private static final String SQL_SELECT_ALL_ID_TICKET = "SELECT a.id_ticket " + " FROM ticketing_ticket a"
             + " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user" + " LEFT JOIN unittree_unit h ON h.id_unit=a.id_unit"
@@ -730,6 +733,8 @@ public final class TicketDAO implements ITicketDAO
         }
         
         ticket.setDemandId( daoUtil.getInt( nIndex++ ) );
+        
+        ticket.setFacilFamilleNumber( daoUtil.getString( nIndex++ ) );
 
         return ticket;
     }

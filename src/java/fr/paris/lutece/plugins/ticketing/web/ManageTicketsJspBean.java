@@ -221,6 +221,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     private static final String HEADER_ASSIGNEMENT_ENTITY = "ticketing.export.header.assignement.entity";
     private static final String HEADER_ASSIGNEMENT_OFFICER = "ticketing.export.header.assignement.officer";
     private static final String HEADER_FINAL_RESPONSE_DATE= "ticketing.export.header.final.response.date";
+    private static final String HEADER_NUM_FACIL_FAMILLE= "ticketing.export.header.numeroFacilFamille";
 
     /**
      * Build the Manage View
@@ -302,6 +303,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             titlesUntranslated.add( HEADER_ASSIGNEMENT_ENTITY );
             titlesUntranslated.add( HEADER_ASSIGNEMENT_OFFICER );
             titlesUntranslated.add( HEADER_FINAL_RESPONSE_DATE );
+            titlesUntranslated.add( HEADER_NUM_FACIL_FAMILLE );
 
             List<String> titlesTranslated = titlesUntranslated.stream( ).map( title -> I18nService.getLocalizedString( title, Locale.FRENCH ) ).collect( Collectors.toList( ) );
 
@@ -341,6 +343,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 } else {
                     line.add( "" );
                 }
+                line.add( ticket.getFacilFamilleNumber( ) != null? "=\"" + ticket.getFacilFamilleNumber( ) + "\"" : "" );
 
                 // Write line in the temp file
                 CSVUtils.writeLine( w, line );

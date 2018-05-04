@@ -85,4 +85,5 @@ public class TicketSearchItemConstant
     public static final String FIELD_CATEGORY_DEPTHNUMBER = "category_depthnumber_";
     public static final String FIELD_CATEGORY_ID_DEPTHNUMBER = "category_id_depthnumber_";
     public static final String FIELD_DATE_CLOSE = "ticket_close_date";
+    public static final String FIELD_FACIL_FAMILLE = "facil_famille";
 }

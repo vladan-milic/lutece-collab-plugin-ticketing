@@ -271,6 +271,11 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new LongPoint( TicketSearchItemConstant.FIELD_DATE_CLOSE, longCloseDate ) );
         doc.add( new NumericDocValuesField( TicketSearchItemConstant.FIELD_DATE_CLOSE, longCloseDate ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_DATE_CLOSE, longCloseDate ) );
+        
+        // --- ticket Facil'familles
+        String strFacilFamille = ticket.getFacilFamilleNumber( ) != null ? ticket.getFacilFamilleNumber( ) : "";
+        doc.add( new StringField( TicketSearchItemConstant.FIELD_FACIL_FAMILLE, strFacilFamille, Store.YES ) );
+        doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_FACIL_FAMILLE, new BytesRef( strFacilFamille ) ) );
 
         // --- ticket comment
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_COMMENT, manageNullValue( ticket.getTicketComment( ) ) ) );
