@@ -84,6 +84,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
     private final String FIELD_KEYWORD = "keyword";
     private final String FIELD_DOMAIN_LABEL = "domain";
     private final String FIELD_SEARCH_CONTENT = "content";
+    private final String FIELD_DATE_UPDATE = "date_update";
     private final String SEPARATOR_COMA = ",";
     private final String SEPARATOR_SPACE = " ";
 
@@ -147,6 +148,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         doc.add( new StringField( FIELD_DOMAIN_LABEL, modelReponse.getDomain( ), Field.Store.YES ) );
         doc.add( new StringField( FIELD_MODEL_RESPONSE_INFOS, modelReponse.toString( ), Field.Store.YES ) );
         doc.add( new TextField( FIELD_SEARCH_CONTENT, modelReponse.getKeyword( ).replace( SEPARATOR_COMA, SEPARATOR_SPACE ), Field.Store.NO ) );
+        doc.add( new StringField( FIELD_DATE_UPDATE, modelReponse.getDateUpdate(), Field.Store.YES ) );
         return doc;
     }
 
@@ -262,7 +264,6 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
             ScoreDoc [ ] hits = results.scoreDocs;
 
             AppLogService.debug( "\n Ticketing - Model Response  : query lucene " + hits.length + " \n" );
-
             for ( ScoreDoc hit : hits )
             {
                 Document doc = searcher.doc( hit.doc );
@@ -272,6 +273,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
                 modelResponse.setReponse( doc.get( FIELD_RESPONSE ) );
                 modelResponse.setDomain( doc.get( FIELD_DOMAIN_LABEL ) );
                 modelResponse.setKeyword( doc.get( FIELD_KEYWORD ) );
+                modelResponse.setDateUpdate(doc.get(FIELD_DATE_UPDATE));
                 list.add( modelResponse );
             }
 
@@ -284,7 +286,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
         catch( ParseException ex )
         {
             AppLogService.error( "\n Ticketing - Model Response : Error searching model response : " + ex.getMessage( ), ex );
-        }
+        } 
 
         return list;
     }

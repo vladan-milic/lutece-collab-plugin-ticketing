@@ -60,8 +60,12 @@ import fr.paris.lutece.util.sort.AttributeComparator;
 import fr.paris.lutece.util.url.UrlItem;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,6 +147,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     private String _strSelectedDomain;
     private String _strSortedAttributeName;
     private String _strAscSort;
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
     // Session variable to store working values
     private ModelResponse _modelResponse;
@@ -195,7 +200,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     @View( value = VIEW_MANAGE_MODELRESPONSES, defaultView = true )
     public String getManageModelResponses( HttpServletRequest request )
     {
-        Map<String, String> mapDomains = new LinkedHashMap<>( );
+        Map<String, String> mapDomains = new LinkedHashMap<>( );       
         TicketCategoryType type = TicketCategoryTypeHome.findByDepth( 1 );
         mapDomains.put( NO_TYPE_SELECTED, type.getLabel( ) );
         mapDomains.putAll( getFilteredCategoryList( ) );
@@ -286,7 +291,11 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         {
             return redirectView( request, VIEW_CREATE_MODELRESPONSE );
         }
-
+        Date today = Calendar.getInstance().getTime();  
+        _modelResponse.setDateUpdate(df.format(today));
+        _modelResponse.setFirstName(getUser( ).getFirstName());
+        _modelResponse.setLastName(getUser( ).getLastName());
+        
         ModelResponseHome.create( _modelResponse );
 
         try
@@ -393,7 +402,8 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         {
             return redirect( request, VIEW_MODIFY_MODELRESPONSE, PARAMETER_ID_MODELRESPONSE, _modelResponse.getId( ) );
         }
-
+        _modelResponse.setFirstName(getUser( ).getFirstName());
+        _modelResponse.setLastName(getUser( ).getLastName());
         ModelResponseHome.update( _modelResponse );
         addInfo( INFO_MODELRESPONSE_UPDATED, getLocale( ) );
 
