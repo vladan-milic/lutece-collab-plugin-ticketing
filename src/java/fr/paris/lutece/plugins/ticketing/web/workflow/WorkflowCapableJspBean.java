@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.BooleanUtils;
@@ -637,7 +638,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 ticketIndexer.indexTicket( ticket );
             } catch ( TicketIndexerException ticketIndexerException )
             {
-                addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
+                //addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
+                AppLogService.error(TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, ticketIndexerException);
 
                 // The indexation of the Ticket fail, we will store the Ticket in the table for the daemon
                 IndexerActionHome.create( TicketIndexerActionUtil.createIndexerActionFromTicket( ticket ) );
@@ -659,7 +661,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
             ticketIndexer.deleteTicketIndex( idTicket );
         } catch ( TicketIndexerException ticketIndexerException )
         {
-            addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
+            //addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
+            AppLogService.error(TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, ticketIndexerException);
 
             // The indexation of the Ticket fail, we will store the Ticket in the table for the daemon
             IndexerActionHome.create( TicketIndexerActionUtil.createIndexerDeleteActionFromTicket( idTicket ) );
