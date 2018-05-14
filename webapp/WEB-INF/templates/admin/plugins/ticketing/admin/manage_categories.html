@@ -243,6 +243,10 @@
 	                	<span class="category-unit"><i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> ${(node.defaultAssignUnit.name)!''}</span>
 	               	</#if>
                		<span class="category-actions">
+               			<#if node.piecesJointes>
+							<@button  size='xs' buttonIcon='paperclip' showTitle=false title='Pi&#232ces jointes pr&#233sentes' />							
+						</#if>
+						
 		               	<@button type='submit' size='xs' name='view_modifyCategory' buttonIcon='pencil' showTitle=false title='Modifier'/>
 		               	<@button type='submit' size='xs' name='view_modifyCategoryInputs' buttonIcon='wpforms' showTitle=false title='Modifier les entrées du formulaire' />
 

@@ -317,6 +317,12 @@ public final class TicketCategoryDAO implements ITicketCategoryDAO
             category.setManageable( daoUtil.getBoolean( nIndex++ ) );
             category.setInactive( daoUtil.getBoolean( nIndex++ ) );
             category.setIconFont( daoUtil.getString( nIndex++ ) );
+            
+            //show if there is some attachment
+            if(!TicketCategoryInputsHome.getIdInputListByCategory(category.getId()).isEmpty()) {
+            	category.setPiecesJointes(true);
+            }
+            
 
             categoryList.add( category );
         }

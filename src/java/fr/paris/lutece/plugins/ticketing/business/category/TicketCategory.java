@@ -96,6 +96,8 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     
     private boolean            _bInactive;
     
+    private boolean            _bPiecesJointes;
+    
     @Size( max = 50, message = "#i18n{ticketing.validation.channel.IconFont.size}" )
     private String _strIconFont;
 
@@ -414,4 +416,20 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     {
         _strIconFont = strIconFont;
     }
+
+	/**
+	 * @return the _bPiecesJointes
+	 */
+	public boolean isPiecesJointes() {
+		return _bPiecesJointes;
+	}
+
+	/**
+	 * @param _bPiecesJointes the _bPiecesJointes to set
+	 */
+	public void setPiecesJointes(boolean piecesJointes) {
+		this._bPiecesJointes = piecesJointes;
+	}
+    
+    
 }
