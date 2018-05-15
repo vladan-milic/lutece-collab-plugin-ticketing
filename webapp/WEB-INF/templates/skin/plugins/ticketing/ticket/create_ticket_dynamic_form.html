@@ -220,7 +220,20 @@
                       selectSection.val(category.id).trigger('change');
                });
                
+			   if( category.selected ) {
+					linkElement.addClass('selected');
+					linkElement.click();
+               }
+               
                sectionContainer.append(element);
+               
+               category['categories_depth_2'].forEach(function(category2) {
+            	   if( category2.selected ) {
+            		   linkElement.addClass('selected');
+   					   linkElement.click();
+            		   $("#id_category_2").val(category2.id);
+            	   }
+   				});
         });
         
   		<#if !entryComment.hidden>

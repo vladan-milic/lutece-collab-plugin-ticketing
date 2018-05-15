@@ -1,6 +1,7 @@
 package fr.paris.lutece.plugins.ticketing.web.filter;
 
 import java.io.IOException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -9,6 +10,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.mylutece.service.security.AuthenticationFilterService;
 import fr.paris.lutece.plugins.ticketing.business.form.Form;
@@ -33,6 +36,9 @@ public class FormAuthorizationFilter implements Filter
     private static final String URL_STAR = "*";
 
     private static final String PARAMETER_XPAGE = "page";
+    
+    private static final String PARAMETER_CATEGORY_1 = "cat1";
+    private static final String PARAMETER_CATEGORY_2 = "cat2";
 
     /**
      * {@inheritDoc}
@@ -86,7 +92,24 @@ public class FormAuthorizationFilter implements Filter
                     // if form exists and doesn't require connection, form is not restricted
                     if ( form != null )
                     {
-                        resp.sendRedirect( AppPathService.getAbsoluteUrl( req, SecurityService.getInstance( ).getLoginPageUrl( ) + "&form=" + form.getId( ) ) );
+                        String category1 = request.getParameter( PARAMETER_CATEGORY_1 );
+                        if( category1 != null && StringUtils.isNumeric( category1 ) ) 
+                        {
+                        	category1 = URL_AMPERSAND + PARAMETER_CATEGORY_1 + URL_EQUAL + category1;
+                        } else 
+                        {
+                        	category1 = "";
+                        }
+                        
+                        String category2 = request.getParameter( PARAMETER_CATEGORY_2 );
+                        if( category2 != null && StringUtils.isNumeric( category2 ) ) 
+                        {
+                        	category2 = URL_AMPERSAND + PARAMETER_CATEGORY_2 + URL_EQUAL + category2;
+                        } else 
+                        {
+                        	category1 = "";
+                        }
+                        resp.sendRedirect( AppPathService.getAbsoluteUrl( req, SecurityService.getInstance( ).getLoginPageUrl( ) + "&form=" + form.getId( ) + category1 + category2 ) );
                     }
                     else
                     {
