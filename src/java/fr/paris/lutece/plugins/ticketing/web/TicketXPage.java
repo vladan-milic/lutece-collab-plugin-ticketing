@@ -127,6 +127,8 @@ public class TicketXPage extends WorkflowCapableXPage
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
     public static final String PARAMETER_ID_FORM = "form";
     private static final String PARAMETER_RESET_RESPONSE = "reset_response";
+    private static final String PARAMETER_CATEGORY_1 = "cat1";
+    private static final String PARAMETER_CATEGORY_2 = "cat2";
 
     // Views
     private static final String VIEW_CREATE_TICKET = "createTicket";
@@ -208,8 +210,22 @@ public class TicketXPage extends WorkflowCapableXPage
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale( ) ) );
+        
+        int selectedRootCategory = 0;
+        String category1 = request.getParameter( PARAMETER_CATEGORY_1 );
+        if( category1 != null && StringUtils.isNumeric( category1 ) ) 
+        {
+        	selectedRootCategory = Integer.parseInt( category1 );
+        }
+        
+        int selectedChildCategory = 0;
+        String category2 = request.getParameter( PARAMETER_CATEGORY_2 );
+        if( category2 != null && StringUtils.isNumeric( category2 ) ) 
+        {
+        	selectedChildCategory = Integer.parseInt( category2 );
+        }
 
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( restrictedCategoriesId ).getTreeJSONObject( ) );
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( restrictedCategoriesId ).getTreeJSONObject( selectedRootCategory, selectedChildCategory ) );
         model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( restrictedCategoriesId ).getDepths( ) );
 
         saveActionTypeInSession( request.getSession( ), ACTION_CREATE_TICKET );
