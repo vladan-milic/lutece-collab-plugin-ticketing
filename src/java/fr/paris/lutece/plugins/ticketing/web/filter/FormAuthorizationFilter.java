@@ -107,7 +107,7 @@ public class FormAuthorizationFilter implements Filter
                         	category2 = URL_AMPERSAND + PARAMETER_CATEGORY_2 + URL_EQUAL + category2;
                         } else 
                         {
-                        	category1 = "";
+                        	category2 = "";
                         }
                         resp.sendRedirect( AppPathService.getAbsoluteUrl( req, SecurityService.getInstance( ).getLoginPageUrl( ) + "&form=" + form.getId( ) + category1 + category2 ) );
                     }
