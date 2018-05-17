@@ -13,8 +13,8 @@
 	            <@formGroup labelKey='#i18n{ticketing.modify_category.labelCode}' helpKey='#i18n{ticketing.modify_category.labelCode.help}' mandatory=true>
 	                    <@input type='text' name='code' value='${category.code}' />
 	            </@formGroup>
-                <@formGroup labelKey='#i18n{ticketing.modify_category.labelDemandId}' helpKey='#i18n{ticketing.modify_category.labelDemandId.help}' mandatory=false>
-                        <@input type='text' name='demandId' value='${category.demandId!\'\'}' />
+                <@formGroup labelKey='#i18n{ticketing.modify_category.labelDemandId}' helpKey='#i18n{ticketing.modify_category.labelDemandId.help}' mandatory=true>
+                        <@comboWithParams name="demandId" items=demand_type_my_account_list default_value='${category.demandId!\'\'}' additionalParameters="required"/>
                 </@formGroup>
 	            <@formGroup labelKey='#i18n{ticketing.modify_category.labelUnit}' helpKey='#i18n{ticketing.modify_category.labelUnit.help}'>
 	                <select id="id_unit" name="id_unit" >

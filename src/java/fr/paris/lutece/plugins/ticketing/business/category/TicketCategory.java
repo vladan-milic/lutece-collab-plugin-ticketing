@@ -37,6 +37,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
@@ -87,6 +88,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     private List<Integer>      _listIdInput;
 
     @Digits( integer = 6, fraction = 0, message = "#i18n{ticketing.validation.category.demandId.int}" )
+    @Min(value = 1, message = "#i18n{ticketing.validation.category.demandId.notEmpty}" )
     private int                _nDemandId;
 
     @Size( max = 500, message = "#i18n{ticketing.validation.category.helpMessage.size}" )
