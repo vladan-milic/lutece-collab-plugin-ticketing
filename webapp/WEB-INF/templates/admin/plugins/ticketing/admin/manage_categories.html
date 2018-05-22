@@ -1,4 +1,5 @@
 <#include "admin_tabs.html" />
+<link rel="stylesheet" href="css/plugins/ticketing/manage_categories.css">
 <@tabsWrapper>
   <@tabs tab="category" formName="manage_categories" />
     <@box>
@@ -250,15 +251,12 @@
 		               	<@button type='submit' size='xs' name='view_modifyCategory' buttonIcon='pencil' showTitle=false title='Modifier'/>
 		               	<@button type='submit' size='xs' name='view_modifyCategoryInputs' buttonIcon='wpforms' showTitle=false title='Modifier les entrées du formulaire' />
 
-		               	<#if node.order gt 1 >
+		               	<#if !firstChild>
 		                 	<@button type='submit' size='xs' name='action_doMoveCategoryUp' buttonIcon='chevron-up' showTitle=false title='Monter'/>
 		               	</#if>
 		               	
-		               	<#if !node.parent?? && node.order lt rootelementssize >
+		               	<#if !lastChild>
 		                	<@button type='submit' size='xs' name='action_doMoveCategoryDown' buttonIcon='chevron-down' showTitle=false title='Descendre'/>
-		               	</#if>
-		               	<#if node.parent?? && node.parent.children?? && node.order lt node.parent.children?size >
-		                 	<@button type='submit' size='xs' name='action_doMoveCategoryDown' buttonIcon='chevron-down' showTitle=false title='Descendre'/>
 		               	</#if>
 		               	
 		               	<@button type='submit' size='xs' color='btn-danger' name='action_confirmRemoveCategory' buttonIcon='trash' showTitle=false title='Supprimer'/>
@@ -271,111 +269,3 @@
 	    </td>    
 	</#if>	       
 </#macro>
-<style>
-
-	.category-type {
-		position: relative;
-	}
-	
-	.category-type .h4 {
-		border-bottom: 1px solid #ccc;
-		display: block;
-		padding: 10px 0;
-		margin: 0 10px;
-	}
-	
-	.category-type-actions {
-		position: absolute;
-		top: 10px;
-		right: 10px;
-	}
-	
-	.category-container {
-		position: relative;
-		padding: 10px 40px;
-	}
-	
-	.category-box {
-		border: 1px solid #ccc;
-		padding: 30px 10px 20px 10px;
-		margin: auto;
-		text-align: center;
-		position: relative;
-		transition: all .3s;
-	}
-	
-	.category-title, .category-unit {
-		display: block;
-	}
-	
-	.category-actions {
-		position: absolute;
-		top: 3px;
-		right: 3px;
-	}
-	
-	.category-addsub {
-		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
-		right: 15px;
-	}
-	
-	.category-box::before {
-		content: '';
-		position: absolute;
-		display: block;
-		top: 50%;
-		left: -41px;
-		width: 41px;
-		border-bottom: 1px solid black;
-	}
-	
-	.category-box::after {
-		content: '';
-		position: absolute;
-		display: block;
-		top: 50%;
-		right: -41px;
-		width: 41px;
-		border-bottom: 1px solid black;
-	}
-	
-	td.category-container::before {
-		content: '';
-		display: block;
-		border-left: 1px solid black;
-		position: absolute;
-		top: 0;
-		left: 0;
-		bottom: 0;
-	}
-	
-	td.category-container:not([data-category-parent])::before,
-	td.category-container:not([data-category-parent]) .category-box::before {
-		display: none;
-	}
-	
-	td.category-container.container-first::before {
-		top: 50%;
-	}
-	
-	td.category-container.container-last::before {
-		bottom: 50%;
-	}
-	
-	.category-box.category-hover {
-		background: #eee;
-		border: 1px solid #000;
-	}
-	
-	td.category-container:last-child .category-box::after {
-		right: -20px;
-		width: 20px;
-	}
-	
-	.fa-chevron-down, .fa-chevron-up {
-		margin: -1px;
-	}
-	
-</style>
