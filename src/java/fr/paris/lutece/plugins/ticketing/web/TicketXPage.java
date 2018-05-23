@@ -199,7 +199,7 @@ public class TicketXPage extends WorkflowCapableXPage
             // remove ticket from session
             // -> on refresh, ticket will be reset
             // -> we pass the ticket via the form
-            _ticketFormService.removeTicketFromSession( request.getSession( ), form );
+            //_ticketFormService.removeTicketFromSession( request.getSession( ), form );
 
             List<FormCategory> restrictedCategories = FormCategoryHome.findByForm( form.getId( ) );
             restrictedCategoriesId = restrictedCategories.stream( ).map( category -> category.getIdCategory( ) ).collect( Collectors.toList( ) );
@@ -682,7 +682,7 @@ public class TicketXPage extends WorkflowCapableXPage
         if ( ticket != null )
         {
             strContent = fillTemplate( request, ticket );
-            _ticketFormService.removeTicketFromSession( request.getSession( ), form );
+            //_ticketFormService.removeTicketFromSession( request.getSession( ), form );
             removeActionTypeFromSession( request.getSession( ) );
         }
         model.put( MARK_MESSAGE, strContent );
