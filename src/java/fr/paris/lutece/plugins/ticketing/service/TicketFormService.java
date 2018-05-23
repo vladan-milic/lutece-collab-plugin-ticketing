@@ -33,6 +33,19 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItem;
+
 import fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
@@ -48,6 +61,7 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeSer
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.categoryinputs.TicketCategoryInputsHome;
 import fr.paris.lutece.plugins.ticketing.business.form.Form;
+import fr.paris.lutece.plugins.ticketing.business.form.FormHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
@@ -61,19 +75,6 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.fileupload.FileItem;
 
 /**
  * Service for ticketing forms
@@ -293,7 +294,8 @@ public class TicketFormService implements Serializable
         List<Response> listResponse = null;
         if ( request != null )
         {
-            Ticket ticket = getTicketFromSession( request.getSession( ) );
+        	Form form = FormHome.getFormFromRequest( request );
+            Ticket ticket = getTicketFromSession( request.getSession( ), form );
 
             if ( ticket != null )
             {
