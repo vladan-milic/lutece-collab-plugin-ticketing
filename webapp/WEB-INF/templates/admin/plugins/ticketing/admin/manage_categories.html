@@ -201,7 +201,7 @@
                <#if i gt 0 >
                     <tr>
                 </#if>
-                  <@printNode category.children[i] 0/>
+                  <@printNode category.children[i] 0 i/>
                
                 <#if category.children[i].leaf == false>
                     <@printNodeRecursive category.children[i] 0/>
@@ -214,8 +214,11 @@
 
 </#macro>
                     
-<#macro printNode node rootelementssize>
+<#macro printNode node rootelementssize index=0>
 	<#if !node.inactive>
+		<#assign firstChild=index = 0>
+		<#assign nbSiblings=(node.parent??)?then((node.parent.children![])?size, rootelementssize)>
+		<#assign lastChild=index=nbSiblings -1>
 	    <td class="text-center" style="vertical-align:middle;" data-category-id="${node.id}" <#if node.parent??>data-category-parent="${node.parent.id}"</#if> <#if node.children?? && node.children?size gt 0> rowspan="${node.leaves?size!'1'}"</#if>>
 	           <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
 	               <input type="hidden" id="id_parent_category" name="id_parent_category" value="${node.id}"/>
@@ -227,13 +230,10 @@
 	               <@button class="pull-right" type='submit' size='xs' color='btn-danger' name='action_confirmRemoveCategory' buttonIcon='trash'/>
 	               </br>
 	               <span>${node.code}</span>
-	               <#if !node.parent?? && node.order lt rootelementssize >
+	               <#if !lastChild>
 	                 <@button class="pull-right" type='submit' size='xs' name='action_doMoveCategoryDown' buttonIcon='chevron-down'/>
 	               </#if>
-	               <#if node.parent?? && node.parent.children?? && node.order lt node.parent.children?size >
-	                 <@button class="pull-right" type='submit' size='xs' name='action_doMoveCategoryDown' buttonIcon='chevron-down'/>
-	               </#if>
-	               <#if node.order gt 1 >
+	               <#if !firstChild>
 	                 <@button class="pull-right" type='submit' size='xs' name='action_doMoveCategoryUp' buttonIcon='chevron-up'/>
 	               </#if>
 	               </br>
