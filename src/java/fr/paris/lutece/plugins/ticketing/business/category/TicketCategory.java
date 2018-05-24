@@ -95,11 +95,11 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     private String             _strHelpMessage;
 
     private boolean            _bManageable;
-    
+
     private boolean            _bInactive;
-    
+
     private boolean            _bPiecesJointes;
-    
+
     @Size( max = 50, message = "#i18n{ticketing.validation.channel.IconFont.size}" )
     private String _strIconFont;
 
@@ -387,7 +387,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     {
         _bManageable = manageable;
     }
-    
+
     public boolean isInactive( )
     {
         return _bInactive;
@@ -395,9 +395,9 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     public void setInactive( boolean inactive )
     {
-    	_bInactive = inactive;
+        _bInactive = inactive;
     }
-    
+
     /**
      * Returns the Icon font label
      * 
@@ -419,19 +419,35 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
         _strIconFont = strIconFont;
     }
 
-	/**
-	 * @return the _bPiecesJointes
-	 */
-	public boolean isPiecesJointes() {
-		return _bPiecesJointes;
-	}
+    /**
+     * @return the _bPiecesJointes
+     */
+    public boolean isPiecesJointes() {
+        return _bPiecesJointes;
+    }
 
-	/**
-	 * @param _bPiecesJointes the _bPiecesJointes to set
-	 */
-	public void setPiecesJointes(boolean piecesJointes) {
-		this._bPiecesJointes = piecesJointes;
-	}
-    
-    
+    /**
+     * @param _bPiecesJointes the _bPiecesJointes to set
+     */
+    public void setPiecesJointes(boolean piecesJointes) {
+        this._bPiecesJointes = piecesJointes;
+    }
+
+    public TicketCategory getPreviousSibling( )
+    {
+        return getSibling( -1 );
+    }
+
+    public TicketCategory getNextSibling( )
+    {
+        return getSibling( +1 );
+    }
+
+    public TicketCategory getSibling( int position )
+    {
+        List<TicketCategory> siblings = getParent( ).getChildren( );
+        int index = siblings.indexOf( this ) + position;
+        boolean inBounds = ( index >= 0 ) && ( index < siblings.size( ) );
+        return inBounds ? siblings.get( index ) : null;
+    }
 }
