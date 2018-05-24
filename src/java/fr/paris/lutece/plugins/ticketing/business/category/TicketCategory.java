@@ -93,9 +93,9 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     private String             _strHelpMessage;
 
     private boolean            _bManageable;
-    
+
     private boolean            _bInactive;
-    
+
     @Size( max = 50, message = "#i18n{ticketing.validation.channel.IconFont.size}" )
     private String _strIconFont;
 
@@ -383,7 +383,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     {
         _bManageable = manageable;
     }
-    
+
     public boolean isInactive( )
     {
         return _bInactive;
@@ -391,9 +391,9 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     public void setInactive( boolean inactive )
     {
-    	_bInactive = inactive;
+        _bInactive = inactive;
     }
-    
+
     /**
      * Returns the Icon font label
      * 
@@ -413,5 +413,23 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     public void setIconFont( String strIconFont )
     {
         _strIconFont = strIconFont;
+    }
+
+    public TicketCategory getPreviousSibling( )
+    {
+        return getSibling( -1 );
+    }
+
+    public TicketCategory getNextSibling( )
+    {
+        return getSibling( +1 );
+    }
+
+    public TicketCategory getSibling( int position )
+    {
+        List<TicketCategory> siblings = getParent( ).getChildren( );
+        int index = siblings.indexOf( this ) + position;
+        boolean inBounds = ( index >= 0 ) && ( index < siblings.size( ) );
+        return inBounds ? siblings.get( index ) : null;
     }
 }

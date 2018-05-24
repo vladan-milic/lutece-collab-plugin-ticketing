@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.category;
 
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -203,22 +204,34 @@ public final class TicketCategoryHome
      */
     public static void updateCategoryOrder( int nId, boolean bMoveUp )
     {
-        TicketCategory categoryToRemove = findByPrimaryKey( nId );
-        int nCurrentOrder = categoryToRemove.getOrder( );
-        int nIdParent = categoryToRemove.getIdParent( );
-        int nTargetOrder = bMoveUp ? ( nCurrentOrder - 1 ) : ( nCurrentOrder + 1 );
+        TicketCategory sourceCategory = TicketCategoryService.getInstance( ).findCategoryById( nId );
+        TicketCategory targetCategory = bMoveUp ? sourceCategory.getPreviousSibling( ) : sourceCategory.getNextSibling( );
 
-        int nIdCategoryWhichPlaceIsTaken = _dao.selectCategoryIdByOrder( nTargetOrder, nIdParent, _plugin );
-
-        if ( nIdCategoryWhichPlaceIsTaken != -1 )
+        if ( targetCategory != null )
         {
-            _dao.updateCategoryOrder( nId, nTargetOrder, _plugin );
-            _dao.updateCategoryOrder( nIdCategoryWhichPlaceIsTaken, nCurrentOrder, _plugin );
+            int targetOrder = targetCategory.getOrder( );
+            int sourceOrder = sourceCategory.getOrder( );
+
+            // If two categories have the same order, add one to the last element
+            if ( targetCategory.getOrder( ) == sourceCategory.getOrder( ) )
+            {
+                if ( bMoveUp )
+                {
+                    sourceOrder++;
+                }
+                else
+                {
+                    targetOrder++;
+                }
+            }
+
+            _dao.updateCategoryOrder( sourceCategory.getId( ), targetOrder, _plugin );
+            _dao.updateCategoryOrder( targetCategory.getId( ), sourceOrder, _plugin );
         }
         else
         {
             AppLogService
-            .error( "Could not move TicketCategory " + nId + " to position " + nTargetOrder + " : no TicketCategory to replace on position " + nCurrentOrder );
+            .error( "Could not move TicketCategory " + nId + " " + ( bMoveUp ? "up" : "down" ) + " : no TicketCategory to replace on destination " );
         }
     }
 
