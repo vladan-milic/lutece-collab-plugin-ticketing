@@ -46,7 +46,7 @@
 		<tbody>
             <#list tree.rootElements as root >
                 <tr>
-                    <@printNodeRecursive root tree.rootElements?size />
+                    <@printNodeRecursive root tree.rootElements?size root?index />
                 </tr>
             </#list>
             <#if tree.depths?size gt 0 > 
@@ -206,9 +206,9 @@
 	});
 </script>
 
-<#macro printNodeRecursive category rootelementssize>
+<#macro printNodeRecursive category rootelementssize i=0>
         <#if !(category.parent)??>
-            <@printNode category rootelementssize/>
+            <@printNode category rootelementssize i/>
         </#if>
         <#if category.children?? && category.children?size gt 0>
             <#list 0..category.children?size-1 as i>
