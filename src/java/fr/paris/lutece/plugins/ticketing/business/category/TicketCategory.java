@@ -44,6 +44,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTree;
 import fr.paris.lutece.plugins.ticketing.service.tree.AbstractNode;
 import fr.paris.lutece.portal.service.rbac.RBACResource;
 
@@ -433,19 +434,27 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
         this._bPiecesJointes = piecesJointes;
     }
 
-    public TicketCategory getPreviousSibling( )
+    public TicketCategory getPreviousSibling( TicketCategoryTree tree )
     {
-        return getSibling( -1 );
+        return getSibling( -1, tree );
     }
 
-    public TicketCategory getNextSibling( )
+    public TicketCategory getNextSibling( TicketCategoryTree tree )
     {
-        return getSibling( +1 );
+        return getSibling( +1, tree );
     }
 
-    public TicketCategory getSibling( int position )
+    public TicketCategory getSibling( int position, TicketCategoryTree tree )
     {
-        List<TicketCategory> siblings = getParent( ).getChildren( );
+        List<TicketCategory> siblings;
+        if ( getParent( ) != null )
+        {
+            siblings = getParent( ).getChildren( );
+        }
+        else
+        {
+            siblings = tree.getRootElements( );
+        }
         int index = siblings.indexOf( this ) + position;
         boolean inBounds = ( index >= 0 ) && ( index < siblings.size( ) );
         return inBounds ? siblings.get( index ) : null;
