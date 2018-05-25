@@ -43,7 +43,7 @@
 		<tbody>
             <#list tree.rootElements as root >
                 <tr>
-                    <@printNodeRecursive root tree.rootElements?size />
+                    <@printNodeRecursive root tree.rootElements?size root?index />
                 </tr>
             
             </#list>
@@ -192,9 +192,9 @@
 	});
 </script>
 
-<#macro printNodeRecursive category rootelementssize>
+<#macro printNodeRecursive category rootelementssize i=0>
         <#if !(category.parent)??>
-            <@printNode category rootelementssize/>
+            <@printNode category rootelementssize i/>
         </#if>
         <#if category.children?? && category.children?size gt 0>
             <#list 0..category.children?size-1 as i>
@@ -223,7 +223,7 @@
 	           <@tform class='form-inline' name='add_sub_category' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
 	               <input type="hidden" id="id_parent_category" name="id_parent_category" value="${node.id}"/>
 	               <input type="hidden" id="id_category" name="id_category" value="${node.id}"/>
-	               <span><strong>${node.label}</strong></span> 
+	               <span><strong>${node.label}</strong></span>
 	               <@button class="pull-right" type='submit' size='xs' name='view_createCategory' buttonIcon='plus' />
 	               <@button class="pull-right" type='submit' size='xs' name='view_modifyCategoryInputs' buttonIcon='wpforms' />
 	               <@button class="pull-right" type='submit' size='xs' name='view_modifyCategory' buttonIcon='pencil'/>
