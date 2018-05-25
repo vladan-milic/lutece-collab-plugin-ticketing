@@ -34,6 +34,7 @@
 package fr.paris.lutece.plugins.ticketing.business.category;
 
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTree;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -205,7 +206,8 @@ public final class TicketCategoryHome
     public static void updateCategoryOrder( int nId, boolean bMoveUp )
     {
         TicketCategory sourceCategory = TicketCategoryService.getInstance( ).findCategoryById( nId );
-        TicketCategory targetCategory = bMoveUp ? sourceCategory.getPreviousSibling( ) : sourceCategory.getNextSibling( );
+        TicketCategoryTree tree = TicketCategoryService.getInstance( ).getCategoriesTree( );
+        TicketCategory targetCategory = bMoveUp ? sourceCategory.getPreviousSibling( tree ) : sourceCategory.getNextSibling( tree );
 
         if ( targetCategory != null )
         {
