@@ -6,7 +6,7 @@
 			<input type="hidden" id="id" name="id">
         	<input type="hidden" id="form" name="form" value="${(form.id)!}">
 			<input type="hidden" name="view" value="redirectAfterCreateAction">
-	        <div class="container">
+	        <main class="container">
 	            <div class="row">
 	                <div class="col-md-12 text-center">
 	                    <img src="images/skin/plugins/ticketing/success.png" alt="demande enregistrée" />
@@ -16,12 +16,11 @@
 	                    </div>
 	                </div>
 	            </div>
-	        </div>
+	        </main>
 	    </form>
     </div>
 </div>
 <script src="js/plugins/ticketing/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/plugins/ticketing/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 <script language="javascript"> 
     $( function() {
     	document.getElementById('form-title').innerHTML = "${form.title}";
