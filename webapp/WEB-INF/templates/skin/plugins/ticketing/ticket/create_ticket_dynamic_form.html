@@ -17,7 +17,7 @@
         <input type="hidden" id="guid" name="guid" value="${ticket.guid!}">
         <input type="hidden" id="form" name="form" value="${form.id}">
 	   		
-	    <main class="container">
+	    <div class="container">
 	        <div class="row">
 	            <div class="col-sm-12">
 	                <p class="description">${form.message!''}</p>
@@ -29,7 +29,7 @@
 	                    #i18n{ticketing.xpage.create_ticket.mandatory_fields}
 	                </span>
 	                <div class="form">
-	                    <h1 aria-label="#i18n{ticketing.xpage.create_ticket.title_bloc1}" class="title">#i18n{ticketing.xpage.create_ticket.title_bloc1}</h1>
+	                    <span class="title">#i18n{ticketing.xpage.create_ticket.title_bloc1}</span>
 	                    
       					<#assign entryUserTitle = form.getEntry(formEntryType.userTitle)>
 	                    <div class="row <#if entryUserTitle.hidden>hidden</#if>">
@@ -66,7 +66,7 @@
 	                    <div class="row <#if entryEmail.hidden>hidden</#if>">
 	                        <div class="form-group col-md-6">
 	                            <label for="email" class="control-label">#i18n{ticketing.xpage.create_ticket.labelEmail} <#if !entryEmail.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
-								<input class="form-control" type="email" id="email" name="email" value="${ticket.email!''}"  maxlength="255">
+								<input class="form-control" type="text" id="email" name="email" value="${ticket.email!''}"  maxlength="255">
 								<span class="subtitle">#i18n{ticketing.xpage.create_ticket.labelEmail.help}</span>
 	                        </div>
 	                    </div>
@@ -75,12 +75,12 @@
 	                    <div class="row <#if entryPhones.hidden>hidden</#if>">
 	                        <div class="form-group col-md-6">
 	                            <label for="fixed_phone_number" class="control-label">#i18n{ticketing.xpage.create_ticket.labelFixedPhoneNumber} <#if !entryPhones.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
-								<input class="form-control input-phone" type="tel" id="fixed_phone_number" name="fixed_phone_number" value="${ticket.fixedPhoneNumber!''}"  maxlength="10" />
+								<input class="form-control input-phone" type="text" id="fixed_phone_number" name="fixed_phone_number" value="${ticket.fixedPhoneNumber!''}"  maxlength="10" />
 								<#if entryPhones.mandatory><span class="subtitle">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span></#if>
 	                        </div>
 	                        <div class="form-group col-md-6">
 	                            <label for="mobile_phone_number" class="control-label">#i18n{ticketing.xpage.create_ticket.labelMobilePhoneNumber} <#if !entryPhones.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
-								<input class="form-control input-phone" type="tel" id="mobile_phone_number" name="mobile_phone_number" value="${ticket.mobilePhoneNumber!''}"  maxlength="10" />
+								<input class="form-control input-phone" type="text" id="mobile_phone_number" name="mobile_phone_number" value="${ticket.mobilePhoneNumber!''}"  maxlength="10" />
 								<#if entryPhones.mandatory><span class="subtitle">#i18n{ticketing.xpage.create_ticket.labelPhoneNumber.help}</span></#if>
 	                        </div>
 	                    </div>
@@ -107,8 +107,8 @@
 		      		<#if depth.depthNumber == 1>
 	      			<#assign entryCategory = form.getEntry(formEntryType.category + 1)>
 	                <div class="form <#if entryCategory.hidden>hidden</#if>">
-	                    <h1 aria-label="#i18n{ticketing.xpage.create_ticket.title_bloc_sujet}" class="title domaine">#i18n{ticketing.xpage.create_ticket.title_bloc_sujet}</h1>
-		                <h2 class="precision">#i18n{ticketing.xpage.create_ticket.select}</h2>
+	                    <span class="title domaine">#i18n{ticketing.xpage.create_ticket.title_bloc_sujet}</span>
+		                <span class="precision">#i18n{ticketing.xpage.create_ticket.select}</span>
 		                
 		                <div class="select hidden">
 	                    	<@comboWithParams name="id_category_1" default_value="" additionalParameters=" id=\"id_category_1\" depth=\"1\" class=\"select-control\" " items=[] />
@@ -125,7 +125,7 @@
 	                <!--second part-->
 	                <div class="second-part">
 	                    <div class="form last">
-	                        <h1 aria-label="#i18n{ticketing.xpage.create_ticket.title_bloc2}" class="title">#i18n{ticketing.xpage.create_ticket.title_bloc2}</h1>
+	                        <span class="title">#i18n{ticketing.xpage.create_ticket.title_bloc2}</span>
 	                        
 				            <#list categories_depths as depth>
 				            <#if depth.depthNumber != 1>
@@ -159,7 +159,7 @@
 	                </div>
 	            </div>
 	        </div>
-	    </main>
+	    </div>
 	</form>
 	<#else>
 		<!-- error if no form selected -->
@@ -167,6 +167,8 @@
 	</#if>
 </div>
 <#if form?? && form.id??>
+<script src="js/plugins/ticketing/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/plugins/ticketing/mademande.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/bootstrap-datepicker.js"></script>
 <script src="js/locales/bootstrap-datepicker.fr.js" charset="utf-8"></script>
 <script src="js/plugins/ticketing/ticket_tree.js"></script>
