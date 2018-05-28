@@ -170,6 +170,7 @@ a:hover {
 .title {
     display: block;
     margin-bottom: 20px;
+    margin-top: 0;
     font-weight: 700;
     font-size: 2rem;
     font-size: 20px;
@@ -266,6 +267,7 @@ label.radio-inline {
     font-size: 1.6rem;
     font-size: 16px;
     color: #333333;
+    margin-top: 0;
 }
 
 .button-centered {
@@ -388,6 +390,13 @@ button {
     line-height: 1.2;
     color: rgb(12, 81, 138);
     transition: color .3s;
+}
+
+.custom-radio input[type="radio"]:focus+label::before {
+    border-color: #66afe9;
+	outline: 0;
+	-webkit-box-shadow: inset 0px 0px 0px 5px rgb(255, 255, 255), 0 0 8px rgba(102,175,233,.6);
+	box-shadow: inset 0px 0px 0px 5px rgb(255, 255, 255), 0 0 8px rgba(102,175,233,.6);
 }
 
 .custom-radio input[type="radio"]+label::before {
