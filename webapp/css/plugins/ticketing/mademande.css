@@ -187,6 +187,28 @@ a:hover {
     color: #0c518a;
     text-align: left !important;
 }
+
+@media (max-width: 768px) {
+
+	.control-label-static, .form-group label.control-label-static{
+		font-size: 16px;
+	    font-weight: 400;
+	    color: #0c518a;
+	    text-align: left;
+	}
+
+}
+
+@media (min-width: 768px) {
+
+	.control-label-static, .form-group label.control-label-static{
+		font-size: 16px;
+	    font-weight: 400;
+	    color: #0c518a;
+	    text-align: right;
+	}
+
+}
 	
 .custom-radio.group {
     display: inline-block;
