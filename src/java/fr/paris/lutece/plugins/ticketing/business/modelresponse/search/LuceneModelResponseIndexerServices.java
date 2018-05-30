@@ -257,9 +257,11 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
                 booleanQueryBuilderMain.add( new BooleanClause( booleanQueryBuilderDomain.build( ), Occur.MUST ) );
             }
 
-            Query query = new QueryParser( FIELD_SEARCH_CONTENT, _analyzer ).parse( strQuery );
-            booleanQueryBuilderMain.add( new BooleanClause( query, Occur.MUST ) );
-
+            if ( !"*".equals( strQuery ) )
+            {
+	            Query query = new QueryParser( FIELD_SEARCH_CONTENT, _analyzer ).parse( strQuery );
+	            booleanQueryBuilderMain.add( new BooleanClause( query, Occur.MUST ) );
+            }
             TopDocs results = searcher.search( booleanQueryBuilderMain.build( ), Short.MAX_VALUE );
             ScoreDoc [ ] hits = results.scoreDocs;
 
