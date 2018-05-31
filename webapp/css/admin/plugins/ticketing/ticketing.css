@@ -14,9 +14,8 @@
 
 #demand-panel{ padding: 0; min-height: 800px }
 
-#demand-panel .nav-tabs{ margin-bottom: 0 }
+#demand-panel .nav-tabs{ margin-bottom: -2px }
 #demand-panel .nav-tabs.nav-gru { padding-left: 25px }
-#demand-panel .nav-tabs > li:first-of-type { padding-left: 16% }
 #demand-panel .nav-tabs > li > a{ background-color: #DDD; border: 1px solid #DDD; padding:15px 30px; margin-left:15px; text-transform: uppercase; font-size: 1.5rem }
 #demand-panel .nav-tabs > li.active > a{ border-bottom:1px solid #fff; background-color: #FFF }
 #demand-panel .nav-tabs .dropdown-menu{ padding: 0px 26px; border: 0; min-width: 300px }
@@ -59,7 +58,7 @@ table.table-hover tbody tr:hover{ cursor: pointer }
 
 #info-head-right{ border-left: 1px solid #fff; min-height:200px; margin-top:0; padding-top:0; margin-bottom: -9999px; padding-bottom: 9999px; }
 #info-head-right .fa { width: 40px; }
-.nav-ticket{ padding-left: 140px }
+.nav-ticket{ margin-left: 8.33333333%; width: 83.33333333%}
 
 .ticket-head{ min-height: 200px !important;}
 .ticket-content{ margin-left: 0 }
@@ -261,7 +260,6 @@ textarea.ticketing.richtext {
 /*==========  Non-Mobile First Method  ==========*/
 /* Large Devices, Wide Screens */
 @media only screen and (max-width : 1200px) {
-  #demand-panel .nav-ticket{ padding-left: 100px }
   #demand-panel .nav-ticket > li > a {	padding: 15px 15px;	margin-left: 10px;	text-transform: uppercase;	font-size: 1.3rem;}
   #instant-response tr td:nth-of-type(2){ width: 20rem }
   #instant-response td .detail{ width: 40rem !important}
@@ -269,7 +267,6 @@ textarea.ticketing.richtext {
 
 /* Medium Devices, Desktops */
 @media only screen and (max-width : 992px) {
-  #demand-panel .nav-ticket{ padding-left: 80px }
   #demand-panel .nav-ticket > li > a{ padding: 15px 5px; margin-left: 5px; font-size: 1.2rem }
   #customer-panel p{ text-align: center }
   #instant-response tr td:nth-of-type(2){ width: 10rem }
@@ -378,4 +375,47 @@ label.filter:first-child {
 .filter-ticket-date .input-group-addon:hover {
     background: #ddd;
     cursor: pointer;
+}
+
+#demand-panel .nav-tabs li.mass-action-tab {
+	padding: 15px 0;
+	width: 200px;
+}
+
+#demand-panel .nav-tabs li.alert-box {
+	padding: 15px 0;
+	width: auto;
+	margin: 0 10px;
+	font-size: 16px;
+}
+
+#demand-panel .nav-tabs li.separator {
+	width: calc((80% - 688px) / 2 - 282px);
+}
+
+#demand-panel .nav-tabs .alert-box .icon {
+	color: #ffc756;
+	margin-right: 6px;
+}
+
+#demand-panel .nav-tabs .alert-box .counter {
+	font-size: 16px;
+	line-height: 10px;
+	opacity: 0.7;
+}
+
+#demand-panel .nav-tabs .alert-box.active .counter {
+	opacity: 1;
+	background: #ffffff;
+	color: #333;
+}
+	
+.reference-tag {
+	display: block;
+	width: auto;
+	white-space: nowrap;
+}
+
+#demand-panel .nav-tabs > li > a, #demand-panel .nav-tabs > li {
+	height: 54px;
 }

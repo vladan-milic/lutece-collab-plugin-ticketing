@@ -57,6 +57,7 @@ public final class TicketingConstants
     public static final String PARAMETER_USER_SIGNATURE                                    = "user_signature";
     public static final String PARAMETER_SELECTABLE_ID_CHANNEL_LIST                        = "selectable_channels";
     public static final String PARAMETER_SELECTED_ID_CHANNEL                               = "selected_channel";
+    public static final String PARAMETER_WARNING_DAYS                                      = "warning_days";
     public static final String PARAMETER_SIGNATURE                                         = "signature";
     public static final String PARAMETER_TIMESTAMP                                         = "timestamp";
     public static final String PARAMETER_FILTER_URGENCY                                    = "fltr_new_urgency";
@@ -106,6 +107,7 @@ public final class TicketingConstants
     public static final String MARK_CHANNELS_LIST = "channels_list";
     public static final String MARK_SELECTABLE_CHANNELS_LIST = "selectable_channels_list";
     public static final String MARK_PREFERRED_ID_CHANNEL = "preferred_id_channel";
+    public static final String MARK_WARNING_DAYS = "warning_days";
     public static final String MARK_SELECTABLE_ID_CHANNEL_LIST = "selectable_id_channel_list";
     public static final String MARK_USER_SIGNATURE = "user_signature";
     public static final String MARK_AGENT_VIEW = "agent_view";
@@ -172,6 +174,7 @@ public final class TicketingConstants
     public static final String USER_PREFERENCE_SIGNATURE                                   = "ticketingUserSignature";
     public static final String USER_PREFERENCE_CHANNELS_LIST                               = "ticketingUserChannelsList";
     public static final String USER_PREFERENCE_PREFERRED_CHANNEL                           = "ticketingUserPreferredChannel";
+    public static final String USER_PREFERENCE_WARNING_DAYS                                = "ticketingUserWarningDays";
 
     // Plugins
     public static final String PLUGIN_AVATAR                                               = "avatar";

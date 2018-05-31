@@ -447,6 +447,21 @@ public class TicketSearchEngine implements ITicketSearchEngine
                     booleanQueryBuilderGlobal.add( docValuesTermsQueryIdAssigneeUnit, Occur.MUST_NOT );
                     booleanQueryBuilderGlobal.add( docValuesTermsQueryIdAssignerUnit, Occur.MUST_NOT );
                     break;
+                case WARNING:
+                    Builder booleanQueryManageable = new Builder( );
+                    booleanQueryManageable.add( queryIdAdminUser, Occur.SHOULD );
+                    booleanQueryManageable.add( queryIdAssignerUser, Occur.SHOULD );
+                    if ( docValuesTermsQueryIdAssigneeUnit != null )
+                    {
+                        booleanQueryManageable.add( docValuesTermsQueryIdAssigneeUnit, Occur.SHOULD );
+                    }
+                    if ( docValuesTermsQueryIdAssignerUnit != null )
+                    {
+                        booleanQueryManageable.add( docValuesTermsQueryIdAssignerUnit, Occur.SHOULD );
+                    }
+
+                    booleanQueryBuilderGlobal.add( booleanQueryManageable.build( ), Occur.MUST );
+                    break;
                 case ALL:
                 default:
                     break;

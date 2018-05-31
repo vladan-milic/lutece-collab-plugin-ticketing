@@ -45,6 +45,7 @@
                     </td>
                 </#if>
                   <td>
+               <div class="reference-tag">
               <#assign textColor="aqua"/>
               <#if ticket.urgency==1 >
                 <#assign textColor="orange"/>
@@ -80,6 +81,7 @@
                   <i class="fa fa-circle text-${textColor}" ></i> ${ticket.id}
                 </a>
               </#if>
+              </div>
               <#if id == "agent" || id == "group">
                 <#if ticket.marking??>
                     <#assign marking=ticket.marking>
@@ -218,6 +220,7 @@
         <input type="hidden" name="selected_tab" value="<#if selected_tab?? && selected_tab?has_content>${selected_tab}<#else>agent</#if>">
         <input type="hidden" name="fltr_order_sort" value="${ticket_filter.orderSort!}">
         <input type="hidden" name="fltr_order_by" value="${ticket_filter.orderBy!}">
+        <input type="hidden" name="fltr_warnings_only" value="0">
         <input type="hidden" id="hidden_query_value" name="query" value="${query!}">
         <div class="row">
             <div class="col-xs-12">
@@ -237,7 +240,7 @@
                         </#list>
                     </select>
                 </#if>
-                <button type="submit" class="filter-button btn btn-border bg-gru-light">
+                <button type="button" id="filter_button" class="filter-button btn btn-border bg-gru-light">
                     #i18n{ticketing.manage_tickets.filter.label}
                 </button>
             </div>
@@ -309,27 +312,36 @@
   <div id="demand-panel" class="row bg-gru-light tickets">
     <div class="col-xs-12 col-sm-12">
     <ul class="nav nav-tabs nav-ticket">
-        <#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
-            <li role="presentation" class="mass-action-tab">
-                <form id="mass_action_form" class="form" method="post" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
-                    <div class="form-group">
-                        <label class="select" for="mass_action">
-                            <select id="id_mass_action" name="id_mass_action" class="form-control input-xs">
-                                <#list mass_actions_list as massAction>
-                                    <option value="${massAction.id}" data-description="${massAction.description}" data-name="${massAction.name}">${massAction.name}</option>
-                                </#list>
-                            </select>
-                        </label>
-                        <a id="linkMassAction" class="btn btn-border bg-gru-light link-modal link-mass-action" href="jsp/admin/plugins/ticketing/WorkflowMassAction.jsp?view=viewWorkflowMassActionForm&jsp=${jsp_controller}&id_action=<#if mass_actions_list?? 
-                            && mass_actions_list?has_content>${mass_actions_list[0].id}<#else>-1</#if>" data-remote="false" data-toggle="modal" 
-                            data-title="<#if mass_actions_list?? && mass_actions_list?has_content>${mass_actions_list[0].description}</#if>" data-target="#ticketing-modal-workflow-action-form" 
-                            title="<#if mass_actions_list?? && mass_actions_list?has_content>${mass_actions_list[0].name}</#if>" data-action-id="" disabled="disabled">
-                            <i class="fa fa-check icon-mass-action"></i>
-                        </a>
-                    </div>
-                </form>
-            </li>
-        </#if>
+      <li role="presentation" class="mass-action-tab">
+      	<#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
+              <form id="mass_action_form" class="form" method="post" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+                  <div class="form-group">
+                      <label class="select" for="mass_action">
+                          <select id="id_mass_action" name="id_mass_action" class="form-control input-xs">
+                              <#list mass_actions_list as massAction>
+                                  <option value="${massAction.id}" data-description="${massAction.description}" data-name="${massAction.name}">${massAction.name}</option>
+                              </#list>
+                          </select>
+                      </label>
+                      <a id="linkMassAction" class="btn btn-border bg-gru-light link-modal link-mass-action" href="jsp/admin/plugins/ticketing/WorkflowMassAction.jsp?view=viewWorkflowMassActionForm&jsp=${jsp_controller}&id_action=<#if mass_actions_list?? 
+                          && mass_actions_list?has_content>${mass_actions_list[0].id}<#else>-1</#if>" data-remote="false" data-toggle="modal" 
+                          data-title="<#if mass_actions_list?? && mass_actions_list?has_content>${mass_actions_list[0].description}</#if>" data-target="#ticketing-modal-workflow-action-form" 
+                          title="<#if mass_actions_list?? && mass_actions_list?has_content>${mass_actions_list[0].name}</#if>" data-action-id="" disabled="disabled">
+                          <i class="fa fa-check icon-mass-action"></i>
+                      </a>
+                  </div>
+              </form>
+      	</#if>
+      </li>
+      <li class="separator"></li>
+      <#if warning_count != -1>
+	      <li class="alert-box <#if selected_tab?? && selected_tab == "warning">active</#if>">
+	        <div>
+		      	<i onclick="setSelectedTab('warning')" class="fa fa-bell icon"></i>
+		      	<a onclick="setSelectedTab('warning')" class="counter btn btn-border bg-gru-light link-modal link-mass-action">${warning_count}</a>
+	      	</div>
+	      </li>
+      </#if>
       <li role="presentation" <#if !selected_tab?? || ( selected_tab?? && selected_tab=="agent")> class="active" </#if> >
         <a href="#" onclick="setSelectedTab('agent')" aria-controls="agent" role="tab" data-toggle="tab">
           <i class="fa fa-inbox"></i> #i18n{ticketing.manage_tickets.labelAgentTickets} <span class="badge">${nb_ticket_agent}</span>
@@ -349,21 +361,7 @@
     <div class="tab-content">
         <@messages errors=errors />
         <@notification infos=infos />
-        <#if !selected_tab?? || ( selected_tab?? && selected_tab=="agent") >
-            <@renderTabPanel panel_list=ticket_list active=true id='agent' />
-        <#else>
-            <@renderTabPanel panel_list="" active=false  id='agent' />
-        </#if>
-        <#if selected_tab?? && selected_tab=="group" >
-            <@renderTabPanel panel_list=ticket_list  active=true id='group' />
-        <#else>
-            <@renderTabPanel panel_list="" active=false  id='group' />
-        </#if>
-        <#if selected_tab?? && selected_tab=="domain" >
-            <@renderTabPanel panel_list=ticket_list active=true id='domain' />
-        <#else>
-            <@renderTabPanel panel_list="" active=false id='domain' />
-        </#if>
+        <@renderTabPanel panel_list=ticket_list active=true id=selected_tab />
       </div>
     </div>
   </div>
@@ -461,8 +459,14 @@ function loadFilter(mapSize){
     	    }
     	})
     	.on('changeDate', function (e) {
+    	    $("input[name=selected_tab]").val('agent');
             $("#filter_form").submit();
         });
+        
+        $('#filter_button').click(function(e) {
+    	    $("input[name=selected_tab]").val('agent');
+            $("#filter_form").submit( );
+        })
     
 	    $('#fltr_open_since').parent().find('.input-group-addon').click(function() { $('#fltr_open_since').focus(); });
 	    $('#fltr_open_until').parent().find('.input-group-addon').click(function() { $('#fltr_open_until').focus(); });  

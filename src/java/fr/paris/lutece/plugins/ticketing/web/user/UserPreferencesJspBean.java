@@ -117,6 +117,9 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
                 StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_PREFERRED_ID_CHANNEL, strPreferredIdChannel );
 
+        String strWarningDays = _userPreferencesService.get( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_WARNING_DAYS, StringUtils.EMPTY );
+        model.put( TicketingConstants.MARK_WARNING_DAYS, strWarningDays );
+
         ModelUtils.storeRichText( request, model );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_USER_PREFERENCES, TEMPLATE_MANAGE_USER_PREFERENCES, model );
@@ -146,6 +149,9 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
 
         String strPreferredIdChannel = request.getParameter( TicketingConstants.PARAMETER_SELECTED_ID_CHANNEL );
         _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, strPreferredIdChannel );
+
+        String strWarningDays = request.getParameter( TicketingConstants.PARAMETER_WARNING_DAYS );
+        _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_WARNING_DAYS, strWarningDays );
 
         addInfo( INFO_USER_PREFERENCES_SAVED, getLocale( ) );
 

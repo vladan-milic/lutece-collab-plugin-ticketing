@@ -39,5 +39,5 @@ package fr.paris.lutece.plugins.ticketing.business.ticket;
  */
 public enum TicketFilterViewEnum
 {
-    AGENT, GROUP, DOMAIN, ALL;
+    AGENT, GROUP, DOMAIN, ALL, WARNING;
 }
