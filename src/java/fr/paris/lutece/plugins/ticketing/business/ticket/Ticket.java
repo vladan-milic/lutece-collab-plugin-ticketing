@@ -118,7 +118,7 @@ public class Ticket implements Serializable, RBACResource
     private int                          _nIdticketMarking    = -1;
     private int 						 _nIdDemand = -1;
     private String                       _strFacilFamilleNumber;
-    
+
 
     /**
      * Enriches empty ticket attributes with specified values
@@ -444,6 +444,16 @@ public class Ticket implements Serializable, RBACResource
     public TicketCategory getTicketCategory( )
     {
         return _ticketCategory;
+    }
+
+    /**
+     * Returns the TicketDomain
+     * 
+     * @return The TicketDomain
+     */
+    public TicketCategory getCategoryDepth( int depth )
+    {
+        return TicketCategoryService.getInstance( true ).getDepth( _ticketCategory, depth );
     }
 
     /**
@@ -1101,20 +1111,20 @@ public class Ticket implements Serializable, RBACResource
     {
         return TicketHome.getTicketMarking( this );
     }
-    
-    
+
+
     /**
      * @return load and return the ticket demand id
      */
-	public int getDemandId( ) 
-	{
-		return _nIdDemand;
-	}
+    public int getDemandId( ) 
+    {
+        return _nIdDemand;
+    }
 
-	public void setDemandId( int _nIdDemand ) 
-	{
-		this._nIdDemand = _nIdDemand;
-	}
+    public void setDemandId( int _nIdDemand ) 
+    {
+        this._nIdDemand = _nIdDemand;
+    }
     public String getFacilFamilleNumber( )
     {
         return _strFacilFamilleNumber;
@@ -1124,6 +1134,6 @@ public class Ticket implements Serializable, RBACResource
     {
         this._strFacilFamilleNumber = _strFacilFamilleNumber;
     } 
-    
-    
+
+
 }

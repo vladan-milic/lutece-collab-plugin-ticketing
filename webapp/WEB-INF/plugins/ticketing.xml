@@ -205,11 +205,17 @@
 			<daemon-description>ticketing.daemon.indexerDameon.description</daemon-description>
 			<daemon-class>fr.paris.lutece.plugins.ticketing.service.daemon.TicketIndexerDaemon</daemon-class>
 		</daemon>
-                <daemon>
+        <daemon>
 			<daemon-id>modelResponsesIndexerDaemon</daemon-id>
 			<daemon-name>ticketing.daemon.modelResponsesIndexerDaemon.name</daemon-name>
 			<daemon-description>ticketing.daemon.modelResponsesIndexerDaemon.description</daemon-description>
 			<daemon-class>fr.paris.lutece.plugins.ticketing.business.modelresponse.search.ModelResponsesIndexerDaemon</daemon-class>
+		</daemon>
+		<daemon>
+			<daemon-id>sphinxDaemon</daemon-id>
+			<daemon-name>ticketing.daemon.sphinxDaemon.name</daemon-name>
+			<daemon-description>ticketing.daemon.sphinxDaemon.description</daemon-description>
+			<daemon-class>fr.paris.lutece.plugins.ticketing.business.sphinx.SphinxDaemon</daemon-class>
 		</daemon>
 	</daemons>
     
