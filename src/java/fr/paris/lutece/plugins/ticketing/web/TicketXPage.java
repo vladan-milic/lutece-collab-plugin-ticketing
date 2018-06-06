@@ -96,7 +96,7 @@ import freemarker.template.TemplateModelException;
 @Controller( xpageName = TicketXPage.TICKET_XPAGE_NAME, pageTitleI18nKey = "ticketing.xpage.ticket.pageTitle", pagePathI18nKey = "ticketing.xpage.ticket.pagePathLabel" )
 public class TicketXPage extends WorkflowCapableXPage
 {
-    public static final String TICKET_XPAGE_NAME = "ticket";
+	public static final String TICKET_XPAGE_NAME = "ticket";
 
     private static final long serialVersionUID = 1L;
 
@@ -127,6 +127,7 @@ public class TicketXPage extends WorkflowCapableXPage
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
     public static final String PARAMETER_ID_FORM = "form";
     private static final String PARAMETER_RESET_RESPONSE = "reset_response";
+    private static final String PARAMETER_ID_TICKET = "ticket_id";
 
     // Views
     private static final String VIEW_CREATE_TICKET = "createTicket";
@@ -404,35 +405,44 @@ public class TicketXPage extends WorkflowCapableXPage
     public XPage doCreateTicket( HttpServletRequest request )
     {
         Form form = FormHome.getFormFromRequest( request );
+        HashMap<String, String> additionalParameters = new HashMap<String, String>( );
         try
         {
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
-
-            Channel channelFront = ChannelHome.findByPrimaryKey( Integer.valueOf( PluginConfigurationService.getInt(
-                    PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT, TicketingConstants.PROPERTY_UNSET_INT ) ) );
-
-            ticket.setChannel( channelFront );
-            TicketHome.create( ticket );
-
-            if ( ( ticket.getListResponse( ) != null ) && !ticket.getListResponse( ).isEmpty( ) )
+            
+            
+            if ( ticket != null )
             {
-                for ( Response response : ticket.getListResponse( ) )
-                {
-                    ResponseHome.create( response );
-                    TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
-                }
+	            Channel channelFront = ChannelHome.findByPrimaryKey( Integer.valueOf( PluginConfigurationService.getInt(
+	                    PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT, TicketingConstants.PROPERTY_UNSET_INT ) ) );
+	
+	            ticket.setChannel( channelFront );
+	            TicketHome.create( ticket );
+	            
+	            _ticketFormService.removeTicketFromSession( request.getSession( ), form );
+	            
+	            if ( ( ticket.getListResponse( ) != null ) && !ticket.getListResponse( ).isEmpty( ) )
+	            {
+	                for ( Response response : ticket.getListResponse( ) )
+	                {
+	                    ResponseHome.create( response );
+	                    TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
+	                }
+	            }
+	
+	            request.setAttribute( TicketingConstants.ATTRIBUTE_BYPASS_ASSSIGN_TO_ME, true );
+	
+	            doProcessNextWorkflowAction( ticket, request );
+	
+	            // Immediate indexation of the Ticket
+	            immediateTicketIndexing( ticket.getId( ), request );
+	            
+	            TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( request.getSession( ).getId( ) );
+	
+	            addInfo( INFO_TICKET_CREATED, getLocale( request ) );
+	            
+	            additionalParameters.put( PARAMETER_ID_TICKET, String.valueOf( ticket.getId( ) ));
             }
-
-            request.setAttribute( TicketingConstants.ATTRIBUTE_BYPASS_ASSSIGN_TO_ME, true );
-
-            doProcessNextWorkflowAction( ticket, request );
-
-            // Immediate indexation of the Ticket
-            immediateTicketIndexing( ticket.getId( ), request );
-
-            TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( request.getSession( ).getId( ) );
-
-            addInfo( INFO_TICKET_CREATED, getLocale( request ) );
         }
         catch( Exception e )
         {
@@ -442,7 +452,7 @@ public class TicketXPage extends WorkflowCapableXPage
             return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
         }
 
-        return redirectView( request, VIEW_CONFIRM_TICKET, form );
+		return redirectView( request, VIEW_CONFIRM_TICKET, form, additionalParameters );
     }
 
     /**
@@ -588,7 +598,51 @@ public class TicketXPage extends WorkflowCapableXPage
     {
         return redirect( request, getViewUrl( strView, form ) );
     }
+    
+    
+    /**
+     * Redirect to requested view
+     *
+     * @param request
+     *            the http request
+     * @param strView
+     *            the targeted view
+     * @return the page requested
+     */
+    protected XPage redirectView( HttpServletRequest request, String strView, Form form, Map<String, String> additionalParameters )
+    {
+        return redirect( request, getViewUrl( strView, form, additionalParameters ) );
+    }
+    
 
+    /**
+     * Get a View URL
+     * 
+     * @param strView
+     *            The view name
+     * @return The URL
+     */
+    protected String getViewUrl( String strView, Form form, Map<String, String> additionalParameters )
+    {
+        UrlItem url = new UrlItem( URL_PORTAL );
+        url.addParameter( MVCUtils.PARAMETER_PAGE, getXPageName( ) );
+        url.addParameter( MVCUtils.PARAMETER_VIEW, strView );
+        if ( form != null )
+        {
+            url.addParameter( PARAMETER_ID_FORM, form.getId( ) );
+        }
+        
+        if ( additionalParameters != null && !additionalParameters.isEmpty() )
+        {
+        	for ( java.util.Map.Entry<String, String> parameters : additionalParameters.entrySet() )
+        	{
+        		url.addParameter( parameters.getKey(), parameters.getValue() );
+        	}
+        }
+
+        return url.getUrl( );
+    }
+    
     /**
      * Get a View URL
      * 
@@ -598,15 +652,7 @@ public class TicketXPage extends WorkflowCapableXPage
      */
     protected String getViewUrl( String strView, Form form )
     {
-        UrlItem url = new UrlItem( URL_PORTAL );
-        url.addParameter( MVCUtils.PARAMETER_PAGE, getXPageName( ) );
-        url.addParameter( MVCUtils.PARAMETER_VIEW, strView );
-        if ( form != null )
-        {
-            url.addParameter( PARAMETER_ID_FORM, form.getId( ) );
-        }
-
-        return url.getUrl( );
+        return getViewUrl(strView, form, null);
     }
 
 
@@ -622,18 +668,24 @@ public class TicketXPage extends WorkflowCapableXPage
     {
         Map<String, Object> model = getModel( );
         Form form = FormHome.getFormFromRequest( request );
-        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
-
-        model.put( TicketingConstants.MARK_TICKET, ticket );
-        String strContent = (String) request.getSession( ).getAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE );
-
-        if ( ticket != null )
+        String strContent = StringUtils.EMPTY;
+        String idTicketParam = request.getParameter( PARAMETER_ID_TICKET );
+        if ( idTicketParam != null ) 
         {
-            strContent = fillTemplate( request, ticket );
-            _ticketFormService.removeTicketFromSession( request.getSession( ), form );
-            removeActionTypeFromSession( request.getSession( ) );
+			int ticketId = Integer.parseInt( idTicketParam );
+	        Ticket ticket = TicketHome.findByPrimaryKey( ticketId );
+	
+	        model.put( TicketingConstants.MARK_TICKET, ticket );
+	        strContent = (String) request.getSession( ).getAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE );
+	
+	        if ( ticket != null )
+	        {
+	            strContent = fillTemplate( request, ticket );
+	            removeActionTypeFromSession( request.getSession( ) );
+	        }
+	        model.put( MARK_MESSAGE, strContent );
+        
         }
-        model.put( MARK_MESSAGE, strContent );
         model.put( MARK_FORM, form );
         request.getSession( ).setAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE, strContent );
 
