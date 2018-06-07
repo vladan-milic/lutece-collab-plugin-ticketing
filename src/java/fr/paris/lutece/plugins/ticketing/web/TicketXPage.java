@@ -472,6 +472,12 @@ public class TicketXPage extends WorkflowCapableXPage
         }
 
         Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
+        
+        if( ticket == null ) 
+        {
+        	redirectView( request, VIEW_CONFIRM_TICKET, form );
+        }
+        
         List<ResponseRecap> listResponseRecap = _ticketFormService.getListResponseRecap( ticket.getListResponse( ) );
 
         Map<String, Object> model = getModel( );
@@ -680,6 +686,7 @@ public class TicketXPage extends WorkflowCapableXPage
 	
 	        if ( ticket != null )
 	        {
+	        	ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) ).getConfirmationMsg( ) );
 	            strContent = fillTemplate( request, ticket );
 	            removeActionTypeFromSession( request.getSession( ) );
 	        }
