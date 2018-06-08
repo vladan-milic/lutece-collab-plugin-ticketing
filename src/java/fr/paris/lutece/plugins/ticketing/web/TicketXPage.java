@@ -419,6 +419,7 @@ public class TicketXPage extends WorkflowCapableXPage
 	            ticket.setChannel( channelFront );
 	            TicketHome.create( ticket );
 	            
+	            _ticketConfirmed = ticket;
 	            _ticketFormService.removeTicketFromSession( request.getSession( ), form );
 	            
 	            if ( ( ticket.getListResponse( ) != null ) && !ticket.getListResponse( ).isEmpty( ) )
@@ -441,7 +442,6 @@ public class TicketXPage extends WorkflowCapableXPage
 	
 	            addInfo( INFO_TICKET_CREATED, getLocale( request ) );
 	            
-	            _ticketConfirmed = ticket;
             }
         }
         catch( Exception e )
@@ -640,22 +640,21 @@ public class TicketXPage extends WorkflowCapableXPage
     {
         Map<String, Object> model = getModel( );
         Form form = FormHome.getFormFromRequest( request );
-        String strContent = StringUtils.EMPTY;
+        String strContent = (String) request.getSession( ).getAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE );
+        if( strContent != null )
+        {
+        	strContent = StringUtils.EMPTY;
+        }
         if ( _ticketConfirmed != null ) 
         {
 	        model.put( TicketingConstants.MARK_TICKET, _ticketConfirmed );
-	        strContent = (String) request.getSession( ).getAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE );
-	
 	        strContent = fillTemplate( request, _ticketConfirmed );
 	        removeActionTypeFromSession( request.getSession( ) );
 	        model.put( MARK_MESSAGE, strContent );
-        
         }
         model.put( MARK_FORM, form );
         request.getSession( ).setAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE, strContent );
 
-        _ticketConfirmed = null;
-        
         return getXPage( TEMPLATE_CONFIRM_TICKET, request.getLocale( ), model );
     }
 
