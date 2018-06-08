@@ -127,7 +127,6 @@ public class TicketXPage extends WorkflowCapableXPage
     private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
     public static final String PARAMETER_ID_FORM = "form";
     private static final String PARAMETER_RESET_RESPONSE = "reset_response";
-    private static final String PARAMETER_ID_TICKET = "ticket_id";
 
     // Views
     private static final String VIEW_CREATE_TICKET = "createTicket";
@@ -154,6 +153,8 @@ public class TicketXPage extends WorkflowCapableXPage
 
     // Session variable to store working values
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
+
+	private Ticket _ticketConfirmed;
 
     // Other constants
     private static final String LUTECE_USER_INFO_CUSTOMER_ID = "user.id.customer";
@@ -405,7 +406,6 @@ public class TicketXPage extends WorkflowCapableXPage
     public XPage doCreateTicket( HttpServletRequest request )
     {
         Form form = FormHome.getFormFromRequest( request );
-        HashMap<String, String> additionalParameters = new HashMap<String, String>( );
         try
         {
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
@@ -441,7 +441,7 @@ public class TicketXPage extends WorkflowCapableXPage
 	
 	            addInfo( INFO_TICKET_CREATED, getLocale( request ) );
 	            
-	            additionalParameters.put( PARAMETER_ID_TICKET, String.valueOf( ticket.getId( ) ));
+	            _ticketConfirmed = ticket;
             }
         }
         catch( Exception e )
@@ -452,7 +452,7 @@ public class TicketXPage extends WorkflowCapableXPage
             return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
         }
 
-		return redirectView( request, VIEW_CONFIRM_TICKET, form, additionalParameters );
+		return redirectView( request, VIEW_CONFIRM_TICKET, form );
     }
 
     /**
@@ -607,28 +607,13 @@ public class TicketXPage extends WorkflowCapableXPage
     
     
     /**
-     * Redirect to requested view
-     *
-     * @param request
-     *            the http request
-     * @param strView
-     *            the targeted view
-     * @return the page requested
-     */
-    protected XPage redirectView( HttpServletRequest request, String strView, Form form, Map<String, String> additionalParameters )
-    {
-        return redirect( request, getViewUrl( strView, form, additionalParameters ) );
-    }
-    
-
-    /**
      * Get a View URL
      * 
      * @param strView
      *            The view name
      * @return The URL
      */
-    protected String getViewUrl( String strView, Form form, Map<String, String> additionalParameters )
+    protected String getViewUrl( String strView, Form form )
     {
         UrlItem url = new UrlItem( URL_PORTAL );
         url.addParameter( MVCUtils.PARAMETER_PAGE, getXPageName( ) );
@@ -638,28 +623,9 @@ public class TicketXPage extends WorkflowCapableXPage
             url.addParameter( PARAMETER_ID_FORM, form.getId( ) );
         }
         
-        if ( additionalParameters != null && !additionalParameters.isEmpty() )
-        {
-        	for ( java.util.Map.Entry<String, String> parameters : additionalParameters.entrySet() )
-        	{
-        		url.addParameter( parameters.getKey(), parameters.getValue() );
-        	}
-        }
-
         return url.getUrl( );
     }
     
-    /**
-     * Get a View URL
-     * 
-     * @param strView
-     *            The view name
-     * @return The URL
-     */
-    protected String getViewUrl( String strView, Form form )
-    {
-        return getViewUrl(strView, form, null);
-    }
 
 
     /**
@@ -675,27 +641,21 @@ public class TicketXPage extends WorkflowCapableXPage
         Map<String, Object> model = getModel( );
         Form form = FormHome.getFormFromRequest( request );
         String strContent = StringUtils.EMPTY;
-        String idTicketParam = request.getParameter( PARAMETER_ID_TICKET );
-        if ( idTicketParam != null ) 
+        if ( _ticketConfirmed != null ) 
         {
-			int ticketId = Integer.parseInt( idTicketParam );
-	        Ticket ticket = TicketHome.findByPrimaryKey( ticketId );
-	
-	        model.put( TicketingConstants.MARK_TICKET, ticket );
+	        model.put( TicketingConstants.MARK_TICKET, _ticketConfirmed );
 	        strContent = (String) request.getSession( ).getAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE );
 	
-	        if ( ticket != null )
-	        {
-	        	ticket.setConfirmationMsg( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) ).getConfirmationMsg( ) );
-	            strContent = fillTemplate( request, ticket );
-	            removeActionTypeFromSession( request.getSession( ) );
-	        }
+	        strContent = fillTemplate( request, _ticketConfirmed );
+	        removeActionTypeFromSession( request.getSession( ) );
 	        model.put( MARK_MESSAGE, strContent );
         
         }
         model.put( MARK_FORM, form );
         request.getSession( ).setAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE, strContent );
 
+        _ticketConfirmed = null;
+        
         return getXPage( TEMPLATE_CONFIRM_TICKET, request.getLocale( ), model );
     }
 
