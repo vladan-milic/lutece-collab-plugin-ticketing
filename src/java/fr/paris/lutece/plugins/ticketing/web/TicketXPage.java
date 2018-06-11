@@ -156,6 +156,8 @@ public class TicketXPage extends WorkflowCapableXPage
     // Session variable to store working values
     private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
 
+	private Ticket _ticketConfirmed;
+
     // Other constants
     private static final String LUTECE_USER_INFO_CUSTOMER_ID = "user.id.customer";
     private static final String URL_PORTAL = "Portal.jsp";
@@ -199,7 +201,7 @@ public class TicketXPage extends WorkflowCapableXPage
             // remove ticket from session
             // -> on refresh, ticket will be reset
             // -> we pass the ticket via the form
-            //_ticketFormService.removeTicketFromSession( request.getSession( ), form );
+            _ticketFormService.removeTicketFromSession( request.getSession( ), form );
 
             List<FormCategory> restrictedCategories = FormCategoryHome.findByForm( form.getId( ) );
             restrictedCategoriesId = restrictedCategories.stream( ).map( category -> category.getIdCategory( ) ).collect( Collectors.toList( ) );
@@ -439,28 +441,34 @@ public class TicketXPage extends WorkflowCapableXPage
         try
         {
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
-
-            TicketHome.create( ticket );
-
-            if ( ( ticket.getListResponse( ) != null ) && !ticket.getListResponse( ).isEmpty( ) )
+            
+            if ( ticket != null )
             {
-                for ( Response response : ticket.getListResponse( ) )
-                {
-                    ResponseHome.create( response );
-                    TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
-                }
+	            TicketHome.create( ticket );
+	            
+	            _ticketConfirmed = ticket;
+	            _ticketFormService.removeTicketFromSession( request.getSession( ), form );
+	
+	            if ( ( ticket.getListResponse( ) != null ) && !ticket.getListResponse( ).isEmpty( ) )
+	            {
+	                for ( Response response : ticket.getListResponse( ) )
+	                {
+	                    ResponseHome.create( response );
+	                    TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
+	                }
+	            }
+	
+	            request.setAttribute( TicketingConstants.ATTRIBUTE_BYPASS_ASSSIGN_TO_ME, true );
+	
+	            doProcessNextWorkflowAction( ticket, request );
+	
+	            // Immediate indexation of the Ticket
+	            immediateTicketIndexing( ticket.getId( ), request );
+	
+	            TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( request.getSession( ).getId( ) );
+	
+	            addInfo( INFO_TICKET_CREATED, getLocale( request ) );
             }
-
-            request.setAttribute( TicketingConstants.ATTRIBUTE_BYPASS_ASSSIGN_TO_ME, true );
-
-            doProcessNextWorkflowAction( ticket, request );
-
-            // Immediate indexation of the Ticket
-            immediateTicketIndexing( ticket.getId( ), request );
-
-            TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( request.getSession( ).getId( ) );
-
-            addInfo( INFO_TICKET_CREATED, getLocale( request ) );
         }
         catch( Exception e )
         {
@@ -674,16 +682,13 @@ public class TicketXPage extends WorkflowCapableXPage
     {
         Map<String, Object> model = getModel( );
         Form form = FormHome.getFormFromRequest( request );
-        Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
-
-        model.put( TicketingConstants.MARK_TICKET, ticket );
         String strContent = (String) request.getSession( ).getAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE );
 
-        if ( ticket != null )
+        if ( _ticketConfirmed != null ) 
         {
-            strContent = fillTemplate( request, ticket );
-            //_ticketFormService.removeTicketFromSession( request.getSession( ), form );
-            removeActionTypeFromSession( request.getSession( ) );
+	        model.put( TicketingConstants.MARK_TICKET, _ticketConfirmed );
+	        strContent = fillTemplate( request, _ticketConfirmed );
+	        removeActionTypeFromSession( request.getSession( ) );
         }
         model.put( MARK_MESSAGE, strContent );
         model.put( MARK_FORM, form );
