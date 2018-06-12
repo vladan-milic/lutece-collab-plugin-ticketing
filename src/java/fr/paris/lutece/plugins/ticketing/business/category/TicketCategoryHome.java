@@ -205,8 +205,8 @@ public final class TicketCategoryHome
      */
     public static void updateCategoryOrder( int nId, boolean bMoveUp )
     {
-        TicketCategory sourceCategory = TicketCategoryService.getInstance( ).findCategoryById( nId );
         TicketCategoryTree tree = TicketCategoryService.getInstance( ).getCategoriesTree( );
+        TicketCategory sourceCategory = tree.findNodeById( nId );
         TicketCategory targetCategory = bMoveUp ? sourceCategory.getPreviousSibling( tree ) : sourceCategory.getNextSibling( tree );
 
         if ( targetCategory != null )
