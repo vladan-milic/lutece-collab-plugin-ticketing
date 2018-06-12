@@ -445,6 +445,19 @@ public class TicketCategoryService
     ////////
     // FOR TICKETING DOMAIN/TYPE/CATEGORY
 
+    public TicketCategory getDepth( TicketCategory ticketCategory, int depth )
+    {
+        try
+        {
+            TicketCategory domainCategory = ticketCategory.getBranch( ).get( depth );
+            return domainCategory;
+        }
+        catch ( IndexOutOfBoundsException e )
+        {
+            return null;
+        }
+    }
+
     /**
      * Return the ticket type
      * 
@@ -454,14 +467,7 @@ public class TicketCategoryService
      */
     public TicketCategory getType( TicketCategory ticketCategory )
     {
-        try
-        {
-            TicketCategory typeCategory = ticketCategory.getBranch( ).get( TicketingConstants.TYPE_DEPTH - 1 );
-            return typeCategory;
-        } catch ( IndexOutOfBoundsException e )
-        {
-            return null;
-        }
+        return getDepth( ticketCategory, TicketingConstants.TYPE_DEPTH - 1 );
     }
 
     /**
@@ -473,14 +479,7 @@ public class TicketCategoryService
      */
     public TicketCategory getDomain( TicketCategory ticketCategory )
     {
-        try
-        {
-            TicketCategory domainCategory = ticketCategory.getBranch( ).get( TicketingConstants.DOMAIN_DEPTH - 1 );
-            return domainCategory;
-        } catch ( IndexOutOfBoundsException e )
-        {
-            return null;
-        }
+        return getDepth( ticketCategory, TicketingConstants.DOMAIN_DEPTH - 1 );
     }
 
     /**

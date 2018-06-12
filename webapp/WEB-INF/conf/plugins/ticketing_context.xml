@@ -65,7 +65,11 @@
         <constructor-arg type="java.lang.String" value="fr.paris.lutece.plugins.lucene.service.analyzer.LuteceFrenchAnalyzer"/>
         <constructor-arg type="java.lang.Boolean" value="true"/>
     </bean>
-
+    
+    <!-- Sphinx-->
+    <bean id="ticketing.sphinxDAO"  class="fr.paris.lutece.plugins.ticketing.business.sphinx.SphinxDAO" />
+    <bean id="ticketing.sphinxServices" class="fr.paris.lutece.plugins.ticketing.business.sphinx.SphinxServices"/>
+    
     
     <!-- SignRequest -->
     <bean id="ticketing.hashService"
