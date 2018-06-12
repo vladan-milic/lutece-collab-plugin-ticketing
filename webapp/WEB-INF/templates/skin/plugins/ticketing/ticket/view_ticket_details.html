@@ -60,7 +60,27 @@
     </fieldset>
     
     <#if editable_ticket?? >
-        <#include "/skin/plugins/ticketing/ticket/edit_ticket.html" />
+    	<div id="edit_fields">
+        	<#include "/skin/plugins/ticketing/ticket/edit_ticket.html" />
+        </div>
+        <script>
+        
+        	var firstRow = $('#edit_fields .row:first');
+        	var helpBlock = $('#edit_fields .help-block:first');
+        	var inputText = $('#edit_fields .form-control:first');
+        	var labelFF = $(inputText).prev();
+        	
+        	$(firstRow).find(".col-xs-12").removeClass( "col-xs-12" );
+        	$(firstRow).find(".col-sm-12").removeClass( "col-sm-12" );
+        	$(firstRow).removeClass( "row" );
+        	$(helpBlock).after( "<div class='col-sm-9' id='ffContainer'></div>" );
+        	$(labelFF).attr("class","col-sm-3 control-label-static");
+        	$(labelFF).text($(labelFF).text()+" : ")
+        	$('#ffContainer').append($(inputText));
+        	$('#ffContainer').append($(helpBlock));
+        	$(inputText).removeClass( "form-control" );
+        	
+        </script>
     </#if>
     
     <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
