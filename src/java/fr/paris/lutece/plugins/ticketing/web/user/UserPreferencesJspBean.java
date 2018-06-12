@@ -150,8 +150,12 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
         String strPreferredIdChannel = request.getParameter( TicketingConstants.PARAMETER_SELECTED_ID_CHANNEL );
         _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, strPreferredIdChannel );
 
-        String strWarningDays = request.getParameter( TicketingConstants.PARAMETER_WARNING_DAYS );
-        _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_WARNING_DAYS, strWarningDays );
+        String usWarningDays = request.getParameter( TicketingConstants.PARAMETER_WARNING_DAYS );
+
+        // Check if warning days is a number ; if not, returns an empty string
+        String sWarningDays = usWarningDays.matches( "[0-9]+" ) ? String.valueOf( Integer.parseInt( usWarningDays ) ) : StringUtils.EMPTY;
+
+        _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_WARNING_DAYS, sWarningDays );
 
         addInfo( INFO_USER_PREFERENCES_SAVED, getLocale( ) );
 
