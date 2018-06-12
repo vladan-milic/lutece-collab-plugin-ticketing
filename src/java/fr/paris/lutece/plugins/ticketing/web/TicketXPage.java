@@ -201,7 +201,7 @@ public class TicketXPage extends WorkflowCapableXPage
             // remove ticket from session
             // -> on refresh, ticket will be reset
             // -> we pass the ticket via the form
-            _ticketFormService.removeTicketFromSession( request.getSession( ), form );
+            //_ticketFormService.removeTicketFromSession( request.getSession( ), form );
 
             List<FormCategory> restrictedCategories = FormCategoryHome.findByForm( form.getId( ) );
             restrictedCategoriesId = restrictedCategories.stream( ).map( category -> category.getIdCategory( ) ).collect( Collectors.toList( ) );
