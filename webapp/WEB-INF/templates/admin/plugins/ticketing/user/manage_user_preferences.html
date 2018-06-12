@@ -48,7 +48,7 @@
             <div class="form-group">
                 <label class="col-xs-12 col-sm-3 control-label" for="user_signature">#i18n{ticketing.manage_user_preferences.labelWarningDays}&nbsp;:</label>
                 <div class="col-xs-12 col-sm-9">
-                    <input style="width: 80px; display: inline-block" class="form-control" id="warning_days" name="warning_days" value="${warning_days!''}"> #i18n{ticketing.manage_user_preferences.labelWarningDays.append}
+                    <input type="number" min="0" step="1" style="width: 80px; display: inline-block" class="form-control" id="warning_days" name="warning_days" value="${warning_days!''}"> #i18n{ticketing.manage_user_preferences.labelWarningDays.append}
                     <p class="help-block">#i18n{ticketing.manage_user_preferences.labelWarningDays.help}</p>
                 </div>
             </div>
