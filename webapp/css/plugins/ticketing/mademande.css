@@ -396,7 +396,6 @@ button {
 
 .custom-radio input[type="radio"] {
     position: absolute;
-    height: 50px;
     opacity: 0;
     -moz-opacity: 0;
     -webkit-opacity: 0;
