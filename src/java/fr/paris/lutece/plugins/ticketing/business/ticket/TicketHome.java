@@ -140,21 +140,31 @@ public final class TicketHome
                 for ( int nIdResponse : listIdResponse )
                 {
                     Response response = ResponseHome.findByPrimaryKey( nIdResponse );
-
-                    if ( response.getField( ) != null )
+                    
+                    if( response != null )
                     {
-                        response.setField( FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) ) );
-                    }
 
-                    if ( response.getFile( ) != null )
-                    {
-                        fr.paris.lutece.portal.business.file.File file = FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) );
-                        PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) );
-                        file.setPhysicalFile( physicalFile );
-                        response.setFile( file );
+	                    if ( response.getField( ) != null )
+	                    {
+	                        response.setField( FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) ) );
+	                    }
+	
+	                    if ( response.getFile( ) != null )
+	                    {
+	                        fr.paris.lutece.portal.business.file.File file = FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) );
+	                        if ( file != null )
+	                        {
+		                        PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) );
+		                        if( physicalFile != null )
+		                        {
+		                        	file.setPhysicalFile( physicalFile );
+		                        }
+		                        response.setFile( file );
+	                        }
+	                    }
+	
+	                    listResponses.add( response );
                     }
-
-                    listResponses.add( response );
                 }
             }
 
