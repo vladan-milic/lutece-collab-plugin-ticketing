@@ -66,18 +66,21 @@
         <script>
         
         	var firstRow = $('#edit_fields .row:first');
-        	var helpBlock = $('#edit_fields .help-block:first');
-        	var inputText = $('#edit_fields .form-control:first');
-        	var labelFF = $(inputText).prev();
+        	var inputText = $("input[id^='attribute']");
+        	var helpBlock = $(inputText).next();
+        	var label = $(inputText).prev();
         	
         	$(firstRow).find(".col-xs-12").removeClass( "col-xs-12" );
         	$(firstRow).find(".col-sm-12").removeClass( "col-sm-12" );
         	$(firstRow).removeClass( "row" );
+        	
+        	$(label).addClass("col-sm-3 control-label-static");
+        	$(label).append(" : ");
+        	
         	$(helpBlock).after( "<div class='col-sm-9' id='ffContainer'></div>" );
-        	$(labelFF).attr("class","col-sm-3 control-label-static");
-        	$(labelFF).text($(labelFF).text()+" : ");
         	$('#ffContainer').append($(inputText));
         	$('#ffContainer').append($(helpBlock));
+        	
         	$(inputText).removeClass( "form-control" );
         	
         </script>
