@@ -209,9 +209,12 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>( );
 
         String strSelectedDomain = request.getParameter( PARAMETER_FILTER_ID_DOMAIN );
-        _strSelectedDomain = strSelectedDomain;
+        if ( strSelectedDomain != null ) 
+        {
+        	_strSelectedDomain = strSelectedDomain;
+        }
 
-        if ( StringUtils.isEmpty( strSelectedDomain ) || NO_TYPE_SELECTED.equals( strSelectedDomain ) )
+        if ( StringUtils.isEmpty( _strSelectedDomain ) || NO_TYPE_SELECTED.equals( _strSelectedDomain ) )
         {
             for ( ModelResponse modelResponse : ModelResponseHome.getModelResponsesList( ) )
             {
