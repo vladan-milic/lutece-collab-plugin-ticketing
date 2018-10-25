@@ -62,15 +62,15 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
  */
 public final class TicketSearchService
 {
-    private static final String PATH_INDEX = "ticketing.internalIndexer.lucene.indexPath";
-    private static final String PATH_INDEX_IN_WEBAPP = "ticketing.internalIndexer.lucene.indexInWebapp";
-    private static final String PROPERTY_ANALYSER_CLASS_NAME = "ticketing.internalIndexer.lucene.analyser.className";
+    private static final String                 PATH_INDEX                   = "ticketing.internalIndexer.lucene.indexPath";
+    private static final String                 PATH_INDEX_IN_WEBAPP         = "ticketing.internalIndexer.lucene.indexInWebapp";
+    private static final String                 PROPERTY_ANALYSER_CLASS_NAME = "ticketing.internalIndexer.lucene.analyser.className";
 
     // Constants corresponding to the variables defined in the lutece.properties file
     private static volatile TicketSearchService _singleton;
-    private volatile String _strIndex;
-    private Analyzer _analyzer;
-    private ITicketSearchIndexer _indexer;
+    private volatile String                     _strIndex;
+    private Analyzer                            _analyzer;
+    private ITicketSearchIndexer                _indexer;
 
     /**
      * Creates a new instance of DirectorySearchService
@@ -92,20 +92,16 @@ public final class TicketSearchService
             throw new AppException( "Analyser class name not found in ticketing.properties", null );
         }
 
-        _indexer = (ITicketSearchIndexer) SpringContextService.getBean( "ticketing.ticketIndexer" );
+        _indexer = ( ITicketSearchIndexer ) SpringContextService.getBean( "ticketing.ticketIndexer" );
 
         try
         {
-            @SuppressWarnings( {
-                "rawtypes"
-            } )
-            java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName ).getConstructor( String [ ].class );
-            _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] {
-                new String [ ] { }
-            } );
+            @SuppressWarnings( { "rawtypes" } )
+            java.lang.reflect.Constructor constructeur = Class.forName( strAnalyserClassName ).getConstructor( String[].class );
+            _analyzer = ( Analyzer ) constructeur.newInstance( new Object[] { new String[] { } } );
         }
 
-        catch( InstantiationException ie )
+        catch ( InstantiationException ie )
         {
             @SuppressWarnings( "rawtypes" )
             Class classAnalyzer;
@@ -114,18 +110,14 @@ public final class TicketSearchService
             {
                 classAnalyzer = Class.forName( strAnalyserClassName );
 
-                @SuppressWarnings( {
-                        "unchecked", "rawtypes"
-                } )
+                @SuppressWarnings( { "unchecked", "rawtypes" } )
                 java.lang.reflect.Constructor constructeur = classAnalyzer.getConstructor( );
-                _analyzer = (Analyzer) constructeur.newInstance( new Object [ ] { } );
-            }
-            catch( Exception e )
+                _analyzer = ( Analyzer ) constructeur.newInstance( new Object[] { } );
+            } catch ( Exception e )
             {
                 throw new AppException( "Failed to load Lucene Analyzer class", e );
             }
-        }
-        catch( Exception e )
+        } catch ( Exception e )
         {
             throw new AppException( "Failed to load Lucene Analyzer class", e );
         }
@@ -159,8 +151,7 @@ public final class TicketSearchService
         {
             IndexReader ir = DirectoryReader.open( NIOFSDirectory.open( getIndex( ) ) );
             searcher = new IndexSearcher( ir );
-        }
-        catch( IOException e )
+        } catch ( IOException e )
         {
             AppLogService.error( e.getMessage( ), e );
         }
@@ -215,8 +206,7 @@ public final class TicketSearchService
             sbLogs.append( "Duration of the treatment : " );
             sbLogs.append( end.getTime( ) - start.getTime( ) );
             sbLogs.append( " milliseconds\r\n" );
-        }
-        catch( Exception e )
+        } catch ( Exception e )
         {
             sbLogs.append( " caught a " );
             sbLogs.append( e.getClass( ) );
@@ -224,8 +214,7 @@ public final class TicketSearchService
             sbLogs.append( e.getMessage( ) );
             sbLogs.append( "\r\n" );
             AppLogService.error( "Indexing error : " + e.getMessage( ), e );
-        }
-        finally
+        } finally
         {
             TicketIndexWriterUtil.manageCloseWriter( writer );
         }
@@ -294,8 +283,7 @@ public final class TicketSearchService
             if ( indexInWebapp )
             {
                 _strIndex = AppPathService.getPath( PATH_INDEX );
-            }
-            else
+            } else
             {
                 _strIndex = AppPropertiesService.getProperty( PATH_INDEX );
             }
@@ -304,8 +292,7 @@ public final class TicketSearchService
         try
         {
             return Paths.get( _strIndex );
-        }
-        catch( InvalidPathException exception )
+        } catch ( InvalidPathException exception )
         {
             AppLogService.error( exception.getMessage( ), exception );
             return null;

@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.workflow;
 
+import java.util.Collection;
+
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.icon.Icon;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.workflow.Workflow;
-
-import java.util.Collection;
 
 /**
  * This class is a decorator of the class {@link fr.paris.lutece.plugins.workflowcore.business.action.Action} for Ticketing
@@ -46,7 +46,7 @@ import java.util.Collection;
  */
 public class TicketingAction extends Action
 {
-    private Action _action;
+    private Action  _action;
     private boolean _bDisplayTasksForm;
 
     /**

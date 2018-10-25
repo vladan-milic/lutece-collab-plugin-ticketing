@@ -98,34 +98,34 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     protected static final Map<String, String> _mapRedirectUrl;
 
     // MARKS
-    private static final String                MARK_RESOURCE_HISTORY_CHANNEL             = "resource_history_channel";
-    private static final String                MARK_USER_FACTORY                         = "user_factory";
+    private static final String                MARK_RESOURCE_HISTORY_CHANNEL                  = "resource_history_channel";
+    private static final String                MARK_USER_FACTORY                              = "user_factory";
 
-    private static final String                MARK_ACTION                               = "action";
-    private static final String                MARK_MASS_ACTION_SUCCESS_TICKETS          = "success_tickets";
-    private static final String                MARK_MASS_ACTION_FAILED_TICKETS           = "failed_tickets";
-    private static final String                MARK_MASS_ACTION_NOT_ALLOWED_TICKETS      = "notallowed_tickets";
-    private static final String MARK_MESSAGE_MARK = "message_mark";
+    private static final String                MARK_ACTION                                    = "action";
+    private static final String                MARK_MASS_ACTION_SUCCESS_TICKETS               = "success_tickets";
+    private static final String                MARK_MASS_ACTION_FAILED_TICKETS                = "failed_tickets";
+    private static final String                MARK_MASS_ACTION_NOT_ALLOWED_TICKETS           = "notallowed_tickets";
+    private static final String                MARK_MESSAGE_MARK                              = "message_mark";
 
     // Properties
-    private static final String                PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW   = "ticketing.taskFormWorkflow.pageTitle";
+    private static final String                PROPERTY_PAGE_TITLE_TASKS_FORM_WORKFLOW        = "ticketing.taskFormWorkflow.pageTitle";
 
     // Bean
-    private static final String                BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE = "workflow-ticketing.resourceHistoryService";
+    private static final String                BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE      = "workflow-ticketing.resourceHistoryService";
     private static final String                BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE_CORE = "workflow.resourceHistoryService";
 
     // Templates
-    private static final String                TEMPLATE_RESOURCE_HISTORY                 = "admin/plugins/ticketing/workflow/ticket_history.html";
-    private static final String                TEMPLATE_WORKFLOW_MASS_TASK_RESULT        = "admin/plugins/ticketing/workflow/mass_task_result.html";
+    private static final String                TEMPLATE_RESOURCE_HISTORY                      = "admin/plugins/ticketing/workflow/ticket_history.html";
+    private static final String                TEMPLATE_WORKFLOW_MASS_TASK_RESULT             = "admin/plugins/ticketing/workflow/mass_task_result.html";
 
     // Infos
-    private static final String                INFO_WORKFLOW_ACTION_EXECUTED             = "ticketing.info.workflow.action.executed";
+    private static final String                INFO_WORKFLOW_ACTION_EXECUTED                  = "ticketing.info.workflow.action.executed";
 
     // Errors
-    private static final String                ERROR_WORKFLOW_ACTION_ABORTED             = "ticketing.error.workflow.action.aborted.backoffice";
+    private static final String                ERROR_WORKFLOW_ACTION_ABORTED                  = "ticketing.error.workflow.action.aborted.backoffice";
 
     // Views
-    private static final String                VIEW_MASS_ACTION_RESULT                   = "MassActionResult";
+    private static final String                VIEW_MASS_ACTION_RESULT                        = "MassActionResult";
 
     static
     {
@@ -145,17 +145,17 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
     }
 
     // Services
-    private static WorkflowService                    _workflowService                            = WorkflowService.getInstance( );
-    private static IResourceHistoryInformationService _resourceHistoryTicketingInformationService = SpringContextService.getBean( BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE );
-    private static IResourceHistoryService _resourceHistoryTicketingInformationServiceCORE = SpringContextService.getBean( BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE_CORE );
-    private final TicketSearchEngine                  _engine                                     = ( TicketSearchEngine ) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
-    private final IActionService                      _actionService                              = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
-    private static StateService                       _stateService                               = SpringContextService.getBean( StateService.BEAN_SERVICE );
+    private static WorkflowService                    _workflowService                                = WorkflowService.getInstance( );
+    private static IResourceHistoryInformationService _resourceHistoryTicketingInformationService     = SpringContextService.getBean( BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE );
+    private static IResourceHistoryService            _resourceHistoryTicketingInformationServiceCORE = SpringContextService.getBean( BEAN_RESOURCE_HISTORY_INFORMATION_SERVICE_CORE );
+    private final TicketSearchEngine                  _engine                                         = ( TicketSearchEngine ) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
+    private final IActionService                      _actionService                                  = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
+    private static StateService                       _stateService                                   = SpringContextService.getBean( StateService.BEAN_SERVICE );
 
     /**
      * Generated serial id
      */
-    private static final long                         serialVersionUID                            = -249042695023346133L;
+    private static final long                         serialVersionUID                                = -249042695023346133L;
 
     private ArrayList<Integer>                        _listIdsSuccessTickets;
     private ArrayList<Integer>                        _listIdsFailedTickets;
@@ -380,13 +380,14 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
                     if ( _workflowService.isDisplayTasksForm( _nIdAction, getLocale( ) ) )
                     {
-                        List<ResourceHistory> listTicketHistory = _resourceHistoryTicketingInformationServiceCORE.getAllHistoryByResource(nIdTicket, "ticket", 301);
+                        List<ResourceHistory> listTicketHistory = _resourceHistoryTicketingInformationServiceCORE.getAllHistoryByResource( nIdTicket, "ticket", 301 );
 
                         if ( _workflowService.canProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, null, request, false ) )
                         {
 
                             strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, _nIdAction, null, request, getLocale( ) );
-                        }else {
+                        } else
+                        {
                             addErrorWorkflowAction( request, _nIdAction );
                             return redirectWorkflowActionCancelled( request );
                         }
@@ -417,8 +418,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
             {
                 return redirectWorkflowActionCancelled( request );
             }
-        }
-        else
+        } else
         {
             return redirectWorkflowActionCancelled( request );
         }
@@ -638,8 +638,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 ticketIndexer.indexTicket( ticket );
             } catch ( TicketIndexerException ticketIndexerException )
             {
-                //addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
-                AppLogService.error(TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, ticketIndexerException);
+                // addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
+                AppLogService.error( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, ticketIndexerException );
 
                 // The indexation of the Ticket fail, we will store the Ticket in the table for the daemon
                 IndexerActionHome.create( TicketIndexerActionUtil.createIndexerActionFromTicket( ticket ) );
@@ -661,8 +661,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
             ticketIndexer.deleteTicketIndex( idTicket );
         } catch ( TicketIndexerException ticketIndexerException )
         {
-            //addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
-            AppLogService.error(TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, ticketIndexerException);
+            // addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
+            AppLogService.error( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, ticketIndexerException );
 
             // The indexation of the Ticket fail, we will store the Ticket in the table for the daemon
             IndexerActionHome.create( TicketIndexerActionUtil.createIndexerDeleteActionFromTicket( idTicket ) );

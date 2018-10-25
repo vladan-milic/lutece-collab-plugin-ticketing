@@ -68,7 +68,7 @@ public final class RequestUtils
      */
     public static void setParameter( HttpServletRequest request, int nScope, String strParameter, String strValue )
     {
-        switch( nScope )
+        switch ( nScope )
         {
             case SCOPE_REQUEST:
                 request.setAttribute( strParameter, strValue );
@@ -95,15 +95,15 @@ public final class RequestUtils
     {
         String strValue = null;
 
-        switch( nScope )
+        switch ( nScope )
         {
             case SCOPE_REQUEST:
-                strValue = (String) request.getAttribute( strParameter );
+                strValue = ( String ) request.getAttribute( strParameter );
 
                 break;
 
             default:
-                strValue = (String) request.getSession( ).getAttribute( strParameter );
+                strValue = ( String ) request.getSession( ).getAttribute( strParameter );
         }
 
         return strValue;
@@ -125,7 +125,7 @@ public final class RequestUtils
         String strValue = getParameter( request, nScope, strParameter );
 
         // we remove attribute after consuming it
-        switch( nScope )
+        switch ( nScope )
         {
             case SCOPE_REQUEST:
                 request.removeAttribute( strParameter );
@@ -167,7 +167,7 @@ public final class RequestUtils
     public static List<Integer> extractIdList( HttpServletRequest request, String strParameterName )
     {
         List<Integer> result = new ArrayList<Integer>( );
-        String [ ] listParameterValues = request.getParameterValues( strParameterName );
+        String[] listParameterValues = request.getParameterValues( strParameterName );
 
         if ( listParameterValues != null )
         {
@@ -192,7 +192,7 @@ public final class RequestUtils
     public static List<String> extractValueList( HttpServletRequest request, String strParameterName )
     {
         List<String> result = new ArrayList<String>( );
-        String [ ] listParameterValues = request.getParameterValues( strParameterName );
+        String[] listParameterValues = request.getParameterValues( strParameterName );
 
         if ( listParameterValues != null )
         {

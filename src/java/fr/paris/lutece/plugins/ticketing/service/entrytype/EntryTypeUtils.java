@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.entrytype;
 
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.Response;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
 
 /**
  * This class is a utility class for Ticketing EntryType
@@ -46,9 +46,9 @@ import java.util.Map;
 public final class EntryTypeUtils
 {
     // Markers
-    private static final String MARK_ENTRY = "entry";
+    private static final String MARK_ENTRY    = "entry";
     private static final String MARK_RESPONSE = "response";
-    private static final String MARK_FIELD = "field";
+    private static final String MARK_FIELD    = "field";
 
     /**
      * Default constructor

@@ -89,7 +89,7 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 public class TicketSearchEngine implements ITicketSearchEngine
 {
     // Constants
-    private static final String DESC_CONSTANT = "DESC";
+    private static final String                                            DESC_CONSTANT = "DESC";
 
     // The map for the association on the filter selected by the user and the Lucene field
     private final Map<String, List<AbstractMap.SimpleEntry<String, Type>>> _mapSortField = TicketSearchUtil.initMapSortField( );
@@ -128,13 +128,13 @@ public class TicketSearchEngine implements ITicketSearchEngine
             TicketCategoryService ticketCategoryInstance = TicketCategoryService.getInstance( true );
 
             TicketCategoryTree categoriesTree = ticketCategoryInstance.getCategoriesTree( );
-            categoriesTree.getDepths().removeIf(c -> c.getDepthNumber() > TicketingConstants.CATEGORY_DEPTH_MAX );
+            categoriesTree.getDepths( ).removeIf( c -> c.getDepthNumber( ) > TicketingConstants.CATEGORY_DEPTH_MAX );
 
             int maxDepthNumber = categoriesTree.getMaxDepthNumber( );
             int i = maxDepthNumber;
             while ( i >= 1 )
             {
-                String strCategoryId = document.get( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + i);
+                String strCategoryId = document.get( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + i );
                 if ( strCategoryId != null )
                 {
                     TicketCategory ticketCategory = ticketCategoryInstance.findCategoryById( Integer.valueOf( strCategoryId ) );
@@ -206,18 +206,17 @@ public class TicketSearchEngine implements ITicketSearchEngine
             {
                 // Get results documents
                 TopDocs topDocs = searcher.search( query, LuceneSearchEngine.MAX_RESPONSES, getSortQuery( filter ) );
-                ScoreDoc [ ] hits = topDocs.scoreDocs;
+                ScoreDoc[] hits = topDocs.scoreDocs;
 
                 for ( int i = 0; i < hits.length; i++ )
                 {
-                    int docId = hits [i].doc;
+                    int docId = hits[i].doc;
                     Document document = searcher.doc( docId );
                     listResults.add( createTicketFromDocument( document ) );
                 }
                 searcher.getIndexReader( ).close( );
             }
-        }
-        catch( IOException e )
+        } catch ( IOException e )
         {
             AppLogService.error( e.getMessage( ), e );
         }
@@ -281,8 +280,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
                 searcher.getIndexReader( ).close( );
                 return nTotalHits;
             }
-        }
-        catch( IOException e )
+        } catch ( IOException e )
         {
             AppLogService.error( e.getMessage( ), e );
         }
@@ -315,8 +313,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
         if ( StringUtils.isNotBlank( strQuery ) )
         {
-            PerFieldAnalyzerWrapper perFieldAnalyzerWrapper = new PerFieldAnalyzerWrapper( TicketSearchService.getInstance( ).getAnalyzer( ),
-                    TicketIndexWriterUtil.getPerFieldAnalyzerMap( ) );
+            PerFieldAnalyzerWrapper perFieldAnalyzerWrapper = new PerFieldAnalyzerWrapper( TicketSearchService.getInstance( ).getAnalyzer( ), TicketIndexWriterUtil.getPerFieldAnalyzerMap( ) );
             Query queryTicket = new QueryParser( TicketSearchItemConstant.FIELD_CONTENTS, perFieldAnalyzerWrapper ).parse( strQuery );
             mainQuery.add( queryTicket, BooleanClause.Occur.MUST );
         }
@@ -380,10 +377,9 @@ public class TicketSearchEngine implements ITicketSearchEngine
                 }
                 if ( !listSortField.isEmpty( ) )
                 {
-                    return new Sort( listSortField.toArray( new SortField [ listSortField.size( )] ) );
+                    return new Sort( listSortField.toArray( new SortField[listSortField.size( )] ) );
                 }
-            }
-            else
+            } else
             {
                 return defaultSort;
             }
@@ -412,14 +408,12 @@ public class TicketSearchEngine implements ITicketSearchEngine
             Query queryIdAssignerUser = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_ASSIGNER_USER_ID, nIdAdminUser );
 
             // Create a list of filter terms for the id of assignee unit
-            DocValuesTermsQuery docValuesTermsQueryIdAssigneeUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID,
-                    filter.getFilterIdAssigneeUnit( ) );
+            DocValuesTermsQuery docValuesTermsQueryIdAssigneeUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, filter.getFilterIdAssigneeUnit( ) );
 
             // Create a list of filter terms for the id of assigner unit
-            DocValuesTermsQuery docValuesTermsQueryIdAssignerUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID,
-                    filter.getFilterIdAssignerUnit( ) );
+            DocValuesTermsQuery docValuesTermsQueryIdAssignerUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, filter.getFilterIdAssignerUnit( ) );
 
-            switch( filter.getFilterView( ) )
+            switch ( filter.getFilterView( ) )
             {
                 case AGENT:
 
@@ -496,7 +490,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             // Filter on the ticket category
             if ( filter.getMapCategoryId( ) != null )
             {
-                for (int i = 1; i <= filter.getMapCategoryId( ).size( ); i++)
+                for ( int i = 1; i <= filter.getMapCategoryId( ).size( ); i++ )
                 {
                     if ( filter.getMapCategoryId( ).get( i ) != -1 )
                     {
@@ -581,11 +575,11 @@ public class TicketSearchEngine implements ITicketSearchEngine
      * Add the Boolean clause on the creation date on the query builder
      *
      * @param queryBuilder
-     *         The query builder to add the new BooleanClause
+     *            The query builder to add the new BooleanClause
      * @param creationDateStart
-     *         The creation date start limit
+     *            The creation date start limit
      * @param creationDateEnd
-     *         The creation end date limit
+     *            The creation end date limit
      */
     private void addCreationDateFilter( Builder queryBuilder, long creationDateStart, long creationDateEnd )
     {

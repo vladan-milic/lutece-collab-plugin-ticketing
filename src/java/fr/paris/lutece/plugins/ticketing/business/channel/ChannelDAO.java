@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.channel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class provides Data Access methods for Channel objects
@@ -46,12 +46,12 @@ import java.util.List;
 public final class ChannelDAO implements IChannelDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_channel ) FROM ticketing_channel";
-    private static final String SQL_QUERY_SELECT = "SELECT id_channel, label, icon_font FROM ticketing_channel WHERE id_channel = ? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_channel ( id_channel, label, icon_font, inactive ) VALUES ( ?, ?, ?, 0 ) ";
-    private static final String SQL_QUERY_DELETE = "UPDATE ticketing_channel SET inactive = 1 WHERE id_channel = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_channel SET id_channel = ?, label = ?, icon_font = ? WHERE id_channel = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_channel, label, icon_font FROM ticketing_channel WHERE inactive <> 1";
+    private static final String SQL_QUERY_NEW_PK       = "SELECT max( id_channel ) FROM ticketing_channel";
+    private static final String SQL_QUERY_SELECT       = "SELECT id_channel, label, icon_font FROM ticketing_channel WHERE id_channel = ? ";
+    private static final String SQL_QUERY_INSERT       = "INSERT INTO ticketing_channel ( id_channel, label, icon_font, inactive ) VALUES ( ?, ?, ?, 0 ) ";
+    private static final String SQL_QUERY_DELETE       = "UPDATE ticketing_channel SET inactive = 1 WHERE id_channel = ? ";
+    private static final String SQL_QUERY_UPDATE       = "UPDATE ticketing_channel SET id_channel = ?, label = ?, icon_font = ? WHERE id_channel = ?";
+    private static final String SQL_QUERY_SELECTALL    = "SELECT id_channel, label, icon_font FROM ticketing_channel WHERE inactive <> 1";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_channel FROM ticketing_channel WHERE inactive <> 1";
 
     /**

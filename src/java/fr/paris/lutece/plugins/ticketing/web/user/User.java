@@ -33,10 +33,10 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.user;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
-
-import java.util.List;
 
 /**
  * This class provide a user for the FactoryUser
@@ -45,12 +45,12 @@ import java.util.List;
 public class User
 {
     // Variables declarations
-    private int _nIdUser;
-    private String _strFirstName;
-    private String _strLastName;
-    private String _strEmail;
+    private int                  _nIdUser;
+    private String               _strFirstName;
+    private String               _strLastName;
+    private String               _strEmail;
     private List<TicketCategory> _listDomains;
-    private List<Unit> _listUnits;
+    private List<Unit>           _listUnits;
 
     /**
      * Returns the AdminUserId

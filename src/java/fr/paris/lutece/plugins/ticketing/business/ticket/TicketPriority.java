@@ -33,13 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.ticket;
 
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.util.ReferenceList;
-
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.util.ReferenceList;
 
 /**
  * This enum represents the priority of a ticket
@@ -49,7 +49,7 @@ public enum TicketPriority
 {
     LOW, MEDIUM, HIGH;
 
-    private static final String MESSAGE_PREFIX = "ticketing.priority.";
+    private static final String                 MESSAGE_PREFIX     = "ticketing.priority.";
     private static Map<Integer, TicketPriority> _mapTicketPriority = new HashMap<Integer, TicketPriority>( );
 
     static

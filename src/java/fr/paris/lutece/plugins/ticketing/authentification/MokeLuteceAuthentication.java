@@ -76,7 +76,7 @@ public class MokeLuteceAuthentication implements LuteceAuthentication
         user.setUserInfo( LuteceUser.NAME_MIDDLE, "Titi" );
         user.setUserInfo( LuteceUser.HOME_INFO_ONLINE_EMAIL, "toto@titi.com" );
         user.setUserInfo( LuteceUser.HOME_INFO_TELECOM_TELEPHONE_NUMBER, "0145455656" );
-        user.setUserInfo( LuteceUser.HOME_INFO_TELECOM_MOBILE_NUMBER, "0645455656"  );
+        user.setUserInfo( LuteceUser.HOME_INFO_TELECOM_MOBILE_NUMBER, "0645455656" );
         return user;
     }
 

@@ -33,19 +33,19 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.entrytype;
 
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.portal.service.template.AppTemplateService;
-import fr.paris.lutece.portal.service.util.AppPathService;
-import fr.paris.lutece.util.html.HtmlTemplate;
-
-import org.apache.commons.lang.StringUtils;
-
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppPathService;
+import fr.paris.lutece.util.html.HtmlTemplate;
 
 /**
  *
@@ -57,13 +57,13 @@ public class EntryTypeImage extends EntryTypeFile
     /**
      * Name of the bean of this service
      */
-    public static final String BEAN_NAME = "ticketing.entryTypeImage";
-    private static final String TEMPLATE_HTML_CODE = "skin/plugins/ticketing/entries/html_code_entry_type_image.html";
+    public static final String  BEAN_NAME                = "ticketing.entryTypeImage";
+    private static final String TEMPLATE_HTML_CODE       = "skin/plugins/ticketing/entries/html_code_entry_type_image.html";
     private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/ticketing/entries/html_code_entry_type_image.html";
-    private static final String TEMPLATE_FILE_IMAGE = "admin/plugins/ticketing/entries/read_only_entry_type_image.html";
-    private static final String MARK_FILE_NAME = "file_name";
-    private static final String MARK_IMG_URL = "img_url";
-    private static final String MARK_ENTRY = "entry";
+    private static final String TEMPLATE_FILE_IMAGE      = "admin/plugins/ticketing/entries/read_only_entry_type_image.html";
+    private static final String MARK_FILE_NAME           = "file_name";
+    private static final String MARK_IMG_URL             = "img_url";
+    private static final String MARK_ENTRY               = "entry";
 
     /**
      * {@inheritDoc}

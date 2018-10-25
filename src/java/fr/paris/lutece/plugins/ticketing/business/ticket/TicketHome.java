@@ -33,6 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.ticket;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
@@ -49,17 +52,14 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * This class provides instances management methods (create, find, ...) for Ticket objects
  */
 public final class TicketHome
 {
     // Static variable pointed at the DAO instance
-    private static ITicketDAO _dao = SpringContextService.getBean( "ticketing.ticketDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static ITicketDAO             _dao          = SpringContextService.getBean( "ticketing.ticketDAO" );
+    private static Plugin                 _plugin       = PluginService.getPlugin( "ticketing" );
     private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance( );
 
     /**
@@ -140,30 +140,30 @@ public final class TicketHome
                 for ( int nIdResponse : listIdResponse )
                 {
                     Response response = ResponseHome.findByPrimaryKey( nIdResponse );
-                    
-                    if( response != null )
+
+                    if ( response != null )
                     {
 
-	                    if ( response.getField( ) != null )
-	                    {
-	                        response.setField( FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) ) );
-	                    }
-	
-	                    if ( response.getFile( ) != null )
-	                    {
-	                        fr.paris.lutece.portal.business.file.File file = FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) );
-	                        if ( file != null )
-	                        {
-		                        PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) );
-		                        if( physicalFile != null )
-		                        {
-		                        	file.setPhysicalFile( physicalFile );
-		                        }
-		                        response.setFile( file );
-	                        }
-	                    }
-	
-	                    listResponses.add( response );
+                        if ( response.getField( ) != null )
+                        {
+                            response.setField( FieldHome.findByPrimaryKey( response.getField( ).getIdField( ) ) );
+                        }
+
+                        if ( response.getFile( ) != null )
+                        {
+                            fr.paris.lutece.portal.business.file.File file = FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) );
+                            if ( file != null )
+                            {
+                                PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) );
+                                if ( physicalFile != null )
+                                {
+                                    file.setPhysicalFile( physicalFile );
+                                }
+                                response.setFile( file );
+                            }
+                        }
+
+                        listResponses.add( response );
                     }
                 }
             }
@@ -317,14 +317,13 @@ public final class TicketHome
     public static List<Integer> findListIdResponse( int nIdticket )
     {
         String strCacheKey = _cacheService.getTicketResponseCacheKey( nIdticket );
-        List<Integer> listIdResponse = (List<Integer>) _cacheService.getFromCache( strCacheKey );
+        List<Integer> listIdResponse = ( List<Integer> ) _cacheService.getFromCache( strCacheKey );
 
         if ( listIdResponse == null )
         {
             listIdResponse = _dao.findListIdResponse( nIdticket, _plugin );
             _cacheService.putInCache( strCacheKey, new ArrayList<Integer>( listIdResponse ) );
-        }
-        else
+        } else
         {
             listIdResponse = new ArrayList<Integer>( listIdResponse );
         }

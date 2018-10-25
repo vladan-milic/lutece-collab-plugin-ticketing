@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.instantresponse;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
-
 import java.util.List;
+
+import fr.paris.lutece.portal.service.plugin.Plugin;
 
 /**
  * IInstantResponseDAO Interface

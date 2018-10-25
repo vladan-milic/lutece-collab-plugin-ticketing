@@ -33,6 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
@@ -44,16 +47,13 @@ import fr.paris.lutece.plugins.ticketing.service.format.ticket.TicketFormatterXm
 import fr.paris.lutece.plugins.ticketing.service.format.ticketcategory.TicketCategoryTreeFormatterXml;
 import fr.paris.lutece.plugins.ticketing.service.format.usertitle.UserTitleFormatterXml;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Factory for the XML formatters
  */
 public class FormatterXmlFactory implements IFormatterFactory
 {
     private Map<Class<?>, ITicketingFormatter<?>> _formatters;
-    private IRestFormatter _restFormatter;
+    private IRestFormatter                        _restFormatter;
 
     /**
      * Default constructor
@@ -73,7 +73,7 @@ public class FormatterXmlFactory implements IFormatterFactory
     @Override
     public <T> ITicketingFormatter<T> createFormatter( Class<T> clazz )
     {
-        return (ITicketingFormatter<T>) _formatters.get( clazz );
+        return ( ITicketingFormatter<T> ) _formatters.get( clazz );
     }
 
     @Override

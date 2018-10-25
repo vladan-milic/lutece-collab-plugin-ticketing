@@ -33,16 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format.usertitle;
 
-import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
-import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
-import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import java.util.List;
+import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
+import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
+import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * JSON formatter for user title resource

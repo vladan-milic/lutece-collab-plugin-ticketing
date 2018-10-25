@@ -2,8 +2,6 @@ package fr.paris.lutece.plugins.ticketing.business.marking;
 
 import java.util.List;
 
-import fr.paris.lutece.plugins.ticketing.business.marking.IMarkingDAO;
-import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
 import fr.paris.lutece.plugins.ticketing.service.TicketCacheService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -12,8 +10,8 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public class MarkingHome
 {
     // Static variable pointed at the DAO instance
-    private static IMarkingDAO _dao = SpringContextService.getBean( "ticketing.markingDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static IMarkingDAO        _dao                = SpringContextService.getBean( "ticketing.markingDAO" );
+    private static Plugin             _plugin             = PluginService.getPlugin( "ticketing" );
     private static TicketCacheService _ticketCacheService = TicketCacheService.getInstance( );
 
     /**
@@ -99,7 +97,7 @@ public class MarkingHome
 
         String strCacheKey = _ticketCacheService.getMarkingByIdCacheKey( nIdMarking );
 
-        marking = (Marking) _ticketCacheService.getFromCache( strCacheKey );
+        marking = ( Marking ) _ticketCacheService.getFromCache( strCacheKey );
 
         if ( marking == null )
         {

@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format;
 
-import fr.paris.lutece.plugins.rest.util.xml.XMLUtil;
-
 import java.util.List;
+
+import fr.paris.lutece.plugins.rest.util.xml.XMLUtil;
 
 /**
  * XML formatter for REST purpose

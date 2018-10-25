@@ -44,8 +44,8 @@ public class TicketCategoryValidatorResult
 {
     private TicketCategory _ticketCategory;
     private TicketCategory _ticketCategoryParent;
-    private boolean _ticketCategoryValid;
-    private List<String> _listValidationErrors;
+    private boolean        _ticketCategoryValid;
+    private List<String>   _listValidationErrors;
 
     /**
      * Constructor

@@ -39,23 +39,27 @@ import fr.paris.lutece.portal.service.daemon.Daemon;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 /**
- * Sphinx daemon to send each day the ticket list to Sphinx aplication to feed the mailing 
+ * Sphinx daemon to send each day the ticket list to Sphinx aplication to feed the mailing
  *
  */
-public class SphinxDaemon extends Daemon{
-	
+public class SphinxDaemon extends Daemon
+{
+
     /**
      * {@inheritDoc }
      */
     @Override
-	public void run() {
-        try {
-    	    ISphinxServices iSphinxServices = SpringContextService.getBean( ISphinxServices.BEAN_SERVICE );
-			setLastRunLogs( iSphinxServices.mailingToSphinx() );
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        
-	}
+    public void run( )
+    {
+        try
+        {
+            ISphinxServices iSphinxServices = SpringContextService.getBean( ISphinxServices.BEAN_SERVICE );
+            setLastRunLogs( iSphinxServices.mailingToSphinx( ) );
+        } catch ( IOException e )
+        {
+            e.printStackTrace( );
+        }
+
+    }
 
 }

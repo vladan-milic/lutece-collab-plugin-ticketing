@@ -71,64 +71,61 @@ public class InstantResponseJspBean extends MVCAdminJspBean
     // //////////////////////////////////////////////////////////////////////////
     // Constants
 
-    private static final long serialVersionUID = 8473463434018604540L;
+    private static final long   serialVersionUID                             = 8473463434018604540L;
 
     // templates
-    private static final String TEMPLATE_MANAGE_INSTANT_RESPONSES = TicketingConstants.TEMPLATE_ADMIN_INSTANTRESPONSE_FEATURE_PATH
-            + "manage_instant_responses.html";
-    private static final String TEMPLATE_CREATE_INSTANT_RESPONSE = TicketingConstants.TEMPLATE_ADMIN_INSTANTRESPONSE_FEATURE_PATH
-            + "create_instant_response.html";
-    private static final String TEMPLATE_MODIFY_INSTANT_RESPONSE = TicketingConstants.TEMPLATE_ADMIN_INSTANTRESPONSE_FEATURE_PATH
-            + "modify_instant_response.html";
+    private static final String TEMPLATE_MANAGE_INSTANT_RESPONSES            = TicketingConstants.TEMPLATE_ADMIN_INSTANTRESPONSE_FEATURE_PATH + "manage_instant_responses.html";
+    private static final String TEMPLATE_CREATE_INSTANT_RESPONSE             = TicketingConstants.TEMPLATE_ADMIN_INSTANTRESPONSE_FEATURE_PATH + "create_instant_response.html";
+    private static final String TEMPLATE_MODIFY_INSTANT_RESPONSE             = TicketingConstants.TEMPLATE_ADMIN_INSTANTRESPONSE_FEATURE_PATH + "modify_instant_response.html";
 
     // Parameters
-    private static final String PARAMETER_ID_INSTANT_RESPONSE = "id";
+    private static final String PARAMETER_ID_INSTANT_RESPONSE                = "id";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_INSTANT_RESPONSES = "ticketing.manage_instantresponses.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_INSTANT_RESPONSE = "ticketing.modify_instantresponse.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_INSTANT_RESPONSE = "ticketing.create_instantresponse.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MODIFY_INSTANT_RESPONSE  = "ticketing.modify_instantresponse.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_CREATE_INSTANT_RESPONSE  = "ticketing.create_instantresponse.pageTitle";
 
     // Markers
-    private static final String MARK_INSTANT_RESPONSE_LIST = "instantresponse_list";
-    private static final String MARK_INSTANT_RESPONSE = "instantresponse";
-    private static final String JSP_MANAGE_INSTANT_RESPONSES = TicketingConstants.ADMIN_CONTROLLLER_PATH + "ManageInstantResponses.jsp";
+    private static final String MARK_INSTANT_RESPONSE_LIST                   = "instantresponse_list";
+    private static final String MARK_INSTANT_RESPONSE                        = "instantresponse";
+    private static final String JSP_MANAGE_INSTANT_RESPONSES                 = TicketingConstants.ADMIN_CONTROLLLER_PATH + "ManageInstantResponses.jsp";
 
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_INSTANT_RESPONSE = "ticketing.message.confirmRemoveInstantResponse";
-    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.instantresponse.attribute.";
+    private static final String MESSAGE_CONFIRM_REMOVE_INSTANT_RESPONSE      = "ticketing.message.confirmRemoveInstantResponse";
+    private static final String VALIDATION_ATTRIBUTES_PREFIX                 = "ticketing.model.entity.instantresponse.attribute.";
 
     // Views
-    private static final String VIEW_MANAGE_INSTANT_RESPONSES = "manageInstantResponses";
-    private static final String VIEW_CREATE_INSTANT_RESPONSE = "createInstantResponse";
-    private static final String VIEW_MODIFY_INSTANT_RESPONSE = "modifyInstantResponse";
+    private static final String VIEW_MANAGE_INSTANT_RESPONSES                = "manageInstantResponses";
+    private static final String VIEW_CREATE_INSTANT_RESPONSE                 = "createInstantResponse";
+    private static final String VIEW_MODIFY_INSTANT_RESPONSE                 = "modifyInstantResponse";
 
     // Actions
-    private static final String ACTION_CREATE_INSTANT_RESPONSE = "createInstantResponse";
-    private static final String ACTION_MODIFY_INSTANT_RESPONSE = "modifyInstantResponse";
-    private static final String ACTION_REMOVE_INSTANT_RESPONSE = "removeInstantResponse";
-    private static final String ACTION_CONFIRM_REMOVE_INSTANT_RESPONSE = "confirmRemoveInstantResponse";
+    private static final String ACTION_CREATE_INSTANT_RESPONSE               = "createInstantResponse";
+    private static final String ACTION_MODIFY_INSTANT_RESPONSE               = "modifyInstantResponse";
+    private static final String ACTION_REMOVE_INSTANT_RESPONSE               = "removeInstantResponse";
+    private static final String ACTION_CONFIRM_REMOVE_INSTANT_RESPONSE       = "confirmRemoveInstantResponse";
 
     // Infos
-    private static final String INFO_INSTANT_RESPONSE_CREATED = "ticketing.info.instantresponse.created";
-    private static final String INFO_INSTANT_RESPONSE_UPDATED = "ticketing.info.instantresponse.updated";
-    private static final String INFO_INSTANT_RESPONSE_REMOVED = "ticketing.info.instantresponse.removed";
+    private static final String INFO_INSTANT_RESPONSE_CREATED                = "ticketing.info.instantresponse.created";
+    private static final String INFO_INSTANT_RESPONSE_UPDATED                = "ticketing.info.instantresponse.updated";
+    private static final String INFO_INSTANT_RESPONSE_REMOVED                = "ticketing.info.instantresponse.removed";
 
     // Right
-    public static final String RIGHT_MANAGEINSTANTRESPONSE = "TICKETING_INSTANT_RESPONSE_MANAGEMENT";
-    private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
-    private static final String PARAMETER_PAGE_INDEX = "page_index";
-    private static final String MARK_PAGINATOR = "paginator";
-    private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
-    private static boolean _bAvatarAvailable = PluginService.isPluginEnable( TicketingConstants.PLUGIN_AVATAR );
+    public static final String  RIGHT_MANAGEINSTANTRESPONSE                  = "TICKETING_INSTANT_RESPONSE_MANAGEMENT";
+    private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE          = "ticketing.listItems.itemsPerPage";
+    private static final String PARAMETER_PAGE_INDEX                         = "page_index";
+    private static final String MARK_PAGINATOR                               = "paginator";
+    private static final String MARK_NB_ITEMS_PER_PAGE                       = "nb_items_per_page";
+    private static boolean      _bAvatarAvailable                            = PluginService.isPluginEnable( TicketingConstants.PLUGIN_AVATAR );
 
     // Session variable to store working values
-    private InstantResponse _instantresponse;
+    private InstantResponse     _instantresponse;
 
     // Variables
-    private int _nDefaultItemsPerPage;
-    private String _strCurrentPageIndex;
-    private int _nItemsPerPage;
+    private int                 _nDefaultItemsPerPage;
+    private String              _strCurrentPageIndex;
+    private int                 _nItemsPerPage;
 
     /**
      * Return a model that contains the list and paginator infos
@@ -143,8 +140,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
      *            The JSP
      * @return The model
      */
-    protected Map<String, Object> getPaginatedListModel( HttpServletRequest request, String strBookmark, List<InstantResponse> listInstantResponse,
-            String strManageJsp )
+    protected Map<String, Object> getPaginatedListModel( HttpServletRequest request, String strBookmark, List<InstantResponse> listInstantResponse, String strManageJsp )
     {
         _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
@@ -154,8 +150,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         String strUrl = url.getUrl( );
 
         // PAGINATOR
-        LocalizedPaginator<InstantResponse> paginator = new LocalizedPaginator<>( listInstantResponse, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
-                _strCurrentPageIndex, getLocale( ) );
+        LocalizedPaginator<InstantResponse> paginator = new LocalizedPaginator<>( listInstantResponse, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
         Map<String, Object> model = getModel( );
 
@@ -227,12 +222,12 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         populate( _instantresponse, request );
 
         // Validate the TicketCategory
-        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, getLocale() ).validateTicketCategory( );
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, getLocale( ) ).validateTicketCategory( );
 
         // Check constraints
         if ( !validateBean( _instantresponse, VALIDATION_ATTRIBUTES_PREFIX ) || !categoryValidatorResult.isTicketCategoryValid( ) )
         {
-            return redirectView( request, VIEW_CREATE_INSTANT_RESPONSE);
+            return redirectView( request, VIEW_CREATE_INSTANT_RESPONSE );
         }
 
         int nUserId = getUser( ).getUserId( );
@@ -260,8 +255,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         UrlItem url = new UrlItem( getActionUrl( ACTION_REMOVE_INSTANT_RESPONSE ) );
         url.addParameter( PARAMETER_ID_INSTANT_RESPONSE, nId );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_INSTANT_RESPONSE, url.getUrl( ),
-                AdminMessage.TYPE_CONFIRMATION );
+        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_INSTANT_RESPONSE, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
     }
@@ -321,7 +315,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
         populate( _instantresponse, request );
 
         // Validate the TicketCategory
-        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, getLocale() ).validateTicketCategory( );
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, getLocale( ) ).validateTicketCategory( );
 
         // Check constraints
         if ( !validateBean( _instantresponse, VALIDATION_ATTRIBUTES_PREFIX ) || !categoryValidatorResult.isTicketCategoryValid( ) )

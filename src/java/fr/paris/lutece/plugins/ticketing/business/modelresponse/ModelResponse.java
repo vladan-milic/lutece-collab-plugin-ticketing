@@ -47,22 +47,23 @@ public class ModelResponse implements Serializable
     private static final long serialVersionUID = 1L;
 
     // Variables declarations
-    private int _nId;
+    private int               _nId;
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Title.notEmpty}" )
     @Size( max = 500, message = "#i18n{ticketing.validation.modelresponse.Title.size}" )
-    private String _strTitle;
+    private String            _strTitle;
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Reponse.notEmpty}" )
     @Size( max = 60000, message = "#i18n{ticketing.validation.modelresponse.Reponse.size}" )
-    private String _strReponse;
+    private String            _strReponse;
     @Size( max = 1000, message = "#i18n{ticketing.validation.modelresponse.Keyword.size}" )
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Keyword.notEmpty}" )
-    private String _strKeyword;
-    private String _strDomain;
-    private String _strDomainLabel;
-    private String _strDateUpdate;
-    private String _strLastName;    
-    private String _strFirstName;
-    private String _strInfos;
+    private String            _strKeyword;
+    private String            _strDomain;
+    private String            _strDomainLabel;
+    private String            _strDateUpdate;
+    private String            _strLastName;
+    private String            _strFirstName;
+    private String            _strInfos;
+
     /**
      * Returns the Id
      * 
@@ -182,44 +183,50 @@ public class ModelResponse implements Serializable
     public String toString( )
     {
         return "ModelResponse{" + "_nId=" + _nId + '}';
-    }    
-  
+    }
+
     /**
-	 * @return the _strLastName
-	 */
-	public String getLastName() {
-		return _strLastName;
-	}
+     * @return the _strLastName
+     */
+    public String getLastName( )
+    {
+        return _strLastName;
+    }
 
-	/**
-	 * @param _strLastName the _strLastName to set
-	 */
-	public void setLastName(String _strLastName) {
-		this._strLastName = _strLastName;
-	}
+    /**
+     * @param _strLastName
+     *            the _strLastName to set
+     */
+    public void setLastName( String _strLastName )
+    {
+        this._strLastName = _strLastName;
+    }
 
-	/**
-	 * @return the _strFirstName
-	 */
-	public String getFirstName() {
-		return _strFirstName;
-	}
+    /**
+     * @return the _strFirstName
+     */
+    public String getFirstName( )
+    {
+        return _strFirstName;
+    }
 
-	/**
-	 * @param _strFirstName the _strFirstName to set
-	 */
-	public void setFirstName(String _strFirstName) {
-		this._strFirstName = _strFirstName;
-	}
+    /**
+     * @param _strFirstName
+     *            the _strFirstName to set
+     */
+    public void setFirstName( String _strFirstName )
+    {
+        this._strFirstName = _strFirstName;
+    }
 
-	/**
+    /**
      * Gets the update date
      * 
      * @return the update date
      */
     public String getDateUpdate( )
     {
-    	return _strDateUpdate;
+        return _strDateUpdate;
     }
 
     /**
@@ -230,29 +237,33 @@ public class ModelResponse implements Serializable
      */
     public void setDateUpdate( String _strDateUpdate )
     {
-    	this._strDateUpdate = _strDateUpdate;
+        this._strDateUpdate = _strDateUpdate;
     }
 
-	/**
-	 * @return the _strInfos
-	 */
-	public String getInfos() {
-		 
-		 if( !getDateUpdate().isEmpty()  && !getFirstName().isEmpty()  && !getLastName().isEmpty())
-		 {
-			 _strInfos=  getDateUpdate() + " par " + getFirstName() + " " + getLastName().toUpperCase();
-		 }else {
-			 _strInfos= "";
-		 }
-		
-		return _strInfos;
-	}
+    /**
+     * @return the _strInfos
+     */
+    public String getInfos( )
+    {
 
-	/**
-	 * @param _strInfos the _strInfos to set
-	 */
-	public void setInfos(String _strInfos) {
-		this._strInfos = _strInfos;
-	}
-    
+        if ( !getDateUpdate( ).isEmpty( ) && !getFirstName( ).isEmpty( ) && !getLastName( ).isEmpty( ) )
+        {
+            _strInfos = getDateUpdate( ) + " par " + getFirstName( ) + " " + getLastName( ).toUpperCase( );
+        } else
+        {
+            _strInfos = "";
+        }
+
+        return _strInfos;
+    }
+
+    /**
+     * @param _strInfos
+     *            the _strInfos to set
+     */
+    public void setInfos( String _strInfos )
+    {
+        this._strInfos = _strInfos;
+    }
+
 }

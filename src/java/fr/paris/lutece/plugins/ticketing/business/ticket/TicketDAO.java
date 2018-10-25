@@ -61,101 +61,91 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class TicketDAO implements ITicketDAO
 {
     // Constants
-    private static final String TICKET_RESOURCE_TYPE = "ticket";
+    private static final String TICKET_RESOURCE_TYPE                      = "ticket";
 
     // SQL Queries
-    private static final String SQL_SELECT_WITH_JOIN_DATA_TICKET = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, "
-            + " a.fixed_phone_number, a.mobile_phone_number, a.id_marking, "
-            + " a.id_ticket_category, a.id_contact_mode, f.code, a.ticket_comment, "
+    private static final String SQL_SELECT_WITH_JOIN_DATA_TICKET          = "SELECT a.id_ticket, a.ticket_reference, a.guid, a.id_user_title, b.label, a.firstname, a.lastname, a.email, "
+            + " a.fixed_phone_number, a.mobile_phone_number, a.id_marking, " + " a.id_ticket_category, a.id_contact_mode, f.code, a.ticket_comment, "
             + " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, g.first_name, g.last_name, a.id_unit, h.label, a.id_assigner_user, a.id_assigner_unit, h2.label, a.user_message, a.url, a.id_channel, x.label, x.icon_font, a.nomenclature, "
-            + " ad.address, ad.address_detail, ad.postal_code, ad.city, a.demand_id, ar.response_value as facilfamilles"
-            + " FROM ticketing_ticket a"
-            + " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user"
-            + " LEFT JOIN unittree_unit h ON h.id_unit=a.id_unit"
-            + " LEFT JOIN unittree_unit h2 ON h2.id_unit=a.id_assigner_unit"
-            + " LEFT JOIN ticketing_ticket_address ad ON ad.id_ticket=a.id_ticket"
-            + " JOIN ticketing_user_title b ON a.id_user_title = b.id_user_title"
-            + " JOIN ticketing_contact_mode f ON a.id_contact_mode = f.id_contact_mode" + " JOIN ticketing_channel x ON a.id_channel = x.id_channel"
-            + " LEFT JOIN ticketing_ticket_response r ON r.id_ticket = a.id_ticket\r\n" 
-            + " LEFT JOIN genatt_entry e ON e.resource_type = 'TICKET_INPUT' AND e.code = 'FFAccountNumber'\r\n" 
-             +" LEFT JOIN genatt_response ar ON ar.id_response = r.id_response AND ar.id_entry = e.id_entry";
-
-    private static final String SQL_SELECT_ALL_ID_TICKET = "SELECT a.id_ticket " + " FROM ticketing_ticket a"
-            + " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user" + " LEFT JOIN unittree_unit h ON h.id_unit=a.id_unit"
+            + " ad.address, ad.address_detail, ad.postal_code, ad.city, a.demand_id, ar.response_value as facilfamilles" + " FROM ticketing_ticket a"
+            + " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user" + " LEFT JOIN unittree_unit h ON h.id_unit=a.id_unit" + " LEFT JOIN unittree_unit h2 ON h2.id_unit=a.id_assigner_unit"
             + " LEFT JOIN ticketing_ticket_address ad ON ad.id_ticket=a.id_ticket" + " JOIN ticketing_user_title b ON a.id_user_title = b.id_user_title"
-            + " JOIN ticketing_contact_mode f ON a.id_contact_mode = f.id_contact_mode" + " JOIN ticketing_channel x ON a.id_channel = x.id_channel";
-    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_ticket ) FROM ticketing_ticket";
-    private static final String SQL_QUERY_SELECT = SQL_SELECT_WITH_JOIN_DATA_TICKET + " WHERE a.id_ticket = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket ( id_ticket, ticket_reference , guid, id_user_title, firstname, lastname, email, "
-            + " fixed_phone_number, mobile_phone_number, id_ticket_category, "
-            + " id_contact_mode, ticket_comment, ticket_status, ticket_status_text, date_update, date_create, "
+            + " JOIN ticketing_contact_mode f ON a.id_contact_mode = f.id_contact_mode" + " JOIN ticketing_channel x ON a.id_channel = x.id_channel"
+            + " LEFT JOIN ticketing_ticket_response r ON r.id_ticket = a.id_ticket\r\n" + " LEFT JOIN genatt_entry e ON e.resource_type = 'TICKET_INPUT' AND e.code = 'FFAccountNumber'\r\n"
+            + " LEFT JOIN genatt_response ar ON ar.id_response = r.id_response AND ar.id_entry = e.id_entry";
+
+    private static final String SQL_SELECT_ALL_ID_TICKET                  = "SELECT a.id_ticket " + " FROM ticketing_ticket a" + " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user"
+            + " LEFT JOIN unittree_unit h ON h.id_unit=a.id_unit" + " LEFT JOIN ticketing_ticket_address ad ON ad.id_ticket=a.id_ticket"
+            + " JOIN ticketing_user_title b ON a.id_user_title = b.id_user_title" + " JOIN ticketing_contact_mode f ON a.id_contact_mode = f.id_contact_mode"
+            + " JOIN ticketing_channel x ON a.id_channel = x.id_channel";
+    private static final String SQL_QUERY_NEW_PK                          = "SELECT max( id_ticket ) FROM ticketing_ticket";
+    private static final String SQL_QUERY_SELECT                          = SQL_SELECT_WITH_JOIN_DATA_TICKET + " WHERE a.id_ticket = ?";
+    private static final String SQL_QUERY_INSERT                          = "INSERT INTO ticketing_ticket ( id_ticket, ticket_reference , guid, id_user_title, firstname, lastname, email, "
+            + " fixed_phone_number, mobile_phone_number, id_ticket_category, " + " id_contact_mode, ticket_comment, ticket_status, ticket_status_text, date_update, date_create, "
             + " priority, criticality, id_customer, id_admin_user, id_unit, id_assigner_user, id_assigner_unit, user_message, url, id_channel, nomenclature, demand_id ) "
             + " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE t, ad FROM ticketing_ticket t LEFT JOIN ticketing_ticket_address ad ON ad.id_ticket = t.id_ticket WHERE t.id_ticket = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket SET id_ticket = ?, ticket_reference = ?, guid = ?, id_user_title = ?, firstname = ?, lastname = ?, email = ?, fixed_phone_number = ?, mobile_phone_number = ?, "
+    private static final String SQL_QUERY_DELETE                          = "DELETE t, ad FROM ticketing_ticket t LEFT JOIN ticketing_ticket_address ad ON ad.id_ticket = t.id_ticket WHERE t.id_ticket = ? ";
+    private static final String SQL_QUERY_UPDATE                          = "UPDATE ticketing_ticket SET id_ticket = ?, ticket_reference = ?, guid = ?, id_user_title = ?, firstname = ?, lastname = ?, email = ?, fixed_phone_number = ?, mobile_phone_number = ?, "
             + " id_ticket_category = ?, id_contact_mode = ?, ticket_comment = ?, ticket_status = ?, ticket_status_text = ?, date_update = ?,"
             + " date_close = ? , priority = ? , criticality = ? , id_customer = ? , id_admin_user = ? , id_unit = ?, id_assigner_user = ? , id_assigner_unit = ?, user_message = ?, url = ?, id_channel = ?, nomenclature = ? "
             + " WHERE id_ticket = ?";
-    private static final String SQL_QUERY_SELECTALL_SELECT_CLAUSE = SQL_SELECT_WITH_JOIN_DATA_TICKET;
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket FROM ticketing_ticket";
-    private static final String SQL_FILTER_STATUS = " AND a.ticket_status = UPPER(?) ";
-    private static final String SQL_FILTER_ID_TICKET = " AND  a.id_ticket= ? ";
-    private static final String SQL_FILTER_CREATION_DATE = " AND a.date_create >= ? AND a.date_create < ? ";
-    private static final String SQL_FILTER_CREATION_START_DATE = " AND a.date_create >= ? ";
-    private static final String SQL_FILTER_CREATION_END_DATE = " AND a.date_create <= ? ";
-    private static final String SQL_FILTER_LASTUPDATE_DATE = " AND a.date_update >= ? AND a.date_update < ? ";
-    private static final String SQL_FILTER_LASTUPDATE_START_DATE = " AND a.date_update >= ? ";
-    private static final String SQL_FILTER_LASTUPDATE_END_DATE = " AND a.date_update <= ? ";
-    private static final String SQL_FILTER_ID_USER = "  AND a.guid = ? ";
-    private static final String SQL_FILTER_ID_CHANNEL = " AND x.id_channel = ? ";
-    private static final String SQL_FILTER_NOMENCLATURE = " AND a.nomenclature = ? ";
-    private static final String SQL_FILTER_EMAIL = " AND a.email = UPPER(?) ";
-    private static final String SQL_FILTER_LASTNAME = " AND a.lastname = UPPER(?) ";
-    private static final String SQL_FILTER_FIRSTNAME = " AND a.firstname = UPPER(?) ";
-    private static final String SQL_FILTER_FIXED_PHONE_NUMBER = " AND a.fixed_phone_number = ? ";
-    private static final String SQL_FILTER_MOBILE_PHONE_NUMBER = " AND a.mobile_phone_number = ? ";
-    private static final String SQL_FILTER_CLOSE_DATE = " AND a.date_close <= ? AND a.date_close < ? ";
-    private static final String SQL_FILTER_URGENCY = " AND ( ( a.priority = ? AND a.criticality <= a.priority)  OR ( a.criticality = ? AND a.priority  <= a.criticality) )";
-    private static final String SQL_FILTER_ID_SINGLE_STATE = " AND j.id_state = ? ";
-    private static final String SQL_FILTER_ID_MULTIPLE_STATES_START = " AND ( ";
-    private static final String SQL_FILTER_ID_STATE = " j.id_state = ? ";
-    private static final String CONSTANT_OPEN_PARENTHESIS = " ( ";
-    private static final String CONSTANT_CLOSE_PARENTHESIS = " ) ";
-    private static final String CONSTANT_OR = " OR ";
-    private static final String CONSTANT_AND = " AND ";
-    private static final String SQL_FILTER_VIEW_AGENT = " AND ( a.id_admin_user = ? OR a.id_assigner_user = ? ) ";
-    private static final String SQL_FILTER_VIEW_GROUP = " AND a.id_admin_user != ? AND a.id_assigner_user != ? ";
-    private static final String SQL_FILTER_VIEW_GROUP_UNIT_ASSIGNEE = " a.id_unit IN ( ";
-    private static final String SQL_FILTER_VIEW_GROUP_UNIT_ASSIGNER = " a.id_assigner_unit IN ( ";
-    private static final String SQL_FILTER_VIEW_DOMAIN = " AND a.id_admin_user != ? AND a.id_assigner_user != ? ";
-    private static final String SQL_FILTER_VIEW_DOMAIN_UNIT_ASSIGNEE = " a.id_unit NOT IN ( ";
-    private static final String SQL_FILTER_VIEW_DOMAIN_UNIT_ASSIGNER = " a.id_assigner_unit NOT IN ( ";
-    private static final String SQL_FILTER_LIMIT = " LIMIT ?,? ";
+    private static final String SQL_QUERY_SELECTALL_SELECT_CLAUSE         = SQL_SELECT_WITH_JOIN_DATA_TICKET;
+    private static final String SQL_QUERY_SELECTALL_ID                    = "SELECT id_ticket FROM ticketing_ticket";
+    private static final String SQL_FILTER_STATUS                         = " AND a.ticket_status = UPPER(?) ";
+    private static final String SQL_FILTER_ID_TICKET                      = " AND  a.id_ticket= ? ";
+    private static final String SQL_FILTER_CREATION_DATE                  = " AND a.date_create >= ? AND a.date_create < ? ";
+    private static final String SQL_FILTER_CREATION_START_DATE            = " AND a.date_create >= ? ";
+    private static final String SQL_FILTER_CREATION_END_DATE              = " AND a.date_create <= ? ";
+    private static final String SQL_FILTER_LASTUPDATE_DATE                = " AND a.date_update >= ? AND a.date_update < ? ";
+    private static final String SQL_FILTER_LASTUPDATE_START_DATE          = " AND a.date_update >= ? ";
+    private static final String SQL_FILTER_LASTUPDATE_END_DATE            = " AND a.date_update <= ? ";
+    private static final String SQL_FILTER_ID_USER                        = "  AND a.guid = ? ";
+    private static final String SQL_FILTER_ID_CHANNEL                     = " AND x.id_channel = ? ";
+    private static final String SQL_FILTER_NOMENCLATURE                   = " AND a.nomenclature = ? ";
+    private static final String SQL_FILTER_EMAIL                          = " AND a.email = UPPER(?) ";
+    private static final String SQL_FILTER_LASTNAME                       = " AND a.lastname = UPPER(?) ";
+    private static final String SQL_FILTER_FIRSTNAME                      = " AND a.firstname = UPPER(?) ";
+    private static final String SQL_FILTER_FIXED_PHONE_NUMBER             = " AND a.fixed_phone_number = ? ";
+    private static final String SQL_FILTER_MOBILE_PHONE_NUMBER            = " AND a.mobile_phone_number = ? ";
+    private static final String SQL_FILTER_CLOSE_DATE                     = " AND a.date_close <= ? AND a.date_close < ? ";
+    private static final String SQL_FILTER_URGENCY                        = " AND ( ( a.priority = ? AND a.criticality <= a.priority)  OR ( a.criticality = ? AND a.priority  <= a.criticality) )";
+    private static final String SQL_FILTER_ID_SINGLE_STATE                = " AND j.id_state = ? ";
+    private static final String SQL_FILTER_ID_MULTIPLE_STATES_START       = " AND ( ";
+    private static final String SQL_FILTER_ID_STATE                       = " j.id_state = ? ";
+    private static final String CONSTANT_OPEN_PARENTHESIS                 = " ( ";
+    private static final String CONSTANT_CLOSE_PARENTHESIS                = " ) ";
+    private static final String CONSTANT_OR                               = " OR ";
+    private static final String CONSTANT_AND                              = " AND ";
+    private static final String SQL_FILTER_VIEW_AGENT                     = " AND ( a.id_admin_user = ? OR a.id_assigner_user = ? ) ";
+    private static final String SQL_FILTER_VIEW_GROUP                     = " AND a.id_admin_user != ? AND a.id_assigner_user != ? ";
+    private static final String SQL_FILTER_VIEW_GROUP_UNIT_ASSIGNEE       = " a.id_unit IN ( ";
+    private static final String SQL_FILTER_VIEW_GROUP_UNIT_ASSIGNER       = " a.id_assigner_unit IN ( ";
+    private static final String SQL_FILTER_VIEW_DOMAIN                    = " AND a.id_admin_user != ? AND a.id_assigner_user != ? ";
+    private static final String SQL_FILTER_VIEW_DOMAIN_UNIT_ASSIGNEE      = " a.id_unit NOT IN ( ";
+    private static final String SQL_FILTER_VIEW_DOMAIN_UNIT_ASSIGNER      = " a.id_assigner_unit NOT IN ( ";
+    private static final String SQL_FILTER_LIMIT                          = " LIMIT ?,? ";
 
-    private static final String SQL_SELECT_ALL_WORKFLOW_JOIN_CLAUSE = " LEFT JOIN  workflow_resource_workflow i ON i.id_resource=a.id_ticket"
+    private static final String SQL_SELECT_ALL_WORKFLOW_JOIN_CLAUSE       = " LEFT JOIN  workflow_resource_workflow i ON i.id_resource=a.id_ticket"
             + " LEFT JOIN workflow_state j ON j.id_state=i.id_state";
-    private static final String SQL_SELECT_ALL_WORKFLOW_WHERE_CLAUSE = " WHERE (i.id_resource IS NULL OR i.resource_type='" + TICKET_RESOURCE_TYPE + "')";
+    private static final String SQL_SELECT_ALL_WORKFLOW_WHERE_CLAUSE      = " WHERE (i.id_resource IS NULL OR i.resource_type='" + TICKET_RESOURCE_TYPE + "')";
 
     // SQL commands to manage ticket's generic attributes responses
-    private static final String SQL_QUERY_INSERT_TICKET_RESPONSE = "INSERT INTO ticketing_ticket_response (id_ticket, id_response) VALUES (?,?)";
-    private static final String SQL_QUERY_SELECT_TICKET_RESPONSE_LIST = "SELECT id_response FROM ticketing_ticket_response WHERE id_ticket = ?";
+    private static final String SQL_QUERY_INSERT_TICKET_RESPONSE          = "INSERT INTO ticketing_ticket_response (id_ticket, id_response) VALUES (?,?)";
+    private static final String SQL_QUERY_SELECT_TICKET_RESPONSE_LIST     = "SELECT id_response FROM ticketing_ticket_response WHERE id_ticket = ?";
     private static final String SQL_QUERY_DELETE_TICKET_RESPONSE          = "DELETE a, b, c, d FROM ticketing_ticket_response a"
             + " JOIN genatt_response b ON b.id_response = a.id_response LEFT JOIN core_file c ON c.id_file = b.id_file"
             + " LEFT JOIN core_physical_file d ON d.id_physical_file = c.id_physical_file  WHERE a.id_ticket = ? ";
-    private static final String SQL_QUERY_REMOVE_FROM_ID_RESPONSE = "DELETE a, b, c, d FROM ticketing_ticket_response a "
-            + " JOIN genatt_response b ON b.id_response = a.id_response " + " LEFT JOIN core_file c ON c.id_file = b.id_file"
-            + " LEFT JOIN core_physical_file d ON d.id_physical_file = c.id_physical_file  WHERE a.id_response = ? ";
+    private static final String SQL_QUERY_REMOVE_FROM_ID_RESPONSE         = "DELETE a, b, c, d FROM ticketing_ticket_response a " + " JOIN genatt_response b ON b.id_response = a.id_response "
+            + " LEFT JOIN core_file c ON c.id_file = b.id_file" + " LEFT JOIN core_physical_file d ON d.id_physical_file = c.id_physical_file  WHERE a.id_response = ? ";
     private static final String SQL_QUERY_FIND_ID_TICKET_FROM_ID_RESPONSE = " SELECT id_ticket FROM ticketing_ticket_response WHERE id_response = ? ";
     private static final String SQL_QUERY_INSERT_TICKET_ADDRESS           = "INSERT INTO ticketing_ticket_address ( id_ticket, address, address_detail, postal_code, city)"
             + " VALUES ( ?, ?, ?, ?, ? ) ";
-    private static final String SQL_QUERY_UPDATE_TICKET_ADDRESS = "UPDATE ticketing_ticket_address SET  address = ?, address_detail = ?, postal_code = ?, city = ?"
-            + " WHERE id_ticket = ?";
+    private static final String SQL_QUERY_UPDATE_TICKET_ADDRESS           = "UPDATE ticketing_ticket_address SET  address = ?, address_detail = ?, postal_code = ?, city = ?" + " WHERE id_ticket = ?";
 
     private static final String SQL_QUERY_SELECT_TICKET_ADDRESS           = "SELECT id_ticket from ticketing_ticket_address WHERE id_ticket = ? ";
     private static final String SQL_QUERY_UPDATE_ID_MARKING               = "UPDATE ticketing_ticket SET id_marking = ? WHERE id_ticket = ?";
     private static final String SQL_QUERY_SELECT_ID_MARKING               = "SELECT id_marking FROM ticketing_ticket WHERE id_ticket = ?";
-    private static final String SQL_QUERY_RESET_ID_MARKING = "UPDATE ticketing_ticket SET id_marking = " + TicketingConstants.DEFAULT_MARKING
-            + " WHERE id_marking = ?";
+    private static final String SQL_QUERY_RESET_ID_MARKING                = "UPDATE ticketing_ticket SET id_marking = " + TicketingConstants.DEFAULT_MARKING + " WHERE id_marking = ?";
     private static final String SQL_QUERY_SELECT_TICKET_BY_ID_UNIT        = SQL_QUERY_SELECTALL_SELECT_CLAUSE + " WHERE a.id_unit = ?";
 
     /**
@@ -226,22 +216,20 @@ public final class TicketDAO implements ITicketDAO
         if ( ( ticket.getChannel( ) != null ) && TicketUtils.isIdSet( ticket.getChannel( ).getId( ) ) )
         {
             daoUtil.setInt( nIndex++, ticket.getChannel( ).getId( ) );
-        }
-        else
+        } else
         {
             daoUtil.setIntNull( nIndex++ );
         }
 
         daoUtil.setString( nIndex++, ticket.getNomenclature( ) );
-        daoUtil.setInt( nIndex++,  TicketCategoryService.getInstance( ).findCategoryById( ticket.getTicketType( ).getId( ) ).getDemandId( )  );
+        daoUtil.setInt( nIndex++, TicketCategoryService.getInstance( ).findCategoryById( ticket.getTicketType( ).getId( ) ).getDemandId( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
 
         TicketAddress _ticketAddress = ticket.getTicketAddress( );
-        if ( _ticketAddress != null
-                && ( StringUtils.isNotBlank( _ticketAddress.getAddress( ) ) || StringUtils.isNotBlank( _ticketAddress.getAddressDetail( ) )
-                        || StringUtils.isNotBlank( _ticketAddress.getPostalCode( ) ) || StringUtils.isNotBlank( _ticketAddress.getCity( ) ) ) )
+        if ( _ticketAddress != null && ( StringUtils.isNotBlank( _ticketAddress.getAddress( ) ) || StringUtils.isNotBlank( _ticketAddress.getAddressDetail( ) )
+                || StringUtils.isNotBlank( _ticketAddress.getPostalCode( ) ) || StringUtils.isNotBlank( _ticketAddress.getCity( ) ) ) )
         {
             storeTicketAddress( ticket, plugin );
         }
@@ -322,8 +310,7 @@ public final class TicketDAO implements ITicketDAO
         if ( ( ticket.getChannel( ) != null ) && TicketUtils.isIdSet( ticket.getChannel( ).getId( ) ) )
         {
             daoUtil.setInt( nIndex++, ticket.getChannel( ).getId( ) );
-        }
-        else
+        } else
         {
             daoUtil.setIntNull( nIndex++ );
         }
@@ -372,8 +359,7 @@ public final class TicketDAO implements ITicketDAO
 
             daoUtil.executeUpdate( );
             daoUtil.free( );
-        }
-        else
+        } else
         {
             daoUtil = new DAOUtil( SQL_QUERY_INSERT_TICKET_ADDRESS, plugin );
             int nIndex = 1;
@@ -726,14 +712,14 @@ public final class TicketDAO implements ITicketDAO
         ticketAddress.setPostalCode( daoUtil.getString( nIndex++ ) );
         ticketAddress.setCity( daoUtil.getString( nIndex++ ) );
 
-        if ( StringUtils.isNotEmpty( ticketAddress.getAddress( ) ) || StringUtils.isNotBlank( ticketAddress.getAddressDetail( ) )
-                || StringUtils.isNotBlank( ticketAddress.getPostalCode( ) ) || StringUtils.isNotBlank( ticketAddress.getCity( ) ) )
+        if ( StringUtils.isNotEmpty( ticketAddress.getAddress( ) ) || StringUtils.isNotBlank( ticketAddress.getAddressDetail( ) ) || StringUtils.isNotBlank( ticketAddress.getPostalCode( ) )
+                || StringUtils.isNotBlank( ticketAddress.getCity( ) ) )
         {
             ticket.setTicketAddress( ticketAddress );
         }
-        
+
         ticket.setDemandId( daoUtil.getInt( nIndex++ ) );
-        
+
         ticket.setFacilFamilleNumber( daoUtil.getString( nIndex++ ) );
 
         return ticket;
@@ -774,8 +760,7 @@ public final class TicketDAO implements ITicketDAO
             if ( filter.getListIdWorkflowState( ).size( ) == 1 )
             {
                 sbSQL.append( SQL_FILTER_ID_SINGLE_STATE );
-            }
-            else
+            } else
             {
                 sbSQL.append( SQL_FILTER_ID_MULTIPLE_STATES_START );
 
@@ -797,7 +782,7 @@ public final class TicketDAO implements ITicketDAO
         // specific filter for tickets view
         boolean bNotEmptyAssigneeUnit = CollectionUtils.isNotEmpty( filter.getFilterIdAssigneeUnit( ) );
         boolean bNotEmptyAssignerUnit = CollectionUtils.isNotEmpty( filter.getFilterIdAssignerUnit( ) );
-        switch( filter.getFilterView( ) )
+        switch ( filter.getFilterView( ) )
         {
             case AGENT:
                 sbSQL.append( SQL_FILTER_VIEW_AGENT );
@@ -857,8 +842,7 @@ public final class TicketDAO implements ITicketDAO
         if ( filter.containsOrderBy( ) )
         {
             sbSQL.append( filter.getOrderBySqlClause( filter.isOrderASC( ) ) );
-        }
-        else
+        } else
         {
             // always apply default sorting
             sbSQL.append( filter.getDefaultOrderBySqlClause( filter.isOrderASC( ) ) );
@@ -998,7 +982,7 @@ public final class TicketDAO implements ITicketDAO
         // specific filter for tickets view
         boolean bNotEmptyAssigneeUnit = CollectionUtils.isNotEmpty( filter.getFilterIdAssigneeUnit( ) );
         boolean bNotEmptyAssignerUnit = CollectionUtils.isNotEmpty( filter.getFilterIdAssignerUnit( ) );
-        switch( filter.getFilterView( ) )
+        switch ( filter.getFilterView( ) )
         {
             case AGENT:
                 daoUtil.setInt( nIndex++, filter.getFilterIdAdminUser( ) );

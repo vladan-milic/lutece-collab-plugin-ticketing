@@ -70,7 +70,7 @@ public class TicketCategoryTypeBusinessTest extends LuteceTestCase
         newTicketCategoryType.setLabel( "Nature" );
         newTicketCategoryType.setDepthNumber( 1 );
         TicketCategoryTypeHome.update( newTicketCategoryType );
-        
+
         // List test
         newTicketCategoryType = new TicketCategoryType( );
         newTicketCategoryType.setLabel( "Domaine" );
@@ -79,25 +79,25 @@ public class TicketCategoryTypeBusinessTest extends LuteceTestCase
 
         newTicketCategoryType.setLabel( "Problématique" );
         TicketCategoryTypeHome.createNewDepthCategoryType( newTicketCategoryType );
-        
+
         ticketCategoryTypeStored = TicketCategoryTypeHome.findByDepth( 3 );
         assertEquals( ticketCategoryTypeStored.getLabel( ), "Problématique" );
         assertEquals( ticketCategoryTypeStored.getDepthNumber( ), 3 );
-        
+
         List<Integer> listCategoryTypeId = TicketCategoryTypeHome.getIdCategoryTypesList( );
         assertEquals( listCategoryTypeId.size( ), 3 );
-        listCategoryTypeId.forEach(categoryTypeId -> System.out.println(categoryTypeId));
-        
+        listCategoryTypeId.forEach( categoryTypeId -> System.out.println( categoryTypeId ) );
+
         List<TicketCategoryType> listCategoryType = TicketCategoryTypeHome.getCategoryTypesList( );
         assertEquals( listCategoryType.size( ), 3 );
-        listCategoryType.forEach(categoryType -> System.out.println(categoryType.getLabel( ) + " " + categoryType.getDepthNumber( ) ) );
-        
+        listCategoryType.forEach( categoryType -> System.out.println( categoryType.getLabel( ) + " " + categoryType.getDepthNumber( ) ) );
+
         ReferenceList referenceList = TicketCategoryTypeHome.getCategoryTypesReferenceList( );
         assertEquals( referenceList.size( ), 3 );
-        referenceList.forEach(reference -> System.out.println(reference.getCode( ) + " " + reference.getName( ) ) );
-        
+        referenceList.forEach( reference -> System.out.println( reference.getCode( ) + " " + reference.getName( ) ) );
+
         // Delete test
-        listCategoryType.forEach(categoryType -> TicketCategoryTypeHome.remove( categoryType.getId( ) ) );
+        listCategoryType.forEach( categoryType -> TicketCategoryTypeHome.remove( categoryType.getId( ) ) );
         listCategoryType = TicketCategoryTypeHome.getCategoryTypesList( );
         assertEquals( listCategoryType.size( ), 0 );
     }

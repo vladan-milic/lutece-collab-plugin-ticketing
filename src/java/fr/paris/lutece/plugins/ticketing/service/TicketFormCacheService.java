@@ -40,17 +40,17 @@ import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
  */
 public final class TicketFormCacheService extends AbstractCacheableService
 {
-    private static final String SERVICE_NAME = "ticketing.ticketFormCacheService";
-    private static final String CACHE_KEY_FORM = "ticketing.ticketForm.";
-    private static final String CACHE_KEY_TICKET_RESPONSE = "ticketing.ticketResponse";
-    private static final String CACHE_KEY_FORM_BY_CATEGORY = "ticketing.ticketForm.category";
-    private static final String CACHE_KEY_TICKET_CATEGORY = "ticketing.ticketCategory";
-    private static final String CACHE_KEY_TICKET_DOMAIN = "ticketing.ticketDomain";
-    private static final String CACHE_KEY_TICKET_TYPE = "ticketing.ticketType";
-    private static final String CACHE_KEY_TICKET_USER_TITLE = "ticketing.ticketUserTitle";
-    private static final String CACHE_KEY_TICKET_CONTACT_MODE = "ticketing.ticketContactMode";
+    private static final String           SERVICE_NAME                  = "ticketing.ticketFormCacheService";
+    private static final String           CACHE_KEY_FORM                = "ticketing.ticketForm.";
+    private static final String           CACHE_KEY_TICKET_RESPONSE     = "ticketing.ticketResponse";
+    private static final String           CACHE_KEY_FORM_BY_CATEGORY    = "ticketing.ticketForm.category";
+    private static final String           CACHE_KEY_TICKET_CATEGORY     = "ticketing.ticketCategory";
+    private static final String           CACHE_KEY_TICKET_DOMAIN       = "ticketing.ticketDomain";
+    private static final String           CACHE_KEY_TICKET_TYPE         = "ticketing.ticketType";
+    private static final String           CACHE_KEY_TICKET_USER_TITLE   = "ticketing.ticketUserTitle";
+    private static final String           CACHE_KEY_TICKET_CONTACT_MODE = "ticketing.ticketContactMode";
 
-    private static TicketFormCacheService _instance = new TicketFormCacheService( );
+    private static TicketFormCacheService _instance                     = new TicketFormCacheService( );
 
     /**
      * Private constructor

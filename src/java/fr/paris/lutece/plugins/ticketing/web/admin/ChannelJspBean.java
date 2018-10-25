@@ -33,6 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
@@ -44,11 +49,6 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.url.UrlItem;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * This class provides the user interface to manage Channel features ( manage, create, modify, remove )
  */
@@ -59,46 +59,46 @@ public class ChannelJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_CHANNELS = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_channels.html";
-    private static final String TEMPLATE_CREATE_CHANNEL = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_channel.html";
-    private static final String TEMPLATE_MODIFY_CHANNEL = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_channel.html";
+    private static final String TEMPLATE_MANAGE_CHANNELS            = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_channels.html";
+    private static final String TEMPLATE_CREATE_CHANNEL             = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_channel.html";
+    private static final String TEMPLATE_MODIFY_CHANNEL             = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_channel.html";
 
     // Parameters
-    private static final String PARAMETER_ID_CHANNEL = "id";
+    private static final String PARAMETER_ID_CHANNEL                = "id";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_CHANNELS = "ticketing.manage_channels.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_CHANNEL = "ticketing.modify_channel.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_CHANNEL = "ticketing.create_channel.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MODIFY_CHANNEL  = "ticketing.modify_channel.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_CREATE_CHANNEL  = "ticketing.create_channel.pageTitle";
 
     // Markers
-    private static final String MARK_CHANNEL_LIST = "channel_list";
-    private static final String MARK_CHANNEL = "channel";
-    private static final String JSP_MANAGE_CHANNELS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageChannels.jsp";
+    private static final String MARK_CHANNEL_LIST                   = "channel_list";
+    private static final String MARK_CHANNEL                        = "channel";
+    private static final String JSP_MANAGE_CHANNELS                 = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageChannels.jsp";
 
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_CHANNEL = "ticketing.message.confirmRemoveChannel";
-    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.channel.attribute.";
+    private static final String MESSAGE_CONFIRM_REMOVE_CHANNEL      = "ticketing.message.confirmRemoveChannel";
+    private static final String VALIDATION_ATTRIBUTES_PREFIX        = "ticketing.model.entity.channel.attribute.";
 
     // Views
-    private static final String VIEW_MANAGE_CHANNELS = "manageChannels";
-    private static final String VIEW_CREATE_CHANNEL = "createChannel";
-    private static final String VIEW_MODIFY_CHANNEL = "modifyChannel";
+    private static final String VIEW_MANAGE_CHANNELS                = "manageChannels";
+    private static final String VIEW_CREATE_CHANNEL                 = "createChannel";
+    private static final String VIEW_MODIFY_CHANNEL                 = "modifyChannel";
 
     // Actions
-    private static final String ACTION_CREATE_CHANNEL = "createChannel";
-    private static final String ACTION_MODIFY_CHANNEL = "modifyChannel";
-    private static final String ACTION_REMOVE_CHANNEL = "removeChannel";
-    private static final String ACTION_CONFIRM_REMOVE_CHANNEL = "confirmRemoveChannel";
+    private static final String ACTION_CREATE_CHANNEL               = "createChannel";
+    private static final String ACTION_MODIFY_CHANNEL               = "modifyChannel";
+    private static final String ACTION_REMOVE_CHANNEL               = "removeChannel";
+    private static final String ACTION_CONFIRM_REMOVE_CHANNEL       = "confirmRemoveChannel";
 
     // Infos
-    private static final String INFO_CHANNEL_CREATED = "ticketing.info.channel.created";
-    private static final String INFO_CHANNEL_UPDATED = "ticketing.info.channel.updated";
-    private static final String INFO_CHANNEL_REMOVED = "ticketing.info.channel.removed";
-    private static final long serialVersionUID = 1L;
+    private static final String INFO_CHANNEL_CREATED                = "ticketing.info.channel.created";
+    private static final String INFO_CHANNEL_UPDATED                = "ticketing.info.channel.updated";
+    private static final String INFO_CHANNEL_REMOVED                = "ticketing.info.channel.removed";
+    private static final long   serialVersionUID                    = 1L;
 
     // Session variable to store working values
-    private Channel _channel;
+    private Channel             _channel;
 
     /**
      * Build the Manage View
@@ -112,7 +112,7 @@ public class ChannelJspBean extends ManageAdminTicketingJspBean
     {
         _channel = null;
 
-        List<Channel> listChannels = (List<Channel>) ChannelHome.getChannelList( );
+        List<Channel> listChannels = ( List<Channel> ) ChannelHome.getChannelList( );
         Map<String, Object> model = getPaginatedListModel( request, MARK_CHANNEL_LIST, listChannels, JSP_MANAGE_CHANNELS );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_CHANNELS, TEMPLATE_MANAGE_CHANNELS, model );

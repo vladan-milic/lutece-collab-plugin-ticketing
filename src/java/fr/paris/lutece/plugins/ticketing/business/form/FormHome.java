@@ -33,20 +33,20 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.form;
 
+import java.util.List;
+import java.util.function.Consumer;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategory;
 import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategoryHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
-import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategory;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
-
-import java.util.List;
-import java.util.function.Consumer;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * This class provides instances management methods (create, find, ...) for Form objects
@@ -54,20 +54,22 @@ import javax.servlet.http.HttpServletRequest;
 public final class FormHome
 {
     // Static variable pointed at the DAO instance
-    private static IFormDAO _dao = SpringContextService.getBean( "ticketing.formDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static IFormDAO _dao    = SpringContextService.getBean( "ticketing.formDAO" );
+    private static Plugin   _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private FormHome(  )
+    private FormHome( )
     {
     }
 
     /**
      * Create an instance of the form class
-     * @param form The instance of the Form which contains the informations to store
-     * @return The  instance of form which has been created with its primary key.
+     * 
+     * @param form
+     *            The instance of the Form which contains the informations to store
+     * @return The instance of form which has been created with its primary key.
      */
     public static Form create( Form form )
     {
@@ -78,8 +80,10 @@ public final class FormHome
 
     /**
      * Update of the form which is specified in parameter
-     * @param form The instance of the Form which contains the data to store
-     * @return The instance of the  form which has been updated
+     * 
+     * @param form
+     *            The instance of the Form which contains the data to store
+     * @return The instance of the form which has been updated
      */
     public static Form update( Form form )
     {
@@ -90,7 +94,9 @@ public final class FormHome
 
     /**
      * Remove the form whose identifier is specified in parameter
-     * @param nKey The form Id
+     * 
+     * @param nKey
+     *            The form Id
      */
     public static void remove( int nKey )
     {
@@ -99,16 +105,19 @@ public final class FormHome
 
     /**
      * Returns an instance of a form whose identifier is specified in parameter
-     * @param nKey The form primary key
+     * 
+     * @param nKey
+     *            The form primary key
      * @return an instance of Form
      */
     public static Form findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, _plugin);
+        return _dao.load( nKey, _plugin );
     }
 
     /**
      * Load the data of all the form objects and returns them as a list
+     * 
      * @return the list which contains the data of all the form objects
      */
     public static List<Form> getFormsList( )
@@ -143,6 +152,7 @@ public final class FormHome
 
     /**
      * Load the id of all the form objects and returns them as a list
+     * 
      * @return the list which contains the id of all the form objects
      */
     public static List<Integer> getIdFormsList( )
@@ -152,11 +162,12 @@ public final class FormHome
 
     /**
      * Load the data of all the form objects and returns them as a referenceList
+     * 
      * @return the referenceList which contains the data of all the form objects
      */
     public static ReferenceList getFormsReferenceList( )
     {
-        return _dao.selectFormsReferenceList(_plugin );
+        return _dao.selectFormsReferenceList( _plugin );
     }
 
     /**
@@ -174,8 +185,7 @@ public final class FormHome
         try
         {
             form = FormHome.findByPrimaryKey( Integer.parseInt( formId ) );
-        }
-        catch ( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
             AppLogService.info( formId );
         }
@@ -189,4 +199,3 @@ public final class FormHome
     }
 
 }
-

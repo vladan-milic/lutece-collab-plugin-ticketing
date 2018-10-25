@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.search;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import java.util.List;
 
 /**
  * This class provides instances management methods (create, find, ...) for IndexerAction objects
@@ -46,8 +46,8 @@ import java.util.List;
 public final class IndexerActionHome
 {
     // Static variable pointed at the DAO instance
-    private static IIndexerActionDAO _dao = SpringContextService.getBean( "ticketing.ticketIndexerActionDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME );
+    private static IIndexerActionDAO _dao    = SpringContextService.getBean( "ticketing.ticketIndexerActionDAO" );
+    private static Plugin            _plugin = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -69,12 +69,10 @@ public final class IndexerActionHome
         if ( indexerAction.getIdTask( ) == IndexerAction.TASK_CREATE )
         {
             nOppositeTask = IndexerAction.TASK_DELETE;
+        } else if ( indexerAction.getIdTask( ) == IndexerAction.TASK_DELETE )
+        {
+            nOppositeTask = IndexerAction.TASK_CREATE;
         }
-        else
-            if ( indexerAction.getIdTask( ) == IndexerAction.TASK_DELETE )
-            {
-                nOppositeTask = IndexerAction.TASK_CREATE;
-            }
 
         boolean bAlreadyFound = false;
 
@@ -90,19 +88,16 @@ public final class IndexerActionHome
                 if ( action.getIdTask( ) == nOppositeTask )
                 {
                     remove( action.getIdAction( ) );
-                }
-                else
-                    if ( action.getIdTask( ) == indexerAction.getIdTask( ) )
+                } else if ( action.getIdTask( ) == indexerAction.getIdTask( ) )
+                {
+                    if ( bAlreadyFound )
                     {
-                        if ( bAlreadyFound )
-                        {
-                            remove( action.getIdAction( ) );
-                        }
-                        else
-                        {
-                            bAlreadyFound = true;
-                        }
+                        remove( action.getIdAction( ) );
+                    } else
+                    {
+                        bAlreadyFound = true;
                     }
+                }
             }
         }
 

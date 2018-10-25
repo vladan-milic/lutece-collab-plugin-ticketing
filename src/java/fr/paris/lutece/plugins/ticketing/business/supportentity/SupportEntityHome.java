@@ -33,16 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.supportentity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.plugins.ticketing.service.SupportEntityResourceIdService;
-import fr.paris.lutece.plugins.ticketing.service.TicketResourceIdService;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class provides instances management methods (create, find, ...) for SupportEntity objects
@@ -50,8 +49,8 @@ import java.util.List;
 public final class SupportEntityHome
 {
     // Static variable pointed at the DAO instance
-    private static ISupportEntityDAO _dao = SpringContextService.getBean( "ticketing.supportEntityDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static ISupportEntityDAO _dao    = SpringContextService.getBean( "ticketing.supportEntityDAO" );
+    private static Plugin            _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated

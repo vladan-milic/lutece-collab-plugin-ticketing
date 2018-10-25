@@ -30,13 +30,13 @@ import fr.paris.lutece.util.url.UrlItem;
 
 public class FormAuthorizationFilter implements Filter
 {
-    private static final String URL_INTERROGATIVE = "?";
-    private static final String URL_AMPERSAND = "&";
-    private static final String URL_EQUAL = "=";
-    private static final String URL_STAR = "*";
+    private static final String URL_INTERROGATIVE    = "?";
+    private static final String URL_AMPERSAND        = "&";
+    private static final String URL_EQUAL            = "=";
+    private static final String URL_STAR             = "*";
 
-    private static final String PARAMETER_XPAGE = "page";
-    
+    private static final String PARAMETER_XPAGE      = "page";
+
     private static final String PARAMETER_CATEGORY_1 = "cat1";
     private static final String PARAMETER_CATEGORY_2 = "cat2";
 
@@ -71,21 +71,18 @@ public class FormAuthorizationFilter implements Filter
             try
             {
                 filterAccess( req );
-            }
-            catch ( UserNotSignedException e )
+            } catch ( UserNotSignedException e )
             {
                 if ( SecurityService.getInstance( ).isExternalAuthentication( ) && !SecurityService.getInstance( ).isMultiAuthenticationSupported( ) )
                 {
                     try
                     {
                         SiteMessageService.setMessage( req, Messages.MESSAGE_USER_NOT_AUTHENTICATED, null, Messages.MESSAGE_USER_NOT_AUTHENTICATED, null, "", SiteMessage.TYPE_STOP );
-                    }
-                    catch ( SiteMessageException lme )
+                    } catch ( SiteMessageException lme )
                     {
                         resp.sendRedirect( AppPathService.getSiteMessageUrl( req ) );
                     }
-                }
-                else
+                } else
                 {
                     Form form = FormHome.getFormFromRequest( req );
 
@@ -93,25 +90,24 @@ public class FormAuthorizationFilter implements Filter
                     if ( form != null )
                     {
                         String category1 = request.getParameter( PARAMETER_CATEGORY_1 );
-                        if( category1 != null && StringUtils.isNumeric( category1 ) ) 
+                        if ( category1 != null && StringUtils.isNumeric( category1 ) )
                         {
-                        	category1 = URL_AMPERSAND + PARAMETER_CATEGORY_1 + URL_EQUAL + category1;
-                        } else 
+                            category1 = URL_AMPERSAND + PARAMETER_CATEGORY_1 + URL_EQUAL + category1;
+                        } else
                         {
-                        	category1 = "";
+                            category1 = "";
                         }
-                        
+
                         String category2 = request.getParameter( PARAMETER_CATEGORY_2 );
-                        if( category2 != null && StringUtils.isNumeric( category2 ) ) 
+                        if ( category2 != null && StringUtils.isNumeric( category2 ) )
                         {
-                        	category2 = URL_AMPERSAND + PARAMETER_CATEGORY_2 + URL_EQUAL + category2;
-                        } else 
+                            category2 = URL_AMPERSAND + PARAMETER_CATEGORY_2 + URL_EQUAL + category2;
+                        } else
                         {
-                        	category2 = "";
+                            category2 = "";
                         }
                         resp.sendRedirect( AppPathService.getAbsoluteUrl( req, SecurityService.getInstance( ).getLoginPageUrl( ) + "&form=" + form.getId( ) + category1 + category2 ) );
-                    }
-                    else
+                    } else
                     {
                         resp.sendRedirect( PortalJspBean.redirectLogin( req ) );
                     }
@@ -162,8 +158,7 @@ public class FormAuthorizationFilter implements Filter
                     throw new UserNotSignedException( );
                 }
             }
-        }
-        else
+        } else
         {
             LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
@@ -263,8 +258,7 @@ public class FormAuthorizationFilter implements Filter
                 String strUrlPaternLeftEnd = strUrlPatern.substring( 0, strUrlPatern.indexOf( URL_STAR ) );
                 String strAbsoluteUrlPattern = getAbsoluteUrl( request, strUrlPaternLeftEnd );
                 bMatch = url.getUrl( ).startsWith( strAbsoluteUrlPattern );
-            }
-            else
+            } else
             {
                 String strAbsoluteUrlPattern = getAbsoluteUrl( request, strUrlPatern );
                 bMatch = url.getUrl( ).equals( strAbsoluteUrlPattern );
@@ -289,8 +283,7 @@ public class FormAuthorizationFilter implements Filter
         if ( ( strUrl != null ) && !strUrl.startsWith( "http://" ) && !strUrl.startsWith( "https://" ) )
         {
             return AppPathService.getBaseUrl( request ) + strUrl;
-        }
-        else
+        } else
         {
             return strUrl;
         }

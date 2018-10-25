@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.category;
 
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
-
-import java.util.List;
 
 /**
  * This class provides instances management methods (create, find, ...) for CategoryType objects
@@ -46,8 +46,8 @@ import java.util.List;
 public final class TicketCategoryTypeHome
 {
     // Static variable pointed at the DAO instance
-    private static ITicketCategoryTypeDAO _dao = SpringContextService.getBean( "ticketing.ticketCategoryTypeDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static ITicketCategoryTypeDAO _dao    = SpringContextService.getBean( "ticketing.ticketCategoryTypeDAO" );
+    private static Plugin                 _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -160,5 +160,5 @@ public final class TicketCategoryTypeHome
     {
         return _dao.loadByDepth( nDepth, _plugin );
     }
-    
+
 }

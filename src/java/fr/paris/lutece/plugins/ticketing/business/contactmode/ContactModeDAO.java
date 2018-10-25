@@ -33,14 +33,14 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.contactmode;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.util.ReferenceList;
-import fr.paris.lutece.util.sql.DAOUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.util.ReferenceList;
+import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
  * This class provides Data Access methods for ContactMode objects
@@ -48,12 +48,12 @@ import java.util.List;
 public final class ContactModeDAO implements IContactModeDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_contact_mode ) FROM ticketing_contact_mode";
-    private static final String SQL_QUERY_SELECT = "SELECT id_contact_mode, code, required_inputs, confirmation_msg FROM ticketing_contact_mode WHERE id_contact_mode = ? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_contact_mode ( id_contact_mode, code, required_inputs, confirmation_msg, inactive ) VALUES ( ?, ?, ?, ?, 0 ) ";
-    private static final String SQL_QUERY_DELETE = "UPDATE ticketing_contact_mode SET inactive = 1 WHERE id_contact_mode = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_contact_mode SET id_contact_mode = ?, code = ?, required_inputs = ?, confirmation_msg = ? WHERE id_contact_mode = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_contact_mode, code, required_inputs, confirmation_msg FROM ticketing_contact_mode WHERE inactive <> 1 ";
+    private static final String SQL_QUERY_NEW_PK       = "SELECT max( id_contact_mode ) FROM ticketing_contact_mode";
+    private static final String SQL_QUERY_SELECT       = "SELECT id_contact_mode, code, required_inputs, confirmation_msg FROM ticketing_contact_mode WHERE id_contact_mode = ? ";
+    private static final String SQL_QUERY_INSERT       = "INSERT INTO ticketing_contact_mode ( id_contact_mode, code, required_inputs, confirmation_msg, inactive ) VALUES ( ?, ?, ?, ?, 0 ) ";
+    private static final String SQL_QUERY_DELETE       = "UPDATE ticketing_contact_mode SET inactive = 1 WHERE id_contact_mode = ? ";
+    private static final String SQL_QUERY_UPDATE       = "UPDATE ticketing_contact_mode SET id_contact_mode = ?, code = ?, required_inputs = ?, confirmation_msg = ? WHERE id_contact_mode = ?";
+    private static final String SQL_QUERY_SELECTALL    = "SELECT id_contact_mode, code, required_inputs, confirmation_msg FROM ticketing_contact_mode WHERE inactive <> 1 ";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_contact_mode FROM ticketing_contact_mode WHERE inactive <> 1 ";
 
     /**

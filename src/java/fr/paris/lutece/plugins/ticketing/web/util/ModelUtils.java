@@ -33,6 +33,14 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServiceManager;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.IEntryTypeService;
@@ -45,14 +53,6 @@ import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.prefs.AdminUserPreferencesService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.util.AppPathService;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Class providing utility methods for for Model
@@ -163,8 +163,8 @@ public final class ModelUtils
      */
     public static void storeUserSignature( HttpServletRequest request, Map<String, Object> model )
     {
-        String strUserSignature = AdminUserPreferencesService.instance( ).get( String.valueOf( AdminUserService.getAdminUser( request ).getUserId( ) ),
-                TicketingConstants.USER_PREFERENCE_SIGNATURE, StringUtils.EMPTY );
+        String strUserSignature = AdminUserPreferencesService.instance( ).get( String.valueOf( AdminUserService.getAdminUser( request ).getUserId( ) ), TicketingConstants.USER_PREFERENCE_SIGNATURE,
+                StringUtils.EMPTY );
 
         model.put( TicketingConstants.MARK_USER_SIGNATURE, strUserSignature );
     }

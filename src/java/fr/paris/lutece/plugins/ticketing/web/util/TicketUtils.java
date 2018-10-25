@@ -86,8 +86,7 @@ public final class TicketUtils
      */
     public static AdminUser registerAdminUserFront( HttpServletRequest request )
     {
-        AdminUser userFront = AdminUserHome.findByPrimaryKey( PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_ADMINUSER_ID_FRONT,
-                TicketingConstants.PROPERTY_UNSET_INT ) );
+        AdminUser userFront = AdminUserHome.findByPrimaryKey( PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_ADMINUSER_ID_FRONT, TicketingConstants.PROPERTY_UNSET_INT ) );
 
         try
         {
@@ -95,12 +94,10 @@ public final class TicketUtils
 
             // Gets the user from request because registerUser initializes roles, etc.
             userFront = AdminAuthenticationService.getInstance( ).getRegisteredUser( request );
-        }
-        catch( AccessDeniedException e )
+        } catch ( AccessDeniedException e )
         {
             AppLogService.error( e.getMessage( ), e );
-        }
-        catch( UserNotSignedException e )
+        } catch ( UserNotSignedException e )
         {
             AppLogService.error( e.getMessage( ), e );
         }
@@ -227,14 +224,12 @@ public final class TicketUtils
         if ( ( parentUnit == null ) || ( currentUnit == null ) )
         {
             result = false;
-        }
-        else
+        } else
         {
             if ( parentUnit.getIdUnit( ) == currentUnit.getIdParent( ) )
             {
                 result = true;
-            }
-            else
+            } else
             {
                 if ( TicketingConstants.NO_PARENT_ID != currentUnit.getIdParent( ) )
                 {
@@ -320,19 +315,15 @@ public final class TicketUtils
         {
             // ticket assign to agent
             bAssignToUserOrGroup = true;
+        } else if ( isTicketAssignedToUserGroup( ticket, UnitHome.findByIdUser( user.getUserId( ) ) ) )
+        {
+            // ticket assign to agent group
+            bAssignToUserOrGroup = true;
+        } else if ( isTicketAssignedToChildUnitUserGroup( ticket, UnitHome.findByIdUser( user.getUserId( ) ) ) )
+        {
+            // ticket assign to child unit of agent group
+            bAssignToUserOrGroup = true;
         }
-        else
-            if ( isTicketAssignedToUserGroup( ticket, UnitHome.findByIdUser( user.getUserId( ) ) ) )
-            {
-                // ticket assign to agent group
-                bAssignToUserOrGroup = true;
-            }
-            else
-                if ( isTicketAssignedToChildUnitUserGroup( ticket, UnitHome.findByIdUser( user.getUserId( ) ) ) )
-                {
-                    // ticket assign to child unit of agent group
-                    bAssignToUserOrGroup = true;
-                }
 
         return bAssignToUserOrGroup;
     }
@@ -372,8 +363,8 @@ public final class TicketUtils
     {
         ReferenceList channelList = ChannelHome.getReferenceList( );
 
-        String strIdSelectableChannelList = AdminUserPreferencesService.instance( ).get(
-                String.valueOf( AdminUserService.getAdminUser( request ).getUserId( ) ), TicketingConstants.USER_PREFERENCE_CHANNELS_LIST, StringUtils.EMPTY );
+        String strIdSelectableChannelList = AdminUserPreferencesService.instance( ).get( String.valueOf( AdminUserService.getAdminUser( request ).getUserId( ) ),
+                TicketingConstants.USER_PREFERENCE_CHANNELS_LIST, StringUtils.EMPTY );
 
         List<Integer> idSelectableChannelList = extractListIdFromString( strIdSelectableChannelList );
         Map<String, String> selectableChannelsMap = new HashMap<String, String>( );
@@ -444,8 +435,7 @@ public final class TicketUtils
         try
         {
             return Integer.parseInt( strStringToConvert );
-        }
-        catch( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
             if ( StringUtils.isNotBlank( strMessageError ) )
             {
@@ -457,6 +447,7 @@ public final class TicketUtils
 
     /**
      * Check if a ticket is authorized
+     * 
      * @param ticket
      * @param strPermission
      * @param user

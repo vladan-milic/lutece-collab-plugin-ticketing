@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.channel;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import java.io.Serializable;
 
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * This is the business class for the object Channel
@@ -52,12 +52,12 @@ public class Channel implements Serializable
     private static final long serialVersionUID = 1L;
 
     // Variables declarations
-    private int _nId;
+    private int               _nId;
     @NotEmpty( message = "#i18n{ticketing.validation.channel.Label.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.channel.Label.size}" )
-    private String _strLabel;
+    private String            _strLabel;
     @Size( max = 50, message = "#i18n{ticketing.validation.channel.IconFont.size}" )
-    private String _strIconFont;
+    private String            _strIconFont;
 
     /**
      * Returns the Id

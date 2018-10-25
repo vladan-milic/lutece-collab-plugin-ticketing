@@ -38,24 +38,23 @@ import fr.paris.lutece.plugins.ticketing.business.form.FormEntry;
 import fr.paris.lutece.plugins.ticketing.business.form.FormEntryHome;
 import fr.paris.lutece.test.LuteceTestCase;
 
-
 public class FormEntryBusinessTest extends LuteceTestCase
 {
-    private final static int IDFORM1 = 1;
-    private final static int IDFORM2 = 2;
-    private final static String IDCHAMP1 = "IdChamp1";
-    private final static String IDCHAMP2 = "IdChamp2";
-	private final static boolean HIDDEN1 = true;
-    private final static boolean HIDDEN2 = false;
-	private final static boolean MANDATORY1 = true;
+    private final static int     IDFORM1    = 1;
+    private final static int     IDFORM2    = 2;
+    private final static String  IDCHAMP1   = "IdChamp1";
+    private final static String  IDCHAMP2   = "IdChamp2";
+    private final static boolean HIDDEN1    = true;
+    private final static boolean HIDDEN2    = false;
+    private final static boolean MANDATORY1 = true;
     private final static boolean MANDATORY2 = false;
-    private final static int ORDER1 = 1;
-    private final static int ORDER2 = 2;
+    private final static int     ORDER1     = 1;
+    private final static int     ORDER2     = 2;
 
-    public void testBusiness(  )
+    public void testBusiness( )
     {
         // Initialize an object
-        FormEntry formEntry = new FormEntry();
+        FormEntry formEntry = new FormEntry( );
         formEntry.setIdForm( IDFORM1 );
         formEntry.setIdChamp( IDCHAMP1 );
         formEntry.setHidden( HIDDEN1 );
@@ -65,11 +64,11 @@ public class FormEntryBusinessTest extends LuteceTestCase
         // Create test
         FormEntryHome.create( formEntry );
         FormEntry formEntryStored = FormEntryHome.findByPrimaryKey( formEntry.getId( ) );
-        assertEquals( formEntryStored.getIdForm() , formEntry.getIdForm( ) );
-        assertEquals( formEntryStored.getIdChamp() , formEntry.getIdChamp( ) );
-        assertEquals( formEntryStored.isHidden() , formEntry.isHidden( ) );
-        assertEquals( formEntryStored.isMandatory() , formEntry.isMandatory( ) );
-        assertEquals( formEntryStored.getHierarchy() , formEntry.getHierarchy( ) );
+        assertEquals( formEntryStored.getIdForm( ), formEntry.getIdForm( ) );
+        assertEquals( formEntryStored.getIdChamp( ), formEntry.getIdChamp( ) );
+        assertEquals( formEntryStored.isHidden( ), formEntry.isHidden( ) );
+        assertEquals( formEntryStored.isMandatory( ), formEntry.isMandatory( ) );
+        assertEquals( formEntryStored.getHierarchy( ), formEntry.getHierarchy( ) );
 
         // Update test
         formEntry.setIdForm( IDFORM2 );
@@ -79,20 +78,20 @@ public class FormEntryBusinessTest extends LuteceTestCase
         formEntry.setHierarchy( ORDER2 );
         FormEntryHome.update( formEntry );
         formEntryStored = FormEntryHome.findByPrimaryKey( formEntry.getId( ) );
-        assertEquals( formEntryStored.getIdForm() , formEntry.getIdForm( ) );
-        assertEquals( formEntryStored.getIdChamp() , formEntry.getIdChamp( ) );
-        assertEquals( formEntryStored.isHidden() , formEntry.isHidden( ) );
-        assertEquals( formEntryStored.isMandatory() , formEntry.isMandatory( ) );
-        assertEquals( formEntryStored.getHierarchy() , formEntry.getHierarchy( ) );
+        assertEquals( formEntryStored.getIdForm( ), formEntry.getIdForm( ) );
+        assertEquals( formEntryStored.getIdChamp( ), formEntry.getIdChamp( ) );
+        assertEquals( formEntryStored.isHidden( ), formEntry.isHidden( ) );
+        assertEquals( formEntryStored.isMandatory( ), formEntry.isMandatory( ) );
+        assertEquals( formEntryStored.getHierarchy( ), formEntry.getHierarchy( ) );
 
         // List test
-        FormEntryHome.getFormEntrysList();
+        FormEntryHome.getFormEntrysList( );
 
         // Delete test
         FormEntryHome.remove( formEntry.getId( ) );
         formEntryStored = FormEntryHome.findByPrimaryKey( formEntry.getId( ) );
         assertNull( formEntryStored );
-        
+
     }
 
 }

@@ -33,16 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
+import java.util.Locale;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.portal.service.rbac.Permission;
 import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
 import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
 import fr.paris.lutece.util.ReferenceList;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.Locale;
 
 /**
  *
@@ -52,27 +52,26 @@ import java.util.Locale;
 public class TicketResourceIdService extends ResourceIdService
 {
     /** Permission for creating a ticket */
-    public static final String PERMISSION_CREATE = "CREATE";
+    public static final String  PERMISSION_CREATE            = "CREATE";
 
     /** Permission for modifying a ticket */
-    public static final String PERMISSION_MODIFY = "MODIFY";
+    public static final String  PERMISSION_MODIFY            = "MODIFY";
 
     /** Permission for deleting a ticket */
-    public static final String PERMISSION_DELETE = "DELETE";
+    public static final String  PERMISSION_DELETE            = "DELETE";
 
     /** Permission for deleting a ticket */
-    public static final String PERMISSION_VIEW = "VIEW";
+    public static final String  PERMISSION_VIEW              = "VIEW";
 
     /** Permission for exporting tickets */
-    public static final String PERMISSION_EXPORT = "EXPORT";
-
+    public static final String  PERMISSION_EXPORT            = "EXPORT";
 
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "ticketing.ticket.resourceType";
-    private static final String PROPERTY_LABEL_CREATE = "ticketing.ticket.permission.label.create";
-    private static final String PROPERTY_LABEL_MODIFY = "ticketing.ticket.permission.label.modify";
-    private static final String PROPERTY_LABEL_DELETE = "ticketing.ticket.permission.label.delete";
-    private static final String PROPERTY_LABEL_VIEW = "ticketing.ticket.permission.label.view";
-    private static final String PROPERTY_LABEL_EXPORT = "ticketing.ticket.permission.label.export";
+    private static final String PROPERTY_LABEL_CREATE        = "ticketing.ticket.permission.label.create";
+    private static final String PROPERTY_LABEL_MODIFY        = "ticketing.ticket.permission.label.modify";
+    private static final String PROPERTY_LABEL_DELETE        = "ticketing.ticket.permission.label.delete";
+    private static final String PROPERTY_LABEL_VIEW          = "ticketing.ticket.permission.label.view";
+    private static final String PROPERTY_LABEL_EXPORT        = "ticketing.ticket.permission.label.export";
 
     /**
      * Constructor

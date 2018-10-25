@@ -30,49 +30,51 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * License 1.0
- */ 
+ */
 package fr.paris.lutece.plugins.ticketing.business.form;
 
-import javax.validation.constraints.*;
-import org.hibernate.validator.constraints.*;
 import java.io.Serializable;
+
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * This is the business class for the object FormEntry
- */ 
+ */
 public class FormEntry implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    // Variables declarations 
-    private int _nId;
+    // Variables declarations
+    private int               _nId;
 
-    private int _nIdForm;
+    private int               _nIdForm;
 
     @NotEmpty( message = "#i18n{ticketing.validation.formentry.IdChamp.notEmpty}" )
-    @Size( max = 50 , message = "#i18n{ticketing.validation.formentry.IdChamp.size}" ) 
-    private String _strIdChamp;
+    @Size( max = 50, message = "#i18n{ticketing.validation.formentry.IdChamp.size}" )
+    private String            _strIdChamp;
 
-    private boolean _bHidden;
+    private boolean           _bHidden;
 
-    private boolean _bMandatory;
+    private boolean           _bMandatory;
 
-    private int _nHierarchy;
+    private int               _nHierarchy;
 
     @Size( max = 500, message = "#i18n{ticketing.validation.formentry.DefaultValue.size}" )
-    private String _strDefaultValue;
+    private String            _strDefaultValue;
 
-    
-    
     /**
-	 * 
-	 */
-	public FormEntry() {
-		super();
-	}
+     * 
+     */
+    public FormEntry( )
+    {
+        super( );
+    }
 
-	/**
+    /**
      * Returns the Id
+     * 
      * @return The Id
      */
     public int getId( )
@@ -82,8 +84,10 @@ public class FormEntry implements Serializable
 
     /**
      * Sets the Id
-     * @param nId The Id
-     */ 
+     * 
+     * @param nId
+     *            The Id
+     */
     public void setId( int nId )
     {
         _nId = nId;
@@ -91,6 +95,7 @@ public class FormEntry implements Serializable
 
     /**
      * Returns the IdForm
+     * 
      * @return The IdForm
      */
     public int getIdForm( )
@@ -100,8 +105,10 @@ public class FormEntry implements Serializable
 
     /**
      * Sets the IdForm
-     * @param nIdForm The IdForm
-     */ 
+     * 
+     * @param nIdForm
+     *            The IdForm
+     */
     public void setIdForm( int nIdForm )
     {
         _nIdForm = nIdForm;
@@ -109,6 +116,7 @@ public class FormEntry implements Serializable
 
     /**
      * Returns the IdChamp
+     * 
      * @return The IdChamp
      */
     public String getIdChamp( )
@@ -118,8 +126,10 @@ public class FormEntry implements Serializable
 
     /**
      * Sets the IdChamp
-     * @param strIdChamp The IdChamp
-     */ 
+     * 
+     * @param strIdChamp
+     *            The IdChamp
+     */
     public void setIdChamp( String strIdChamp )
     {
         _strIdChamp = strIdChamp;
@@ -127,6 +137,7 @@ public class FormEntry implements Serializable
 
     /**
      * Returns the Hidden
+     * 
      * @return The Hidden
      */
     public boolean isHidden( )
@@ -136,8 +147,10 @@ public class FormEntry implements Serializable
 
     /**
      * Sets the Hidden
-     * @param bHidden The Hidden
-     */ 
+     * 
+     * @param bHidden
+     *            The Hidden
+     */
     public void setHidden( boolean bHidden )
     {
         _bHidden = bHidden;
@@ -145,6 +158,7 @@ public class FormEntry implements Serializable
 
     /**
      * Returns the Mandatory
+     * 
      * @return The Mandatory
      */
     public boolean isMandatory( )
@@ -154,8 +168,10 @@ public class FormEntry implements Serializable
 
     /**
      * Sets the Mandatory
-     * @param bMandatory The Mandatory
-     */ 
+     * 
+     * @param bMandatory
+     *            The Mandatory
+     */
     public void setMandatory( boolean bMandatory )
     {
         _bMandatory = bMandatory;
@@ -163,6 +179,7 @@ public class FormEntry implements Serializable
 
     /**
      * Returns the Order
+     * 
      * @return The Order
      */
     public int getHierarchy( )
@@ -172,8 +189,10 @@ public class FormEntry implements Serializable
 
     /**
      * Sets the Order
-     * @param nOrder The Order
-     */ 
+     * 
+     * @param nOrder
+     *            The Order
+     */
     public void setHierarchy( int nOrder )
     {
         _nHierarchy = nOrder;

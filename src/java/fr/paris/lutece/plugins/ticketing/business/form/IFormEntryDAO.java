@@ -31,12 +31,13 @@
  *
  * License 1.0
  */
- 
+
 package fr.paris.lutece.plugins.ticketing.business.form;
+
+import java.util.List;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
-import java.util.List;
 
 /**
  * IFormEntryDAO Interface
@@ -45,22 +46,31 @@ public interface IFormEntryDAO
 {
     /**
      * Insert a new record in the table.
-     * @param formEntry instance of the FormEntry object to insert
-     * @param plugin the Plugin
+     * 
+     * @param formEntry
+     *            instance of the FormEntry object to insert
+     * @param plugin
+     *            the Plugin
      */
     void insert( FormEntry formEntry, Plugin plugin );
 
     /**
      * Update the record in the table
-     * @param formEntry the reference of the FormEntry
-     * @param plugin the Plugin
+     * 
+     * @param formEntry
+     *            the reference of the FormEntry
+     * @param plugin
+     *            the Plugin
      */
     void store( FormEntry formEntry, Plugin plugin );
 
     /**
      * Delete a record from the table
-     * @param nKey The identifier of the FormEntry to delete
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the FormEntry to delete
+     * @param plugin
+     *            the Plugin
      */
     void delete( int nKey, Plugin plugin );
 
@@ -69,29 +79,38 @@ public interface IFormEntryDAO
 
     /**
      * Load the data from the table
-     * @param nKey The identifier of the formEntry
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the formEntry
+     * @param plugin
+     *            the Plugin
      * @return The instance of the formEntry
      */
     FormEntry load( int nKey, Plugin plugin );
 
     /**
      * Load the data of all the formEntry objects and returns them as a list
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The list which contains the data of all the formEntry objects
      */
     List<FormEntry> selectFormEntrysList( Plugin plugin );
-    
+
     /**
      * Load the id of all the formEntry objects and returns them as a list
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The list which contains the id of all the formEntry objects
      */
     List<Integer> selectIdFormEntrysList( Plugin plugin );
-    
+
     /**
      * Load the data of all the formEntry objects and returns them as a referenceList
-     * @param plugin the Plugin
+     * 
+     * @param plugin
+     *            the Plugin
      * @return The referenceList which contains the data of all the formEntry objects
      */
     ReferenceList selectFormEntrysReferenceList( Plugin plugin );
@@ -109,8 +128,11 @@ public interface IFormEntryDAO
 
     /**
      * Delete a record from the table
-     * @param nKey The identifier of the Form to delete
-     * @param plugin the Plugin
+     * 
+     * @param nKey
+     *            The identifier of the Form to delete
+     * @param plugin
+     *            the Plugin
      */
-	void deleteByIdForm(int nKey, Plugin _plugin);
+    void deleteByIdForm( int nKey, Plugin _plugin );
 }

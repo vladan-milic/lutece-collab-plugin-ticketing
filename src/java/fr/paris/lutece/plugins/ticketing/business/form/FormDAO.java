@@ -34,12 +34,12 @@
 
 package fr.paris.lutece.plugins.ticketing.business.form;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class provides Data Access methods for Form objects
@@ -47,31 +47,33 @@ import java.util.List;
 public final class FormDAO implements IFormDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_form ) FROM ticketing_form";
-    private static final String SQL_QUERY_SELECT = "SELECT id_form, title, message, button_label, connection FROM ticketing_form WHERE id_form = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_form ( id_form, title, message, button_label, connection ) VALUES ( ?, ?, ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_form WHERE id_form = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_form SET id_form = ?, title = ?, message = ?, button_label = ?, connection = ? WHERE id_form = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_form, title, message, button_label, connection FROM ticketing_form";
+    private static final String SQL_QUERY_NEW_PK       = "SELECT max( id_form ) FROM ticketing_form";
+    private static final String SQL_QUERY_SELECT       = "SELECT id_form, title, message, button_label, connection FROM ticketing_form WHERE id_form = ?";
+    private static final String SQL_QUERY_INSERT       = "INSERT INTO ticketing_form ( id_form, title, message, button_label, connection ) VALUES ( ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE       = "DELETE FROM ticketing_form WHERE id_form = ? ";
+    private static final String SQL_QUERY_UPDATE       = "UPDATE ticketing_form SET id_form = ?, title = ?, message = ?, button_label = ?, connection = ? WHERE id_form = ?";
+    private static final String SQL_QUERY_SELECTALL    = "SELECT id_form, title, message, button_label, connection FROM ticketing_form";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_form FROM ticketing_form";
 
     /**
      * Generates a new primary key
-     * @param plugin The Plugin
+     * 
+     * @param plugin
+     *            The Plugin
      * @return The new primary key
      */
-    public int newPrimaryKey( Plugin plugin)
+    public int newPrimaryKey( Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK , plugin  );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, plugin );
         daoUtil.executeQuery( );
         int nKey = 1;
 
-        if( daoUtil.next( ) )
+        if ( daoUtil.next( ) )
         {
             nKey = daoUtil.getInt( 1 ) + 1;
         }
 
-        daoUtil.free();
+        daoUtil.free( );
         return nKey;
     }
 
@@ -84,12 +86,12 @@ public final class FormDAO implements IFormDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         form.setId( newPrimaryKey( plugin ) );
         int nIndex = 1;
-        
-        daoUtil.setInt( nIndex++ , form.getId( ) );
-        daoUtil.setString( nIndex++ , form.getTitle( ) );
-        daoUtil.setString( nIndex++ , form.getMessage( ) );
-        daoUtil.setString( nIndex++ , form.getButtonLabel( ) );
-        daoUtil.setBoolean( nIndex++ , form.isConnection( ) );
+
+        daoUtil.setInt( nIndex++, form.getId( ) );
+        daoUtil.setString( nIndex++, form.getTitle( ) );
+        daoUtil.setString( nIndex++, form.getMessage( ) );
+        daoUtil.setString( nIndex++, form.getButtonLabel( ) );
+        daoUtil.setBoolean( nIndex++, form.isConnection( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -102,15 +104,15 @@ public final class FormDAO implements IFormDAO
     public Form load( int nKey, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.setInt( 1 , nKey );
+        daoUtil.setInt( 1, nKey );
         daoUtil.executeQuery( );
         Form form = null;
 
         if ( daoUtil.next( ) )
         {
-            form = new Form();
+            form = new Form( );
             int nIndex = 1;
-            
+
             form.setId( daoUtil.getInt( nIndex++ ) );
             form.setTitle( daoUtil.getString( nIndex++ ) );
             form.setMessage( daoUtil.getString( nIndex++ ) );
@@ -129,7 +131,7 @@ public final class FormDAO implements IFormDAO
     public void delete( int nKey, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
-        daoUtil.setInt( 1 , nKey );
+        daoUtil.setInt( 1, nKey );
         daoUtil.executeUpdate( );
         daoUtil.free( );
     }
@@ -142,13 +144,13 @@ public final class FormDAO implements IFormDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
         int nIndex = 1;
-        
-        daoUtil.setInt( nIndex++ , form.getId( ) );
-        daoUtil.setString( nIndex++ , form.getTitle( ) );
-        daoUtil.setString( nIndex++ , form.getMessage( ) );
-        daoUtil.setString( nIndex++ , form.getButtonLabel( ) );
-        daoUtil.setBoolean( nIndex++ , form.isConnection( ) );
-        daoUtil.setInt( nIndex , form.getId( ) );
+
+        daoUtil.setInt( nIndex++, form.getId( ) );
+        daoUtil.setString( nIndex++, form.getTitle( ) );
+        daoUtil.setString( nIndex++, form.getMessage( ) );
+        daoUtil.setString( nIndex++, form.getButtonLabel( ) );
+        daoUtil.setBoolean( nIndex++, form.isConnection( ) );
+        daoUtil.setInt( nIndex, form.getId( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -160,15 +162,15 @@ public final class FormDAO implements IFormDAO
     @Override
     public List<Form> selectFormsList( Plugin plugin )
     {
-        List<Form> formList = new ArrayList<Form>(  );
+        List<Form> formList = new ArrayList<Form>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            Form form = new Form(  );
+            Form form = new Form( );
             int nIndex = 1;
-            
+
             form.setId( daoUtil.getInt( nIndex++ ) );
             form.setTitle( daoUtil.getString( nIndex++ ) );
             form.setMessage( daoUtil.getString( nIndex++ ) );
@@ -181,7 +183,7 @@ public final class FormDAO implements IFormDAO
         daoUtil.free( );
         return formList;
     }
-    
+
     /**
      * {@inheritDoc }
      */
@@ -190,9 +192,9 @@ public final class FormDAO implements IFormDAO
     {
         List<Integer> formList = new ArrayList<Integer>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             formList.add( daoUtil.getInt( 1 ) );
         }
@@ -200,20 +202,20 @@ public final class FormDAO implements IFormDAO
         daoUtil.free( );
         return formList;
     }
-    
+
     /**
      * {@inheritDoc }
      */
     @Override
     public ReferenceList selectFormsReferenceList( Plugin plugin )
     {
-        ReferenceList formList = new ReferenceList();
+        ReferenceList formList = new ReferenceList( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            formList.addItem( daoUtil.getInt( 1 ) , daoUtil.getString( 2 ) );
+            formList.addItem( daoUtil.getInt( 1 ), daoUtil.getString( 2 ) );
         }
 
         daoUtil.free( );

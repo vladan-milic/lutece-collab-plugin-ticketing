@@ -41,13 +41,13 @@ public abstract class AbstractNode
 {
     protected List<AbstractNode> _childrenNodes;
 
-    protected AbstractNode _parentNode;
+    protected AbstractNode       _parentNode;
 
     protected List<AbstractNode> _leaves;
 
-    protected AbstractDepth _depth;
+    protected AbstractDepth      _depth;
 
-    private boolean _bLeaf;
+    private boolean              _bLeaf;
 
     /**
      * Constructor of the Abstract Node
@@ -72,7 +72,7 @@ public abstract class AbstractNode
     public abstract int getIdParent( );
 
     /**
-     * Get the boolean indicating the node is a leaf 
+     * Get the boolean indicating the node is a leaf
      * 
      * @return
      */
@@ -177,25 +177,27 @@ public abstract class AbstractNode
     /**
      * Get the list of nodes behind this node, from root to node.
      * 
-     * @param <Node> the Node type
+     * @param <Node>
+     *            the Node type
      * @return the list of nodes behind a node
      */
     public <Node extends AbstractNode> List<Node> getBranch( )
     {
         List<Node> listNode = new ArrayList<>( );
-        listNode.add( (Node)this );
-        Node parent = (Node)this.getParent( );
+        listNode.add( ( Node ) this );
+        Node parent = ( Node ) this.getParent( );
         while ( parent != null )
         {
             listNode.add( parent );
-            parent = (Node)parent.getParent( );
+            parent = ( Node ) parent.getParent( );
         }
         Collections.reverse( listNode );
         return listNode;
     }
-    
+
     /**
      * Return if true if rootElement, false otherwise
+     * 
      * @return true if the node is a root node, false otherwise
      */
     public boolean isRootNode( )

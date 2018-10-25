@@ -43,6 +43,7 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.Email;
+
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.ticketing.business.address.TicketAddress;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
@@ -116,9 +117,8 @@ public class Ticket implements Serializable, RBACResource
     private Channel                      _channel             = new Channel( );
     private String                       _strNomenclature;
     private int                          _nIdticketMarking    = -1;
-    private int 						 _nIdDemand = -1;
+    private int                          _nIdDemand           = -1;
     private String                       _strFacilFamilleNumber;
-
 
     /**
      * Enriches empty ticket attributes with specified values
@@ -499,12 +499,12 @@ public class Ticket implements Serializable, RBACResource
 
     public TicketCategory getCategoryOfDepth( int depth )
     {
-        if(_ticketCategory.getDepth().getDepthNumber() >= depth )
+        if ( _ticketCategory.getDepth( ).getDepthNumber( ) >= depth )
         {
             return _ticketCategory.getBranch( ).get( depth - 1 );
-        }else
+        } else
         {
-            return new TicketCategory();
+            return new TicketCategory( );
         }
 
     }
@@ -1112,19 +1112,19 @@ public class Ticket implements Serializable, RBACResource
         return TicketHome.getTicketMarking( this );
     }
 
-
     /**
      * @return load and return the ticket demand id
      */
-    public int getDemandId( ) 
+    public int getDemandId( )
     {
         return _nIdDemand;
     }
 
-    public void setDemandId( int _nIdDemand ) 
+    public void setDemandId( int _nIdDemand )
     {
         this._nIdDemand = _nIdDemand;
     }
+
     public String getFacilFamilleNumber( )
     {
         return _strFacilFamilleNumber;
@@ -1133,7 +1133,6 @@ public class Ticket implements Serializable, RBACResource
     public void setFacilFamilleNumber( String _strFacilFamilleNumber )
     {
         this._strFacilFamilleNumber = _strFacilFamilleNumber;
-    } 
-
+    }
 
 }

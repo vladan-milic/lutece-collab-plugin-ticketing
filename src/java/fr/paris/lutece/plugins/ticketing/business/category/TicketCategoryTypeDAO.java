@@ -34,12 +34,12 @@
 
 package fr.paris.lutece.plugins.ticketing.business.category;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class provides Data Access methods for CategoryType objects
@@ -47,14 +47,14 @@ import java.util.List;
 public final class TicketCategoryTypeDAO implements ITicketCategoryTypeDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_category_type ) FROM ticketing_category_type";
-    private static final String SQL_QUERY_SELECT = "SELECT id_category_type, label, depth FROM ticketing_category_type WHERE id_category_type = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_category_type ( id_category_type, label, depth ) VALUES ( ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_category_type WHERE id_category_type = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_category_type SET id_category_type = ?, label = ?, depth = ? WHERE id_category_type = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_category_type, label, depth FROM ticketing_category_type ORDER BY depth";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_category_type FROM ticketing_category_type ORDER BY depth";
-    private static final String SQL_QUERY_NEW_DEPTH = "SELECT max( depth ) FROM ticketing_category_type";
+    private static final String SQL_QUERY_NEW_PK          = "SELECT max( id_category_type ) FROM ticketing_category_type";
+    private static final String SQL_QUERY_SELECT          = "SELECT id_category_type, label, depth FROM ticketing_category_type WHERE id_category_type = ?";
+    private static final String SQL_QUERY_INSERT          = "INSERT INTO ticketing_category_type ( id_category_type, label, depth ) VALUES ( ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE          = "DELETE FROM ticketing_category_type WHERE id_category_type = ? ";
+    private static final String SQL_QUERY_UPDATE          = "UPDATE ticketing_category_type SET id_category_type = ?, label = ?, depth = ? WHERE id_category_type = ?";
+    private static final String SQL_QUERY_SELECTALL       = "SELECT id_category_type, label, depth FROM ticketing_category_type ORDER BY depth";
+    private static final String SQL_QUERY_SELECTALL_ID    = "SELECT id_category_type FROM ticketing_category_type ORDER BY depth";
+    private static final String SQL_QUERY_NEW_DEPTH       = "SELECT max( depth ) FROM ticketing_category_type";
     private static final String SQL_QUERY_SELECT_BY_DEPTH = "SELECT id_category_type, label, depth FROM ticketing_category_type WHERE depth = ?";
 
     /**

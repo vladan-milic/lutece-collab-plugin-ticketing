@@ -45,7 +45,7 @@ import fr.paris.lutece.plugins.ticketing.service.tree.Tree;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType> 
+public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
 {
     private List<Integer> _restrictedCategoriesId = null;
 
@@ -60,8 +60,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
     public TicketCategoryTree( List<TicketCategory> listCategory, List<TicketCategoryType> listCategoryType )
     {
         super( listCategory, listCategoryType );
-        listCategory.stream( ).forEach( ( category ) -> 
-        category.setListIdInput( TicketCategoryInputsHome.getIdInputListByCategory( category.getId( ) ) ) );
+        listCategory.stream( ).forEach( ( category ) -> category.setListIdInput( TicketCategoryInputsHome.getIdInputListByCategory( category.getId( ) ) ) );
     }
 
     /**
@@ -103,7 +102,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
      * 
      * @return the JSON Object of the tree
      */
-    public String getTreeJSONObject( int selectedRootCategory , int selectedChildCategory )
+    public String getTreeJSONObject( int selectedRootCategory, int selectedChildCategory )
     {
         JSONObject json = new JSONObject( );
 
@@ -118,9 +117,9 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
             jsonRootElement.accumulate( FormatConstants.KEY_DEPTH, ticketCategory.getDepth( ).getDepthNumber( ) );
             jsonRootElement.accumulate( FormatConstants.KEY_INACTIVE, ticketCategory.isInactive( ) );
             jsonRootElement.accumulate( FormatConstants.KEY_ICON, ticketCategory.getIconFont( ) );
-            if ( selectedRootCategory > 0 && ticketCategory.getId( ) == selectedRootCategory ) 
+            if ( selectedRootCategory > 0 && ticketCategory.getId( ) == selectedRootCategory )
             {
-            	jsonRootElement.accumulate( FormatConstants.KEY_SELECTED, true );
+                jsonRootElement.accumulate( FormatConstants.KEY_SELECTED, true );
             }
             addJSONArraysChildren( jsonRootElement, ticketCategory, selectedChildCategory );
             jsonRootElements.add( jsonRootElement );
@@ -142,7 +141,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
 
         return json.toString( );
     }
-    
+
     /**
      * Get a JSON Object of the tree
      * 
@@ -150,7 +149,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
      */
     public String getTreeJSONObject( )
     {
-    	return getTreeJSONObject( 0 , 0 );
+        return getTreeJSONObject( 0, 0 );
     }
 
     /**
@@ -158,7 +157,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
      * 
      * @param ticketCategory
      *            the current ticketCategory
-     * @param selectedChildCategory  
+     * @param selectedChildCategory
      */
     public void addJSONArraysChildren( JSONObject jsonRootElement, TicketCategory ticketCategory, int selectedChildCategory )
     {
@@ -173,9 +172,9 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
             jsonElement.accumulate( FormatConstants.KEY_DEPTH, children.getDepth( ).getDepthNumber( ) );
             jsonElement.accumulate( FormatConstants.KEY_HELP, children.getHelpMessage( ) );
             jsonElement.accumulate( FormatConstants.KEY_INACTIVE, children.isInactive( ) );
-            if ( selectedChildCategory > 0 && children.getId( ) == selectedChildCategory ) 
+            if ( selectedChildCategory > 0 && children.getId( ) == selectedChildCategory )
             {
-            	jsonElement.accumulate( FormatConstants.KEY_SELECTED, true );
+                jsonElement.accumulate( FormatConstants.KEY_SELECTED, true );
             }
             addJSONArraysChildren( jsonElement, children, selectedChildCategory );
             jsonElements.add( jsonElement );

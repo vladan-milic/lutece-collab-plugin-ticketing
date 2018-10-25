@@ -30,72 +30,73 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  * 
  * License 1.0 
- */ 
-package fr.paris.lutece.plugins.ticketing.business.viewing; 
- 
+ */
+package fr.paris.lutece.plugins.ticketing.business.viewing;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
-import fr.paris.lutece.portal.service.spring.SpringContextService; 
- 
-/** 
- * This class provides instances management methods (manage, find, ...) for Viewing objects 
- */ 
-public class ViewingHome { 
- 
-    // Static variable pointed at the DAO instance 
-    private static IViewingDAO _dao = SpringContextService.getBean( "ticketing.viewingDAO" ); 
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" ); 
-     
-    /** 
-     * Private constructor - this class need not be instantiated 
-     */ 
-    private ViewingHome( ) 
-    { 
-    } 
- 
-    /** 
-     * Create an instance of the viewing class 
+import fr.paris.lutece.portal.service.spring.SpringContextService;
+
+/**
+ * This class provides instances management methods (manage, find, ...) for Viewing objects
+ */
+public class ViewingHome
+{
+
+    // Static variable pointed at the DAO instance
+    private static IViewingDAO _dao    = SpringContextService.getBean( "ticketing.viewingDAO" );
+    private static Plugin      _plugin = PluginService.getPlugin( "ticketing" );
+
+    /**
+     * Private constructor - this class need not be instantiated
+     */
+    private ViewingHome( )
+    {
+    }
+
+    /**
+     * Create an instance of the viewing class
      * 
-     * @param viewing 
-     *            The instance of the Viewing which contains the informations to store 
-     */ 
-    public static void create( Viewing viewing ) 
-    { 
-        _dao.insert( viewing, _plugin ); 
-    } 
- 
-    /** 
-     * Update of the viewing which is specified in parameter 
+     * @param viewing
+     *            The instance of the Viewing which contains the informations to store
+     */
+    public static void create( Viewing viewing )
+    {
+        _dao.insert( viewing, _plugin );
+    }
+
+    /**
+     * Update of the viewing which is specified in parameter
      * 
-     * @param channel 
-     *            The instance of the Viewing which contains the data to store 
-     */ 
-    public static void update( Viewing viewing ) 
-    { 
-        _dao.store( viewing, _plugin ); 
-    } 
-     
-    // ///////////////////////////////////////////////////////////////////////// 
-    // Finders 
- 
-    /** 
-     * Load the data of a viewing objects and returns them in form 
+     * @param channel
+     *            The instance of the Viewing which contains the data to store
+     */
+    public static void update( Viewing viewing )
+    {
+        _dao.store( viewing, _plugin );
+    }
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Finders
+
+    /**
+     * Load the data of a viewing objects and returns them in form
      * 
-     * @return Data of a viewing objects 
-     */ 
-    public static Viewing getViewing( ) 
-    { 
-        return _dao.selectViewing( _plugin ); 
-    } 
-     
-    /** 
-     * Load the count of data of a viewing objects and returns them in form 
+     * @return Data of a viewing objects
+     */
+    public static Viewing getViewing( )
+    {
+        return _dao.selectViewing( _plugin );
+    }
+
+    /**
+     * Load the count of data of a viewing objects and returns them in form
      * 
-     * @return Number of data of a viewing objects 
-     */ 
-    public static int getCountViewing( ) 
-    { 
-        return _dao.selectCount( _plugin ); 
-    } 
- 
+     * @return Number of data of a viewing objects
+     */
+    public static int getCountViewing( )
+    {
+        return _dao.selectCount( _plugin );
+    }
+
 }

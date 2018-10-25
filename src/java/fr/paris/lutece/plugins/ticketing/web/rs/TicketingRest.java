@@ -33,14 +33,14 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
-import fr.paris.lutece.plugins.ticketing.service.format.FormatterJsonFactory;
-import fr.paris.lutece.plugins.ticketing.service.format.FormatterXmlFactory;
-import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
+
+import fr.paris.lutece.plugins.ticketing.service.format.FormatterJsonFactory;
+import fr.paris.lutece.plugins.ticketing.service.format.FormatterXmlFactory;
+import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
 
 /**
  * Common method used in REST services for ticketing resources
@@ -79,8 +79,7 @@ public class TicketingRest
         if ( ( ( accept != null ) && accept.contains( MediaType.APPLICATION_JSON ) ) || ( ( format != null ) && format.equals( Constants.MEDIA_TYPE_JSON ) ) )
         {
             strMediaType = MediaType.APPLICATION_JSON;
-        }
-        else
+        } else
         {
             strMediaType = MediaType.APPLICATION_XML;
         }

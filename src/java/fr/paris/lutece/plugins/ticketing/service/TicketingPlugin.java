@@ -33,15 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
+import java.text.DateFormat;
+import java.util.Locale;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
-
 import org.dozer.converters.DateConverter;
 
-import java.text.DateFormat;
-
-import java.util.Locale;
+import fr.paris.lutece.portal.service.plugin.Plugin;
 
 /**
  * Ticketing plugin
@@ -59,8 +57,7 @@ public class TicketingPlugin extends Plugin
     @Override
     public void init( )
     {
-        BeanUtilsBean.getInstance( ).getConvertUtils( )
-                .register( new DateConverter( DateFormat.getDateInstance( DateFormat.SHORT, getPluginLocale( Locale.FRANCE ) ) ), java.sql.Date.class );
+        BeanUtilsBean.getInstance( ).getConvertUtils( ).register( new DateConverter( DateFormat.getDateInstance( DateFormat.SHORT, getPluginLocale( Locale.FRANCE ) ) ), java.sql.Date.class );
     }
 
     /**

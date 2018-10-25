@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.modelresponse.search;
 
-import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+
+import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 
 /**
  *

@@ -33,6 +33,21 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeHome;
@@ -59,21 +74,6 @@ import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.sort.AttributeComparator;
 import fr.paris.lutece.util.url.UrlItem;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 /**
  * This class provides the user interface to manage ModelResponse features ( manage, create, modify, remove )
  */
@@ -81,79 +81,79 @@ import org.apache.commons.lang.StringUtils;
 public class ModelResponseJspBean extends MVCAdminJspBean
 {
 
-    private static final long serialVersionUID = -3664860610121112868L;
+    private static final long     serialVersionUID                          = -3664860610121112868L;
 
     // Rights
-    public static final String RIGHT_MANAGETICKETINGREPONSESTYPES = "TICKETING_MANAGEMENT_MODEL_RESPONSE";
+    public static final String    RIGHT_MANAGETICKETINGREPONSESTYPES        = "TICKETING_MANAGEMENT_MODEL_RESPONSE";
 
     // Templates
-    private static final String TEMPLATE_MANAGE_MODELRESPONSES = "/admin/plugins/ticketing/admin/manage_modelresponses.html";
-    private static final String TEMPLATE_CREATE_MODELRESPONSE = "/admin/plugins/ticketing/admin/create_modelresponse.html";
-    private static final String TEMPLATE_MODIFY_MODELRESPONSE = "/admin/plugins/ticketing/admin/modify_modelresponse.html";
+    private static final String   TEMPLATE_MANAGE_MODELRESPONSES            = "/admin/plugins/ticketing/admin/manage_modelresponses.html";
+    private static final String   TEMPLATE_CREATE_MODELRESPONSE             = "/admin/plugins/ticketing/admin/create_modelresponse.html";
+    private static final String   TEMPLATE_MODIFY_MODELRESPONSE             = "/admin/plugins/ticketing/admin/modify_modelresponse.html";
 
     // Parameters
-    private static final String PARAMETER_ID_MODELRESPONSE = "id";
+    private static final String   PARAMETER_ID_MODELRESPONSE                = "id";
 
     // Parameters
-    private static final String PARAMETER_PAGE_INDEX = "page_index";
-    private static final String PARAMETER_FILTER_ID_DOMAIN = "fltr_id_domain";
+    private static final String   PARAMETER_PAGE_INDEX                      = "page_index";
+    private static final String   PARAMETER_FILTER_ID_DOMAIN                = "fltr_id_domain";
 
     // Properties for page titles
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_MODELRESPONSES = "ticketing.manage_modelresponse.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_MODELRESPONSE = "ticketing.modify_modelresponse.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_MODELRESPONSE = "ticketing.create_modelresponse.pageTitle";
+    private static final String   PROPERTY_PAGE_TITLE_MANAGE_MODELRESPONSES = "ticketing.manage_modelresponse.pageTitle";
+    private static final String   PROPERTY_PAGE_TITLE_MODIFY_MODELRESPONSE  = "ticketing.modify_modelresponse.pageTitle";
+    private static final String   PROPERTY_PAGE_TITLE_CREATE_MODELRESPONSE  = "ticketing.create_modelresponse.pageTitle";
 
     // Properties
-    private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
+    private static final String   PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE       = "ticketing.listItems.itemsPerPage";
 
     // Markers
-    private static final String MARK_MODELRESPONSE_LIST = "modelresponse_list";
-    private static final String MARK_MODELRESPONSE = "modelresponse";
+    private static final String   MARK_MODELRESPONSE_LIST                   = "modelresponse_list";
+    private static final String   MARK_MODELRESPONSE                        = "modelresponse";
 
     // Markers
-    private static final String MARK_PAGINATOR = "paginator";
-    private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
-    private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
-    private static final String MARK_FULL_DOMAIN_LIST = "domain_list";
-    private static final String MARK_SELECTED_DOMAIN = "selected_domain";
-    private static final String JSP_MANAGE_MODELRESPONSES = "jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp";
+    private static final String   MARK_PAGINATOR                            = "paginator";
+    private static final String   MARK_NB_ITEMS_PER_PAGE                    = "nb_items_per_page";
+    private static final String   MARK_TICKET_DOMAINS_LIST                  = "ticket_domains_list";
+    private static final String   MARK_FULL_DOMAIN_LIST                     = "domain_list";
+    private static final String   MARK_SELECTED_DOMAIN                      = "selected_domain";
+    private static final String   JSP_MANAGE_MODELRESPONSES                 = "jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp";
 
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_MODELRESPONSE = "ticketing.message.confirmRemoveModelResponse";
+    private static final String   MESSAGE_CONFIRM_REMOVE_MODELRESPONSE      = "ticketing.message.confirmRemoveModelResponse";
 
     // Validations
-    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.modelresponse.attribute.";
+    private static final String   VALIDATION_ATTRIBUTES_PREFIX              = "ticketing.model.entity.modelresponse.attribute.";
 
     // Views
-    private static final String VIEW_MANAGE_MODELRESPONSES = "manageModelResponses";
-    private static final String VIEW_CREATE_MODELRESPONSE = "createModelResponse";
-    private static final String VIEW_MODIFY_MODELRESPONSE = "modifyModelResponse";
+    private static final String   VIEW_MANAGE_MODELRESPONSES                = "manageModelResponses";
+    private static final String   VIEW_CREATE_MODELRESPONSE                 = "createModelResponse";
+    private static final String   VIEW_MODIFY_MODELRESPONSE                 = "modifyModelResponse";
 
     // Actions
-    private static final String ACTION_CREATE_MODELRESPONSE = "createModelResponse";
-    private static final String ACTION_MODIFY_MODELRESPONSE = "modifyModelResponse";
-    private static final String ACTION_REMOVE_MODELRESPONSE = "removeModelResponse";
-    private static final String ACTION_CONFIRM_REMOVE_MODELRESPONSE = "confirmRemoveModelResponse";
+    private static final String   ACTION_CREATE_MODELRESPONSE               = "createModelResponse";
+    private static final String   ACTION_MODIFY_MODELRESPONSE               = "modifyModelResponse";
+    private static final String   ACTION_REMOVE_MODELRESPONSE               = "removeModelResponse";
+    private static final String   ACTION_CONFIRM_REMOVE_MODELRESPONSE       = "confirmRemoveModelResponse";
 
     // Infos
-    private static final String INFO_MODELRESPONSE_CREATED = "ticketing.info.modelresponse.created";
-    private static final String INFO_MODELRESPONSE_UPDATED = "ticketing.info.modelresponse.updated";
-    private static final String INFO_MODELRESPONSE_REMOVED = "ticketing.info.modelresponse.removed";
+    private static final String   INFO_MODELRESPONSE_CREATED                = "ticketing.info.modelresponse.created";
+    private static final String   INFO_MODELRESPONSE_UPDATED                = "ticketing.info.modelresponse.updated";
+    private static final String   INFO_MODELRESPONSE_REMOVED                = "ticketing.info.modelresponse.removed";
 
     // Variables
-    private int _nDefaultItemsPerPage;
-    private String _strCurrentPageIndex;
-    private int _nItemsPerPage;
-    private String _strSelectedDomain;
-    private String _strSortedAttributeName;
-    private String _strAscSort;
-    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    private int                   _nDefaultItemsPerPage;
+    private String                _strCurrentPageIndex;
+    private int                   _nItemsPerPage;
+    private String                _strSelectedDomain;
+    private String                _strSortedAttributeName;
+    private String                _strAscSort;
+    DateFormat                    df                                        = new SimpleDateFormat( "dd/MM/yyyy" );
 
     // Session variable to store working values
-    private ModelResponse _modelResponse;
-    private IModelResponseIndexer _modelResponseIndexer = SpringContextService.getBean( IModelResponseIndexer.BEAN_SERVICE );
+    private ModelResponse         _modelResponse;
+    private IModelResponseIndexer _modelResponseIndexer                     = SpringContextService.getBean( IModelResponseIndexer.BEAN_SERVICE );
 
-    private static final String NO_TYPE_SELECTED = "-1";
+    private static final String   NO_TYPE_SELECTED                          = "-1";
 
     /**
      * Return a model that contains the list and paginator infos
@@ -178,8 +178,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         String strUrl = url.getUrl( );
 
         // PAGINATOR
-        LocalizedPaginator<ModelResponse> paginator = new LocalizedPaginator<ModelResponse>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
-                _strCurrentPageIndex, getLocale( ) );
+        LocalizedPaginator<ModelResponse> paginator = new LocalizedPaginator<ModelResponse>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
         Map<String, Object> model = getModel( );
 
@@ -200,7 +199,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
     @View( value = VIEW_MANAGE_MODELRESPONSES, defaultView = true )
     public String getManageModelResponses( HttpServletRequest request )
     {
-        Map<String, String> mapDomains = new LinkedHashMap<>( );       
+        Map<String, String> mapDomains = new LinkedHashMap<>( );
         TicketCategoryType type = TicketCategoryTypeHome.findByDepth( 1 );
         mapDomains.put( NO_TYPE_SELECTED, type.getLabel( ) );
         mapDomains.putAll( getFilteredCategoryList( ) );
@@ -209,9 +208,9 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         List<ModelResponse> listModelResponses = new ArrayList<ModelResponse>( );
 
         String strSelectedDomain = request.getParameter( PARAMETER_FILTER_ID_DOMAIN );
-        if ( strSelectedDomain != null ) 
+        if ( strSelectedDomain != null )
         {
-        	_strSelectedDomain = strSelectedDomain;
+            _strSelectedDomain = strSelectedDomain;
         }
 
         if ( StringUtils.isEmpty( _strSelectedDomain ) || NO_TYPE_SELECTED.equals( _strSelectedDomain ) )
@@ -223,12 +222,11 @@ public class ModelResponseJspBean extends MVCAdminJspBean
                     listModelResponses.add( modelResponse );
                 }
             }
-        }
-        else
+        } else
         {
             listModelResponses = ModelResponseHome.getModelResponsesListByDomain( _strSelectedDomain );
         }
-        
+
         // SORT
         String strSortedAttributeName = request.getParameter( Parameters.SORTED_ATTRIBUTE_NAME );
 
@@ -294,18 +292,17 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         {
             return redirectView( request, VIEW_CREATE_MODELRESPONSE );
         }
-        Date today = Calendar.getInstance().getTime();  
-        _modelResponse.setDateUpdate(df.format(today));
-        _modelResponse.setFirstName(getUser( ).getFirstName());
-        _modelResponse.setLastName(getUser( ).getLastName());
-        
+        Date today = Calendar.getInstance( ).getTime( );
+        _modelResponse.setDateUpdate( df.format( today ) );
+        _modelResponse.setFirstName( getUser( ).getFirstName( ) );
+        _modelResponse.setLastName( getUser( ).getLastName( ) );
+
         ModelResponseHome.create( _modelResponse );
 
         try
         {
             _modelResponseIndexer.add( _modelResponse );
-        }
-        catch( IOException ex )
+        } catch ( IOException ex )
         {
             AppLogService.error( "\n Ticketing - TypicalResponseJspBean : can't add index odel response", ex );
         }
@@ -349,8 +346,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         try
         {
             _modelResponseIndexer.delete( ModelResponseHome.findByPrimaryKey( nId ) );
-        }
-        catch( IOException ex )
+        } catch ( IOException ex )
         {
             AppLogService.error( "\n Ticketing - TypicalResponseJspBean : can't delete index model response", ex );
         }
@@ -405,16 +401,15 @@ public class ModelResponseJspBean extends MVCAdminJspBean
         {
             return redirect( request, VIEW_MODIFY_MODELRESPONSE, PARAMETER_ID_MODELRESPONSE, _modelResponse.getId( ) );
         }
-        _modelResponse.setFirstName(getUser( ).getFirstName());
-        _modelResponse.setLastName(getUser( ).getLastName());
+        _modelResponse.setFirstName( getUser( ).getFirstName( ) );
+        _modelResponse.setLastName( getUser( ).getLastName( ) );
         ModelResponseHome.update( _modelResponse );
         addInfo( INFO_MODELRESPONSE_UPDATED, getLocale( ) );
 
         try
         {
             _modelResponseIndexer.update( _modelResponse );
-        }
-        catch( IOException ex )
+        } catch ( IOException ex )
         {
             AppLogService.error( "\n Ticketing - TypicalResponseJspBean : can't update index model response", ex );
         }

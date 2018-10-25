@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format.channel;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
 import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
 import fr.paris.lutece.util.xml.XmlUtil;
-
-import java.util.List;
 
 /**
  * XML formatter for channel resource

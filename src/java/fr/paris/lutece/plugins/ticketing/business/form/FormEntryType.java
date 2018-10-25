@@ -9,17 +9,18 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeHom
 
 public class FormEntryType
 {
-    private static final String USER_TITLE = "user_title";
-    private static final String LAST_NAME = "last_name";
-    private static final String FIRST_NAME = "first_name";
-    private static final String EMAIL = "email";
+    private static final String USER_TITLE    = "user_title";
+    private static final String LAST_NAME     = "last_name";
+    private static final String FIRST_NAME    = "first_name";
+    private static final String EMAIL         = "email";
     private static final String PHONE_NUMBERS = "phone_numbers";
-    private static final String CONTACT_MODE = "contact_mode";
-    private static final String CHANNEL = "channel";
-    private static final String COMMENT = "comment";
-    private static final String CATEGORY = "category_level_";
+    private static final String CONTACT_MODE  = "contact_mode";
+    private static final String CHANNEL       = "channel";
+    private static final String COMMENT       = "comment";
+    private static final String CATEGORY      = "category_level_";
 
-    public List<String> entryTypes() {
+    public List<String> entryTypes( )
+    {
         return Arrays.asList( USER_TITLE, LAST_NAME, FIRST_NAME, EMAIL, PHONE_NUMBERS, CONTACT_MODE, CHANNEL, COMMENT );
     }
 

@@ -33,15 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.contactmode;
 
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.validator.constraints.NotEmpty;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.constraints.Size;
+
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * This is the business class for the object ContactMode
@@ -54,16 +54,16 @@ import javax.validation.constraints.Size;
 public class ContactMode implements Serializable
 {
     private static final long serialVersionUID = 1L;
-    private static final char COMMA = ',';
+    private static final char COMMA            = ',';
 
     // Variables declarations
-    private int _nId;
+    private int               _nId;
     @NotEmpty( message = "#i18n{ticketing.validation.contactmode.code.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.contactmode.code.size}" )
-    private String _strCode;
+    private String            _strCode;
     @Size( max = 150, message = "#i18n{ticketing.validation.contactmode.required_inputs.size}" )
-    private String _strRequiredInputs;
-    private String _strConfirmationMsg;
+    private String            _strRequiredInputs;
+    private String            _strConfirmationMsg;
 
     /**
      * Returns the Id

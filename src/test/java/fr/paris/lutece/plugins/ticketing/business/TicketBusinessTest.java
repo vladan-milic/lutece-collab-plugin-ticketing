@@ -40,33 +40,33 @@ import fr.paris.lutece.test.LuteceTestCase;
 
 public class TicketBusinessTest extends LuteceTestCase
 {
-    private final static String REFERENCE1 = "INF20000100001";
-    private final static String REFERENCE2 = "INF20000100002";
-    private final static String GUID1 = "1234567";
-    private final static String GUID2 = "9876543";
-    private final static int IDUSERTITLE1 = 1;
-    private final static int IDUSERTITLE2 = 2;
-    private final static String USERTITLE2 = "UserTitle2";
-    private final static String FIRSTNAME1 = "Firstname1";
-    private final static String FIRSTNAME2 = "Firstname2";
-    private final static String LASTNAME1 = "Lastname1";
-    private final static String LASTNAME2 = "Lastname2";
-    private final static String EMAIL1 = "Email1";
-    private final static String EMAIL2 = "Email2";
-    private final static String FIXEDPHONENUMBER1 = "0123456789";
-    private final static String FIXEDPHONENUMBER2 = "0198765432";
+    private final static String REFERENCE1         = "INF20000100001";
+    private final static String REFERENCE2         = "INF20000100002";
+    private final static String GUID1              = "1234567";
+    private final static String GUID2              = "9876543";
+    private final static int    IDUSERTITLE1       = 1;
+    private final static int    IDUSERTITLE2       = 2;
+    private final static String USERTITLE2         = "UserTitle2";
+    private final static String FIRSTNAME1         = "Firstname1";
+    private final static String FIRSTNAME2         = "Firstname2";
+    private final static String LASTNAME1          = "Lastname1";
+    private final static String LASTNAME2          = "Lastname2";
+    private final static String EMAIL1             = "Email1";
+    private final static String EMAIL2             = "Email2";
+    private final static String FIXEDPHONENUMBER1  = "0123456789";
+    private final static String FIXEDPHONENUMBER2  = "0198765432";
     private final static String MOBILEPHONENUMBER1 = "0623456789";
     private final static String MOBILEPHONENUMBER2 = "0698765432";
-    private final static int IDTICKETCATEGORY1 = 1;
-    private final static int IDTICKETCATEGORY2 = 2;
-    private final static int CONTACTMODE1 = 1;
-    private final static int CONTACTMODE2 = 2;
-    private final static String TICKETCOMMENT1 = "TicketComment1";
-    private final static String TICKETCOMMENT2 = "TicketComment2";
-    private final static int TICKETSTATUS1 = 1;
-    private final static int TICKETSTATUS2 = 2;
-    private final static String TICKETSTATUSTEXT1 = "TicketStatusText1";
-    private final static String TICKETSTATUSTEXT2 = "TicketStatusText2";
+    private final static int    IDTICKETCATEGORY1  = 1;
+    private final static int    IDTICKETCATEGORY2  = 2;
+    private final static int    CONTACTMODE1       = 1;
+    private final static int    CONTACTMODE2       = 2;
+    private final static String TICKETCOMMENT1     = "TicketComment1";
+    private final static String TICKETCOMMENT2     = "TicketComment2";
+    private final static int    TICKETSTATUS1      = 1;
+    private final static int    TICKETSTATUS2      = 2;
+    private final static String TICKETSTATUSTEXT1  = "TicketStatusText1";
+    private final static String TICKETSTATUSTEXT2  = "TicketStatusText2";
 
     public void testBusiness( )
     {

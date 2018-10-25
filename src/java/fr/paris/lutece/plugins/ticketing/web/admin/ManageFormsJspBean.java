@@ -40,76 +40,76 @@ import fr.paris.lutece.util.url.UrlItem;
  * This class provides the user interface to manage forms ( manage, create, modify, remove )
  */
 @Controller( controllerJsp = "ManageForms.jsp", controllerPath = "jsp/admin/plugins/ticketing/admin/", right = "TICKETING_TICKETS_MANAGEMENT_FORMS" )
-public class ManageFormsJspBean extends MVCAdminJspBean {
-
+public class ManageFormsJspBean extends MVCAdminJspBean
+{
 
     /**
      * 
      */
-    private static final long serialVersionUID = 3672494350924238271L;
+    private static final long   serialVersionUID                    = 3672494350924238271L;
 
     // Templates
-    private static final String TEMPLATE_MANAGE_FORMS = "/admin/plugins/ticketing/admin/manage_forms.html";
-    //    private static final String TEMPLATE_CREATE_FORM = "/admin/plugins/ticketing/admin/create_form.html";
-    //    private static final String TEMPLATE_MODIFY_FORM = "/admin/plugins/ticketing/admin/modify_form.html";
-    private static final String TEMPLATE_EDIT_FORM = "/admin/plugins/ticketing/admin/edit_form.html";
+    private static final String TEMPLATE_MANAGE_FORMS               = "/admin/plugins/ticketing/admin/manage_forms.html";
+    // private static final String TEMPLATE_CREATE_FORM = "/admin/plugins/ticketing/admin/create_form.html";
+    // private static final String TEMPLATE_MODIFY_FORM = "/admin/plugins/ticketing/admin/modify_form.html";
+    private static final String TEMPLATE_EDIT_FORM                  = "/admin/plugins/ticketing/admin/edit_form.html";
     // Views
-    private static final String VIEW_MANAGE_FORMS = "manageForms";
-    private static final String VIEW_CREATE_FORM = "createForm";
-    private static final String VIEW_MODIFY_FORM = "modifyForm";
+    private static final String VIEW_MANAGE_FORMS                   = "manageForms";
+    private static final String VIEW_CREATE_FORM                    = "createForm";
+    private static final String VIEW_MODIFY_FORM                    = "modifyForm";
 
     // Actions
-    private static final String ACTION_CREATE_FORM = "createForm";
-    private static final String ACTION_MODIFY_FORM = "modifyForm";
-    private static final String ACTION_REMOVE_FORM = "removeForm";
-    private static final String ACTION_CONFIRM_REMOVE_FORM = "confirmRemoveForm";
+    private static final String ACTION_CREATE_FORM                  = "createForm";
+    private static final String ACTION_MODIFY_FORM                  = "modifyForm";
+    private static final String ACTION_REMOVE_FORM                  = "removeForm";
+    private static final String ACTION_CONFIRM_REMOVE_FORM          = "confirmRemoveForm";
 
     // Properties for page titles
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_FORMS = "ticketing.manage_form.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_FORM = "ticketing.modify_form.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_FORM = "ticketing.create_form.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MANAGE_FORMS    = "ticketing.manage_form.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MODIFY_FORM     = "ticketing.modify_form.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_CREATE_FORM     = "ticketing.create_form.pageTitle";
 
     // Properties
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
 
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_FORM = "ticketing.message.confirmRemoveForm";
+    private static final String MESSAGE_CONFIRM_REMOVE_FORM         = "ticketing.message.confirmRemoveForm";
 
     // Validations
-    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.form.attribute.";
+    private static final String VALIDATION_ATTRIBUTES_PREFIX        = "ticketing.model.entity.form.attribute.";
 
     // Markers
-    private static final String MARK_FORM_LIST = "form_list";
-    private static final String MARK_FORM = "form";
-    private static final String MARK_TICKET = "ticket";
-    private static final String MARK_FORMENTRYTYPE = "formEntryType";
-    private static final String MARK_PAGINATOR = "paginator";
-    private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
-    private static final String MARK_MIN_DEPTH = "minDepth";
-    private static final String JSP_MANAGE_FORMS = "jsp/admin/plugins/ticketing/admin/ManageForms.jsp";
+    private static final String MARK_FORM_LIST                      = "form_list";
+    private static final String MARK_FORM                           = "form";
+    private static final String MARK_TICKET                         = "ticket";
+    private static final String MARK_FORMENTRYTYPE                  = "formEntryType";
+    private static final String MARK_PAGINATOR                      = "paginator";
+    private static final String MARK_NB_ITEMS_PER_PAGE              = "nb_items_per_page";
+    private static final String MARK_MIN_DEPTH                      = "minDepth";
+    private static final String JSP_MANAGE_FORMS                    = "jsp/admin/plugins/ticketing/admin/ManageForms.jsp";
 
-    private static final String MARK_USER_TITLES_LIST = "user_titles_list";
-    private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
-    private static final String MARK_CHANNELS_LIST = "channels_list";
+    private static final String MARK_USER_TITLES_LIST               = "user_titles_list";
+    private static final String MARK_CONTACT_MODES_LIST             = "contact_modes_list";
+    private static final String MARK_CHANNELS_LIST                  = "channels_list";
     // Infos
-    private static final String INFO_FORM_CREATED = "ticketing.info.form.created";
-    private static final String INFO_FORM_UPDATED = "ticketing.info.form.updated";
-    private static final String INFO_FORM_REMOVED = "ticketing.info.form.removed";
+    private static final String INFO_FORM_CREATED                   = "ticketing.info.form.created";
+    private static final String INFO_FORM_UPDATED                   = "ticketing.info.form.updated";
+    private static final String INFO_FORM_REMOVED                   = "ticketing.info.form.removed";
 
     // Variables
-    private int _nDefaultItemsPerPage;
-    private String _strCurrentPageIndex;
-    private int _nItemsPerPage;
+    private int                 _nDefaultItemsPerPage;
+    private String              _strCurrentPageIndex;
+    private int                 _nItemsPerPage;
 
     // Parameters
-    private static final String PARAMETER_PAGE_INDEX = "page_index";
-    private static final String PARAMETER_ID_FORM = "id";
-    private static final String PARAMETER_ROLE = "roles";
+    private static final String PARAMETER_PAGE_INDEX                = "page_index";
+    private static final String PARAMETER_ID_FORM                   = "id";
+    private static final String PARAMETER_ROLE                      = "roles";
 
     // Session variable to store working values
-    private Form _form;
-    private FormEntryType _formEntryType;
-    private FormEntry _formEntry;
+    private Form                _form;
+    private FormEntryType       _formEntryType;
+    private FormEntry           _formEntry;
 
     /**
      * Return a model that contains the list and paginator infos
@@ -134,8 +134,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         String strUrl = url.getUrl( );
 
         // PAGINATOR
-        LocalizedPaginator<Form> paginator = new LocalizedPaginator<Form>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex,
-                getLocale( ) );
+        LocalizedPaginator<Form> paginator = new LocalizedPaginator<Form>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
         Map<String, Object> model = getModel( );
 
@@ -143,7 +142,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         model.put( MARK_PAGINATOR, paginator );
         model.put( strBookmark, paginator.getPageItems( ) );
 
-        return model;    	
+        return model;
     }
 
     /**
@@ -157,7 +156,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     public String getManageForms( HttpServletRequest request )
     {
         List<Form> listForms = new ArrayList<Form>( );
-        listForms = FormHome.getFormsList();
+        listForms = FormHome.getFormsList( );
 
         Map<String, Object> model = getPaginatedListModel( request, MARK_FORM_LIST, listForms, JSP_MANAGE_FORMS );
 
@@ -175,7 +174,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     public String getCreateForm( HttpServletRequest request )
     {
         _form = new Form( );
-        _formEntryType = new FormEntryType();
+        _formEntryType = new FormEntryType( );
 
         Map<String, Object> model = getModel( );
         model.put( MARK_FORM, _form );
@@ -197,7 +196,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
      * @param request
      *            The Http Request
      * @return The Jsp URL of the process result
-     * @throws IOException 
+     * @throws IOException
      */
     @Action( ACTION_CREATE_FORM )
     public String doCreateForm( HttpServletRequest request ) throws IOException
@@ -208,7 +207,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         if ( !validateBean( _form, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
             return redirectView( request, VIEW_CREATE_FORM );
-        }      
+        }
 
         FormHome.create( _form );
 
@@ -319,7 +318,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
         int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_FORM ) );
 
         _form = FormHome.findByPrimaryKey( nId );
-        _formEntryType = new FormEntryType();
+        _formEntryType = new FormEntryType( );
         Map<String, Object> model = getModel( );
         model.put( MARK_FORM, _form );
         model.put( MARK_FORMENTRYTYPE, _formEntryType );
@@ -372,15 +371,14 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
     public String doModifyForm( HttpServletRequest request )
     {
         populate( _form, request );
-        _form.setFormEntries(_form.getFormEntries());
+        _form.setFormEntries( _form.getFormEntries( ) );
         // Check constraints
         if ( !validateBean( _form, VALIDATION_ATTRIBUTES_PREFIX ) )
         {
             return redirect( request, VIEW_MODIFY_FORM, PARAMETER_ID_FORM, _form.getId( ) );
         }
 
-
-        updateFormEntries(request);
+        updateFormEntries( request );
 
         FormHome.update( _form );
 
@@ -388,6 +386,5 @@ public class ManageFormsJspBean extends MVCAdminJspBean {
 
         return redirectView( request, VIEW_MANAGE_FORMS );
     }
-
 
 }

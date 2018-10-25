@@ -85,25 +85,25 @@ public class TicketFormService implements Serializable
     /**
      * Name of the bean of the service
      */
-    public static final String BEAN_NAME = "ticketing.ticketFormService";
-    public static final int NULL_FORM_ID = 0;
+    public static final String  BEAN_NAME                      = "ticketing.ticketFormService";
+    public static final int     NULL_FORM_ID                   = 0;
 
     /**
      * Serial version UID
      */
-    private static final long serialVersionUID = 1L;
-    private static final String PARAMETER_ID_FORM = "id_form";
-    private static final String PREFIX_ATTRIBUTE = "attribute";
-    private static final String EMPTY_STRING = "";
+    private static final long   serialVersionUID               = 1L;
+    private static final String PARAMETER_ID_FORM              = "id_form";
+    private static final String PREFIX_ATTRIBUTE               = "attribute";
+    private static final String EMPTY_STRING                   = "";
 
     // marks
-    private static final String MARK_LOCALE = "locale";
-    private static final String MARK_ENTRY = "entry";
-    private static final String MARK_FIELD = "field";
-    private static final String MARK_STR_LIST_CHILDREN = "str_list_entry_children";
-    private static final String MARK_USER = "user";
-    private static final String MARK_LIST_RESPONSES = "list_responses";
-    private static final String MARK_UPLOAD_HANDLER = "uploadHandler";
+    private static final String MARK_LOCALE                    = "locale";
+    private static final String MARK_ENTRY                     = "entry";
+    private static final String MARK_FIELD                     = "field";
+    private static final String MARK_STR_LIST_CHILDREN         = "str_list_entry_children";
+    private static final String MARK_USER                      = "user";
+    private static final String MARK_LIST_RESPONSES            = "list_responses";
+    private static final String MARK_UPLOAD_HANDLER            = "uploadHandler";
 
     // Templates
     private static final String TEMPLATE_DIV_CONDITIONAL_ENTRY = "skin/plugins/ticketing/html_code_div_conditional_entry.html";
@@ -117,12 +117,12 @@ public class TicketFormService implements Serializable
      */
     public static List<Entry> getFilterInputs( int idCategory, List<Integer> listEntryId )
     {
-        List<Integer> listInputs =  new ArrayList<Integer>( );
+        List<Integer> listInputs = new ArrayList<Integer>( );
         List<TicketCategory> listCategoriesBranch = TicketCategoryService.getInstance( ).getBranchOfCategoryId( idCategory );
 
         for ( TicketCategory ticketCategory : listCategoriesBranch )
         {
-            List<Integer> listInputsByCategoryId =  TicketCategoryInputsHome.getIdInputListByCategory( ticketCategory.getId( ) );
+            List<Integer> listInputsByCategoryId = TicketCategoryInputsHome.getIdInputListByCategory( ticketCategory.getId( ) );
             listInputs.addAll( listInputsByCategoryId );
         }
 
@@ -236,8 +236,7 @@ public class TicketFormService implements Serializable
             }
 
             model.put( MARK_STR_LIST_CHILDREN, strGroupStringBuffer.toString( ) );
-        }
-        else
+        } else
         {
             if ( entry.getNumberConditionalQuestion( ) != 0 )
             {
@@ -283,8 +282,7 @@ public class TicketFormService implements Serializable
             try
             {
                 user = SecurityService.getInstance( ).getRemoteUser( request );
-            }
-            catch( UserNotSignedException e )
+            } catch ( UserNotSignedException e )
             {
                 // Nothing to do : lutece user is not mandatory
             }
@@ -294,7 +292,7 @@ public class TicketFormService implements Serializable
         List<Response> listResponse = null;
         if ( request != null )
         {
-        	Form form = FormHome.getFormFromRequest( request );
+            Form form = FormHome.getFormFromRequest( request );
             Ticket ticket = getTicketFromSession( request.getSession( ), form );
 
             if ( ticket != null )
@@ -309,7 +307,7 @@ public class TicketFormService implements Serializable
         // If the entry type is a file, we add the
         if ( entryTypeService instanceof AbstractEntryTypeUpload )
         {
-            IAsyncUploadHandler uploadHandler = ( (AbstractEntryTypeUpload) entryTypeService ).getAsynchronousUploadHandler( );
+            IAsyncUploadHandler uploadHandler = ( ( AbstractEntryTypeUpload ) entryTypeService ).getAsynchronousUploadHandler( );
             if ( listResponse != null && !listResponse.isEmpty( ) )
             {
                 for ( Response response : listResponse )
@@ -357,8 +355,7 @@ public class TicketFormService implements Serializable
 
     /**
      * Get the responses associated with an entry.<br />
-     * Return null if there is no error in the response, or return the list of errors Response created are stored the map of {@link Ticket}. The key of the map
-     * is this id of the entry, and the value the list of responses
+     * Return null if there is no error in the response, or return the list of errors Response created are stored the map of {@link Ticket}. The key of the map is this id of the entry, and the value the list of responses
      *
      * @param request
      *            the request
@@ -399,8 +396,7 @@ public class TicketFormService implements Serializable
      *            The ticket
      * @return null if there is no error in the response or the list of errors found
      */
-    private List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry, List<Response> listResponse, boolean bResponseNull,
-            Locale locale, Ticket ticket )
+    private List<GenericAttributeError> getResponseEntry( HttpServletRequest request, int nIdEntry, List<Response> listResponse, boolean bResponseNull, Locale locale, Ticket ticket )
     {
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
         Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
@@ -424,49 +420,45 @@ public class TicketFormService implements Serializable
 
                 listFormErrors.addAll( getResponseEntry( request, entryChild.getIdEntry( ), listResponseChild, false, locale, ticket ) );
             }
-        }
-        else
-            if ( !entry.getEntryType( ).getComment( ) )
+        } else if ( !entry.getEntryType( ).getComment( ) )
+        {
+            GenericAttributeError formError = null;
+
+            if ( !bResponseNull )
             {
-                GenericAttributeError formError = null;
-
-                if ( !bResponseNull )
-                {
-                    formError = EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request, listResponse, locale );
-
-                    if ( formError != null )
-                    {
-                        formError.setUrl( getEntryUrl( entry ) );
-                    }
-                }
-                else
-                {
-                    Response response = new Response( );
-                    response.setEntry( entry );
-                    listResponse.add( response );
-                }
+                formError = EntryTypeServiceManager.getEntryTypeService( entry ).getResponseData( entry, request, listResponse, locale );
 
                 if ( formError != null )
                 {
-                    entry.setError( formError );
-                    listFormErrors.add( formError );
+                    formError.setUrl( getEntryUrl( entry ) );
                 }
+            } else
+            {
+                Response response = new Response( );
+                response.setEntry( entry );
+                listResponse.add( response );
+            }
 
-                if ( entry.getNumberConditionalQuestion( ) != 0 )
+            if ( formError != null )
+            {
+                entry.setError( formError );
+                listFormErrors.add( formError );
+            }
+
+            if ( entry.getNumberConditionalQuestion( ) != 0 )
+            {
+                for ( Field field : entry.getFields( ) )
                 {
-                    for ( Field field : entry.getFields( ) )
-                    {
-                        boolean bIsFieldInResponseList = isFieldInTheResponseList( field.getIdField( ), listResponse );
+                    boolean bIsFieldInResponseList = isFieldInTheResponseList( field.getIdField( ), listResponse );
 
-                        for ( Entry conditionalEntry : field.getConditionalQuestions( ) )
-                        {
-                            List<Response> listResponseChild = new ArrayList<Response>( );
-                            listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry( ), listResponseChild, !bIsFieldInResponseList,
-                                    locale, ticket ) );
-                        }
+                    for ( Entry conditionalEntry : field.getConditionalQuestions( ) )
+                    {
+                        List<Response> listResponseChild = new ArrayList<Response>( );
+                        listFormErrors.addAll( getResponseEntry( request, conditionalEntry.getIdEntry( ), listResponseChild, !bIsFieldInResponseList, locale, ticket ) );
                     }
                 }
             }
+        }
 
         return listFormErrors;
     }
@@ -540,20 +532,17 @@ public class TicketFormService implements Serializable
                 if ( response.getField( ) != null )
                 {
                     responseRecap.addValue( response.getField( ).getTitle( ) );
-                }
-                else
+                } else
                 {
                     if ( response.getFile( ) != null )
                     {
                         responseRecap.addValue( response.getFile( ).getTitle( ) );
-                    }
-                    else
+                    } else
                     {
                         if ( response.getResponseValue( ) != null )
                         {
                             responseRecap.addValue( response.getResponseValue( ) );
-                        }
-                        else
+                        } else
                         {
                             responseRecap.addValue( EMPTY_STRING );
                         }
@@ -667,7 +656,7 @@ public class TicketFormService implements Serializable
      */
     public Ticket getValidatedTicketFromSession( HttpSession session )
     {
-        return (Ticket) session.getAttribute( TicketingConstants.SESSION_VALIDATED_TICKET_FORM );
+        return ( Ticket ) session.getAttribute( TicketingConstants.SESSION_VALIDATED_TICKET_FORM );
     }
 
     /**

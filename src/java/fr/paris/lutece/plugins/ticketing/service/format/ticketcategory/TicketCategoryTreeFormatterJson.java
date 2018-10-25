@@ -33,11 +33,10 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format.ticketcategory;
 
-import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTree;
-import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
-
 import java.util.List;
 
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTree;
+import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
 
 /**
  * JSON formatter for ticket category resource

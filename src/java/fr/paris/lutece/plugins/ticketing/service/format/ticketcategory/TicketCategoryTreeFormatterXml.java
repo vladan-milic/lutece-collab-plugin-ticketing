@@ -33,10 +33,10 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format.ticketcategory;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTree;
 import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
-
-import java.util.List;
 
 /**
  * XML formatter for ticket type resource

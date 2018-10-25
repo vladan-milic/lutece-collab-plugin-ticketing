@@ -61,18 +61,18 @@ import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
  */
 public class PersonalDataApp extends MVCApplication
 {
-    private static final long serialVersionUID = 1L;
+    private static final long     serialVersionUID               = 1L;
 
     // Session keys
-    private static final String SESSION_INIT_PERSONAL_DATA = "ticketing.personal.data.init";
-    private static final String SESSION_DELTA_PERSONAL_DATA = "ticketing.personal.data.delta";
+    private static final String   SESSION_INIT_PERSONAL_DATA     = "ticketing.personal.data.init";
+    private static final String   SESSION_DELTA_PERSONAL_DATA    = "ticketing.personal.data.delta";
 
     // map properties
-    private static final String [ ] MAP_ATTRIBUTES_IDENTITY_TOSAVE = AppPropertiesService.getProperty( "ticketing.identity.attribute.tosave" ).split( "," );
+    private static final String[] MAP_ATTRIBUTES_IDENTITY_TOSAVE = AppPropertiesService.getProperty( "ticketing.identity.attribute.tosave" ).split( "," );
 
     // IDS service
-    private static final String IDS_SERVICE_BEAN_NAME = AppPropertiesService.getProperty( "ticketing.identity.service.beanname" );
-    private IdentityService _identityService;
+    private static final String   IDS_SERVICE_BEAN_NAME          = AppPropertiesService.getProperty( "ticketing.identity.service.beanname" );
+    private IdentityService       _identityService;
 
     public PersonalDataApp( )
     {
@@ -119,7 +119,7 @@ public class PersonalDataApp extends MVCApplication
         {
             try
             {
-                Map<String, String> mapInitPersonalData = (Map<String, String>) request.getSession( ).getAttribute( SESSION_INIT_PERSONAL_DATA );
+                Map<String, String> mapInitPersonalData = ( Map<String, String> ) request.getSession( ).getAttribute( SESSION_INIT_PERSONAL_DATA );
                 if ( mapInitPersonalData != null )
                 {
                     for ( String strAttrKeyToSave : MAP_ATTRIBUTES_IDENTITY_TOSAVE )
@@ -131,8 +131,7 @@ public class PersonalDataApp extends MVCApplication
                         }
                     }
                 }
-            }
-            catch( ClassCastException e )
+            } catch ( ClassCastException e )
             {
                 // do nothing, object in session should be map<string,string>
                 AppLogService.error( "error while convert session object " + SESSION_INIT_PERSONAL_DATA + " to map", e );
@@ -157,14 +156,12 @@ public class PersonalDataApp extends MVCApplication
         {
             try
             {
-                Map<String, String> mapDeltaPersonalData = (Map<String, String>) (Map<String, String>) request.getSession( ).getAttribute(
-                        SESSION_DELTA_PERSONAL_DATA );
+                Map<String, String> mapDeltaPersonalData = ( Map<String, String> ) ( Map<String, String> ) request.getSession( ).getAttribute( SESSION_DELTA_PERSONAL_DATA );
                 if ( mapDeltaPersonalData != null && mapDeltaPersonalData.size( ) > 0 )
                 {
                     jsonMap.put( "delta", true );
                 }
-            }
-            catch( ClassCastException e )
+            } catch ( ClassCastException e )
             {
                 // do nothing, object in session should be map<string,string>
                 AppLogService.error( "error while convert session object " + SESSION_DELTA_PERSONAL_DATA + " to map", e );
@@ -188,9 +185,8 @@ public class PersonalDataApp extends MVCApplication
             Map<String, String> mapDeltaPersonalData = new HashMap<String, String>( );
             try
             {
-                mapDeltaPersonalData = (Map<String, String>) request.getSession( ).getAttribute( SESSION_DELTA_PERSONAL_DATA );
-            }
-            catch( ClassCastException e )
+                mapDeltaPersonalData = ( Map<String, String> ) request.getSession( ).getAttribute( SESSION_DELTA_PERSONAL_DATA );
+            } catch ( ClassCastException e )
             {
                 // do nothing, object in session should be map<string,string>
                 AppLogService.error( "error while convert session object " + SESSION_DELTA_PERSONAL_DATA + " to map", e );
@@ -229,8 +225,7 @@ public class PersonalDataApp extends MVCApplication
                     _identityService.updateIdentity( identityChangeDto, null );
                     request.getSession( ).removeAttribute( SESSION_DELTA_PERSONAL_DATA );
                     request.getSession( ).removeAttribute( SESSION_INIT_PERSONAL_DATA );
-                }
-                catch( Exception e )
+                } catch ( Exception e )
                 {
                     // do nothing, just log
                     AppLogService.error( "Error occur while save data to identityStore", e );

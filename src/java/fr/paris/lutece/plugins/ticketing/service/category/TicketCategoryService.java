@@ -451,8 +451,7 @@ public class TicketCategoryService
         {
             TicketCategory domainCategory = ticketCategory.getBranch( ).get( depth );
             return domainCategory;
-        }
-        catch ( IndexOutOfBoundsException e )
+        } catch ( IndexOutOfBoundsException e )
         {
             return null;
         }

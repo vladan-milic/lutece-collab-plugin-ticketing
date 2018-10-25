@@ -80,35 +80,35 @@ import fr.paris.lutece.portal.web.constants.Messages;
 public class TicketViewJspBean extends WorkflowCapableJspBean
 {
     // Templates
-    private static final String TEMPLATE_VIEW_TICKET_DETAILS = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "view_ticket_details.html";
+    private static final String                     TEMPLATE_VIEW_TICKET_DETAILS           = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "view_ticket_details.html";
 
     // Markers
-    private static final String MARK_PRIORITY = "priority";
-    private static final String MARK_CRITICALITY = "criticality";
-    private static final String MARK_HISTORY = "history";
-    private static final String MARK_USER_FACTORY = "user_factory";
+    private static final String                     MARK_PRIORITY                          = "priority";
+    private static final String                     MARK_CRITICALITY                       = "criticality";
+    private static final String                     MARK_HISTORY                           = "history";
+    private static final String                     MARK_USER_FACTORY                      = "user_factory";
 
     // Properties
-    private static final String PROPERTY_PAGE_TITLE_TICKET_DETAILS = "ticketing.view_ticket.pageTitle";
+    private static final String                     PROPERTY_PAGE_TITLE_TICKET_DETAILS     = "ticketing.view_ticket.pageTitle";
 
     // Views
-    private static final String VIEW_DETAILS = "ticketDetails";
+    private static final String                     VIEW_DETAILS                           = "ticketDetails";
 
     // Actions
-    private static final String ACTION_DETAILS_FROM_REFERENCE = "ticketReference";
+    private static final String                     ACTION_DETAILS_FROM_REFERENCE          = "ticketReference";
 
     // Other constants
-    private static final long serialVersionUID = 1L;
-    private static final String TICKET_NOT_EXIST_REDIRECT_URL = TicketingConstants.ADMIN_CONTROLLLER_PATH + TicketingConstants.JSP_MANAGE_TICKETS;
-    private static final String CONTENT_POST_PROCESSORS_LIST_BEAN_NAME = "workflow.commentContentPostProcessors.list";
+    private static final long                       serialVersionUID                       = 1L;
+    private static final String                     TICKET_NOT_EXIST_REDIRECT_URL          = TicketingConstants.ADMIN_CONTROLLLER_PATH + TicketingConstants.JSP_MANAGE_TICKETS;
+    private static final String                     CONTENT_POST_PROCESSORS_LIST_BEAN_NAME = "workflow.commentContentPostProcessors.list";
 
     // Session keys
-    private static boolean _bAvatarAvailable = ( PluginService.getPlugin( TicketingConstants.PLUGIN_AVATAR ) != null );
+    private static boolean                          _bAvatarAvailable                      = ( PluginService.getPlugin( TicketingConstants.PLUGIN_AVATAR ) != null );
 
     // Variable
-    private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
-    private final ITicketReferenceService _ticketReferenceService = SpringContextService.getBean( ITicketReferenceService.BEAN_NAME );
-    private static final List<ContentPostProcessor> _listContentPostProcessors = SpringContextService.getBean( CONTENT_POST_PROCESSORS_LIST_BEAN_NAME );
+    private final TicketFormService                 _ticketFormService                     = SpringContextService.getBean( TicketFormService.BEAN_NAME );
+    private final ITicketReferenceService           _ticketReferenceService                = SpringContextService.getBean( ITicketReferenceService.BEAN_NAME );
+    private static final List<ContentPostProcessor> _listContentPostProcessors             = SpringContextService.getBean( CONTENT_POST_PROCESSORS_LIST_BEAN_NAME );
 
     /**
      * Gets the Details tab of the Ticket View
@@ -127,15 +127,13 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         if ( StringUtils.isBlank( strRedirectUrl ) )
         {
             strRedirectUrl = TICKET_NOT_EXIST_REDIRECT_URL;
-        }
-        else
+        } else
         {
-            String [ ] strArraySplitQuery = strRedirectUrl.split( SessionFilter.PARAM_RETURN_URL + TicketingConstants.EQUAL_SYMBOL );
+            String[] strArraySplitQuery = strRedirectUrl.split( SessionFilter.PARAM_RETURN_URL + TicketingConstants.EQUAL_SYMBOL );
             if ( strArraySplitQuery.length > 1 )
             {
-                strRedirectUrl = strArraySplitQuery [1];
-            }
-            else
+                strRedirectUrl = strArraySplitQuery[1];
+            } else
             {
                 String strRedirectSessionUrl = RequestUtils.getParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_RETURN_URL );
                 strRedirectUrl = ( StringUtils.isNotBlank( strRedirectSessionUrl ) ) ? strRedirectSessionUrl : TICKET_NOT_EXIST_REDIRECT_URL;
@@ -147,19 +145,16 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         try
         {
             nIdTicket = Integer.parseInt( strIdTicket );
-        }
-        catch( NumberFormatException exception )
+        } catch ( NumberFormatException exception )
         {
-            return redirect( request,
-                    AdminMessageService.getMessageUrl( request, TicketingConstants.MESSAGE_ERROR_TICKET_NOT_EXISTS, strRedirectUrl, AdminMessage.TYPE_STOP ) );
+            return redirect( request, AdminMessageService.getMessageUrl( request, TicketingConstants.MESSAGE_ERROR_TICKET_NOT_EXISTS, strRedirectUrl, AdminMessage.TYPE_STOP ) );
         }
 
         // Check if the ticket is present in the database
         Ticket ticket = TicketHome.findByPrimaryKey( nIdTicket );
         if ( ticket == null )
         {
-            return redirect( request,
-                    AdminMessageService.getMessageUrl( request, TicketingConstants.MESSAGE_ERROR_TICKET_NOT_EXISTS, strRedirectUrl, AdminMessage.TYPE_STOP ) );
+            return redirect( request, AdminMessageService.getMessageUrl( request, TicketingConstants.MESSAGE_ERROR_TICKET_NOT_EXISTS, strRedirectUrl, AdminMessage.TYPE_STOP ) );
         }
 
         // check user rights
@@ -193,7 +188,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
 
         // navigation in authorized tickets : next <-> previous
         @SuppressWarnings( "unchecked" )
-        List<Integer> listTickets = (List<Integer>) request.getSession( ).getAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION );
+        List<Integer> listTickets = ( List<Integer> ) request.getSession( ).getAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION );
 
         ModelUtils.storeNavigationBetweenTickets( nIdTicket, listTickets, model );
 
@@ -230,11 +225,10 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
             {
                 TicketIndexer ticketIndexer = new TicketIndexer( );
                 ticketIndexer.indexTicket( ticket );
-            }
-            catch( TicketIndexerException ticketIndexerException )
+            } catch ( TicketIndexerException ticketIndexerException )
             {
-                //addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
-                AppLogService.error(TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, ticketIndexerException);
+                // addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
+                AppLogService.error( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, ticketIndexerException );
 
                 // The indexation of the Ticket fail, we will store the Ticket in the table for the daemon
                 IndexerActionHome.create( TicketIndexerActionUtil.createIndexerActionFromTicket( ticket ) );
@@ -248,8 +242,7 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
         {
             addInfo( messageInfo );
             fillCommons( model );
-        }
-        else
+        } else
         {
             messageInfo = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_MODIFY_ACTION_MESSAGE_INFO );
             if ( StringUtils.isNotEmpty( messageInfo ) )
@@ -292,28 +285,27 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
     @Override
     public String redirectAfterWorkflowAction( HttpServletRequest request )
     {
-        String strRedirect = ( request.getAttribute( TicketingConstants.ATTRIBUTE_REDIRECT_AFTER_WORKFLOW_ACTION ) != null ) ? (String) request
-                .getAttribute( TicketingConstants.ATTRIBUTE_REDIRECT_AFTER_WORKFLOW_ACTION ) : request
-                .getParameter( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION );
+        String strRedirect = ( request.getAttribute( TicketingConstants.ATTRIBUTE_REDIRECT_AFTER_WORKFLOW_ACTION ) != null )
+                ? ( String ) request.getAttribute( TicketingConstants.ATTRIBUTE_REDIRECT_AFTER_WORKFLOW_ACTION )
+                : request.getParameter( TicketingConstants.PARAMETER_REDIRECT_AFTER_WORKFLOW_ACTION );
 
-                String strRedirectUrl = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_RETURN_URL );
+        String strRedirectUrl = RequestUtils.popParameter( request, RequestUtils.SCOPE_SESSION, TicketingConstants.ATTRIBUTE_RETURN_URL );
 
-                if ( StringUtils.isNotEmpty( strRedirect ) && StringUtils.isNotEmpty( strRedirectUrl ) )
+        if ( StringUtils.isNotEmpty( strRedirect ) && StringUtils.isNotEmpty( strRedirectUrl ) )
+        {
+            return redirect( request, strRedirectUrl );
+        } else
+        {
+            if ( StringUtils.isNotEmpty( strRedirect ) )
+            {
+                if ( _mapRedirectUrl.containsKey( strRedirect ) )
                 {
-                    return redirect( request, strRedirectUrl );
+                    return redirect( request, _mapRedirectUrl.get( strRedirect ) );
                 }
-                else
-                {
-                    if ( StringUtils.isNotEmpty( strRedirect ) )
-                    {
-                        if ( _mapRedirectUrl.containsKey( strRedirect ) )
-                        {
-                            return redirect( request, _mapRedirectUrl.get( strRedirect ) );
-                        }
-                    }
-                }
+            }
+        }
 
-                return defaultRedirect( request );
+        return defaultRedirect( request );
     }
 
     /**

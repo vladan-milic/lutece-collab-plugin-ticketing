@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.resourcehistory;
 
-import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
-
 import java.util.Map;
+
+import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 
 /**
  * IResourceHistoryInformationService

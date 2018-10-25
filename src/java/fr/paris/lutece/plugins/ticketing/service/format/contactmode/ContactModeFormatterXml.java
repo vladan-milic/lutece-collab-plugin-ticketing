@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format.contactmode;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
 import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
 import fr.paris.lutece.plugins.ticketing.service.format.ITicketingFormatter;
 import fr.paris.lutece.util.xml.XmlUtil;
-
-import java.util.List;
 
 /**
  * XML formatter for contact mode resource

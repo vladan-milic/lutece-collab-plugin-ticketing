@@ -33,6 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitle;
 import fr.paris.lutece.plugins.ticketing.business.usertitle.UserTitleHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
@@ -42,11 +47,6 @@ import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.url.UrlItem;
-
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * This class provides the user interface to manage UserTitle features ( manage, create, modify, remove )
@@ -58,46 +58,46 @@ public class UserTitleJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_USERTITLES = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_user_titles.html";
-    private static final String TEMPLATE_CREATE_USERTITLE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_user_title.html";
-    private static final String TEMPLATE_MODIFY_USERTITLE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_user_title.html";
+    private static final String TEMPLATE_MANAGE_USERTITLES            = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_user_titles.html";
+    private static final String TEMPLATE_CREATE_USERTITLE             = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_user_title.html";
+    private static final String TEMPLATE_MODIFY_USERTITLE             = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_user_title.html";
 
     // Parameters
-    private static final String PARAMETER_ID_USERTITLE = "id";
+    private static final String PARAMETER_ID_USERTITLE                = "id";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_USERTITLES = "ticketing.manage_usertitles.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_USERTITLE = "ticketing.modify_usertitle.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_USERTITLE = "ticketing.create_usertitle.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MODIFY_USERTITLE  = "ticketing.modify_usertitle.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_CREATE_USERTITLE  = "ticketing.create_usertitle.pageTitle";
 
     // Markers
-    private static final String MARK_USERTITLE_LIST = "usertitle_list";
-    private static final String MARK_USERTITLE = "usertitle";
-    private static final String JSP_MANAGE_USERTITLES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageUserTitles.jsp";
+    private static final String MARK_USERTITLE_LIST                   = "usertitle_list";
+    private static final String MARK_USERTITLE                        = "usertitle";
+    private static final String JSP_MANAGE_USERTITLES                 = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageUserTitles.jsp";
 
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_USERTITLE = "ticketing.message.confirmRemoveUserTitle";
-    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.usertitle.attribute.";
+    private static final String MESSAGE_CONFIRM_REMOVE_USERTITLE      = "ticketing.message.confirmRemoveUserTitle";
+    private static final String VALIDATION_ATTRIBUTES_PREFIX          = "ticketing.model.entity.usertitle.attribute.";
 
     // Views
-    private static final String VIEW_MANAGE_USERTITLES = "manageUserTitles";
-    private static final String VIEW_CREATE_USERTITLE = "createUserTitle";
-    private static final String VIEW_MODIFY_USERTITLE = "modifyUserTitle";
+    private static final String VIEW_MANAGE_USERTITLES                = "manageUserTitles";
+    private static final String VIEW_CREATE_USERTITLE                 = "createUserTitle";
+    private static final String VIEW_MODIFY_USERTITLE                 = "modifyUserTitle";
 
     // Actions
-    private static final String ACTION_CREATE_USERTITLE = "createUserTitle";
-    private static final String ACTION_MODIFY_USERTITLE = "modifyUserTitle";
-    private static final String ACTION_REMOVE_USERTITLE = "removeUserTitle";
-    private static final String ACTION_CONFIRM_REMOVE_USERTITLE = "confirmRemoveUserTitle";
+    private static final String ACTION_CREATE_USERTITLE               = "createUserTitle";
+    private static final String ACTION_MODIFY_USERTITLE               = "modifyUserTitle";
+    private static final String ACTION_REMOVE_USERTITLE               = "removeUserTitle";
+    private static final String ACTION_CONFIRM_REMOVE_USERTITLE       = "confirmRemoveUserTitle";
 
     // Infos
-    private static final String INFO_USERTITLE_CREATED = "ticketing.info.usertitle.created";
-    private static final String INFO_USERTITLE_UPDATED = "ticketing.info.usertitle.updated";
-    private static final String INFO_USERTITLE_REMOVED = "ticketing.info.usertitle.removed";
-    private static final long serialVersionUID = 1L;
+    private static final String INFO_USERTITLE_CREATED                = "ticketing.info.usertitle.created";
+    private static final String INFO_USERTITLE_UPDATED                = "ticketing.info.usertitle.updated";
+    private static final String INFO_USERTITLE_REMOVED                = "ticketing.info.usertitle.removed";
+    private static final long   serialVersionUID                      = 1L;
 
     // Session variable to store working values
-    private UserTitle _usertitle;
+    private UserTitle           _usertitle;
 
     /**
      * Build the Manage View
@@ -111,7 +111,7 @@ public class UserTitleJspBean extends ManageAdminTicketingJspBean
     {
         _usertitle = null;
 
-        List<UserTitle> listUserTitles = (List<UserTitle>) UserTitleHome.getUserTitlesList( );
+        List<UserTitle> listUserTitles = ( List<UserTitle> ) UserTitleHome.getUserTitlesList( );
         Map<String, Object> model = getPaginatedListModel( request, MARK_USERTITLE_LIST, listUserTitles, JSP_MANAGE_USERTITLES );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_USERTITLES, TEMPLATE_MANAGE_USERTITLES, model );

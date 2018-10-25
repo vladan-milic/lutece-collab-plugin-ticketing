@@ -33,6 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
@@ -44,11 +49,6 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.url.UrlItem;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * This class provides the user interface to manage ContactMode features ( manage, create, modify, remove )
  */
@@ -59,46 +59,46 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_CONTACTMODES = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_contact_modes.html";
-    private static final String TEMPLATE_CREATE_CONTACTMODE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_contact_mode.html";
-    private static final String TEMPLATE_MODIFY_CONTACTMODE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_contact_mode.html";
+    private static final String TEMPLATE_MANAGE_CONTACTMODES            = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_contact_modes.html";
+    private static final String TEMPLATE_CREATE_CONTACTMODE             = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_contact_mode.html";
+    private static final String TEMPLATE_MODIFY_CONTACTMODE             = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_contact_mode.html";
 
     // Parameters
-    private static final String PARAMETER_ID_CONTACTMODE = "id";
+    private static final String PARAMETER_ID_CONTACTMODE                = "id";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_CONTACTMODES = "ticketing.manage_contactmodes.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_CONTACTMODE = "ticketing.modify_contactmode.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_CONTACTMODE = "ticketing.create_contactmode.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MODIFY_CONTACTMODE  = "ticketing.modify_contactmode.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_CREATE_CONTACTMODE  = "ticketing.create_contactmode.pageTitle";
 
     // Markers
-    private static final String MARK_CONTACTMODE_LIST = "contactmode_list";
-    private static final String MARK_CONTACTMODE = "contactmode";
-    private static final String JSP_MANAGE_CONTACTMODES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageContactModes.jsp";
+    private static final String MARK_CONTACTMODE_LIST                   = "contactmode_list";
+    private static final String MARK_CONTACTMODE                        = "contactmode";
+    private static final String JSP_MANAGE_CONTACTMODES                 = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageContactModes.jsp";
 
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_CONTACTMODE = "ticketing.message.confirmRemoveContactMode";
-    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.contactmode.attribute.";
+    private static final String MESSAGE_CONFIRM_REMOVE_CONTACTMODE      = "ticketing.message.confirmRemoveContactMode";
+    private static final String VALIDATION_ATTRIBUTES_PREFIX            = "ticketing.model.entity.contactmode.attribute.";
 
     // Views
-    private static final String VIEW_MANAGE_CONTACTMODES = "manageContactModes";
-    private static final String VIEW_CREATE_CONTACTMODE = "createContactMode";
-    private static final String VIEW_MODIFY_CONTACTMODE = "modifyContactMode";
+    private static final String VIEW_MANAGE_CONTACTMODES                = "manageContactModes";
+    private static final String VIEW_CREATE_CONTACTMODE                 = "createContactMode";
+    private static final String VIEW_MODIFY_CONTACTMODE                 = "modifyContactMode";
 
     // Actions
-    private static final String ACTION_CREATE_CONTACTMODE = "createContactMode";
-    private static final String ACTION_MODIFY_CONTACTMODE = "modifyContactMode";
-    private static final String ACTION_REMOVE_CONTACTMODE = "removeContactMode";
-    private static final String ACTION_CONFIRM_REMOVE_CONTACTMODE = "confirmRemoveContactMode";
+    private static final String ACTION_CREATE_CONTACTMODE               = "createContactMode";
+    private static final String ACTION_MODIFY_CONTACTMODE               = "modifyContactMode";
+    private static final String ACTION_REMOVE_CONTACTMODE               = "removeContactMode";
+    private static final String ACTION_CONFIRM_REMOVE_CONTACTMODE       = "confirmRemoveContactMode";
 
     // Infos
-    private static final String INFO_CONTACTMODE_CREATED = "ticketing.info.contactmode.created";
-    private static final String INFO_CONTACTMODE_UPDATED = "ticketing.info.contactmode.updated";
-    private static final String INFO_CONTACTMODE_REMOVED = "ticketing.info.contactmode.removed";
-    private static final long serialVersionUID = 1L;
+    private static final String INFO_CONTACTMODE_CREATED                = "ticketing.info.contactmode.created";
+    private static final String INFO_CONTACTMODE_UPDATED                = "ticketing.info.contactmode.updated";
+    private static final String INFO_CONTACTMODE_REMOVED                = "ticketing.info.contactmode.removed";
+    private static final long   serialVersionUID                        = 1L;
 
     // Session variable to store working values
-    private ContactMode _contactmode;
+    private ContactMode         _contactmode;
 
     /**
      * Build the Manage View
@@ -112,7 +112,7 @@ public class ContactModeJspBean extends ManageAdminTicketingJspBean
     {
         _contactmode = null;
 
-        List<ContactMode> listContactModes = (List<ContactMode>) ContactModeHome.getContactModesList( );
+        List<ContactMode> listContactModes = ( List<ContactMode> ) ContactModeHome.getContactModesList( );
         Map<String, Object> model = getPaginatedListModel( request, MARK_CONTACTMODE_LIST, listContactModes, JSP_MANAGE_CONTACTMODES );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_CONTACTMODES, TEMPLATE_MANAGE_CONTACTMODES, model );

@@ -27,61 +27,61 @@ import fr.paris.lutece.util.url.UrlItem;
 public class MarkingJspBean extends MVCAdminJspBean
 {
 
-    private static final long serialVersionUID = 8048541959673399437L;
+    private static final long   serialVersionUID                    = 8048541959673399437L;
 
     // Templates
-    private static final String TEMPLATE_MANAGE_MARKINGS = "/admin/plugins/ticketing/admin/manage_markings.html";
-    private static final String TEMPLATE_CREATE_MARKING = "/admin/plugins/ticketing/admin/create_marking.html";
-    private static final String TEMPLATE_MODIFY_MARKING = "/admin/plugins/ticketing/admin/modify_marking.html";
+    private static final String TEMPLATE_MANAGE_MARKINGS            = "/admin/plugins/ticketing/admin/manage_markings.html";
+    private static final String TEMPLATE_CREATE_MARKING             = "/admin/plugins/ticketing/admin/create_marking.html";
+    private static final String TEMPLATE_MODIFY_MARKING             = "/admin/plugins/ticketing/admin/modify_marking.html";
 
     // Views
-    private static final String VIEW_MANAGE_MARKINGS = "manageMarkings";
-    private static final String VIEW_CREATE_MARKING = "createMarking";
-    private static final String VIEW_MODIFY_MARKING = "modifyMarking";
+    private static final String VIEW_MANAGE_MARKINGS                = "manageMarkings";
+    private static final String VIEW_CREATE_MARKING                 = "createMarking";
+    private static final String VIEW_MODIFY_MARKING                 = "modifyMarking";
 
     // Actions
-    private static final String ACTION_CREATE_MARKING = "createMarking";
-    private static final String ACTION_MODIFY_MARKING = "modifyMarking";
-    private static final String ACTION_REMOVE_MARKING = "removeMarking";
-    private static final String ACTION_CONFIRM_REMOVE_MARKING = "confirmRemoveMarking";
+    private static final String ACTION_CREATE_MARKING               = "createMarking";
+    private static final String ACTION_MODIFY_MARKING               = "modifyMarking";
+    private static final String ACTION_REMOVE_MARKING               = "removeMarking";
+    private static final String ACTION_CONFIRM_REMOVE_MARKING       = "confirmRemoveMarking";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_MARKINGS = "ticketing.manage_marking.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_MARKING = "ticketing.modify_marking.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_MARKING = "ticketing.create_marking.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MODIFY_MARKING  = "ticketing.modify_marking.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_CREATE_MARKING  = "ticketing.create_marking.pageTitle";
 
     // Properties
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
 
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_MARKING = "ticketing.message.confirmRemoveMarking";
+    private static final String MESSAGE_CONFIRM_REMOVE_MARKING      = "ticketing.message.confirmRemoveMarking";
 
     // Validations
-    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.marking.attribute.";
+    private static final String VALIDATION_ATTRIBUTES_PREFIX        = "ticketing.model.entity.marking.attribute.";
 
     // Markers
-    private static final String MARK_MARKING_LIST = "marking_list";
-    private static final String MARK_MARKING = "marking";
-    private static final String MARK_PAGINATOR = "paginator";
-    private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
-    private static final String JSP_MANAGE_MARKINGS = "jsp/admin/plugins/ticketing/admin/ManageMarkings.jsp";
+    private static final String MARK_MARKING_LIST                   = "marking_list";
+    private static final String MARK_MARKING                        = "marking";
+    private static final String MARK_PAGINATOR                      = "paginator";
+    private static final String MARK_NB_ITEMS_PER_PAGE              = "nb_items_per_page";
+    private static final String JSP_MANAGE_MARKINGS                 = "jsp/admin/plugins/ticketing/admin/ManageMarkings.jsp";
 
     // Infos
-    private static final String INFO_MARKING_CREATED = "ticketing.info.marking.created";
-    private static final String INFO_MARKING_UPDATED = "ticketing.info.marking.updated";
-    private static final String INFO_MARKING_REMOVED = "ticketing.info.marking.removed";
+    private static final String INFO_MARKING_CREATED                = "ticketing.info.marking.created";
+    private static final String INFO_MARKING_UPDATED                = "ticketing.info.marking.updated";
+    private static final String INFO_MARKING_REMOVED                = "ticketing.info.marking.removed";
 
     // Variables
-    private int _nDefaultItemsPerPage;
-    private String _strCurrentPageIndex;
-    private int _nItemsPerPage;
+    private int                 _nDefaultItemsPerPage;
+    private String              _strCurrentPageIndex;
+    private int                 _nItemsPerPage;
 
     // Parameters
-    private static final String PARAMETER_PAGE_INDEX = "page_index";
-    private static final String PARAMETER_ID_MARKING = "id";
+    private static final String PARAMETER_PAGE_INDEX                = "page_index";
+    private static final String PARAMETER_ID_MARKING                = "id";
 
     // Session variable to store working values
-    private Marking _marking;
+    private Marking             _marking;
 
     /**
      * Return a model that contains the list and paginator infos
@@ -106,8 +106,7 @@ public class MarkingJspBean extends MVCAdminJspBean
         String strUrl = url.getUrl( );
 
         // PAGINATOR
-        LocalizedPaginator<Marking> paginator = new LocalizedPaginator<Marking>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex,
-                getLocale( ) );
+        LocalizedPaginator<Marking> paginator = new LocalizedPaginator<Marking>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
         Map<String, Object> model = getModel( );
 

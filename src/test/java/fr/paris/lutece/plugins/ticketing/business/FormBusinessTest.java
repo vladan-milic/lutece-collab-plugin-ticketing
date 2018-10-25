@@ -38,22 +38,21 @@ import fr.paris.lutece.plugins.ticketing.business.form.Form;
 import fr.paris.lutece.plugins.ticketing.business.form.FormHome;
 import fr.paris.lutece.test.LuteceTestCase;
 
-
 public class FormBusinessTest extends LuteceTestCase
 {
-    private final static String TITLE1 = "Title1";
-    private final static String TITLE2 = "Title2";
-    private final static String MESSAGE1 = "Message1";
-    private final static String MESSAGE2 = "Message2";
-    private final static String BUTTONLABEL1 = "ButtonLabel1";
-    private final static String BUTTONLABEL2 = "ButtonLabel2";
-	private final static boolean CONNECTION1 = true;
-    private final static boolean CONNECTION2 = false;
+    private final static String  TITLE1       = "Title1";
+    private final static String  TITLE2       = "Title2";
+    private final static String  MESSAGE1     = "Message1";
+    private final static String  MESSAGE2     = "Message2";
+    private final static String  BUTTONLABEL1 = "ButtonLabel1";
+    private final static String  BUTTONLABEL2 = "ButtonLabel2";
+    private final static boolean CONNECTION1  = true;
+    private final static boolean CONNECTION2  = false;
 
-    public void testBusiness(  )
+    public void testBusiness( )
     {
         // Initialize an object
-        Form form = new Form();
+        Form form = new Form( );
         form.setTitle( TITLE1 );
         form.setMessage( MESSAGE1 );
         form.setButtonLabel( BUTTONLABEL1 );
@@ -62,10 +61,10 @@ public class FormBusinessTest extends LuteceTestCase
         // Create test
         FormHome.create( form );
         Form formStored = FormHome.findByPrimaryKey( form.getId( ) );
-        assertEquals( formStored.getTitle() , form.getTitle( ) );
-        assertEquals( formStored.getMessage() , form.getMessage( ) );
-        assertEquals( formStored.getButtonLabel() , form.getButtonLabel( ) );
-        assertEquals( formStored.isConnection() , form.isConnection() );
+        assertEquals( formStored.getTitle( ), form.getTitle( ) );
+        assertEquals( formStored.getMessage( ), form.getMessage( ) );
+        assertEquals( formStored.getButtonLabel( ), form.getButtonLabel( ) );
+        assertEquals( formStored.isConnection( ), form.isConnection( ) );
 
         // Update test
         form.setTitle( TITLE2 );
@@ -74,19 +73,19 @@ public class FormBusinessTest extends LuteceTestCase
         form.setConnection( CONNECTION2 );
         FormHome.update( form );
         formStored = FormHome.findByPrimaryKey( form.getId( ) );
-        assertEquals( formStored.getTitle() , form.getTitle( ) );
-        assertEquals( formStored.getMessage() , form.getMessage( ) );
-        assertEquals( formStored.getButtonLabel() , form.getButtonLabel( ) );
-        assertEquals( formStored.isConnection() , form.isConnection( ) );
+        assertEquals( formStored.getTitle( ), form.getTitle( ) );
+        assertEquals( formStored.getMessage( ), form.getMessage( ) );
+        assertEquals( formStored.getButtonLabel( ), form.getButtonLabel( ) );
+        assertEquals( formStored.isConnection( ), form.isConnection( ) );
 
         // List test
-        FormHome.getFormsList();
+        FormHome.getFormsList( );
 
         // Delete test
         FormHome.remove( form.getId( ) );
         formStored = FormHome.findByPrimaryKey( form.getId( ) );
         assertNull( formStored );
-        
+
     }
 
 }

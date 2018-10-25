@@ -33,6 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.config;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.service.util.PluginConfigurationService;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
@@ -53,16 +63,6 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * This class provides the user interface to manage the plugin configuration
  */
@@ -71,64 +71,64 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 {
     // //////////////////////////////////////////////////////////////////////////
     // Constants
-    protected static final String CONTROLLER_RIGHT = "TICKETING_PLUGIN_CONFIGURATION";
+    protected static final String  CONTROLLER_RIGHT                                     = "TICKETING_PLUGIN_CONFIGURATION";
 
     // templates
-    private static final String TEMPLATE_CONFIGURE_PLUGIN = TicketingConstants.TEMPLATE_ADMIN_PATH + "config/configure_plugin.html";
-    private static final String TEMPLATE_WORKFLOW_RELATED_PROPERTIES = TicketingConstants.TEMPLATE_ADMIN_PATH + "config/workflow_related_properties.html";
+    private static final String    TEMPLATE_CONFIGURE_PLUGIN                            = TicketingConstants.TEMPLATE_ADMIN_PATH + "config/configure_plugin.html";
+    private static final String    TEMPLATE_WORKFLOW_RELATED_PROPERTIES                 = TicketingConstants.TEMPLATE_ADMIN_PATH + "config/workflow_related_properties.html";
 
     // Parameters
-    private static final String PARAMETER_WORKFLOW_ID = "id_workflow";
-    private static final String PARAMETER_STATE_CLOSED_ID = "id_state_closed";
-    private static final String PARAMETER_STATES_SELECTED = "states_selected";
-    private static final String PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE = "states_selected_for_role_role";
-    private static final String PARAMETER_STATES_SELECTED_FOR_ROLE_STATES_PREFIX = "states_selected_for_role_states_";
-    private static final String PARAMETER_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME = "actions_filtered_when_assigned_to_me";
-    private static final String PARAMETER_ADMIN_USER_ID_FRONT = "admin_user_id_front";
-    private static final String PARAMETER_CHANNEL_ID_FRONT = "channel_id_front";
+    private static final String    PARAMETER_WORKFLOW_ID                                = "id_workflow";
+    private static final String    PARAMETER_STATE_CLOSED_ID                            = "id_state_closed";
+    private static final String    PARAMETER_STATES_SELECTED                            = "states_selected";
+    private static final String    PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE              = "states_selected_for_role_role";
+    private static final String    PARAMETER_STATES_SELECTED_FOR_ROLE_STATES_PREFIX     = "states_selected_for_role_states_";
+    private static final String    PARAMETER_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME       = "actions_filtered_when_assigned_to_me";
+    private static final String    PARAMETER_ADMIN_USER_ID_FRONT                        = "admin_user_id_front";
+    private static final String    PARAMETER_CHANNEL_ID_FRONT                           = "channel_id_front";
 
     // Properties for page titles
 
     // Marks
-    private static final String MARK_WORKFLOW_ID = PARAMETER_WORKFLOW_ID;
-    private static final String MARK_LIST_WORKFLOWS = "list_workflows";
-    private static final String MARK_WORKFLOW_RELATED_PROPERTIES = "workflow_related_properties";
-    private static final String MARK_STATE_CLOSED_ID = PARAMETER_STATE_CLOSED_ID;
-    private static final String MARK_STATES = "states";
-    private static final String MARK_STATES_SELECTED = PARAMETER_STATES_SELECTED;
-    private static final String MARK_STATES_SELECTED_FOR_ROLES = "states_selected_for_roles";
-    private static final String MARK_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME = PARAMETER_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME;
-    private static final String MARK_ACTIONS = "actions";
-    private static final String MARK_ADMIN_USERS = "admin_users";
-    private static final String MARK_ADMIN_USER_ID_FRONT = PARAMETER_ADMIN_USER_ID_FRONT;
-    private static final String MARK_CHANNELS = "channels";
-    private static final String MARK_CHANNEL_ID_FRONT = PARAMETER_CHANNEL_ID_FRONT;
+    private static final String    MARK_WORKFLOW_ID                                     = PARAMETER_WORKFLOW_ID;
+    private static final String    MARK_LIST_WORKFLOWS                                  = "list_workflows";
+    private static final String    MARK_WORKFLOW_RELATED_PROPERTIES                     = "workflow_related_properties";
+    private static final String    MARK_STATE_CLOSED_ID                                 = PARAMETER_STATE_CLOSED_ID;
+    private static final String    MARK_STATES                                          = "states";
+    private static final String    MARK_STATES_SELECTED                                 = PARAMETER_STATES_SELECTED;
+    private static final String    MARK_STATES_SELECTED_FOR_ROLES                       = "states_selected_for_roles";
+    private static final String    MARK_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME            = PARAMETER_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME;
+    private static final String    MARK_ACTIONS                                         = "actions";
+    private static final String    MARK_ADMIN_USERS                                     = "admin_users";
+    private static final String    MARK_ADMIN_USER_ID_FRONT                             = PARAMETER_ADMIN_USER_ID_FRONT;
+    private static final String    MARK_CHANNELS                                        = "channels";
+    private static final String    MARK_CHANNEL_ID_FRONT                                = PARAMETER_CHANNEL_ID_FRONT;
 
     // Properties
-    private static final String PROPERTY_PAGE_TITLE_CONFIGURE_PLUGIN = "ticketing.configure_plugin.pageTitle";
+    private static final String    PROPERTY_PAGE_TITLE_CONFIGURE_PLUGIN                 = "ticketing.configure_plugin.pageTitle";
 
     // Views
-    private static final String VIEW_MANAGE_CONFIGURATION = "getManageConfiguration";
+    private static final String    VIEW_MANAGE_CONFIGURATION                            = "getManageConfiguration";
 
     // Actions
-    private static final String ACTION_MODIFIY_CONFIGURATION = "modifyConfiguration";
-    private static final String ACTION_BUILD_WORKFLOW_RELATED_PROPERTIES = "buildWorkflowRelatedProperties";
+    private static final String    ACTION_MODIFIY_CONFIGURATION                         = "modifyConfiguration";
+    private static final String    ACTION_BUILD_WORKFLOW_RELATED_PROPERTIES             = "buildWorkflowRelatedProperties";
 
     // Infos
-    private static final String INFO_CONFIGURATION_SAVED = "ticketing.info.configuration.saved";
+    private static final String    INFO_CONFIGURATION_SAVED                             = "ticketing.info.configuration.saved";
 
     // Errors
-    private static final String ERROR_CONFIGURATION_SAVE_ABORTED = "ticketing.error.configuration.save.aborted";
-    private static final String ERROR_CONFIGURATION_STATES_SELECTED_FOR_ROLES_DOUBLE = "ticketing.error.configuration.states.selected.fro.roles.double";
+    private static final String    ERROR_CONFIGURATION_SAVE_ABORTED                     = "ticketing.error.configuration.save.aborted";
+    private static final String    ERROR_CONFIGURATION_STATES_SELECTED_FOR_ROLES_DOUBLE = "ticketing.error.configuration.states.selected.fro.roles.double";
 
     /**
      * Generated serial id
      */
-    private static final long serialVersionUID = -1920398324341843326L;
+    private static final long      serialVersionUID                                     = -1920398324341843326L;
 
     // Services
-    private static WorkflowService _workflowService = WorkflowService.getInstance( );
-    private static IActionService _actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
+    private static WorkflowService _workflowService                                     = WorkflowService.getInstance( );
+    private static IActionService  _actionService                                       = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
 
     /**
      * Build the Manage View
@@ -167,8 +167,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         {
             saveWorkflowProperties( request );
             saveFrontOfficeProperties( request );
-        }
-        catch( Exception e )
+        } catch ( Exception e )
         {
             AppLogService.error( e );
             addError( ERROR_CONFIGURATION_SAVE_ABORTED, getLocale( ) );
@@ -197,8 +196,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         try
         {
             strResult = buildWorkflowRelatedProperties( Integer.parseInt( strIdWorkflow ), getLocale( ) );
-        }
-        catch( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
             AppLogService.error( e );
         }
@@ -277,8 +275,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
             model.put( MARK_STATES_SELECTED, PluginConfigurationService.getStringList( PluginConfigurationService.PROPERTY_STATES_SELECTED, null ) );
 
             // Selected states for roles
-            Map<String, List<String>> mapStatesForRoles = PluginConfigurationService.getStringListByPrefix(
-                    PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX, null );
+            Map<String, List<String>> mapStatesForRoles = PluginConfigurationService.getStringListByPrefix( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX, null );
 
             if ( mapStatesForRoles != null )
             {
@@ -305,8 +302,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
             model.put( MARK_ACTIONS, referenceListActions );
 
             // Filtered actions when assigned to me
-            model.put( MARK_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME,
-                    PluginConfigurationService.getStringList( PluginConfigurationService.PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME, null ) );
+            model.put( MARK_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME, PluginConfigurationService.getStringList( PluginConfigurationService.PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME, null ) );
 
             HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_WORKFLOW_RELATED_PROPERTIES, locale, model );
 
@@ -343,7 +339,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
                 listStateSelected = RequestUtils.extractIdList( request, PARAMETER_STATES_SELECTED );
 
                 // Manage selected states for roles
-                String [ ] listStateSelectedForRoleRoles = request.getParameterValues( PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE );
+                String[] listStateSelectedForRoleRoles = request.getParameterValues( PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE );
 
                 if ( listStateSelectedForRoleRoles != null )
                 {
@@ -351,11 +347,9 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
                     {
                         if ( !StringUtils.isEmpty( strRole ) )
                         {
-                            List<Integer> listStateSelectedForRoleIds = RequestUtils.extractIdList( request, PARAMETER_STATES_SELECTED_FOR_ROLE_STATES_PREFIX
-                                    + strRole );
+                            List<Integer> listStateSelectedForRoleIds = RequestUtils.extractIdList( request, PARAMETER_STATES_SELECTED_FOR_ROLE_STATES_PREFIX + strRole );
 
-                            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX + strRole,
-                                    listStateSelectedForRoleIds );
+                            PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX + strRole, listStateSelectedForRoleIds );
                         }
                     }
                 }
@@ -451,7 +445,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     {
         boolean bIsValidated = true;
 
-        String [ ] listStateSelectedForRoleRoles = request.getParameterValues( PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE );
+        String[] listStateSelectedForRoleRoles = request.getParameterValues( PARAMETER_STATES_SELECTED_FOR_ROLE_ROLE );
 
         if ( listStateSelectedForRoleRoles != null )
         {
@@ -467,8 +461,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
                         bIsValidated = false;
 
                         break;
-                    }
-                    else
+                    } else
                     {
                         setRoles.add( strRole );
                     }
@@ -485,7 +478,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
      */
     public static final class SelectedStatesForRole
     {
-        private final String _strRole;
+        private final String       _strRole;
         private final List<String> _listState;
 
         /**

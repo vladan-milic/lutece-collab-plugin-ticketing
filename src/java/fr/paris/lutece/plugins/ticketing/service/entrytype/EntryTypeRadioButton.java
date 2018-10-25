@@ -33,16 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.entrytype;
 
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeRadioButton;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
-
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -51,11 +51,11 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class EntryTypeRadioButton extends AbstractEntryTypeRadioButton
 {
-    private static final String TEMPLATE_CREATE = "admin/plugins/ticketing/entries/create_entry_type_radio_button.html";
-    private static final String TEMPLATE_MODIFY = "admin/plugins/ticketing/entries/modify_entry_type_radio_button.html";
-    private static final String TEMPLATE_HTML_CODE = "skin/plugins/ticketing/entries/html_code_entry_type_radio_button.html";
+    private static final String TEMPLATE_CREATE          = "admin/plugins/ticketing/entries/create_entry_type_radio_button.html";
+    private static final String TEMPLATE_MODIFY          = "admin/plugins/ticketing/entries/modify_entry_type_radio_button.html";
+    private static final String TEMPLATE_HTML_CODE       = "skin/plugins/ticketing/entries/html_code_entry_type_radio_button.html";
     private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/ticketing/entries/html_code_entry_type_radio_button.html";
-    private static final String TEMPLATE_READ_ONLY_HTML = "admin/plugins/ticketing/entries/read_only_entry_type_radio_button.html";
+    private static final String TEMPLATE_READ_ONLY_HTML  = "admin/plugins/ticketing/entries/read_only_entry_type_radio_button.html";
 
     /**
      * {@inheritDoc}

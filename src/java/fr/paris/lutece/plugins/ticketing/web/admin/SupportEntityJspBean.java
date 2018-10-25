@@ -167,7 +167,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     {
         populate( _supportEntity, request );
 
-        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, getLocale() ).validateTicketCategory( );
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, getLocale( ) ).validateTicketCategory( );
         TicketCategory ticketCategory = categoryValidatorResult.getTicketCategory( );
         if ( ticketCategory == null )
         {
@@ -296,7 +296,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     {
         populate( _supportEntity, request );
 
-        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, getLocale() ).validateTicketCategory( );
+        TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, getLocale( ) ).validateTicketCategory( );
         TicketCategory ticketCategory = categoryValidatorResult.getTicketCategory( );
         if ( ticketCategory == null )
         {

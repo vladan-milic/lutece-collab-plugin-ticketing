@@ -42,33 +42,33 @@ package fr.paris.lutece.plugins.ticketing.web.search;
 public final class SearchConstants
 {
     // Parameters
-    public static final String PARAMETER_QUERY = "query";
-    public static final String PARAMETER_PAGE_INDEX = "page_index";
-    public static final String PARAMETER_SEARCH_FIELD = "searched_field";
-    public static final String PARAMETER_CATEGORY = "category";
-    public static final String PARAMETER_DOMAIN = "domain";
+    public static final String PARAMETER_QUERY                               = "query";
+    public static final String PARAMETER_PAGE_INDEX                          = "page_index";
+    public static final String PARAMETER_SEARCH_FIELD                        = "searched_field";
+    public static final String PARAMETER_CATEGORY                            = "category";
+    public static final String PARAMETER_DOMAIN                              = "domain";
 
     // Markers
-    public static final String MARK_QUERY = "query";
-    public static final String MARK_RESULT = "result";
-    public static final String MARK_PAGINATOR = "paginator";
-    public static final String MARK_SEARCH_FIELDS_LIST = "search_fields_list";
-    public static final String MARK_SEARCH_FIELD = "searched_field";
-    public static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
-    public static final String MARK_ERRORS = "errors";
-    public static final String MARK_INFOS = "infos";
+    public static final String MARK_QUERY                                    = "query";
+    public static final String MARK_RESULT                                   = "result";
+    public static final String MARK_PAGINATOR                                = "paginator";
+    public static final String MARK_SEARCH_FIELDS_LIST                       = "search_fields_list";
+    public static final String MARK_SEARCH_FIELD                             = "searched_field";
+    public static final String MARK_NB_ITEMS_PER_PAGE                        = "nb_items_per_page";
+    public static final String MARK_ERRORS                                   = "errors";
+    public static final String MARK_INFOS                                    = "infos";
 
     // Properties
-    public static final String PROPERTY_PAGE_TITLE_TICKET_SEARCH = "ticketing.search_ticket.pageTitle";
-    public static final String PROPERTY_PAGE_TITLE_RESPONSE_RESULTS = "ticketing.search_response_results.pageTitle";
-    public static final String PROPERTY_DEFAULT_RESULT_PER_PAGE = "ticketing.search_ticket.labelItemsPerPag";
-    public static final String MESSAGE_SEARCH_NO_INPUT = "ticketing.search_ticket.noInput";
-    public static final String MESSAGE_SEARCH_ERROR = "ticketing.search_ticket.error";
-    public static final String PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY = "ticketing.modelResponsesIndexerDaemon.limitResponse";
+    public static final String PROPERTY_PAGE_TITLE_TICKET_SEARCH             = "ticketing.search_ticket.pageTitle";
+    public static final String PROPERTY_PAGE_TITLE_RESPONSE_RESULTS          = "ticketing.search_response_results.pageTitle";
+    public static final String PROPERTY_DEFAULT_RESULT_PER_PAGE              = "ticketing.search_ticket.labelItemsPerPag";
+    public static final String MESSAGE_SEARCH_NO_INPUT                       = "ticketing.search_ticket.noInput";
+    public static final String MESSAGE_SEARCH_ERROR                          = "ticketing.search_ticket.error";
+    public static final String PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY       = "ticketing.modelResponsesIndexerDaemon.limitResponse";
     public static final String PROPERTY_DEFAULT_RESPONSE_MODEL_ITEM_PER_PAGE = "ticketing.responseModel.itemsPerPage";
 
     // for search purpose
-    public static final String BEAN_SEARCH_ENGINE = "ticketing.ticketSearchEngine";
+    public static final String BEAN_SEARCH_ENGINE                            = "ticketing.ticketSearchEngine";
 
     /**
      * constructor

@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.search;
 
-import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
-import fr.paris.lutece.portal.service.message.SiteMessageException;
+import java.io.IOException;
 
 import org.apache.lucene.index.IndexWriter;
 
-import java.io.IOException;
+import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
+import fr.paris.lutece.portal.service.message.SiteMessageException;
 
 /**
  *
@@ -64,8 +64,7 @@ public interface ITicketSearchIndexer
      *             occurs when a site message need to be displayed
      * @throws TicketIndexerException
      */
-    void processIndexing( IndexWriter indexWriter, boolean bCreate, StringBuffer sbLog ) throws IOException, InterruptedException, SiteMessageException,
-            TicketIndexerException;
+    void processIndexing( IndexWriter indexWriter, boolean bCreate, StringBuffer sbLog ) throws IOException, InterruptedException, SiteMessageException, TicketIndexerException;
 
     /**
      * Index a ticket

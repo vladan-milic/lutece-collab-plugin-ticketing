@@ -14,7 +14,7 @@ public interface IFormCategoryDao
      * @param nIdForm
      * @param plugin
      */
-    public void insert(int nIdCategory, int nIdForm, Plugin plugin);
+    public void insert( int nIdCategory, int nIdForm, Plugin plugin );
 
     /**
      * Update the record in the table

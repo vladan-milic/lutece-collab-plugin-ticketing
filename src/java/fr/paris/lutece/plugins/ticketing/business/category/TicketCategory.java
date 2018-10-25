@@ -89,7 +89,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     private List<Integer>      _listIdInput;
 
     @Digits( integer = 6, fraction = 0, message = "#i18n{ticketing.validation.category.demandId.int}" )
-    @Min(value = 1, message = "#i18n{ticketing.validation.category.demandId.notEmpty}" )
+    @Min( value = 1, message = "#i18n{ticketing.validation.category.demandId.notEmpty}" )
     private int                _nDemandId;
 
     @Size( max = 500, message = "#i18n{ticketing.validation.category.helpMessage.size}" )
@@ -102,7 +102,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     private boolean            _bPiecesJointes;
 
     @Size( max = 50, message = "#i18n{ticketing.validation.channel.IconFont.size}" )
-    private String _strIconFont;
+    private String             _strIconFont;
 
     /**
      * Constructor TicketCategory
@@ -423,14 +423,17 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     /**
      * @return the _bPiecesJointes
      */
-    public boolean isPiecesJointes() {
+    public boolean isPiecesJointes( )
+    {
         return _bPiecesJointes;
     }
 
     /**
-     * @param _bPiecesJointes the _bPiecesJointes to set
+     * @param _bPiecesJointes
+     *            the _bPiecesJointes to set
      */
-    public void setPiecesJointes(boolean piecesJointes) {
+    public void setPiecesJointes( boolean piecesJointes )
+    {
         this._bPiecesJointes = piecesJointes;
     }
 
@@ -450,8 +453,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
         if ( getParent( ) != null )
         {
             siblings = getParent( ).getChildren( );
-        }
-        else
+        } else
         {
             siblings = tree.getRootElements( );
         }

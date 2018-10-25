@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.format;
 
-import fr.paris.lutece.plugins.rest.util.json.JSONUtil;
-
 import java.util.List;
+
+import fr.paris.lutece.plugins.rest.util.json.JSONUtil;
 
 /**
  * JSON formatter for REST purpose

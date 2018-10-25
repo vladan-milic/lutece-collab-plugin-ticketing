@@ -123,116 +123,116 @@ import fr.paris.lutece.util.url.UrlItem;
 public class ManageTicketsJspBean extends WorkflowCapableJspBean
 {
     // Right
-    public static final  String RIGHT_MANAGETICKETS = "TICKETING_TICKETS_MANAGEMENT";
-    private static final long   serialVersionUID    = 1L;
+    public static final String             RIGHT_MANAGETICKETS                 = "TICKETING_TICKETS_MANAGEMENT";
+    private static final long              serialVersionUID                    = 1L;
 
     // //////////////////////////////////////////////////////////////////////////
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_TICKETS = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "manage_tickets.html";
-    private static final String TEMPLATE_CREATE_TICKET  = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "create_ticket.html";
-    private static final String TEMPLATE_MODIFY_TICKET  = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "modify_ticket.html";
-    private static final String TEMPLATE_RECAP_TICKET   = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "recap_ticket.html";
+    private static final String            TEMPLATE_MANAGE_TICKETS             = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "manage_tickets.html";
+    private static final String            TEMPLATE_CREATE_TICKET              = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "create_ticket.html";
+    private static final String            TEMPLATE_MODIFY_TICKET              = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "modify_ticket.html";
+    private static final String            TEMPLATE_RECAP_TICKET               = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "recap_ticket.html";
 
     // Parameters
-    private static final String PARAMETER_USER_TITLE   = "ut";
-    private static final String PARAMETER_FIRSTNAME    = "fn";
-    private static final String PARAMETER_FAMILYNAME   = "fan";
-    private static final String PARAMETER_LASTNAME     = "ln";
-    private static final String PARAMETER_FIXED_PHONE  = "fph";
-    private static final String PARAMETER_MOBILE_PHONE = "mph";
-    private static final String PARAMETER_EMAIL        = "em";
-    private static final String PARAMETER_CATEGORY     = "cat";
-    private static final String PARAMETER_PAGE_INDEX   = "page_index";
-    private static final String PARAMETER_SELECTED_TAB = "selected_tab";
-    private static final String PARAMETER_NOMENCLATURE = "nom";
+    private static final String            PARAMETER_USER_TITLE                = "ut";
+    private static final String            PARAMETER_FIRSTNAME                 = "fn";
+    private static final String            PARAMETER_FAMILYNAME                = "fan";
+    private static final String            PARAMETER_LASTNAME                  = "ln";
+    private static final String            PARAMETER_FIXED_PHONE               = "fph";
+    private static final String            PARAMETER_MOBILE_PHONE              = "mph";
+    private static final String            PARAMETER_EMAIL                     = "em";
+    private static final String            PARAMETER_CATEGORY                  = "cat";
+    private static final String            PARAMETER_PAGE_INDEX                = "page_index";
+    private static final String            PARAMETER_SELECTED_TAB              = "selected_tab";
+    private static final String            PARAMETER_NOMENCLATURE              = "nom";
 
     // Properties for page titles
-    private static final String PROPERTY_PAGE_MANAGE_TITLE          = "ticketing.manage_tickets.title";
-    private static final String PROPERTY_PAGE_SEARCH_TILE           = "ticketing.search_ticket.pageTitle";
-    private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETS  = "ticketing.manage_tickets.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_TICKET   = "ticketing.modify_ticket.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_TICKET   = "ticketing.create_ticket.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_RECAP_TICKET    = "ticketing.recap_ticket.pageTitle";
+    private static final String            PROPERTY_PAGE_MANAGE_TITLE          = "ticketing.manage_tickets.title";
+    private static final String            PROPERTY_PAGE_SEARCH_TILE           = "ticketing.search_ticket.pageTitle";
+    private static final String            PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
+    private static final String            PROPERTY_PAGE_TITLE_MANAGE_TICKETS  = "ticketing.manage_tickets.pageTitle";
+    private static final String            PROPERTY_PAGE_TITLE_MODIFY_TICKET   = "ticketing.modify_ticket.pageTitle";
+    private static final String            PROPERTY_PAGE_TITLE_CREATE_TICKET   = "ticketing.create_ticket.pageTitle";
+    private static final String            PROPERTY_PAGE_TITLE_RECAP_TICKET    = "ticketing.recap_ticket.pageTitle";
 
     // Markers
-    private static final String MARK_TICKET_LIST = "ticket_list";
-    private static final String MARK_USER_FACTORY = "user_factory";
-    private static final String MARK_USER_TITLES_LIST = "user_titles_list";
-    private static final String MARK_MASS_ACTIONS_LIST = "mass_actions_list";
-    private static final String MARK_NB_TICKET_AGENT = "nb_ticket_agent";
-    private static final String MARK_NB_TICKET_GROUP = "nb_ticket_group";
-    private static final String MARK_NB_TICKET_DOMAIN = "nb_ticket_domain";
-    private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
-    private static final String MARK_GUID = "guid";
-    private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
-    private static final String MARK_PAGINATOR = "paginator";
-    private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
-    private static final String MARK_SELECTED_TAB = "selected_tab";
-    private static final String MARK_USER_WITH_NO_UNIT = "user_with_no_unit";
-    private static final String JSP_MANAGE_TICKETS = TicketingConstants.ADMIN_CONTROLLLER_PATH + "ManageTickets.jsp";
-    private static final String MARK_MANAGE_PAGE_TITLE = "manage_ticket_page_title";
-    private static final String MARK_CREATE_ASSIGN_RIGHT = "create_assign_right";
-    private static final String MARK_WARNING_COUNT = "warning_count";
+    private static final String            MARK_TICKET_LIST                    = "ticket_list";
+    private static final String            MARK_USER_FACTORY                   = "user_factory";
+    private static final String            MARK_USER_TITLES_LIST               = "user_titles_list";
+    private static final String            MARK_MASS_ACTIONS_LIST              = "mass_actions_list";
+    private static final String            MARK_NB_TICKET_AGENT                = "nb_ticket_agent";
+    private static final String            MARK_NB_TICKET_GROUP                = "nb_ticket_group";
+    private static final String            MARK_NB_TICKET_DOMAIN               = "nb_ticket_domain";
+    private static final String            MARK_CONTACT_MODES_LIST             = "contact_modes_list";
+    private static final String            MARK_GUID                           = "guid";
+    private static final String            MARK_RESPONSE_RECAP_LIST            = "response_recap_list";
+    private static final String            MARK_PAGINATOR                      = "paginator";
+    private static final String            MARK_NB_ITEMS_PER_PAGE              = "nb_items_per_page";
+    private static final String            MARK_SELECTED_TAB                   = "selected_tab";
+    private static final String            MARK_USER_WITH_NO_UNIT              = "user_with_no_unit";
+    private static final String            JSP_MANAGE_TICKETS                  = TicketingConstants.ADMIN_CONTROLLLER_PATH + "ManageTickets.jsp";
+    private static final String            MARK_MANAGE_PAGE_TITLE              = "manage_ticket_page_title";
+    private static final String            MARK_CREATE_ASSIGN_RIGHT            = "create_assign_right";
+    private static final String            MARK_WARNING_COUNT                  = "warning_count";
 
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_TICKET    = "ticketing.message.confirmRemoveTicket";
-    private static final String MESSAGE_ERROR_COMMENT_VALIDATION = "ticketing.validation.ticket.TicketComment.size";
+    private static final String            MESSAGE_CONFIRM_REMOVE_TICKET       = "ticketing.message.confirmRemoveTicket";
+    private static final String            MESSAGE_ERROR_COMMENT_VALIDATION    = "ticketing.validation.ticket.TicketComment.size";
 
     // Views
-    private static final String VIEW_MANAGE_TICKETS = "manageTickets";
-    private static final String VIEW_TICKET_PAGE    = "ticketPage";
-    private static final String VIEW_CREATE_TICKET  = "createTicket";
-    private static final String VIEW_MODIFY_TICKET  = "modifyTicket";
-    private static final String VIEW_RECAP_TICKET   = "recapTicket";
+    private static final String            VIEW_MANAGE_TICKETS                 = "manageTickets";
+    private static final String            VIEW_TICKET_PAGE                    = "ticketPage";
+    private static final String            VIEW_CREATE_TICKET                  = "createTicket";
+    private static final String            VIEW_MODIFY_TICKET                  = "modifyTicket";
+    private static final String            VIEW_RECAP_TICKET                   = "recapTicket";
 
     // Actions
-    private static final String ACTION_CREATE_TICKET         = "createTicket";
-    private static final String ACTION_CREATE_ASSIGN_TICKET  = "createAssignTicket";
-    private static final String ACTION_MODIFY_TICKET         = "modifyTicket";
-    private static final String ACTION_REMOVE_TICKET         = "removeTicket";
-    private static final String ACTION_CONFIRM_REMOVE_TICKET = "confirmRemoveTicket";
-    private static final String ACTION_RECAP_TICKET          = "recapTicket";
-    private static final String ACTION_EXPORT_TICKET         = "exportTicket";
+    private static final String            ACTION_CREATE_TICKET                = "createTicket";
+    private static final String            ACTION_CREATE_ASSIGN_TICKET         = "createAssignTicket";
+    private static final String            ACTION_MODIFY_TICKET                = "modifyTicket";
+    private static final String            ACTION_REMOVE_TICKET                = "removeTicket";
+    private static final String            ACTION_CONFIRM_REMOVE_TICKET        = "confirmRemoveTicket";
+    private static final String            ACTION_RECAP_TICKET                 = "recapTicket";
+    private static final String            ACTION_EXPORT_TICKET                = "exportTicket";
 
     // Infos
-    private static final String INFO_TICKET_CREATED = "ticketing.info.ticket.created";
-    private static final String INFO_TICKET_UPDATED = "ticketing.info.ticket.updated";
-    private static final String INFO_TICKET_REMOVED = "ticketing.info.ticket.removed";
+    private static final String            INFO_TICKET_CREATED                 = "ticketing.info.ticket.created";
+    private static final String            INFO_TICKET_UPDATED                 = "ticketing.info.ticket.updated";
+    private static final String            INFO_TICKET_REMOVED                 = "ticketing.info.ticket.removed";
 
     // Other constants
-    private static       boolean _bAvatarAvailable = ( PluginService.getPlugin( TicketingConstants.PLUGIN_AVATAR ) != null );
-    private static final String  CONTENT_TYPE_CSV  = "application/csv";
+    private static boolean                 _bAvatarAvailable                   = ( PluginService.getPlugin( TicketingConstants.PLUGIN_AVATAR ) != null );
+    private static final String            CONTENT_TYPE_CSV                    = "application/csv";
 
     // Variables
-    private int    _nDefaultItemsPerPage;
-    private String _strCurrentPageIndex;
-    private int    _nItemsPerPage;
-    private boolean _bSearchMode = false;
-    private final TicketFormService  _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
-    private final TicketSearchEngine _engine            = ( TicketSearchEngine ) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
-    private static IUserPreferencesService _userPreferencesService = AdminUserPreferencesService.instance( );
+    private int                            _nDefaultItemsPerPage;
+    private String                         _strCurrentPageIndex;
+    private int                            _nItemsPerPage;
+    private boolean                        _bSearchMode                        = false;
+    private final TicketFormService        _ticketFormService                  = SpringContextService.getBean( TicketFormService.BEAN_NAME );
+    private final TicketSearchEngine       _engine                             = ( TicketSearchEngine ) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
+    private static IUserPreferencesService _userPreferencesService             = AdminUserPreferencesService.instance( );
 
-    //Header export
-    private static final String HEADER_REFERENCE = "ticketing.export.header.reference"; 
-    private static final String HEADER_CREATION_DATE = "ticketing.export.header.creation.date";
-    private static final String HEADER_TIME_CREATION = "ticketing.export.header.time.creation";
-    private static final String HEADER_OBJECT_SOLICITATION = "ticketing.export.header.object.solicitation";
-    private static final String HEADER_STATUS = "ticketing.export.header.status";
-    private static final String HEADER_NOMENCLATURE = "ticketing.export.header.nomenclature";
-    private static final String HEADER_CHANNEL = "ticketing.export.header.channel";
-    private static final String HEADER_ASSIGNEMENT_ENTITY = "ticketing.export.header.assignement.entity";
-    private static final String HEADER_ASSIGNEMENT_OFFICER = "ticketing.export.header.assignement.officer";
-    private static final String HEADER_FINAL_RESPONSE_DATE= "ticketing.export.header.final.response.date";
-    private static final String HEADER_NUM_FACIL_FAMILLE= "ticketing.export.header.numeroFacilFamille";
+    // Header export
+    private static final String            HEADER_REFERENCE                    = "ticketing.export.header.reference";
+    private static final String            HEADER_CREATION_DATE                = "ticketing.export.header.creation.date";
+    private static final String            HEADER_TIME_CREATION                = "ticketing.export.header.time.creation";
+    private static final String            HEADER_OBJECT_SOLICITATION          = "ticketing.export.header.object.solicitation";
+    private static final String            HEADER_STATUS                       = "ticketing.export.header.status";
+    private static final String            HEADER_NOMENCLATURE                 = "ticketing.export.header.nomenclature";
+    private static final String            HEADER_CHANNEL                      = "ticketing.export.header.channel";
+    private static final String            HEADER_ASSIGNEMENT_ENTITY           = "ticketing.export.header.assignement.entity";
+    private static final String            HEADER_ASSIGNEMENT_OFFICER          = "ticketing.export.header.assignement.officer";
+    private static final String            HEADER_FINAL_RESPONSE_DATE          = "ticketing.export.header.final.response.date";
+    private static final String            HEADER_NUM_FACIL_FAMILLE            = "ticketing.export.header.numeroFacilFamille";
 
     /**
      * Build the Manage View
      *
      * @param request
-     *         The HTTP request
+     *            The HTTP request
      * @return The page
      */
     @View( value = VIEW_TICKET_PAGE, defaultView = true )
@@ -255,7 +255,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Export all the tickets found in the search
      *
      * @param request
-     *         The HTTP request
+     *            The HTTP request
      * @return The page
      */
     @Action( value = ACTION_EXPORT_TICKET )
@@ -295,7 +295,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             List<Ticket> listTickets = _engine.searchTickets( strQuery, getUser( ), filter );
             File tempFile = File.createTempFile( "ticketing", null );
 
-            List<String> titlesUntranslated = new ArrayList<>();
+            List<String> titlesUntranslated = new ArrayList<>( );
             titlesUntranslated.add( HEADER_REFERENCE );
             titlesUntranslated.add( HEADER_CREATION_DATE );
             titlesUntranslated.add( HEADER_TIME_CREATION );
@@ -313,7 +313,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             List<String> titlesTranslated = titlesUntranslated.stream( ).map( title -> I18nService.getLocalizedString( title, Locale.FRENCH ) ).collect( Collectors.toList( ) );
 
             List<TicketCategoryType> categoryTypesList = TicketCategoryTypeHome.getCategoryTypesList( );
-            for(TicketCategoryType category : categoryTypesList) {
+            for ( TicketCategoryType category : categoryTypesList )
+            {
                 titlesTranslated.add( indexWhereCategoryWillBeAdded + category.getDepthNumber( ), category.getLabel( ) );
             }
 
@@ -321,7 +322,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             Writer w = new OutputStreamWriter( new FileOutputStream( tempFile ), StandardCharsets.ISO_8859_1 );
 
             // Write line in the temp file
-            CSVUtils.writeLine(w, titlesTranslated);
+            CSVUtils.writeLine( w, titlesTranslated );
 
             for ( Ticket ticket : listTickets )
             {
@@ -330,23 +331,26 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 line.add( ticket.getReference( ) );
                 line.add( sdf.format( ticket.getDateCreate( ) ) );
                 line.add( sdf2.format( ticket.getDateCreate( ) ) );
-                for(TicketCategory category : ticket.getBranch( )) {
+                for ( TicketCategory category : ticket.getBranch( ) )
+                {
                     line.add( category.getLabel( ) );
                 }
-                for ( int index=0; index < categoryTypesList.size() - ticket.getBranch( ).size( ); index++  )
+                for ( int index = 0; index < categoryTypesList.size( ) - ticket.getBranch( ).size( ); index++ )
                 {
                     line.add( "" );
                 }
                 line.add( ticket.getTicketComment( ) );
-                line.add( ticket.getFacilFamilleNumber( ) != null? "=\"" + ticket.getFacilFamilleNumber( ) + "\"" : "" );
+                line.add( ticket.getFacilFamilleNumber( ) != null ? "=\"" + ticket.getFacilFamilleNumber( ) + "\"" : "" );
                 line.add( ticket.getState( ).getName( ) );
                 line.add( ticket.getNomenclature( ) );
                 line.add( ticket.getChannel( ) != null ? ticket.getChannel( ).getLabel( ) : "" );
                 line.add( ticket.getAssigneeUnit( ) != null ? ticket.getAssigneeUnit( ).getName( ) : "" );
                 line.add( ticket.getAssigneeUser( ) != null ? ticket.getAssigneeUser( ).getFirstname( ) + " " + ticket.getAssigneeUser( ).getLastname( ) : "" );
-                if ( ticket.getTicketStatus() == TicketingConstants.TICKET_STATUS_CLOSED ) {
+                if ( ticket.getTicketStatus( ) == TicketingConstants.TICKET_STATUS_CLOSED )
+                {
                     line.add( ticket.getDateClose( ) != null ? sdf.format( ticket.getDateClose( ) ) : "" );
-                } else {
+                } else
+                {
                     line.add( "" );
                 }
 
@@ -375,7 +379,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Build the Manage View
      *
      * @param request
-     *         The HTTP request
+     *            The HTTP request
      * @return The page
      */
     @View( value = VIEW_MANAGE_TICKETS )
@@ -469,8 +473,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         try
         {
             filter.setFilterView( TicketFilterViewEnum.valueOf( strUpperSelectedTab ) );
-        }
-        catch ( IllegalArgumentException e )
+        } catch ( IllegalArgumentException e )
         {
             // The default view
             filter.setFilterView( TicketFilterViewEnum.AGENT );
@@ -506,8 +509,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 warningCount = getNbTicketsWithLucene( strQuery, filterWarning );
             }
 
-        }
-        catch ( ParseException e )
+        } catch ( ParseException e )
         {
             AppLogService.error( "Error while parsing query " + strQuery, e );
             addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
@@ -563,7 +565,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * returns current selectedTab
      *
      * @param request
-     *         http request
+     *            http request
      * @return selectedTab
      */
     private String getSelectedTab( HttpServletRequest request )
@@ -589,7 +591,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Returns the form to create a ticket
      *
      * @param request
-     *         The Http request
+     *            The Http request
      * @return the html code of the ticket form
      */
     @View( VIEW_CREATE_TICKET )
@@ -620,11 +622,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * ticket initialisation method
      *
      * @param request
-     *         request
+     *            request
      * @param ticket
-     *         ticket
+     *            ticket
      * @param model
-     *         model
+     *            model
      */
     private void initTicketForm( HttpServletRequest request, Ticket ticket, Map<String, Object> model )
     {
@@ -660,7 +662,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Process the data capture form of a new ticket
      *
      * @param request
-     *         The Http Request
+     *            The Http Request
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_CREATE_TICKET )
@@ -707,7 +709,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Process the data capture form of a new ticket and assign it to the agent
      *
      * @param request
-     *         The Http Request
+     *            The Http Request
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_CREATE_ASSIGN_TICKET )
@@ -761,7 +763,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Computes redirection for creation action
      *
      * @param request
-     *         http request
+     *            http request
      * @return redirect view
      */
     public String redirectAfterCreateAction( HttpServletRequest request )
@@ -782,7 +784,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Manages the removal form of a ticket whose identifier is in the http request
      *
      * @param request
-     *         The Http request
+     *            The Http request
      * @return the html code to confirm
      */
     @Action( ACTION_CONFIRM_REMOVE_TICKET )
@@ -807,7 +809,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Handles the removal form of a ticket
      *
      * @param request
-     *         The Http request
+     *            The Http request
      * @return the jsp URL to display the form to manage tickets
      */
     @Action( ACTION_REMOVE_TICKET )
@@ -836,7 +838,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Returns the form to update info about a ticket
      *
      * @param request
-     *         The Http request
+     *            The Http request
      * @return The HTML form to update info
      */
     @View( VIEW_MODIFY_TICKET )
@@ -872,7 +874,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Process the change form of a ticket
      *
      * @param request
-     *         The Http request
+     *            The Http request
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_MODIFY_TICKET )
@@ -915,7 +917,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Returns the form to recapitulate a ticket to create
      *
      * @param request
-     *         The Http request
+     *            The Http request
      * @return the html code of the ticket form
      */
     @View( VIEW_RECAP_TICKET )
@@ -933,7 +935,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         Map<String, Object> model = getModel( );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_RESPONSE_RECAP_LIST, listResponseRecap );
-        model.put( MARK_CREATE_ASSIGN_RIGHT, RBACService.isAuthorized( TicketCategoryService.getInstance( ).getTicketCategoryRBACResource( ticket.getTicketCategory( ) ), TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) );
+        model.put( MARK_CREATE_ASSIGN_RIGHT,
+                RBACService.isAuthorized( TicketCategoryService.getInstance( ).getTicketCategoryRBACResource( ticket.getTicketCategory( ) ), TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) );
 
         return getPage( PROPERTY_PAGE_TITLE_RECAP_TICKET, TEMPLATE_RECAP_TICKET, model );
     }
@@ -942,7 +945,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Process the data capture form of a new ticket
      *
      * @param request
-     *         The Http Request
+     *            The Http Request
      * @return The Jsp URL of the process result
      */
     @Action( ACTION_RECAP_TICKET )
@@ -980,9 +983,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Populate the ticket from the request and validate the ticket form
      *
      * @param ticket
-     *         The ticket to populate
+     *            The ticket to populate
      * @param request
-     *         The Http Request
+     *            The Http Request
      * @return true if the ticket is valid else false
      */
     public boolean populateAndValidateFormTicket( Ticket ticket, HttpServletRequest request )
@@ -1000,8 +1003,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             categoryValidatorResult.getListValidationErrors( ).stream( ).forEach( ( error ) -> addError( error ) );
             bIsFormValid = false;
-        }
-        else
+        } else
         {
             ticket.setTicketCategory( categoryValidatorResult.getTicketCategory( ) );
         }
@@ -1032,7 +1034,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             bIsFormValid = false;
         }
 
-        String errorLastNameFilled= new FormValidator( request ).isLastNameFilled( );
+        String errorLastNameFilled = new FormValidator( request ).isLastNameFilled( );
         if ( errorLastNameFilled != null )
         {
             addError( errorLastNameFilled );
@@ -1075,9 +1077,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Populate the ticket from the request and validate the ticket form for modification
      *
      * @param ticket
-     *         The ticket to populate
+     *            The ticket to populate
      * @param request
-     *         The Http Request
+     *            The Http Request
      * @return true if the ticket is valid else false
      */
     public boolean populateAndValidateModificationFormTicket( Ticket ticket, HttpServletRequest request )
@@ -1151,9 +1153,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Redirect to the view details for the ticket passed in parameter
      *
      * @param request
-     *         The Http request
+     *            The Http request
      * @param ticket
-     *         The ticket
+     *            The ticket
      * @return The Jsp URL of the process result
      */
     public String redirectToViewDetails( HttpServletRequest request, Ticket ticket )
@@ -1168,7 +1170,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Clear uploaded files if needed.
      *
      * @param session
-     *         The session of the current user
+     *            The session of the current user
      */
     private void clearUploadFilesIfNeeded( HttpSession session )
     {
@@ -1222,7 +1224,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
      * Set the ticket list in session and get the workflow action form before processing a mass action.
      *
      * @param request
-     *         The request
+     *            The request
      * @return The HTML content to display, or the next URL to redirect the user to
      */
     @View( TicketingConstants.VIEW_WORKFLOW_MASS_ACTION_FORM )

@@ -38,8 +38,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategory;
+import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategoryHome;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -57,19 +57,19 @@ public abstract class ManageAdminTicketingJspBean extends MVCAdminJspBean
     /**
      * Generated serial id
      */
-    private static final long serialVersionUID = 872956829819739350L;
+    private static final long   serialVersionUID                    = 872956829819739350L;
 
     // Right
-    public static final String RIGHT_MANAGEADMINTICKETING = "TICKETING_MANAGEMENT";
+    public static final String  RIGHT_MANAGEADMINTICKETING          = "TICKETING_MANAGEMENT";
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
-    private static final String PARAMETER_PAGE_INDEX = "page_index";
-    private static final String MARK_PAGINATOR = "paginator";
-    private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
+    private static final String PARAMETER_PAGE_INDEX                = "page_index";
+    private static final String MARK_PAGINATOR                      = "paginator";
+    private static final String MARK_NB_ITEMS_PER_PAGE              = "nb_items_per_page";
 
     // Variables
-    private int _nDefaultItemsPerPage;
-    private String _strCurrentPageIndex;
-    private int _nItemsPerPage;
+    private int                 _nDefaultItemsPerPage;
+    private String              _strCurrentPageIndex;
+    private int                 _nItemsPerPage;
 
     /**
      * Return a model that contains the list and paginator infos
@@ -123,7 +123,8 @@ public abstract class ManageAdminTicketingJspBean extends MVCAdminJspBean
         return lstRef;
     }
 
-    public List<FormCategory> getListFormCategoryByIdCategory( int nIdCategory ){
-        return FormCategoryHome.findByCategory(nIdCategory);
+    public List<FormCategory> getListFormCategoryByIdCategory( int nIdCategory )
+    {
+        return FormCategoryHome.findByCategory( nIdCategory );
     }
 }

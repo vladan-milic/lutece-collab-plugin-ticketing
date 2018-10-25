@@ -33,6 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.usertitle;
 
+import java.util.List;
+import java.util.Locale;
+
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -40,20 +43,17 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
-import java.util.List;
-import java.util.Locale;
-
 /**
  * This class provides instances management methods (create, find, ...) for UserTitle objects
  */
 public final class UserTitleHome
 {
     // Static variable pointed at the DAO instance
-    private static IUserTitleDAO _dao = SpringContextService.getBean( "ticketing.userTitleDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static IUserTitleDAO _dao                      = SpringContextService.getBean( "ticketing.userTitleDAO" );
+    private static Plugin        _plugin                   = PluginService.getPlugin( "ticketing" );
 
     // Properties
-    private static final String PROPERTY_USER_TITLE_EMPTY = "ticketing.userTitle.empty";
+    private static final String  PROPERTY_USER_TITLE_EMPTY = "ticketing.userTitle.empty";
 
     /**
      * Private constructor - this class need not be instantiated

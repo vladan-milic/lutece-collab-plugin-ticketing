@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.util;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -55,7 +54,7 @@ public class TicketCategoryValidator
 {
     // Variables
     private HttpServletRequest _request;
-    private Locale _locale;
+    private Locale             _locale;
 
     /**
      * Constructor
@@ -100,8 +99,7 @@ public class TicketCategoryValidator
             try
             {
                 nId = Integer.valueOf( _request.getParameter( TicketingConstants.PARAMETER_CATEGORY_ID + i ) );
-            }
-            catch ( NumberFormatException e )
+            } catch ( NumberFormatException e )
             {
                 nId = -1;
             }
@@ -117,8 +115,7 @@ public class TicketCategoryValidator
             {
                 lastValidTicketCategory = ticketCategory;
                 lastValidI = i;
-            }
-            else if ( ticketCategoryIsRequired || i <= TicketingConstants.CATEGORY_DEPTH_MIN )
+            } else if ( ticketCategoryIsRequired || i <= TicketingConstants.CATEGORY_DEPTH_MIN )
             {
                 listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED,
                         new String[] { TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( i - 1 ).getLabel( ) }, this._locale ) );
@@ -141,9 +138,8 @@ public class TicketCategoryValidator
 
         if ( isValid && lastValidI < TicketingConstants.CATEGORY_DEPTH_MIN )
         {
-            listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED, new String [ ] {
-                    TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( lastValidI + 1 ).getLabel( )
-            }, this._locale ) );
+            listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED,
+                    new String[] { TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( lastValidI + 1 ).getLabel( ) }, this._locale ) );
             isValid = false;
         }
 

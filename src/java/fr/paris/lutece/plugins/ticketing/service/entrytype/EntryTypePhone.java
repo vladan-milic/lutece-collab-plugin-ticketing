@@ -33,26 +33,26 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.entrytype;
 
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.Response;
-import fr.paris.lutece.portal.service.template.AppTemplateService;
-import fr.paris.lutece.util.html.HtmlTemplate;
-
 import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.Response;
+import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.util.html.HtmlTemplate;
 
 /**
  * class EntryTypePhone
  */
 public class EntryTypePhone extends EntryTypeText
 {
-    private static final String TEMPLATE_CREATE = "admin/plugins/ticketing/entries/create_entry_type_text.html";
-    private static final String TEMPLATE_MODIFY = "admin/plugins/ticketing/entries/modify_entry_type_text.html";
-    private static final String TEMPLATE_HTML_CODE = "skin/plugins/ticketing/entries/html_code_entry_type_text.html";
+    private static final String TEMPLATE_CREATE          = "admin/plugins/ticketing/entries/create_entry_type_text.html";
+    private static final String TEMPLATE_MODIFY          = "admin/plugins/ticketing/entries/modify_entry_type_text.html";
+    private static final String TEMPLATE_HTML_CODE       = "skin/plugins/ticketing/entries/html_code_entry_type_text.html";
     private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/ticketing/entries/html_code_entry_type_text.html";
-    private static final String TEMPLATE_READ_ONLY_HTML = "admin/plugins/ticketing/entries/read_only_entry_type_phone.html";
+    private static final String TEMPLATE_READ_ONLY_HTML  = "admin/plugins/ticketing/entries/read_only_entry_type_phone.html";
 
     /**
      * {@inheritDoc}

@@ -33,6 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
@@ -48,12 +54,6 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.util.beanvalidation.BeanValidationUtil;
 import fr.paris.lutece.util.beanvalidation.ValidationError;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * This class permits to validate a ticket
  *
@@ -61,12 +61,12 @@ import javax.servlet.http.HttpServletRequest;
 public class TicketValidator
 {
     // Errors
-    private static final String ERROR_USER_TITLE_UNKNOWN = "ticketing.error.userTitle.unknown";
+    private static final String ERROR_USER_TITLE_UNKNOWN   = "ticketing.error.userTitle.unknown";
     private static final String ERROR_CONTACT_MODE_UNKNOWN = "ticketing.error.contactMode.unknown";
-    private static final String ERROR_CHANNEL_UNKNOWN = "ticketing.error.channel.unknown";
+    private static final String ERROR_CHANNEL_UNKNOWN      = "ticketing.error.channel.unknown";
 
     // Attributes
-    private Locale _locale;
+    private Locale              _locale;
 
     /**
      * Constructor

@@ -30,39 +30,42 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * License 1.0
- */ 
+ */
 package fr.paris.lutece.plugins.ticketing.business.form;
 
-import javax.validation.constraints.*;
-import org.hibernate.validator.constraints.*;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * This is the business class for the object Form
- */ 
+ */
 public class Form implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    // Variables declarations 
-    private int _nId;
+    // Variables declarations
+    private int               _nId;
     @NotEmpty( message = "#i18n{ticketing.validation.form.Title.notEmpty}" )
     @Size( max = 500, message = "#i18n{ticketing.validation.form.Title.size}" )
-    private String _strTitle;
+    private String            _strTitle;
     @Size( max = 500, message = "#i18n{ticketing.validation.form.Message.size}" )
-    private String _strMessage;
+    private String            _strMessage;
     @NotEmpty( message = "#i18n{ticketing.validation.form.ButtonLabel.notEmpty}" )
     @Size( max = 500, message = "#i18n{ticketing.validation.form.ButtonLabel.size}" )
-    private String _strButtonLabel;
+    private String            _strButtonLabel;
 
-    private boolean _bConnection = true;
-    private List<FormEntry> formEntries;
+    private boolean           _bConnection     = true;
+    private List<FormEntry>   formEntries;
 
-    private boolean _bSelected = false;
+    private boolean           _bSelected       = false;
 
     /**
      * Returns the Id
+     * 
      * @return The Id
      */
     public int getId( )
@@ -72,8 +75,10 @@ public class Form implements Serializable
 
     /**
      * Sets the Id
-     * @param nId The Id
-     */ 
+     * 
+     * @param nId
+     *            The Id
+     */
     public void setId( int nId )
     {
         _nId = nId;
@@ -81,6 +86,7 @@ public class Form implements Serializable
 
     /**
      * Returns the Title
+     * 
      * @return The Title
      */
     public String getTitle( )
@@ -90,8 +96,10 @@ public class Form implements Serializable
 
     /**
      * Sets the Title
-     * @param strTitle The Title
-     */ 
+     * 
+     * @param strTitle
+     *            The Title
+     */
     public void setTitle( String strTitle )
     {
         _strTitle = strTitle;
@@ -99,6 +107,7 @@ public class Form implements Serializable
 
     /**
      * Returns the Message
+     * 
      * @return The Message
      */
     public String getMessage( )
@@ -108,8 +117,10 @@ public class Form implements Serializable
 
     /**
      * Sets the Message
-     * @param strMessage The Message
-     */ 
+     * 
+     * @param strMessage
+     *            The Message
+     */
     public void setMessage( String strMessage )
     {
         _strMessage = strMessage;
@@ -117,6 +128,7 @@ public class Form implements Serializable
 
     /**
      * Returns the ButtonLabel
+     * 
      * @return The ButtonLabel
      */
     public String getButtonLabel( )
@@ -126,8 +138,10 @@ public class Form implements Serializable
 
     /**
      * Sets the ButtonLabel
-     * @param strButtonLabel The ButtonLabel
-     */ 
+     * 
+     * @param strButtonLabel
+     *            The ButtonLabel
+     */
     public void setButtonLabel( String strButtonLabel )
     {
         _strButtonLabel = strButtonLabel;
@@ -145,8 +159,10 @@ public class Form implements Serializable
 
     /**
      * Sets the Connection
-     * @param bConnection The Connection
-     */ 
+     * 
+     * @param bConnection
+     *            The Connection
+     */
     public void setConnection( boolean bConnection )
     {
         _bConnection = bConnection;
@@ -168,7 +184,7 @@ public class Form implements Serializable
 
     public List<FormEntry> getFormEntries( )
     {
-        if ( this.formEntries == null || this.formEntries.isEmpty())
+        if ( this.formEntries == null || this.formEntries.isEmpty( ) )
         {
             formEntries = FormEntryHome.findByFormId( _nId );
         }
@@ -177,9 +193,11 @@ public class Form implements Serializable
     }
 
     /**
-     * @param formEntries the formEntries to set
+     * @param formEntries
+     *            the formEntries to set
      */
-    public void setFormEntries(List<FormEntry> formEntries) {
+    public void setFormEntries( List<FormEntry> formEntries )
+    {
         this.formEntries = formEntries;
     }
 

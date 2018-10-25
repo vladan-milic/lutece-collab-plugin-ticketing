@@ -33,6 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
+import java.util.List;
+import java.util.Locale;
+
 import fr.paris.lutece.plugins.ticketing.business.supportentity.SupportEntity;
 import fr.paris.lutece.plugins.ticketing.business.supportentity.SupportEntityHome;
 import fr.paris.lutece.portal.service.rbac.Permission;
@@ -40,9 +43,6 @@ import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
 import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
 import fr.paris.lutece.util.ReferenceList;
-
-import java.util.List;
-import java.util.Locale;
 
 /**
  *
@@ -52,9 +52,9 @@ import java.util.Locale;
 public class SupportEntityResourceIdService extends ResourceIdService
 {
     /** Permission for viewing a support entity */
-    public static final String PERMISSION_VIEW = "VIEW";
+    public static final String  PERMISSION_VIEW              = "VIEW";
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "ticketing.supportentity.resourceType";
-    private static final String PROPERTY_LABEL_VIEW = "ticketing.supportentity.permission.label.view";
+    private static final String PROPERTY_LABEL_VIEW          = "ticketing.supportentity.permission.label.view";
 
     /**
      * Constructor

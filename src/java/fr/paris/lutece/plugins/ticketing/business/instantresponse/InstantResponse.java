@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.ticketing.business.instantresponse;
 
 import java.io.Serializable;
-
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -52,16 +51,16 @@ public class InstantResponse implements Serializable
     private static final long serialVersionUID = 1L;
 
     // Variables declarations
-    private int _nId;
-    private String _strSubject;
-    private TicketCategory _ticketCategory;
-    private Timestamp _dDateCreate;
-    private int _nIdAdminUser;
-    private String _strUserFirstname;
-    private String _strUserLastname;
-    private int _nIdUnit;
-    private String _strUnit;
-    private int _nIdChannel;
+    private int               _nId;
+    private String            _strSubject;
+    private TicketCategory    _ticketCategory;
+    private Timestamp         _dDateCreate;
+    private int               _nIdAdminUser;
+    private String            _strUserFirstname;
+    private String            _strUserLastname;
+    private int               _nIdUnit;
+    private String            _strUnit;
+    private int               _nIdChannel;
 
     /**
      * Returns the Id
@@ -101,7 +100,7 @@ public class InstantResponse implements Serializable
      */
     public TicketCategory getTicketType( )
     {
-        return TicketCategoryService.getInstance().getType( _ticketCategory );
+        return TicketCategoryService.getInstance( ).getType( _ticketCategory );
     }
 
     /**
@@ -111,7 +110,7 @@ public class InstantResponse implements Serializable
      */
     public TicketCategory getTicketDomain( )
     {
-        return TicketCategoryService.getInstance().getDomain( _ticketCategory );
+        return TicketCategoryService.getInstance( ).getDomain( _ticketCategory );
     }
 
     /**
@@ -121,7 +120,7 @@ public class InstantResponse implements Serializable
      */
     public TicketCategory getTicketThematic( )
     {
-        return TicketCategoryService.getInstance().getThematic( _ticketCategory );
+        return TicketCategoryService.getInstance( ).getThematic( _ticketCategory );
     }
 
     /**
@@ -131,7 +130,7 @@ public class InstantResponse implements Serializable
      */
     public TicketCategory getTicketPrecision( )
     {
-        return TicketCategoryService.getInstance().getPrecision( _ticketCategory );
+        return TicketCategoryService.getInstance( ).getPrecision( _ticketCategory );
     }
 
     /**
@@ -154,17 +153,17 @@ public class InstantResponse implements Serializable
     {
         JSONArray jsonBranchCategories = new JSONArray( );
 
-        for ( TicketCategory ticketCategory : TicketCategoryService.getInstance().getCategoriesTree( ).getBranch( _ticketCategory ) )
+        for ( TicketCategory ticketCategory : TicketCategoryService.getInstance( ).getCategoriesTree( ).getBranch( _ticketCategory ) )
         {
             JSONObject jsonTicketCategory = new JSONObject( );
             jsonTicketCategory.accumulate( FormatConstants.KEY_ID, ticketCategory.getId( ) );
             jsonTicketCategory.accumulate( FormatConstants.KEY_DEPTH_NUMBER, ticketCategory.getDepth( ).getDepthNumber( ) );
             jsonBranchCategories.add( jsonTicketCategory );
         }
-        
+
         return jsonBranchCategories.toString( );
     }
-    
+
     /**
      * Get the branch of the ticketCategory
      * 
@@ -172,9 +171,9 @@ public class InstantResponse implements Serializable
      */
     public List<TicketCategory> getBranch( )
     {
-        return TicketCategoryService.getInstance().getCategoriesTree( ).getBranch( _ticketCategory );
+        return TicketCategoryService.getInstance( ).getCategoriesTree( ).getBranch( _ticketCategory );
     }
-    
+
     /**
      * Returns the Subject
      * 

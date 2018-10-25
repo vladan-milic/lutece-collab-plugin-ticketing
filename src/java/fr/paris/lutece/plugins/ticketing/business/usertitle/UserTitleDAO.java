@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.usertitle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class provides Data Access methods for UserTitle objects
@@ -46,12 +46,12 @@ import java.util.List;
 public final class UserTitleDAO implements IUserTitleDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_user_title ) FROM ticketing_user_title";
-    private static final String SQL_QUERY_SELECT = "SELECT id_user_title, label FROM ticketing_user_title WHERE id_user_title = ? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_user_title ( id_user_title, label, inactive ) VALUES ( ?, ?, 0 ) ";
-    private static final String SQL_QUERY_DELETE = "UPDATE ticketing_user_title SET inactive = 1 WHERE id_user_title = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_user_title SET id_user_title = ?, label = ? WHERE id_user_title = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_user_title, label FROM ticketing_user_title WHERE inactive <> 1 ";
+    private static final String SQL_QUERY_NEW_PK       = "SELECT max( id_user_title ) FROM ticketing_user_title";
+    private static final String SQL_QUERY_SELECT       = "SELECT id_user_title, label FROM ticketing_user_title WHERE id_user_title = ? ";
+    private static final String SQL_QUERY_INSERT       = "INSERT INTO ticketing_user_title ( id_user_title, label, inactive ) VALUES ( ?, ?, 0 ) ";
+    private static final String SQL_QUERY_DELETE       = "UPDATE ticketing_user_title SET inactive = 1 WHERE id_user_title = ? ";
+    private static final String SQL_QUERY_UPDATE       = "UPDATE ticketing_user_title SET id_user_title = ?, label = ? WHERE id_user_title = ?";
+    private static final String SQL_QUERY_SELECTALL    = "SELECT id_user_title, label FROM ticketing_user_title WHERE inactive <> 1 ";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_user_title FROM ticketing_user_title WHERE inactive <> 1 ";
 
     /**

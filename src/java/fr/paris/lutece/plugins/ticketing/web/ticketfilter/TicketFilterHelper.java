@@ -81,39 +81,39 @@ public final class TicketFilterHelper
     private static final String PARAMETER_FILTER_OPEN_UNTIL            = "fltr_open_until";
     private static final String PARAMETER_FILTER_LASTUPDATE_DATE       = "fltr_lastupdate";
     private static final String PARAMETER_FILTER_START_LASTUPDATE_DATE = "fltr_start_lastupdate";
-    private static final String PARAMETER_FILTER_END_LASTUPDATE_DATE = "fltr_end_lastupdate";
-    private static final String PARAMETER_FILTER_CREATION_DATE = "fltr_creationdate";
-    private static final String PARAMETER_FILTER_CLOSE_DATE = "fltr_closedate";
-    private static final String PARAMETER_FILTER_END_CREATION_DATE = "fltr_end_creationdate";
-    private static final String PARAMETER_FILTER_START_CREATION_DATE = "fltr_start_creationdate";
-    private static final String PARAMETER_FILTER_ID_USER = "fltr_id_user";
-    private static final String PARAMETER_FILTER_ID_CATEGORY_DEPTH = "fltr_id_category_depth_";
-    private static final String PARAMETER_FILTER_ORDER_BY = "fltr_order_by";
-    private static final String PARAMETER_FILTER_EMAIL = "fltr_email";
-    private static final String PARAMETER_FILTER_LASTNAME = "fltr_lastname";
-    private static final String PARAMETER_FILTER_FIRSTNAME = "fltr_firstname";
-    private static final String PARAMETER_FILTER_NOMENCLATURE = "fltr_nomenclature";
-    private static final String PARAMETER_FILTER_FIXED_PHONE_NUMBER = "fltr_fixed_phone_number";
-    private static final String PARAMETER_FILTER_MOBILE_PHONE_NUMBER = "fltr_mobile_phone_number";
-    private static final String PARAMETER_FILTER_URGENCY = "fltr_urgency";
-    private static final String PARAMETER_FILTER_NEW_URGENCY = "fltr_new_urgency";
-    private static final String PARAMETER_FILTER_REFERENCE = "fltr_reference";
-    private static final String PARAMETER_FILTER_ORDER_SORT = "fltr_order_sort";
-    private static final String PARAMETER_FILTER_SUBMITTED_FORM = "submitted_form";
-    private static final String PARAMETER_FILTER_WORKFLOW_STATE_IDS = "fltr_state_ids";
+    private static final String PARAMETER_FILTER_END_LASTUPDATE_DATE   = "fltr_end_lastupdate";
+    private static final String PARAMETER_FILTER_CREATION_DATE         = "fltr_creationdate";
+    private static final String PARAMETER_FILTER_CLOSE_DATE            = "fltr_closedate";
+    private static final String PARAMETER_FILTER_END_CREATION_DATE     = "fltr_end_creationdate";
+    private static final String PARAMETER_FILTER_START_CREATION_DATE   = "fltr_start_creationdate";
+    private static final String PARAMETER_FILTER_ID_USER               = "fltr_id_user";
+    private static final String PARAMETER_FILTER_ID_CATEGORY_DEPTH     = "fltr_id_category_depth_";
+    private static final String PARAMETER_FILTER_ORDER_BY              = "fltr_order_by";
+    private static final String PARAMETER_FILTER_EMAIL                 = "fltr_email";
+    private static final String PARAMETER_FILTER_LASTNAME              = "fltr_lastname";
+    private static final String PARAMETER_FILTER_FIRSTNAME             = "fltr_firstname";
+    private static final String PARAMETER_FILTER_NOMENCLATURE          = "fltr_nomenclature";
+    private static final String PARAMETER_FILTER_FIXED_PHONE_NUMBER    = "fltr_fixed_phone_number";
+    private static final String PARAMETER_FILTER_MOBILE_PHONE_NUMBER   = "fltr_mobile_phone_number";
+    private static final String PARAMETER_FILTER_URGENCY               = "fltr_urgency";
+    private static final String PARAMETER_FILTER_NEW_URGENCY           = "fltr_new_urgency";
+    private static final String PARAMETER_FILTER_REFERENCE             = "fltr_reference";
+    private static final String PARAMETER_FILTER_ORDER_SORT            = "fltr_order_sort";
+    private static final String PARAMETER_FILTER_SUBMITTED_FORM        = "submitted_form";
+    private static final String PARAMETER_FILTER_WORKFLOW_STATE_IDS    = "fltr_state_ids";
 
     // Marks
-    private static final String MARK_FILTER_PERIOD_LIST = "period_list";
-    private static final String MARK_TICKET_FILTER = "ticket_filter";
-    private static final String MARK_FULL_STATE_LIST = "state_list";
-    private static final String MARK_FULL_CATEGORY_MAP = "category_reflist_map";
-    private static final String DATE_FILTER_PATTERN = "yyyyMMdd";
+    private static final String MARK_FILTER_PERIOD_LIST                = "period_list";
+    private static final String MARK_TICKET_FILTER                     = "ticket_filter";
+    private static final String MARK_FULL_STATE_LIST                   = "state_list";
+    private static final String MARK_FULL_CATEGORY_MAP                 = "category_reflist_map";
+    private static final String DATE_FILTER_PATTERN                    = "yyyyMMdd";
     private static final String DATETIME_FILTER_PATTERN                = "yyyyMMdd hh:mm:ss";
     private static final String TIME_START_OF_DAY                      = " 00:00:00";
     private static final String TIME_END_OF_DAY                        = " 23:59:59";
 
     // Properties for page titles
-    private static final String NO_SELECTED_FIELD_ID = "-1";
+    private static final String NO_SELECTED_FIELD_ID                   = "-1";
 
     /**
      * private constructor
@@ -157,18 +157,17 @@ public final class TicketFilterHelper
         }
 
         Map<Integer, Integer> mapCategoryId = new LinkedHashMap<Integer, Integer>( );
-        for(int i = 1; i <= getMaxNumberFilter( ); i++)
+        for ( int i = 1; i <= getMaxNumberFilter( ); i++ )
         {
-            if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_CATEGORY_DEPTH + i ) )
-                    && StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_CATEGORY_DEPTH + i ) ) )
+            if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_CATEGORY_DEPTH + i ) ) && StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_CATEGORY_DEPTH + i ) ) )
             {
                 mapCategoryId.put( i, Integer.parseInt( request.getParameter( PARAMETER_FILTER_ID_CATEGORY_DEPTH + i ) ) );
-            }
-            else
+            } else
             {
                 mapCategoryId.put( i, TicketFilter.CONSTANT_ID_NULL );
             }
-        };
+        }
+        ;
         fltrFiltre.setMapCategoryId( mapCategoryId );
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_USER ) ) && StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_USER ) ) )
@@ -176,8 +175,7 @@ public final class TicketFilterHelper
             fltrFiltre.setIdUser( Integer.parseInt( request.getParameter( PARAMETER_FILTER_ID_USER ) ) );
         }
 
-        if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_TICKET ) )
-                && StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_TICKET ) ) )
+        if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_TICKET ) ) && StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_TICKET ) ) )
         {
             fltrFiltre.setIdTicket( Integer.parseInt( request.getParameter( PARAMETER_FILTER_ID_TICKET ) ) );
         }
@@ -366,10 +364,11 @@ public final class TicketFilterHelper
         filter.setListIdWorkflowState( lstIdWorkflowState );
 
         Map<Integer, Integer> mapCategoryId = new LinkedHashMap<Integer, Integer>( );
-        for(int i = 1; i <= getMaxNumberFilter( ); i++)
+        for ( int i = 1; i <= getMaxNumberFilter( ); i++ )
         {
             mapCategoryId.put( i, TicketFilter.CONSTANT_ID_NULL );
-        };
+        }
+        ;
         filter.setMapCategoryId( mapCategoryId );
 
         return filter;
@@ -389,8 +388,8 @@ public final class TicketFilterHelper
      */
     public static void setModel( Map<String, Object> mapModel, TicketFilter fltrFilter, HttpServletRequest request, AdminUser user )
     {
-        Map<Integer,LinkedHashMap<String,String>> mapTypeCategoryList = new LinkedHashMap<Integer, LinkedHashMap<String, String>>( );
-        for (int i = 1; i <= getMaxNumberFilter( ); i++)
+        Map<Integer, LinkedHashMap<String, String>> mapTypeCategoryList = new LinkedHashMap<Integer, LinkedHashMap<String, String>>( );
+        for ( int i = 1; i <= getMaxNumberFilter( ); i++ )
         {
             Map<String, String> mapCategories = new LinkedHashMap<String, String>( );
 
@@ -399,39 +398,40 @@ public final class TicketFilterHelper
             {
                 mapCategories.put( StringUtils.EMPTY, depth.getLabel( ) );
             }
-            mapTypeCategoryList.put( i, (LinkedHashMap<String, String>) mapCategories );
-        };
+            mapTypeCategoryList.put( i, ( LinkedHashMap<String, String> ) mapCategories );
+        }
+        ;
 
         int nParentId = TicketFilter.CONSTANT_ID_NULL;
-        for (int i = 1; i <= getMaxNumberFilter( ); i++)
+        for ( int i = 1; i <= getMaxNumberFilter( ); i++ )
         {
             ArrayList<TicketCategory> ticketCategoryList = new ArrayList<TicketCategory>( );
-            if ( nParentId ==  TicketFilter.CONSTANT_ID_NULL )
+            if ( nParentId == TicketFilter.CONSTANT_ID_NULL )
             {
                 ticketCategoryList = ( ArrayList<TicketCategory> ) TicketCategoryService.getInstance( false ).getAuthorizedCategoryList( i, user, TicketCategory.PERMISSION_VIEW_LIST );
-            }
-            else
+            } else
             {
                 TicketCategory ticketCategory = TicketCategoryService.getInstance( true ).findCategoryById( nParentId );
                 ticketCategoryList = ( ArrayList<TicketCategory> ) TicketCategoryService.getInstance( false ).getAuthorizedCategoryList( ticketCategory, user, TicketCategory.PERMISSION_VIEW_LIST );
             }
             nParentId = ( fltrFilter.getMapCategoryId( ).get( i ) != null ) ? fltrFilter.getMapCategoryId( ).get( i ) : TicketFilter.CONSTANT_ID_NULL;
 
-            for ( TicketCategory ticketCategory : ticketCategoryList ) 
+            for ( TicketCategory ticketCategory : ticketCategoryList )
             {
-                mapTypeCategoryList.get( i ).put( String.valueOf (ticketCategory.getId( ) ), ticketCategory.getLabel( ) );
-            }            
-        };
+                mapTypeCategoryList.get( i ).put( String.valueOf( ticketCategory.getId( ) ), ticketCategory.getLabel( ) );
+            }
+        }
+        ;
 
         ReferenceList refListStates = new ReferenceList( );
         refListStates.addAll( getWorkflowStates( user, fltrFilter.getListIdWorkflowState( ) ) );
 
         mapModel.put( MARK_TICKET_FILTER, fltrFilter );
 
-        Map<String,ReferenceList> mapTypeCategoryReferenceList = new LinkedHashMap<String, ReferenceList>( );
-        for (int i = 1; i <= mapTypeCategoryList.size( ); i++)
+        Map<String, ReferenceList> mapTypeCategoryReferenceList = new LinkedHashMap<String, ReferenceList>( );
+        for ( int i = 1; i <= mapTypeCategoryList.size( ); i++ )
         {
-            mapTypeCategoryReferenceList.put( String.valueOf (i ), ReferenceList.convert( mapTypeCategoryList.get( i ) ) );  
+            mapTypeCategoryReferenceList.put( String.valueOf( i ), ReferenceList.convert( mapTypeCategoryList.get( i ) ) );
         }
         mapModel.put( MARK_FULL_CATEGORY_MAP, mapTypeCategoryReferenceList );
 

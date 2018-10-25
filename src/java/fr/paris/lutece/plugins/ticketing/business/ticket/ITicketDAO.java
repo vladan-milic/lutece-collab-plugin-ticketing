@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.ticket;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
-
 import java.util.List;
+
+import fr.paris.lutece.portal.service.plugin.Plugin;
 
 /**
  * ITicketDAO Interface

@@ -41,7 +41,7 @@ import fr.paris.lutece.portal.business.user.AdminUser;
 public class AssigneeUser
 {
     // Variables declarations
-    private int _nAdminUserId;
+    private int    _nAdminUserId;
     private String _strFirstname;
     private String _strLastname;
     private String _strEmail;

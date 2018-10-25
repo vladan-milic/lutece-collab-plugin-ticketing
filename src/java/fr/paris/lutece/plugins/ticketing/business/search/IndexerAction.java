@@ -54,9 +54,9 @@ public class IndexerAction
      * Remove a document from the index
      */
     public static final int TASK_DELETE = 3;
-    private int _nIdAction;
-    private int _nIdTask;
-    private int _nIdTicket;
+    private int             _nIdAction;
+    private int             _nIdTask;
+    private int             _nIdTicket;
 
     /**
      * gets the action id

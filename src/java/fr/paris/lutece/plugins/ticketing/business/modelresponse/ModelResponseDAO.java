@@ -46,13 +46,13 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class ModelResponseDAO implements IModelResponseDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_model_response ) FROM ticketing_model_reponses";
-    private static final String SQL_QUERY_SELECT = "SELECT id_model_response, id_ticket_category, title, reponse, keyword, cat.label, date_update, firstname, lastname FROM ticketing_model_reponses res INNER JOIN ticketing_category cat ON cat.id_category = res.id_ticket_category WHERE res.id_model_response = ?";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_model_reponses ( id_model_response, id_ticket_category, title, reponse, keyword, firstname, lastname, date_update ) VALUES ( ?, ?, ?, ?,?,?,?,?) ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_model_reponses WHERE id_model_response = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_model_reponses SET id_model_response = ?, id_ticket_category = ?, title = ?, reponse = ?, keyword =?, firstname= ?, lastname= ?, date_update = (SELECT DATE_FORMAT(NOW(), '%d/%m/%Y')) WHERE id_model_response = ?";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_model_response, id_ticket_category, title, reponse, keyword, cat.label, date_update, firstname, lastname FROM ticketing_model_reponses res INNER JOIN ticketing_category cat ON cat.id_category = res.id_ticket_category";
-    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_model_response FROM ticketing_model_reponses";
+    private static final String SQL_QUERY_NEW_PK           = "SELECT max( id_model_response ) FROM ticketing_model_reponses";
+    private static final String SQL_QUERY_SELECT           = "SELECT id_model_response, id_ticket_category, title, reponse, keyword, cat.label, date_update, firstname, lastname FROM ticketing_model_reponses res INNER JOIN ticketing_category cat ON cat.id_category = res.id_ticket_category WHERE res.id_model_response = ?";
+    private static final String SQL_QUERY_INSERT           = "INSERT INTO ticketing_model_reponses ( id_model_response, id_ticket_category, title, reponse, keyword, firstname, lastname, date_update ) VALUES ( ?, ?, ?, ?,?,?,?,?) ";
+    private static final String SQL_QUERY_DELETE           = "DELETE FROM ticketing_model_reponses WHERE id_model_response = ? ";
+    private static final String SQL_QUERY_UPDATE           = "UPDATE ticketing_model_reponses SET id_model_response = ?, id_ticket_category = ?, title = ?, reponse = ?, keyword =?, firstname= ?, lastname= ?, date_update = (SELECT DATE_FORMAT(NOW(), '%d/%m/%Y')) WHERE id_model_response = ?";
+    private static final String SQL_QUERY_SELECTALL        = "SELECT id_model_response, id_ticket_category, title, reponse, keyword, cat.label, date_update, firstname, lastname FROM ticketing_model_reponses res INNER JOIN ticketing_category cat ON cat.id_category = res.id_ticket_category";
+    private static final String SQL_QUERY_SELECTALL_ID     = "SELECT id_model_response FROM ticketing_model_reponses";
     private static final String SQL_QUERY_SELECT_BY_DOMAIN = "SELECT res.id_model_response, id_ticket_category, res.title, res.reponse, res.keyword,cat.label, date_update, firstname, lastname FROM ticketing_model_reponses res INNER JOIN ticketing_category cat ON cat.id_category = res.id_ticket_category WHERE res.id_ticket_category = ?";
 
     /**
@@ -95,9 +95,9 @@ public final class ModelResponseDAO implements IModelResponseDAO
         daoUtil.setString( nIndex++, modelResponse.getTitle( ) );
         daoUtil.setString( nIndex++, modelResponse.getReponse( ) );
         daoUtil.setString( nIndex++, modelResponse.getKeyword( ) );
-        daoUtil.setString( nIndex++, modelResponse.getFirstName() );
-        daoUtil.setString( nIndex++, modelResponse.getLastName() );
-        daoUtil.setString( nIndex++, modelResponse.getDateUpdate() );
+        daoUtil.setString( nIndex++, modelResponse.getFirstName( ) );
+        daoUtil.setString( nIndex++, modelResponse.getLastName( ) );
+        daoUtil.setString( nIndex++, modelResponse.getDateUpdate( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -129,8 +129,8 @@ public final class ModelResponseDAO implements IModelResponseDAO
             modelResponse.setKeyword( daoUtil.getString( nIndex++ ) );
             modelResponse.setDomainLabel( daoUtil.getString( nIndex++ ) );
             modelResponse.setDateUpdate( daoUtil.getString( nIndex++ ) );
-            modelResponse.setFirstName( daoUtil.getString(nIndex++) );
-            modelResponse.setLastName( daoUtil.getString(nIndex++) );
+            modelResponse.setFirstName( daoUtil.getString( nIndex++ ) );
+            modelResponse.setLastName( daoUtil.getString( nIndex++ ) );
 
         }
 
@@ -165,9 +165,9 @@ public final class ModelResponseDAO implements IModelResponseDAO
         daoUtil.setString( nIndex++, modelResponse.getTitle( ) );
         daoUtil.setString( nIndex++, modelResponse.getReponse( ) );
         daoUtil.setString( nIndex++, modelResponse.getKeyword( ) );
-        daoUtil.setString( nIndex++, modelResponse.getFirstName() );
-        daoUtil.setString( nIndex++, modelResponse.getLastName() );
-        daoUtil.setInt( nIndex, modelResponse.getId( ) );        
+        daoUtil.setString( nIndex++, modelResponse.getFirstName( ) );
+        daoUtil.setString( nIndex++, modelResponse.getLastName( ) );
+        daoUtil.setInt( nIndex, modelResponse.getId( ) );
         daoUtil.executeUpdate( );
         daoUtil.free( );
     }
@@ -230,7 +230,7 @@ public final class ModelResponseDAO implements IModelResponseDAO
             modelResponse.setDateUpdate( daoUtil.getString( nIndex++ ) );
             modelResponse.setFirstName( daoUtil.getString( nIndex++ ) );
             modelResponse.setLastName( daoUtil.getString( nIndex++ ) );
-            
+
             listModelResponses.add( modelResponse );
         }
 

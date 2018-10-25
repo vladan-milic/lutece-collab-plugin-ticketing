@@ -33,13 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.supportentity;
 
-import fr.paris.lutece.portal.service.i18n.I18nService;
-import fr.paris.lutece.util.ReferenceList;
-
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.util.ReferenceList;
 
 /**
  *
@@ -49,7 +49,7 @@ public enum SupportLevel
 {
     LEVEL1( 1 ), LEVEL2( 2 ), LEVEL3( 3 );
 
-    private static final String MESSAGE_PREFIX = "ticketing.supportentity.level";
+    private static final String               MESSAGE_PREFIX   = "ticketing.supportentity.level";
     private static Map<Integer, SupportLevel> _mapSupportLevel = new HashMap<Integer, SupportLevel>( );
 
     static

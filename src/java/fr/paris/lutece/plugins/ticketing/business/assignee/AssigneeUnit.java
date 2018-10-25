@@ -42,11 +42,11 @@ import fr.paris.lutece.portal.service.rbac.RBACResource;
 public class AssigneeUnit implements RBACResource
 {
     public static final String PERMISSION_ASSIGN = "ASSIGN";
-    public static final String RESOURCE_TYPE = "assigneeUnit";
+    public static final String RESOURCE_TYPE     = "assigneeUnit";
 
     // Variables declarations
-    private int _nUnitId;
-    private String _strName;
+    private int                _nUnitId;
+    private String             _strName;
 
     /** Constructor */
     public AssigneeUnit( )

@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import fr.paris.lutece.plugins.genericattributes.business.EntryType;
 import fr.paris.lutece.plugins.genericattributes.business.EntryTypeHome;
 import fr.paris.lutece.util.ReferenceList;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -48,7 +48,7 @@ import java.util.Map;
 public final class EntryTypeService
 {
     private static volatile EntryTypeService _instance;
-    private Map<Integer, EntryType> _mapEntryTypes;
+    private Map<Integer, EntryType>          _mapEntryTypes;
 
     /**
      * Private constructor

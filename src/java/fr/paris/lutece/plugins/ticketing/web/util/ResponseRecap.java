@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.ticketing.web.util;
 
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,10 +45,10 @@ public class ResponseRecap implements Serializable
     /**
      * The resource type of responses
      */
-    private static final long serialVersionUID = 1L;
+    private static final long   serialVersionUID      = 1L;
     private static final String STRING_LIST_SEPARATOR = ", ";
-    private String _strTitle;
-    private List<String> _listValues;
+    private String              _strTitle;
+    private List<String>        _listValues;
 
     /**
      * Default constructor

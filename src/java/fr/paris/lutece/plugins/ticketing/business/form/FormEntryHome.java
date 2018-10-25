@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.form;
 
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
-
-import java.util.List;
 
 /**
  * This class provides instances management methods (create, find, ...) for FormEntry objects
@@ -46,13 +46,13 @@ import java.util.List;
 public final class FormEntryHome
 {
     // Static variable pointed at the DAO instance
-    private static IFormEntryDAO _dao = SpringContextService.getBean( "ticketing.formEntryDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static IFormEntryDAO _dao    = SpringContextService.getBean( "ticketing.formEntryDAO" );
+    private static Plugin        _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private FormEntryHome(  )
+    private FormEntryHome( )
     {
     }
 
@@ -63,8 +63,10 @@ public final class FormEntryHome
 
     /**
      * Create an instance of the formEntry class
-     * @param formEntry The instance of the FormEntry which contains the informations to store
-     * @return The  instance of formEntry which has been created with its primary key.
+     * 
+     * @param formEntry
+     *            The instance of the FormEntry which contains the informations to store
+     * @return The instance of formEntry which has been created with its primary key.
      */
     public static FormEntry create( FormEntry formEntry )
     {
@@ -75,8 +77,10 @@ public final class FormEntryHome
 
     /**
      * Update of the formEntry which is specified in parameter
-     * @param formEntry The instance of the FormEntry which contains the data to store
-     * @return The instance of the  formEntry which has been updated
+     * 
+     * @param formEntry
+     *            The instance of the FormEntry which contains the data to store
+     * @return The instance of the formEntry which has been updated
      */
     public static FormEntry update( FormEntry formEntry )
     {
@@ -87,16 +91,20 @@ public final class FormEntryHome
 
     /**
      * Remove the formEntry whose identifier is specified in parameter
-     * @param nKey The formEntry Id
+     * 
+     * @param nKey
+     *            The formEntry Id
      */
     public static void remove( int nKey )
     {
         _dao.delete( nKey, _plugin );
     }
-    
+
     /**
      * Remove the formEntry whose identifier is specified in parameter
-     * @param nKey The form Id
+     * 
+     * @param nKey
+     *            The form Id
      */
     public static void removeByIdForm( int nKey )
     {
@@ -105,39 +113,43 @@ public final class FormEntryHome
 
     /**
      * Returns an instance of a formEntry whose identifier is specified in parameter
-     * @param nKey The formEntry primary key
+     * 
+     * @param nKey
+     *            The formEntry primary key
      * @return an instance of FormEntry
      */
     public static FormEntry findByPrimaryKey( int nKey )
     {
-        return _dao.load( nKey, _plugin);
+        return _dao.load( nKey, _plugin );
     }
 
     /**
      * Load the data of all the formEntry objects and returns them as a list
+     * 
      * @return the list which contains the data of all the formEntry objects
      */
     public static List<FormEntry> getFormEntrysList( )
     {
         return _dao.selectFormEntrysList( _plugin );
     }
-    
+
     /**
      * Load the id of all the formEntry objects and returns them as a list
+     * 
      * @return the list which contains the id of all the formEntry objects
      */
     public static List<Integer> getIdFormEntrysList( )
     {
         return _dao.selectIdFormEntrysList( _plugin );
     }
-    
+
     /**
      * Load the data of all the formEntry objects and returns them as a referenceList
+     * 
      * @return the referenceList which contains the data of all the formEntry objects
      */
     public static ReferenceList getFormEntrysReferenceList( )
     {
-        return _dao.selectFormEntrysReferenceList(_plugin );
+        return _dao.selectFormEntrysReferenceList( _plugin );
     }
 }
-

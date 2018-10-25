@@ -73,8 +73,8 @@ import fr.paris.lutece.util.url.UrlItem;
 @Controller( controllerJsp = "ManageCategories.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = "TICKETING_MANAGEMENT" )
 public class CategoryJspBean extends ManageAdminTicketingJspBean
 {
-    
-	// Templates
+
+    // Templates
     private static final String TEMPLATE_MANAGE_CATEGORIES                 = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_categories.html";
     private static final String TEMPLATE_CREATE_CATEGORY                   = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_category.html";
     private static final String TEMPLATE_MODIFY_CATEGORY                   = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_category.html";
@@ -98,8 +98,8 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
     private static final String PROPERTY_PAGE_TITLE_CREATE_CATEGORYTYPE    = "ticketing.create_categorytype.pageTitle";
 
     private static final String PROPERTY_PAGE_TITLE_MODIFY_CATEGORY_INPUTS = "ticketing.modify_category_inputs.pageTitle";
-    
-    private static final String PROPERTY_DEMAND_TYPE_MY_ACCOUNT 		   = "ticketing.demand.type.my.account";
+
+    private static final String PROPERTY_DEMAND_TYPE_MY_ACCOUNT            = "ticketing.demand.type.my.account";
 
     // Markers
     private static final String MARK_CATEGORY                              = "category";
@@ -109,9 +109,9 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
     public static final String  MARK_ID_PARENT_CATEGORY                    = "id_parent_category";
     public static final String  MARK_ID_CATEGORY                           = "id_category";
     public static final String  MARK_ASSIGNEE_UNIT_LIST                    = "unit_list";
-    public static final String  MARK_DEMAND_TYPE_MY_ACCOUNT_LIST 		   = "demand_type_my_account_list";
+    public static final String  MARK_DEMAND_TYPE_MY_ACCOUNT_LIST           = "demand_type_my_account_list";
     public static final String  MARK_FORM_LIST                             = "form_list";
-    public static final String MARK_FORMCATEGORY_LIST = "formcategory_list";
+    public static final String  MARK_FORMCATEGORY_LIST                     = "formcategory_list";
     private static final String MARK_CATEGORYTYPE                          = "categorytype";
 
     private static final String MARK_ALL_INPUTS_LIST                       = "inputs_list";
@@ -121,15 +121,15 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_CATEGORY_INPUTS_HERITED_LIST          = "category_inputs_herited_list";
     private static final String MARK_CATEGORY_INPUTS_BLOCKED_LIST          = "category_inputs_blocked_list";
     private static final String MARK_BRANCH_LABEL                          = "branch_label";
-    private static final String MARK_SELECTED_FORMS = "selected_forms";
+    private static final String MARK_SELECTED_FORMS                        = "selected_forms";
 
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_CATEGORY            = "ticketing.message.confirmRemoveCategory";
     private static final String MESSAGE_CONFIRM_REMOVE_CATEGORYTYPE        = "ticketing.message.confirmRemoveCategoryType";
 
     private static final String MESSAGE_CONFIRM_REMOVE_CATEGORY_INPUT      = "ticketing.message.confirmRemoveCategoryInput";
-    
-    private static final String MESSAGE_NO_DEMAND_TYPE 					   = "ticketing.create_category.demandType.noDemandType";
+
+    private static final String MESSAGE_NO_DEMAND_TYPE                     = "ticketing.create_category.demandType.noDemandType";
 
     // Validations
     private static final String VALIDATION_ATTRIBUTES_PREFIX               = "ticketing.model.entity.category.attribute.";
@@ -176,8 +176,8 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
     private static final String JSP_MANAGE_CATEGORIES                      = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageCategories.jsp";
 
     private static final long   serialVersionUID                           = 1L;
-    
-	private static final String DEMAND_TYPE_KEYS_LIST_LABEL 			   = ".label";
+
+    private static final String DEMAND_TYPE_KEYS_LIST_LABEL                = ".label";
 
     // Session variable to store working values
     private TicketCategory      _category;
@@ -210,8 +210,7 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
                 {
                     restrictedCategoriesId = null;
                     break;
-                }
-                else if ( "none".equals( formId ) )
+                } else if ( "none".equals( formId ) )
                 {
                     // We get all categories of first depth
                     List<TicketCategory> firstDepths = TicketCategoryService.getInstance( ).getCategoriesTree( ).getRootElements( );
@@ -229,8 +228,7 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
                     }
 
                     restrictedCategoriesId.addAll( restrictedCategories.stream( ).map( category -> category.getId( ) ).collect( Collectors.toList( ) ) );
-                }
-                else
+                } else
                 {
                     List<FormCategory> restrictedCategories = FormCategoryHome.findByForm( Integer.parseInt( formId ) );
                     restrictedCategoriesId.addAll( restrictedCategories.stream( ).map( category -> category.getIdCategory( ) ).collect( Collectors.toList( ) ) );
@@ -277,7 +275,7 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
         return getPage( PROPERTY_PAGE_TITLE_CREATE_CATEGORY, TEMPLATE_CREATE_CATEGORY, model );
     }
 
-	/**
+    /**
      * Process the data capture form of a new category
      *
      * @param request
@@ -774,24 +772,25 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
 
         return redirect( request, url.getUrl( ) );
     }
-    
+
     /**
      * Load the data of all the demande types my account objects and returns them in form of a collection
      *
      * @return the list which contains the data of all the demand types of my account objects
      */
-    private ReferenceList getDemandTypesMyAccountList() {
-    	List<String> lstDemandTypeCodeKeys = AppPropertiesService.getKeys( PROPERTY_DEMAND_TYPE_MY_ACCOUNT );
+    private ReferenceList getDemandTypesMyAccountList( )
+    {
+        List<String> lstDemandTypeCodeKeys = AppPropertiesService.getKeys( PROPERTY_DEMAND_TYPE_MY_ACCOUNT );
         ReferenceList lstRef = new ReferenceList( lstDemandTypeCodeKeys.size( ) );
 
-        lstRef.addItem("", I18nService.getLocalizedString( MESSAGE_NO_DEMAND_TYPE , getLocale( ) ) );
-        
+        lstRef.addItem( "", I18nService.getLocalizedString( MESSAGE_NO_DEMAND_TYPE, getLocale( ) ) );
+
         for ( String key : lstDemandTypeCodeKeys )
         {
-            lstRef.addItem( AppPropertiesService.getProperty(key), I18nService.getLocalizedString( key + DEMAND_TYPE_KEYS_LIST_LABEL, getLocale( ) ) );
+            lstRef.addItem( AppPropertiesService.getProperty( key ), I18nService.getLocalizedString( key + DEMAND_TYPE_KEYS_LIST_LABEL, getLocale( ) ) );
         }
 
         return lstRef;
-	}
+    }
 
 }

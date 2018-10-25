@@ -33,6 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.EntryFilter;
 import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
@@ -46,11 +51,6 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
 import fr.paris.lutece.util.url.UrlItem;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * This class provides the user interface to manage TicketInputs features ( manage, create, modify, remove )
  */
@@ -60,28 +60,28 @@ public class TicketInputsJspBean extends MVCAdminJspBean
     /**
      * Right to manage ticketing inputs
      */
-    public static final String RIGHT_MANAGETICKETINPUTS = "TICKETING_MANAGEMENT";
-    private static final long serialVersionUID = 1L;
+    public static final String  RIGHT_MANAGETICKETINPUTS                = "TICKETING_MANAGEMENT";
+    private static final long   serialVersionUID                        = 1L;
 
     // templates
-    private static final String TEMPLATE_MANAGE_TICKETINPUTS = TicketingConstants.TEMPLATE_ADMIN_TICKETINPUTS_FEATURE_PATH + "manage_ticketinputs.html";
+    private static final String TEMPLATE_MANAGE_TICKETINPUTS            = TicketingConstants.TEMPLATE_ADMIN_TICKETINPUTS_FEATURE_PATH + "manage_ticketinputs.html";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETINPUTS = "ticketing.manage_ticketinputs.pageTitle";
 
     // Markers
-    private static final String MARK_ENTRY_LIST = "entry_list";
-    private static final String MARK_ENTRY_TYPE_LIST = "entry_type_list";
-    private static final String MARK_LOCALE = "language";
-    private static final String MARK_LOCALE_TINY = "locale";
+    private static final String MARK_ENTRY_LIST                         = "entry_list";
+    private static final String MARK_ENTRY_TYPE_LIST                    = "entry_type_list";
+    private static final String MARK_LOCALE                             = "language";
+    private static final String MARK_LOCALE_TINY                        = "locale";
 
     // Jsp
-    private static final String JSP_MANAGE_TICKETINPUTS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageTicketInputs.jsp";
+    private static final String JSP_MANAGE_TICKETINPUTS                 = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageTicketInputs.jsp";
 
     // Properties
 
     // Views
-    private static final String VIEW_MANAGE_TICKETINPUTS = "manageTicketInputs";
+    private static final String VIEW_MANAGE_TICKETINPUTS                = "manageTicketInputs";
 
     /**
      * Default constructor

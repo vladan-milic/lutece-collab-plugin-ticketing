@@ -33,10 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.category;
 
-import fr.paris.lutece.plugins.ticketing.service.tree.AbstractDepth;
-import javax.validation.constraints.*;
-import org.hibernate.validator.constraints.*;
 import java.io.Serializable;
+
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
+import fr.paris.lutece.plugins.ticketing.service.tree.AbstractDepth;
 
 /**
  * This is the business class for the object CategoryType
@@ -46,13 +49,13 @@ public class TicketCategoryType extends AbstractDepth implements Serializable
     private static final long serialVersionUID = 1L;
 
     // Variables declarations
-    private int _nId;
+    private int               _nId;
 
-    private int _nDepthNumber;
-    
+    private int               _nDepthNumber;
+
     @NotEmpty( message = "#i18n{ticketing.validation.categorytype.Label.notEmpty}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.categorytype.Label.size}" )
-    private String _strLabel;
+    private String            _strLabel;
 
     /**
      * Returns the Id

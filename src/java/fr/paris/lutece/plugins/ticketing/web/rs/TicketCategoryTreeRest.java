@@ -33,17 +33,17 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
-import fr.paris.lutece.plugins.rest.service.RestConstants;
-import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
-import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTree;
-import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
+
+import fr.paris.lutece.plugins.rest.service.RestConstants;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTree;
+import fr.paris.lutece.plugins.ticketing.service.format.IFormatterFactory;
 
 /**
  * REST service for ticket type resource

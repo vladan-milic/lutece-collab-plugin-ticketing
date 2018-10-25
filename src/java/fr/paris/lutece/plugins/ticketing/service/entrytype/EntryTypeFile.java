@@ -33,6 +33,16 @@
  */
 package fr.paris.lutece.plugins.ticketing.service.entrytype;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeFile;
@@ -46,16 +56,6 @@ import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 /**
  *
  * class EntryTypeImage
@@ -66,17 +66,17 @@ public class EntryTypeFile extends AbstractEntryTypeFile
     /**
      * Name of the bean of this service
      */
-    public static final String BEAN_NAME = "ticketing.entryTypeFile";
+    public static final String  BEAN_NAME                = "ticketing.entryTypeFile";
 
     // Templates
-    private static final String TEMPLATE_CREATE = "admin/plugins/ticketing/entries/create_entry_type_file.html";
-    private static final String TEMPLATE_MODIFY = "admin/plugins/ticketing/entries/modify_entry_type_file.html";
-    private static final String TEMPLATE_HTML_CODE = "skin/plugins/ticketing/entries/html_code_entry_type_file.html";
+    private static final String TEMPLATE_CREATE          = "admin/plugins/ticketing/entries/create_entry_type_file.html";
+    private static final String TEMPLATE_MODIFY          = "admin/plugins/ticketing/entries/modify_entry_type_file.html";
+    private static final String TEMPLATE_HTML_CODE       = "skin/plugins/ticketing/entries/html_code_entry_type_file.html";
     private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/ticketing/entries/html_code_entry_type_file.html";
-    private static final String TEMPLATE_READ_ONLY_HTML = "admin/plugins/ticketing/entries/read_only_entry_type_file.html";
+    private static final String TEMPLATE_READ_ONLY_HTML  = "admin/plugins/ticketing/entries/read_only_entry_type_file.html";
 
     // Markers
-    private static final String MARK_FILE_URL = "file_url";
+    private static final String MARK_FILE_URL            = "file_url";
 
     /**
      * {@inheritDoc}

@@ -33,13 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.instantresponse;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import java.util.List;
 
 /**
  * This class provides instances management methods (create, find, ...) for InstantResponse objects
@@ -47,8 +47,8 @@ import java.util.List;
 public final class InstantResponseHome
 {
     // Static variable pointed at the DAO instance
-    private static IInstantResponseDAO _dao = SpringContextService.getBean( "ticketing.instantResponseDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static IInstantResponseDAO _dao    = SpringContextService.getBean( "ticketing.instantResponseDAO" );
+    private static Plugin              _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated

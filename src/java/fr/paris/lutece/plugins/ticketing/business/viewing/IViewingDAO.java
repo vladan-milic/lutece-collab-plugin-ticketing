@@ -30,51 +30,52 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  * 
  * License 1.0 
- */ 
-package fr.paris.lutece.plugins.ticketing.business.viewing; 
- 
-import fr.paris.lutece.portal.service.plugin.Plugin; 
- 
-public interface IViewingDAO { 
- 
-    /** 
-     * Insert a new record in the table. 
+ */
+package fr.paris.lutece.plugins.ticketing.business.viewing;
+
+import fr.paris.lutece.portal.service.plugin.Plugin;
+
+public interface IViewingDAO
+{
+
+    /**
+     * Insert a new record in the table.
      * 
-     * @param viewing 
-     *            instance of the viewing object to insert 
-     * @param plugin 
-     *            the Plugin 
-     */ 
-  void insert(Viewing viewing, Plugin _plugin); 
- 
-    /** 
-     * Update the record in the table 
+     * @param viewing
+     *            instance of the viewing object to insert
+     * @param plugin
+     *            the Plugin
+     */
+    void insert( Viewing viewing, Plugin _plugin );
+
+    /**
+     * Update the record in the table
      * 
-     * @param viewing 
-     *            the reference of the Viewing 
-     * @param plugin 
-     *            the Plugin 
-     */ 
-  void store(Viewing viewing, Plugin _plugin); 
- 
-    // ///////////////////////////////////////////////////////////////////////// 
-    // Finders 
-   
-    /** 
-     * Load the data of a viewing objects and return. 
+     * @param viewing
+     *            the reference of the Viewing
+     * @param plugin
+     *            the Plugin
+     */
+    void store( Viewing viewing, Plugin _plugin );
+
+    // /////////////////////////////////////////////////////////////////////////
+    // Finders
+
+    /**
+     * Load the data of a viewing objects and return.
      * 
-     * @param plugin 
-     *            the Plugin 
-     * @return The data of a viewing objects 
-     */ 
-  Viewing selectViewing(Plugin _plugin); 
-   
-    /** 
-     * Count the data of a viewing objects. 
+     * @param plugin
+     *            the Plugin
+     * @return The data of a viewing objects
+     */
+    Viewing selectViewing( Plugin _plugin );
+
+    /**
+     * Count the data of a viewing objects.
      * 
-     * @param plugin 
-     *            the Plugin 
-     * @return The number of data 
-     */ 
-  int selectCount(Plugin plugin); 
-} 
+     * @param plugin
+     *            the Plugin
+     * @return The number of data
+     */
+    int selectCount( Plugin plugin );
+}
