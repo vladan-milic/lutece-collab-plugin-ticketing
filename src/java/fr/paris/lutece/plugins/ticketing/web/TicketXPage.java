@@ -178,7 +178,7 @@ public class TicketXPage extends WorkflowCapableXPage
         Form form = FormHome.getFormFromRequest( request );
         List<Integer> restrictedCategoriesId = null;
 
-        if ( form == null || form.getId( ) == 0 )
+        if ( ( form == null ) || ( form.getId( ) == 0 ) )
         {
             addError( ERROR_NO_FORM_EXISTS, request.getLocale( ) );
         } else
@@ -214,14 +214,14 @@ public class TicketXPage extends WorkflowCapableXPage
 
         int selectedRootCategory = 0;
         String category1 = request.getParameter( PARAMETER_CATEGORY_1 );
-        if ( category1 != null && StringUtils.isNumeric( category1 ) )
+        if ( ( category1 != null ) && StringUtils.isNumeric( category1 ) )
         {
             selectedRootCategory = Integer.parseInt( category1 );
         }
 
         int selectedChildCategory = 0;
         String category2 = request.getParameter( PARAMETER_CATEGORY_2 );
-        if ( category2 != null && StringUtils.isNumeric( category2 ) )
+        if ( ( category2 != null ) && StringUtils.isNumeric( category2 ) )
         {
             selectedChildCategory = Integer.parseInt( category2 );
         }
@@ -250,7 +250,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
     /**
      * Prefill ticket with form default values
-     * 
+     *
      * @param request
      *            the http request
      * @param form
@@ -337,7 +337,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
     /**
      * Prefill User's informations
-     * 
+     *
      * @param request
      *            The HTTP request
      * @param ticket
@@ -564,7 +564,7 @@ public class TicketXPage extends WorkflowCapableXPage
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
 
         request.setAttribute( TicketingConstants.ATTRIBUTE_IS_DISPLAY_FRONT, true );
-        if ( categoryValidatorResult.isTicketCategoryValid( ) && ticket.getTicketCategory( ) != null )
+        if ( categoryValidatorResult.isTicketCategoryValid( ) && ( ticket.getTicketCategory( ) != null ) )
         {
             ticket.setListResponse( null );
 
@@ -638,7 +638,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
     /**
      * Get a View URL
-     * 
+     *
      * @param strView
      *            The view name
      * @return The URL

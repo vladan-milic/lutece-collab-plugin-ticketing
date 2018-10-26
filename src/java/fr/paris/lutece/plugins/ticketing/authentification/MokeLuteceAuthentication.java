@@ -80,6 +80,7 @@ public class MokeLuteceAuthentication implements LuteceAuthentication
         return user;
     }
 
+    @Override
     public void logout( LuteceUser user )
     {
     }
@@ -96,11 +97,13 @@ public class MokeLuteceAuthentication implements LuteceAuthentication
         return null;
     }
 
+    @Override
     public boolean isUserInRole( LuteceUser user, HttpServletRequest request, String strRole )
     {
         return true;
     }
 
+    @Override
     public String[] getRolesByUser( LuteceUser user )
     {
         return null;
@@ -220,6 +223,7 @@ public class MokeLuteceAuthentication implements LuteceAuthentication
         return null;
     }
 
+    @Override
     public void updateDateLastLogin( LuteceUser user, HttpServletRequest request )
     {
     }

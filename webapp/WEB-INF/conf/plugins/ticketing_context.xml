@@ -16,6 +16,7 @@
 
     <!-- DAO -->
     <bean id="ticketing.ticketDAO"  class="fr.paris.lutece.plugins.ticketing.business.ticket.TicketDAO" />  
+    <bean id="ticketing.ticketFileDAO"  class="fr.paris.lutece.plugins.ticketing.business.file.TicketFileDAO" /> 
     <bean id="ticketing.ticketCategoryDAO"  class="fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryDAO" />  
     <bean id="ticketing.ticketCategoryTypeDAO"  class="fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeDAO" />
     <bean id="ticketing.ticketCategoryInputsDAO"  class="fr.paris.lutece.plugins.ticketing.business.categoryinputs.TicketCategoryInputsDAO" />  
@@ -99,4 +100,11 @@
     
     <!-- Listener -->
     <bean id="ticketing.RemovalUnitListener" class="fr.paris.lutece.plugins.ticketing.service.TicketingUnitRemovalListener" />
+    
+    <!-- Blobstore -->
+    <bean id="ticketing.blobStoreService" class="fr.paris.lutece.plugins.blobstore.service.filesystem.FileSystemBlobStoreService">
+		<property name="name" value="ticketing.blobStoreService" />
+		<property name="basePath" value="C:\data\blobstore" />
+		<property name="depth" value="1" />
+	</bean>
 </beans>

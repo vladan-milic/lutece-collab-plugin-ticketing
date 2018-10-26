@@ -217,6 +217,12 @@
 			<daemon-description>ticketing.daemon.sphinxDaemon.description</daemon-description>
 			<daemon-class>fr.paris.lutece.plugins.ticketing.business.sphinx.SphinxDaemon</daemon-class>
 		</daemon>
+		<daemon>
+			<daemon-id>archivingDaemon</daemon-id>
+			<daemon-name>ticketing.daemon.archivingDaemon.name</daemon-name>
+			<daemon-description>ticketing.daemon.archivingDaemon.description</daemon-description>
+			<daemon-class>fr.paris.lutece.plugins.ticketing.service.daemon.TicketArchivingDaemon</daemon-class>
+		</daemon>
 	</daemons>
     
 </plug-in>

@@ -45,11 +45,11 @@ import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
+import fr.paris.lutece.plugins.ticketing.business.file.TicketFileHome;
 import fr.paris.lutece.plugins.ticketing.service.authentication.RequestAuthenticationService;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
-import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 /**
@@ -73,7 +73,7 @@ public class TicketingFileServlet extends HttpServlet
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * 
+     *
      * @param request
      *            servlet request
      * @param httpResponse
@@ -106,7 +106,7 @@ public class TicketingFileServlet extends HttpServlet
             }
 
             File file = FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) );
-            PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) );
+            PhysicalFile physicalFile = TicketFileHome.findPhysicalFile( file );
 
             httpResponse.setHeader( "Content-Disposition", "attachment; filename=\"" + file.getTitle( ) + "\";" );
             httpResponse.setHeader( "Content-type", file.getMimeType( ) );
@@ -136,7 +136,7 @@ public class TicketingFileServlet extends HttpServlet
 
     /**
      * Handles the HTTP <code>GET</code> method.
-     * 
+     *
      * @param request
      *            servlet request
      * @param response
@@ -154,7 +154,7 @@ public class TicketingFileServlet extends HttpServlet
 
     /**
      * Handles the HTTP <code>POST</code> method.
-     * 
+     *
      * @param request
      *            servlet request
      * @param response
@@ -172,7 +172,7 @@ public class TicketingFileServlet extends HttpServlet
 
     /**
      * Returns a short description of the servlet.
-     * 
+     *
      * @return message
      */
     @Override
@@ -183,7 +183,7 @@ public class TicketingFileServlet extends HttpServlet
 
     /**
      * Checks if the request is authenticated or not
-     * 
+     *
      * @param request
      *            the HTTP request
      * @return {@code true} if the request is authenticated, {@code false} otherwise
