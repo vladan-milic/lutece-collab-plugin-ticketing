@@ -228,7 +228,7 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.free( );
 
         TicketAddress _ticketAddress = ticket.getTicketAddress( );
-        if ( _ticketAddress != null && ( StringUtils.isNotBlank( _ticketAddress.getAddress( ) ) || StringUtils.isNotBlank( _ticketAddress.getAddressDetail( ) )
+        if ( ( _ticketAddress != null ) && ( StringUtils.isNotBlank( _ticketAddress.getAddress( ) ) || StringUtils.isNotBlank( _ticketAddress.getAddressDetail( ) )
                 || StringUtils.isNotBlank( _ticketAddress.getPostalCode( ) ) || StringUtils.isNotBlank( _ticketAddress.getCity( ) ) ) )
         {
             storeTicketAddress( ticket, plugin );
@@ -332,7 +332,7 @@ public final class TicketDAO implements ITicketDAO
 
     /**
      * Update or create the TicketAddress record in the table
-     * 
+     *
      * @param ticket
      *            the reference of the Ticket
      * @param plugin
@@ -377,12 +377,12 @@ public final class TicketDAO implements ITicketDAO
 
     /**
      * returns baseQuery query built from workflow and filter dependencies
-     * 
+     *
      * @param strBaseQuery
      *            base select query to update
      * @param filter
      *            filter use for the query
-     * 
+     *
      * @return select all query
      */
     private String getSelectAllQuery( String strBaseQuery, TicketFilter filter )
@@ -612,7 +612,7 @@ public final class TicketDAO implements ITicketDAO
 
     /**
      * Creates a Ticket object from data
-     * 
+     *
      * @param daoUtil
      *            the data
      * @return the Ticket object
@@ -962,7 +962,7 @@ public final class TicketDAO implements ITicketDAO
         if ( filter.containsCloseDate( ) )
         {
             daoUtil.setDate( nIndex++, new Date( filter.getCloseDate( ).getTime( ) ) );
-            daoUtil.setDate( nIndex++, new Date( getNextDayDate( filter.getCreationDate( ) ).getTime( ) ) );
+            daoUtil.setDate( nIndex++, new Date( getNextDayDate( filter.getCloseDate( ) ).getTime( ) ) );
         }
 
         if ( filter.containsUrgency( ) )
@@ -1048,7 +1048,7 @@ public final class TicketDAO implements ITicketDAO
     {
         List<Ticket> ticketList = new ArrayList<Ticket>( );
 
-        if ( filter != null && TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) && CollectionUtils.isEmpty( filter.getAdminUserRoles( ) ) )
+        if ( ( filter != null ) && ( TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) ) && CollectionUtils.isEmpty( filter.getAdminUserRoles( ) ) )
         {
             // domain case with no rbac role on user, empty return
             return ticketList;
@@ -1084,7 +1084,7 @@ public final class TicketDAO implements ITicketDAO
     {
         List<Integer> listIdTickets = new ArrayList<Integer>( );
 
-        if ( filter != null && TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) && CollectionUtils.isEmpty( filter.getAdminUserRoles( ) ) )
+        if ( ( filter != null ) && ( TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) ) && CollectionUtils.isEmpty( filter.getAdminUserRoles( ) ) )
         {
             // domain case with no rbac role on user, empty return
             return listIdTickets;

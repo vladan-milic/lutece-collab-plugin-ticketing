@@ -41,13 +41,13 @@ import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseFilter;
 import fr.paris.lutece.plugins.genericattributes.business.ResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
+import fr.paris.lutece.plugins.ticketing.business.file.TicketFileHome;
 import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
 import fr.paris.lutece.plugins.ticketing.business.marking.MarkingHome;
 import fr.paris.lutece.plugins.ticketing.service.TicketFormCacheService;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
-import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -71,7 +71,7 @@ public final class TicketHome
 
     /**
      * Create an instance of the ticket class
-     * 
+     *
      * @param ticket
      *            The instance of the Ticket which contains the informations to store
      * @return The instance of ticket which has been created with its primary key.
@@ -85,7 +85,7 @@ public final class TicketHome
 
     /**
      * Update of the ticket which is specified in parameter
-     * 
+     *
      * @param ticket
      *            The instance of the Ticket which contains the data to store
      * @return The instance of the ticket which has been updated
@@ -154,7 +154,7 @@ public final class TicketHome
                             fr.paris.lutece.portal.business.file.File file = FileHome.findByPrimaryKey( response.getFile( ).getIdFile( ) );
                             if ( file != null )
                             {
-                                PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) );
+                                PhysicalFile physicalFile = TicketFileHome.findPhysicalFile( file );
                                 if ( physicalFile != null )
                                 {
                                     file.setPhysicalFile( physicalFile );
@@ -176,7 +176,7 @@ public final class TicketHome
 
     /**
      * Get the marking for the given ticket id
-     * 
+     *
      * @param nIdTicketMarking
      *            the marking id
      * @return the marking
@@ -196,7 +196,7 @@ public final class TicketHome
 
     /**
      * Get the marking id for the given ticket
-     * 
+     *
      * @param nIdTicket
      *            the ticket
      * @param nIdMarking
@@ -209,7 +209,7 @@ public final class TicketHome
 
     /**
      * Store the marking id for the given ticket
-     * 
+     *
      * @param nIdTicket
      *            the ticket
      * @param nIdMarking
@@ -222,7 +222,7 @@ public final class TicketHome
 
     /**
      * Reset the marking id to default value for the given marking id
-     * 
+     *
      * @param nIdMarking
      *            the marking id
      */
@@ -233,7 +233,7 @@ public final class TicketHome
 
     /**
      * Reset the marking id to default value for the given ticket id
-     * 
+     *
      * @param nIdTicket
      *            the ticket id
      */
@@ -244,7 +244,7 @@ public final class TicketHome
 
     /**
      * Load the data of all the ticket objects and returns them in form of a collection be carefull generic attribute response are not loaded in this method
-     * 
+     *
      * @see findByPrimaryKey for loading all attribute responses
      * @return the collection which contains the data of all the ticket objects
      */
@@ -267,7 +267,7 @@ public final class TicketHome
 
     /**
      * Load the id of all the ticket objects and returns them in form of a collection
-     * 
+     *
      * @return the collection which contains the id of all the ticket objects
      */
     public static List<Integer> getIdTicketsList( )
@@ -280,7 +280,7 @@ public final class TicketHome
      *
      * @param filter
      *            filter to apply to ticket search
-     * 
+     *
      * @return the collection which contains the id of all the ticket objects
      */
     public static List<Integer> getIdTicketsList( TicketFilter filter )
@@ -294,7 +294,7 @@ public final class TicketHome
 
     /**
      * Associates a response to a ticket
-     * 
+     *
      * @param nIdTicket
      *            The id of the ticket
      * @param nIdResponse
@@ -308,7 +308,7 @@ public final class TicketHome
 
     /**
      * Get the list of id of responses associated with an ticket
-     * 
+     *
      * @param nIdticket
      *            the id of the ticket
      * @return the list of responses, or an empty list if no response was found
@@ -333,7 +333,7 @@ public final class TicketHome
 
     /**
      * Get the list of responses associated with an ticket
-     * 
+     *
      * @param nIdticket
      *            the id of the ticket
      * @return the list of responses, or an empty list if no response was found
@@ -353,7 +353,7 @@ public final class TicketHome
 
     /**
      * Find the id of the ticket associated with a given response
-     * 
+     *
      * @param nIdResponse
      *            The id of the response
      * @return The id of the ticket, or 0 if no ticket is associated with he given response.
@@ -391,7 +391,7 @@ public final class TicketHome
 
     /**
      * Remove every ticket responses associated with a given entry.
-     * 
+     *
      * @param nIdEntry
      *            The id of the entry
      */
@@ -413,7 +413,7 @@ public final class TicketHome
 
     /**
      * Get every ticket associated with the given unit
-     * 
+     *
      * @param nIdUnit
      *            The id of the unit
      * @return The list of ticket associated

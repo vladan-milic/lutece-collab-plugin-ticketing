@@ -77,6 +77,7 @@ public class TicketFilter extends OrderByFilter
     private Date                  _dateCreationStartDate;
     private Date                  _dateCreationEndDate;
     private Date                  _dateCloseDate;
+    private boolean               _bCloseDatePosterior;
     private int                   _nIdUser                    = CONSTANT_ID_NULL;
     private int                   _nIdChannel                 = CONSTANT_ID_NULL;
     private int                   _nOpenSincePeriod           = CONSTANT_ID_NULL;
@@ -123,7 +124,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setIdUser( int nIdUser )
     {
-        this._nIdUser = nIdUser;
+        _nIdUser = nIdUser;
     }
 
     /**
@@ -150,7 +151,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setListIdWorkflowState( List<Integer> lstIdWorkflowState )
     {
-        this._listIdWorkflowState = lstIdWorkflowState;
+        _listIdWorkflowState = lstIdWorkflowState;
     }
 
     /**
@@ -159,11 +160,11 @@ public class TicketFilter extends OrderByFilter
      */
     public void setListIdWorkflowState( String[] tabIdWorkflowState )
     {
-        this._listIdWorkflowState = new ArrayList<Integer>( );
+        _listIdWorkflowState = new ArrayList<Integer>( );
 
         for ( String strId : tabIdWorkflowState )
         {
-            this._listIdWorkflowState.add( Integer.valueOf( strId ) );
+            _listIdWorkflowState.add( Integer.valueOf( strId ) );
         }
     }
 
@@ -181,7 +182,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setIdTicket( int nIdTicket )
     {
-        this._nIdTicket = nIdTicket;
+        _nIdTicket = nIdTicket;
     }
 
     /**
@@ -208,7 +209,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setLastUpdateDate( Date strLastUpdateDate )
     {
-        this._dateLastUpdateDate = strLastUpdateDate;
+        _dateLastUpdateDate = strLastUpdateDate;
     }
 
     /**
@@ -235,7 +236,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setLastUpdateStartDate( Date strLastUpdateStartDate )
     {
-        this._dateLastUpdateStartDate = strLastUpdateStartDate;
+        _dateLastUpdateStartDate = strLastUpdateStartDate;
     }
 
     /**
@@ -262,7 +263,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setLastUpdateEndDate( Date strLastUpdateEndDate )
     {
-        this._dateLastUpdateEndDate = strLastUpdateEndDate;
+        _dateLastUpdateEndDate = strLastUpdateEndDate;
     }
 
     /**
@@ -289,7 +290,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setCloseDate( Date strCloseDate )
     {
-        this._dateCloseDate = strCloseDate;
+        _dateCloseDate = strCloseDate;
     }
 
     /**
@@ -316,7 +317,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setCreationDate( Date strCreationDate )
     {
-        this._dateCreationDate = strCreationDate;
+        _dateCreationDate = strCreationDate;
     }
 
     /**
@@ -343,7 +344,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setCreationStartDate( Date strCreationStartDate )
     {
-        this._dateCreationStartDate = strCreationStartDate;
+        _dateCreationStartDate = strCreationStartDate;
     }
 
     /**
@@ -370,7 +371,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setCreationEndDate( Date strCreationEndDate )
     {
-        this._dateCreationEndDate = strCreationEndDate;
+        _dateCreationEndDate = strCreationEndDate;
     }
 
     /**
@@ -397,7 +398,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setStatus( String strStatus )
     {
-        this._strStatus = strStatus;
+        _strStatus = strStatus;
     }
 
     /**
@@ -424,7 +425,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setEmail( String strEmail )
     {
-        this._strEmail = strEmail;
+        _strEmail = strEmail;
     }
 
     /**
@@ -451,7 +452,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setLastName( String strLastName )
     {
-        this._strLastName = strLastName;
+        _strLastName = strLastName;
     }
 
     /**
@@ -478,7 +479,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setFirstName( String strFirstName )
     {
-        this._strFirstName = strFirstName;
+        _strFirstName = strFirstName;
     }
 
     /**
@@ -505,7 +506,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setFixedPhoneNumber( String strFixedPhoneNumber )
     {
-        this._strFixedPhoneNumber = strFixedPhoneNumber;
+        _strFixedPhoneNumber = strFixedPhoneNumber;
     }
 
     /**
@@ -532,7 +533,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setMobilePhoneNumber( String strMobilePhoneNumber )
     {
-        this._strMobilePhoneNumber = strMobilePhoneNumber;
+        _strMobilePhoneNumber = strMobilePhoneNumber;
     }
 
     /**
@@ -559,7 +560,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setIdChannel( int nIdChannel )
     {
-        this._nIdChannel = nIdChannel;
+        _nIdChannel = nIdChannel;
     }
 
     /**
@@ -586,7 +587,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setReference( String strReference )
     {
-        this._strReference = strReference;
+        _strReference = strReference;
     }
 
     /**
@@ -613,7 +614,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setNomenclature( String strNomenclature )
     {
-        this._strNomenclature = strNomenclature;
+        _strNomenclature = strNomenclature;
     }
 
     /**
@@ -640,7 +641,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setOpenSincePeriod( int nOpenSincePeriod )
     {
-        this._nOpenSincePeriod = nOpenSincePeriod;
+        _nOpenSincePeriod = nOpenSincePeriod;
     }
 
     /**
@@ -667,7 +668,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setUrgency( int nUrgency )
     {
-        this._nUrgency = nUrgency;
+        _nUrgency = nUrgency;
     }
 
     /**
@@ -694,7 +695,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setFilterView( TicketFilterViewEnum enumFilterView )
     {
-        this._enumFilterView = enumFilterView;
+        _enumFilterView = enumFilterView;
     }
 
     /**
@@ -704,7 +705,7 @@ public class TicketFilter extends OrderByFilter
      */
     public boolean containsFilterView( )
     {
-        return ( this._enumFilterView != null && this._enumFilterView != TicketFilterViewEnum.ALL );
+        return ( ( _enumFilterView != null ) && ( _enumFilterView != TicketFilterViewEnum.ALL ) );
     }
 
     /**
@@ -721,7 +722,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setFilterIdAdminUser( int nFilterIdAdminUser )
     {
-        this._nFilterIdAdminUser = nFilterIdAdminUser;
+        _nFilterIdAdminUser = nFilterIdAdminUser;
     }
 
     /**
@@ -738,7 +739,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setFilterIdAssigneeUnit( Set<Integer> setFilterIdAssigneeUnit )
     {
-        this._setFilterIdAssigneeUnit = setFilterIdAssigneeUnit;
+        _setFilterIdAssigneeUnit = setFilterIdAssigneeUnit;
     }
 
     /**
@@ -755,7 +756,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setFilterIdAssignerUnit( Set<Integer> setFilterIdAssignerUnit )
     {
-        this._setFilterIdAssignerUnit = setFilterIdAssignerUnit;
+        _setFilterIdAssignerUnit = setFilterIdAssignerUnit;
     }
 
     /**
@@ -772,11 +773,11 @@ public class TicketFilter extends OrderByFilter
      */
     public void setAdminUserRoles( Set<String> setAdminUserRoles )
     {
-        this._setAdminUserRoles = setAdminUserRoles;
+        _setAdminUserRoles = setAdminUserRoles;
     }
 
     /**
-     * 
+     *
      * @return true if query limit is enabled
      */
     public boolean containsLimit( )
@@ -798,7 +799,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setTicketsLimitStart( int nTicketsLimitStart )
     {
-        this._nTicketsLimitStart = nTicketsLimitStart;
+        _nTicketsLimitStart = nTicketsLimitStart;
     }
 
     /**
@@ -815,7 +816,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setTicketsLimitCount( int nTicketsLimitCount )
     {
-        this._nTicketsLimitCount = nTicketsLimitCount;
+        _nTicketsLimitCount = nTicketsLimitCount;
     }
 
     /**
@@ -832,7 +833,7 @@ public class TicketFilter extends OrderByFilter
      */
     public void setMapCategoryId( Map<Integer, Integer> mapCategoryId )
     {
-        this._mapCategoryId = mapCategoryId;
+        _mapCategoryId = mapCategoryId;
     }
 
     @Override
