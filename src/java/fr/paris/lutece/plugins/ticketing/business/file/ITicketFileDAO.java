@@ -34,6 +34,8 @@
 package fr.paris.lutece.plugins.ticketing.business.file;
 
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.Map;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
@@ -83,5 +85,16 @@ public interface ITicketFileDAO
      * @return migration date
      */
     Timestamp findCreationDateByIdFile( int nIdFile, Plugin plugin );
+
+    /**
+     * find blobs from start date
+     *
+     * @param date
+     *            start date
+     * @param _plugin
+     *            the Plugin
+     * @return map id_blob, id_file
+     */
+    Map<String, Integer> findListIdBlobByDate( Date date, Plugin _plugin );
 
 }

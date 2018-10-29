@@ -34,6 +34,9 @@
 package fr.paris.lutece.plugins.ticketing.business.file;
 
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -48,6 +51,7 @@ public final class TicketFileDAO implements ITicketFileDAO
     private static final String SQL_QUERY_DELETE                        = "DELETE FROM ticketing_file_blob where id_file = ? ";
     private static final String SQL_QUERY_FIND_BY_FILE_ID               = "SELECT id_blob FROM ticketing_file_blob WHERE id_file = ? ";
     private static final String SQL_QUERY_FIND_DATE_CREATION_BY_FILE_ID = "SELECT creation_date FROM ticketing_file_blob WHERE id_file = ? ";
+    private static final String SQL_QUERY_FIND_BLOBS_BY_DATE            = "SELECT id_blob, id_file FROM ticketing_file_blob WHERE creation_date <= ? ";
 
     /**
      * {@inheritDoc}
@@ -142,6 +146,25 @@ public final class TicketFileDAO implements ITicketFileDAO
         daoUtil.free( );
 
         return creationDate;
+    }
+
+    @Override
+    public Map<String, Integer> findListIdBlobByDate( Date date, Plugin _plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BLOBS_BY_DATE, _plugin );
+        daoUtil.setTimestamp( 1, new Timestamp( date.getTime( ) ) );
+        daoUtil.executeQuery( );
+
+        Map<String, Integer> idBlobMap = new HashMap<>( );
+
+        if ( daoUtil.next( ) )
+        {
+            idBlobMap.put( daoUtil.getString( 1 ), daoUtil.getInt( 2 ) );
+        }
+
+        daoUtil.free( );
+
+        return idBlobMap;
     }
 
 }

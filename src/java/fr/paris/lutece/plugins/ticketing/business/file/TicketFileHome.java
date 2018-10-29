@@ -34,6 +34,9 @@
 package fr.paris.lutece.plugins.ticketing.business.file;
 
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import fr.paris.lutece.plugins.blobstore.service.IBlobStoreService;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
@@ -44,6 +47,7 @@ import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 /**
  * This class provides instances management methods (create, find, ...) for Ticket file objects
@@ -77,10 +81,32 @@ public final class TicketFileHome
                     if ( strIdBlob != null )
                     {
                         _dao.insert( file.getIdFile( ), strIdBlob, _plugin );
-                        PhysicalFileHome.remove( idPhysicalFile );// TODO ajout un parametre boolean depuis properties
+                        if ( AppPropertiesService.getPropertyBoolean( "ticketing.daemon.archiving.remove.database.blob", false ) )
+                        {
+                            PhysicalFileHome.remove( idPhysicalFile );
+                        }
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * purge all files from a start date
+     * 
+     * @param date
+     */
+    public static void purgeFromDate( Date date )
+    {
+        Map<String, Integer> strBlobIdMap = _dao.findListIdBlobByDate( date, _plugin );
+        for ( Entry<String, Integer> entry : strBlobIdMap.entrySet( ) )
+        {
+            _blobStoreService.delete( entry.getKey( ) );
+            int idFile = entry.getValue( );
+            _dao.delete( idFile, _plugin );
+            File file = FileHome.findByPrimaryKey( idFile );
+            PhysicalFileHome.remove( file.getPhysicalFile( ).getIdPhysicalFile( ) );
+            FileHome.remove( idFile );
         }
     }
 

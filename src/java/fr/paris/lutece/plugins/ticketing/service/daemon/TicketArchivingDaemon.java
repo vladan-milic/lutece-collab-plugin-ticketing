@@ -43,6 +43,7 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.service.daemon.Daemon;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 /**
  *
@@ -66,14 +67,34 @@ public class TicketArchivingDaemon extends Daemon
     @Override
     public void run( )
     {
+        setLastRunLogs( "Début de l'archivage" );
+        archivage( );
+        setLastRunLogs( "Fin de l'archivage" );
 
+        setLastRunLogs( "Début de la purge" );
+        purge( );
+        setLastRunLogs( "Fin de la purge" );
+    }
+
+    private void purge( )
+    {
+        Date purgeDate = new Date( );
+        Calendar calpurgeDate = Calendar.getInstance( );
+        calpurgeDate.setTime( purgeDate );
+        calpurgeDate.add( Calendar.YEAR, -AppPropertiesService.getPropertyInt( "ticketing.daemon.archiving.purge.delai.annee", 5 ) );
+        purgeDate = calpurgeDate.getTime( );
+        TicketFileHome.purgeFromDate( purgeDate );
+    }
+
+    private void archivage( )
+    {
         TicketFilter filter = new TicketFilter( );
         filter.setStatus( "1" );
 
         Date date = new Date( );
         Calendar cal = Calendar.getInstance( );
         cal.setTime( date );
-        cal.add( Calendar.MONTH, -3 );
+        cal.add( Calendar.MONTH, -AppPropertiesService.getPropertyInt( "ticketing.daemon.archiving.archivage.delai.mois", 3 ) );
         date = cal.getTime( );
 
         filter.setCloseDate( date );
@@ -101,7 +122,5 @@ public class TicketArchivingDaemon extends Daemon
                 }
             }
         }
-
-        setLastRunLogs( "Fin de l'archivage" );
     }
 }
