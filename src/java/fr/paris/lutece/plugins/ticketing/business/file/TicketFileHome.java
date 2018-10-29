@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.file;
 
+import java.util.Date;
+
 import fr.paris.lutece.plugins.blobstore.service.IBlobStoreService;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
 import fr.paris.lutece.portal.business.file.File;
@@ -107,6 +109,16 @@ public final class TicketFileHome
             }
         }
         return physicalFile;
+    }
+
+    /**
+     *
+     * @param file
+     * @return migration date
+     */
+    public static Date getMigrationDate( File file )
+    {
+        return _dao.findCreationDateByIdFile( file.getIdFile( ), _plugin );
     }
 
 }

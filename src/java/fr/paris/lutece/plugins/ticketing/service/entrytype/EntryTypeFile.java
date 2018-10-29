@@ -47,6 +47,7 @@ import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.genericattributes.service.entrytype.AbstractEntryTypeFile;
 import fr.paris.lutece.plugins.genericattributes.service.upload.AbstractGenAttUploadHandler;
+import fr.paris.lutece.plugins.ticketing.business.file.TicketFileHome;
 import fr.paris.lutece.plugins.ticketing.service.authentication.RequestAuthenticationService;
 import fr.paris.lutece.plugins.ticketing.service.download.TicketingFileServlet;
 import fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler;
@@ -77,6 +78,7 @@ public class EntryTypeFile extends AbstractEntryTypeFile
 
     // Markers
     private static final String MARK_FILE_URL            = "file_url";
+    private static final String MARK_DATE_ARCHIVED       = "date_archived";
 
     /**
      * {@inheritDoc}
@@ -118,6 +120,7 @@ public class EntryTypeFile extends AbstractEntryTypeFile
             if ( response.getIdResponse( ) > 0 )
             {
                 model.put( MARK_FILE_URL, getUrlDownloadFile( response.getIdResponse( ), AppPathService.getBaseUrl( request ) ) );
+                model.put( MARK_DATE_ARCHIVED, TicketFileHome.getMigrationDate( response.getFile( ) ) );
             }
         }
 

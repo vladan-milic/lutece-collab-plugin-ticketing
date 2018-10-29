@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.file;
 
+import java.util.Date;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 /**
@@ -70,5 +72,16 @@ public interface ITicketFileDAO
      *            the Plugin
      */
     void delete( int idFile, Plugin plugin );
+
+    /**
+     * find creation date
+     *
+     * @param nIdFile
+     *            id file from core_file
+     * @param plugin
+     *            the Plugin
+     * @return migration date
+     */
+    Date findCreationDateByIdFile( int nIdFile, Plugin plugin );
 
 }

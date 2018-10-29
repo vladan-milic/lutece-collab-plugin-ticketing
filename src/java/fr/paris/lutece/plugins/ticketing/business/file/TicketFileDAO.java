@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.file;
 
+import java.util.Date;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -41,10 +43,11 @@ import fr.paris.lutece.util.sql.DAOUtil;
  */
 public final class TicketFileDAO implements ITicketFileDAO
 {
-    private static final String SQL_QUERY_NEW_PK          = "SELECT max( id_file_blob ) FROM ticketing_file_blob";
-    private static final String SQL_QUERY_INSERT          = "INSERT INTO ticketing_file_blob ( id_file_blob, id_file, id_blob ) VALUES ( ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE          = "DELETE FROM ticketing_file_blob where id_file = ? ";
-    private static final String SQL_QUERY_FIND_BY_FILE_ID = "SELECT id_blob FROM ticketing_file_blob WHERE id_file = ? ";
+    private static final String SQL_QUERY_NEW_PK                        = "SELECT max( id_file_blob ) FROM ticketing_file_blob";
+    private static final String SQL_QUERY_INSERT                        = "INSERT INTO ticketing_file_blob ( id_file_blob, id_file, id_blob ) VALUES ( ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE                        = "DELETE FROM ticketing_file_blob where id_file = ? ";
+    private static final String SQL_QUERY_FIND_BY_FILE_ID               = "SELECT id_blob FROM ticketing_file_blob WHERE id_file = ? ";
+    private static final String SQL_QUERY_FIND_DATE_CREATION_BY_FILE_ID = "SELECT creation_date FROM ticketing_file_blob WHERE id_file = ? ";
 
     /**
      * {@inheritDoc}
@@ -117,6 +120,28 @@ public final class TicketFileDAO implements ITicketFileDAO
 
         daoUtil.free( );
         return nKey;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Date findCreationDateByIdFile( int nIdFile, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_DATE_CREATION_BY_FILE_ID, plugin );
+        daoUtil.setInt( 1, nIdFile );
+        daoUtil.executeQuery( );
+
+        Date creationDate = null;
+
+        if ( daoUtil.next( ) )
+        {
+            creationDate = daoUtil.getDate( 1 );
+        }
+
+        daoUtil.free( );
+
+        return creationDate;
     }
 
 }
