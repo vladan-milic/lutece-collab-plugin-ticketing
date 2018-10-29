@@ -38,6 +38,7 @@ import java.util.Date;
 import fr.paris.lutece.plugins.blobstore.service.IBlobStoreService;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
 import fr.paris.lutece.portal.business.file.File;
+import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFileHome;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -62,11 +63,12 @@ public final class TicketFileHome
      */
     public static void migrateToBlob( File file )
     {
-        if ( ( file != null ) && ( file.getPhysicalFile( ) != null ) )
+        if ( ( file != null ) )
         {
             String strBlobId = _dao.findIdBlobByIdFile( file.getIdFile( ), _plugin );
             if ( strBlobId == null )
             {
+                file = FileHome.findByPrimaryKey( file.getIdFile( ) );
                 int idPhysicalFile = file.getPhysicalFile( ).getIdPhysicalFile( );
                 PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( idPhysicalFile );
                 if ( physicalFile != null )
