@@ -67,13 +67,17 @@ public class TicketArchivingDaemon extends Daemon
     @Override
     public void run( )
     {
-        setLastRunLogs( "Début de l'archivage" );
-        archivage( );
-        setLastRunLogs( "Fin de l'archivage" );
+        StringBuffer sb = new StringBuffer( );
 
-        setLastRunLogs( "Début de la purge" );
+        sb.append( "Début de l'archivage" );
+        archivage( sb );
+        sb.append( "Fin de l'archivage" );
+
+        sb.append( "Début de la purge" );
         purge( );
-        setLastRunLogs( "Fin de la purge" );
+        sb.append( "Fin de la purge" );
+        setLastRunLogs( sb.toString( ) );
+
     }
 
     private void purge( )
@@ -86,7 +90,7 @@ public class TicketArchivingDaemon extends Daemon
         TicketFileHome.purgeFromDate( purgeDate );
     }
 
-    private void archivage( )
+    private void archivage( StringBuffer sb )
     {
         TicketFilter filter = new TicketFilter( );
         filter.setStatus( "1" );
@@ -116,7 +120,7 @@ public class TicketArchivingDaemon extends Daemon
 
                         if ( ( file != null ) && ( response.getField( ) != null ) )
                         {
-                            setLastRunLogs( "Id Ticket:" + idTicket + ", Intitulé:" + response.getField( ).getTitle( ) + ", Fichier archivé: " + file.getTitle( ) );
+                            sb.append( "Id Ticket:" + idTicket + ", Intitulé:" + response.getField( ).getTitle( ) + ", Fichier archivé: " + file.getTitle( ) );
                         }
                     }
                 }
