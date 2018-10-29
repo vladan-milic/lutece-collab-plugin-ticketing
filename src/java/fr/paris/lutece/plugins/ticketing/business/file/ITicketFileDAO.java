@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.file;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
@@ -82,6 +82,6 @@ public interface ITicketFileDAO
      *            the Plugin
      * @return migration date
      */
-    Date findCreationDateByIdFile( int nIdFile, Plugin plugin );
+    Timestamp findCreationDateByIdFile( int nIdFile, Plugin plugin );
 
 }

@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.file;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -126,17 +126,17 @@ public final class TicketFileDAO implements ITicketFileDAO
      * {@inheritDoc}
      */
     @Override
-    public Date findCreationDateByIdFile( int nIdFile, Plugin plugin )
+    public Timestamp findCreationDateByIdFile( int nIdFile, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_DATE_CREATION_BY_FILE_ID, plugin );
         daoUtil.setInt( 1, nIdFile );
         daoUtil.executeQuery( );
 
-        Date creationDate = null;
+        Timestamp creationDate = null;
 
         if ( daoUtil.next( ) )
         {
-            creationDate = daoUtil.getDate( 1 );
+            creationDate = daoUtil.getTimestamp( 1 );
         }
 
         daoUtil.free( );

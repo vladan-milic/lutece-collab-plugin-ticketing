@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.file;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 import fr.paris.lutece.plugins.blobstore.service.IBlobStoreService;
 import fr.paris.lutece.plugins.ticketing.service.TicketingPlugin;
@@ -118,7 +118,7 @@ public final class TicketFileHome
      * @param file
      * @return migration date
      */
-    public static Date getMigrationDate( File file )
+    public static Timestamp getMigrationDate( File file )
     {
         return _dao.findCreationDateByIdFile( file.getIdFile( ), _plugin );
     }
