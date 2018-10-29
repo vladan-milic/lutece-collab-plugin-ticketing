@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.ticketing.service.daemon;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.StringJoiner;
 
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.ticketing.business.file.TicketFileHome;
@@ -67,13 +68,17 @@ public class TicketArchivingDaemon extends Daemon
     @Override
     public void run( )
     {
-        setLastRunLogs( "Début de l'archivage" );
-        archivage( );
-        setLastRunLogs( "Fin de l'archivage" );
+        StringJoiner sb = new StringJoiner( "\n\r" );
 
-        setLastRunLogs( "Début de la purge" );
+        sb.add( "Début de l'archivage" );
+        archivage( sb );
+        sb.add( "Fin de l'archivage" );
+
+        sb.add( "Début de la purge" );
         purge( );
-        setLastRunLogs( "Fin de la purge" );
+        sb.add( "Fin de la purge" );
+        setLastRunLogs( sb.toString( ) );
+
     }
 
     private void purge( )
@@ -86,7 +91,7 @@ public class TicketArchivingDaemon extends Daemon
         TicketFileHome.purgeFromDate( purgeDate );
     }
 
-    private void archivage( )
+    private void archivage( StringJoiner sb )
     {
         TicketFilter filter = new TicketFilter( );
         filter.setStatus( "1" );
@@ -116,7 +121,7 @@ public class TicketArchivingDaemon extends Daemon
 
                         if ( ( file != null ) && ( response.getField( ) != null ) )
                         {
-                            setLastRunLogs( "Id Ticket:" + idTicket + ", Intitulé:" + response.getField( ).getTitle( ) + ", Fichier archivé: " + file.getTitle( ) );
+                            sb.add( "Id Ticket:" + idTicket + ", Intitulé:" + response.getField( ).getTitle( ) + ", Fichier archivé: " + file.getTitle( ) );
                         }
                     }
                 }
