@@ -119,9 +119,9 @@ public class TicketArchivingDaemon extends Daemon
                         File file = response.getFile( );
                         TicketFileHome.migrateToBlob( file );
 
-                        if ( ( file != null ) && ( response.getField( ) != null ) )
+                        if ( file != null )
                         {
-                            sb.add( "Id Ticket:" + idTicket + ", Intitulé:" + response.getField( ).getTitle( ) + ", Fichier archivé: " + file.getTitle( ) );
+                            sb.add( "Id Ticket:" + idTicket + ", Fichier archivé: " + file.getTitle( ) );
                         }
                     }
                 }
