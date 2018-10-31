@@ -534,6 +534,9 @@ public class TicketXPage extends WorkflowCapableXPage
             ticket.setTicketCategory( categoryValidatorResult.getTicketCategory( ) );
         }
 
+        //Replace quote
+        ticket.setTicketComment( StringUtils.replace( ticket.getTicketComment( ), String.format("\\u00%x", (int)'"') , "\"" ) );
+
         // Check constraints
         // Count the number of characters in the ticket comment
         int iNbCharcount = FormValidator.countCharTicketComment( ticket.getTicketComment( ) );

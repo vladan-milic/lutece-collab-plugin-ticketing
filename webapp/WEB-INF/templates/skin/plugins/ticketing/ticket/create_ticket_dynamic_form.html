@@ -143,7 +143,8 @@
 	                        <div class="row <#if entryComment.hidden>hidden</#if>">
 	                            <div class="form-group col-md-12">
 	                                <label for="ticket_comment" class="control-label">#i18n{ticketing.xpage.create_ticket.labelTicketComment} <#if !entryComment.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
-	               					<textarea class="ticketing form-control" id="ticket_comment" name="ticket_comment" rows="6">${ticket.ticketComment!''}</textarea>
+	               					<textarea class="ticketing form-control" id="ticket_comment" rows="6">${ticket.ticketComment!''}</textarea>
+	               					<input type="hidden" name="ticket_comment" id="ticket_comment_hidden" value=""/>
 	                                <span class="subtitle"></span>
 	                            </div>
 	                        </div>
@@ -235,6 +236,9 @@
         });
         
   		<#if !entryComment.hidden>
+  		/*Replace quotes in ticket comment*/
+  		var quote = "\\u00".concat("\"".charCodeAt(0).toString(16));
+  		$("#ticket_comment_hidden").val($("#ticket_comment").val().replace(/"/g, quote));
 		/* Check maxlength for textarea input */
 		var maxObjet = 5000;
 		$("#ticket_comment").keypress(function(e) {
@@ -257,6 +261,8 @@
 				var nCar = $(this).val().length;
 				$(this).next().html( "<strong>" + nCar + " caract&egrave;res</strong>");
 			}
+			/*Replace quotes in ticket comment*/
+			$("#ticket_comment_hidden").val(txt.replace(/"/g, quote));
 		});
 		</#if>
 			
