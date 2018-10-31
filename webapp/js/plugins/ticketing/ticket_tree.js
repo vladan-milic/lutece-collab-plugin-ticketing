@@ -133,6 +133,7 @@ function loadHelpMessage(help_message, selectedCategory)
 //Load generic attributes form from selected category
 function loadGenericAttributesForm(url, is_response_reseted, selector, is_first_call) {
 	if (typeof url !== "undefined") {
+		$("#submit_create_ticket").attr("disabled", true);
 		$.ajax({
 			url: url+"&id_ticket_category="+$(selector).val()+"&reset_response="+is_response_reseted,
 			type: "GET",
@@ -159,7 +160,11 @@ function loadGenericAttributesForm(url, is_response_reseted, selector, is_first_
 						  scrollTop: positionToScroll
 						}, 1000);
 				}
-			}
+			},
+            complete: function( jqXHR, textStatus ) {
+                $("#submit_create_ticket").attr("disabled", false);
+          }
+
 		});
 	}
 	else
