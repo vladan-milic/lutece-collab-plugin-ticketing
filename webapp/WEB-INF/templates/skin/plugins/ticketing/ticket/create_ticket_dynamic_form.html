@@ -144,8 +144,8 @@
 	                            <div class="form-group col-md-12">
 	                                <label for="ticket_comment" class="control-label">#i18n{ticketing.xpage.create_ticket.labelTicketComment} <#if !entryComment.mandatory>#i18n{ticketing.xpage.optional_field}</#if></label>
 	               					<textarea class="ticketing form-control" id="ticket_comment" rows="6">${ticket.ticketComment!''}</textarea>
-	               					<input type="hidden" name="ticket_comment" id="ticket_comment_hidden" value=""/>
 	                                <span class="subtitle"></span>
+	                                <input type="hidden" name="ticket_comment" id="ticket_comment_hidden" value=""/>
 	                            </div>
 	                        </div>
 	                        
@@ -235,35 +235,42 @@
    				});
         });
         
+        
   		<#if !entryComment.hidden>
-  		/*Replace quotes in ticket comment*/
-  		var quote = "\\u00".concat("\"".charCodeAt(0).toString(16));
-  		$("#ticket_comment_hidden").val($("#ticket_comment").val().replace(/"/g, quote));
-		/* Check maxlength for textarea input */
-		var maxObjet = 5000;
-		$("#ticket_comment").keypress(function(e) {
-			if( e.charCode >= 48 ){
-			var nCar = $(this).val().length;
-				$(this).next().html( "<strong>" + nCar + " caract&egrave;res</strong>");
-				if( nCar >= maxObjet){
-					$(this).next().html('<strong class="label label-warning">Attention limite de '+ maxObjet +' caract&egrave;res atteinte !</strong>');
-					return false;
+	        function escapeSpecialsCharacters(val){
+	        	/*Replace quotes in string*/
+	        	<#list unicode_quote?keys as key> 
+	            val = val.replace(/${unicode_quote[key]}/g, "${key?j_string}");
+	        	</#list> 
+	        	return val;
+	        }
+	  		
+	  		$("#ticket_comment_hidden").val(escapeSpecialsCharacters($("#ticket_comment").val()));
+			/* Check maxlength for textarea input */
+			var maxObjet = 5000;
+			$("#ticket_comment").keypress(function(e) {
+				if( e.charCode >= 48 ){
+					$("#ticket_comment_hidden").val(escapeSpecialsCharacters($("#ticket_comment").val()));
+					var nCar = $(this).val().length;
+					$(this).next().html( "<strong>" + nCar + " caract&egrave;res</strong>");
+					if( nCar >= maxObjet){
+						$(this).next().html('<strong class="label label-warning">Attention limite de '+ maxObjet +' caract&egrave;res atteinte !</strong>');
+						return false;
+					}
 				}
-			}
-		});
-	
-		$("#ticket_comment").blur(function(e) {
-			var txt = $(this).val();
-			if( txt.length > maxObjet){
-				$(this).next().html('<span class="label label-warning">Attention limite de '+ maxObjet +' caract&egrave;res atteinte ! <i class="fa fa-exclamation-triangle fa-fw"></i> Votre texte a &eacute;t&eacute; tronqu&eacute; &agrave; '+ maxObjet +' caract&egrave;res</span>');
-				$(this).val( txt.substr(0,maxObjet) );
-			} else {
-				var nCar = $(this).val().length;
-				$(this).next().html( "<strong>" + nCar + " caract&egrave;res</strong>");
-			}
-			/*Replace quotes in ticket comment*/
-			$("#ticket_comment_hidden").val(txt.replace(/"/g, quote));
-		});
+			});
+		
+			$("#ticket_comment").blur(function(e) {
+				var txt = $(this).val();
+				if( txt.length > maxObjet){
+					$(this).next().html('<span class="label label-warning">Attention limite de '+ maxObjet +' caract&egrave;res atteinte ! <i class="fa fa-exclamation-triangle fa-fw"></i> Votre texte a &eacute;t&eacute; tronqu&eacute; &agrave; '+ maxObjet +' caract&egrave;res</span>');
+					$(this).val( txt.substr(0,maxObjet) );
+				} else {
+					var nCar = $(this).val().length;
+					$(this).next().html( "<strong>" + nCar + " caract&egrave;res</strong>");
+				}
+				$("#ticket_comment_hidden").val(escapeSpecialsCharacters(txt));
+			});
 		</#if>
 			
 		/* Phone */		
