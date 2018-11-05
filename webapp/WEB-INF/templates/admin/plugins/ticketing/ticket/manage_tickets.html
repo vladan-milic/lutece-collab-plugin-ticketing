@@ -448,20 +448,14 @@ function loadFilter(mapSize){
  // initialization functions for multiselect state list
     $(document).ready(function() {
         $('#fltr_open_since, #fltr_open_until')
-    	.datepicker({language: 'fr'})
-    	.off('keypress keyup keydown')
-    	.on('keypress keyup keydown', function(e) {
-    	    if(e.keyCode === 13) {
-    	        e.stopPropagation();
-    	        e.preventDefault();
-                $("#filter_form").submit();
-    	        return false;
-    	    }
-    	})
-    	.on('changeDate', function (e) {
-    	    $("input[name=selected_tab]").val('agent');
-            $("#filter_form").submit();
-        });
+    		.datepicker({
+    			language: 'fr',
+    			onSelect: function(dateText, inst) {
+		    			$("input[name=selected_tab]").val('agent');
+		                $("#filter_form").submit();
+		                $(this).change();
+    		  		}
+    			});
         
         $('#filter_button').click(function(e) {
     	    $("input[name=selected_tab]").val('agent');
