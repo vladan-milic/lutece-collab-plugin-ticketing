@@ -73,10 +73,11 @@ public final class TicketFileHome
             if ( strBlobId == null )
             {
                 file = FileHome.findByPrimaryKey( file.getIdFile( ) );
-                int idPhysicalFile = file.getPhysicalFile( ).getIdPhysicalFile( );
-                PhysicalFile physicalFile = PhysicalFileHome.findByPrimaryKey( idPhysicalFile );
+                PhysicalFile physicalFile = file.getPhysicalFile( );
                 if ( physicalFile != null )
                 {
+                    int idPhysicalFile = physicalFile.getIdPhysicalFile( );
+                    physicalFile = PhysicalFileHome.findByPrimaryKey( idPhysicalFile );
                     String strIdBlob = _blobStoreService.store( physicalFile.getValue( ) );
                     if ( strIdBlob != null )
                     {
@@ -93,7 +94,7 @@ public final class TicketFileHome
 
     /**
      * purge all files from a start date
-     * 
+     *
      * @param date
      */
     public static void purgeFromDate( Date date )
