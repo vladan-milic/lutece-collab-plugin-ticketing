@@ -67,24 +67,27 @@ public final class TicketFileHome
      */
     public static void migrateToBlob( File file )
     {
-        if ( ( file != null ) )
+        if ( file != null )
         {
             String strBlobId = _dao.findIdBlobByIdFile( file.getIdFile( ), _plugin );
             if ( strBlobId == null )
             {
                 file = FileHome.findByPrimaryKey( file.getIdFile( ) );
-                PhysicalFile physicalFile = file.getPhysicalFile( );
-                if ( physicalFile != null )
+                if ( file != null )
                 {
-                    int idPhysicalFile = physicalFile.getIdPhysicalFile( );
-                    physicalFile = PhysicalFileHome.findByPrimaryKey( idPhysicalFile );
-                    String strIdBlob = _blobStoreService.store( physicalFile.getValue( ) );
-                    if ( strIdBlob != null )
+                    PhysicalFile physicalFile = file.getPhysicalFile( );
+                    if ( physicalFile != null )
                     {
-                        _dao.insert( file.getIdFile( ), strIdBlob, _plugin );
-                        if ( AppPropertiesService.getPropertyBoolean( "ticketing.daemon.archiving.remove.database.blob", false ) )
+                        int idPhysicalFile = physicalFile.getIdPhysicalFile( );
+                        physicalFile = PhysicalFileHome.findByPrimaryKey( idPhysicalFile );
+                        String strIdBlob = _blobStoreService.store( physicalFile.getValue( ) );
+                        if ( strIdBlob != null )
                         {
-                            PhysicalFileHome.remove( idPhysicalFile );
+                            _dao.insert( file.getIdFile( ), strIdBlob, _plugin );
+                            if ( AppPropertiesService.getPropertyBoolean( "ticketing.daemon.archiving.remove.database.blob", false ) )
+                            {
+                                PhysicalFileHome.remove( idPhysicalFile );
+                            }
                         }
                     }
                 }
