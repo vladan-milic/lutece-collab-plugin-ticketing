@@ -34,8 +34,10 @@
 package fr.paris.lutece.plugins.ticketing.business.file;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -52,6 +54,7 @@ public final class TicketFileDAO implements ITicketFileDAO
     private static final String SQL_QUERY_FIND_BY_FILE_ID               = "SELECT id_blob FROM ticketing_file_blob WHERE id_file = ? ";
     private static final String SQL_QUERY_FIND_DATE_CREATION_BY_FILE_ID = "SELECT creation_date FROM ticketing_file_blob WHERE id_file = ? ";
     private static final String SQL_QUERY_FIND_BLOBS_BY_DATE            = "SELECT id_blob, id_file FROM ticketing_file_blob WHERE creation_date <= ? ";
+    private static final String SQL_QUERY_FIND_ID_FILE_LIST             = "SELECT id_file FROM ticketing_file_blob ";
 
     /**
      * {@inheritDoc}
@@ -165,6 +168,24 @@ public final class TicketFileDAO implements ITicketFileDAO
         daoUtil.free( );
 
         return idBlobMap;
+    }
+
+    @Override
+    public List<Integer> findListIdFile( Plugin _plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ID_FILE_LIST, _plugin );
+        daoUtil.executeQuery( );
+
+        List<Integer> idList = new ArrayList<Integer>( );
+
+        if ( daoUtil.next( ) )
+        {
+            idList.add( daoUtil.getInt( 1 ) );
+        }
+
+        daoUtil.free( );
+
+        return idList;
     }
 
 }

@@ -5,8 +5,10 @@
 <%@ page errorPage="../../ErrorPage.jsp" %>
 <jsp:include page="../../AdminHeader.jsp" />
 
-<script src="js/bootstrap-datepicker.js"></script>
-<script src="js/locales/bootstrap-datepicker.fr.js" charset="utf-8"></script>
+<script src="js/jquery/plugins/ui/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="js/jquery/plugins/ui/css/jquery-ui.min.css" type="text/css"/>
+
+<script src="js/jquery/plugins/ui/ui.datepicker-fr.js" charset="utf-8"></script>
 
 <%= strContent %>
 

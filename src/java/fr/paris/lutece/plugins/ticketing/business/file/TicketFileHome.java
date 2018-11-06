@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.ticketing.business.file;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -55,9 +56,11 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 public final class TicketFileHome
 {
     // Static variable pointed at the DAO instance
-    private static ITicketFileDAO    _dao              = SpringContextService.getBean( "ticketing.ticketFileDAO" );
-    private static Plugin            _plugin           = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME );
-    private static IBlobStoreService _blobStoreService = SpringContextService.getBean( "ticketing.blobStoreService" );
+    private static ITicketFileDAO    _dao                = SpringContextService.getBean( "ticketing.ticketFileDAO" );
+    private static Plugin            _plugin             = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME );
+    private static IBlobStoreService _blobStoreService   = SpringContextService.getBean( "ticketing.blobStoreService" );
+
+    private static final boolean     REMOVE_FILE_FROM_DB = AppPropertiesService.getPropertyBoolean( "ticketing.daemon.archiving.remove.database.blob", false );
 
     /**
      * Migrate from database to filesystem file
@@ -83,7 +86,7 @@ public final class TicketFileHome
                     {
                         _dao.insert( file.getIdFile( ), strIdBlob, _plugin );
                         bMoved = true;
-                        if ( AppPropertiesService.getPropertyBoolean( "ticketing.daemon.archiving.remove.database.blob", false ) )
+                        if ( REMOVE_FILE_FROM_DB )
                         {
                             PhysicalFileHome.remove( idPhysicalFile );
                         }
@@ -95,13 +98,33 @@ public final class TicketFileHome
     }
 
     /**
+     * Clean physical files after activating property for removing
+     */
+    public static void cleanPhysicalFiles( )
+    {
+        if ( REMOVE_FILE_FROM_DB )
+        {
+            List<Integer> listIdFile = _dao.findListIdFile( _plugin );
+            for ( Integer id : listIdFile )
+            {
+                File fileItem = FileHome.findByPrimaryKey( id );
+                if ( ( fileItem != null ) && ( fileItem.getPhysicalFile( ) != null ) )
+                {
+                    PhysicalFileHome.remove( fileItem.getPhysicalFile( ).getIdPhysicalFile( ) );
+                }
+            }
+        }
+    }
+
+    /**
      * purge all files from a start date
      *
      * @param date
      */
-    public static void purgeFromDate( Date date )
+    public static int purgeFromDate( Date date )
     {
         Map<String, Integer> strBlobIdMap = _dao.findListIdBlobByDate( date, _plugin );
+        int count = 0;
         for ( Entry<String, Integer> entry : strBlobIdMap.entrySet( ) )
         {
             _blobStoreService.delete( entry.getKey( ) );
@@ -110,7 +133,9 @@ public final class TicketFileHome
             File file = FileHome.findByPrimaryKey( idFile );
             PhysicalFileHome.remove( file.getPhysicalFile( ).getIdPhysicalFile( ) );
             FileHome.remove( idFile );
+            count++;
         }
+        return count;
     }
 
     /**

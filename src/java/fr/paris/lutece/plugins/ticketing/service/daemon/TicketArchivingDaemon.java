@@ -55,6 +55,9 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 public class TicketArchivingDaemon extends Daemon
 {
 
+    private static final int DELAI_PURGE_MOIS     = AppPropertiesService.getPropertyInt( "ticketing.daemon.archiving.archivage.delai.mois", 3 );
+    private static final int DELAI_ARCHIVING_YEAR = AppPropertiesService.getPropertyInt( "ticketing.daemon.archiving.purge.delai.annee", 5 );
+
     /**
      * Constructor
      */
@@ -76,20 +79,21 @@ public class TicketArchivingDaemon extends Daemon
         sb.add( "Fin de l'archivage" );
 
         sb.add( "Début de la purge" );
-        purge( );
+        purge( sb );
         sb.add( "Fin de la purge" );
         setLastRunLogs( sb.toString( ) );
 
     }
 
-    private void purge( )
+    private void purge( StringJoiner sb )
     {
         Date purgeDate = new Date( );
         Calendar calpurgeDate = Calendar.getInstance( );
         calpurgeDate.setTime( purgeDate );
-        calpurgeDate.add( Calendar.YEAR, -AppPropertiesService.getPropertyInt( "ticketing.daemon.archiving.purge.delai.annee", 5 ) );
+        calpurgeDate.add( Calendar.YEAR, -DELAI_ARCHIVING_YEAR );
         purgeDate = calpurgeDate.getTime( );
-        TicketFileHome.purgeFromDate( purgeDate );
+        int count = TicketFileHome.purgeFromDate( purgeDate );
+        sb.add( "Nombre de fichiers purgés: " + count );
     }
 
     private void archivage( StringJoiner sb )
@@ -100,7 +104,7 @@ public class TicketArchivingDaemon extends Daemon
         Date date = new Date( );
         Calendar cal = Calendar.getInstance( );
         cal.setTime( date );
-        cal.add( Calendar.MONTH, -AppPropertiesService.getPropertyInt( "ticketing.daemon.archiving.archivage.delai.mois", 3 ) );
+        cal.add( Calendar.MONTH, -DELAI_PURGE_MOIS );
         date = cal.getTime( );
 
         filter.setCloseDate( date );
@@ -131,5 +135,7 @@ public class TicketArchivingDaemon extends Daemon
                 }
             }
         }
+
+        TicketFileHome.cleanPhysicalFiles( );
     }
 }

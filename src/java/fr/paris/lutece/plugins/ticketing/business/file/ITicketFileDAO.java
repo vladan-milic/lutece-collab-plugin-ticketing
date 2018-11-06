@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.ticketing.business.file;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -96,5 +97,15 @@ public interface ITicketFileDAO
      * @return map id_blob, id_file
      */
     Map<String, Integer> findListIdBlobByDate( Date date, Plugin _plugin );
+
+    /**
+     * find id file list
+     *
+     * @param _plugin
+     *            the Plugin
+     *
+     * @return list id
+     */
+    List<Integer> findListIdFile( Plugin _plugin );
 
 }
