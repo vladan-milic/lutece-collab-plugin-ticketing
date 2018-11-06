@@ -65,34 +65,33 @@ public final class TicketFileHome
      * @param file
      *            File to migrate
      */
-    public static void migrateToBlob( File file )
+    public static boolean migrateToBlob( File file )
     {
+        boolean bMoved = false;
         if ( file != null )
         {
             String strBlobId = _dao.findIdBlobByIdFile( file.getIdFile( ), _plugin );
             if ( strBlobId == null )
             {
-                file = FileHome.findByPrimaryKey( file.getIdFile( ) );
-                if ( file != null )
+                PhysicalFile physicalFile = file.getPhysicalFile( );
+                if ( physicalFile != null )
                 {
-                    PhysicalFile physicalFile = file.getPhysicalFile( );
-                    if ( physicalFile != null )
+                    int idPhysicalFile = physicalFile.getIdPhysicalFile( );
+                    physicalFile = PhysicalFileHome.findByPrimaryKey( idPhysicalFile );
+                    String strIdBlob = _blobStoreService.store( physicalFile.getValue( ) );
+                    if ( strIdBlob != null )
                     {
-                        int idPhysicalFile = physicalFile.getIdPhysicalFile( );
-                        physicalFile = PhysicalFileHome.findByPrimaryKey( idPhysicalFile );
-                        String strIdBlob = _blobStoreService.store( physicalFile.getValue( ) );
-                        if ( strIdBlob != null )
+                        _dao.insert( file.getIdFile( ), strIdBlob, _plugin );
+                        bMoved = true;
+                        if ( AppPropertiesService.getPropertyBoolean( "ticketing.daemon.archiving.remove.database.blob", false ) )
                         {
-                            _dao.insert( file.getIdFile( ), strIdBlob, _plugin );
-                            if ( AppPropertiesService.getPropertyBoolean( "ticketing.daemon.archiving.remove.database.blob", false ) )
-                            {
-                                PhysicalFileHome.remove( idPhysicalFile );
-                            }
+                            PhysicalFileHome.remove( idPhysicalFile );
                         }
                     }
                 }
             }
         }
+        return bMoved;
     }
 
     /**

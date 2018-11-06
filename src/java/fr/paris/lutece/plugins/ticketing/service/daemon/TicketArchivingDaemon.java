@@ -43,6 +43,7 @@ import fr.paris.lutece.plugins.ticketing.business.file.TicketFileHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.portal.business.file.File;
+import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.service.daemon.Daemon;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
@@ -117,11 +118,14 @@ public class TicketArchivingDaemon extends Daemon
                     if ( response != null )
                     {
                         File file = response.getFile( );
-                        TicketFileHome.migrateToBlob( file );
-
                         if ( file != null )
                         {
-                            sb.add( "Id Ticket:" + idTicket + ", Fichier archivé: " + file.getTitle( ) );
+                            file = FileHome.findByPrimaryKey( file.getIdFile( ) );
+                            boolean bMoved = TicketFileHome.migrateToBlob( file );
+                            if ( bMoved )
+                            {
+                                sb.add( "Id Ticket:" + idTicket + ", Fichier archivé: " + file.getTitle( ) );
+                            }
                         }
                     }
                 }
