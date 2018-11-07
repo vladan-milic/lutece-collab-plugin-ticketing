@@ -34,6 +34,9 @@
 package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.validation.constraints.Size;
 
@@ -66,7 +69,7 @@ public class ModelResponse implements Serializable
 
     /**
      * Returns the Id
-     * 
+     *
      * @return The Id
      */
     public int getId( )
@@ -76,7 +79,7 @@ public class ModelResponse implements Serializable
 
     /**
      * Sets the Id
-     * 
+     *
      * @param nId
      *            The Id
      */
@@ -87,7 +90,7 @@ public class ModelResponse implements Serializable
 
     /**
      * Returns the Title
-     * 
+     *
      * @return The Title
      */
     public String getTitle( )
@@ -97,7 +100,7 @@ public class ModelResponse implements Serializable
 
     /**
      * Sets the Title
-     * 
+     *
      * @param strTitle
      *            The Title
      */
@@ -108,7 +111,7 @@ public class ModelResponse implements Serializable
 
     /**
      * Returns the Reponse
-     * 
+     *
      * @return The Reponse
      */
     public String getReponse( )
@@ -118,7 +121,7 @@ public class ModelResponse implements Serializable
 
     /**
      * Sets the Reponse
-     * 
+     *
      * @param strReponse
      *            The Reponse
      */
@@ -129,7 +132,7 @@ public class ModelResponse implements Serializable
 
     /**
      * Returns the Domain
-     * 
+     *
      * @return The Domain
      */
     public String getDomain( )
@@ -139,7 +142,7 @@ public class ModelResponse implements Serializable
 
     /**
      * Sets the Domain
-     * 
+     *
      * @param strDomain
      *            The Domain
      */
@@ -160,7 +163,7 @@ public class ModelResponse implements Serializable
 
     /**
      * Returns the Keyword
-     * 
+     *
      * @return The Keyword
      */
     public String getKeyword( )
@@ -170,7 +173,7 @@ public class ModelResponse implements Serializable
 
     /**
      * Sets the Keyword
-     * 
+     *
      * @param strKeyword
      *            The Keyword
      */
@@ -221,7 +224,7 @@ public class ModelResponse implements Serializable
 
     /**
      * Gets the update date
-     * 
+     *
      * @return the update date
      */
     public String getDateUpdate( )
@@ -231,7 +234,7 @@ public class ModelResponse implements Serializable
 
     /**
      * Sets the update date
-     * 
+     *
      * @param dDateUpdate
      *            the update date
      */
@@ -264,6 +267,17 @@ public class ModelResponse implements Serializable
     public void setInfos( String _strInfos )
     {
         this._strInfos = _strInfos;
+    }
+
+    public long getDateUpdateTimestamp( ) throws ParseException
+    {
+        if ( ( _strDateUpdate != null ) && !_strDateUpdate.isEmpty( ) )
+        {
+            SimpleDateFormat dateFormat = new SimpleDateFormat( "dd/MM/yyyy" );
+            Date date = dateFormat.parse( _strDateUpdate );
+            return date.getTime( );
+        }
+        return 0;
     }
 
 }
