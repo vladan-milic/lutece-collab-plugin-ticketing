@@ -20,24 +20,21 @@
 					<thead>
 						<tr>
 							<th width="55%">
-								#i18n{ticketing.manage_modelresponse.columnTitle} <@sort
-								jsp_url="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp"
-								attribute="title" /></th>
-							<th width="15%">${domain_list[0].name} <@sort
-								jsp_url="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp"
-								attribute="domain" /></th>
+								#i18n{ticketing.manage_modelresponse.columnTitle} 
+								<@sort jsp_url="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp" attribute="title" />
+							</th>
+							<th width="15%">
+								${domain_list[0].name} 
+								<@sort jsp_url="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp" attribute="domain" />
+							</th>
 							<th width="25%">
-								<form id="filter_form" class="form-inline" method="post"
-									name="manage_modelresponse"
-									action="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp">
-									<label class="select" for="domain"> <@comboWithParams
-										name="fltr_id_domain" default_value="${selected_domain!}"
-										additionalParameters=" id=\"fltr_id_domain\"
-										class=\"form-control input-xs\" " items=domain_list /> </label>
-								</form> #i18n{ticketing.manage_modelresponse.columnLastModification}
-								<@sort
-								jsp_url="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp"
-								attribute="infos" />
+								<form id="filter_form" class="form-inline" method="post" name="manage_modelresponse" action="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp">
+									<label class="select" for="domain"> 
+										<@comboWithParams name="fltr_id_domain" default_value="${selected_domain!}" additionalParameters=" id=\"fltr_id_domain\" class=\"form-control input-xs\" " items=domain_list /> 
+									</label>
+								</form> 
+								#i18n{ticketing.manage_modelresponse.columnLastModification}
+								<@sort jsp_url="jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp" attribute="dateUpdateTimestamp" />
 							</th>
 							<th width="5%" style="text-align: center">#i18n{ticketing.manage_modelresponse.columnEdit}</th>
 							<th width="5%" style="text-align: center">#i18n{ticketing.manage_modelresponse.columnDelete}</th>
