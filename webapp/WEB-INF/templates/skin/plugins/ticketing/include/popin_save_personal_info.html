@@ -66,12 +66,12 @@ function ${prefix}callPopinCallback(result) {
 
 $(document).on("click", "#${prefix}popin-save-personal-info-yes", function(event){
 	$("#${prefix}popin_update").slideUp();
-	callBacksOnHide.forEach(function(cb){ cb(); });
+	callBacksOnHide.forEach(function(cb){ if(cb){cb();} });
 	${prefix}callPopinCallback(true);
 });
 $(document).on("click", "#${prefix}popin-save-personal-info-no", function(event){
 	$("#${prefix}popin_update").slideUp();
-	callBacksOnHide.forEach(function(cb){ cb(); });
+	callBacksOnHide.forEach(function(cb){ if(cb){cb();} });
 	${prefix}callPopinCallback(false);
 });
 </script>
