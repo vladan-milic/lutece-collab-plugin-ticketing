@@ -46,7 +46,7 @@
         <#if read_only_reponses_html_list?? && read_only_reponses_html_list?size &gt; 0>
             <div class="form-group">
                 <label class="col-xs-12 col-sm-3 control-label-static">#i18n{ticketing.view_ticket_details.labelExtraFields}&nbsp;:</label>
-                <div class="col-xs-12 col-sm-9">
+                <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
                     <div class="col-xs-12">
                         <#list read_only_reponses_html_list as html_response>
                             <#if html_response?has_content>
@@ -66,22 +66,27 @@
         <script>
         
         	var firstRow = $('#edit_fields .row:first');
-        	var inputText = $("input[id^='attribute']");
-        	var helpBlock = $(inputText).next();
-        	var label = $(inputText).prev();
+        	$("input[id^='attribute']").filter("input:text" ).each(function( index ) {
+        		var helpBlock = $(this).next();
+              	var label = $(this).prev();
+              	
+              	$(firstRow).find(".col-xs-12").removeClass( "col-xs-12" );
+              	$(firstRow).find(".col-sm-12").removeClass( "col-sm-12" );
+              	$(firstRow).removeClass( "row" );
+              	$(label).addClass("col-xs-12 col-sm-3 control-label-static");
+              	$(label).append(" : ");
+              	
+              	$(helpBlock).after( "<div class='col-sm-9 col-xs-12 col-md-6 col-lg-6' id='ffContainer"+index+"'></div>" );
+              	 $('#ffContainer'+index).append($(this));
+              	$('#ffContainer'+index).append($(helpBlock)); 
+        	});
+        	$("input[id^='attribute']").filter("input:file" ).each(function( index ) {
+        		var label = $('label[for="'+ $(this).attr('id') +'"]');
+              	$(label).addClass("col-xs-12 col-sm-3 control-label-static");
+              	$(label).append(" : ");
+              	
+        	});
         	
-        	$(firstRow).find(".col-xs-12").removeClass( "col-xs-12" );
-        	$(firstRow).find(".col-sm-12").removeClass( "col-sm-12" );
-        	$(firstRow).removeClass( "row" );
-        	
-        	$(label).addClass("col-sm-3 control-label-static");
-        	$(label).append(" : ");
-        	
-        	$(helpBlock).after( "<div class='col-sm-9' id='ffContainer'></div>" );
-        	$('#ffContainer').append($(inputText));
-        	$('#ffContainer').append($(helpBlock));
-        	
-        	$(inputText).removeClass( "form-control" );
         	
         </script>
     </#if>
