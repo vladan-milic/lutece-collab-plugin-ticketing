@@ -91,6 +91,7 @@ table.table-hover tbody tr:hover{ cursor: pointer }
 #info-right h5{ color:#808179 }
 
 .avatar-label{ display:inline-block; line-height:40px; vertical-align: middle; margin-left: 5px }
+#admin-avatar { float:unset; }
 
 .modal-body>.content-header{ display: none }
 
