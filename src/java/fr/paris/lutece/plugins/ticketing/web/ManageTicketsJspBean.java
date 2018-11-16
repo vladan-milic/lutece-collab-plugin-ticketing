@@ -53,6 +53,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -335,7 +336,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 {
                     line.add( category.getLabel( ) );
                 }
-                for ( int index = 0; index < categoryTypesList.size( ) - ticket.getBranch( ).size( ); index++ )
+                for ( int index = 0; index < ( categoryTypesList.size( ) - ticket.getBranch( ).size( ) ); index++ )
                 {
                     line.add( "" );
                 }
@@ -422,7 +423,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         TicketFilterHelper.setFilterUserAndUnitIds( filter, userCurrent );
 
         // Check if a user belong to a unit
-        boolean bUserWithNoUnit = filter.getFilterIdAssigneeUnit( ) == null || filter.getFilterIdAssigneeUnit( ).isEmpty( ) || filter.getFilterIdAssignerUnit( ) == null
+        boolean bUserWithNoUnit = ( filter.getFilterIdAssigneeUnit( ) == null ) || filter.getFilterIdAssigneeUnit( ).isEmpty( ) || ( filter.getFilterIdAssignerUnit( ) == null )
                 || filter.getFilterIdAssignerUnit( ).isEmpty( );
 
         _strCurrentPageIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
@@ -1041,6 +1042,15 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             bIsFormValid = false;
         }
 
+        if (BooleanUtils.isTrue( ChannelHome.findByPrimaryKey( ticket.getChannel( ).getId( ) ).getFlagMandatoryTicketComment( ) ) )
+        {
+            String errorCommentFilled = new FormValidator( request ).isCommentFilled( );
+            if (errorCommentFilled != null)
+            {
+                addError( errorCommentFilled );
+                bIsFormValid = false;
+            }
+        }
         // The validation for the ticket comment size is made here because the validation doesn't work for this field
         // Check constraints
         // Count the number of characters in the ticket comment
@@ -1211,7 +1221,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     {
         List<TicketCategory> listDomain = TicketCategoryService.getInstance( true ).getAuthorizedDomainsList( getUser( ), permission );
 
-        if ( mapIntegerTicketDomain != null && listDomain != null && !listDomain.isEmpty( ) )
+        if ( ( mapIntegerTicketDomain != null ) && ( listDomain != null ) && !listDomain.isEmpty( ) )
         {
             for ( TicketCategory ticketDomain : listDomain )
             {
