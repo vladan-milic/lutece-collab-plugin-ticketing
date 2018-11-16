@@ -47,16 +47,16 @@ public final class ChannelDAO implements IChannelDAO
 {
     // Constants
     private static final String SQL_QUERY_NEW_PK       = "SELECT max( id_channel ) FROM ticketing_channel";
-    private static final String SQL_QUERY_SELECT       = "SELECT id_channel, label, icon_font FROM ticketing_channel WHERE id_channel = ? ";
-    private static final String SQL_QUERY_INSERT       = "INSERT INTO ticketing_channel ( id_channel, label, icon_font, inactive ) VALUES ( ?, ?, ?, 0 ) ";
+    private static final String SQL_QUERY_SELECT       = "SELECT id_channel, label, icon_font, flag_mandatory_ticket_comment FROM ticketing_channel WHERE id_channel = ? ";
+    private static final String SQL_QUERY_INSERT       = "INSERT INTO ticketing_channel ( id_channel, label, icon_font, flag_mandatory_ticket_comment, inactive ) VALUES ( ?, ?, ?, ?, 0 ) ";
     private static final String SQL_QUERY_DELETE       = "UPDATE ticketing_channel SET inactive = 1 WHERE id_channel = ? ";
-    private static final String SQL_QUERY_UPDATE       = "UPDATE ticketing_channel SET id_channel = ?, label = ?, icon_font = ? WHERE id_channel = ?";
-    private static final String SQL_QUERY_SELECTALL    = "SELECT id_channel, label, icon_font FROM ticketing_channel WHERE inactive <> 1";
+    private static final String SQL_QUERY_UPDATE       = "UPDATE ticketing_channel SET id_channel = ?, label = ?, icon_font = ?, flag_mandatory_ticket_comment = ? WHERE id_channel = ?";
+    private static final String SQL_QUERY_SELECTALL    = "SELECT id_channel, label, icon_font, flag_mandatory_ticket_comment FROM ticketing_channel WHERE inactive <> 1";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_channel FROM ticketing_channel WHERE inactive <> 1";
 
     /**
      * Generates a new primary key
-     * 
+     *
      * @param plugin
      *            The Plugin
      * @return The new primary key
@@ -91,6 +91,7 @@ public final class ChannelDAO implements IChannelDAO
         daoUtil.setInt( 1, channel.getId( ) );
         daoUtil.setString( 2, channel.getLabel( ) );
         daoUtil.setString( 3, channel.getIconFont( ) );
+        daoUtil.setBoolean( 4, channel.getFlagMandatoryTicketComment( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -114,6 +115,7 @@ public final class ChannelDAO implements IChannelDAO
             channel.setId( daoUtil.getInt( 1 ) );
             channel.setLabel( daoUtil.getString( 2 ) );
             channel.setIconFont( daoUtil.getString( 3 ) );
+            channel.setFlagMandatoryTicketComment( daoUtil.getBoolean( 4 ) );
         }
 
         daoUtil.free( );
@@ -144,7 +146,8 @@ public final class ChannelDAO implements IChannelDAO
         daoUtil.setInt( 1, channel.getId( ) );
         daoUtil.setString( 2, channel.getLabel( ) );
         daoUtil.setString( 3, channel.getIconFont( ) );
-        daoUtil.setInt( 4, channel.getId( ) );
+        daoUtil.setBoolean( 4, channel.getFlagMandatoryTicketComment( ) );
+        daoUtil.setInt( 5, channel.getId( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -167,6 +170,7 @@ public final class ChannelDAO implements IChannelDAO
             channel.setId( daoUtil.getInt( 1 ) );
             channel.setLabel( daoUtil.getString( 2 ) );
             channel.setIconFont( daoUtil.getString( 3 ) );
+            channel.setFlagMandatoryTicketComment( daoUtil.getBoolean( 4 ) );
 
             channelList.add( channel );
         }

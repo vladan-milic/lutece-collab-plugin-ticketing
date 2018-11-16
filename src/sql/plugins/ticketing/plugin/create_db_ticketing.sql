@@ -188,6 +188,7 @@ CREATE TABLE ticketing_channel (
 id_channel int(6) NOT NULL,
 label varchar(50) NOT NULL default '',
 icon_font varchar(50) NULL default '',
+flag_mandatory_ticket_comment boolean,
 inactive int(1)  NOT NULL default '0',
 PRIMARY KEY (id_channel)
 );
