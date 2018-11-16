@@ -14,12 +14,6 @@
 		            <#if response.file.dateCreation??>#i18n{ticketing.xpage.view_ticket_details.files.uploadDate} ${response.file.dateCreation?date} #i18n{ticketing.xpage.view_ticket_details.files.uploadDateAt} ${response.file.dateCreation?time}</#if>
 		        </td>
 	        </tr>
-        	<tr>
-        		<td></td>
-        		<td>
-        			<#if date_archived??>#i18n{ticketing.xpage.view_ticket_details.files.archivedDate} ${date_archived?date} #i18n{ticketing.xpage.view_ticket_details.files.uploadDateAt} ${date_archived?time}</#if>
-        		</td>
-        	</tr>
         </table>
         </p>
     </div>
