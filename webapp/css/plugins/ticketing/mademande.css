@@ -688,13 +688,19 @@ footer {
     .mademande .btn-toolbar.validation-block {
         text-align: center;
     }
-    .mademande .btn-toolbar.validation-block button:first-child {
-        margin: 0 0 15px 0;
-    }
+
     .mademande .btn-toolbar.validation-block {
         margin: 20px auto 30px auto;
     }
     .actions-btn button:first-child {
         margin-bottom: 15px;
     }
+    
+    @media (min-width:120px) and (max_width: 556px) {
+    .mademande .btn-toolbar.validation-block button:first-child {
+            margin-bottom:15px;
+            margin-left:2.7rem;
+        }
+	}
+    
 }
