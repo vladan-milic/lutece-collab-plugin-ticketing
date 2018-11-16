@@ -58,10 +58,11 @@ public class Channel implements Serializable
     private String            _strLabel;
     @Size( max = 50, message = "#i18n{ticketing.validation.channel.IconFont.size}" )
     private String            _strIconFont;
+    private Boolean           _bFlagMandatoryTicketComment;
 
     /**
      * Returns the Id
-     * 
+     *
      * @return The Id
      */
     public int getId( )
@@ -71,7 +72,7 @@ public class Channel implements Serializable
 
     /**
      * Sets the Id
-     * 
+     *
      * @param nId
      *            The Id
      */
@@ -82,7 +83,7 @@ public class Channel implements Serializable
 
     /**
      * Returns the Label
-     * 
+     *
      * @return The Label
      */
     public String getLabel( )
@@ -92,7 +93,7 @@ public class Channel implements Serializable
 
     /**
      * Sets the Label
-     * 
+     *
      * @param strLabel
      *            The Label
      */
@@ -103,7 +104,7 @@ public class Channel implements Serializable
 
     /**
      * Returns the Icon font label
-     * 
+     *
      * @return The Icon font label
      */
     public String getIconFont( )
@@ -113,12 +114,33 @@ public class Channel implements Serializable
 
     /**
      * Sets the Icon font label
-     * 
+     *
      * @param strIconFont
      *            The Icon font label
      */
     public void setIconFont( String strIconFont )
     {
         _strIconFont = strIconFont;
+    }
+
+    /**
+     * Returns the Flag mandatory ticket comment
+     *
+     * @return The Flag mandatory ticket comment
+     */
+    public Boolean getFlagMandatoryTicketComment( )
+    {
+        return _bFlagMandatoryTicketComment;
+    }
+
+    /**
+     * Sets the Mandatory ticket comment
+     *
+     * @param _bFlagMandatoryTicketComment
+     *            The Mandatory ticket comment
+     */
+    public void setFlagMandatoryTicketComment( Boolean bFlagMandatoryTicketComment )
+    {
+        _bFlagMandatoryTicketComment = bFlagMandatoryTicketComment;
     }
 }
