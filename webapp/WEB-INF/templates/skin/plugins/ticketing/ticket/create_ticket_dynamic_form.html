@@ -283,9 +283,10 @@
 			var ticketingPostData = {};
 			ticketingPostData["gender"] = "${ticket.idUserTitle!''}";
 			ticketingPostData["first_name"] = "${ticket.firstname!''}";
-			ticketingPostData["preferred_username"] = "${ticket.lastname!''}";
+			ticketingPostData["family_name"] = "${ticket.lastname!''}";
 			ticketingPostData["fixed_phone"] = "${ticket.fixedPhoneNumber!''}";
 			ticketingPostData["mobile_phone"] = "${ticket.mobilePhoneNumber!''}";
+			ticketingPostData["email"] = "${ticket.email!''}";
 			$.ajax({
 				url : "jsp/site/plugins/ticketing/personaldata/InitPersonalData.jsp",
 				type: 'POST',

@@ -373,7 +373,9 @@ public class TicketXPage extends WorkflowCapableXPage
                 String strFirstname = user.getUserInfo( LuteceUser.NAME_GIVEN );
                 String strLastname = user.getUserInfo( LuteceUser.NAME_FAMILY );
                 String strBirthname = user.getUserInfo( LuteceUser.NAME_MIDDLE );
-                String strEmail = user.getUserInfo( LuteceUser.HOME_INFO_ONLINE_EMAIL );
+                String strEmailHome = user.getUserInfo( LuteceUser.HOME_INFO_ONLINE_EMAIL );
+                String strEmailBusiness = user.getUserInfo( LuteceUser.BUSINESS_INFO_ONLINE_EMAIL );
+                String strEmail = StringUtils.isNotBlank( strEmailHome ) ? strEmailHome : strEmailBusiness;
                 String strFixedPhoneNumber = user.getUserInfo( LuteceUser.HOME_INFO_TELECOM_TELEPHONE_NUMBER );
                 String strMobilePhoneNumber = user.getUserInfo( LuteceUser.HOME_INFO_TELECOM_MOBILE_NUMBER );
 

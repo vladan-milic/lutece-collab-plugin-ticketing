@@ -81,14 +81,14 @@ public class PersonalDataApp extends MVCApplication
 
     /**
      * Init personal data in session
-     * 
+     *
      * @param request
      */
     public void doInitPersonalData( HttpServletRequest request )
     {
         LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
-        if ( user != null && StringUtils.isNotEmpty( user.getName( ) ) && request.getSession( ).getAttribute( SESSION_INIT_PERSONAL_DATA ) == null )
+        if ( ( user != null ) && StringUtils.isNotEmpty( user.getName( ) ) && ( request.getSession( ).getAttribute( SESSION_INIT_PERSONAL_DATA ) == null ) )
         {
             Map<String, String> mapAttributes = new HashMap<String, String>( );
 
@@ -106,7 +106,7 @@ public class PersonalDataApp extends MVCApplication
 
     /**
      * Calculate personal data delta between init and the current Store the delta map in session
-     * 
+     *
      * @param request
      */
     @SuppressWarnings( "unchecked" )
@@ -115,7 +115,7 @@ public class PersonalDataApp extends MVCApplication
         LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
         Map<String, String> mapAttributes = new HashMap<String, String>( );
 
-        if ( user != null && StringUtils.isNotEmpty( user.getName( ) ) )
+        if ( ( user != null ) && StringUtils.isNotEmpty( user.getName( ) ) )
         {
             try
             {
@@ -142,7 +142,7 @@ public class PersonalDataApp extends MVCApplication
 
     /**
      * Return a json {"delta":true} if there is a calculated delta in session, empty json elsewhere
-     * 
+     *
      * @param request
      * @return json string
      */
@@ -152,12 +152,12 @@ public class PersonalDataApp extends MVCApplication
         ObjectNode jsonMap = JsonNodeFactory.instance.objectNode( );
         LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
-        if ( user != null && StringUtils.isNotEmpty( user.getName( ) ) )
+        if ( ( user != null ) && StringUtils.isNotEmpty( user.getName( ) ) )
         {
             try
             {
-                Map<String, String> mapDeltaPersonalData = ( Map<String, String> ) ( Map<String, String> ) request.getSession( ).getAttribute( SESSION_DELTA_PERSONAL_DATA );
-                if ( mapDeltaPersonalData != null && mapDeltaPersonalData.size( ) > 0 )
+                Map<String, String> mapDeltaPersonalData = ( Map<String, String> ) request.getSession( ).getAttribute( SESSION_DELTA_PERSONAL_DATA );
+                if ( ( mapDeltaPersonalData != null ) && ( mapDeltaPersonalData.size( ) > 0 ) )
                 {
                     jsonMap.put( "delta", true );
                 }
@@ -172,7 +172,7 @@ public class PersonalDataApp extends MVCApplication
 
     /**
      * Save personal data difference in identitystore
-     * 
+     *
      * @param request
      */
     @SuppressWarnings( "unchecked" )
@@ -180,7 +180,7 @@ public class PersonalDataApp extends MVCApplication
     {
         LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
-        if ( user != null && StringUtils.isNotEmpty( user.getName( ) ) )
+        if ( ( user != null ) && StringUtils.isNotEmpty( user.getName( ) ) )
         {
             Map<String, String> mapDeltaPersonalData = new HashMap<String, String>( );
             try
@@ -198,7 +198,7 @@ public class PersonalDataApp extends MVCApplication
 
             for ( String strAttrKeyToSave : MAP_ATTRIBUTES_IDENTITY_TOSAVE )
             {
-                if ( mapDeltaPersonalData != null && mapDeltaPersonalData.containsKey( strAttrKeyToSave ) )
+                if ( ( mapDeltaPersonalData != null ) && mapDeltaPersonalData.containsKey( strAttrKeyToSave ) )
                 {
                     attribute = new AttributeDto( );
                     attribute.setKey( strAttrKeyToSave );
