@@ -68,6 +68,7 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
+import fr.paris.lutece.plugins.ticketing.business.file.TicketFileHome;
 import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
@@ -685,6 +686,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 for ( Response response : ticket.getListResponse( ) )
                 {
                     ResponseHome.create( response );
+                    if ( response.getFile( ) != null )
+                    {
+                        TicketFileHome.migrateToBlob( response.getFile( ) );
+                    }
                     TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
                 }
             }
@@ -738,6 +743,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 for ( Response response : ticket.getListResponse( ) )
                 {
                     ResponseHome.create( response );
+                    if ( response.getFile( ) != null )
+                    {
+                        TicketFileHome.migrateToBlob( response.getFile( ) );
+                    }
                     TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
                 }
             }
@@ -1042,10 +1051,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             bIsFormValid = false;
         }
 
-        if (BooleanUtils.isTrue( ChannelHome.findByPrimaryKey( ticket.getChannel( ).getId( ) ).getFlagMandatoryTicketComment( ) ) )
+        if ( BooleanUtils.isTrue( ChannelHome.findByPrimaryKey( ticket.getChannel( ).getId( ) ).getFlagMandatoryTicketComment( ) ) )
         {
             String errorCommentFilled = new FormValidator( request ).isCommentFilled( );
-            if (errorCommentFilled != null)
+            if ( errorCommentFilled != null )
             {
                 addError( errorCommentFilled );
                 bIsFormValid = false;

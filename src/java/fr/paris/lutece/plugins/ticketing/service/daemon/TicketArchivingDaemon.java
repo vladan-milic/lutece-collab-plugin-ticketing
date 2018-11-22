@@ -40,7 +40,6 @@ import java.util.StringJoiner;
 
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.ticketing.business.file.TicketFileHome;
-import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.file.FileHome;
@@ -55,8 +54,7 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 public class TicketArchivingDaemon extends Daemon
 {
 
-    private static final int DELAI_PURGE_MOIS     = AppPropertiesService.getPropertyInt( "ticketing.daemon.archiving.archivage.delai.mois", 3 );
-    private static final int DELAI_ARCHIVING_YEAR = AppPropertiesService.getPropertyInt( "ticketing.daemon.archiving.purge.delai.annee", 5 );
+    private static final int DELAI_PURGE_YEAR = AppPropertiesService.getPropertyInt( "ticketing.daemon.archiving.purge.delai.annee", 5 );
 
     /**
      * Constructor
@@ -90,7 +88,7 @@ public class TicketArchivingDaemon extends Daemon
         Date purgeDate = new Date( );
         Calendar calpurgeDate = Calendar.getInstance( );
         calpurgeDate.setTime( purgeDate );
-        calpurgeDate.add( Calendar.YEAR, -DELAI_ARCHIVING_YEAR );
+        calpurgeDate.add( Calendar.YEAR, -DELAI_PURGE_YEAR );
         purgeDate = calpurgeDate.getTime( );
         int count = TicketFileHome.purgeFromDate( purgeDate );
         sb.add( "Nombre de fichiers purgés: " + count );
@@ -98,18 +96,8 @@ public class TicketArchivingDaemon extends Daemon
 
     private void archivage( StringJoiner sb )
     {
-        TicketFilter filter = new TicketFilter( );
-        filter.setStatus( "1" );
 
-        Date date = new Date( );
-        Calendar cal = Calendar.getInstance( );
-        cal.setTime( date );
-        cal.add( Calendar.MONTH, -DELAI_PURGE_MOIS );
-        date = cal.getTime( );
-
-        filter.setCloseDate( date );
-
-        List<Integer> ticketsList = TicketHome.getIdTicketsList( filter );
+        List<Integer> ticketsList = TicketHome.getIdTicketsList( );
 
         for ( Integer idTicket : ticketsList )
         {

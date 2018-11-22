@@ -68,7 +68,7 @@ public final class TicketFileHome
      * @param file
      *            File to migrate
      */
-    public static boolean migrateToBlob( File file )
+    public synchronized static boolean migrateToBlob( File file )
     {
         boolean bMoved = false;
         if ( file != null )

@@ -80,7 +80,7 @@ public final class TicketUtils
 
     /**
      * Registers the admin user for front office
-     * 
+     *
      * @param request
      *            the request
      */
@@ -107,7 +107,7 @@ public final class TicketUtils
 
     /**
      * Unregisters the admin user for front office
-     * 
+     *
      * @param request
      *            the request
      */
@@ -118,7 +118,7 @@ public final class TicketUtils
 
     /**
      * Creates a ReferenceList object initialized with one item
-     * 
+     *
      * @param strLabel
      *            the label for the item
      * @param nCode
@@ -132,7 +132,7 @@ public final class TicketUtils
 
     /**
      * Creates a ReferenceList object initialized with one item
-     * 
+     *
      * @param strLabel
      *            the label for the item
      * @param strCode
@@ -153,7 +153,7 @@ public final class TicketUtils
 
     /**
      * returns true if ticket is assign to user's group
-     * 
+     *
      * @param ticket
      *            ticket
      * @param lstUserUnits
@@ -179,7 +179,7 @@ public final class TicketUtils
 
     /**
      * returns true if ticket is assigned to a child unit of user's group
-     * 
+     *
      * @param ticket
      *            ticket
      * @param lstUserUnits
@@ -210,7 +210,7 @@ public final class TicketUtils
 
     /**
      * returns true if the current unit is the parent unit
-     * 
+     *
      * @param parentUnit
      *            parent unit
      * @param currentUnit
@@ -244,7 +244,7 @@ public final class TicketUtils
 
     /**
      * returns true if ticket is assign up from user's group
-     * 
+     *
      * @param ticket
      *            ticket
      * @param lstUserUnits
@@ -270,7 +270,7 @@ public final class TicketUtils
 
     /**
      * get list of ticket id according to filter
-     * 
+     *
      * @param user
      *            admin user
      * @param filter
@@ -285,7 +285,7 @@ public final class TicketUtils
 
     /**
      * get list of ticket according to filter
-     * 
+     *
      * @param user
      *            admin user
      * @param filter
@@ -300,7 +300,7 @@ public final class TicketUtils
 
     /**
      * returns true if ticket is assign to user or group, false otherwise
-     * 
+     *
      * @param user
      *            adminUser
      * @param ticket
@@ -384,7 +384,7 @@ public final class TicketUtils
 
     /**
      * Tests whether the id is set or not
-     * 
+     *
      * @param nId
      *            the id to test
      * @return {@code true} if the id is set, {@code false} otherwise
@@ -396,7 +396,7 @@ public final class TicketUtils
 
     /**
      * Tests if the specified ticket is assigned to the specified user
-     * 
+     *
      * @param ticket
      *            the ticket
      * @param user
@@ -410,7 +410,7 @@ public final class TicketUtils
 
     /**
      * Tests if the specified user is the assigner of the specified ticket
-     * 
+     *
      * @param ticket
      *            the ticket
      * @param user
@@ -424,7 +424,7 @@ public final class TicketUtils
 
     /**
      * Return the parsing of the String into Integer or -1 if fails
-     * 
+     *
      * @param strStringToConvert
      * @param strMessageError
      *            the error message
@@ -447,7 +447,7 @@ public final class TicketUtils
 
     /**
      * Check if a ticket is authorized
-     * 
+     *
      * @param ticket
      * @param strPermission
      * @param user

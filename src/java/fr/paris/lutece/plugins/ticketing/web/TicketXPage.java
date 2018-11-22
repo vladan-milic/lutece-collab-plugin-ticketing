@@ -55,6 +55,7 @@ import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
+import fr.paris.lutece.plugins.ticketing.business.file.TicketFileHome;
 import fr.paris.lutece.plugins.ticketing.business.form.Form;
 import fr.paris.lutece.plugins.ticketing.business.form.FormEntryType;
 import fr.paris.lutece.plugins.ticketing.business.form.FormHome;
@@ -458,6 +459,10 @@ public class TicketXPage extends WorkflowCapableXPage
                     for ( Response response : ticket.getListResponse( ) )
                     {
                         ResponseHome.create( response );
+                        if ( response.getFile( ) != null )
+                        {
+                            TicketFileHome.migrateToBlob( response.getFile( ) );
+                        }
                         TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
                     }
                 }
