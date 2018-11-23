@@ -50,6 +50,8 @@ import fr.paris.lutece.plugins.ticketing.service.authentication.RequestAuthentic
 import fr.paris.lutece.portal.business.file.File;
 import fr.paris.lutece.portal.business.file.FileHome;
 import fr.paris.lutece.portal.business.physicalfile.PhysicalFile;
+import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.service.admin.AdminAuthenticationService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
 /**
@@ -70,6 +72,7 @@ public class TicketingFileServlet extends HttpServlet
     private static final String LOG_UNKNOWN_ID_RESPONSE     = "Calling Ticketing file servlet with unknown id response : ";
     private static final String LOG_WRONG_ID_RESPONSE       = "Calling Ticketing file servlet with wrong format for parameter " + PARAMETER_ID_RESPONSE + " : ";
     private static final String LOG_UNAUTHENTICATED_REQUEST = "Calling Ticketing file servlet with unauthenticated request";
+    private static final String LOG_UNAUTHENTICATED_USER    = "Calling ExternalUserEmailValidationServlet with unauthenticated user";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -85,6 +88,13 @@ public class TicketingFileServlet extends HttpServlet
      */
     protected void processRequest( HttpServletRequest request, HttpServletResponse httpResponse ) throws ServletException, IOException
     {
+        AdminUser user = AdminAuthenticationService.getInstance( ).getRegisteredUser( request );
+        if ( user == null )
+        {
+            AppLogService.error( LOG_UNAUTHENTICATED_USER );
+            throw new ServletException( LOG_UNAUTHENTICATED_USER );
+        }
+
         String strIdResponse = request.getParameter( PARAMETER_ID_RESPONSE );
 
         if ( !StringUtils.isEmpty( strIdResponse ) && StringUtils.isNumeric( strIdResponse ) )
