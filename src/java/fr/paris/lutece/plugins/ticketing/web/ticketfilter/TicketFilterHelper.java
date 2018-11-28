@@ -103,14 +103,13 @@ public final class TicketFilterHelper
     private static final String PARAMETER_FILTER_WORKFLOW_STATE_IDS    = "fltr_state_ids";
 
     // Marks
-    private static final String MARK_FILTER_PERIOD_LIST                = "period_list";
     private static final String MARK_TICKET_FILTER                     = "ticket_filter";
     private static final String MARK_FULL_STATE_LIST                   = "state_list";
     private static final String MARK_FULL_CATEGORY_MAP                 = "category_reflist_map";
     private static final String DATE_FILTER_PATTERN                    = "yyyyMMdd";
-    private static final String DATETIME_FILTER_PATTERN                = "yyyyMMdd hh:mm:ss";
     private static final String TIME_START_OF_DAY                      = " 00:00:00";
     private static final String TIME_END_OF_DAY                        = " 23:59:59";
+    private static final String DATETIME_PATTERN                       = "dd/MM/yyyy hh:mm:ss";
 
     // Properties for page titles
     private static final String NO_SELECTED_FIELD_ID                   = "-1";
@@ -135,7 +134,6 @@ public final class TicketFilterHelper
     private static TicketFilter getFilterFromRequest( HttpServletRequest request ) throws ParseException
     {
         TicketFilter fltrFiltre = new TicketFilter( );
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "dd/MM/yyyy hh:mm:ss" );
 
         if ( ( request.getParameterValues( PARAMETER_FILTER_WORKFLOW_STATE_IDS ) != null ) && ( request.getParameterValues( PARAMETER_FILTER_WORKFLOW_STATE_IDS ).length > 0 ) )
         {
@@ -252,13 +250,13 @@ public final class TicketFilterHelper
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_OPEN_SINCE ) ) )
         {
-            Date dateStart = simpleDateFormat.parse( request.getParameter( PARAMETER_FILTER_OPEN_SINCE ) + TIME_START_OF_DAY );
+            Date dateStart = getDateFromString( request.getParameter( PARAMETER_FILTER_OPEN_SINCE ) + TIME_START_OF_DAY, DATETIME_PATTERN );
             fltrFiltre.setCreationStartDate( dateStart );
         }
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_OPEN_UNTIL ) ) )
         {
-            Date dateEnd = simpleDateFormat.parse( request.getParameter( PARAMETER_FILTER_OPEN_UNTIL ) + TIME_END_OF_DAY );
+            Date dateEnd = getDateFromString( request.getParameter( PARAMETER_FILTER_OPEN_UNTIL ) + TIME_END_OF_DAY, DATETIME_PATTERN );
             fltrFiltre.setCreationEndDate( dateEnd );
         }
 
@@ -476,22 +474,11 @@ public final class TicketFilterHelper
      */
     private static Date getDateFromString( String strDate )
     {
-        SimpleDateFormat sdf = new SimpleDateFormat( DATE_FILTER_PATTERN );
-        Date date = null;
-
-        try
-        {
-            date = sdf.parse( strDate );
-        } catch ( ParseException pe )
-        {
-            AppLogService.info( "Invalid date : " + strDate + ". The expected pattern is : " + DATE_FILTER_PATTERN );
-        }
-
-        return date;
+        return getDateFromString( strDate, DATE_FILTER_PATTERN );
     }
 
     /**
-     * returns a Date object from a String date String has to respect yyyyMMdd hh:mm:ss format unless a parseException is thrown
+     * returns a Date object from a String date String has to respect pattern date format unless a parseException is thrown
      *
      * @param strDate
      *            yyyyMMdd hh:mm:ss datetime
@@ -499,9 +486,9 @@ public final class TicketFilterHelper
      * @throws ParseException
      *             exception when error occurs while parsing date
      */
-    private static Date getDateTimeFromString( String strDate )
+    private static Date getDateFromString( String strDate, String datePattern )
     {
-        SimpleDateFormat sdf = new SimpleDateFormat( DATETIME_FILTER_PATTERN );
+        SimpleDateFormat sdf = new SimpleDateFormat( datePattern );
         Date date = null;
 
         try
@@ -509,7 +496,7 @@ public final class TicketFilterHelper
             date = sdf.parse( strDate );
         } catch ( ParseException pe )
         {
-            AppLogService.info( "Invalid date : " + strDate + ". The expected pattern is : " + DATETIME_FILTER_PATTERN );
+            AppLogService.info( "Invalid date : " + strDate + ". The expected pattern is : " + datePattern );
         }
 
         return date;
@@ -527,23 +514,33 @@ public final class TicketFilterHelper
         List<Unit> lstUserUnits = UnitHome.findByIdUser( user.getUserId( ) );
         Set<Integer> setAssigneeUnitId = new HashSet<>( );
         Set<Integer> setAssignerUnitId = new HashSet<>( );
-        for ( Unit unit : lstUserUnits )
+        if ( lstUserUnits != null )
         {
-            setAssignerUnitId.add( unit.getIdUnit( ) );
-            setAssigneeUnitId.add( unit.getIdUnit( ) );
-            setAssigneeUnitId.addAll( UnitHome.getAllSubUnitsId( unit.getIdUnit( ) ) );
+            for ( Unit unit : lstUserUnits )
+            {
+                if ( unit != null )
+                {
+                    setAssignerUnitId.add( unit.getIdUnit( ) );
+                    setAssigneeUnitId.add( unit.getIdUnit( ) );
+                    setAssigneeUnitId.addAll( UnitHome.getAllSubUnitsId( unit.getIdUnit( ) ) );
+                }
+            }
         }
 
         filter.setFilterIdAdminUser( user.getUserId( ) );
         filter.setFilterIdAssigneeUnit( setAssigneeUnitId );
         filter.setFilterIdAssignerUnit( setAssignerUnitId );
 
-        filter.setAdminUserRoles( user.getRoles( ).keySet( ) );
+        Map<String, AdminRole> roles = user.getRoles( );
+        if ( roles != null )
+        {
+            filter.setAdminUserRoles( roles.keySet( ) );
+        }
     }
 
     /**
      * Returns the Max Number of Filter
-     * 
+     *
      * @return The Max Number of Filter
      */
     private static int getMaxNumberFilter( )
