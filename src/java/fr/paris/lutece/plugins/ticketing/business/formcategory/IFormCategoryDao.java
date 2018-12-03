@@ -10,9 +10,12 @@ public interface IFormCategoryDao
      * Insert into ticketing_form_category
      *
      * @param nIdCategory
+     *            id category
      *
      * @param nIdForm
+     *            id form
      * @param plugin
+     *            plugin
      */
     public void insert( int nIdCategory, int nIdForm, Plugin plugin );
 
@@ -46,7 +49,9 @@ public interface IFormCategoryDao
      * load list by formulaire id
      *
      * @param nIdForm
+     *            id form
      * @param plugin
+     *            plugin
      * @return list
      */
     public List<FormCategory> loadByForm( int nIdForm, Plugin plugin );
@@ -54,7 +59,9 @@ public interface IFormCategoryDao
     /**
      *
      * @param nIdCategory
+     *            id category
      * @param plugin
+     *            plugin
      * @return form list
      */
     public List<FormCategory> loadByCategory( int nIdCategory, Plugin plugin );

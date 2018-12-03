@@ -119,8 +119,9 @@ public final class ModelResponseHome
 
     /**
      * Load the data of all the modelResponse objects for a given domain label and returns them as a list
-     * 
+     *
      * @param sLabelDomain
+     *            Label Domain
      *
      * @return the list which contains the data of all the modelResponse objects
      */

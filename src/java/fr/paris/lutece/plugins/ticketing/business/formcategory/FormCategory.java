@@ -28,6 +28,7 @@ public class FormCategory
      * set id formulaire
      *
      * @param _nIdForm
+     *            id form
      */
     public void setIdForm( int _nIdForm )
     {
@@ -48,6 +49,7 @@ public class FormCategory
      * set id category
      *
      * @param _nIdCategory
+     *            id category
      */
     public void setIdCategory( int _nIdCategory )
     {

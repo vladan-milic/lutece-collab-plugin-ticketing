@@ -252,6 +252,7 @@ public class FormValidator
      * Return the number of character of a ticket comment for validation
      *
      * @param strTicketComment
+     *            comment
      * @return the number of character of a ticket comment
      */
     public static int countCharTicketComment( String strTicketComment )

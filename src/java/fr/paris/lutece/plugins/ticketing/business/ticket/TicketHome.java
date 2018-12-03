@@ -178,6 +178,7 @@ public final class TicketHome
      * Get the marking for the given ticket id
      *
      * @param ticket
+     *            ticket
      *
      * @return the marking
      */

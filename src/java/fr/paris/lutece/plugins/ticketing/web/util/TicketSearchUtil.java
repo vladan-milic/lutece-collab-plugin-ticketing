@@ -63,6 +63,7 @@ public class TicketSearchUtil
      * @param strFieldForTerm
      *            the field to filter
      * @param collectionInteger
+     *            collection Integer
      * @return the TermsFilter object
      */
     public static DocValuesTermsQuery createTermsFilter( String strFieldForTerm, Collection<Integer> collectionInteger )

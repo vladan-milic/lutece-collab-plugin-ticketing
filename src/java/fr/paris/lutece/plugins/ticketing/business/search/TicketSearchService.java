@@ -166,6 +166,7 @@ public final class TicketSearchService
      *            the boolean use to know if we must create a new index if it doesn't exist
      * @return IndexWriter
      * @throws IOException
+     *             IOException
      */
     public IndexWriter getTicketIndexWriter( boolean bCreate ) throws IOException
     {

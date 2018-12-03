@@ -64,7 +64,9 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
      * The main constructor of the tree
      *
      * @param listNode
+     *            node list
      * @param listDepth
+     *            depth list
      */
     public Tree( List<Node> listNode, List<Depth> listDepth )
     {
@@ -245,6 +247,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
      * Get all children nodes of the given node (recursively)
      *
      * @param node
+     *            given node
      * @param isFirstCall
      *            true if first recursive call
      * @return the list of all the children of the given node (recursively).
@@ -270,6 +273,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
      * Find a node with given id
      *
      * @param nId
+     *            given id
      * @return the node of given id.
      */
     public Node findNodeById( int nId )
@@ -288,6 +292,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
      * Find the Depth obj with given depth number
      *
      * @param nDepth
+     *            given depth number
      * @return the Depth obj
      */
     public Depth findDepthByDepthNumber( int nDepth )
@@ -310,6 +315,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
      * Find the Depth obj with given label
      *
      * @param strLabel
+     *            given label
      * @return the Depth obj
      */
     public Depth findDepthByLabel( String strLabel )
@@ -346,6 +352,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
      * Get the list of nodes parents of given node ( from root to node)
      *
      * @param node
+     *            node
      * @return the list of nodes parents of given node ( from root to node)
      */
     public List<Node> getBranch( Node node )
@@ -366,8 +373,9 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the list of nodes of a given depth
-     * 
+     *
      * @param depth
+     *            given depth
      * @return the list of nodes of the given depth
      */
     public List<Node> getListNodesOfDepth( Depth depth )

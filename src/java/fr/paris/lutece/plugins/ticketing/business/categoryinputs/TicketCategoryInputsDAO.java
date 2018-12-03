@@ -57,8 +57,9 @@ public final class TicketCategoryInputsDAO implements ITicketCategoryInputsDAO
 
     /**
      * Return the next available Position value for inputs linked to a category
-     * 
+     *
      * @param nIdCategory
+     *            Id Category
      *
      * @param plugin
      *            The Plugin

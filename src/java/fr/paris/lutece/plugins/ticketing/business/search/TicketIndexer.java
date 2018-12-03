@@ -185,7 +185,9 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
      * @param ticket
      *            the ticket to index or update
      * @throws TicketIndexerException
+     *             TicketIndexerException
      * @throws IOException
+     *             IOException
      */
     public void indexTicket( IndexWriter indexWriter, Ticket ticket ) throws TicketIndexerException, IOException
     {
@@ -533,6 +535,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
      * @param sbLogs
      *            log message
      * @throws TicketIndexerException
+     *             TicketIndexerException
      *
      */
     @Override

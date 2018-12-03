@@ -44,7 +44,6 @@ public interface IViewingDAO
      * @param viewing
      *            instance of the viewing object to insert
      * @param _plugin
-     * @param plugin
      *            the Plugin
      */
     void insert( Viewing viewing, Plugin _plugin );
@@ -65,7 +64,7 @@ public interface IViewingDAO
 
     /**
      * Load the data of a viewing objects and return.
-     * 
+     *
      * @param _plugin
      *
      * @param plugin

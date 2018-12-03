@@ -53,9 +53,11 @@ public class TicketCategoryValidatorResult
      * @param ticketCategory
      *            the ticketCategory to set
      * @param ticketCategoryParent
+     *            ticket Category Parent
      * @param ticketCategoryValid
      *            the ticketCategoryValid to set
      * @param listValidationErrors
+     *            listValidationErrors
      */
     public TicketCategoryValidatorResult( TicketCategory ticketCategory, TicketCategory ticketCategoryParent, boolean ticketCategoryValid, List<String> listValidationErrors )
     {

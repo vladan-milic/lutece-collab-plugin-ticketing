@@ -114,6 +114,7 @@ public class TicketFormService implements Serializable
      * @param idCategory
      *            the id category
      * @param listEntryId
+     *            list entry id
      * @return List a filter Entry
      */
     public static List<Entry> getFilterInputs( int idCategory, List<Integer> listEntryId )
@@ -160,6 +161,7 @@ public class TicketFormService implements Serializable
      * @param bDisplayFront
      *            True if the entry will be displayed in Front Office, false if it will be displayed in Back Office.
      * @param nIdcategory
+     *            id category
      * @param listEntryId
      *            list of EntryId which have to be retrieved. If list is null no filtering is done
      * @param request
@@ -566,6 +568,7 @@ public class TicketFormService implements Serializable
      * @param ticket
      *            The ticketing to save
      * @param form
+     *            form
      */
     public void saveTicketInSession( HttpSession session, Ticket ticket, Form form )
     {
@@ -592,6 +595,7 @@ public class TicketFormService implements Serializable
      * @param session
      *            The session of the user
      * @param form
+     *            form
      * @return The ticketing form
      */
     public Ticket getTicketFromSession( HttpSession session, Form form )
@@ -618,6 +622,7 @@ public class TicketFormService implements Serializable
      * @param session
      *            The session
      * @param form
+     *            form
      */
     public void removeTicketFromSession( HttpSession session, Form form )
     {

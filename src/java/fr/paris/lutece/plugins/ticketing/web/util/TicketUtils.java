@@ -421,6 +421,7 @@ public final class TicketUtils
      * Return the parsing of the String into Integer or -1 if fails
      *
      * @param strStringToConvert
+     *            String To Convert
      * @param strMessageError
      *            the error message
      * @return the parsing of the String or -1 if fails
@@ -444,8 +445,11 @@ public final class TicketUtils
      * Check if a ticket is authorized
      *
      * @param ticket
+     *            ticket
      * @param strPermission
+     *            permission
      * @param user
+     *            user
      * @return boolean is authorized
      */
     public static boolean isAuthorized( Ticket ticket, String strPermission, AdminUser user )

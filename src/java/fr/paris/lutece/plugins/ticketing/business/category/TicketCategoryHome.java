@@ -163,6 +163,7 @@ public final class TicketCategoryHome
      * Load the list of categories (full, with java objects filled)
      *
      * @param withInactives
+     *            with Inactives
      *
      * @return list of categories
      */
@@ -197,6 +198,7 @@ public final class TicketCategoryHome
      * @param nId
      *            the if of category to move
      * @param bMoveUp
+     *            MoveUp
      */
     public static void updateCategoryOrder( int nId, boolean bMoveUp )
     {

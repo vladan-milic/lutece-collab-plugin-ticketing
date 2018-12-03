@@ -84,6 +84,7 @@ public class TicketCategoryService
      * Get the instance of CategoryService
      *
      * @param withInactives
+     *            boolean with inactives
      *
      * @return the instance of categoryService
      */
@@ -101,6 +102,7 @@ public class TicketCategoryService
      * Return the category tree
      *
      * @param restrictedCategoriesId
+     *            restricted Categories Id
      *
      * @return the category tree
      */
@@ -260,6 +262,7 @@ public class TicketCategoryService
      * Update order the category
      *
      * @param bMoveUp
+     *            boolean move up
      *
      * @param nIdCategory
      *            category the id of the category to order
@@ -391,6 +394,7 @@ public class TicketCategoryService
      * Get the branch of a category (from root to category)
      *
      * @param category
+     *            category
      * @return the branch of categories from root to category
      */
     public List<TicketCategory> getBranchOfCategory( TicketCategory category )
@@ -414,6 +418,7 @@ public class TicketCategoryService
      * Get the category list corresponding to the depth
      *
      * @param depth
+     *            depth
      * @return the category list
      */
     public List<TicketCategory> getCategoryListOfDepth( TicketCategoryType depth )
@@ -441,6 +446,7 @@ public class TicketCategoryService
      * Check if the given category type is not referenced in category
      *
      * @param nIdCategoryType
+     *            Id Category Type
      * @return true if referenced, false otherwise
      */
     public boolean isCategoryTypeNotReferenced( int nIdCategoryType )
@@ -529,8 +535,11 @@ public class TicketCategoryService
      * Check if given category is Authorized for given user and given permission
      *
      * @param category
+     *            category
      * @param user
+     *            user
      * @param strPermission
+     *            permission
      * @return true if authorized, false otherwise
      */
     public static boolean isAuthorizedBranch( TicketCategory category, AdminUser user, String strPermission )
@@ -543,8 +552,11 @@ public class TicketCategoryService
      * Check if given category is Authorized for given user and given permission
      *
      * @param category
+     *            category
      * @param user
+     *            user
      * @param strPermission
+     *            permission
      * @return true if authorized, false otherwise
      */
     public static boolean isAuthorizedCategory( TicketCategory category, AdminUser user, String strPermission )
@@ -556,6 +568,7 @@ public class TicketCategoryService
      * Get the children category list corresponding to the category and allowed for an admin user according to RBAC provided permission
      *
      * @param ticketCategories
+     *            ticket Categories
      * @param user
      *            admin user
      * @param strPermission
@@ -571,6 +584,7 @@ public class TicketCategoryService
      * Get the children category list corresponding to the category and allowed for an admin user according to RBAC provided permission
      *
      * @param ticketCategory
+     *            ticket Category
      * @param adminUser
      *            admin user
      * @param strPermission
@@ -586,6 +600,7 @@ public class TicketCategoryService
      * Get the category list corresponding to the depth and allowed for an admin user according to RBAC provided permission
      *
      * @param nDepth
+     *            depth
      *
      * @param adminUser
      *            admin user
@@ -670,6 +685,7 @@ public class TicketCategoryService
      * Return a list of Entries linked to a category
      *
      * @param _category
+     *            category
      * @return list of Entries linked to a category
      */
     public List<Entry> getCategoryEntryList( TicketCategory _category )
@@ -703,7 +719,9 @@ public class TicketCategoryService
      * Return a list of Entries herited from parent categories
      *
      * @param _category
+     *            category
      * @param locale
+     *            locale
      * @return list of Entries herited from parent categories
      */
     public List<Entry> getCategoryEntryHeritedList( TicketCategory _category, Locale locale )
@@ -732,7 +750,9 @@ public class TicketCategoryService
      * Return a list of Entries bocked by children categories
      *
      * @param _category
+     *            category
      * @param locale
+     *            locale
      * @return ist of Entries bocked by children categories
      */
     public List<Entry> getCategoryEntryBlockedList( TicketCategory _category, Locale locale )
@@ -795,6 +815,7 @@ public class TicketCategoryService
      * @param category
      *            admin user
      * @param separator
+     *            separator
      * @return the branch label
      */
     public String getBranchLabel( TicketCategory category, String separator )
@@ -810,6 +831,7 @@ public class TicketCategoryService
      * Returns the TicketCategory used as RBACResource
      *
      * @param ticketCategory
+     *            ticket Category
      *
      * @return The TicketCategory used as RBACResource
      */

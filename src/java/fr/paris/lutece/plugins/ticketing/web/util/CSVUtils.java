@@ -60,7 +60,7 @@ public class CSVUtils
      * Transcode les doubles quotes.
      *
      * @param value
-     *         The value
+     *            The value
      * @return The value with double quote
      */
     private static String followCSVformat( String value )
@@ -78,10 +78,11 @@ public class CSVUtils
      * Permet d'ecrire une ligne dans un writer avec des valeurs separees par un separateur
      *
      * @param w
-     *         The writer
+     *            The writer
      * @param values
-     *         The list of values
+     *            The list of values
      * @throws IOException
+     *             IOException
      */
     public static void writeLine( Writer w, List<String> values ) throws IOException
     {

@@ -148,6 +148,7 @@ public class Ticket implements Serializable, RBACResource
      * @param strCustomerId
      *            the customer id
      * @param strNomenclature
+     *            Nomenclature
      */
     public void enrich( String strIdUserTitle, String strFirstname, String strLastname, String strFixedPhoneNumber, String strMobilePhoneNumber, String strEmail, String strCategoryCode,
             String strIdContactMode, String strIdChannel, String strComment, String strGuid, String strCustomerId, String strNomenclature )
@@ -451,6 +452,7 @@ public class Ticket implements Serializable, RBACResource
      * Returns the TicketDomain
      *
      * @param depth
+     *            depth
      *
      * @return The TicketDomain
      */
@@ -1041,6 +1043,7 @@ public class Ticket implements Serializable, RBACResource
      * Sets the Nomenclature
      *
      * @param _strNomenclature
+     *            nomenclature
      *
      */
     public void setNomenclature( String _strNomenclature )

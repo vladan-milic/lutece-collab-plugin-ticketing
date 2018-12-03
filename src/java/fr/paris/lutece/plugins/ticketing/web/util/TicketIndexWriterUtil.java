@@ -121,6 +121,7 @@ public class TicketIndexWriterUtil
      *            the value used if the directory doesn't exist
      * @return is index exists
      * @throws IOException
+     *             IOException
      */
     public static boolean isIndexExists( Directory directory, boolean bCreate ) throws IOException
     {

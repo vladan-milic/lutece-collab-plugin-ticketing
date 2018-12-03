@@ -123,6 +123,7 @@ public class TicketRest extends TicketingRest
      * @param strComment
      *            the comment
      * @param strNomenclature
+     *            Nomenclature
      * @param strGuid
      *            the guid
      * @param strIdCustomer

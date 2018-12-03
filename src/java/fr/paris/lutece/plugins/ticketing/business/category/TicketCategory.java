@@ -240,6 +240,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
      * Set the default assign unit
      *
      * @param defaultAssignUnit
+     *            default AssignUnit
      */
     public void setDefaultAssignUnit( AssigneeUnit defaultAssignUnit )
     {

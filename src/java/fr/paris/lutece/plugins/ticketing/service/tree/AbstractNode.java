@@ -85,6 +85,7 @@ public abstract class AbstractNode
      * Set the boolean indicating the node is a leaf
      *
      * @param bLeaf
+     *            boolean is leaf
      */
     public void setLeaf( boolean bLeaf )
     {
@@ -126,6 +127,7 @@ public abstract class AbstractNode
      * Set the children list of a node
      *
      * @param children
+     *            list of a node
      */
     public void setChildren( List<AbstractNode> children )
     {

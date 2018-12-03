@@ -69,8 +69,9 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
 
     /**
      * Return the instance of CategoryTreeCacheService
-     * 
+     *
      * @param withInactives
+     *            with Inactives
      *
      * @return the CategoryTreeCacheService
      */

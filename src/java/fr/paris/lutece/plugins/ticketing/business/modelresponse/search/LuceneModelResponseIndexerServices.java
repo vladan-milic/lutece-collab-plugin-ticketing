@@ -98,10 +98,13 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 
     /**
      * Instantiates a new lucene model response indexer services.
-     * 
+     *
      * @param strIndexPath
+     *            strIndexPath
      * @param strClassAnalyzer
+     *            strClassAnalyzer
      * @param bIndexInWebapp
+     *            bIndexInWebapp
      */
     public LuceneModelResponseIndexerServices( String strIndexPath, String strClassAnalyzer, Boolean bIndexInWebapp )
     {

@@ -67,6 +67,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
      * Constructor for category tree
      *
      * @param treeSource
+     *            treeSource
      * @param restrictedCategoriesId
      *            the list of Categories
      */
@@ -100,7 +101,9 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
      * Get a JSON Object of the tree
      *
      * @param selectedRootCategory
+     *            selected Root Category
      * @param selectedChildCategory
+     *            selected Child Category
      *
      * @return the JSON Object of the tree
      */
@@ -158,10 +161,12 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
      * Add a JSON Array of the ticketCategory children
      *
      * @param jsonRootElement
+     *            json Root Element
      *
      * @param ticketCategory
      *            the current ticketCategory
      * @param selectedChildCategory
+     *            selected Child Category
      */
     public void addJSONArraysChildren( JSONObject jsonRootElement, TicketCategory ticketCategory, int selectedChildCategory )
     {
