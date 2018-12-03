@@ -41,16 +41,16 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
- * This class accesses a ticket reference in the following format: <prefix><sequence>
+ * This class accesses a ticket reference in the following format: {prefix}{sequence}
  *
  */
 public class TicketReferencePrefixAndNumberDAO implements ITicketReferenceDAO
 {
     // SQL QUERIES
-    private static final String SQL_QUERY_SELECT_LAST_TICKET_REFERENCE = " SELECT max( substring( ticket_reference, ? ) ) FROM ticketing_ticket WHERE ticket_reference LIKE ? ";
-    private static final String SQL_QUERY_SELECT_ALL_PREFIX_REFERENCE = " SELECT reference_prefix FROM ticketing_ticket_type";
+    private static final String SQL_QUERY_SELECT_LAST_TICKET_REFERENCE  = " SELECT max( substring( ticket_reference, ? ) ) FROM ticketing_ticket WHERE ticket_reference LIKE ? ";
+    private static final String SQL_QUERY_SELECT_ALL_PREFIX_REFERENCE   = " SELECT reference_prefix FROM ticketing_ticket_type";
     private static final String SQL_QUERY_SELECT_ID_TICKET_BY_REFERENCE = " SELECT id_ticket FROM ticketing_ticket WHERE ticket_reference = ?";
-    private static final String SQL_LIKE_WILDCARD = "%";
+    private static final String SQL_LIKE_WILDCARD                       = "%";
 
     /**
      * {@inheritDoc}
