@@ -356,8 +356,7 @@ public class TicketFormService implements Serializable
     }
 
     /**
-     * Get the responses associated with an entry.<br />
-     * Return null if there is no error in the response, or return the list of errors Response created are stored the map of {@link Ticket}. The key of the map is this id of the entry, and the value the list of responses
+     * Get the responses associated with an entry. Return null if there is no error in the response, or return the list of errors Response created are stored the map of {@link Ticket}. The key of the map is this id of the entry, and the value the list of responses
      *
      * @param request
      *            the request
