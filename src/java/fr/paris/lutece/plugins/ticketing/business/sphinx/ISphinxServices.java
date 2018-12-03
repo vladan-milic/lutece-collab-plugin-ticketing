@@ -11,11 +11,10 @@ public interface ISphinxServices
     /**
      * update index with modelResponse
      *
-     * @param modelReponse
-     *            modelResponse
      * @return message
      * @throws IOException
-     * 
+     *             IOException
+     *
      */
     String mailingToSphinx( ) throws IOException;
 

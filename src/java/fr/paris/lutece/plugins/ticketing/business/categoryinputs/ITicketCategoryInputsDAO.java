@@ -112,6 +112,7 @@ public interface ITicketCategoryInputsDAO
      * @param nIdInput
      *            id of input
      * @param _plugin
+     *            plugin
      * @return the position as an integer
      */
     int selectCategoryInputPosition( int nId, int nIdInput, Plugin _plugin );
@@ -122,9 +123,9 @@ public interface ITicketCategoryInputsDAO
      * @param nId
      *            id of category
      * @param nPos
-     * @param plugin
-     * @param nIdInput
      *            the position
+     * @param plugin
+     *            plugin
      * @return the input id
      */
     int selectCategoryInputByPosition( int nId, int nPos, Plugin plugin );
@@ -135,7 +136,6 @@ public interface ITicketCategoryInputsDAO
      * @param nCategoryId
      *            The Category ID
      * @param _plugin
-     * @param plugin
      *            The plugin
      * @return The collection which contains the id of all the ticketCategory objects
      */
@@ -147,6 +147,7 @@ public interface ITicketCategoryInputsDAO
      * @param nIdResource
      *            the id_resource of the input to be checked
      * @param _plugin
+     *            the plugin
      * @return true if the input is linked to 1 or more Categories
      */
     boolean checkIfInputIsUsedInCategories( int nIdResource, Plugin _plugin );

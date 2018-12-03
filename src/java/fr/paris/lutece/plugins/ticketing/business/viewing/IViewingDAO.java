@@ -54,7 +54,6 @@ public interface IViewingDAO
      * @param viewing
      *            the reference of the Viewing
      * @param _plugin
-     * @param plugin
      *            the Plugin
      */
     void store( Viewing viewing, Plugin _plugin );
@@ -66,8 +65,6 @@ public interface IViewingDAO
      * Load the data of a viewing objects and return.
      *
      * @param _plugin
-     *
-     * @param plugin
      *            the Plugin
      * @return The data of a viewing objects
      */

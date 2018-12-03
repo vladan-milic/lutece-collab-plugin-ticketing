@@ -11,6 +11,7 @@ public interface ISphinxDAO
      * Retrieve the list of the new mailing list of the day
      *
      * @param idAction
+     *            id action
      * @param plugin
      *            the plugin
      * @return list of the new mailing list of the day

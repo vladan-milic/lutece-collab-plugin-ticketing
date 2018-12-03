@@ -23,8 +23,11 @@ public interface IFormCategoryDao
      * Update the record in the table
      *
      * @param nIdCategory
+     *            id category
      * @param nIdForm
+     *            id form
      * @param plugin
+     *            the plugin
      */
     void store( int nIdCategory, int nIdForm, Plugin plugin );
 
@@ -32,8 +35,11 @@ public interface IFormCategoryDao
      * Delete a record from the table
      *
      * @param nIdCategory
+     *            id category
      * @param nIdForm
+     *            id form
      * @param plugin
+     *            the plugin
      */
     void delete( int nIdCategory, int nIdForm, Plugin plugin );
 
@@ -41,7 +47,9 @@ public interface IFormCategoryDao
      * Delete a record from the table by formulaire id
      *
      * @param nIdForm
+     *            id form
      * @param plugin
+     *            the plugin
      */
     void deleteByIdCategory( int nIdForm, Plugin plugin );
 

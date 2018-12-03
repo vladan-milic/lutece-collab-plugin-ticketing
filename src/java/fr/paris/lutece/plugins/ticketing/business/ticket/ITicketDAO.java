@@ -117,8 +117,9 @@ public interface ITicketDAO
 
     /**
      * Load the id of all the ticket objects matching input filter and returns them as a collection
-     * 
+     *
      * @param filter
+     *            filter
      *
      * @param plugin
      *            the Plugin

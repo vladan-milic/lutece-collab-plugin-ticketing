@@ -92,7 +92,9 @@ public interface ITicketCategoryDAO
      * Load the category for given code
      *
      * @param strCode
+     *            strCode
      * @param plugin
+     *            plugin
      * @return the category
      */
     TicketCategory loadByCode( String strCode, Plugin plugin );
@@ -110,7 +112,9 @@ public interface ITicketCategoryDAO
      * Load the list of categories (full with java objects filled)
      *
      * @param plugin
+     *            plugin
      * @param withInactives
+     *            withInactives
      * @return the full categories list
      */
     List<TicketCategory> selectFullCategorysList( Plugin plugin, boolean withInactives );
@@ -141,7 +145,6 @@ public interface ITicketCategoryDAO
      * @param nNewPosition
      *            the order value to update
      * @param _plugin
-     * @param plugin
      *            the Plugin
      */
     void updateCategoryOrder( int nId, int nNewPosition, Plugin _plugin );
@@ -154,20 +157,20 @@ public interface ITicketCategoryDAO
      * @param nIdParent
      *            Id of the parent
      * @param _plugin
+     *            the plugin
      * @return the id of category as an integer
      */
     int selectCategoryIdByOrder( int nOrder, int nIdParent, Plugin _plugin );
 
     /**
      * Rebuild the order sequence of active TicketCategory for a parent, by substracting 1 to all orders larger than a given value
-     * 
-     * @param nFromOrder
      *
-     * @param nfromOrder
+     * @param nFromOrder
      *            the order to rebuild sequence from
      * @param nIdParent
      *            the parent id
      * @param _plugin
+     *            the plugin
      */
     void rebuildCategoryOrders( int nFromOrder, int nIdParent, Plugin _plugin );
 
@@ -177,7 +180,6 @@ public interface ITicketCategoryDAO
      * @param category
      *            the reference of the TicketCategory
      * @param _plugin
-     * @param plugin
      *            the Plugin
      */
     void storeWithLastOrder( TicketCategory category, Plugin _plugin );

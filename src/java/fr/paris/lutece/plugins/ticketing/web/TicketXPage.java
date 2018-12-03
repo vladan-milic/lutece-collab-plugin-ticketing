@@ -627,6 +627,8 @@ public class TicketXPage extends WorkflowCapableXPage
      *            the http request
      * @param strView
      *            the targeted view
+     * @param form
+     *            form
      * @return the page requested
      */
     protected XPage redirectView( HttpServletRequest request, String strView, Form form )
@@ -639,6 +641,8 @@ public class TicketXPage extends WorkflowCapableXPage
      *
      * @param strView
      *            The view name
+     * @param form
+     *            form
      * @return The URL
      */
     protected String getViewUrl( String strView, Form form )

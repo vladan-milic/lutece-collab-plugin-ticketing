@@ -57,8 +57,7 @@ public interface ITicketSearchEngine
      * @param strQuery
      *            query to search
      * @param user
-     * @param listTicketCategory
-     *            list categories authorized for admin user
+     *            user
      * @param filter
      *            the ticketfilter
      * @return Results as a collection of Ticket
@@ -73,8 +72,7 @@ public interface ITicketSearchEngine
      * @param strQuery
      *            query to search
      * @param user
-     * @param listTicketCategory
-     *            list categories authorized for admin user
+     *            user
      * @param filter
      *            the ticketfilter
      * @return Results as a collection of Ticket

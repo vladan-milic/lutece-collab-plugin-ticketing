@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.search;
 
-import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
-import fr.paris.lutece.portal.service.message.SiteMessageException;
+import java.io.IOException;
 
 import org.apache.lucene.index.IndexWriter;
 
-import java.io.IOException;
+import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
+import fr.paris.lutece.portal.service.message.SiteMessageException;
 
 /**
  *
@@ -49,7 +49,7 @@ public interface ITicketSearchIndexer
 {
     /**
      * add to the index writer the document associate to the key specified in parameter
-     * 
+     *
      * @param indexWriter
      *            lucene index writer
      * @param bCreate
@@ -63,56 +63,56 @@ public interface ITicketSearchIndexer
      * @throws SiteMessageException
      *             occurs when a site message need to be displayed
      * @throws TicketIndexerException
+     *             TicketIndexerException
      */
-    void processIndexing( IndexWriter indexWriter, boolean bCreate, StringBuffer sbLog ) throws IOException, InterruptedException, SiteMessageException,
-            TicketIndexerException;
+    void processIndexing( IndexWriter indexWriter, boolean bCreate, StringBuffer sbLog ) throws IOException, InterruptedException, SiteMessageException, TicketIndexerException;
 
     /**
      * Index a ticket
-     * 
+     *
      * @param ticket
      *            the ticket to index
-     * @param bCreate
-     *            true for indexing all directory false for use incremental indexing
      * @throws TicketIndexerException
+     *             TicketIndexerException
      */
     void indexTicket( Ticket ticket ) throws TicketIndexerException;
 
     /**
      * Returns the indexer service name
-     * 
+     *
      * @return the indexer service name
      */
     String getName( );
 
     /**
      * Returns the indexer service version
-     * 
+     *
      * @return the indexer service version
      */
     String getVersion( );
 
     /**
      * Returns the indexer service description
-     * 
+     *
      * @return the indexer service description
      */
     String getDescription( );
 
     /**
      * Tells whether the service is enable or not
-     * 
+     *
      * @return true if enable, otherwise false
      */
     boolean isEnable( );
 
     /**
      * Remove a ticket from index
-     * 
+     *
      * @param nTicketId
      *            the identifier of ticket to remove from index
-     * 
+     *
      * @throws TicketIndexerException
+     *             TicketIndexerException
      */
     void deleteTicketIndex( int nTicketId ) throws TicketIndexerException;
 }
