@@ -58,22 +58,22 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 public class TicketIndexWriterUtil
 {
     // Properties
-    private static final String PROPERTY_WRITER_MERGE_FACTOR = "ticketing.internalIndexer.lucene.writer.mergeFactor";
-    private static final String PROPERTY_WRITER_MAX_FIELD_LENGTH = "ticketing.internalIndexer.lucene.writer.maxSectorLength";
+    private static final String               PROPERTY_WRITER_MERGE_FACTOR     = "ticketing.internalIndexer.lucene.writer.mergeFactor";
+    private static final String               PROPERTY_WRITER_MAX_FIELD_LENGTH = "ticketing.internalIndexer.lucene.writer.maxSectorLength";
 
     // Default values
-    private static final int DEFAULT_WRITER_MERGE_FACTOR = 20;
-    private static final int DEFAULT_WRITER_MAX_FIELD_LENGTH = 1000000;
+    private static final int                  DEFAULT_WRITER_MERGE_FACTOR      = 20;
+    private static final int                  DEFAULT_WRITER_MAX_FIELD_LENGTH  = 1000000;
 
     // Variables
-    public static final Map<String, Analyzer> _mapAnalyzerPerField = initPerFieldAnalyzerMap( );
+    public static final Map<String, Analyzer> _mapAnalyzerPerField             = initPerFieldAnalyzerMap( );
 
     /**
      * Return the IndexWriterConfig for an IndexWriter
-     * 
+     *
      * @param analyzer
      *            the analyzer to use for the config
-     * @return
+     * @return the IndexWriterConfig for an IndexWriter
      */
     public static IndexWriterConfig getIndexWriterConfig( Analyzer analyzer )
     {
@@ -94,7 +94,7 @@ public class TicketIndexWriterUtil
 
     /**
      * Close an IndexWriter
-     * 
+     *
      * @param indexWriter
      *            the indexWriter to close
      */
@@ -106,8 +106,7 @@ public class TicketIndexWriterUtil
             {
                 indexWriter.close( );
             }
-        }
-        catch( IOException e )
+        } catch ( IOException e )
         {
             AppLogService.error( e.getMessage( ), e );
         }
@@ -115,12 +114,12 @@ public class TicketIndexWriterUtil
 
     /**
      * Method which tell if a directory exists or if it's necessary to create a new one and a new index
-     * 
+     *
      * @param directory
      *            the directory to test
      * @param bCreate
      *            the value used if the directory doesn't exist
-     * @return
+     * @return is index exists
      * @throws IOException
      */
     public static boolean isIndexExists( Directory directory, boolean bCreate ) throws IOException
@@ -130,7 +129,7 @@ public class TicketIndexWriterUtil
 
     /**
      * Create the map which specify specific Analyzer to use for some field
-     * 
+     *
      * @return the map which associate an analyzer to the name of a field
      */
     public static final Map<String, Analyzer> initPerFieldAnalyzerMap( )
@@ -151,7 +150,7 @@ public class TicketIndexWriterUtil
 
     /**
      * Return the map which specify specific Analyzer to use for some field
-     * 
+     *
      * @return the map which specify specific Analyzer to use for some field
      */
     public static Map<String, Analyzer> getPerFieldAnalyzerMap( )

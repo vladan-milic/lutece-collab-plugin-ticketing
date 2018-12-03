@@ -51,7 +51,7 @@ public class TicketIndexerActionUtil
 
     /**
      * Create a IndexerAction from the given Ticket object
-     * 
+     *
      * @param ticket
      * @return the IndexerAction from the Ticket
      */
@@ -67,7 +67,7 @@ public class TicketIndexerActionUtil
             indexerAction = new IndexerAction( );
             indexerAction.setIdTicket( ticket.getId( ) );
 
-            if ( state == null || state.getId( ) == AppPropertiesService.getPropertyInt( PROPERTY_WORKFLOW_ACTION_ID_NEW, 301 ) )
+            if ( ( state == null ) || ( state.getId( ) == AppPropertiesService.getPropertyInt( PROPERTY_WORKFLOW_ACTION_ID_NEW, 301 ) ) )
             {
                 indexerAction.setIdTask( IndexerAction.TASK_CREATE );
             } else
@@ -81,9 +81,9 @@ public class TicketIndexerActionUtil
 
     /**
      * Create a Delete IndexerAction from the given Ticket identifier
-     * 
-     * @param ticket
-     *            identifier
+     *
+     * @param nTicketId
+     *
      * @return the IndexerAction from the Ticket
      */
     public static IndexerAction createIndexerDeleteActionFromTicket( int nTicketId )

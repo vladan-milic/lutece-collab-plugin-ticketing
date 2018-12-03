@@ -33,10 +33,10 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.user;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
-
-import java.util.List;
 
 /**
  * This class provide a user for the FactoryUser
@@ -45,16 +45,16 @@ import java.util.List;
 public class User
 {
     // Variables declarations
-    private int _nIdUser;
-    private String _strFirstName;
-    private String _strLastName;
-    private String _strEmail;
+    private int                  _nIdUser;
+    private String               _strFirstName;
+    private String               _strLastName;
+    private String               _strEmail;
     private List<TicketCategory> _listDomains;
-    private List<Unit> _listUnits;
+    private List<Unit>           _listUnits;
 
     /**
      * Returns the AdminUserId
-     * 
+     *
      * @return The AdminUserId
      */
     public int getIdUser( )
@@ -64,18 +64,18 @@ public class User
 
     /**
      * Sets the AdminUserId
-     * 
-     * @param nAdminUserId
-     *            The AdminUserId
+     *
+     * @param _niduser
+     *            The UserId
      */
     public void setIdUser( int _niduser )
     {
-        this._nIdUser = _niduser;
+        _nIdUser = _niduser;
     }
 
     /**
      * Returns the Firstname
-     * 
+     *
      * @return The Firstname
      */
     public String getFirstName( )
@@ -85,18 +85,18 @@ public class User
 
     /**
      * Sets the Firstname
-     * 
-     * @param strFirstname
+     *
+     * @param _strFistname
      *            The Firstname
      */
     public void setFirstName( String _strFistname )
     {
-        this._strFirstName = _strFistname;
+        _strFirstName = _strFistname;
     }
 
     /**
      * Returns the Lastname
-     * 
+     *
      * @return The Lastname
      */
     public String getLastName( )
@@ -106,18 +106,18 @@ public class User
 
     /**
      * Sets the Lastname
-     * 
-     * @param strLastname
+     *
+     * @param _strLastname
      *            The Lastname
      */
     public void setLastName( String _strLastname )
     {
-        this._strLastName = _strLastname;
+        _strLastName = _strLastname;
     }
 
     /**
      * Returns the Email
-     * 
+     *
      * @return The Email
      */
     public String getEmail( )
@@ -127,8 +127,8 @@ public class User
 
     /**
      * Sets the Email
-     * 
-     * @param strEmail
+     *
+     * @param _strEmail
      *            The Email
      */
     public void setEmail( String _strEmail )
@@ -138,7 +138,7 @@ public class User
 
     /**
      * Returns the TicketCategory list of domain type
-     * 
+     *
      * @return TicketCategory list of domain type
      */
     public List<TicketCategory> getDomains( )
@@ -148,18 +148,18 @@ public class User
 
     /**
      * Sets the list of TicketCategory list of domain type
-     * 
+     *
      * @param listDomains
      *            TicketCategory list of domain type
      */
     public void setDomains( List<TicketCategory> listDomains )
     {
-        this._listDomains = listDomains;
+        _listDomains = listDomains;
     }
 
     /**
      * Returns the Units
-     * 
+     *
      * @return list of The Unit
      */
     public List<Unit> getUnits( )
@@ -169,12 +169,12 @@ public class User
 
     /**
      * Sets the Unit
-     * 
-     * @param list
+     *
+     * @param _listUnit
      *            of Unit
      */
     public void setUnit( List<Unit> _listUnit )
     {
-        this._listUnits = _listUnit;
+        _listUnits = _listUnit;
     }
 }

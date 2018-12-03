@@ -43,6 +43,7 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.validator.constraints.Email;
+
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.ticketing.business.address.TicketAddress;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
@@ -116,13 +117,12 @@ public class Ticket implements Serializable, RBACResource
     private Channel                      _channel             = new Channel( );
     private String                       _strNomenclature;
     private int                          _nIdticketMarking    = -1;
-    private int 						 _nIdDemand = -1;
+    private int                          _nIdDemand           = -1;
     private String                       _strFacilFamilleNumber;
-
 
     /**
      * Enriches empty ticket attributes with specified values
-     * 
+     *
      * @param strIdUserTitle
      *            the user title id as String
      * @param strFirstname
@@ -147,6 +147,7 @@ public class Ticket implements Serializable, RBACResource
      *            the guid
      * @param strCustomerId
      *            the customer id
+     * @param strNomenclature
      */
     public void enrich( String strIdUserTitle, String strFirstname, String strLastname, String strFixedPhoneNumber, String strMobilePhoneNumber, String strEmail, String strCategoryCode,
             String strIdContactMode, String strIdChannel, String strComment, String strGuid, String strCustomerId, String strNomenclature )
@@ -229,7 +230,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the Id
-     * 
+     *
      * @return The Id
      */
     public int getId( )
@@ -239,7 +240,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the Id
-     * 
+     *
      * @param nId
      *            The Id
      */
@@ -250,7 +251,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the IdUserTitle
-     * 
+     *
      * @return The IdUserTitle
      */
     public int getIdUserTitle( )
@@ -260,7 +261,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the IdUserTitle
-     * 
+     *
      * @param nIdUserTitle
      *            The IdUserTitle
      */
@@ -271,7 +272,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the Reference
-     * 
+     *
      * @return The Reference
      */
     public String getReference( )
@@ -281,7 +282,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the Reference
-     * 
+     *
      * @param strReference
      *            The Reference
      */
@@ -292,7 +293,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the UserTitle
-     * 
+     *
      * @return The UserTitle
      */
     public String getUserTitle( )
@@ -302,7 +303,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the UserTitle
-     * 
+     *
      * @param strUserTitle
      *            The UserTitle
      */
@@ -313,7 +314,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the Firstname
-     * 
+     *
      * @return The Firstname
      */
     public String getFirstname( )
@@ -323,7 +324,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the Firstname
-     * 
+     *
      * @param strFirstname
      *            The Firstname
      */
@@ -334,7 +335,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the Lastname
-     * 
+     *
      * @return The Lastname
      */
     public String getLastname( )
@@ -344,7 +345,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the Lastname
-     * 
+     *
      * @param strLastname
      *            The Lastname
      */
@@ -355,7 +356,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the Email
-     * 
+     *
      * @return The Email
      */
     public String getEmail( )
@@ -365,7 +366,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the Email
-     * 
+     *
      * @param strEmail
      *            The Email
      */
@@ -418,7 +419,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the TicketType
-     * 
+     *
      * @return The TicketType
      */
     public TicketCategory getTicketType( )
@@ -428,7 +429,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the TicketDomain
-     * 
+     *
      * @return The TicketDomain
      */
     public TicketCategory getTicketDomain( )
@@ -438,7 +439,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the TicketCategory
-     * 
+     *
      * @return The TicketCategory
      */
     public TicketCategory getTicketCategory( )
@@ -448,7 +449,9 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the TicketDomain
-     * 
+     *
+     * @param depth
+     *
      * @return The TicketDomain
      */
     public TicketCategory getCategoryDepth( int depth )
@@ -458,7 +461,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the TicketThematic
-     * 
+     *
      * @return The TicketThematic
      */
     public TicketCategory getTicketThematic( )
@@ -468,7 +471,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Get a JSON Object of the branch
-     * 
+     *
      * @return the JSON Object of the branch
      */
     public String getBranchJSONObject( )
@@ -489,7 +492,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Get the branch of the ticketCategory
-     * 
+     *
      * @return the TicketCategory list corresponding to the branch
      */
     public List<TicketCategory> getBranch( )
@@ -499,19 +502,19 @@ public class Ticket implements Serializable, RBACResource
 
     public TicketCategory getCategoryOfDepth( int depth )
     {
-        if(_ticketCategory.getDepth().getDepthNumber() >= depth )
+        if ( _ticketCategory.getDepth( ).getDepthNumber( ) >= depth )
         {
             return _ticketCategory.getBranch( ).get( depth - 1 );
-        }else
+        } else
         {
-            return new TicketCategory();
+            return new TicketCategory( );
         }
 
     }
 
     /**
      * Sets the TicketCategory
-     * 
+     *
      * @param ticketCategory
      *            The TicketCategory
      */
@@ -522,7 +525,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the TicketCategory precision
-     * 
+     *
      * @return The TicketCategory precision
      */
     public TicketCategory getTicketPrecision( )
@@ -605,7 +608,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Gets the create date
-     * 
+     *
      * @return the create date
      */
     public Timestamp getDateCreate( )
@@ -615,7 +618,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the create date
-     * 
+     *
      * @param dDateCreate
      *            the create date
      */
@@ -626,7 +629,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Gets the update date
-     * 
+     *
      * @return the update date
      */
     public Timestamp getDateUpdate( )
@@ -636,7 +639,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the update date
-     * 
+     *
      * @param dDateUpdate
      *            the update date
      */
@@ -647,7 +650,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Gets the close date
-     * 
+     *
      * @return the close date
      */
     public Timestamp getDateClose( )
@@ -657,7 +660,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the close date
-     * 
+     *
      * @param dDateClose
      *            The close date
      */
@@ -689,7 +692,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the TicketStatus
-     * 
+     *
      * @param nTicketStatus
      *            The TicketStatus
      */
@@ -700,7 +703,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the TicketStatusText
-     * 
+     *
      * @return The TicketStatusText
      */
     public String getTicketStatusText( )
@@ -710,7 +713,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the TicketStatusText
-     * 
+     *
      * @param strTicketStatusText
      *            The TicketStatusText
      */
@@ -721,7 +724,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the State
-     * 
+     *
      * @return The State
      */
     public State getState( )
@@ -731,7 +734,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the State
-     * 
+     *
      * @param state
      *            The state
      */
@@ -742,7 +745,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Get the list of workflow actions available for this ticket. Workflow actions are NOT loaded by default, so check that they have been set before calling this method.
-     * 
+     *
      * @return The list of workflow actions available for this ticket.
      */
     public Collection<Action> getListWorkflowActions( )
@@ -752,18 +755,18 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Set the list of workflow actions available for this ticket.
-     * 
+     *
      * @param listWorkflowActions
      *            The list of workflow actions available for this ticket.
      */
     public void setListWorkflowActions( Collection<Action> listWorkflowActions )
     {
-        this._listWorkflowActions = listWorkflowActions;
+        _listWorkflowActions = listWorkflowActions;
     }
 
     /**
      * Get the list of response of this ticket
-     * 
+     *
      * @return the list of response of this ticket
      */
     public List<Response> getListResponse( )
@@ -773,7 +776,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Set the list of responses of this ticket
-     * 
+     *
      * @param listResponse
      *            The list of responses
      */
@@ -793,7 +796,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the GUID
-     * 
+     *
      * @param strGuid
      *            the Guid to set
      */
@@ -814,7 +817,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the Criticality
-     * 
+     *
      * @param nCriticality
      *            The Criticality
      */
@@ -835,7 +838,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the Priority
-     * 
+     *
      * @param nPriority
      *            The Priority
      */
@@ -867,7 +870,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the AssigneeUser
-     * 
+     *
      * @return The AssigneeUser
      */
     public AssigneeUser getAssigneeUser( )
@@ -877,7 +880,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the AssigneeUser
-     * 
+     *
      * @param assigneeUser
      *            The AssigneeUser
      */
@@ -888,7 +891,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the AssigneeUnit
-     * 
+     *
      * @return The AssigneeUnit
      */
     public AssigneeUnit getAssigneeUnit( )
@@ -898,7 +901,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the assigneeUnit
-     * 
+     *
      * @param assigneeUnit
      *            The assigneeUnit
      */
@@ -909,7 +912,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the user from assign up
-     * 
+     *
      * @return The user from assign up
      */
     public AssigneeUser getAssignerUser( )
@@ -919,7 +922,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the user from assign up
-     * 
+     *
      * @param assignerUser
      *            The user from assign up
      */
@@ -930,7 +933,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the unit from assign up
-     * 
+     *
      * @return The unit from assign up
      */
     public AssigneeUnit getAssignerUnit( )
@@ -940,7 +943,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the unit from assign up
-     * 
+     *
      * @param assignerUnit
      *            The unit from assign up
      */
@@ -1005,7 +1008,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the channel
-     * 
+     *
      * @param channel
      *            The channel
      */
@@ -1016,7 +1019,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the channel
-     * 
+     *
      * @return The channel
      */
     public Channel getChannel( )
@@ -1026,7 +1029,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns the nomenclature
-     * 
+     *
      * @return The string of the nomenclature
      */
     public String getNomenclature( )
@@ -1036,8 +1039,9 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Sets the Nomenclature
-     * 
-     * @param String
+     *
+     * @param _strNomenclature
+     *
      */
     public void setNomenclature( String _strNomenclature )
     {
@@ -1046,7 +1050,7 @@ public class Ticket implements Serializable, RBACResource
 
     /**
      * Returns urgency, it s computed from max of criticty and priority value
-     * 
+     *
      * @return urgency
      */
     public int getUrgency( )
@@ -1057,6 +1061,7 @@ public class Ticket implements Serializable, RBACResource
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toString( )
     {
         StringBuilder sb = new StringBuilder( );
@@ -1096,8 +1101,8 @@ public class Ticket implements Serializable, RBACResource
     }
 
     /**
-     * @param _ticketMarking
-     *            the Marking to set
+     * @param _nIdticketMarking
+     *            the id Marking to set
      */
     public void setIdTicketMarking( int _nIdticketMarking )
     {
@@ -1112,19 +1117,19 @@ public class Ticket implements Serializable, RBACResource
         return TicketHome.getTicketMarking( this );
     }
 
-
     /**
      * @return load and return the ticket demand id
      */
-    public int getDemandId( ) 
+    public int getDemandId( )
     {
         return _nIdDemand;
     }
 
-    public void setDemandId( int _nIdDemand ) 
+    public void setDemandId( int _nIdDemand )
     {
         this._nIdDemand = _nIdDemand;
     }
+
     public String getFacilFamilleNumber( )
     {
         return _strFacilFamilleNumber;
@@ -1133,7 +1138,6 @@ public class Ticket implements Serializable, RBACResource
     public void setFacilFamilleNumber( String _strFacilFamilleNumber )
     {
         this._strFacilFamilleNumber = _strFacilFamilleNumber;
-    } 
-
+    }
 
 }

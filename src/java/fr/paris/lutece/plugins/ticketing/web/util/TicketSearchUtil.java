@@ -59,11 +59,10 @@ public class TicketSearchUtil
 
     /**
      * Create a TermsFilter object which contains all the values to filter on a specific field
-     * 
+     *
      * @param strFieldForTerm
      *            the field to filter
-     * @param setInteger
-     *            the set which contains all values to filter
+     * @param collectionInteger
      * @return the TermsFilter object
      */
     public static DocValuesTermsQuery createTermsFilter( String strFieldForTerm, Collection<Integer> collectionInteger )
@@ -84,20 +83,20 @@ public class TicketSearchUtil
 
     /**
      * Return a BytesRef object associated to the given BigInteger parameter
-     * 
+     *
      * @param value
      *            the BigInteger value to convert
      * @return the BytesRef associated to the value
      */
     public static BytesRef getBytesRef( BigInteger value )
     {
-        byte [ ] byteArrayValue = value.toByteArray( );
+        byte[] byteArrayValue = value.toByteArray( );
         return new BytesRef( byteArrayValue, OFFSET, byteArrayValue.length );
     }
 
     /**
      * Create the map containing the association of sort name and index field name
-     * 
+     *
      * @return the map with each sort is associate to a field
      */
     public static Map<String, List<AbstractMap.SimpleEntry<String, Type>>> initMapSortField( )
@@ -105,38 +104,33 @@ public class TicketSearchUtil
         Map<String, List<AbstractMap.SimpleEntry<String, Type>>> mapSortField = new LinkedHashMap<String, List<AbstractMap.SimpleEntry<String, Type>>>( );
 
         // Sort on reference field and on ticket id
-        mapSortField.put( "reference", Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_REFERENCE,
-                SortField.Type.STRING ), new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_TICKET_ID, SortField.Type.INT ) ) );
+        mapSortField.put( "reference", Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_REFERENCE, SortField.Type.STRING ),
+                new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_TICKET_ID, SortField.Type.INT ) ) );
 
         // Sort on the creation date
-        mapSortField.put( "date_create",
-                Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_DATE_CREATION, SortField.Type.LONG ) ) );
+        mapSortField.put( "date_create", Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_DATE_CREATION, SortField.Type.LONG ) ) );
 
         // Sort on category label
-        mapSortField.put( "category_label",
-                Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_CATEGORY, SortField.Type.STRING ) ) );
+        mapSortField.put( "category_label", Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_CATEGORY, SortField.Type.STRING ) ) );
 
         // Sort on lastname and on firtsname and at last on email
-        mapSortField.put( "lastname", Arrays.asList(
-                new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_LASTNAME, SortField.Type.STRING ),
-                new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_FIRSTNAME, SortField.Type.STRING ),
-                new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_EMAIL, SortField.Type.STRING ) ) );
+        mapSortField.put( "lastname",
+                Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_LASTNAME, SortField.Type.STRING ),
+                        new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_FIRSTNAME, SortField.Type.STRING ),
+                        new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_EMAIL, SortField.Type.STRING ) ) );
 
         // Sort on state label
         mapSortField.put( "state", Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_STATE, SortField.Type.STRING ) ) );
 
         // Sort on nomenclature
-        mapSortField.put( "nomenclature",
-                Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE, SortField.Type.STRING ) ) );
+        mapSortField.put( "nomenclature", Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE, SortField.Type.STRING ) ) );
 
         // Sort on channel label
-        mapSortField.put( "channel",
-                Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_CHANNEL_LABEL, SortField.Type.STRING ) ) );
+        mapSortField.put( "channel", Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_CHANNEL_LABEL, SortField.Type.STRING ) ) );
 
         // Sort on assignee unit label and on the lastname of the assignee user
-        mapSortField.put( "assignee", Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME,
-                SortField.Type.STRING ), new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME,
-                        SortField.Type.STRING ) ) );
+        mapSortField.put( "assignee", Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_NAME, SortField.Type.STRING ),
+                new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_LASTNAME, SortField.Type.STRING ) ) );
 
         return mapSortField;
     }

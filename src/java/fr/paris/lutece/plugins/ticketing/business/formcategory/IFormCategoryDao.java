@@ -8,17 +8,17 @@ public interface IFormCategoryDao
 {
     /**
      * Insert into ticketing_form_category
-     * 
+     *
      * @param nIdCategory
-     * 
+     *
      * @param nIdForm
      * @param plugin
      */
-    public void insert(int nIdCategory, int nIdForm, Plugin plugin);
+    public void insert( int nIdCategory, int nIdForm, Plugin plugin );
 
     /**
      * Update the record in the table
-     * 
+     *
      * @param nIdCategory
      * @param nIdForm
      * @param plugin
@@ -27,7 +27,7 @@ public interface IFormCategoryDao
 
     /**
      * Delete a record from the table
-     * 
+     *
      * @param nIdCategory
      * @param nIdForm
      * @param plugin
@@ -36,7 +36,7 @@ public interface IFormCategoryDao
 
     /**
      * Delete a record from the table by formulaire id
-     * 
+     *
      * @param nIdForm
      * @param plugin
      */
@@ -44,24 +44,24 @@ public interface IFormCategoryDao
 
     /**
      * load list by formulaire id
-     * 
+     *
      * @param nIdForm
      * @param plugin
-     * @return
+     * @return list
      */
     public List<FormCategory> loadByForm( int nIdForm, Plugin plugin );
 
     /**
-     * 
+     *
      * @param nIdCategory
      * @param plugin
-     * @return
+     * @return form list
      */
     public List<FormCategory> loadByCategory( int nIdCategory, Plugin plugin );
 
     /**
      * Load the data of all the category objects and returns them as a list
-     * 
+     *
      * @param plugin
      *            the Plugin
      * @return The list which contains the data of all the category objects

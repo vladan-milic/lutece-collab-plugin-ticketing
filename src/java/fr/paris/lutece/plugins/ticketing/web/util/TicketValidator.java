@@ -33,6 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactMode;
@@ -48,12 +54,6 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.util.beanvalidation.BeanValidationUtil;
 import fr.paris.lutece.util.beanvalidation.ValidationError;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * This class permits to validate a ticket
  *
@@ -61,16 +61,16 @@ import javax.servlet.http.HttpServletRequest;
 public class TicketValidator
 {
     // Errors
-    private static final String ERROR_USER_TITLE_UNKNOWN = "ticketing.error.userTitle.unknown";
+    private static final String ERROR_USER_TITLE_UNKNOWN   = "ticketing.error.userTitle.unknown";
     private static final String ERROR_CONTACT_MODE_UNKNOWN = "ticketing.error.contactMode.unknown";
-    private static final String ERROR_CHANNEL_UNKNOWN = "ticketing.error.channel.unknown";
+    private static final String ERROR_CHANNEL_UNKNOWN      = "ticketing.error.channel.unknown";
 
     // Attributes
-    private Locale _locale;
+    private Locale              _locale;
 
     /**
      * Constructor
-     * 
+     *
      * @param locale
      *            the locale used to select the correct validation error messages
      */
@@ -81,7 +81,7 @@ public class TicketValidator
 
     /**
      * Validates a ticket, considered as a bean
-     * 
+     *
      * @param ticket
      *            the ticket
      * @return the list of validation errors
@@ -92,7 +92,7 @@ public class TicketValidator
 
         List<ValidationError> listValidationErrors = BeanValidationUtil.validate( ticket, _locale, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
 
-        if ( ticket != null && ticket.getTicketAddress( ) != null )
+        if ( ( ticket != null ) && ( ticket.getTicketAddress( ) != null ) )
         {
             listValidationErrors.addAll( BeanValidationUtil.validate( ticket.getTicketAddress( ), _locale, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX ) );
         }
@@ -107,7 +107,7 @@ public class TicketValidator
 
     /**
      * Validates a ticket
-     * 
+     *
      * @param ticket
      *            the ticket
      * @return the validation errors
@@ -119,7 +119,7 @@ public class TicketValidator
 
     /**
      * Validates a ticket
-     * 
+     *
      * @param ticket
      *            the ticket
      * @param bValidateReferenceData
@@ -159,11 +159,9 @@ public class TicketValidator
 
     /**
      * Validate fields and return errors
-     * 
+     *
      * @param request
-     * @param form
-     * @param listValidationErrors
-     *            populate
+     * @return errors
      */
     public List<String> validateDynamicFields( HttpServletRequest request )
     {
@@ -213,7 +211,7 @@ public class TicketValidator
 
     private boolean defaultRequired( Form form, String entryType )
     {
-        return form == null || isMandatoryEntry( form, entryType );
+        return ( form == null ) || isMandatoryEntry( form, entryType );
     }
 
     private boolean defaultOptional( Form form, String entryType )
@@ -223,6 +221,6 @@ public class TicketValidator
 
     private boolean isMandatoryEntry( Form form, String entry )
     {
-        return form != null && form.getEntry( entry ).isMandatory( );
+        return ( form != null ) && form.getEntry( entry ).isMandatory( );
     }
 }

@@ -39,27 +39,27 @@ import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 
 public class TicketCategoryTreeCacheService extends AbstractCacheableService
 {
-    private static final String SERVICE_NAME = "TREE_CAT_CACHE_SERVICE";
-    private static final String SERVICE_NAME_WITH_INACTIVES = "TREE_CAT_CACHE_SERVICE_WITH_INACTIVES";
-    private static final String KEY_CACHE_TREE = "TREE_CAT";
-    private static final String KEY_CACHE_TREE_WITH_INACTIVES = "TREE_CAT_WITH_INACTIVES";
+    private static final String                   SERVICE_NAME                  = "TREE_CAT_CACHE_SERVICE";
+    private static final String                   SERVICE_NAME_WITH_INACTIVES   = "TREE_CAT_CACHE_SERVICE_WITH_INACTIVES";
+    private static final String                   KEY_CACHE_TREE                = "TREE_CAT";
+    private static final String                   KEY_CACHE_TREE_WITH_INACTIVES = "TREE_CAT_WITH_INACTIVES";
 
     private static TicketCategoryTreeCacheService _instance;
     private static TicketCategoryTreeCacheService _instanceWithInactives;
-    private final boolean _bWithInactives;
+    private final boolean                         _bWithInactives;
 
     /**
      * Private constructor
      */
     private TicketCategoryTreeCacheService( boolean withInactives )
     {
-        this._bWithInactives = withInactives;
+        _bWithInactives = withInactives;
         initCache( );
     }
 
     /**
      * Return the instance of CategoryTreeCacheService
-     * 
+     *
      * @return the CategoryTreeCacheService
      */
     public static TicketCategoryTreeCacheService getInstance( )
@@ -70,6 +70,8 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
     /**
      * Return the instance of CategoryTreeCacheService
      * 
+     * @param withInactives
+     *
      * @return the CategoryTreeCacheService
      */
     public static TicketCategoryTreeCacheService getInstance( boolean withInactives )
@@ -81,8 +83,7 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
                 _instanceWithInactives = new TicketCategoryTreeCacheService( withInactives );
             }
             return _instanceWithInactives;
-        }
-        else
+        } else
         {
             if ( _instance == null )
             {
@@ -103,7 +104,7 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
 
     /**
      * The category tree found in cache or a new category tree otherwise
-     * 
+     *
      * @return the category tree
      */
     public TicketCategoryTree getResource( )

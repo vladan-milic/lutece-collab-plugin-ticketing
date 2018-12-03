@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.category;
 
+import java.util.List;
+
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTree;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -41,16 +43,14 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
 
-import java.util.List;
-
 /**
  * This class provides instances management methods (create, find, ...) for Category objects
  */
 public final class TicketCategoryHome
 {
     // Static variable pointed at the DAO instance
-    private static ITicketCategoryDAO _dao = SpringContextService.getBean( "ticketing.ticketCategoryDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static ITicketCategoryDAO _dao    = SpringContextService.getBean( "ticketing.ticketCategoryDAO" );
+    private static Plugin             _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -61,7 +61,7 @@ public final class TicketCategoryHome
 
     /**
      * Create an instance of the category class
-     * 
+     *
      * @param category
      *            The instance of the Category which contains the informations to store
      * @return The instance of category which has been created with its primary key.
@@ -75,7 +75,7 @@ public final class TicketCategoryHome
 
     /**
      * Update of the category which is specified in parameter
-     * 
+     *
      * @param category
      *            The instance of the Category which contains the data to store
      * @return The instance of the category which has been updated
@@ -91,8 +91,7 @@ public final class TicketCategoryHome
         {
             _dao.storeWithLastOrder( category, _plugin );
             _dao.rebuildCategoryOrders( nCurrentOrder, nCurrentParentId, _plugin );
-        }
-        else
+        } else
         {
             _dao.store( category, _plugin );
         }
@@ -102,28 +101,28 @@ public final class TicketCategoryHome
 
     /**
      * Remove the category whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The category Id
      */
     public static void remove( int nKey )
     {
-        //        if ( canRemove( nKey ) )
-        //        {
+        // if ( canRemove( nKey ) )
+        // {
         TicketCategory categoryToRemove = findByPrimaryKey( nKey );
 
         _dao.delete( nKey, _plugin );
         _dao.rebuildCategoryOrders( categoryToRemove.getOrder( ), categoryToRemove.getIdParent( ), _plugin );
-        //        }
-        //        else
-        //        {
-        //            throw new AppException( "TicketCategory cannot be removed for ID :" + nKey );
-        //        }
+        // }
+        // else
+        // {
+        // throw new AppException( "TicketCategory cannot be removed for ID :" + nKey );
+        // }
     }
 
     /**
      * return true if category can be removed false otherwise
-     * 
+     *
      * @param nKey
      *            The category Id
      * @return true if type can be removed false otherwise
@@ -135,7 +134,7 @@ public final class TicketCategoryHome
 
     /**
      * Returns an instance of a category whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The category primary key
      * @return an instance of Category
@@ -152,7 +151,7 @@ public final class TicketCategoryHome
 
     /**
      * Load the data of all the category objects and returns them as a list
-     * 
+     *
      * @return the list which contains the data of all the category objects
      */
     public static List<TicketCategory> getCategorysList( )
@@ -162,10 +161,10 @@ public final class TicketCategoryHome
 
     /**
      * Load the list of categories (full, with java objects filled)
-     * 
+     *
      * @param withInactives
-     * 
-     * @return
+     *
+     * @return list of categories
      */
     public static List<TicketCategory> getFullCategorysList( boolean withInactives )
     {
@@ -174,7 +173,7 @@ public final class TicketCategoryHome
 
     /**
      * Load the id of all the category objects and returns them as a list
-     * 
+     *
      * @return the list which contains the id of all the category objects
      */
     public static List<Integer> getIdCategorysList( )
@@ -184,7 +183,7 @@ public final class TicketCategoryHome
 
     /**
      * Load the data of all the category objects and returns them as a referenceList
-     * 
+     *
      * @return the referenceList which contains the data of all the category objects
      */
     public static ReferenceList getCategorysReferenceList( )
@@ -197,11 +196,7 @@ public final class TicketCategoryHome
      *
      * @param nId
      *            the if of category to move
-     * @param nCurrentPostion
-     *            the current position of the Type
-     * 
-     * @param nNewPosition
-     *            the target position of the Type
+     * @param bMoveUp
      */
     public static void updateCategoryOrder( int nId, boolean bMoveUp )
     {
@@ -220,8 +215,7 @@ public final class TicketCategoryHome
                 if ( bMoveUp )
                 {
                     sourceOrder++;
-                }
-                else
+                } else
                 {
                     targetOrder++;
                 }
@@ -229,11 +223,9 @@ public final class TicketCategoryHome
 
             _dao.updateCategoryOrder( sourceCategory.getId( ), targetOrder, _plugin );
             _dao.updateCategoryOrder( targetCategory.getId( ), sourceOrder, _plugin );
-        }
-        else
+        } else
         {
-            AppLogService
-            .error( "Could not move TicketCategory " + nId + " " + ( bMoveUp ? "up" : "down" ) + " : no TicketCategory to replace on destination " );
+            AppLogService.error( "Could not move TicketCategory " + nId + " " + ( bMoveUp ? "up" : "down" ) + " : no TicketCategory to replace on destination " );
         }
     }
 

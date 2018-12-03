@@ -9,14 +9,16 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public class FormCategoryHome
 {
     // Static variable pointed at the DAO instance
-    private static IFormCategoryDao _dao = SpringContextService.getBean( "ticketing.formCategoryDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static IFormCategoryDao _dao    = SpringContextService.getBean( "ticketing.formCategoryDAO" );
+    private static Plugin           _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Create an instance of the form class
-     * 
-     * @param nIdCategory The category Id
-     * @param nIdForm The form Id
+     *
+     * @param nIdCategory
+     *            The category Id
+     * @param nIdForm
+     *            The form Id
      */
     public static void create( int nIdCategory, int nIdForm )
     {
@@ -25,29 +27,33 @@ public class FormCategoryHome
 
     /**
      * Update of the form which is specified in parameter
-     * 
-     * @param nIdCategory The category Id
-     * @param nIdForm The form Id
+     *
+     * @param nIdCategory
+     *            The category Id
+     * @param nIdForm
+     *            The form Id
      */
-    public static void update( int nIdCategory, int nIdForm)
+    public static void update( int nIdCategory, int nIdForm )
     {
         _dao.store( nIdCategory, nIdForm, _plugin );
     }
 
     /**
      * Remove the form whose identifier is specified in parameter
-     * 
-     * @param nIdCategory The category Id
-     * @param nIdForm The form Id
+     *
+     * @param nIdCategory
+     *            The category Id
+     * @param nIdForm
+     *            The form Id
      */
     public static void remove( int nIdCategory, int nIdForm )
     {
-        _dao.delete(  nIdCategory, nIdForm, _plugin );
+        _dao.delete( nIdCategory, nIdForm, _plugin );
     }
 
     /**
      * Remove the formCategory by id category
-     * 
+     *
      * @param nKey
      *            The category Id
      */
@@ -58,35 +64,35 @@ public class FormCategoryHome
 
     /**
      * Returns an instance of a form whose identifier is specified in parameter
-     * 
-     * @param nKey
-     *            The form primary key
+     *
+     * @param nIdForm
+     *
      * @return an instance of Form
      */
     public static List<FormCategory> findByForm( int nIdForm )
     {
-        return _dao.loadByForm( nIdForm, _plugin);
+        return _dao.loadByForm( nIdForm, _plugin );
     }
 
     /**
      * Returns an instance of a form whose identifier is specified in parameter
-     * @param nKey The form primary key
+     *
+     * @param nIdCategory
+     *            The form primary key
      * @return an instance of Form
      */
     public static List<FormCategory> findByCategory( int nIdCategory )
     {
-        return _dao.loadByCategory( nIdCategory, _plugin);
+        return _dao.loadByCategory( nIdCategory, _plugin );
     }
 
     /**
      * Load the data of all the category objects and returns them as a list
-     * 
-     * @param plugin
-     *            the Plugin
+     *
      * @return The list which contains the data of all the category objects
      */
-    public static List<FormCategory> findAll(  )
+    public static List<FormCategory> findAll( )
     {
-        return _dao.selectAll(_plugin );
+        return _dao.selectAll( _plugin );
     }
 }

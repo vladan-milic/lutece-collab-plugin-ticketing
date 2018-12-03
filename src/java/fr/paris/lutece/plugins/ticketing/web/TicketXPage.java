@@ -88,7 +88,6 @@ import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
-import freemarker.template.TemplateModelException;
 
 /**
  * This class provides the user interface to manage Ticket xpages ( manage, create, modify, remove )
@@ -96,71 +95,71 @@ import freemarker.template.TemplateModelException;
 @Controller( xpageName = TicketXPage.TICKET_XPAGE_NAME, pageTitleI18nKey = "ticketing.xpage.ticket.pageTitle", pagePathI18nKey = "ticketing.xpage.ticket.pagePathLabel" )
 public class TicketXPage extends WorkflowCapableXPage
 {
-    public static final String TICKET_XPAGE_NAME = "ticket";
+    public static final String      TICKET_XPAGE_NAME                   = "ticket";
 
-    private static final long serialVersionUID = 1L;
+    private static final long       serialVersionUID                    = 1L;
 
     // Templates
-    private static final String TEMPLATE_TICKET_FORM = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "ticket_form.html";
-    private static final String TEMPLATE_RECAP_TICKET = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "recap_ticket.html";
-    private static final String TEMPLATE_CONFIRM_TICKET = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "confirm_ticket.html";
-    private static final String TEMPLATE_MESSAGE_CONFIRM = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "message_confirm_ticket.html";
-    private static final String TEMPLATE_CREATE_TICKET_DYNAMIC_FORM = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "create_ticket_dynamic_form.html";
+    private static final String     TEMPLATE_TICKET_FORM                = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "ticket_form.html";
+    private static final String     TEMPLATE_RECAP_TICKET               = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "recap_ticket.html";
+    private static final String     TEMPLATE_CONFIRM_TICKET             = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "confirm_ticket.html";
+    private static final String     TEMPLATE_MESSAGE_CONFIRM            = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "message_confirm_ticket.html";
+    private static final String     TEMPLATE_CREATE_TICKET_DYNAMIC_FORM = TicketingConstants.TEMPLATE_FRONT_TICKET_FEATURE_PATH + "create_ticket_dynamic_form.html";
 
     // Marks
-    private static final String MARK_USER_TITLES_LIST = "user_titles_list";
-    private static final String MARK_TICKET_FORM = "ticket_form";
-    private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
-    private static final String MARK_TICKET_ACTION = "ticket_action";
-    private static final String MARK_MESSAGE = "message";
-    private static final String MARK_USERTITLE = "userTitle";
-    private static final String MARK_FIRSTNAME = "firstName";
-    private static final String MARK_LASTNAME = "lastName";
-    private static final String MARK_EMAIL = "email";
-    private static final String MARK_FIX_PHONE_NUMBER = "fixedPhoneNumber";
-    private static final String MARK_MOBILE_PHONE_NUMBER = "mobilePhoneNumber";
-    private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
-    private static final String MARK_FORM = "form";
-    private static final String MARK_FORMENTRYTYPE = "formEntryType";
+    private static final String     MARK_USER_TITLES_LIST               = "user_titles_list";
+    private static final String     MARK_TICKET_FORM                    = "ticket_form";
+    private static final String     MARK_CONTACT_MODES_LIST             = "contact_modes_list";
+    private static final String     MARK_TICKET_ACTION                  = "ticket_action";
+    private static final String     MARK_MESSAGE                        = "message";
+    private static final String     MARK_USERTITLE                      = "userTitle";
+    private static final String     MARK_FIRSTNAME                      = "firstName";
+    private static final String     MARK_LASTNAME                       = "lastName";
+    private static final String     MARK_EMAIL                          = "email";
+    private static final String     MARK_FIX_PHONE_NUMBER               = "fixedPhoneNumber";
+    private static final String     MARK_MOBILE_PHONE_NUMBER            = "mobilePhoneNumber";
+    private static final String     MARK_RESPONSE_RECAP_LIST            = "response_recap_list";
+    private static final String     MARK_FORM                           = "form";
+    private static final String     MARK_FORMENTRYTYPE                  = "formEntryType";
 
     // Parameters
-    private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
-    public static final String PARAMETER_ID_FORM = "form";
-    private static final String PARAMETER_RESET_RESPONSE = "reset_response";
-    private static final String PARAMETER_CATEGORY_1 = "cat1";
-    private static final String PARAMETER_CATEGORY_2 = "cat2";
+    private static final String     PARAMETER_ID_CATEGORY               = "id_ticket_category";
+    public static final String      PARAMETER_ID_FORM                   = "form";
+    private static final String     PARAMETER_RESET_RESPONSE            = "reset_response";
+    private static final String     PARAMETER_CATEGORY_1                = "cat1";
+    private static final String     PARAMETER_CATEGORY_2                = "cat2";
 
     // Views
-    private static final String VIEW_CREATE_TICKET = "createTicket";
-    private static final String VIEW_RECAP_TICKET = "recapTicket";
-    private static final String VIEW_CONFIRM_TICKET = "confirmTicket";
-    private static final String VIEW_REDIRECT_AFTER_CREATE_ACTION = "redirectAfterCreateAction";
-    private static final String VIEW_TICKET_FORM = "ticketForm";
-    private static final String VIEW_CREATE_TICKET_DYNAMIC_FORM = "create";
+    private static final String     VIEW_CREATE_TICKET                  = "createTicket";
+    private static final String     VIEW_RECAP_TICKET                   = "recapTicket";
+    private static final String     VIEW_CONFIRM_TICKET                 = "confirmTicket";
+    private static final String     VIEW_REDIRECT_AFTER_CREATE_ACTION   = "redirectAfterCreateAction";
+    private static final String     VIEW_TICKET_FORM                    = "ticketForm";
+    private static final String     VIEW_CREATE_TICKET_DYNAMIC_FORM     = "create";
 
     // Actions
-    private static final String ACTION_CREATE_TICKET = "createTicket";
-    private static final String ACTION_RECAP_TICKET = "recapTicket";
+    private static final String     ACTION_CREATE_TICKET                = "createTicket";
+    private static final String     ACTION_RECAP_TICKET                 = "recapTicket";
 
     // Infos
-    private static final String INFO_TICKET_CREATED = "ticketing.info.ticket.created";
+    private static final String     INFO_TICKET_CREATED                 = "ticketing.info.ticket.created";
 
     // Errors
-    private static final String ERROR_TICKET_CREATION_ABORTED = "ticketing.error.ticket.creation.aborted.frontoffice";
-    private static final String MESSAGE_ERROR_COMMENT_VALIDATION = "ticketing.validation.ticket.TicketComment.size";
-    private static final String ERROR_NO_FORM_EXISTS = "ticketing.error.no.form";
+    private static final String     ERROR_TICKET_CREATION_ABORTED       = "ticketing.error.ticket.creation.aborted.frontoffice";
+    private static final String     MESSAGE_ERROR_COMMENT_VALIDATION    = "ticketing.validation.ticket.TicketComment.size";
+    private static final String     ERROR_NO_FORM_EXISTS                = "ticketing.error.no.form";
 
     // Session keys
-    private static final String SESSION_ACTION_TYPE = "ticketing.session.actionType";
+    private static final String     SESSION_ACTION_TYPE                 = "ticketing.session.actionType";
 
     // Session variable to store working values
-    private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
+    private final TicketFormService _ticketFormService                  = SpringContextService.getBean( TicketFormService.BEAN_NAME );
 
-	private Ticket _ticketConfirmed;
+    private Ticket                  _ticketConfirmed;
 
     // Other constants
-    private static final String LUTECE_USER_INFO_CUSTOMER_ID = "user.id.customer";
-    private static final String URL_PORTAL = "Portal.jsp";
+    private static final String     LUTECE_USER_INFO_CUSTOMER_ID        = "user.id.customer";
+    private static final String     URL_PORTAL                          = "Portal.jsp";
 
     /**
      * Returns the form to create a ticket
@@ -168,7 +167,6 @@ public class TicketXPage extends WorkflowCapableXPage
      * @param request
      *            The Http request
      * @return the html code of the ticket form
-     * @throws TemplateModelException
      */
     @View( value = VIEW_CREATE_TICKET_DYNAMIC_FORM, defaultView = true )
     public XPage getCreateTicketDynamicForm( HttpServletRequest request )
@@ -178,11 +176,10 @@ public class TicketXPage extends WorkflowCapableXPage
         Form form = FormHome.getFormFromRequest( request );
         List<Integer> restrictedCategoriesId = null;
 
-        if ( form == null || form.getId( ) == 0 )
+        if ( ( form == null ) || ( form.getId( ) == 0 ) )
         {
             addError( ERROR_NO_FORM_EXISTS, request.getLocale( ) );
-        }
-        else
+        } else
         {
             // Get ticket from session or create one
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
@@ -201,7 +198,7 @@ public class TicketXPage extends WorkflowCapableXPage
             // remove ticket from session
             // -> on refresh, ticket will be reset
             // -> we pass the ticket via the form
-            //_ticketFormService.removeTicketFromSession( request.getSession( ), form );
+            // _ticketFormService.removeTicketFromSession( request.getSession( ), form );
 
             List<FormCategory> restrictedCategories = FormCategoryHome.findByForm( form.getId( ) );
             restrictedCategoriesId = restrictedCategories.stream( ).map( category -> category.getIdCategory( ) ).collect( Collectors.toList( ) );
@@ -212,30 +209,29 @@ public class TicketXPage extends WorkflowCapableXPage
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
         model.put( MARK_CONTACT_MODES_LIST, ContactModeHome.getReferenceList( request.getLocale( ) ) );
-        
+
         int selectedRootCategory = 0;
         String category1 = request.getParameter( PARAMETER_CATEGORY_1 );
-        if( category1 != null && StringUtils.isNumeric( category1 ) ) 
+        if ( ( category1 != null ) && StringUtils.isNumeric( category1 ) )
         {
-        	selectedRootCategory = Integer.parseInt( category1 );
-        }
-        
-        int selectedChildCategory = 0;
-        String category2 = request.getParameter( PARAMETER_CATEGORY_2 );
-        if( category2 != null && StringUtils.isNumeric( category2 ) ) 
-        {
-        	selectedChildCategory = Integer.parseInt( category2 );
+            selectedRootCategory = Integer.parseInt( category1 );
         }
 
-        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( restrictedCategoriesId ).getTreeJSONObject( selectedRootCategory, selectedChildCategory ) );
+        int selectedChildCategory = 0;
+        String category2 = request.getParameter( PARAMETER_CATEGORY_2 );
+        if ( ( category2 != null ) && StringUtils.isNumeric( category2 ) )
+        {
+            selectedChildCategory = Integer.parseInt( category2 );
+        }
+
+        model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE,
+                TicketCategoryService.getInstance( ).getCategoriesTree( restrictedCategoriesId ).getTreeJSONObject( selectedRootCategory, selectedChildCategory ) );
         model.put( TicketingConstants.MARK_TICKET_CATEGORIES_DEPTHS, TicketCategoryService.getInstance( ).getCategoriesTree( restrictedCategoriesId ).getDepths( ) );
 
         saveActionTypeInSession( request.getSession( ), ACTION_CREATE_TICKET );
 
-
         return getXPage( TEMPLATE_CREATE_TICKET_DYNAMIC_FORM, request.getLocale( ), model );
     }
-
 
     /**
      * Returns the form to create a ticket
@@ -252,7 +248,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
     /**
      * Prefill ticket with form default values
-     * 
+     *
      * @param request
      *            the http request
      * @param form
@@ -260,15 +256,14 @@ public class TicketXPage extends WorkflowCapableXPage
      */
     private void prefillTicketWithDefaultForm( HttpServletRequest request, Ticket ticket, Form form )
     {
-        FormEntryType formEntryType = new FormEntryType();
+        FormEntryType formEntryType = new FormEntryType( );
 
         UserTitle userTitle = null;
         try
         {
             String userTitleId = form.getEntry( formEntryType.getUserTitle( ) ).getDefaultValue( );
             userTitle = UserTitleHome.findByPrimaryKey( Integer.parseInt( userTitleId ) );
-        }
-        catch ( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
             // do nothing, default value can be empty or not valid
         }
@@ -289,8 +284,7 @@ public class TicketXPage extends WorkflowCapableXPage
         {
             String contactModeId = form.getEntry( formEntryType.getContactMode( ) ).getDefaultValue( );
             contactMode = ContactModeHome.findByPrimaryKey( Integer.parseInt( contactModeId ) );
-        }
-        catch ( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
             // do nothing, default value can be empty or not valid
         }
@@ -307,8 +301,7 @@ public class TicketXPage extends WorkflowCapableXPage
         {
             String channelId = form.getEntry( formEntryType.getChannel( ) ).getDefaultValue( );
             channel = ChannelHome.findByPrimaryKey( Integer.parseInt( channelId ) );
-        }
-        catch ( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
             // do nothing, default value can be empty or not valid
         }
@@ -325,8 +318,7 @@ public class TicketXPage extends WorkflowCapableXPage
             {
                 String categoryId = form.getEntry( formEntryType.getCategory( ) + depth.getDepthNumber( ) ).getDefaultValue( );
                 category = TicketCategoryService.getInstance( ).findCategoryById( Integer.parseInt( categoryId ) );
-            }
-            catch ( NumberFormatException e )
+            } catch ( NumberFormatException e )
             {
                 // do nothing, default value can be empty or not valid
             }
@@ -343,7 +335,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
     /**
      * Prefill User's informations
-     * 
+     *
      * @param request
      *            The HTTP request
      * @param ticket
@@ -383,8 +375,7 @@ public class TicketXPage extends WorkflowCapableXPage
                             ticket.setIdUserTitle( userTitle.getId( ) );
                             ticket.setUserTitle( userTitle.getLabel( ) );
                         }
-                    }
-                    catch( NumberFormatException e )
+                    } catch ( NumberFormatException e )
                     {
                         // The ticket keep the default value 0 for the user title id (undefined)
                     }
@@ -419,8 +410,7 @@ public class TicketXPage extends WorkflowCapableXPage
                 {
                     ticket.setMobilePhoneNumber( strMobilePhoneNumber );
                 }
-            }
-            catch( IdentityNotFoundException e )
+            } catch ( IdentityNotFoundException e )
             {
                 // The customer is not in the identity store yet : nothing to do
             }
@@ -441,36 +431,35 @@ public class TicketXPage extends WorkflowCapableXPage
         try
         {
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ), form );
-            
+
             if ( ticket != null )
             {
-	            TicketHome.create( ticket );
-	            
-	            _ticketConfirmed = ticket;
-	            _ticketFormService.removeTicketFromSession( request.getSession( ), form );
-	
-	            if ( ( ticket.getListResponse( ) != null ) && !ticket.getListResponse( ).isEmpty( ) )
-	            {
-	                for ( Response response : ticket.getListResponse( ) )
-	                {
-	                    ResponseHome.create( response );
-	                    TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
-	                }
-	            }
-	
-	            request.setAttribute( TicketingConstants.ATTRIBUTE_BYPASS_ASSSIGN_TO_ME, true );
-	
-	            doProcessNextWorkflowAction( ticket, request );
-	
-	            // Immediate indexation of the Ticket
-	            immediateTicketIndexing( ticket.getId( ), request );
-	
-	            TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( request.getSession( ).getId( ) );
-	
-	            addInfo( INFO_TICKET_CREATED, getLocale( request ) );
+                TicketHome.create( ticket );
+
+                _ticketConfirmed = ticket;
+                _ticketFormService.removeTicketFromSession( request.getSession( ), form );
+
+                if ( ( ticket.getListResponse( ) != null ) && !ticket.getListResponse( ).isEmpty( ) )
+                {
+                    for ( Response response : ticket.getListResponse( ) )
+                    {
+                        ResponseHome.create( response );
+                        TicketHome.insertTicketResponse( ticket.getId( ), response.getIdResponse( ) );
+                    }
+                }
+
+                request.setAttribute( TicketingConstants.ATTRIBUTE_BYPASS_ASSSIGN_TO_ME, true );
+
+                doProcessNextWorkflowAction( ticket, request );
+
+                // Immediate indexation of the Ticket
+                immediateTicketIndexing( ticket.getId( ), request );
+
+                TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( request.getSession( ).getId( ) );
+
+                addInfo( INFO_TICKET_CREATED, getLocale( request ) );
             }
-        }
-        catch( Exception e )
+        } catch ( Exception e )
         {
             addError( ERROR_TICKET_CREATION_ABORTED, request.getLocale( ) );
             AppLogService.error( e );
@@ -573,7 +562,7 @@ public class TicketXPage extends WorkflowCapableXPage
         List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
 
         request.setAttribute( TicketingConstants.ATTRIBUTE_IS_DISPLAY_FRONT, true );
-        if ( categoryValidatorResult.isTicketCategoryValid( ) && ticket.getTicketCategory( ) != null )
+        if ( categoryValidatorResult.isTicketCategoryValid( ) && ( ticket.getTicketCategory( ) != null ) )
         {
             ticket.setListResponse( null );
 
@@ -600,8 +589,7 @@ public class TicketXPage extends WorkflowCapableXPage
         {
             String channelId = form.getEntry( formEntryType.getChannel( ) ).getDefaultValue( );
             channel = ChannelHome.findByPrimaryKey( Integer.parseInt( channelId ) );
-        }
-        catch ( NumberFormatException e )
+        } catch ( NumberFormatException e )
         {
             // do nothing, default value can be empty or not valid
         }
@@ -609,8 +597,7 @@ public class TicketXPage extends WorkflowCapableXPage
         if ( channel != null )
         {
             ticket.setChannel( channel );
-        }
-        else
+        } else
         {
             int nIdChannel = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT, TicketingConstants.PROPERTY_UNSET_INT );
             channel = ChannelHome.findByPrimaryKey( nIdChannel );
@@ -627,13 +614,11 @@ public class TicketXPage extends WorkflowCapableXPage
         if ( !bIsFormValid && ACTION_CREATE_TICKET.equals( getActionTypeFromSession( request.getSession( ) ) ) )
         {
             return redirectView( request, VIEW_CREATE_TICKET_DYNAMIC_FORM, form );
-        }
-        else
+        } else
         {
             return redirectView( request, VIEW_RECAP_TICKET, form );
         }
     }
-
 
     /**
      * Redirect to requested view
@@ -651,7 +636,7 @@ public class TicketXPage extends WorkflowCapableXPage
 
     /**
      * Get a View URL
-     * 
+     *
      * @param strView
      *            The view name
      * @return The URL
@@ -669,7 +654,6 @@ public class TicketXPage extends WorkflowCapableXPage
         return url.getUrl( );
     }
 
-
     /**
      * Returns the form to confirm a ticket
      *
@@ -682,13 +666,13 @@ public class TicketXPage extends WorkflowCapableXPage
     {
         Map<String, Object> model = getModel( );
         Form form = FormHome.getFormFromRequest( request );
-        String strContent = (String) request.getSession( ).getAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE );
+        String strContent = ( String ) request.getSession( ).getAttribute( TicketingConstants.SESSION_TICKET_CONFIRM_MESSAGE );
 
-        if ( _ticketConfirmed != null ) 
+        if ( _ticketConfirmed != null )
         {
-	        model.put( TicketingConstants.MARK_TICKET, _ticketConfirmed );
-	        strContent = fillTemplate( request, _ticketConfirmed );
-	        removeActionTypeFromSession( request.getSession( ) );
+            model.put( TicketingConstants.MARK_TICKET, _ticketConfirmed );
+            strContent = fillTemplate( request, _ticketConfirmed );
+            removeActionTypeFromSession( request.getSession( ) );
         }
         model.put( MARK_MESSAGE, strContent );
         model.put( MARK_FORM, form );
@@ -808,7 +792,7 @@ public class TicketXPage extends WorkflowCapableXPage
      */
     private String getActionTypeFromSession( HttpSession session )
     {
-        return (String) session.getAttribute( SESSION_ACTION_TYPE );
+        return ( String ) session.getAttribute( SESSION_ACTION_TYPE );
     }
 
     /**

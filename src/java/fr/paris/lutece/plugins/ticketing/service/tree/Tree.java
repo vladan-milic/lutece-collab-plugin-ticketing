@@ -42,13 +42,13 @@ import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
 
-public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDepth> 
+public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDepth>
 {
-    protected List<Node> _rootNodes;
+    protected List<Node>  _rootNodes;
 
-    protected List<Node> _leaves;
+    protected List<Node>  _leaves;
 
-    protected List<Node> _nodes;
+    protected List<Node>  _nodes;
 
     protected List<Depth> _depths;
 
@@ -59,9 +59,10 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
         setNodes( treeSource.getNodes( ) );
         setRootElements( treeSource.getRootElements( ) );
     }
+
     /**
      * The main constructor of the tree
-     * 
+     *
      * @param listNode
      * @param listDepth
      */
@@ -83,8 +84,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
                         break;
                     }
                 }
-            }
-            else
+            } else
             {
                 // Set the depth of the node
                 Node.setParent( null );
@@ -94,14 +94,14 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
             // Set the children
             List<AbstractNode> listChildren = new ArrayList<>( );
 
-            listNode.stream( ).filter( ( childNode ) -> ( childNode.getIdParent( ) == Node.getId( ) ) ).forEach( ( childNode ) -> {
+            listNode.stream( ).filter( ( childNode ) -> ( childNode.getIdParent( ) == Node.getId( ) ) ).forEach( ( childNode ) ->
+            {
                 listChildren.add( childNode );
             } );
             if ( listChildren.isEmpty( ) )
             {
                 Node.setLeaf( true );
-            }
-            else
+            } else
             {
                 Node.setLeaf( false );
             }
@@ -110,14 +110,15 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
         _nodes = new ArrayList<Node>( listNode );
         _rootNodes = _nodes.stream( ).filter( node -> ( node.getIdParent( ) == -1 ) ).collect( Collectors.toList( ) );
         _leaves = _nodes.stream( ).filter( node -> ( node.getLeaf( ) == true ) ).collect( Collectors.toList( ) );
-        _nodes.stream( ).forEach( ( node ) -> {
+        _nodes.stream( ).forEach( ( node ) ->
+        {
             node.setLeaves( getLeavesOf( node ) );
         } );
     }
 
     /**
      * Get the root elements of the tree
-     * 
+     *
      * @return the list of root elements of the tree
      */
     public List<Node> getRootElements( )
@@ -127,7 +128,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Set the root elements of the tree
-     * 
+     *
      * @param rootNodes
      *            the list of root elements of the tree
      */
@@ -138,7 +139,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the list of nodes of the tree
-     * 
+     *
      * @return the list of node of the tree.
      */
     public List<Node> getNodes( )
@@ -167,7 +168,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Set the list of nodes of the tree
-     * 
+     *
      * @param nodes
      *            the list of nodes of the tree
      */
@@ -178,18 +179,17 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the depths java obj of the tree
-     * 
-     * @return
+     *
+     * @return depths java obj of the tree
      */
     public List<Depth> getDepths( )
     {
         return _depths;
     }
 
-
     /**
      * Set the depths java obj of the tree
-     * 
+     *
      * @param depths
      *            the Depths of the tree
      */
@@ -200,7 +200,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the leaves of the tree
-     * 
+     *
      * @return the leaves nodes of the tree
      */
     public List<Node> getLeaves( )
@@ -210,7 +210,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Set the leaves node of the tree
-     * 
+     *
      * @param leaves
      *            the leaves node of the tree
      */
@@ -221,7 +221,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the leaves nodes of a given node
-     * 
+     *
      * @param node
      * @return the list of leaves node of the given node
      */
@@ -231,8 +231,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
         if ( node.getLeaf( ) )
         {
             listLeaves.add( node );
-        }
-        else
+        } else
         {
             for ( AbstractNode child : node.getChildren( ) )
             {
@@ -244,9 +243,10 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get all children nodes of the given node (recursively)
-     * 
+     *
      * @param node
-     * @param isFirstCall true if first recursive call 
+     * @param isFirstCall
+     *            true if first recursive call
      * @return the list of all the children of the given node (recursively).
      */
     public List<AbstractNode> getAllChildren( AbstractNode node, boolean isFirstCall )
@@ -268,7 +268,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Find a node with given id
-     * 
+     *
      * @param nId
      * @return the node of given id.
      */
@@ -286,7 +286,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Find the Depth obj with given depth number
-     * 
+     *
      * @param nDepth
      * @return the Depth obj
      */
@@ -308,7 +308,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Find the Depth obj with given label
-     * 
+     *
      * @param strLabel
      * @return the Depth obj
      */
@@ -326,7 +326,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the max depth of the tree
-     * 
+     *
      * @return the max depth of the tree;
      */
     public int getMaxDepthNumber( )
@@ -344,19 +344,19 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the list of nodes parents of given node ( from root to node)
-     * 
+     *
      * @param node
      * @return the list of nodes parents of given node ( from root to node)
      */
     public List<Node> getBranch( Node node )
     {
         List<Node> listNodes = new ArrayList<>( );
-        if (node != null)
+        if ( node != null )
         {
             listNodes.add( node );
             while ( node.getParent( ) != null )
             {
-                node = (Node) node.getParent( );
+                node = ( Node ) node.getParent( );
                 listNodes.add( node );
             }
             Collections.reverse( listNodes );
@@ -366,15 +366,16 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the list of nodes of a given depth
+     * 
      * @param depth
      * @return the list of nodes of the given depth
      */
     public List<Node> getListNodesOfDepth( Depth depth )
     {
-        List<Node> listNodes = new ArrayList<>();
+        List<Node> listNodes = new ArrayList<>( );
         for ( Node node : getNodes( ) )
         {
-            if ( node.getDepth().getDepthNumber() == depth.getDepthNumber() )
+            if ( node.getDepth( ).getDepthNumber( ) == depth.getDepthNumber( ) )
             {
                 listNodes.add( node );
             }

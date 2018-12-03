@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.modelresponse;
 
+import java.util.List;
+
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
-
-import java.util.List;
 
 /**
  * This class provides instances management methods (create, find, ...) for TypeResponse objects
@@ -46,8 +46,8 @@ import java.util.List;
 public final class ModelResponseHome
 {
     // Static variable pointed at the DAO instance
-    private static IModelResponseDAO _dao = SpringContextService.getBean( "ticketing.modelResponseDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static IModelResponseDAO _dao    = SpringContextService.getBean( "ticketing.modelResponseDAO" );
+    private static Plugin            _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -58,7 +58,7 @@ public final class ModelResponseHome
 
     /**
      * Create an instance of the modelResponse class
-     * 
+     *
      * @param modelResponse
      *            The instance of the ModelResponse which contains the informations to store
      * @return The instance of modelResponse which has been created with its primary key.
@@ -72,7 +72,7 @@ public final class ModelResponseHome
 
     /**
      * Update of the modelResponse which is specified in parameter
-     * 
+     *
      * @param modelResponse
      *            The instance of the ModelResponse which contains the data to store
      * @return The instance of the modelResponse which has been updated
@@ -86,7 +86,7 @@ public final class ModelResponseHome
 
     /**
      * Remove the modelResponse whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The modelResponse Id
      */
@@ -97,7 +97,7 @@ public final class ModelResponseHome
 
     /**
      * Returns an instance of a modelResponse whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The modelResponse primary key
      * @return an instance of ModelResponse
@@ -109,7 +109,7 @@ public final class ModelResponseHome
 
     /**
      * Load the data of all the modelResponse objects and returns them as a list
-     * 
+     *
      * @return the list which contains the data of all the modelResponse objects
      */
     public static List<ModelResponse> getModelResponsesList( )
@@ -120,6 +120,8 @@ public final class ModelResponseHome
     /**
      * Load the data of all the modelResponse objects for a given domain label and returns them as a list
      * 
+     * @param sLabelDomain
+     *
      * @return the list which contains the data of all the modelResponse objects
      */
     public static List<ModelResponse> getModelResponsesListByDomain( String sLabelDomain )
@@ -129,7 +131,7 @@ public final class ModelResponseHome
 
     /**
      * Load the id of all the modelResponse objects and returns them as a list
-     * 
+     *
      * @return the list which contains the id of all the modelResponse objects
      */
     public static List<Integer> getIdTypeResponsesList( )
@@ -139,7 +141,7 @@ public final class ModelResponseHome
 
     /**
      * Load the data of all the modelResponse objects and returns them as a referenceList
-     * 
+     *
      * @return the referenceList which contains the data of all the modelResponse objects
      */
     public static ReferenceList getTypeResponsesReferenceList( )

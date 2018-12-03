@@ -179,7 +179,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
     /**
      * Index or update a Ticket in the index
-     * 
+     *
      * @param indexWriter
      *            the indexWriter Lucene
      * @param ticket
@@ -213,7 +213,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
     /**
      * Get a document for indexing
-     * 
+     *
      * @param ticket
      *            The ticket
      * @param strUrl
@@ -221,10 +221,6 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
      * @param plugin
      *            The plugin
      * @return The document
-     * @throws IOException
-     *             if an IO error occurs
-     * @throws InterruptedException
-     *             if a Thread error occurs
      */
     public static Document getDocument( Ticket ticket, String strUrl, Plugin plugin )
     {
@@ -265,13 +261,13 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new LongPoint( TicketSearchItemConstant.FIELD_DATE_CREATION, longCreationDate ) );
         doc.add( new NumericDocValuesField( TicketSearchItemConstant.FIELD_DATE_CREATION, longCreationDate ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_DATE_CREATION, longCreationDate ) );
-        
+
         // --- ticket date close
-        Long longCloseDate = ticket.getDateClose( ) == null ? 0 : ticket.getDateClose().getTime();
+        Long longCloseDate = ticket.getDateClose( ) == null ? 0 : ticket.getDateClose( ).getTime( );
         doc.add( new LongPoint( TicketSearchItemConstant.FIELD_DATE_CLOSE, longCloseDate ) );
         doc.add( new NumericDocValuesField( TicketSearchItemConstant.FIELD_DATE_CLOSE, longCloseDate ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_DATE_CLOSE, longCloseDate ) );
-        
+
         // --- ticket Facil'familles
         String strFacilFamille = ticket.getFacilFamilleNumber( ) != null ? ticket.getFacilFamilleNumber( ) : "";
         doc.add( new StringField( TicketSearchItemConstant.FIELD_FACIL_FAMILLE, strFacilFamille, Store.YES ) );
@@ -519,7 +515,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
     /**
      * Get Lucene index document type
-     * 
+     *
      * @return The document type
      */
     public static String getDocumentType( )
@@ -529,20 +525,17 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
     /**
      * process indexation
-     * 
+     *
      * @param indexWriter
      *            index writer
      * @param bCreate
      *            true if index must be created (full mode) false if incremental update
      * @param sbLogs
      *            log message
-     * @throws IOException
-     *             io error when creating/accessing index
-     * @throws InterruptedException
-     *             interrupted exception
      * @throws TicketIndexerException
      *
      */
+    @Override
     public synchronized void processIndexing( IndexWriter indexWriter, boolean bCreate, StringBuffer sbLogs ) throws TicketIndexerException
     {
         if ( !bCreate )
@@ -628,7 +621,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
     /**
      * Indexing action performed on the recording
-     * 
+     *
      * @param sbLogs
      *            the buffer log
      * @param nIdTicket
@@ -713,7 +706,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
         for ( TicketCategory ticketCategory : ticket.getBranch( ) )
         {
-            if ( ticketCategory != null && StringUtils.isNotBlank( ticketCategory.getLabel( ) ) )
+            if ( ( ticketCategory != null ) && StringUtils.isNotBlank( ticketCategory.getLabel( ) ) )
             {
                 sb.append( ticketCategory.getLabel( ) ).append( SEPARATOR );
             }
@@ -750,12 +743,12 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             }
         }
 
-        if ( WorkflowService.getInstance( ).isAvailable( ) && ticket.getTicketCategory( ) != null )
+        if ( WorkflowService.getInstance( ).isAvailable( ) && ( ticket.getTicketCategory( ) != null ) )
         {
             int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
             State state = WorkflowService.getInstance( ).getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
 
-            if ( state != null && StringUtils.isNotBlank( state.getName( ) ) )
+            if ( ( state != null ) && StringUtils.isNotBlank( state.getName( ) ) )
             {
                 sb.append( state.getName( ) ).append( SEPARATOR );
             }
@@ -776,7 +769,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             }
         }
 
-        if ( ticket.getChannel( ) != null && StringUtils.isNotBlank( ticket.getChannel( ).getLabel( ) ) )
+        if ( ( ticket.getChannel( ) != null ) && StringUtils.isNotBlank( ticket.getChannel( ).getLabel( ) ) )
         {
             sb.append( ticket.getChannel( ).getLabel( ) ).append( SEPARATOR );
         }
@@ -786,7 +779,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
             sb.append( ticket.getTicketComment( ) ).append( SEPARATOR );
         }
 
-        if ( ticket.getAssigneeUnit( ) != null && StringUtils.isNotBlank( ticket.getAssigneeUnit( ).getName( ) ) )
+        if ( ( ticket.getAssigneeUnit( ) != null ) && StringUtils.isNotBlank( ticket.getAssigneeUnit( ).getName( ) ) )
         {
             sb.append( ticket.getAssigneeUnit( ).getName( ) ).append( SEPARATOR );
         }
@@ -796,7 +789,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
 
     /**
      * Manages the case the specified String is {@code null}
-     * 
+     *
      * @param strValue
      *            the String to manage
      * @return the correct String when the specified String is {@code null}, {@code strValue} otherwise

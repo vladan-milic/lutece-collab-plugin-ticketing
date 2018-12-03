@@ -2,8 +2,6 @@ package fr.paris.lutece.plugins.ticketing.business.marking;
 
 import java.util.List;
 
-import fr.paris.lutece.plugins.ticketing.business.marking.IMarkingDAO;
-import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
 import fr.paris.lutece.plugins.ticketing.service.TicketCacheService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -12,8 +10,8 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public class MarkingHome
 {
     // Static variable pointed at the DAO instance
-    private static IMarkingDAO _dao = SpringContextService.getBean( "ticketing.markingDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static IMarkingDAO        _dao                = SpringContextService.getBean( "ticketing.markingDAO" );
+    private static Plugin             _plugin             = PluginService.getPlugin( "ticketing" );
     private static TicketCacheService _ticketCacheService = TicketCacheService.getInstance( );
 
     /**
@@ -25,7 +23,7 @@ public class MarkingHome
 
     /**
      * Create an instance of the marking class
-     * 
+     *
      * @param marking
      *            The instance of the Marking which contains the informations to store
      * @return The instance of marking which has been created with its primary key.
@@ -39,7 +37,7 @@ public class MarkingHome
 
     /**
      * Update of the marking which is specified in parameter
-     * 
+     *
      * @param marking
      *            The instance of the Marking which contains the data to store
      * @return The instance of the marking which has been updated
@@ -55,7 +53,7 @@ public class MarkingHome
 
     /**
      * Remove the marking whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The marking Id
      */
@@ -68,7 +66,7 @@ public class MarkingHome
 
     /**
      * Returns an instance of a marking whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The marking primary key
      * @return an instance of Marking
@@ -80,7 +78,7 @@ public class MarkingHome
 
     /**
      * Load the data of all the marking objects and returns them as a list
-     * 
+     *
      * @return the list which contains the data of all the marking objects
      */
     public static List<Marking> getMarkingsList( )
@@ -91,6 +89,8 @@ public class MarkingHome
     /**
      * Load the marking from cache or put it in if doesn't exist
      * 
+     * @param nIdMarking
+     *
      * @return the marking object
      */
     public static Marking loadMarkingFromCache( int nIdMarking )
@@ -99,7 +99,7 @@ public class MarkingHome
 
         String strCacheKey = _ticketCacheService.getMarkingByIdCacheKey( nIdMarking );
 
-        marking = (Marking) _ticketCacheService.getFromCache( strCacheKey );
+        marking = ( Marking ) _ticketCacheService.getFromCache( strCacheKey );
 
         if ( marking == null )
         {

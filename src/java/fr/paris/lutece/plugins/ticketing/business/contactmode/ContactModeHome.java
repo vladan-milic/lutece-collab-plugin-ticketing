@@ -33,6 +33,11 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.contactmode;
 
+import java.util.List;
+import java.util.Locale;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -40,21 +45,16 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
-import org.apache.commons.lang.StringUtils;
-
-import java.util.List;
-import java.util.Locale;
-
 /**
  * This class provides instances management methods (create, find, ...) for ContactMode objects
  */
 public final class ContactModeHome
 {
-    private static final String MESSAGE_PREFIX = "ticketing.contactmodes.label.";
+    private static final String    MESSAGE_PREFIX = "ticketing.contactmodes.label.";
 
     // Static variable pointed at the DAO instance
-    private static IContactModeDAO _dao = SpringContextService.getBean( "ticketing.contactModeDAO" );
-    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
+    private static IContactModeDAO _dao           = SpringContextService.getBean( "ticketing.contactModeDAO" );
+    private static Plugin          _plugin        = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -143,6 +143,8 @@ public final class ContactModeHome
 
     /**
      * Load the data of all the contactMode objects and returns them as a localized reference list
+     * 
+     * @param locale
      *
      * @return The reference list
      */

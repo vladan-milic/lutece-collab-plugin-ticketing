@@ -33,9 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.categoryinputs;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
-
 import java.util.List;
+
+import fr.paris.lutece.portal.service.plugin.Plugin;
 
 /**
  * ITicketCategoryInputsDAO Interface
@@ -44,7 +44,7 @@ public interface ITicketCategoryInputsDAO
 {
     /**
      * Insert a new record in the table linking category with input.
-     * 
+     *
      * @param nIdCategory
      *            id Category
      * @param nIdInput
@@ -58,7 +58,7 @@ public interface ITicketCategoryInputsDAO
 
     /**
      * Delete a record in the table linking category with input.
-     * 
+     *
      * @param nIdCategory
      *            id Category
      * @param nIdInput
@@ -70,7 +70,7 @@ public interface ITicketCategoryInputsDAO
 
     /**
      * Delete all records in the table linking a category.
-     * 
+     *
      * @param nIdCategory
      *            id Category
      * @param plugin
@@ -80,7 +80,7 @@ public interface ITicketCategoryInputsDAO
 
     /**
      * Insert a new record in the table linking category with input Using the next available value for pos
-     * 
+     *
      * @param nIdCategory
      *            id Category
      * @param nIdInput
@@ -92,7 +92,7 @@ public interface ITicketCategoryInputsDAO
 
     /**
      * Update pos field in the table linking category with input
-     * 
+     *
      * @param nIdCategory
      *            id Category
      * @param nIdInput
@@ -106,20 +106,23 @@ public interface ITicketCategoryInputsDAO
 
     /**
      * returns the position of an input for a given category
-     * 
+     *
      * @param nId
      *            id of category
      * @param nIdInput
      *            id of input
+     * @param _plugin
      * @return the position as an integer
      */
     int selectCategoryInputPosition( int nId, int nIdInput, Plugin _plugin );
 
     /**
      * returns the iD of an input for a given category and position
-     * 
+     *
      * @param nId
      *            id of category
+     * @param nPos
+     * @param plugin
      * @param nIdInput
      *            the position
      * @return the input id
@@ -128,9 +131,10 @@ public interface ITicketCategoryInputsDAO
 
     /**
      * Load the id of all inputs related to the ticketCategory id and returns them as a collection
-     * 
+     *
      * @param nCategoryId
      *            The Category ID
+     * @param _plugin
      * @param plugin
      *            The plugin
      * @return The collection which contains the id of all the ticketCategory objects
@@ -139,9 +143,10 @@ public interface ITicketCategoryInputsDAO
 
     /**
      * Check if an input is already used in a Category form
-     * 
+     *
      * @param nIdResource
      *            the id_resource of the input to be checked
+     * @param _plugin
      * @return true if the input is linked to 1 or more Categories
      */
     boolean checkIfInputIsUsedInCategories( int nIdResource, Plugin _plugin );

@@ -101,7 +101,7 @@ public class TicketRest extends TicketingRest
 
     /**
      * Creates a ticket
-     * 
+     *
      * @param strIdUserTitle
      *            the user title id
      * @param strFirstname
@@ -122,6 +122,7 @@ public class TicketRest extends TicketingRest
      *            the channel id
      * @param strComment
      *            the comment
+     * @param strNomenclature
      * @param strGuid
      *            the guid
      * @param strIdCustomer
@@ -221,7 +222,7 @@ public class TicketRest extends TicketingRest
 
     /**
      * Creates the specified ticket. The ticket is saved and injected in the workflow.
-     * 
+     *
      * @param ticket
      *            the ticket to create
      * @return the list of errors which occurred during the creation

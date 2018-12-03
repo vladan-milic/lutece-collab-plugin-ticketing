@@ -89,7 +89,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     private List<Integer>      _listIdInput;
 
     @Digits( integer = 6, fraction = 0, message = "#i18n{ticketing.validation.category.demandId.int}" )
-    @Min(value = 1, message = "#i18n{ticketing.validation.category.demandId.notEmpty}" )
+    @Min( value = 1, message = "#i18n{ticketing.validation.category.demandId.notEmpty}" )
     private int                _nDemandId;
 
     @Size( max = 500, message = "#i18n{ticketing.validation.category.helpMessage.size}" )
@@ -102,7 +102,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     private boolean            _bPiecesJointes;
 
     @Size( max = 50, message = "#i18n{ticketing.validation.channel.IconFont.size}" )
-    private String _strIconFont;
+    private String             _strIconFont;
 
     /**
      * Constructor TicketCategory
@@ -120,7 +120,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Returns the Id
-     * 
+     *
      * @return The Id
      */
     @Override
@@ -131,7 +131,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Sets the Id
-     * 
+     *
      * @param nId
      *            The Id
      */
@@ -142,7 +142,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Returns the IdParent
-     * 
+     *
      * @return The IdParent
      */
     @Override
@@ -153,7 +153,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Sets the IdParent
-     * 
+     *
      * @param nIdParent
      *            The IdParent
      */
@@ -165,7 +165,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Returns the categoryType
-     * 
+     *
      * @return The categoryType
      */
     public String getLabel( )
@@ -175,7 +175,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Sets the Label
-     * 
+     *
      * @param strLabel
      *            The Label
      */
@@ -186,7 +186,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Returns the Order
-     * 
+     *
      * @return The Order
      */
     public int getOrder( )
@@ -196,7 +196,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Sets the Order
-     * 
+     *
      * @param nOrder
      *            The Order
      */
@@ -207,7 +207,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Returns the Code
-     * 
+     *
      * @return The Code
      */
     public String getCode( )
@@ -217,7 +217,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Sets the Code
-     * 
+     *
      * @param strCode
      *            The Code
      */
@@ -228,7 +228,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Get the default assign unit
-     * 
+     *
      * @return the default assign unit
      */
     public AssigneeUnit getDefaultAssignUnit( )
@@ -238,7 +238,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Set the default assign unit
-     * 
+     *
      * @param defaultAssignUnit
      */
     public void setDefaultAssignUnit( AssigneeUnit defaultAssignUnit )
@@ -248,7 +248,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Get the category type
-     * 
+     *
      * @return the category Type
      */
     public TicketCategoryType getCategoryType( )
@@ -258,7 +258,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Set the category type
-     * 
+     *
      * @param categoryType
      *            the category Type
      */
@@ -281,12 +281,12 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
      */
     public void setListIdInput( List<Integer> listIdInput )
     {
-        this._listIdInput = listIdInput;
+        _listIdInput = listIdInput;
     }
 
     /**
      * Returns the DemandId
-     * 
+     *
      * @return The DemandId
      */
     public int getDemandId( )
@@ -296,7 +296,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Sets the DemandId
-     * 
+     *
      * @param nDemandId
      *            The DemandId
      */
@@ -401,7 +401,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Returns the Icon font label
-     * 
+     *
      * @return The Icon font label
      */
     public String getIconFont( )
@@ -411,7 +411,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
 
     /**
      * Sets the Icon font label
-     * 
+     *
      * @param strIconFont
      *            The Icon font label
      */
@@ -423,15 +423,18 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     /**
      * @return the _bPiecesJointes
      */
-    public boolean isPiecesJointes() {
+    public boolean isPiecesJointes( )
+    {
         return _bPiecesJointes;
     }
 
     /**
-     * @param _bPiecesJointes the _bPiecesJointes to set
+     * @param piecesJointes
+     *            the _bPiecesJointes to set
      */
-    public void setPiecesJointes(boolean piecesJointes) {
-        this._bPiecesJointes = piecesJointes;
+    public void setPiecesJointes( boolean piecesJointes )
+    {
+        _bPiecesJointes = piecesJointes;
     }
 
     public TicketCategory getPreviousSibling( TicketCategoryTree tree )
@@ -450,8 +453,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
         if ( getParent( ) != null )
         {
             siblings = getParent( ).getChildren( );
-        }
-        else
+        } else
         {
             siblings = tree.getRootElements( );
         }
