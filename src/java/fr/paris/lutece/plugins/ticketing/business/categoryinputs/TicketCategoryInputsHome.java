@@ -62,7 +62,7 @@ public final class TicketCategoryInputsHome
 
     /**
      * Create a link between a category and an input
-     * 
+     *
      * @param nIdCategory
      *            id Category
      * @param nIdInput
@@ -77,13 +77,11 @@ public final class TicketCategoryInputsHome
 
     /**
      * Create a link between a category and an input
-     * 
+     *
      * @param nIdCategory
      *            id Category
      * @param nIdInput
      *            id Input
-     * @param nPos
-     *            id Input position
      */
     public static void createLinkCategoryInputNextPos( int nIdCategory, int nIdInput )
     {
@@ -92,7 +90,7 @@ public final class TicketCategoryInputsHome
 
     /**
      * Remove a link between a category and an input
-     * 
+     *
      * @param nIdCategory
      *            id Category
      * @param nIdInput
@@ -105,7 +103,7 @@ public final class TicketCategoryInputsHome
 
     /**
      * Remove all links for a category
-     * 
+     *
      * @param nIdCategory
      *            id Category
      */
@@ -116,7 +114,7 @@ public final class TicketCategoryInputsHome
 
     /**
      * Update the Position field in a link between a category and an input
-     * 
+     *
      * @param nIdCategory
      *            id Category
      * @param nIdInput
@@ -134,7 +132,7 @@ public final class TicketCategoryInputsHome
 
     /**
      * returns the position of an input for a given category
-     * 
+     *
      * @param nId
      *            id of category
      * @param nIdInput
@@ -148,7 +146,7 @@ public final class TicketCategoryInputsHome
 
     /**
      * returns the iD of an input for a given category and position
-     * 
+     *
      * @param nId
      *            id of category
      * @param nPos
@@ -162,11 +160,9 @@ public final class TicketCategoryInputsHome
 
     /**
      * Load the id of all inputs related to the ticketCategory id and returns them as a collection
-     * 
+     *
      * @param nCategoryId
      *            The Category ID
-     * @param plugin
-     *            The plugin
      * @return The collection which contains the id of all the ticketCategory objects
      */
     public static List<Integer> getIdInputListByCategory( int nCategoryId )
@@ -176,7 +172,7 @@ public final class TicketCategoryInputsHome
 
     /**
      * Check if an input is already used in a Category form
-     * 
+     *
      * @param nIdResource
      *            the id_resource of the input to be checked
      * @return true if the input is linked to 1 or more Categories

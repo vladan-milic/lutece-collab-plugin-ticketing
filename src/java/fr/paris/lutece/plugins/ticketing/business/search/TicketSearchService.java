@@ -125,8 +125,8 @@ public final class TicketSearchService
 
     /**
      * Get the HelpdeskSearchService instance
-     * 
-     * @return The {@link TicketingSearchService}
+     *
+     * @return The Ticketing Search Service
      */
     public static TicketSearchService getInstance( )
     {
@@ -140,7 +140,7 @@ public final class TicketSearchService
 
     /**
      * return searcher
-     * 
+     *
      * @return searcher
      */
     public IndexSearcher getSearcher( )
@@ -161,11 +161,12 @@ public final class TicketSearchService
 
     /**
      * Create an IndexWriter with the default config
-     * 
+     *
      * @param bCreate
      *            the boolean use to know if we must create a new index if it doesn't exist
-     * @return
+     * @return IndexWriter
      * @throws IOException
+     *             IOException
      */
     public IndexWriter getTicketIndexWriter( boolean bCreate ) throws IOException
     {
@@ -175,7 +176,7 @@ public final class TicketSearchService
 
     /**
      * Process indexing
-     * 
+     *
      * @param bCreate
      *            true for start full indexing false for begin incremental indexing
      * @return the log
@@ -224,13 +225,11 @@ public final class TicketSearchService
 
     /**
      * Add Indexer Action to perform on a record
-     * 
+     *
      * @param nIdTicket
      *            ticket id
      * @param nIdTask
      *            the key of the action to do
-     * @param plugin
-     *            the plugin
      */
     public void addIndexerAction( int nIdTicket, int nIdTask )
     {
@@ -242,7 +241,7 @@ public final class TicketSearchService
 
     /**
      * Remove a Indexer Action
-     * 
+     *
      * @param nIdAction
      *            the key of the action to remove
      * @param plugin
@@ -255,7 +254,7 @@ public final class TicketSearchService
 
     /**
      * return a list of IndexerAction by task key
-     * 
+     *
      * @param nIdTask
      *            the task key
      * @param plugin
@@ -272,7 +271,7 @@ public final class TicketSearchService
 
     /**
      * Get the path to the index of the search service
-     * 
+     *
      * @return The path to the index of the search service
      */
     private Path getIndex( )
@@ -301,7 +300,7 @@ public final class TicketSearchService
 
     /**
      * Get the analyzed of this search service
-     * 
+     *
      * @return The analyzer of this search service
      */
     public Analyzer getAnalyzer( )

@@ -58,7 +58,7 @@ public final class TicketCategoryTypeHome
 
     /**
      * Create an instance of the categoryType class
-     * 
+     *
      * @param categoryType
      *            The instance of the CategoryType which contains the informations to store
      * @return The instance of categoryType which has been created with its primary key.
@@ -72,7 +72,7 @@ public final class TicketCategoryTypeHome
 
     /**
      * Update of the categoryType which is specified in parameter
-     * 
+     *
      * @param categoryType
      *            The instance of the CategoryType which contains the data to store
      * @return The instance of the categoryType which has been updated
@@ -86,7 +86,7 @@ public final class TicketCategoryTypeHome
 
     /**
      * Remove the categoryType whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The categoryType Id
      */
@@ -97,7 +97,7 @@ public final class TicketCategoryTypeHome
 
     /**
      * Returns an instance of a categoryType whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The categoryType primary key
      * @return an instance of CategoryType
@@ -109,7 +109,7 @@ public final class TicketCategoryTypeHome
 
     /**
      * Load the data of all the categoryType objects and returns them as a list
-     * 
+     *
      * @return the list which contains the data of all the categoryType objects
      */
     public static List<TicketCategoryType> getCategoryTypesList( )
@@ -119,7 +119,7 @@ public final class TicketCategoryTypeHome
 
     /**
      * Load the id of all the categoryType objects and returns them as a list
-     * 
+     *
      * @return the list which contains the id of all the categoryType objects
      */
     public static List<Integer> getIdCategoryTypesList( )
@@ -129,7 +129,7 @@ public final class TicketCategoryTypeHome
 
     /**
      * Load the data of all the categoryType objects and returns them as a referenceList
-     * 
+     *
      * @return the referenceList which contains the data of all the categoryType objects
      */
     public static ReferenceList getCategoryTypesReferenceList( )
@@ -139,8 +139,9 @@ public final class TicketCategoryTypeHome
 
     /**
      * Create a category type with a new depth ( previous depth + 1 )
-     * 
+     *
      * @param categoryType
+     *            category Type
      * @return the category type
      */
     public static TicketCategoryType createNewDepthCategoryType( TicketCategoryType categoryType )
@@ -151,7 +152,7 @@ public final class TicketCategoryTypeHome
 
     /**
      * Load a category type of the given depth
-     * 
+     *
      * @param nDepth
      *            the depth
      * @return the Category type of the given depth

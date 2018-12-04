@@ -41,7 +41,7 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
- * This class accesses a ticket reference in the following format: <prefix><sequence>
+ * This class accesses a ticket reference in the following format: {prefix}{sequence}
  *
  */
 public class TicketReferencePrefixAndNumberDAO implements ITicketReferenceDAO

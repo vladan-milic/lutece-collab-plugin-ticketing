@@ -70,7 +70,7 @@ public class TicketValidator
 
     /**
      * Constructor
-     * 
+     *
      * @param locale
      *            the locale used to select the correct validation error messages
      */
@@ -81,7 +81,7 @@ public class TicketValidator
 
     /**
      * Validates a ticket, considered as a bean
-     * 
+     *
      * @param ticket
      *            the ticket
      * @return the list of validation errors
@@ -92,7 +92,7 @@ public class TicketValidator
 
         List<ValidationError> listValidationErrors = BeanValidationUtil.validate( ticket, _locale, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX );
 
-        if ( ticket != null && ticket.getTicketAddress( ) != null )
+        if ( ( ticket != null ) && ( ticket.getTicketAddress( ) != null ) )
         {
             listValidationErrors.addAll( BeanValidationUtil.validate( ticket.getTicketAddress( ), _locale, TicketingConstants.VALIDATION_ATTRIBUTES_PREFIX ) );
         }
@@ -107,7 +107,7 @@ public class TicketValidator
 
     /**
      * Validates a ticket
-     * 
+     *
      * @param ticket
      *            the ticket
      * @return the validation errors
@@ -119,7 +119,7 @@ public class TicketValidator
 
     /**
      * Validates a ticket
-     * 
+     *
      * @param ticket
      *            the ticket
      * @param bValidateReferenceData
@@ -159,11 +159,10 @@ public class TicketValidator
 
     /**
      * Validate fields and return errors
-     * 
+     *
      * @param request
-     * @param form
-     * @param listValidationErrors
-     *            populate
+     *            request
+     * @return errors
      */
     public List<String> validateDynamicFields( HttpServletRequest request )
     {
@@ -213,7 +212,7 @@ public class TicketValidator
 
     private boolean defaultRequired( Form form, String entryType )
     {
-        return form == null || isMandatoryEntry( form, entryType );
+        return ( form == null ) || isMandatoryEntry( form, entryType );
     }
 
     private boolean defaultOptional( Form form, String entryType )
@@ -223,6 +222,6 @@ public class TicketValidator
 
     private boolean isMandatoryEntry( Form form, String entry )
     {
-        return form != null && form.getEntry( entry ).isMandatory( );
+        return ( form != null ) && form.getEntry( entry ).isMandatory( );
     }
 }

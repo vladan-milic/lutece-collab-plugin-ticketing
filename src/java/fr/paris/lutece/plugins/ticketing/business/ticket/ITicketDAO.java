@@ -44,7 +44,7 @@ public interface ITicketDAO
 {
     /**
      * Insert a new record in the table.
-     * 
+     *
      * @param ticket
      *            instance of the Ticket object to insert
      * @param plugin
@@ -54,7 +54,7 @@ public interface ITicketDAO
 
     /**
      * Update the record in the table
-     * 
+     *
      * @param ticket
      *            the reference of the Ticket
      * @param plugin
@@ -64,7 +64,7 @@ public interface ITicketDAO
 
     /**
      * Delete a record from the table
-     * 
+     *
      * @param nKey
      *            The identifier of the Ticket to delete
      * @param plugin
@@ -77,7 +77,7 @@ public interface ITicketDAO
 
     /**
      * Load the data from the table
-     * 
+     *
      * @param nKey
      *            The identifier of the ticket
      * @param plugin
@@ -88,7 +88,7 @@ public interface ITicketDAO
 
     /**
      * Load the data of all the ticket objects and returns them as a collection
-     * 
+     *
      * @param plugin
      *            the Plugin
      * @return The collection which contains the data of all the ticket objects
@@ -118,6 +118,9 @@ public interface ITicketDAO
     /**
      * Load the id of all the ticket objects matching input filter and returns them as a collection
      *
+     * @param filter
+     *            filter
+     *
      * @param plugin
      *            the Plugin
      * @return The collection which contains the id of all the ticket objects
@@ -137,7 +140,7 @@ public interface ITicketDAO
 
     /**
      * Stores the marking id to know which marking to use
-     * 
+     *
      * @param nIdTicket
      *            the ticket id
      * @param nIdMarking
@@ -149,7 +152,7 @@ public interface ITicketDAO
 
     /**
      * Reset the marking id to default value
-     * 
+     *
      * @param nIdMarking
      *            the marking id
      * @param plugin
@@ -159,7 +162,7 @@ public interface ITicketDAO
 
     /**
      * Reset the marking id to default value for a given ticket
-     * 
+     *
      * @param nIdTicket
      *            the ticket id
      * @param plugin
@@ -173,7 +176,7 @@ public interface ITicketDAO
 
     /**
      * Associates a response to a ticket
-     * 
+     *
      * @param nIdTicket
      *            The id of the ticket
      * @param nIdResponse
@@ -185,7 +188,7 @@ public interface ITicketDAO
 
     /**
      * Get the list of id of responses associated with an ticket
-     * 
+     *
      * @param nIdTicket
      *            the id of the ticket
      * @param plugin
@@ -196,7 +199,7 @@ public interface ITicketDAO
 
     /**
      * Remove the association between an ticket and responses
-     * 
+     *
      * @param nIdTicket
      *            The id of the ticket
      * @param plugin
@@ -206,7 +209,7 @@ public interface ITicketDAO
 
     /**
      * Remove an ticket responses from the id of a response.
-     * 
+     *
      * @param nIdResponse
      *            The id of the response
      * @param plugin
@@ -216,7 +219,7 @@ public interface ITicketDAO
 
     /**
      * Find the id of the ticket associated with a given response
-     * 
+     *
      * @param nIdResponse
      *            The id of the response
      * @param plugin
@@ -227,7 +230,7 @@ public interface ITicketDAO
 
     /**
      * Find the list of ticket by id of their unit
-     * 
+     *
      * @param nIdUnit
      *            The id of the unit
      * @param plugin

@@ -49,23 +49,27 @@ public class TicketCategoryValidatorResult
 
     /**
      * Constructor
-     * 
+     *
      * @param ticketCategory
      *            the ticketCategory to set
-     * @param isValid
+     * @param ticketCategoryParent
+     *            ticket Category Parent
+     * @param ticketCategoryValid
      *            the ticketCategoryValid to set
+     * @param listValidationErrors
+     *            listValidationErrors
      */
     public TicketCategoryValidatorResult( TicketCategory ticketCategory, TicketCategory ticketCategoryParent, boolean ticketCategoryValid, List<String> listValidationErrors )
     {
-        this._ticketCategory = ticketCategory;
-        this._ticketCategoryParent = ticketCategoryParent;
-        this._ticketCategoryValid = ticketCategoryValid;
-        this._listValidationErrors = listValidationErrors;
+        _ticketCategory = ticketCategory;
+        _ticketCategoryParent = ticketCategoryParent;
+        _ticketCategoryValid = ticketCategoryValid;
+        _listValidationErrors = listValidationErrors;
     }
 
     /**
      * Return the ticketCategory
-     * 
+     *
      * @return the _ticketCategory
      */
     public TicketCategory getTicketCategory( )
@@ -75,18 +79,18 @@ public class TicketCategoryValidatorResult
 
     /**
      * Set the ticketCategory
-     * 
-     * @param _ticketCategory
+     *
+     * @param ticketCategory
      *            the ticketCategory to set
      */
     public void setTicketCategory( TicketCategory ticketCategory )
     {
-        this._ticketCategory = ticketCategory;
+        _ticketCategory = ticketCategory;
     }
 
     /**
      * Return the ticketCategoryParent
-     * 
+     *
      * @return the _ticketCategoryParent
      */
     public TicketCategory getTicketCategoryParent( )
@@ -96,18 +100,18 @@ public class TicketCategoryValidatorResult
 
     /**
      * Set the ticketCategoryParent
-     * 
-     * @param _ticketCategoryParent
+     *
+     * @param ticketCategoryParent
      *            the ticketCategoryParent to set
      */
     public void setTicketCategoryParent( TicketCategory ticketCategoryParent )
     {
-        this._ticketCategoryParent = ticketCategoryParent;
+        _ticketCategoryParent = ticketCategoryParent;
     }
 
     /**
      * Return the _ticketCategoryValid
-     * 
+     *
      * @return the _ticketCategoryValid
      */
     public boolean isTicketCategoryValid( )
@@ -117,18 +121,18 @@ public class TicketCategoryValidatorResult
 
     /**
      * Set the ticketCategoryValid
-     * 
+     *
      * @param ticketCategoryValid
      *            the ticketCategoryValid to set
      */
     public void setTicketCategoryValid( boolean ticketCategoryValid )
     {
-        this._ticketCategoryValid = ticketCategoryValid;
+        _ticketCategoryValid = ticketCategoryValid;
     }
 
     /**
      * Return the listValidationErrors
-     * 
+     *
      * @return the _listValidationErrors
      */
     public List<String> getListValidationErrors( )
@@ -138,13 +142,13 @@ public class TicketCategoryValidatorResult
 
     /**
      * Set the _listValidationErrors
-     * 
+     *
      * @param listValidationErrors
      *            the listValidationErrors to set
      */
     public void setListValidationErrors( List<String> listValidationErrors )
     {
-        this._listValidationErrors = listValidationErrors;
+        _listValidationErrors = listValidationErrors;
     }
 
 }

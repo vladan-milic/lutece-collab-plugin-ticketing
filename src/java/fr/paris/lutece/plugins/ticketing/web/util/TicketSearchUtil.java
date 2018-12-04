@@ -59,11 +59,11 @@ public class TicketSearchUtil
 
     /**
      * Create a TermsFilter object which contains all the values to filter on a specific field
-     * 
+     *
      * @param strFieldForTerm
      *            the field to filter
-     * @param setInteger
-     *            the set which contains all values to filter
+     * @param collectionInteger
+     *            collection Integer
      * @return the TermsFilter object
      */
     public static DocValuesTermsQuery createTermsFilter( String strFieldForTerm, Collection<Integer> collectionInteger )
@@ -84,7 +84,7 @@ public class TicketSearchUtil
 
     /**
      * Return a BytesRef object associated to the given BigInteger parameter
-     * 
+     *
      * @param value
      *            the BigInteger value to convert
      * @return the BytesRef associated to the value
@@ -97,7 +97,7 @@ public class TicketSearchUtil
 
     /**
      * Create the map containing the association of sort name and index field name
-     * 
+     *
      * @return the map with each sort is associate to a field
      */
     public static Map<String, List<AbstractMap.SimpleEntry<String, Type>>> initMapSortField( )

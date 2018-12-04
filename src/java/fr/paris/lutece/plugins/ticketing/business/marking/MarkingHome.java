@@ -23,7 +23,7 @@ public class MarkingHome
 
     /**
      * Create an instance of the marking class
-     * 
+     *
      * @param marking
      *            The instance of the Marking which contains the informations to store
      * @return The instance of marking which has been created with its primary key.
@@ -37,7 +37,7 @@ public class MarkingHome
 
     /**
      * Update of the marking which is specified in parameter
-     * 
+     *
      * @param marking
      *            The instance of the Marking which contains the data to store
      * @return The instance of the marking which has been updated
@@ -53,7 +53,7 @@ public class MarkingHome
 
     /**
      * Remove the marking whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The marking Id
      */
@@ -66,7 +66,7 @@ public class MarkingHome
 
     /**
      * Returns an instance of a marking whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The marking primary key
      * @return an instance of Marking
@@ -78,7 +78,7 @@ public class MarkingHome
 
     /**
      * Load the data of all the marking objects and returns them as a list
-     * 
+     *
      * @return the list which contains the data of all the marking objects
      */
     public static List<Marking> getMarkingsList( )
@@ -88,7 +88,10 @@ public class MarkingHome
 
     /**
      * Load the marking from cache or put it in if doesn't exist
-     * 
+     *
+     * @param nIdMarking
+     *            nIdMarking
+     *
      * @return the marking object
      */
     public static Marking loadMarkingFromCache( int nIdMarking )

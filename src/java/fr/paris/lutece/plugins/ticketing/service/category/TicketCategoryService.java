@@ -72,7 +72,7 @@ public class TicketCategoryService
 
     /**
      * Get the instance of CategoryService
-     * 
+     *
      * @return the instance of categoryService
      */
     public static TicketCategoryService getInstance( )
@@ -82,7 +82,10 @@ public class TicketCategoryService
 
     /**
      * Get the instance of CategoryService
-     * 
+     *
+     * @param withInactives
+     *            boolean with inactives
+     *
      * @return the instance of categoryService
      */
     public static TicketCategoryService getInstance( boolean withInactives )
@@ -97,7 +100,10 @@ public class TicketCategoryService
 
     /**
      * Return the category tree
-     * 
+     *
+     * @param restrictedCategoriesId
+     *            restricted Categories Id
+     *
      * @return the category tree
      */
     public TicketCategoryTree getCategoriesTree( List<Integer> restrictedCategoriesId )
@@ -107,7 +113,7 @@ public class TicketCategoryService
 
     /**
      * Return the category tree
-     * 
+     *
      * @return the category tree
      */
     public TicketCategoryTree getCategoriesTree( )
@@ -117,7 +123,7 @@ public class TicketCategoryService
 
     /**
      * Find a category by code in the category tree
-     * 
+     *
      * @param strCode
      *            the category code
      * @return the category coresponding to given code
@@ -129,7 +135,7 @@ public class TicketCategoryService
 
     /**
      * Find a category by id in the category tree
-     * 
+     *
      * @param nId
      *            the category id
      * @return the category corresponding to given id
@@ -141,7 +147,7 @@ public class TicketCategoryService
 
     /**
      * Find a category type by id in the list of depth of the category tree
-     * 
+     *
      * @param nId
      *            the category type id
      * @return the category type corresponding to given id
@@ -153,7 +159,7 @@ public class TicketCategoryService
 
     /**
      * Find the assignee unit of given category (recursively found in parent)
-     * 
+     *
      * @param category
      *            the category
      * @return the assignee unit
@@ -165,7 +171,7 @@ public class TicketCategoryService
         {
             return unit;
         }
-        while ( unit.getUnitId( ) == -1 && category.getCategoryType( ).getDepthNumber( ) > 0 )
+        while ( ( unit.getUnitId( ) == -1 ) && ( category.getCategoryType( ).getDepthNumber( ) > 0 ) )
         {
             category = category.getParent( );
             unit = category.getDefaultAssignUnit( );
@@ -179,7 +185,7 @@ public class TicketCategoryService
 
     /**
      * Create a sub category (based on his parent id)
-     * 
+     *
      * @param subCategory
      *            the subcategory to create
      * @return the created category
@@ -228,8 +234,8 @@ public class TicketCategoryService
 
     /**
      * Remove the category
-     * 
-     * @param id
+     *
+     * @param nIdCategory
      *            category the id of the category to remove
      */
     public void removeCategory( int nIdCategory )
@@ -242,7 +248,7 @@ public class TicketCategoryService
 
     /**
      * Update the category
-     * 
+     *
      * @param ticketCategory
      *            the category to update
      */
@@ -254,8 +260,11 @@ public class TicketCategoryService
 
     /**
      * Update order the category
-     * 
-     * @param id
+     *
+     * @param bMoveUp
+     *            boolean move up
+     *
+     * @param nIdCategory
      *            category the id of the category to order
      */
     public void updateCategoryOrder( int nIdCategory, boolean bMoveUp )
@@ -266,7 +275,7 @@ public class TicketCategoryService
 
     /**
      * Create the category type
-     * 
+     *
      * @param ticketCategoryType
      *            the category type to create
      */
@@ -278,8 +287,8 @@ public class TicketCategoryService
 
     /**
      * Remove the category type
-     * 
-     * @param id
+     *
+     * @param nIdCategoryType
      *            category type the id of the category type to remove
      */
     public void removeCategoryTypeAndSubType( int nIdCategoryType )
@@ -297,7 +306,7 @@ public class TicketCategoryService
 
     /**
      * Update the category type
-     * 
+     *
      * @param ticketCategoryType
      *            the category type to update
      */
@@ -309,7 +318,7 @@ public class TicketCategoryService
 
     /**
      * Create the link of category input
-     * 
+     *
      * @param nIdCategory
      *            id ticket category
      * @param nIdInput
@@ -323,7 +332,7 @@ public class TicketCategoryService
 
     /**
      * Remove the link of category input
-     * 
+     *
      * @param nIdCategory
      *            id ticket category
      * @param nIdInput
@@ -357,7 +366,7 @@ public class TicketCategoryService
 
     /**
      * Update the category input position
-     * 
+     *
      * @param nIdCategory
      *            id ticket category
      * @param nIdInput
@@ -383,8 +392,9 @@ public class TicketCategoryService
 
     /**
      * Get the branch of a category (from root to category)
-     * 
+     *
      * @param category
+     *            category
      * @return the branch of categories from root to category
      */
     public List<TicketCategory> getBranchOfCategory( TicketCategory category )
@@ -394,8 +404,8 @@ public class TicketCategoryService
 
     /**
      * Get the branch of a category id (from root to category)
-     * 
-     * @param category
+     *
+     * @param nId
      *            id
      * @return the branch of categories from root to category
      */
@@ -406,8 +416,9 @@ public class TicketCategoryService
 
     /**
      * Get the category list corresponding to the depth
-     * 
+     *
      * @param depth
+     *            depth
      * @return the category list
      */
     public List<TicketCategory> getCategoryListOfDepth( TicketCategoryType depth )
@@ -417,7 +428,7 @@ public class TicketCategoryService
 
     /**
      * Get the referenceList of a ticket category list
-     * 
+     *
      * @param ticketCategoryList
      *            ticket category list
      * @return ReferenceList
@@ -433,8 +444,9 @@ public class TicketCategoryService
 
     /**
      * Check if the given category type is not referenced in category
-     * 
+     *
      * @param nIdCategoryType
+     *            Id Category Type
      * @return true if referenced, false otherwise
      */
     public boolean isCategoryTypeNotReferenced( int nIdCategoryType )
@@ -459,7 +471,7 @@ public class TicketCategoryService
 
     /**
      * Return the ticket type
-     * 
+     *
      * @param ticketCategory
      *            the category of a ticket
      * @return the type of a ticket
@@ -471,7 +483,7 @@ public class TicketCategoryService
 
     /**
      * Return the ticket domain
-     * 
+     *
      * @param ticketCategory
      *            the category of a ticket
      * @return the ticket domain
@@ -483,7 +495,7 @@ public class TicketCategoryService
 
     /**
      * Return the ticket thematic
-     * 
+     *
      * @param ticketCategory
      *            the thematic of a ticket
      * @return the thematic of a ticket
@@ -502,7 +514,7 @@ public class TicketCategoryService
 
     /**
      * Return the ticket category precision
-     * 
+     *
      * @param ticketCategory
      *            the category precision of a ticket
      * @return the ticket category precision
@@ -521,10 +533,13 @@ public class TicketCategoryService
 
     /**
      * Check if given category is Authorized for given user and given permission
-     * 
+     *
      * @param category
+     *            category
      * @param user
+     *            user
      * @param strPermission
+     *            permission
      * @return true if authorized, false otherwise
      */
     public static boolean isAuthorizedBranch( TicketCategory category, AdminUser user, String strPermission )
@@ -535,10 +550,13 @@ public class TicketCategoryService
 
     /**
      * Check if given category is Authorized for given user and given permission
-     * 
+     *
      * @param category
+     *            category
      * @param user
+     *            user
      * @param strPermission
+     *            permission
      * @return true if authorized, false otherwise
      */
     public static boolean isAuthorizedCategory( TicketCategory category, AdminUser user, String strPermission )
@@ -548,9 +566,10 @@ public class TicketCategoryService
 
     /**
      * Get the children category list corresponding to the category and allowed for an admin user according to RBAC provided permission
-     * 
+     *
      * @param ticketCategories
-     * @param adminUser
+     *            ticket Categories
+     * @param user
      *            admin user
      * @param strPermission
      *            TicketCategory permission
@@ -563,8 +582,9 @@ public class TicketCategoryService
 
     /**
      * Get the children category list corresponding to the category and allowed for an admin user according to RBAC provided permission
-     * 
+     *
      * @param ticketCategory
+     *            ticket Category
      * @param adminUser
      *            admin user
      * @param strPermission
@@ -578,8 +598,10 @@ public class TicketCategoryService
 
     /**
      * Get the category list corresponding to the depth and allowed for an admin user according to RBAC provided permission
-     * 
-     * @param depth
+     *
+     * @param nDepth
+     *            depth
+     *
      * @param adminUser
      *            admin user
      * @param strPermission
@@ -661,9 +683,10 @@ public class TicketCategoryService
 
     /**
      * Return a list of Entries linked to a category
-     * 
+     *
      * @param _category
-     * @return
+     *            category
+     * @return list of Entries linked to a category
      */
     public List<Entry> getCategoryEntryList( TicketCategory _category )
     {
@@ -694,10 +717,12 @@ public class TicketCategoryService
 
     /**
      * Return a list of Entries herited from parent categories
-     * 
+     *
      * @param _category
+     *            category
      * @param locale
-     * @return
+     *            locale
+     * @return list of Entries herited from parent categories
      */
     public List<Entry> getCategoryEntryHeritedList( TicketCategory _category, Locale locale )
     {
@@ -723,9 +748,12 @@ public class TicketCategoryService
 
     /**
      * Return a list of Entries bocked by children categories
-     * 
+     *
      * @param _category
-     * @return
+     *            category
+     * @param locale
+     *            locale
+     * @return ist of Entries bocked by children categories
      */
     public List<Entry> getCategoryEntryBlockedList( TicketCategory _category, Locale locale )
     {
@@ -749,7 +777,7 @@ public class TicketCategoryService
 
     /**
      * Get the type list
-     * 
+     *
      * @return the type list
      */
     public List<TicketCategory> getTypeList( )
@@ -759,7 +787,7 @@ public class TicketCategoryService
 
     /**
      * Get the domain list
-     * 
+     *
      * @return the domain list
      */
     public List<TicketCategory> getDomainList( )
@@ -769,7 +797,7 @@ public class TicketCategoryService
 
     /**
      * returns ticketDomains allowed for an admin user according to RBAC provided permission
-     * 
+     *
      * @param adminUser
      *            admin user
      * @param strPermission
@@ -783,9 +811,11 @@ public class TicketCategoryService
 
     /**
      * Get the branch label of the category
-     * 
+     *
      * @param category
      *            admin user
+     * @param separator
+     *            separator
      * @return the branch label
      */
     public String getBranchLabel( TicketCategory category, String separator )
@@ -799,7 +829,10 @@ public class TicketCategoryService
 
     /**
      * Returns the TicketCategory used as RBACResource
-     * 
+     *
+     * @param ticketCategory
+     *            ticket Category
+     *
      * @return The TicketCategory used as RBACResource
      */
     public TicketCategory getTicketCategoryRBACResource( TicketCategory ticketCategory )

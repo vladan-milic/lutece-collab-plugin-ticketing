@@ -144,6 +144,9 @@ public final class ContactModeHome
     /**
      * Load the data of all the contactMode objects and returns them as a localized reference list
      *
+     * @param locale
+     *            locale
+     *
      * @return The reference list
      */
     public static ReferenceList getReferenceList( Locale locale )

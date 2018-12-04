@@ -164,9 +164,9 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * set workflow attributes needed for display a list of ticket
-     * 
-     * 
-     * @param list
+     *
+     *
+     * @param listTicket
      *            of ticket to update
      */
     protected void setWorkflowAttributes( List<Ticket> listTicket )
@@ -192,7 +192,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * set workflow attributes for the specified ticket
-     * 
+     *
      * @param ticket
      *            the Ticket
      */
@@ -247,7 +247,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Gives a list of actions possible for a given ticket based on its status in the workflow and the user role
-     * 
+     *
      * @param nTicketId
      *            the ticket id
      * @param nIdWorkflow
@@ -291,7 +291,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
         // Manage the id tickets list
         String[] strSeqIdTickets = request.getParameterValues( TicketingConstants.PARAMETER_ID_TICKET );
-        String strIdTicket = ( strSeqIdTickets != null && strSeqIdTickets.length > 0 ) ? strSeqIdTickets[0] : "";
+        String strIdTicket = ( ( strSeqIdTickets != null ) && ( strSeqIdTickets.length > 0 ) ) ? strSeqIdTickets[0] : "";
 
         if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) && StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
         {
@@ -358,12 +358,12 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
         boolean bIsMassAction = BooleanUtils.toBoolean( ( Boolean ) ( request.getSession( ).getAttribute( TicketingConstants.PARAMETER_IS_MASS_ACTION ) ) );
         request.getSession( ).removeAttribute( TicketingConstants.PARAMETER_IS_MASS_ACTION );
 
-        if ( tabIdsSelectedTickets != null && tabIdsSelectedTickets.length > 0 && bIsMassAction )
+        if ( ( tabIdsSelectedTickets != null ) && ( tabIdsSelectedTickets.length > 0 ) && bIsMassAction )
         {
             return doProcessWorkflowMassAction( Arrays.asList( tabIdsSelectedTickets ), request );
         }
 
-        if ( _nIdAction != TicketingConstants.PROPERTY_UNSET_INT && StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
+        if ( ( _nIdAction != TicketingConstants.PROPERTY_UNSET_INT ) && StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
         {
             int nIdTicket = Integer.parseInt( strIdTicket );
 
@@ -583,7 +583,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Do remove a workflow resource
-     * 
+     *
      * @param nTicketId
      *            the ticket id associated to the workflow resource
      */
@@ -599,7 +599,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * returns the actions history performed on the specified ticket
-     * 
+     *
      * @param request
      *            the request
      * @param ticket
@@ -623,7 +623,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Immediate indexation of a Ticket for the Backoffice
-     * 
+     *
      * @param idTicket
      *            the id of the Ticket to index
      */
@@ -649,7 +649,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Removes a Ticket from index for the Backoffice
-     * 
+     *
      * @param idTicket
      *            the id of the Ticket to remove from index
      */
@@ -672,7 +672,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Adds information message for workflow action
-     * 
+     *
      * @param request
      *            the request
      * @param nIdAction
@@ -688,7 +688,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Adds error message for workflow action
-     * 
+     *
      * @param request
      *            the request
      * @param nIdAction
@@ -704,7 +704,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Get the html for mass action result
-     * 
+     *
      * @param request
      *            the HTTP request
      * @return the html code
@@ -732,7 +732,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Fill the model with Tickets list for mass action result page Tickets lists are built using search engine queries on id lists
-     * 
+     *
      * @param listIdsSuccessTickets
      *            the list of ticket Ids with success status
      * @param listIdsFailedTickets
@@ -757,9 +757,11 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Return the list of all mass actions associated to the enabled workflow for the user filter by the selected task. If more than one task has been selected the list returned will be empty
-     * 
+     *
      * @param user
+     *            user
      * @param filter
+     *            filter
      * @return the list of all mass actions associated to the enabled workflow for the user
      */
     protected List<Action> getListMassActions( AdminUser user, TicketFilter filter )
@@ -771,17 +773,17 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
             Integer nStateIdFilter = filter.getListIdWorkflowState( ).get( 0 );
             State stateSelected = _stateService.findByPrimaryKey( nStateIdFilter );
 
-            if ( stateSelected != null && stateSelected.getWorkflow( ) != null )
+            if ( ( stateSelected != null ) && ( stateSelected.getWorkflow( ) != null ) )
             {
                 List<Action> listWorkflowMassActions = _workflowService.getMassActions( stateSelected.getWorkflow( ).getId( ) );
 
-                if ( listWorkflowMassActions != null && !listWorkflowMassActions.isEmpty( ) )
+                if ( ( listWorkflowMassActions != null ) && !listWorkflowMassActions.isEmpty( ) )
                 {
                     Map<Integer, Action> mapLibelleAction = new TreeMap<>( );
                     // We sort the list of actions by order
                     for ( Action workflowActionMass : listWorkflowMassActions )
                     {
-                        if ( workflowActionMass.getStateBefore( ) != null && nStateIdFilter == workflowActionMass.getStateBefore( ).getId( ) )
+                        if ( ( workflowActionMass.getStateBefore( ) != null ) && ( nStateIdFilter == workflowActionMass.getStateBefore( ).getId( ) ) )
                         {
                             mapLibelleAction.put( workflowActionMass.getOrder( ), workflowActionMass );
                         }
@@ -795,7 +797,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Redirects to the correct page after workflow action
-     * 
+     *
      * @param request
      *            the request
      * @return the page to redirect to
@@ -804,7 +806,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Redirects to the correct page after the cancellation of the workflow action
-     * 
+     *
      * @param request
      *            the request
      * @return the page to redirect to
@@ -813,7 +815,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Redirects to the default page (if workflow not enabled, if action id not correct, etc.)
-     * 
+     *
      * @param request
      *            the request
      * @return the page to redirect to

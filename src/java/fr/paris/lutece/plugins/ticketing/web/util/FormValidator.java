@@ -79,7 +79,7 @@ public class FormValidator
 
     /**
      * Constructor
-     * 
+     *
      * @param request
      *            the request containing the parameter to validate
      */
@@ -234,8 +234,7 @@ public class FormValidator
     /**
      * Tests whether the specified ticket has a phone number or not
      *
-     * @return the localized error message if neither the fixed phone number nor the mobile phone number are filled, {@code null} otherwise
-     * @return {@code true} if neither the fixed phone number nor the mobile phone number are filled, {@code false} otherwise
+     * @return the localized error message if neither the fixed phone number nor the mobile phone number are filled, {@code null} otherwise {@code true} if neither the fixed phone number nor the mobile phone number are filled, {@code false} otherwise
      */
     public String isPhoneNumberFilled( )
     {
@@ -251,8 +250,9 @@ public class FormValidator
 
     /**
      * Return the number of character of a ticket comment for validation
-     * 
+     *
      * @param strTicketComment
+     *            comment
      * @return the number of character of a ticket comment
      */
     public static int countCharTicketComment( String strTicketComment )

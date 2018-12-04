@@ -60,8 +60,8 @@ public final class UserFactory
 
     /**
      * Creates a User
-     * 
-     * @param IdAdminUser
+     *
+     * @param nIdUser
      *            the idUser used to select the correct AdminUser
      * @return the User
      */
@@ -99,11 +99,9 @@ public final class UserFactory
     }
 
     /**
-     * Creates a User
-     * 
-     * @param id
-     *            of user
-     * @return The User
+     * Creates a UserFactory
+     *
+     * @return The UserFactory
      */
     public static UserFactory getInstance( )
     {

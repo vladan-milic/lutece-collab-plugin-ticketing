@@ -39,8 +39,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 /**
  * TicketAsynchronousUploadHandler.
  *
- * @see #getFileItems(String, String)
- * @see #removeFileItem(String, String, int)
  */
 public class TicketAsynchronousUploadHandler extends AbstractGenAttUploadHandler
 {
@@ -52,7 +50,7 @@ public class TicketAsynchronousUploadHandler extends AbstractGenAttUploadHandler
 
     /**
      * Get the handler
-     * 
+     *
      * @return the handler
      */
     public static TicketAsynchronousUploadHandler getHandler( )

@@ -46,7 +46,7 @@ public interface ITicketCategoryDAO
 {
     /**
      * Insert a new record in the table.
-     * 
+     *
      * @param category
      *            instance of the Category object to insert
      * @param plugin
@@ -56,7 +56,7 @@ public interface ITicketCategoryDAO
 
     /**
      * Update the record in the table
-     * 
+     *
      * @param category
      *            the reference of the Category
      * @param plugin
@@ -66,7 +66,7 @@ public interface ITicketCategoryDAO
 
     /**
      * Delete a record from the table
-     * 
+     *
      * @param nKey
      *            The identifier of the Category to delete
      * @param plugin
@@ -79,7 +79,7 @@ public interface ITicketCategoryDAO
 
     /**
      * Load the data from the table
-     * 
+     *
      * @param nKey
      *            The identifier of the category
      * @param plugin
@@ -90,16 +90,18 @@ public interface ITicketCategoryDAO
 
     /**
      * Load the category for given code
-     * 
+     *
      * @param strCode
+     *            strCode
      * @param plugin
+     *            plugin
      * @return the category
      */
     TicketCategory loadByCode( String strCode, Plugin plugin );
 
     /**
      * Load the data of all the category objects and returns them as a list
-     * 
+     *
      * @param plugin
      *            the Plugin
      * @return The list which contains the data of all the category objects
@@ -108,16 +110,18 @@ public interface ITicketCategoryDAO
 
     /**
      * Load the list of categories (full with java objects filled)
-     * 
+     *
      * @param plugin
+     *            plugin
      * @param withInactives
+     *            withInactives
      * @return the full categories list
      */
     List<TicketCategory> selectFullCategorysList( Plugin plugin, boolean withInactives );
 
     /**
      * Load the id of all the category objects and returns them as a list
-     * 
+     *
      * @param plugin
      *            the Plugin
      * @return The list which contains the id of all the category objects
@@ -126,7 +130,7 @@ public interface ITicketCategoryDAO
 
     /**
      * Load the data of all the category objects and returns them as a referenceList
-     * 
+     *
      * @param plugin
      *            the Plugin
      * @return The referenceList which contains the data of all the category objects
@@ -135,50 +139,54 @@ public interface ITicketCategoryDAO
 
     /**
      * Update order of a category
-     * 
+     *
      * @param nId
      *            id parent to move
      * @param nNewPosition
      *            the order value to update
-     * @param plugin
+     * @param _plugin
      *            the Plugin
      */
     void updateCategoryOrder( int nId, int nNewPosition, Plugin _plugin );
 
     /**
      * returns the Id of a category for a given position and parent
-     * 
+     *
      * @param nOrder
      *            Position of the category
      * @param nIdParent
      *            Id of the parent
+     * @param _plugin
+     *            the plugin
      * @return the id of category as an integer
      */
     int selectCategoryIdByOrder( int nOrder, int nIdParent, Plugin _plugin );
 
     /**
      * Rebuild the order sequence of active TicketCategory for a parent, by substracting 1 to all orders larger than a given value
-     * 
-     * @param nfromOrder
+     *
+     * @param nFromOrder
      *            the order to rebuild sequence from
      * @param nIdParent
      *            the parent id
+     * @param _plugin
+     *            the plugin
      */
     void rebuildCategoryOrders( int nFromOrder, int nIdParent, Plugin _plugin );
 
     /**
      * Update the record in the table. The field n_order will be replaced by the next available value for the category parent.
-     * 
+     *
      * @param category
      *            the reference of the TicketCategory
-     * @param plugin
+     * @param _plugin
      *            the Plugin
      */
     void storeWithLastOrder( TicketCategory category, Plugin _plugin );
 
     /**
      * check if category can be removed
-     * 
+     *
      * @param nKey
      *            The identifier of the category
      * @param plugin

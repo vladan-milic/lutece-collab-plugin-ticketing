@@ -61,7 +61,7 @@ public final class TicketCategoryHome
 
     /**
      * Create an instance of the category class
-     * 
+     *
      * @param category
      *            The instance of the Category which contains the informations to store
      * @return The instance of category which has been created with its primary key.
@@ -75,7 +75,7 @@ public final class TicketCategoryHome
 
     /**
      * Update of the category which is specified in parameter
-     * 
+     *
      * @param category
      *            The instance of the Category which contains the data to store
      * @return The instance of the category which has been updated
@@ -101,7 +101,7 @@ public final class TicketCategoryHome
 
     /**
      * Remove the category whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The category Id
      */
@@ -122,7 +122,7 @@ public final class TicketCategoryHome
 
     /**
      * return true if category can be removed false otherwise
-     * 
+     *
      * @param nKey
      *            The category Id
      * @return true if type can be removed false otherwise
@@ -134,7 +134,7 @@ public final class TicketCategoryHome
 
     /**
      * Returns an instance of a category whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The category primary key
      * @return an instance of Category
@@ -151,7 +151,7 @@ public final class TicketCategoryHome
 
     /**
      * Load the data of all the category objects and returns them as a list
-     * 
+     *
      * @return the list which contains the data of all the category objects
      */
     public static List<TicketCategory> getCategorysList( )
@@ -161,10 +161,11 @@ public final class TicketCategoryHome
 
     /**
      * Load the list of categories (full, with java objects filled)
-     * 
+     *
      * @param withInactives
-     * 
-     * @return
+     *            with Inactives
+     *
+     * @return list of categories
      */
     public static List<TicketCategory> getFullCategorysList( boolean withInactives )
     {
@@ -173,7 +174,7 @@ public final class TicketCategoryHome
 
     /**
      * Load the id of all the category objects and returns them as a list
-     * 
+     *
      * @return the list which contains the id of all the category objects
      */
     public static List<Integer> getIdCategorysList( )
@@ -183,7 +184,7 @@ public final class TicketCategoryHome
 
     /**
      * Load the data of all the category objects and returns them as a referenceList
-     * 
+     *
      * @return the referenceList which contains the data of all the category objects
      */
     public static ReferenceList getCategorysReferenceList( )
@@ -196,11 +197,8 @@ public final class TicketCategoryHome
      *
      * @param nId
      *            the if of category to move
-     * @param nCurrentPostion
-     *            the current position of the Type
-     * 
-     * @param nNewPosition
-     *            the target position of the Type
+     * @param bMoveUp
+     *            MoveUp
      */
     public static void updateCategoryOrder( int nId, boolean bMoveUp )
     {

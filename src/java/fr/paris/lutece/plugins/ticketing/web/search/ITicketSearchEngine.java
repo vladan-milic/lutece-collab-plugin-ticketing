@@ -43,7 +43,7 @@ import fr.paris.lutece.portal.business.user.AdminUser;
 
 /**
  * SearchEngine for tickets document
- * 
+ *
  * @author s267533
  *
  */
@@ -53,11 +53,11 @@ public interface ITicketSearchEngine
 
     /**
      * search tickets which contains strQuery in lucene contents field
-     * 
+     *
      * @param strQuery
      *            query to search
-     * @param listTicketCategory
-     *            list categories authorized for admin user
+     * @param user
+     *            user
      * @param filter
      *            the ticketfilter
      * @return Results as a collection of Ticket
@@ -68,11 +68,11 @@ public interface ITicketSearchEngine
 
     /**
      * search the count of tickets which contains strQuery in lucene contents field
-     * 
+     *
      * @param strQuery
      *            query to search
-     * @param listTicketCategory
-     *            list categories authorized for admin user
+     * @param user
+     *            user
      * @param filter
      *            the ticketfilter
      * @return Results as a collection of Ticket
@@ -83,7 +83,7 @@ public interface ITicketSearchEngine
 
     /**
      * search the tickets which contains id from the provided listIdsTickets in lucene contents fields
-     * 
+     *
      * @param listIdsTickets
      *            list of tickets id
      * @param filter

@@ -53,13 +53,13 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
      */
     private TicketCategoryTreeCacheService( boolean withInactives )
     {
-        this._bWithInactives = withInactives;
+        _bWithInactives = withInactives;
         initCache( );
     }
 
     /**
      * Return the instance of CategoryTreeCacheService
-     * 
+     *
      * @return the CategoryTreeCacheService
      */
     public static TicketCategoryTreeCacheService getInstance( )
@@ -69,7 +69,10 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
 
     /**
      * Return the instance of CategoryTreeCacheService
-     * 
+     *
+     * @param withInactives
+     *            with Inactives
+     *
      * @return the CategoryTreeCacheService
      */
     public static TicketCategoryTreeCacheService getInstance( boolean withInactives )
@@ -102,7 +105,7 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
 
     /**
      * The category tree found in cache or a new category tree otherwise
-     * 
+     *
      * @return the category tree
      */
     public TicketCategoryTree getResource( )

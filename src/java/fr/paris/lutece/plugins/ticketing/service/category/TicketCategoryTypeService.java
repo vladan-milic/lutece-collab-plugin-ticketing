@@ -51,7 +51,10 @@ public class TicketCategoryTypeService
 
     /**
      * Get the instance of CategoryType service
-     * 
+     *
+     * @param withInactives
+     *            with Inactives
+     *
      * @return the category type service
      */
     public static TicketCategoryTypeService getInstance( boolean withInactives )
@@ -66,7 +69,7 @@ public class TicketCategoryTypeService
 
     /**
      * Get the instance of CategoryType service
-     * 
+     *
      * @return the category type service
      */
     public static TicketCategoryTypeService getInstance( )
@@ -76,8 +79,9 @@ public class TicketCategoryTypeService
 
     /**
      * Get the category type corresponding to given depth number
-     * 
+     *
      * @param nDepth
+     *            depth
      * @return the category type of given depth number
      */
     public TicketCategoryType findByDepthNumber( int nDepth )
