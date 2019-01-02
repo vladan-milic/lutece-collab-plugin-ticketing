@@ -55,7 +55,7 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
 /**
- * This class manages ticket reference in the following format : <prefix><date><sequence>
+ * This class manages ticket reference in the following format : prefix date sequence
  *
  */
 public class TicketReferencePrefixAndNumberService implements ITicketReferenceService
@@ -77,7 +77,7 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
 
     /**
      * Constructor of a TicketReferencePrefixAndNumberService
-     * 
+     *
      * @param ticketReferenceDAO
      *            the dao to access the ticket reference
      */
@@ -133,7 +133,7 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
     public String process( HttpServletRequest request, String strContent )
     {
         Object isProcessContent = request.getAttribute( TicketingConstants.ATTRIBUTE_IS_PROCESS_CONTENT );
-        if ( StringUtils.isNotBlank( strContent ) && isProcessContent != null && ( ( Boolean ) isProcessContent ).booleanValue( ) )
+        if ( StringUtils.isNotBlank( strContent ) && ( isProcessContent != null ) && ( ( Boolean ) isProcessContent ).booleanValue( ) )
         {
             String strResult = strContent;
             Set<String> setReferenceChecked = new LinkedHashSet<>( );
