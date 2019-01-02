@@ -132,7 +132,6 @@ public interface IFormEntryDAO
      * @param nKey
      *            The identifier of the Form to delete
      * @param _plugin
-     * @param plugin
      *            the Plugin
      */
     void deleteByIdForm( int nKey, Plugin _plugin );
