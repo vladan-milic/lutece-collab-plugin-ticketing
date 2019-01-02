@@ -281,6 +281,8 @@ public final class TicketFilterHelper
      * @param adminUser
      *            admin user
      * @return filter
+     * @throws ParseException
+     *             ParseException
      */
     public static TicketFilter getFilter( HttpServletRequest request, AdminUser adminUser ) throws ParseException
     {
@@ -506,7 +508,9 @@ public final class TicketFilterHelper
      * Update ids of user and units in a given filter
      *
      * @param filter
+     *            The filter
      * @param user
+     *            Admin user
      */
 
     public static void setFilterUserAndUnitIds( TicketFilter filter, AdminUser user )

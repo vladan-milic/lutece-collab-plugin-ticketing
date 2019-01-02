@@ -67,6 +67,7 @@ public final class TicketFileHome
      *
      * @param file
      *            File to migrate
+     * @return is migrated
      */
     public synchronized static boolean migrateToBlob( File file )
     {
@@ -120,6 +121,8 @@ public final class TicketFileHome
      * purge all files from a start date
      *
      * @param date
+     *            start date
+     * @return count
      */
     public static int purgeFromDate( Date date )
     {
@@ -170,6 +173,7 @@ public final class TicketFileHome
     /**
      *
      * @param file
+     *            File
      * @return migration date
      */
     public static Timestamp getMigrationDate( File file )

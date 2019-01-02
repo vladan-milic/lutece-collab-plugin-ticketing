@@ -113,6 +113,8 @@ public class TicketFormService implements Serializable
      *
      * @param idCategory
      *            the id category
+     * @param listEntryId
+     *            list Entry Id
      * @return List a filter Entry
      */
     public static List<Entry> getFilterInputs( int idCategory, List<Integer> listEntryId )
@@ -141,7 +143,7 @@ public class TicketFormService implements Serializable
 
             if ( ( listEntryFirstLevel != null ) && ( listEntryFirstLevel.size( ) > 0 ) )
             {
-                if ( listEntryId == null || listEntryId.contains( listEntryFirstLevel.get( 0 ).getIdEntry( ) ) )
+                if ( ( listEntryId == null ) || listEntryId.contains( listEntryFirstLevel.get( 0 ).getIdEntry( ) ) )
                 {
                     listEntry.add( listEntryFirstLevel.get( 0 ) );
                 }
@@ -153,13 +155,13 @@ public class TicketFormService implements Serializable
 
     /**
      * Return the HTML code of the form
-     * 
-     * @param category
-     *            The category associated with the form
+     *
      * @param locale
      *            the locale
      * @param bDisplayFront
      *            True if the entry will be displayed in Front Office, false if it will be displayed in Back Office.
+     * @param nIdcategory
+     *            id category
      * @param listEntryId
      *            list of EntryId which have to be retrieved. If list is null no filtering is done
      * @param request
@@ -182,7 +184,7 @@ public class TicketFormService implements Serializable
 
     /**
      * Return the HTML code of the form for the specified list of entries
-     * 
+     *
      * @param listEntryFirstLevel
      *            the list of entries
      * @param locale
@@ -207,7 +209,7 @@ public class TicketFormService implements Serializable
 
     /**
      * Insert in the string buffer the content of the HTML code of the entry
-     * 
+     *
      * @param nIdEntry
      *            the key of the entry which HTML code must be insert in the stringBuffer
      * @param stringBuffer
@@ -308,7 +310,7 @@ public class TicketFormService implements Serializable
         if ( entryTypeService instanceof AbstractEntryTypeUpload )
         {
             IAsyncUploadHandler uploadHandler = ( ( AbstractEntryTypeUpload ) entryTypeService ).getAsynchronousUploadHandler( );
-            if ( listResponse != null && !listResponse.isEmpty( ) )
+            if ( ( listResponse != null ) && !listResponse.isEmpty( ) )
             {
                 for ( Response response : listResponse )
                 {
@@ -340,7 +342,7 @@ public class TicketFormService implements Serializable
     private static List<Response> getEntryListResponse( Ticket ticket, Entry entry )
     {
         List<Response> listResult = new ArrayList<Response>( );
-        if ( entry != null && ticket != null && ticket.getListResponse( ) != null )
+        if ( ( entry != null ) && ( ticket != null ) && ( ticket.getListResponse( ) != null ) )
         {
             for ( Response response : ticket.getListResponse( ) )
             {
@@ -381,7 +383,7 @@ public class TicketFormService implements Serializable
     /**
      * Get the responses associated with an entry.<br />
      * Return null if there is no error in the response, or return the list of errors
-     * 
+     *
      * @param request
      *            the request
      * @param nIdEntry
@@ -465,7 +467,7 @@ public class TicketFormService implements Serializable
 
     /**
      * Check if a field is in a response list
-     * 
+     *
      * @param nIdField
      *            the id of the field to search
      * @param listResponse
@@ -487,7 +489,7 @@ public class TicketFormService implements Serializable
 
     /**
      * Get the URL of the anchor of an entry
-     * 
+     *
      * @param entry
      *            the entry
      * @return The URL of the anchor of an entry
@@ -565,6 +567,8 @@ public class TicketFormService implements Serializable
      *            The session
      * @param ticket
      *            The ticketing to save
+     * @param form
+     *            The form
      */
     public void saveTicketInSession( HttpSession session, Ticket ticket, Form form )
     {
@@ -587,9 +591,11 @@ public class TicketFormService implements Serializable
 
     /**
      * Get the current ticketing form from the session
-     * 
+     *
      * @param session
      *            The session of the user
+     * @param form
+     *            The form
      * @return The ticketing form
      */
     public Ticket getTicketFromSession( HttpSession session, Form form )
@@ -600,7 +606,7 @@ public class TicketFormService implements Serializable
 
     /**
      * Get the current ticketing form from the session
-     * 
+     *
      * @param session
      *            The session of the user
      * @return The ticketing form
@@ -612,9 +618,11 @@ public class TicketFormService implements Serializable
 
     /**
      * Remove any ticketing form responses stored in the session of the user
-     * 
+     *
      * @param session
      *            The session
+     * @param form
+     *            The form
      */
     public void removeTicketFromSession( HttpSession session, Form form )
     {
@@ -624,7 +632,7 @@ public class TicketFormService implements Serializable
 
     /**
      * Remove any ticketing form responses stored in the session of the user
-     * 
+     *
      * @param session
      *            The session
      */
@@ -635,7 +643,7 @@ public class TicketFormService implements Serializable
 
     /**
      * Save a validated ticketing into the session of the user
-     * 
+     *
      * @param session
      *            The session
      * @param ticketing
@@ -649,7 +657,7 @@ public class TicketFormService implements Serializable
 
     /**
      * Get a validated ticketing from the session
-     * 
+     *
      * @param session
      *            The session of the user
      * @return The ticketing
@@ -661,7 +669,7 @@ public class TicketFormService implements Serializable
 
     /**
      * Remove a validated ticketing stored in the session of the user
-     * 
+     *
      * @param session
      *            The session
      */

@@ -14,7 +14,7 @@ public class FormCategoryHome
 
     /**
      * Create an instance of the form class
-     * 
+     *
      * @param nIdCategory
      *            The category Id
      * @param nIdForm
@@ -27,7 +27,7 @@ public class FormCategoryHome
 
     /**
      * Update of the form which is specified in parameter
-     * 
+     *
      * @param nIdCategory
      *            The category Id
      * @param nIdForm
@@ -40,7 +40,7 @@ public class FormCategoryHome
 
     /**
      * Remove the form whose identifier is specified in parameter
-     * 
+     *
      * @param nIdCategory
      *            The category Id
      * @param nIdForm
@@ -53,7 +53,7 @@ public class FormCategoryHome
 
     /**
      * Remove the formCategory by id category
-     * 
+     *
      * @param nKey
      *            The category Id
      */
@@ -64,9 +64,10 @@ public class FormCategoryHome
 
     /**
      * Returns an instance of a form whose identifier is specified in parameter
-     * 
-     * @param nKey
-     *            The form primary key
+     *
+     * @param nIdForm
+     *            form id
+     *
      * @return an instance of Form
      */
     public static List<FormCategory> findByForm( int nIdForm )
@@ -76,9 +77,10 @@ public class FormCategoryHome
 
     /**
      * Returns an instance of a form whose identifier is specified in parameter
-     * 
-     * @param nKey
-     *            The form primary key
+     *
+     * @param nIdCategory
+     *            id category
+     *
      * @return an instance of Form
      */
     public static List<FormCategory> findByCategory( int nIdCategory )
@@ -88,9 +90,7 @@ public class FormCategoryHome
 
     /**
      * Load the data of all the category objects and returns them as a list
-     * 
-     * @param plugin
-     *            the Plugin
+     *
      * @return The list which contains the data of all the category objects
      */
     public static List<FormCategory> findAll( )

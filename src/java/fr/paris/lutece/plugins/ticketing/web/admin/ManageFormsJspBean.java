@@ -44,7 +44,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean
 {
 
     /**
-     * 
+     *
      */
     private static final long   serialVersionUID                    = 3672494350924238271L;
 
@@ -113,7 +113,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean
 
     /**
      * Return a model that contains the list and paginator infos
-     * 
+     *
      * @param request
      *            The HTTP request
      * @param strBookmark
@@ -147,7 +147,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean
 
     /**
      * Build the Form View
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The page
@@ -197,6 +197,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean
      *            The Http Request
      * @return The Jsp URL of the process result
      * @throws IOException
+     *             IOException
      */
     @Action( ACTION_CREATE_FORM )
     public String doCreateForm( HttpServletRequest request ) throws IOException
@@ -238,7 +239,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean
             formEntry = createFormEntry( request, _formEntryType.getCategory( ) + depth );
 
             // force mandatory if category depth is not high enough
-            formEntry.setMandatory( formEntry.isMandatory( ) || depth <= TicketingConstants.CATEGORY_DEPTH_MIN );
+            formEntry.setMandatory( formEntry.isMandatory( ) || ( depth <= TicketingConstants.CATEGORY_DEPTH_MIN ) );
 
             FormEntryHome.create( formEntry );
         }
@@ -260,7 +261,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean
         boolean forcedMandatory = _formEntryType.isForcedMandatory( entryType );
 
         formEntry.setHidden( strShown == null );
-        formEntry.setMandatory( strMandatory != null || forcedMandatory );
+        formEntry.setMandatory( ( strMandatory != null ) || forcedMandatory );
         formEntry.setDefaultValue( strDefaultValue );
 
         return formEntry;

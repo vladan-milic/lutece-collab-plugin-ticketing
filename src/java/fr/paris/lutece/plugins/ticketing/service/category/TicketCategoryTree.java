@@ -51,7 +51,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
 
     /**
      * Constructor for category tree
-     * 
+     *
      * @param listCategory
      *            the list of Categories
      * @param listCategoryType
@@ -65,22 +65,23 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
 
     /**
      * Constructor for category tree
-     * 
-     * @param listCategory
-     *            the list of Categories
-     * @param listCategoryType
-     *            the list of Category types
+     *
+     * @param treeSource
+     *            Tree Source
+     * @param restrictedCategoriesId
+     *            the restricted Categories Id list
+     *
      */
     public TicketCategoryTree( TicketCategoryTree treeSource, List<Integer> restrictedCategoriesId )
     {
         super( treeSource );
-        this._restrictedCategoriesId = restrictedCategoriesId;
-        setRootElements( _rootNodes.stream( ).filter( root -> _restrictedCategoriesId == null || _restrictedCategoriesId.contains( root.getId( ) ) ).collect( Collectors.toList( ) ) );
+        _restrictedCategoriesId = restrictedCategoriesId;
+        setRootElements( _rootNodes.stream( ).filter( root -> ( _restrictedCategoriesId == null ) || _restrictedCategoriesId.contains( root.getId( ) ) ).collect( Collectors.toList( ) ) );
     }
 
     /**
      * Find a category in the tree by code
-     * 
+     *
      * @param strCode
      *            the code
      * @return the category found with the given code
@@ -99,7 +100,12 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
 
     /**
      * Get a JSON Object of the tree
-     * 
+     *
+     * @param selectedRootCategory
+     *            The selected Root Category
+     * @param selectedChildCategory
+     *            The selected Child Category
+     *
      * @return the JSON Object of the tree
      */
     public String getTreeJSONObject( int selectedRootCategory, int selectedChildCategory )
@@ -108,7 +114,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
 
         JSONArray jsonRootElements = new JSONArray( );
 
-        for ( TicketCategory ticketCategory : this.getRootElements( ) )
+        for ( TicketCategory ticketCategory : getRootElements( ) )
         {
             JSONObject jsonRootElement = new JSONObject( );
             jsonRootElement.accumulate( FormatConstants.KEY_ID, ticketCategory.getId( ) );
@@ -117,7 +123,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
             jsonRootElement.accumulate( FormatConstants.KEY_DEPTH, ticketCategory.getDepth( ).getDepthNumber( ) );
             jsonRootElement.accumulate( FormatConstants.KEY_INACTIVE, ticketCategory.isInactive( ) );
             jsonRootElement.accumulate( FormatConstants.KEY_ICON, ticketCategory.getIconFont( ) );
-            if ( selectedRootCategory > 0 && ticketCategory.getId( ) == selectedRootCategory )
+            if ( ( selectedRootCategory > 0 ) && ( ticketCategory.getId( ) == selectedRootCategory ) )
             {
                 jsonRootElement.accumulate( FormatConstants.KEY_SELECTED, true );
             }
@@ -144,7 +150,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
 
     /**
      * Get a JSON Object of the tree
-     * 
+     *
      * @return the JSON Object of the tree
      */
     public String getTreeJSONObject( )
@@ -154,10 +160,14 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
 
     /**
      * Add a JSON Array of the ticketCategory children
-     * 
+     *
+     * @param jsonRootElement
+     *            json RootElement
+     *
      * @param ticketCategory
      *            the current ticketCategory
      * @param selectedChildCategory
+     *            the selected Child Category
      */
     public void addJSONArraysChildren( JSONObject jsonRootElement, TicketCategory ticketCategory, int selectedChildCategory )
     {
@@ -172,7 +182,7 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
             jsonElement.accumulate( FormatConstants.KEY_DEPTH, children.getDepth( ).getDepthNumber( ) );
             jsonElement.accumulate( FormatConstants.KEY_HELP, children.getHelpMessage( ) );
             jsonElement.accumulate( FormatConstants.KEY_INACTIVE, children.isInactive( ) );
-            if ( selectedChildCategory > 0 && children.getId( ) == selectedChildCategory )
+            if ( ( selectedChildCategory > 0 ) && ( children.getId( ) == selectedChildCategory ) )
             {
                 jsonElement.accumulate( FormatConstants.KEY_SELECTED, true );
             }

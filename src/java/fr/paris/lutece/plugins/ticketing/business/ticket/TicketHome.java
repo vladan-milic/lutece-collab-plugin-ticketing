@@ -177,8 +177,9 @@ public final class TicketHome
     /**
      * Get the marking for the given ticket id
      *
-     * @param nIdTicketMarking
-     *            the marking id
+     * @param ticket
+     *            Ticket
+     *
      * @return the marking
      */
     public static Marking getTicketMarking( Ticket ticket )
@@ -199,8 +200,7 @@ public final class TicketHome
      *
      * @param nIdTicket
      *            the ticket
-     * @param nIdMarking
-     *            the marking
+     * @return id for the given ticket
      */
     public static int getTicketMarkingId( int nIdTicket )
     {
@@ -245,7 +245,7 @@ public final class TicketHome
     /**
      * Load the data of all the ticket objects and returns them in form of a collection be carefull generic attribute response are not loaded in this method
      *
-     * @see findByPrimaryKey for loading all attribute responses
+     * @see #findByPrimaryKey for loading all attribute responses
      * @return the collection which contains the data of all the ticket objects
      */
     public static List<Ticket> getTicketsList( )

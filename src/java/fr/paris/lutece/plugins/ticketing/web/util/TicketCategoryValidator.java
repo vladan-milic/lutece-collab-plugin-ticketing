@@ -58,7 +58,7 @@ public class TicketCategoryValidator
 
     /**
      * Constructor
-     * 
+     *
      * @param request
      *            the request containing the parameter to validate
      * @param locale
@@ -66,15 +66,13 @@ public class TicketCategoryValidator
      */
     public TicketCategoryValidator( HttpServletRequest request, Locale locale )
     {
-        this._request = request;
-        this._locale = locale;
+        _request = request;
+        _locale = locale;
     }
 
     /**
      * Global method to validate a TicketCategory with the managing of the precision
-     * 
-     * @param nIdDomain
-     *            The id of the domain
+     *
      * @return the TicketCategoryValidatorResult which represent the result of the validation
      */
     public TicketCategoryValidatorResult validateTicketCategory( )
@@ -94,7 +92,7 @@ public class TicketCategoryValidator
         TicketCategory lastValidTicketCategory = null;
         int lastValidI = 1;
 
-        while ( i <= TicketCategoryTypeHome.getCategoryTypesList( ).size( ) && isValid )
+        while ( ( i <= TicketCategoryTypeHome.getCategoryTypesList( ).size( ) ) && isValid )
         {
             try
             {
@@ -108,21 +106,21 @@ public class TicketCategoryValidator
 
             boolean ticketCategoryIsProvided = ticketCategory != null;
             boolean ticketCategoryWithoutFormIsRequired = form == null;
-            boolean ticketCategoryWithFormIsRequired = form != null && form.getEntry( formEntryType.getCategory( ) + i ).isMandatory( );
+            boolean ticketCategoryWithFormIsRequired = ( form != null ) && form.getEntry( formEntryType.getCategory( ) + i ).isMandatory( );
             boolean ticketCategoryIsRequired = ticketCategoryWithoutFormIsRequired || ticketCategoryWithFormIsRequired;
 
             if ( ticketCategoryIsProvided )
             {
                 lastValidTicketCategory = ticketCategory;
                 lastValidI = i;
-            } else if ( ticketCategoryIsRequired || i <= TicketingConstants.CATEGORY_DEPTH_MIN )
+            } else if ( ticketCategoryIsRequired || ( i <= TicketingConstants.CATEGORY_DEPTH_MIN ) )
             {
                 listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED,
-                        new String[] { TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( i - 1 ).getLabel( ) }, this._locale ) );
+                        new String[] { TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( i - 1 ).getLabel( ) }, _locale ) );
                 isValid = false;
             }
 
-            boolean ticketCategoryIsLeaf = ticketCategory != null && ticketCategory.getLeaf( );
+            boolean ticketCategoryIsLeaf = ( ticketCategory != null ) && ticketCategory.getLeaf( );
             if ( !isValid || ticketCategoryIsLeaf )
             {
                 break;
@@ -136,14 +134,14 @@ public class TicketCategoryValidator
             i++;
         }
 
-        if ( isValid && lastValidI < TicketingConstants.CATEGORY_DEPTH_MIN )
+        if ( isValid && ( lastValidI < TicketingConstants.CATEGORY_DEPTH_MIN ) )
         {
             listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED,
-                    new String[] { TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( lastValidI + 1 ).getLabel( ) }, this._locale ) );
+                    new String[] { TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( lastValidI + 1 ).getLabel( ) }, _locale ) );
             isValid = false;
         }
 
-        if ( isValid && lastValidTicketCategory == null && ticketCategoryParent != null )
+        if ( isValid && ( lastValidTicketCategory == null ) && ( ticketCategoryParent != null ) )
         {
             lastValidTicketCategory = ticketCategoryParent;
             ticketCategoryParent = lastValidTicketCategory.getParent( );

@@ -62,9 +62,11 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * The main constructor of the tree
-     * 
+     *
      * @param listNode
+     *            list node
      * @param listDepth
+     *            list depth
      */
     public Tree( List<Node> listNode, List<Depth> listDepth )
     {
@@ -118,7 +120,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the root elements of the tree
-     * 
+     *
      * @return the list of root elements of the tree
      */
     public List<Node> getRootElements( )
@@ -128,7 +130,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Set the root elements of the tree
-     * 
+     *
      * @param rootNodes
      *            the list of root elements of the tree
      */
@@ -139,7 +141,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the list of nodes of the tree
-     * 
+     *
      * @return the list of node of the tree.
      */
     public List<Node> getNodes( )
@@ -168,7 +170,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Set the list of nodes of the tree
-     * 
+     *
      * @param nodes
      *            the list of nodes of the tree
      */
@@ -179,8 +181,8 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the depths java obj of the tree
-     * 
-     * @return
+     *
+     * @return depths java obj of the tree
      */
     public List<Depth> getDepths( )
     {
@@ -189,7 +191,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Set the depths java obj of the tree
-     * 
+     *
      * @param depths
      *            the Depths of the tree
      */
@@ -200,7 +202,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the leaves of the tree
-     * 
+     *
      * @return the leaves nodes of the tree
      */
     public List<Node> getLeaves( )
@@ -210,7 +212,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Set the leaves node of the tree
-     * 
+     *
      * @param leaves
      *            the leaves node of the tree
      */
@@ -221,7 +223,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the leaves nodes of a given node
-     * 
+     *
      * @param node
      * @return the list of leaves node of the given node
      */
@@ -243,8 +245,9 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get all children nodes of the given node (recursively)
-     * 
+     *
      * @param node
+     *            node
      * @param isFirstCall
      *            true if first recursive call
      * @return the list of all the children of the given node (recursively).
@@ -268,8 +271,9 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Find a node with given id
-     * 
+     *
      * @param nId
+     *            id
      * @return the node of given id.
      */
     public Node findNodeById( int nId )
@@ -286,8 +290,9 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Find the Depth obj with given depth number
-     * 
+     *
      * @param nDepth
+     *            id depth
      * @return the Depth obj
      */
     public Depth findDepthByDepthNumber( int nDepth )
@@ -308,8 +313,9 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Find the Depth obj with given label
-     * 
+     *
      * @param strLabel
+     *            label
      * @return the Depth obj
      */
     public Depth findDepthByLabel( String strLabel )
@@ -326,7 +332,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the max depth of the tree
-     * 
+     *
      * @return the max depth of the tree;
      */
     public int getMaxDepthNumber( )
@@ -344,8 +350,9 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the list of nodes parents of given node ( from root to node)
-     * 
+     *
      * @param node
+     *            Node
      * @return the list of nodes parents of given node ( from root to node)
      */
     public List<Node> getBranch( Node node )
@@ -366,8 +373,9 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
 
     /**
      * Get the list of nodes of a given depth
-     * 
+     *
      * @param depth
+     *            Depth
      * @return the list of nodes of the given depth
      */
     public List<Node> getListNodesOfDepth( Depth depth )

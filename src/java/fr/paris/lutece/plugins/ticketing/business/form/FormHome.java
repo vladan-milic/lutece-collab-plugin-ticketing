@@ -66,7 +66,7 @@ public final class FormHome
 
     /**
      * Create an instance of the form class
-     * 
+     *
      * @param form
      *            The instance of the Form which contains the informations to store
      * @return The instance of form which has been created with its primary key.
@@ -80,7 +80,7 @@ public final class FormHome
 
     /**
      * Update of the form which is specified in parameter
-     * 
+     *
      * @param form
      *            The instance of the Form which contains the data to store
      * @return The instance of the form which has been updated
@@ -94,7 +94,7 @@ public final class FormHome
 
     /**
      * Remove the form whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The form Id
      */
@@ -105,7 +105,7 @@ public final class FormHome
 
     /**
      * Returns an instance of a form whose identifier is specified in parameter
-     * 
+     *
      * @param nKey
      *            The form primary key
      * @return an instance of Form
@@ -117,7 +117,7 @@ public final class FormHome
 
     /**
      * Load the data of all the form objects and returns them as a list
-     * 
+     *
      * @return the list which contains the data of all the form objects
      */
     public static List<Form> getFormsList( )
@@ -128,6 +128,9 @@ public final class FormHome
     /**
      * Load the data of all the form objects and returns them as a list
      * 
+     * @param category
+     *            Category
+     *
      * @return the list which contains the data of all the form objects
      */
     public static List<Form> getFormsList( TicketCategory category )
@@ -152,7 +155,7 @@ public final class FormHome
 
     /**
      * Load the id of all the form objects and returns them as a list
-     * 
+     *
      * @return the list which contains the id of all the form objects
      */
     public static List<Integer> getIdFormsList( )
@@ -162,7 +165,7 @@ public final class FormHome
 
     /**
      * Load the data of all the form objects and returns them as a referenceList
-     * 
+     *
      * @return the referenceList which contains the data of all the form objects
      */
     public static ReferenceList getFormsReferenceList( )
@@ -172,10 +175,10 @@ public final class FormHome
 
     /**
      * Retrieve form from request
-     * 
+     *
      * @param request
      *            the request to parse
-     * @return
+     * @return form from request
      */
     public static Form getFormFromRequest( HttpServletRequest request )
     {

@@ -46,7 +46,7 @@ public interface IFormEntryDAO
 {
     /**
      * Insert a new record in the table.
-     * 
+     *
      * @param formEntry
      *            instance of the FormEntry object to insert
      * @param plugin
@@ -56,7 +56,7 @@ public interface IFormEntryDAO
 
     /**
      * Update the record in the table
-     * 
+     *
      * @param formEntry
      *            the reference of the FormEntry
      * @param plugin
@@ -66,7 +66,7 @@ public interface IFormEntryDAO
 
     /**
      * Delete a record from the table
-     * 
+     *
      * @param nKey
      *            The identifier of the FormEntry to delete
      * @param plugin
@@ -79,7 +79,7 @@ public interface IFormEntryDAO
 
     /**
      * Load the data from the table
-     * 
+     *
      * @param nKey
      *            The identifier of the formEntry
      * @param plugin
@@ -90,7 +90,7 @@ public interface IFormEntryDAO
 
     /**
      * Load the data of all the formEntry objects and returns them as a list
-     * 
+     *
      * @param plugin
      *            the Plugin
      * @return The list which contains the data of all the formEntry objects
@@ -99,7 +99,7 @@ public interface IFormEntryDAO
 
     /**
      * Load the id of all the formEntry objects and returns them as a list
-     * 
+     *
      * @param plugin
      *            the Plugin
      * @return The list which contains the id of all the formEntry objects
@@ -108,7 +108,7 @@ public interface IFormEntryDAO
 
     /**
      * Load the data of all the formEntry objects and returns them as a referenceList
-     * 
+     *
      * @param plugin
      *            the Plugin
      * @return The referenceList which contains the data of all the formEntry objects
@@ -117,7 +117,7 @@ public interface IFormEntryDAO
 
     /**
      * Load the data of the formEntry objects related to a form
-     * 
+     *
      * @param nKey
      *            the key of the form
      * @param plugin
@@ -128,9 +128,10 @@ public interface IFormEntryDAO
 
     /**
      * Delete a record from the table
-     * 
+     *
      * @param nKey
      *            The identifier of the Form to delete
+     * @param _plugin
      * @param plugin
      *            the Plugin
      */

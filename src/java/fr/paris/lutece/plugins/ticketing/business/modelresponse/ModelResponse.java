@@ -235,8 +235,8 @@ public class ModelResponse implements Serializable
     /**
      * Sets the update date
      *
-     * @param dDateUpdate
-     *            the update date
+     * @param _strDateUpdate
+     *            update date
      */
     public void setDateUpdate( String _strDateUpdate )
     {

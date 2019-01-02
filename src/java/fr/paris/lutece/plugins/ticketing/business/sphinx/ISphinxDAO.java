@@ -9,9 +9,12 @@ public interface ISphinxDAO
 
     /**
      * Retrieve the list of the new mailing list of the day
-     * 
+     *
+     * @param idAction
+     *
      * @param plugin
      *            the plugin
+     * @return the list of the new mailing list of the day
      */
     List<Mailing> getNewMailingList( int idAction, Plugin plugin );
 }

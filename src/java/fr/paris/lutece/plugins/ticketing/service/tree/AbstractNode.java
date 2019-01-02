@@ -59,22 +59,22 @@ public abstract class AbstractNode
 
     /**
      * Get the id of the node
-     * 
+     *
      * @return the id of the node
      */
     public abstract int getId( );
 
     /**
      * Get the parent id of the node
-     * 
+     *
      * @return the parent id of the node
      */
     public abstract int getIdParent( );
 
     /**
      * Get the boolean indicating the node is a leaf
-     * 
-     * @return
+     *
+     * @return boolean indicating the node is a leaf
      */
     public boolean getLeaf( )
     {
@@ -83,8 +83,9 @@ public abstract class AbstractNode
 
     /**
      * Set the boolean indicating the node is a leaf
-     * 
+     *
      * @param bLeaf
+     *            indicating the node is a leaf
      */
     public void setLeaf( boolean bLeaf )
     {
@@ -93,7 +94,7 @@ public abstract class AbstractNode
 
     /**
      * Get the Depth object of the node
-     * 
+     *
      * @return the Depth java object
      */
     public AbstractDepth getDepth( )
@@ -103,7 +104,7 @@ public abstract class AbstractNode
 
     /**
      * Set the depth of the node
-     * 
+     *
      * @param depth
      *            the Depth
      */
@@ -114,8 +115,8 @@ public abstract class AbstractNode
 
     /**
      * Get the children list of a node
-     * 
-     * @return
+     *
+     * @return list of a node
      */
     public List<? extends AbstractNode> getChildren( )
     {
@@ -124,8 +125,9 @@ public abstract class AbstractNode
 
     /**
      * Set the children list of a node
-     * 
+     *
      * @param children
+     *            list of a node
      */
     public void setChildren( List<AbstractNode> children )
     {
@@ -134,7 +136,7 @@ public abstract class AbstractNode
 
     /**
      * Get the Parent node of the node
-     * 
+     *
      * @return the Parent node
      */
     public AbstractNode getParent( )
@@ -144,7 +146,7 @@ public abstract class AbstractNode
 
     /**
      * Set the parent node of the node
-     * 
+     *
      * @param parentNode
      *            the parent node
      */
@@ -155,7 +157,7 @@ public abstract class AbstractNode
 
     /**
      * Get the leaves of the node
-     * 
+     *
      * @return the leaves of the node
      */
     public List<? extends AbstractNode> getLeaves( )
@@ -165,7 +167,7 @@ public abstract class AbstractNode
 
     /**
      * Set the leaf of a node
-     * 
+     *
      * @param leaves
      *            the leaves of the node
      */
@@ -176,7 +178,7 @@ public abstract class AbstractNode
 
     /**
      * Get the list of nodes behind this node, from root to node.
-     * 
+     *
      * @param <Node>
      *            the Node type
      * @return the list of nodes behind a node
@@ -185,7 +187,7 @@ public abstract class AbstractNode
     {
         List<Node> listNode = new ArrayList<>( );
         listNode.add( ( Node ) this );
-        Node parent = ( Node ) this.getParent( );
+        Node parent = ( Node ) getParent( );
         while ( parent != null )
         {
             listNode.add( parent );
@@ -197,7 +199,7 @@ public abstract class AbstractNode
 
     /**
      * Return if true if rootElement, false otherwise
-     * 
+     *
      * @return true if the node is a root node, false otherwise
      */
     public boolean isRootNode( )

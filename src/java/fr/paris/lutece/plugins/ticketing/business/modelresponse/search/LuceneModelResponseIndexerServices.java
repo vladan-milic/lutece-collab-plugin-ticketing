@@ -98,6 +98,13 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 
     /**
      * Instantiates a new lucene model response indexer services.
+     *
+     * @param strIndexPath
+     *            Index Path
+     * @param strClassAnalyzer
+     *            Class Analyzer
+     * @param bIndexInWebapp
+     *            is Index In Webapp
      */
     public LuceneModelResponseIndexerServices( String strIndexPath, String strClassAnalyzer, Boolean bIndexInWebapp )
     {
@@ -114,7 +121,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer#update(fr.paris.lutece.plugins.ticketing.business.modelresponse .ModelResponse)
      */
     @Override
@@ -152,7 +159,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer#delete(fr.paris.lutece.plugins.ticketing.business.modelresponse .ModelResponse)
      */
     @Override
@@ -167,7 +174,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer#add(fr.paris.lutece.plugins.ticketing.business.modelresponse. ModelResponse)
      */
     @Override
@@ -183,7 +190,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer#addAll()
      */
     @Override
@@ -224,7 +231,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer#searchResponses(java.lang.String, java.lang.String)
      */
     @Override
@@ -239,7 +246,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
             IndexSearcher searcher = new IndexSearcher( reader );
 
             Builder booleanQueryBuilderMain = new Builder( );
-            if ( setDomain != null && !setDomain.isEmpty( ) )
+            if ( ( setDomain != null ) && !setDomain.isEmpty( ) )
             {
                 Builder booleanQueryBuilderDomain = new Builder( );
                 for ( String strDomain : setDomain )
@@ -370,7 +377,7 @@ public class LuceneModelResponseIndexerServices implements IModelResponseIndexer
 
     /**
      * Close an IndexWriter
-     * 
+     *
      * @param indexWriter
      */
     private void close( IndexWriter indexWriter )

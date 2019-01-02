@@ -62,11 +62,8 @@ public class SphinxRest
     /**
      * Gives the contact modes
      * 
-     * @param accept
-     *            the accepted format
-     * @param format
-     *            the format
-     * @return the list of contact modes
+     * @throws Exception
+     *             excpetions
      */
     // @GET
     // @Path( Constants.ALL_PATH )

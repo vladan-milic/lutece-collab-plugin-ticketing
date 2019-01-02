@@ -47,6 +47,9 @@ public interface ITicketFileDAO
 {
     /**
      * Insert a new record in the table.
+     * 
+     * @param nIdFile
+     * @param strIdBlob
      *
      * @param ticket
      *            instance of the Ticket object to insert

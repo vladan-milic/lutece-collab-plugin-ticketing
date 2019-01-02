@@ -16,8 +16,8 @@ public class FormCategory
 
     /**
      * get id formulaire
-     * 
-     * @return
+     *
+     * @return id formulaire
      */
     public int getIdForm( )
     {
@@ -26,8 +26,9 @@ public class FormCategory
 
     /**
      * set id formulaire
-     * 
+     *
      * @param _nIdForm
+     *            id formulaire
      */
     public void setIdForm( int _nIdForm )
     {
@@ -36,8 +37,8 @@ public class FormCategory
 
     /**
      * get id category
-     * 
-     * @return
+     *
+     * @return id category
      */
     public int getIdCategory( )
     {
@@ -46,8 +47,9 @@ public class FormCategory
 
     /**
      * set id category
-     * 
+     *
      * @param _nIdCategory
+     *            id category
      */
     public void setIdCategory( int _nIdCategory )
     {

@@ -135,9 +135,9 @@ public class Channel implements Serializable
 
     /**
      * Sets the Mandatory ticket comment
-     *
-     * @param _bFlagMandatoryTicketComment
-     *            The Mandatory ticket comment
+     * 
+     * @param bFlagMandatoryTicketComment
+     *            the Flag Mandatory Ticket Comment
      */
     public void setFlagMandatoryTicketComment( boolean bFlagMandatoryTicketComment )
     {

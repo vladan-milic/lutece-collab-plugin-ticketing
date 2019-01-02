@@ -83,6 +83,7 @@ public final class TicketUtils
      *
      * @param request
      *            the request
+     * @return admin user
      */
     public static AdminUser registerAdminUserFront( HttpServletRequest request )
     {
@@ -271,12 +272,9 @@ public final class TicketUtils
     /**
      * get list of ticket id according to filter
      *
-     * @param user
-     *            admin user
      * @param filter
      *            ticket filter
-     * @param request
-     *            http request
+     * @return list of ticket id according to filter
      */
     public static List<Integer> getIdTickets( TicketFilter filter )
     {
@@ -286,12 +284,9 @@ public final class TicketUtils
     /**
      * get list of ticket according to filter
      *
-     * @param user
-     *            admin user
      * @param filter
      *            ticket filter
-     * @param request
-     *            http request
+     * @return list of ticket according to filter
      */
     public static List<Ticket> getTickets( TicketFilter filter )
     {
@@ -426,6 +421,7 @@ public final class TicketUtils
      * Return the parsing of the String into Integer or -1 if fails
      *
      * @param strStringToConvert
+     *            string to convert
      * @param strMessageError
      *            the error message
      * @return the parsing of the String or -1 if fails
@@ -449,9 +445,12 @@ public final class TicketUtils
      * Check if a ticket is authorized
      *
      * @param ticket
+     *            Ticket
      * @param strPermission
+     *            strPermission
      * @param user
-     * @return
+     *            user
+     * @return is authorized
      */
     public static boolean isAuthorized( Ticket ticket, String strPermission, AdminUser user )
     {

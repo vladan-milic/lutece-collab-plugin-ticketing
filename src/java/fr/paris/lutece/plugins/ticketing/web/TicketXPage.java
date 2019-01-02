@@ -89,7 +89,6 @@ import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
-import freemarker.template.TemplateModelException;
 
 /**
  * This class provides the user interface to manage Ticket xpages ( manage, create, modify, remove )
@@ -179,7 +178,6 @@ public class TicketXPage extends WorkflowCapableXPage
      * @param request
      *            The Http request
      * @return the html code of the ticket form
-     * @throws TemplateModelException
      */
     @View( value = VIEW_CREATE_TICKET_DYNAMIC_FORM, defaultView = true )
     public XPage getCreateTicketDynamicForm( HttpServletRequest request )
@@ -656,6 +654,8 @@ public class TicketXPage extends WorkflowCapableXPage
      *            the http request
      * @param strView
      *            the targeted view
+     * @param form
+     *            The form
      * @return the page requested
      */
     protected XPage redirectView( HttpServletRequest request, String strView, Form form )
@@ -668,6 +668,8 @@ public class TicketXPage extends WorkflowCapableXPage
      *
      * @param strView
      *            The view name
+     * @param form
+     *            The Form
      * @return The URL
      */
     protected String getViewUrl( String strView, Form form )
