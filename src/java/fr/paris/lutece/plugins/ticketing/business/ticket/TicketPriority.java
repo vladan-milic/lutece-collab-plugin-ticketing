@@ -49,7 +49,7 @@ public enum TicketPriority
 {
     LOW, MEDIUM, HIGH;
 
-    private static final String                 MESSAGE_PREFIX     = "ticketing.priority.";
+    private static final String MESSAGE_PREFIX = "ticketing.priority.";
     private static Map<Integer, TicketPriority> _mapTicketPriority = new HashMap<Integer, TicketPriority>( );
 
     static

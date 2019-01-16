@@ -46,7 +46,7 @@ public class CSVUtils
 {
 
     private static final char DEFAULT_SEPARATOR = ';';
-    private static final char QUOTE             = '\"';
+    private static final char QUOTE = '\"';
 
     /**
      * Private Constructor

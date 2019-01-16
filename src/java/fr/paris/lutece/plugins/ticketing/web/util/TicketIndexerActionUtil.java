@@ -71,7 +71,8 @@ public class TicketIndexerActionUtil
             if ( ( state == null ) || ( state.getId( ) == AppPropertiesService.getPropertyInt( PROPERTY_WORKFLOW_ACTION_ID_NEW, 301 ) ) )
             {
                 indexerAction.setIdTask( IndexerAction.TASK_CREATE );
-            } else
+            }
+            else
             {
                 indexerAction.setIdTask( IndexerAction.TASK_MODIFY );
             }

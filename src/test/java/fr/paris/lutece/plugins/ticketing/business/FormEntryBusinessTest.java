@@ -40,16 +40,16 @@ import fr.paris.lutece.test.LuteceTestCase;
 
 public class FormEntryBusinessTest extends LuteceTestCase
 {
-    private final static int     IDFORM1    = 1;
-    private final static int     IDFORM2    = 2;
-    private final static String  IDCHAMP1   = "IdChamp1";
-    private final static String  IDCHAMP2   = "IdChamp2";
-    private final static boolean HIDDEN1    = true;
-    private final static boolean HIDDEN2    = false;
+    private final static int IDFORM1 = 1;
+    private final static int IDFORM2 = 2;
+    private final static String IDCHAMP1 = "IdChamp1";
+    private final static String IDCHAMP2 = "IdChamp2";
+    private final static boolean HIDDEN1 = true;
+    private final static boolean HIDDEN2 = false;
     private final static boolean MANDATORY1 = true;
     private final static boolean MANDATORY2 = false;
-    private final static int     ORDER1     = 1;
-    private final static int     ORDER2     = 2;
+    private final static int ORDER1 = 1;
+    private final static int ORDER2 = 2;
 
     public void testBusiness( )
     {

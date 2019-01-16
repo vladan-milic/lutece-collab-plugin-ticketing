@@ -52,13 +52,13 @@ public class Channel implements Serializable
     private static final long serialVersionUID = 1L;
 
     // Variables declarations
-    private int               _nId;
+    private int _nId;
     @NotEmpty( message = "#i18n{ticketing.validation.channel.Label.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.channel.Label.size}" )
-    private String            _strLabel;
+    private String _strLabel;
     @Size( max = 50, message = "#i18n{ticketing.validation.channel.IconFont.size}" )
-    private String            _strIconFont;
-    private boolean           _bFlagMandatoryTicketComment;
+    private String _strIconFont;
+    private boolean _bFlagMandatoryTicketComment;
 
     /**
      * Returns the Id

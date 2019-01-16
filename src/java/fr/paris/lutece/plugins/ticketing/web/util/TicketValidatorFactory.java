@@ -44,7 +44,7 @@ import java.util.Map;
 public final class TicketValidatorFactory
 {
     private static volatile TicketValidatorFactory _instance;
-    private Map<Locale, TicketValidator>           _validators;
+    private Map<Locale, TicketValidator> _validators;
 
     /**
      * Default constructor
@@ -83,7 +83,7 @@ public final class TicketValidatorFactory
     {
         if ( _instance == null )
         {
-            synchronized ( TicketValidatorFactory.class )
+            synchronized( TicketValidatorFactory.class )
             {
                 if ( _instance == null )
                 {

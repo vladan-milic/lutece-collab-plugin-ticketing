@@ -35,12 +35,15 @@ public class SphinxDAO implements ISphinxDAO
     // + " ON T1._id = T2.id_category "
     // + " ) AS Y";
     private static final String SQL_SELECT_MAILING_LIST = "		SELECT tt.id_ticket_category ,  tt.email,  Timestampdiff( day, tt.date_create, tt.date_close ) AS 'temps de traitement ' "
-            + "		FROM ticketing_ticket tt " + "		JOIN workflow_resource_history  wrh ON wrh.id_resource = tt.id_ticket " + "		WHERE wrh.id_action = ? "
+            + "		FROM ticketing_ticket tt "
+            + "		JOIN workflow_resource_history  wrh ON wrh.id_resource = tt.id_ticket "
+            + "		WHERE wrh.id_action = ? "
             + "		AND Date(tt.date_close) = CURDATE() ";
 
-    private static final String SQL_SELECT_DOMAINS_LIST = "	SELECT Group_concat(T2.label SEPARATOR ';') AS 'Domaines' " + "	FROM( SELECT @r AS _id, " + "	(" + "				SELECT @r := id_parent "
-            + "				FROM ticketing_category " + "				WHERE id_category = _id " + "			) AS parent_id, " + "			@l := @l + 1 AS lvl "
-            + "		FROM( SELECT @r := ?, @l := 0) vars CROSS " + "		JOIN ticketing_category m " + "		WHERE @r <> 0 " + "	) T1 " + "JOIN ticketing_category T2 ON T1._id = T2.id_category";
+    private static final String SQL_SELECT_DOMAINS_LIST = "	SELECT Group_concat(T2.label SEPARATOR ';') AS 'Domaines' " + "	FROM( SELECT @r AS _id, " + "	("
+            + "				SELECT @r := id_parent " + "				FROM ticketing_category " + "				WHERE id_category = _id " + "			) AS parent_id, "
+            + "			@l := @l + 1 AS lvl " + "		FROM( SELECT @r := ?, @l := 0) vars CROSS " + "		JOIN ticketing_category m " + "		WHERE @r <> 0 " + "	) T1 "
+            + "JOIN ticketing_category T2 ON T1._id = T2.id_category";
 
     @Override
     public List<Mailing> getNewMailingList( int idAction, Plugin plugin )

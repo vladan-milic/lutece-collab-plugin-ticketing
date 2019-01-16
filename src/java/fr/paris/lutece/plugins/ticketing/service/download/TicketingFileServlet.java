@@ -62,17 +62,17 @@ public class TicketingFileServlet extends HttpServlet
     /**
      * Generated serial Id
      */
-    private static final long   serialVersionUID            = -3589685443968252550L;
+    private static final long serialVersionUID = -3589685443968252550L;
 
     // Parameters
-    public static final String  PARAMETER_ID_RESPONSE       = "id_response";
+    public static final String PARAMETER_ID_RESPONSE = "id_response";
 
     // Other constants
-    public static final String  URL_SERVLET                 = "servlet/plugins/ticketing/file";
-    private static final String LOG_UNKNOWN_ID_RESPONSE     = "Calling Ticketing file servlet with unknown id response : ";
-    private static final String LOG_WRONG_ID_RESPONSE       = "Calling Ticketing file servlet with wrong format for parameter " + PARAMETER_ID_RESPONSE + " : ";
+    public static final String URL_SERVLET = "servlet/plugins/ticketing/file";
+    private static final String LOG_UNKNOWN_ID_RESPONSE = "Calling Ticketing file servlet with unknown id response : ";
+    private static final String LOG_WRONG_ID_RESPONSE = "Calling Ticketing file servlet with wrong format for parameter " + PARAMETER_ID_RESPONSE + " : ";
     private static final String LOG_UNAUTHENTICATED_REQUEST = "Calling Ticketing file servlet with unauthenticated request";
-    private static final String LOG_UNAUTHENTICATED_USER    = "Calling ExternalUserEmailValidationServlet with unauthenticated user";
+    private static final String LOG_UNAUTHENTICATED_USER = "Calling ExternalUserEmailValidationServlet with unauthenticated user";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -133,11 +133,13 @@ public class TicketingFileServlet extends HttpServlet
                 // the response stream,
                 // and an error message needs to be displayed if an exception occurs
                 os.close( );
-            } catch ( IOException e )
+            }
+            catch( IOException e )
             {
                 AppLogService.error( e.getStackTrace( ), e );
             }
-        } else
+        }
+        else
         {
             AppLogService.error( LOG_WRONG_ID_RESPONSE + strIdResponse );
             throw new ServletException( );

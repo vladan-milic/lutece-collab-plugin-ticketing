@@ -57,21 +57,21 @@ public final class SphinxServices implements ISphinxServices
 {
 
     // Header export
-    private static final String HEADER_EMAIL           = "email";
-    private static final String HEADER_DOMAINE         = "domaine";
-    private static final String HEADER_THEMATIQUE      = "thematique";
+    private static final String HEADER_EMAIL = "email";
+    private static final String HEADER_DOMAINE = "domaine";
+    private static final String HEADER_THEMATIQUE = "thematique";
     private static final String HEADER_SOUS_THEMATIQUE = "sous-thematique";
-    private static final String HEADER_LOCALISATION    = "localisation";
-    private static final String HEADER_DELAI           = "delai (en jours)";
+    private static final String HEADER_LOCALISATION = "localisation";
+    private static final String HEADER_DELAI = "delai (en jours)";
 
-    private static final int    DEPTH_DOMAINE          = 1;
-    private static final int    DEPTH_THEMATIQUE       = 2;
-    private static final int    DEPTH_SOUS_THEMATIQUE  = 3;
-    private static final int    DEPTH_LOCALISATION     = 4;
+    private static final int DEPTH_DOMAINE = 1;
+    private static final int DEPTH_THEMATIQUE = 2;
+    private static final int DEPTH_SOUS_THEMATIQUE = 3;
+    private static final int DEPTH_LOCALISATION = 4;
 
-    private static final String ID_ACTION              = "daemon.sphinxDaemon.idAction";
+    private static final String ID_ACTION = "daemon.sphinxDaemon.idAction";
 
-    private static File         tempFile;
+    private static File tempFile;
 
     /**
      * 
@@ -107,7 +107,8 @@ public final class SphinxServices implements ISphinxServices
             sbLogs.append( "Duration of the treatment : " );
             sbLogs.append( end.getTime( ) - start.getTime( ) );
             sbLogs.append( " milliseconds\r\n" );
-        } catch ( Exception e )
+        }
+        catch( Exception e )
         {
             sbLogs.append( " caught a " );
             sbLogs.append( e.getClass( ) );
@@ -115,7 +116,8 @@ public final class SphinxServices implements ISphinxServices
             sbLogs.append( e.getMessage( ) );
             sbLogs.append( "\r\n" );
             AppLogService.error( "Sphinx Mailing error : " + e.getMessage( ), e );
-        } finally
+        }
+        finally
         {
             //
         }
@@ -135,49 +137,52 @@ public final class SphinxServices implements ISphinxServices
         SimpleDateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
         tempFile = File.createTempFile( "mailing_" + dateFormat.format( date ), ".csv" );
 
-        CSVFormat csvFormat = CSVFormat.DEFAULT.withHeader( HEADER_EMAIL, HEADER_DOMAINE, HEADER_THEMATIQUE, HEADER_SOUS_THEMATIQUE, HEADER_LOCALISATION, HEADER_DELAI ).withRecordSeparator( '\n' )
-                .withDelimiter( ';' );
-        try ( Writer writer = new OutputStreamWriter( new FileOutputStream( tempFile ), StandardCharsets.ISO_8859_1 );
+        CSVFormat csvFormat = CSVFormat.DEFAULT
+                .withHeader( HEADER_EMAIL, HEADER_DOMAINE, HEADER_THEMATIQUE, HEADER_SOUS_THEMATIQUE, HEADER_LOCALISATION, HEADER_DELAI )
+                .withRecordSeparator( '\n' ).withDelimiter( ';' );
+        try( Writer writer = new OutputStreamWriter( new FileOutputStream( tempFile ), StandardCharsets.ISO_8859_1 ) ;
 
-                CSVPrinter csvPrinter = new CSVPrinter( writer, csvFormat ) )
+        CSVPrinter csvPrinter = new CSVPrinter( writer, csvFormat ) )
         {
             for ( Mailing mailing : mailingList )
             {
 
-                String[] parts = mailing.getDomains( ).split( ";" );
-                switch ( parts.length )
+                String [ ] parts = mailing.getDomains( ).split( ";" );
+                switch( parts.length )
                 {
                     case DEPTH_DOMAINE:
-                        domaine = parts[0];
+                        domaine = parts [0];
                         break;
                     case DEPTH_THEMATIQUE:
-                        thematique = parts[0];
-                        domaine = parts[1];
+                        thematique = parts [0];
+                        domaine = parts [1];
                         break;
                     case DEPTH_SOUS_THEMATIQUE:
-                        sous_thematique = parts[0];
-                        thematique = parts[1];
-                        domaine = parts[2];
+                        sous_thematique = parts [0];
+                        thematique = parts [1];
+                        domaine = parts [2];
                         break;
                     case DEPTH_LOCALISATION:
-                        localisation = parts[0];
-                        sous_thematique = parts[1];
-                        thematique = parts[2];
-                        domaine = parts[3];
+                        localisation = parts [0];
+                        sous_thematique = parts [1];
+                        thematique = parts [2];
+                        domaine = parts [3];
                         break;
                 }
 
                 if ( Integer.parseInt( mailing.getDuration( ) ) == 0 )
                 {
                     duree = 1;
-                } else
+                }
+                else
                 {
                     duree = Integer.parseInt( mailing.getDuration( ) );
                 }
 
                 csvPrinter.printRecord( mailing.getEMail( ), domaine, thematique, sous_thematique, localisation, duree );
             }
-        } catch ( IOException e )
+        }
+        catch( IOException e )
         {
             AppLogService.error( "Failed to export labels to file " + tempFile.getAbsolutePath( ) + " due to error: {}", e );
         }

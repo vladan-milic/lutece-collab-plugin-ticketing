@@ -45,9 +45,9 @@ public class UserTitle implements Serializable
     private static final long serialVersionUID = 1L;
 
     // Variables declarations
-    private int               _nId;
+    private int _nId;
     @Size( max = 50, message = "#i18n{ticketing.validation.usertitle.Label.size}" )
-    private String            _strLabel;
+    private String _strLabel;
 
     /**
      * Returns the Id

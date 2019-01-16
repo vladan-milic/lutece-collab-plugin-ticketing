@@ -46,8 +46,8 @@ import fr.paris.lutece.util.ReferenceList;
 public final class ModelResponseHome
 {
     // Static variable pointed at the DAO instance
-    private static IModelResponseDAO _dao    = SpringContextService.getBean( "ticketing.modelResponseDAO" );
-    private static Plugin            _plugin = PluginService.getPlugin( "ticketing" );
+    private static IModelResponseDAO _dao = SpringContextService.getBean( "ticketing.modelResponseDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated

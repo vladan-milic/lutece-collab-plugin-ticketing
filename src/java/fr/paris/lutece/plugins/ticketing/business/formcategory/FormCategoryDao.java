@@ -8,13 +8,13 @@ import fr.paris.lutece.util.sql.DAOUtil;
 
 public class FormCategoryDao implements IFormCategoryDao
 {
-    private static final String SQL_QUERY_FORM_CATEGORY         = "INSERT INTO ticketing_form_category (id_form, id_category) VALUES ( ?, ? ) ";
-    private static final String SQL_QUERY_UPDATE                = "UPDATE ticketing_form_category SET id_form = ?, id_category = ?";
-    private static final String SQL_QUERY_DELETE                = "DELETE FROM ticketing_form_category WHERE id_form = ? AND id_category = ?";
+    private static final String SQL_QUERY_FORM_CATEGORY = "INSERT INTO ticketing_form_category (id_form, id_category) VALUES ( ?, ? ) ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_form_category SET id_form = ?, id_category = ?";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_form_category WHERE id_form = ? AND id_category = ?";
     private static final String SQL_QUERY_DELETE_BY_ID_CATEGORY = "DELETE FROM ticketing_form_category WHERE id_category = ? ";
-    private static final String SQL_QUERY_LOAD_BY_FORM          = "SELECT id_form, id_category FROM ticketing_form_category WHERE id_form = ?";
-    private static final String SQL_QUERY_LOAD_BY_CATEGORY      = "SELECT id_form, id_category FROM ticketing_form_category WHERE id_category = ?";
-    private static final String SQL_QUERY_LOAD                  = "SELECT id_form, id_category FROM ticketing_form_category";
+    private static final String SQL_QUERY_LOAD_BY_FORM = "SELECT id_form, id_category FROM ticketing_form_category WHERE id_form = ?";
+    private static final String SQL_QUERY_LOAD_BY_CATEGORY = "SELECT id_form, id_category FROM ticketing_form_category WHERE id_category = ?";
+    private static final String SQL_QUERY_LOAD = "SELECT id_form, id_category FROM ticketing_form_category";
 
     /**
      * {@inheritDoc }

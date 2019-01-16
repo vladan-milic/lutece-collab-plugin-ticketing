@@ -50,8 +50,8 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class TicketCategoryInputsHome
 {
     // Static variable pointed at the DAO instance
-    private static ITicketCategoryInputsDAO _dao    = SpringContextService.getBean( "ticketing.ticketCategoryInputsDAO" );
-    private static Plugin                   _plugin = PluginService.getPlugin( "ticketing" );
+    private static ITicketCategoryInputsDAO _dao = SpringContextService.getBean( "ticketing.ticketCategoryInputsDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated

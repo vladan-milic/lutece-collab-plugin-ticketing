@@ -52,8 +52,8 @@ public class EntryService extends RemovalListenerService implements Serializable
     /**
      * Name of the bean of this service
      */
-    public static final String BEAN_NAME        = "ticketing.entryService";
-    private static final long  serialVersionUID = 1L;
+    public static final String BEAN_NAME = "ticketing.entryService";
+    private static final long serialVersionUID = 1L;
 
     /**
      * Get an instance of the service
@@ -102,7 +102,8 @@ public class EntryService extends RemovalListenerService implements Serializable
             {
                 for ( int i = 0; i < orderFirstLevel.size( ); i++ )
                 {
-                    if ( ( orderFirstLevel.get( i ) == entry.getPosition( ) ) && ( entry.getPosition( ) > entryToChangeOrder.getPosition( ) ) && ( entry.getPosition( ) <= nOrderToSet ) )
+                    if ( ( orderFirstLevel.get( i ) == entry.getPosition( ) ) && ( entry.getPosition( ) > entryToChangeOrder.getPosition( ) )
+                            && ( entry.getPosition( ) <= nOrderToSet ) )
                     {
                         if ( nNbChild == 0 )
                         {
@@ -112,7 +113,8 @@ public class EntryService extends RemovalListenerService implements Serializable
                             {
                                 nNewOrder -= nbChildEntryToChangeOrder;
                             }
-                        } else
+                        }
+                        else
                         {
                             nNewOrder += ( nNbChild + 1 );
                         }
@@ -144,7 +146,8 @@ public class EntryService extends RemovalListenerService implements Serializable
                 child.setPosition( entryToChangeOrder.getPosition( ) + nNbChild );
                 EntryHome.update( child );
             }
-        } else
+        }
+        else
         {
             EntryFilter filter = new EntryFilter( );
             filter.setIdResource( entryToChangeOrder.getIdResource( ) );
@@ -202,7 +205,8 @@ public class EntryService extends RemovalListenerService implements Serializable
 
                 for ( int i = 0; i < orderFirstLevel.size( ); i++ )
                 {
-                    if ( ( orderFirstLevel.get( i ).equals( entryInitialPosition ) ) && ( entryInitialPosition < nEntryToMoveOrder ) && ( entryInitialPosition >= nOrderToSet ) )
+                    if ( ( orderFirstLevel.get( i ).equals( entryInitialPosition ) ) && ( entryInitialPosition < nEntryToMoveOrder )
+                            && ( entryInitialPosition >= nOrderToSet ) )
                     {
                         if ( entryToChangeOrder.getPosition( ) == nEntryToMoveOrder )
                         {
@@ -231,7 +235,8 @@ public class EntryService extends RemovalListenerService implements Serializable
                     }
                 }
             }
-        } else
+        }
+        else
         {
             List<Entry> listAllEntry = EntryHome.getEntryList( filter );
 
@@ -273,7 +278,8 @@ public class EntryService extends RemovalListenerService implements Serializable
             {
                 nPosition = entryGroup.getPosition( );
                 moveDownEntryOrder( nPosition, entryToMove );
-            } else
+            }
+            else
             {
                 nPosition = entryGroup.getPosition( ) + entryGroup.getChildren( ).size( ) + 1;
                 moveUpEntryOrder( nPosition, entryToMove );

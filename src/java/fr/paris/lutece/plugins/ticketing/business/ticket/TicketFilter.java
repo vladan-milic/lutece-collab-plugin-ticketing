@@ -56,49 +56,49 @@ public class TicketFilter extends OrderByFilter
     /**
      * Value for boolean filters to represent Boolean.FALSE
      */
-    public static final int       FILTER_FALSE                = 0;
+    public static final int FILTER_FALSE = 0;
 
     /**
      * Value for boolean filters to represent Boolean.TRUE
      */
-    public static final int       FILTER_TRUE                 = 1;
-    public static final int       CONSTANT_ID_NULL            = -1;
+    public static final int FILTER_TRUE = 1;
+    public static final int CONSTANT_ID_NULL = -1;
 
     /**
      * Default order by
      */
-    public static final String    CONSTANT_DEFAULT_ORDER_BY   = "date_create";
-    public static final String    CONSTANT_DEFAULT_ORDER_SORT = OrderSortAllowed.DESC.name( );
-    private int                   _nIdTicket                  = CONSTANT_ID_NULL;
-    private Date                  _dateLastUpdateDate;
-    private Date                  _dateLastUpdateStartDate;
-    private Date                  _dateLastUpdateEndDate;
-    private Date                  _dateCreationDate;
-    private Date                  _dateCreationStartDate;
-    private Date                  _dateCreationEndDate;
-    private Date                  _dateCloseDate;
-    private boolean               _bCloseDatePosterior;
-    private int                   _nIdUser                    = CONSTANT_ID_NULL;
-    private int                   _nIdChannel                 = CONSTANT_ID_NULL;
-    private int                   _nOpenSincePeriod           = CONSTANT_ID_NULL;
-    private String                _strStatus;
-    private String                _strEmail;
-    private String                _strLastName;
-    private String                _strFirstName;
-    private String                _strReference;
-    private String                _strFixedPhoneNumber;
-    private String                _strMobilePhoneNumber;
-    private String                _strNomenclature;
-    private int                   _nUrgency                   = CONSTANT_ID_NULL;
-    private List<Integer>         _listIdWorkflowState        = new ArrayList<Integer>( );
-    private TicketFilterViewEnum  _enumFilterView             = TicketFilterViewEnum.ALL;
-    private int                   _nFilterIdAdminUser         = CONSTANT_ID_NULL;
-    private Set<Integer>          _setFilterIdAssigneeUnit    = null;
-    private Set<Integer>          _setFilterIdAssignerUnit    = null;
-    private Set<String>           _setAdminUserRoles          = null;
-    private int                   _nTicketsLimitStart         = CONSTANT_ID_NULL;
-    private int                   _nTicketsLimitCount         = CONSTANT_ID_NULL;
-    private Map<Integer, Integer> _mapCategoryId              = new LinkedHashMap<Integer, Integer>( );
+    public static final String CONSTANT_DEFAULT_ORDER_BY = "date_create";
+    public static final String CONSTANT_DEFAULT_ORDER_SORT = OrderSortAllowed.DESC.name( );
+    private int _nIdTicket = CONSTANT_ID_NULL;
+    private Date _dateLastUpdateDate;
+    private Date _dateLastUpdateStartDate;
+    private Date _dateLastUpdateEndDate;
+    private Date _dateCreationDate;
+    private Date _dateCreationStartDate;
+    private Date _dateCreationEndDate;
+    private Date _dateCloseDate;
+    private boolean _bCloseDatePosterior;
+    private int _nIdUser = CONSTANT_ID_NULL;
+    private int _nIdChannel = CONSTANT_ID_NULL;
+    private int _nOpenSincePeriod = CONSTANT_ID_NULL;
+    private String _strStatus;
+    private String _strEmail;
+    private String _strLastName;
+    private String _strFirstName;
+    private String _strReference;
+    private String _strFixedPhoneNumber;
+    private String _strMobilePhoneNumber;
+    private String _strNomenclature;
+    private int _nUrgency = CONSTANT_ID_NULL;
+    private List<Integer> _listIdWorkflowState = new ArrayList<Integer>( );
+    private TicketFilterViewEnum _enumFilterView = TicketFilterViewEnum.ALL;
+    private int _nFilterIdAdminUser = CONSTANT_ID_NULL;
+    private Set<Integer> _setFilterIdAssigneeUnit = null;
+    private Set<Integer> _setFilterIdAssignerUnit = null;
+    private Set<String> _setAdminUserRoles = null;
+    private int _nTicketsLimitStart = CONSTANT_ID_NULL;
+    private int _nTicketsLimitCount = CONSTANT_ID_NULL;
+    private Map<Integer, Integer> _mapCategoryId = new LinkedHashMap<Integer, Integer>( );
 
     /**
      * Check if this filter contains a idUser
@@ -158,7 +158,7 @@ public class TicketFilter extends OrderByFilter
      * @param tabIdWorkflowState
      *            the tabIdWorkflowState to set
      */
-    public void setListIdWorkflowState( String[] tabIdWorkflowState )
+    public void setListIdWorkflowState( String [ ] tabIdWorkflowState )
     {
         _listIdWorkflowState = new ArrayList<Integer>( );
 

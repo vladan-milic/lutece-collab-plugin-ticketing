@@ -44,11 +44,11 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
 
 public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDepth>
 {
-    protected List<Node>  _rootNodes;
+    protected List<Node> _rootNodes;
 
-    protected List<Node>  _leaves;
+    protected List<Node> _leaves;
 
-    protected List<Node>  _nodes;
+    protected List<Node> _nodes;
 
     protected List<Depth> _depths;
 
@@ -86,7 +86,8 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
                         break;
                     }
                 }
-            } else
+            }
+            else
             {
                 // Set the depth of the node
                 Node.setParent( null );
@@ -96,14 +97,14 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
             // Set the children
             List<AbstractNode> listChildren = new ArrayList<>( );
 
-            listNode.stream( ).filter( ( childNode ) -> ( childNode.getIdParent( ) == Node.getId( ) ) ).forEach( ( childNode ) ->
-            {
+            listNode.stream( ).filter( ( childNode ) -> ( childNode.getIdParent( ) == Node.getId( ) ) ).forEach( ( childNode ) -> {
                 listChildren.add( childNode );
             } );
             if ( listChildren.isEmpty( ) )
             {
                 Node.setLeaf( true );
-            } else
+            }
+            else
             {
                 Node.setLeaf( false );
             }
@@ -112,8 +113,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
         _nodes = new ArrayList<Node>( listNode );
         _rootNodes = _nodes.stream( ).filter( node -> ( node.getIdParent( ) == -1 ) ).collect( Collectors.toList( ) );
         _leaves = _nodes.stream( ).filter( node -> ( node.getLeaf( ) == true ) ).collect( Collectors.toList( ) );
-        _nodes.stream( ).forEach( ( node ) ->
-        {
+        _nodes.stream( ).forEach( ( node ) -> {
             node.setLeaves( getLeavesOf( node ) );
         } );
     }
@@ -152,10 +152,9 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
     private void addChildrenToList( Node root, List<Node> list )
     {
         list.add( root );
-        root.getChildren( ).stream( ).forEach( node ->
-        {
+        root.getChildren( ).stream( ).forEach( node -> {
             node.setParent( root );
-            addChildrenToList( ( Node ) node, list );
+            addChildrenToList( (Node) node, list );
         } );
     }
 
@@ -233,7 +232,8 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
         if ( node.getLeaf( ) )
         {
             listLeaves.add( node );
-        } else
+        }
+        else
         {
             for ( AbstractNode child : node.getChildren( ) )
             {
@@ -308,7 +308,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
         TicketCategoryType defaultDepth = new TicketCategoryType( );
         defaultDepth.setDepthNumber( nDepth );
         defaultDepth.setLabel( StringUtils.EMPTY );
-        return ( Depth ) defaultDepth;
+        return (Depth) defaultDepth;
     }
 
     /**
@@ -363,7 +363,7 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
             listNodes.add( node );
             while ( node.getParent( ) != null )
             {
-                node = ( Node ) node.getParent( );
+                node = (Node) node.getParent( );
                 listNodes.add( node );
             }
             Collections.reverse( listNodes );

@@ -52,35 +52,35 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 public class ViewingJspBean extends ManageAdminTicketingJspBean
 {
 
-    private static final long   serialVersionUID                   = -3983945855376772508L;
+    private static final long serialVersionUID = -3983945855376772508L;
 
     // //////////////////////////////////////////////////////////////////////////
     // Constants
 
     // templates
-    private static final String TEMPLATE_CREATE_VIEWING            = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_viewing.html";
-    private static final String TEMPLATE_MANAGE_VIEWING            = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_viewing.html";
+    private static final String TEMPLATE_CREATE_VIEWING = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_viewing.html";
+    private static final String TEMPLATE_MANAGE_VIEWING = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_viewing.html";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_CREATE_VIEWING = "ticketing.manage_viewing.pageTitle";
     private static final String PROPERTY_PAGE_TITLE_MANAGE_VIEWING = "ticketing.manage_viewing.pageTitle";
 
     // Markers
-    private static final String MARK_VIEWING                       = "viewing";
+    private static final String MARK_VIEWING = "viewing";
 
     // Views
-    private static final String VIEW_MANAGE_VIEWING                = "manageViewing";
+    private static final String VIEW_MANAGE_VIEWING = "manageViewing";
 
     // Actions
-    private static final String ACTION_CREATE_VIEWING              = "createViewing";
-    private static final String ACTION_MODIFY_VIEWING              = "modifyViewing";
+    private static final String ACTION_CREATE_VIEWING = "createViewing";
+    private static final String ACTION_MODIFY_VIEWING = "modifyViewing";
 
     // Infos
-    private static final String INFO_VIEWING_UPDATED               = "ticketing.info.viewing.updated";
-    private static final String INFO_VIEWING_CREATED               = "ticketing.info.viewing.created";
+    private static final String INFO_VIEWING_UPDATED = "ticketing.info.viewing.updated";
+    private static final String INFO_VIEWING_CREATED = "ticketing.info.viewing.created";
 
     // Session variable to store working values
-    private Viewing             _viewing;
+    private Viewing _viewing;
 
     /**
      * Build the Manage View
@@ -101,7 +101,8 @@ public class ViewingJspBean extends ManageAdminTicketingJspBean
             model.put( MARK_VIEWING, _viewing );
             ModelUtils.storeRichText( request, model );
             return getPage( PROPERTY_PAGE_TITLE_MANAGE_VIEWING, TEMPLATE_MANAGE_VIEWING, model );
-        } else
+        }
+        else
         {
             _viewing = ( _viewing != null ) ? _viewing : new Viewing( );
 

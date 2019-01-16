@@ -52,9 +52,9 @@ import fr.paris.lutece.util.ReferenceList;
 public class SupportEntityResourceIdService extends ResourceIdService
 {
     /** Permission for viewing a support entity */
-    public static final String  PERMISSION_VIEW              = "VIEW";
+    public static final String PERMISSION_VIEW = "VIEW";
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "ticketing.supportentity.resourceType";
-    private static final String PROPERTY_LABEL_VIEW          = "ticketing.supportentity.permission.label.view";
+    private static final String PROPERTY_LABEL_VIEW = "ticketing.supportentity.permission.label.view";
 
     /**
      * Constructor

@@ -41,7 +41,7 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryType;
 
 public class TicketCategoryTypeService
 {
-    private static TicketCategoryTree        _treeCategories;
+    private static TicketCategoryTree _treeCategories;
 
     private static TicketCategoryTypeService _instance;
 

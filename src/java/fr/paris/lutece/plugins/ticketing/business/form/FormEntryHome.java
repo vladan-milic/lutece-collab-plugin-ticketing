@@ -46,8 +46,8 @@ import fr.paris.lutece.util.ReferenceList;
 public final class FormEntryHome
 {
     // Static variable pointed at the DAO instance
-    private static IFormEntryDAO _dao    = SpringContextService.getBean( "ticketing.formEntryDAO" );
-    private static Plugin        _plugin = PluginService.getPlugin( "ticketing" );
+    private static IFormEntryDAO _dao = SpringContextService.getBean( "ticketing.formEntryDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated

@@ -53,11 +53,11 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 public class SphinxRest
 {
 
-    private static final String URL         = "daemon.sphinxDaemon.url";
+    private static final String URL = "daemon.sphinxDaemon.url";
     private static final String URL_MAILING = "daemon.sphinxDaemon.url.mailing";
-    private static final String URL_TOKEN   = "daemon.sphinxDaemon.token.url";
-    private static final String USERNAME    = "daemon.sphinxDaemon.unsername";
-    private static final String PASSWORD    = "daemon.sphinxDaemon.password";
+    private static final String URL_TOKEN = "daemon.sphinxDaemon.token.url";
+    private static final String USERNAME = "daemon.sphinxDaemon.unsername";
+    private static final String PASSWORD = "daemon.sphinxDaemon.password";
 
     /**
      * Gives the contact modes
@@ -88,7 +88,7 @@ public class SphinxRest
 
         String POST_PARAMS = "username=" + username + "&password=" + password + "&lang=fr&grant_type=password&client_id=sphinxapiclient";
         URL obj = new URL( tokenUrl );
-        HttpURLConnection con = ( HttpURLConnection ) obj.openConnection( );
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection( );
         con.setRequestMethod( "POST" );
         con.setRequestProperty( "Content-Type", "application/json;odata=verbose" );
         con.setRequestProperty( "Authorization", "Basic Base64_encoded_clientId:clientSecret" );
@@ -119,13 +119,14 @@ public class SphinxRest
 
             // print result
             System.out.println( response.toString( ) );
-        } else
+        }
+        else
         {
             System.out.println( "POST request not worked" );
         }
     }
 
-    public static void main( String[] args ) throws Exception
+    public static void main( String [ ] args ) throws Exception
     {
         getHttpCon( );
     }

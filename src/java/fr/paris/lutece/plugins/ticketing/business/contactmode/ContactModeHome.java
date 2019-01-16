@@ -50,11 +50,11 @@ import fr.paris.lutece.util.ReferenceList;
  */
 public final class ContactModeHome
 {
-    private static final String    MESSAGE_PREFIX = "ticketing.contactmodes.label.";
+    private static final String MESSAGE_PREFIX = "ticketing.contactmodes.label.";
 
     // Static variable pointed at the DAO instance
-    private static IContactModeDAO _dao           = SpringContextService.getBean( "ticketing.contactModeDAO" );
-    private static Plugin          _plugin        = PluginService.getPlugin( "ticketing" );
+    private static IContactModeDAO _dao = SpringContextService.getBean( "ticketing.contactModeDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated

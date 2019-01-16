@@ -54,7 +54,7 @@ public class TicketCategoryValidator
 {
     // Variables
     private HttpServletRequest _request;
-    private Locale             _locale;
+    private Locale _locale;
 
     /**
      * Constructor
@@ -97,7 +97,8 @@ public class TicketCategoryValidator
             try
             {
                 nId = Integer.valueOf( _request.getParameter( TicketingConstants.PARAMETER_CATEGORY_ID + i ) );
-            } catch ( NumberFormatException e )
+            }
+            catch( NumberFormatException e )
             {
                 nId = -1;
             }
@@ -113,12 +114,15 @@ public class TicketCategoryValidator
             {
                 lastValidTicketCategory = ticketCategory;
                 lastValidI = i;
-            } else if ( ticketCategoryIsRequired || ( i <= TicketingConstants.CATEGORY_DEPTH_MIN ) )
-            {
-                listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED,
-                        new String[] { TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( i - 1 ).getLabel( ) }, _locale ) );
-                isValid = false;
             }
+            else
+                if ( ticketCategoryIsRequired || ( i <= TicketingConstants.CATEGORY_DEPTH_MIN ) )
+                {
+                    listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED, new String [ ] {
+                        TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( i - 1 ).getLabel( )
+                    }, _locale ) );
+                    isValid = false;
+                }
 
             boolean ticketCategoryIsLeaf = ( ticketCategory != null ) && ticketCategory.getLeaf( );
             if ( !isValid || ticketCategoryIsLeaf )
@@ -136,8 +140,9 @@ public class TicketCategoryValidator
 
         if ( isValid && ( lastValidI < TicketingConstants.CATEGORY_DEPTH_MIN ) )
         {
-            listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED,
-                    new String[] { TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( lastValidI + 1 ).getLabel( ) }, _locale ) );
+            listValidationErrors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_CATEGORY_NOT_SELECTED, new String [ ] {
+                TicketCategoryService.getInstance( ).getCategoriesTree( ).getDepths( ).get( lastValidI + 1 ).getLabel( )
+            }, _locale ) );
             isValid = false;
         }
 

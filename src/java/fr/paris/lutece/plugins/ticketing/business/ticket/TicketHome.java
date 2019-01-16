@@ -58,8 +58,8 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class TicketHome
 {
     // Static variable pointed at the DAO instance
-    private static ITicketDAO             _dao          = SpringContextService.getBean( "ticketing.ticketDAO" );
-    private static Plugin                 _plugin       = PluginService.getPlugin( "ticketing" );
+    private static ITicketDAO _dao = SpringContextService.getBean( "ticketing.ticketDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
     private static TicketFormCacheService _cacheService = TicketFormCacheService.getInstance( );
 
     /**
@@ -317,13 +317,14 @@ public final class TicketHome
     public static List<Integer> findListIdResponse( int nIdticket )
     {
         String strCacheKey = _cacheService.getTicketResponseCacheKey( nIdticket );
-        List<Integer> listIdResponse = ( List<Integer> ) _cacheService.getFromCache( strCacheKey );
+        List<Integer> listIdResponse = (List<Integer>) _cacheService.getFromCache( strCacheKey );
 
         if ( listIdResponse == null )
         {
             listIdResponse = _dao.findListIdResponse( nIdticket, _plugin );
             _cacheService.putInCache( strCacheKey, new ArrayList<Integer>( listIdResponse ) );
-        } else
+        }
+        else
         {
             listIdResponse = new ArrayList<Integer>( listIdResponse );
         }

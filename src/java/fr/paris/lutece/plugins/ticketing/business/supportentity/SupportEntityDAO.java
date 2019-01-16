@@ -53,12 +53,12 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class SupportEntityDAO implements ISupportEntityDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK    = "SELECT max( id_support_entity ) FROM ticketing_support_entity";
-    private static final String SQL_QUERY_SELECT    = "SELECT a.id_support_entity, a.name, a.level, a.id_unit, a.id_admin_user, a.id_domain  FROM ticketing_support_entity a "
+    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_support_entity ) FROM ticketing_support_entity";
+    private static final String SQL_QUERY_SELECT = "SELECT a.id_support_entity, a.name, a.level, a.id_unit, a.id_admin_user, a.id_domain  FROM ticketing_support_entity a "
             + " WHERE a.id_support_entity = ? ";
-    private static final String SQL_QUERY_INSERT    = "INSERT INTO ticketing_support_entity ( id_support_entity, name, level, id_unit, id_admin_user, id_domain ) VALUES ( ?, ?, ?, ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE    = "DELETE FROM ticketing_support_entity  WHERE id_support_entity = ? ";
-    private static final String SQL_QUERY_UPDATE    = "UPDATE ticketing_support_entity SET id_support_entity = ?,  name = ?, level = ?, id_unit = ?, id_admin_user = ?, id_domain = ?  WHERE id_support_entity = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_support_entity ( id_support_entity, name, level, id_unit, id_admin_user, id_domain ) VALUES ( ?, ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_support_entity  WHERE id_support_entity = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_support_entity SET id_support_entity = ?,  name = ?, level = ?, id_unit = ?, id_admin_user = ?, id_domain = ?  WHERE id_support_entity = ?";
     private static final String SQL_QUERY_SELECTALL = "SELECT a.id_support_entity, a.name, a.level, a.id_unit, a.id_admin_user, a.id_domain  FROM ticketing_support_entity a ";
 
     /**

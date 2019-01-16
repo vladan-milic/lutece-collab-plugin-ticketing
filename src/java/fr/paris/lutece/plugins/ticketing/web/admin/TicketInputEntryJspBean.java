@@ -78,52 +78,52 @@ import fr.paris.lutece.util.url.UrlItem;
 @Controller( controllerJsp = "ManageTicketInputEntry.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = TicketInputsJspBean.RIGHT_MANAGETICKETINPUTS )
 public class TicketInputEntryJspBean extends MVCAdminJspBean
 {
-    private static final long   serialVersionUID                      = -4951787792196104967L;
+    private static final long serialVersionUID = -4951787792196104967L;
 
     // Parameters
-    private static final String PARAMETER_ID_ENTRY_TYPE               = "id_type";
-    private static final String PARAMETER_ID_INPUT                    = "id_input";
-    private static final String PARAMETER_ID_FIELD                    = "id_field";
-    private static final String PARAMETER_ID_ENTRY                    = "id_entry";
-    private static final String PARAMETER_ENTRY_CODE                  = "entry_code";
-    private static final String PARAMETER_CANCEL                      = "cancel";
-    private static final String PARAMETER_APPLY                       = "apply";
-    private static final String PARAMETER_ID_EXPRESSION               = "id_expression";
-    private static final String FIELD_ENTRY_CODE                      = "ticketing.createEntry.labelCode";
+    private static final String PARAMETER_ID_ENTRY_TYPE = "id_type";
+    private static final String PARAMETER_ID_INPUT = "id_input";
+    private static final String PARAMETER_ID_FIELD = "id_field";
+    private static final String PARAMETER_ID_ENTRY = "id_entry";
+    private static final String PARAMETER_ENTRY_CODE = "entry_code";
+    private static final String PARAMETER_CANCEL = "cancel";
+    private static final String PARAMETER_APPLY = "apply";
+    private static final String PARAMETER_ID_EXPRESSION = "id_expression";
+    private static final String FIELD_ENTRY_CODE = "ticketing.createEntry.labelCode";
 
     // Urls
-    private static final String JSP_URL_MANAGE_TICKETING_INPUT_ENTRY  = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageTicketInputEntry.jsp";
+    private static final String JSP_URL_MANAGE_TICKETING_INPUT_ENTRY = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageTicketInputEntry.jsp";
 
     // Messages
-    private static final String MESSAGE_CONFIRM_REMOVE_ENTRY          = "ticketing.message.confirmRemoveEntry";
-    private static final String MESSAGE_CANT_REMOVE_ENTRY             = "advert.message.cantRemoveEntry";
-    private static final String MESSAGE_MANDATORY_FIELD               = "portal.util.message.mandatoryField";
-    private static final String PROPERTY_CREATE_ENTRY_TITLE           = "ticketing.createEntry.titleInput";
-    private static final String PROPERTY_MODIFY_QUESTION_TITLE        = "ticketing.modifyEntry.titleInput";
-    private static final String PROPERTY_COPY_ENTRY_TITLE             = "ticketing.copyEntry.title";
-    private static final String MESSAGE_CANNOT_REMOVE_ENTRY           = "ticketing.message.errorTicketCategory.cannotRemoveEntry";
+    private static final String MESSAGE_CONFIRM_REMOVE_ENTRY = "ticketing.message.confirmRemoveEntry";
+    private static final String MESSAGE_CANT_REMOVE_ENTRY = "advert.message.cantRemoveEntry";
+    private static final String MESSAGE_MANDATORY_FIELD = "portal.util.message.mandatoryField";
+    private static final String PROPERTY_CREATE_ENTRY_TITLE = "ticketing.createEntry.titleInput";
+    private static final String PROPERTY_MODIFY_QUESTION_TITLE = "ticketing.modifyEntry.titleInput";
+    private static final String PROPERTY_COPY_ENTRY_TITLE = "ticketing.copyEntry.title";
+    private static final String MESSAGE_CANNOT_REMOVE_ENTRY = "ticketing.message.errorTicketCategory.cannotRemoveEntry";
 
     // Views
-    private static final String VIEW_GET_CREATE_ENTRY                 = "getCreateEntry";
-    private static final String VIEW_GET_MODIFY_ENTRY                 = "getModifyEntry";
-    private static final String VIEW_CONFIRM_REMOVE_ENTRY             = "confirmRemoveEntry";
+    private static final String VIEW_GET_CREATE_ENTRY = "getCreateEntry";
+    private static final String VIEW_GET_MODIFY_ENTRY = "getModifyEntry";
+    private static final String VIEW_CONFIRM_REMOVE_ENTRY = "confirmRemoveEntry";
 
     // Actions
-    private static final String ACTION_DO_CREATE_ENTRY                = "doCreateEntry";
-    private static final String ACTION_DO_MODIFY_ENTRY                = "doModifyEntry";
-    private static final String ACTION_DO_REMOVE_ENTRY                = "doRemoveEntry";
-    private static final String ACTION_DO_COPY_ENTRY                  = "doCopyEntry";
-    private static final String ACTION_DO_REMOVE_REGULAR_EXPRESSION   = "doRemoveRegularExpression";
-    private static final String ACTION_DO_INSERT_REGULAR_EXPRESSION   = "doInsertRegularExpression";
+    private static final String ACTION_DO_CREATE_ENTRY = "doCreateEntry";
+    private static final String ACTION_DO_MODIFY_ENTRY = "doModifyEntry";
+    private static final String ACTION_DO_REMOVE_ENTRY = "doRemoveEntry";
+    private static final String ACTION_DO_COPY_ENTRY = "doCopyEntry";
+    private static final String ACTION_DO_REMOVE_REGULAR_EXPRESSION = "doRemoveRegularExpression";
+    private static final String ACTION_DO_INSERT_REGULAR_EXPRESSION = "doInsertRegularExpression";
 
     // Marks
     private static final String MARK_REGULAR_EXPRESSION_LIST_REF_LIST = "regular_expression_list";
-    private static final String MARK_ENTRY                            = "entry";
-    private static final String MARK_LIST                             = "list";
-    private static final String MARK_ENTRY_TYPE_SERVICE               = "entryTypeService";
+    private static final String MARK_ENTRY = "entry";
+    private static final String MARK_LIST = "list";
+    private static final String MARK_ENTRY_TYPE_SERVICE = "entryTypeService";
 
     // Local variables
-    private EntryService        _entryService                         = EntryService.getService( );
+    private EntryService _entryService = EntryService.getService( );
 
     /**
      * Get the HTML code to create an entry
@@ -222,7 +222,9 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
             if ( StringUtils.isEmpty( strEntryCode ) )
             {
-                String[] tabErr = new String[] { I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) ) };
+                String [ ] tabErr = new String [ ] {
+                    I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) )
+                };
 
                 return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabErr, AdminMessage.TYPE_STOP ) );
             }
@@ -345,7 +347,9 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
                 if ( StringUtils.isEmpty( strEntryCode ) )
                 {
-                    String[] tabErr = new String[] { I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) ) };
+                    String [ ] tabErr = new String [ ] {
+                        I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) )
+                    };
 
                     return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabErr, AdminMessage.TYPE_STOP ) );
                 }
@@ -368,7 +372,8 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
                         {
                             // If it exists, update
                             FieldHome.update( field );
-                        } else
+                        }
+                        else
                         {
                             // If it does not exist, create
                             FieldHome.create( field );
@@ -404,15 +409,19 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
             if ( checkIfEntryIsLinkedToACategory( nIdEntry ) )
             {
-                return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CANNOT_REMOVE_ENTRY, TicketInputsJspBean.getURLManageTicketInputs( request ), AdminMessage.TYPE_ERROR ) );
-            } else
+                return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CANNOT_REMOVE_ENTRY,
+                        TicketInputsJspBean.getURLManageTicketInputs( request ), AdminMessage.TYPE_ERROR ) );
+            }
+            else
             {
                 UrlItem url = new UrlItem( getActionUrl( ACTION_DO_REMOVE_ENTRY ) );
                 url.addParameter( PARAMETER_ID_ENTRY, strIdEntry );
 
-                return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ENTRY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
+                return redirect( request,
+                        AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_ENTRY, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION ) );
             }
-        } else
+        }
+        else
         {
             return redirect( request, TicketInputsJspBean.getURLManageTicketInputs( request ) );
         }
@@ -444,7 +453,9 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
             if ( !_entryService.checkForRemoval( strIdEntry, listErrors, getLocale( ) ) )
             {
                 String strCause = AdminMessageService.getFormattedList( listErrors, getLocale( ) );
-                Object[] args = { strCause };
+                Object [ ] args = {
+                    strCause
+                };
 
                 return AdminMessageService.getMessageUrl( request, MESSAGE_CANT_REMOVE_ENTRY, args, AdminMessage.TYPE_STOP );
             }
@@ -481,7 +492,9 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
             Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
-            Object[] tabEntryTileCopy = { entry.getTitle( ) };
+            Object [ ] tabEntryTileCopy = {
+                entry.getTitle( )
+            };
             String strTitleCopyEntry = I18nService.getLocalizedString( PROPERTY_COPY_ENTRY_TITLE, tabEntryTileCopy, getLocale( ) );
 
             if ( strTitleCopyEntry != null )
@@ -524,7 +537,8 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
         String strIdExpression = request.getParameter( PARAMETER_ID_EXPRESSION );
         String strIdField = request.getParameter( PARAMETER_ID_FIELD );
 
-        if ( StringUtils.isNotEmpty( strIdExpression ) && StringUtils.isNotEmpty( strIdField ) && StringUtils.isNumeric( strIdExpression ) && StringUtils.isNumeric( strIdField ) )
+        if ( StringUtils.isNotEmpty( strIdExpression ) && StringUtils.isNotEmpty( strIdField ) && StringUtils.isNumeric( strIdExpression )
+                && StringUtils.isNumeric( strIdField ) )
         {
             int nIdField = Integer.parseInt( strIdField );
             int nIdExpression = Integer.parseInt( strIdExpression );
@@ -551,7 +565,8 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
         String strIdExpression = request.getParameter( PARAMETER_ID_EXPRESSION );
         String strIdField = request.getParameter( PARAMETER_ID_FIELD );
 
-        if ( StringUtils.isNotEmpty( strIdExpression ) && StringUtils.isNotEmpty( strIdField ) && StringUtils.isNumeric( strIdExpression ) && StringUtils.isNumeric( strIdField ) )
+        if ( StringUtils.isNotEmpty( strIdExpression ) && StringUtils.isNotEmpty( strIdField ) && StringUtils.isNumeric( strIdExpression )
+                && StringUtils.isNumeric( strIdField ) )
         {
             int nIdField = Integer.parseInt( strIdField );
             int nIdExpression = Integer.parseInt( strIdExpression );
@@ -607,8 +622,9 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
         try
         {
-            nNextIdInput = ( Integer ) Collections.max( listIdInput ) + 1;
-        } catch ( NoSuchElementException e )
+            nNextIdInput = (Integer) Collections.max( listIdInput ) + 1;
+        }
+        catch( NoSuchElementException e )
         {
             nNextIdInput = 1;
         }

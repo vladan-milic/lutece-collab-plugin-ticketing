@@ -65,7 +65,8 @@ public interface ITicketSearchIndexer
      * @throws TicketIndexerException
      *             TicketIndexerException
      */
-    void processIndexing( IndexWriter indexWriter, boolean bCreate, StringBuffer sbLog ) throws IOException, InterruptedException, SiteMessageException, TicketIndexerException;
+    void processIndexing( IndexWriter indexWriter, boolean bCreate, StringBuffer sbLog ) throws IOException, InterruptedException, SiteMessageException,
+            TicketIndexerException;
 
     /**
      * Index a ticket

@@ -76,7 +76,8 @@ public class TicketCategoryTree extends Tree<TicketCategory, TicketCategoryType>
     {
         super( treeSource );
         _restrictedCategoriesId = restrictedCategoriesId;
-        setRootElements( _rootNodes.stream( ).filter( root -> ( _restrictedCategoriesId == null ) || _restrictedCategoriesId.contains( root.getId( ) ) ).collect( Collectors.toList( ) ) );
+        setRootElements( _rootNodes.stream( ).filter( root -> ( _restrictedCategoriesId == null ) || _restrictedCategoriesId.contains( root.getId( ) ) )
+                .collect( Collectors.toList( ) ) );
     }
 
     /**

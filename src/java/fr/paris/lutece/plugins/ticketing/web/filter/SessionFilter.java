@@ -62,17 +62,17 @@ import fr.paris.lutece.portal.web.xpages.XPageApplicationEntry;
 public class SessionFilter implements Filter
 {
     // Properties
-    private static final String       PROPERTY_RETURN_URL_PARAMETER_NAME     = "ticketing.workflow.redirect.parameterName";
-    private static final String       PROPERTY_LIST_TICKETING_BACKOFFICE_URL = "ticketing.backoffice.url.list";
+    private static final String PROPERTY_RETURN_URL_PARAMETER_NAME = "ticketing.workflow.redirect.parameterName";
+    private static final String PROPERTY_LIST_TICKETING_BACKOFFICE_URL = "ticketing.backoffice.url.list";
 
     // Parameters
-    public static final String        PARAM_RETURN_URL                       = AppPropertiesService.getProperty( PROPERTY_RETURN_URL_PARAMETER_NAME, "return_url" );
-    private static final String       PARAMETER_XPAGE                        = "page";
+    public static final String PARAM_RETURN_URL = AppPropertiesService.getProperty( PROPERTY_RETURN_URL_PARAMETER_NAME, "return_url" );
+    private static final String PARAMETER_XPAGE = "page";
 
     // Other
-    private static final char         COMMA                                  = ',';
-    private static final List<String> LIST_TICKETING_BACKOFFICE_URL          = new ArrayList<String>(
-            Arrays.asList( StringUtils.split( AppPropertiesService.getProperty( PROPERTY_LIST_TICKETING_BACKOFFICE_URL, TicketingConstants.ADMIN_CONTROLLLER_PATH ), COMMA ) ) );
+    private static final char COMMA = ',';
+    private static final List<String> LIST_TICKETING_BACKOFFICE_URL = new ArrayList<String>( Arrays.asList( StringUtils.split(
+            AppPropertiesService.getProperty( PROPERTY_LIST_TICKETING_BACKOFFICE_URL, TicketingConstants.ADMIN_CONTROLLLER_PATH ), COMMA ) ) );
 
     @Override
     public void init( FilterConfig filterConfig ) throws ServletException
@@ -82,15 +82,16 @@ public class SessionFilter implements Filter
     @Override
     public void doFilter( ServletRequest request, ServletResponse response, FilterChain filterChain ) throws IOException, ServletException
     {
-        HttpServletRequest httpRequest = ( HttpServletRequest ) request;
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         if ( isTicketingBackOfficeUrl( httpRequest ) || isTicketingFrontOfficeUrl( httpRequest ) )
         {
-            if ( StringUtils.isNotEmpty( ( String ) request.getParameter( PARAM_RETURN_URL ) ) )
+            if ( StringUtils.isNotEmpty( (String) request.getParameter( PARAM_RETURN_URL ) ) )
             {
                 httpRequest.getSession( true ).setAttribute( TicketingConstants.ATTRIBUTE_RETURN_URL, request.getParameter( PARAM_RETURN_URL ) );
             }
-        } else
+        }
+        else
         {
             // Clean the session
             HttpSession session = httpRequest.getSession( );

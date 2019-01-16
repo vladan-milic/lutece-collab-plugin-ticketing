@@ -49,11 +49,11 @@ import fr.paris.lutece.util.ReferenceList;
 public final class UserTitleHome
 {
     // Static variable pointed at the DAO instance
-    private static IUserTitleDAO _dao                      = SpringContextService.getBean( "ticketing.userTitleDAO" );
-    private static Plugin        _plugin                   = PluginService.getPlugin( "ticketing" );
+    private static IUserTitleDAO _dao = SpringContextService.getBean( "ticketing.userTitleDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     // Properties
-    private static final String  PROPERTY_USER_TITLE_EMPTY = "ticketing.userTitle.empty";
+    private static final String PROPERTY_USER_TITLE_EMPTY = "ticketing.userTitle.empty";
 
     /**
      * Private constructor - this class need not be instantiated

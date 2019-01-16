@@ -56,7 +56,7 @@ public class AssigneeUnitResourceIdService extends ResourceIdService
 {
     /** Permission for viewing a ticket domain */
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "ticketing.assignee.unit.resourceType";
-    private static final String PROPERTY_LABEL_ASSIGN        = "ticketing.assignee.unit.assign.permission.label.assign";
+    private static final String PROPERTY_LABEL_ASSIGN = "ticketing.assignee.unit.assign.permission.label.assign";
 
     /**
      * Constructor

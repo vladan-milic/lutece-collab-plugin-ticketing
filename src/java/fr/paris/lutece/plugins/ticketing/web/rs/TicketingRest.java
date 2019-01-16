@@ -79,7 +79,8 @@ public class TicketingRest
         if ( ( ( accept != null ) && accept.contains( MediaType.APPLICATION_JSON ) ) || ( ( format != null ) && format.equals( Constants.MEDIA_TYPE_JSON ) ) )
         {
             strMediaType = MediaType.APPLICATION_JSON;
-        } else
+        }
+        else
         {
             strMediaType = MediaType.APPLICATION_XML;
         }

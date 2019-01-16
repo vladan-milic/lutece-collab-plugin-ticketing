@@ -9,8 +9,8 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public class FormCategoryHome
 {
     // Static variable pointed at the DAO instance
-    private static IFormCategoryDao _dao    = SpringContextService.getBean( "ticketing.formCategoryDAO" );
-    private static Plugin           _plugin = PluginService.getPlugin( "ticketing" );
+    private static IFormCategoryDao _dao = SpringContextService.getBean( "ticketing.formCategoryDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Create an instance of the form class

@@ -55,17 +55,17 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 @Controller( controllerJsp = "Standalone.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = "TICKETING_TICKETS_MANAGEMENT" )
 public class StandaloneJspBean extends WorkflowCapableJspBean
 {
-    private static final String     PARAMETER_ID_CATEGORY    = "id_ticket_category";
-    private static final String     PARAMETER_RESET_RESPONSE = "reset_response";
+    private static final String PARAMETER_ID_CATEGORY = "id_ticket_category";
+    private static final String PARAMETER_RESET_RESPONSE = "reset_response";
 
-    private static final String     VIEW_TICKET_FORM         = "ticketForm";
+    private static final String VIEW_TICKET_FORM = "ticketForm";
 
     /**
      * Generated serial id
      */
-    private static final long       serialVersionUID         = 8771454376835178743L;
+    private static final long serialVersionUID = 8771454376835178743L;
 
-    private final TicketFormService _ticketFormService       = SpringContextService.getBean( TicketFormService.BEAN_NAME );
+    private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
 
     /**
      * returns form linked to the selected category

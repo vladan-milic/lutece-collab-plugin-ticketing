@@ -46,13 +46,13 @@ public class TicketAddress implements Serializable
 
     // Variables declarations
     @Size( max = 255, message = "#i18n{ticketing.validation.ticketAddress.address.size}" )
-    private String            _strAddress;
+    private String _strAddress;
     @Size( max = 255, message = "#i18n{ticketing.validation.ticketAddress.addressDetail.size}" )
-    private String            _strAddressDetail;
+    private String _strAddressDetail;
     @Size( max = 5, message = "#i18n{ticketing.validation.ticketAddress.postalCode.size}" )
-    private String            _strPostalCode;
+    private String _strPostalCode;
     @Size( max = 255, message = "#i18n{ticketing.validation.ticketAddress.city.size}" )
-    private String            _strCity;
+    private String _strCity;
 
     /**
      * @return the address

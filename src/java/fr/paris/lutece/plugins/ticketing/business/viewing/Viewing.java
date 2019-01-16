@@ -54,25 +54,25 @@ public class Viewing implements Serializable
     private static final long serialVersionUID = 775123631152093005L;
 
     // Variables declarations
-    private int               _nId;
+    private int _nId;
     @Size( max = 50, message = "#i18n{ticketing.validation.viewing.Label.size}" )
-    private String            _strTitle;
+    private String _strTitle;
     @Size( max = 5000, message = "#i18n{ticketing.validation.viewing.Label.size}" )
-    private String            _strMessage;
+    private String _strMessage;
     @Size( max = 50, message = "#i18n{ticketing.validation.viewing.Label.size}" )
-    private String            _strValidationButon;
+    private String _strValidationButon;
     @Size( max = 50, message = "#i18n{ticketing.validation.viewing.Label.size}" )
-    private String            _strIsChannel;
+    private String _strIsChannel;
     @Size( max = 50, message = "#i18n{ticketing.validation.viewing.Label.size}" )
-    private String            _strIsContactMode;
+    private String _strIsContactMode;
     @Size( max = 50, message = "#i18n{ticketing.validation.viewing.Label.size}" )
-    private String            _strIsCivility;
+    private String _strIsCivility;
     @Size( max = 50, message = "#i18n{ticketing.validation.viewing.Label.size}" )
-    private String            _strIsDomain;
+    private String _strIsDomain;
     @Size( max = 50, message = "#i18n{ticketing.validation.viewing.Label.size}" )
-    private String            _strIsThematic;
+    private String _strIsThematic;
     @Size( max = 50, message = "#i18n{ticketing.validation.viewing.Label.size}" )
-    private String            _strIsLocation;
+    private String _strIsLocation;
 
     /**
      * Returns the Id

@@ -66,17 +66,17 @@ public class EntryTypeFile extends AbstractEntryTypeFile
     /**
      * Name of the bean of this service
      */
-    public static final String  BEAN_NAME                = "ticketing.entryTypeFile";
+    public static final String BEAN_NAME = "ticketing.entryTypeFile";
 
     // Templates
-    private static final String TEMPLATE_CREATE          = "admin/plugins/ticketing/entries/create_entry_type_file.html";
-    private static final String TEMPLATE_MODIFY          = "admin/plugins/ticketing/entries/modify_entry_type_file.html";
-    private static final String TEMPLATE_HTML_CODE       = "skin/plugins/ticketing/entries/html_code_entry_type_file.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/ticketing/entries/create_entry_type_file.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/ticketing/entries/modify_entry_type_file.html";
+    private static final String TEMPLATE_HTML_CODE = "skin/plugins/ticketing/entries/html_code_entry_type_file.html";
     private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/ticketing/entries/html_code_entry_type_file.html";
-    private static final String TEMPLATE_READ_ONLY_HTML  = "admin/plugins/ticketing/entries/read_only_entry_type_file.html";
+    private static final String TEMPLATE_READ_ONLY_HTML = "admin/plugins/ticketing/entries/read_only_entry_type_file.html";
 
     // Markers
-    private static final String MARK_FILE_URL            = "file_url";
+    private static final String MARK_FILE_URL = "file_url";
 
     /**
      * {@inheritDoc}

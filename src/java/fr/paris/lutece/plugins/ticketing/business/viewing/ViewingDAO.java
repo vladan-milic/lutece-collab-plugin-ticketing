@@ -43,10 +43,10 @@ public class ViewingDAO implements IViewingDAO
 {
 
     // Constants
-    private static final String SQL_QUERY_NEW_PK       = "SELECT max( id_viewing ) FROM ticketing_viewing";
-    private static final String SQL_QUERY_SELECT       = "SELECT id_viewing, title, message, buton_label, channel, contact_mode, civility, domain, thematic, location FROM ticketing_viewing";
-    private static final String SQL_QUERY_INSERT       = "INSERT INTO ticketing_viewing ( id_viewing, title, message, buton_label, channel, contact_mode, civility, domain, thematic, location ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
-    private static final String SQL_QUERY_UPDATE       = "UPDATE ticketing_viewing tv , (SELECT MAX(id_viewing) as id FROM ticketing_viewing) AS tvid SET tv.title = ?, tv.message = ?, tv.buton_label = ?, tv.channel = ?, tv.contact_mode = ?, tv.civility = ?, tv.domain = ?, tv.thematic = ?, tv.location = ? WHERE tv.id_viewing = tvid.id";
+    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_viewing ) FROM ticketing_viewing";
+    private static final String SQL_QUERY_SELECT = "SELECT id_viewing, title, message, buton_label, channel, contact_mode, civility, domain, thematic, location FROM ticketing_viewing";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_viewing ( id_viewing, title, message, buton_label, channel, contact_mode, civility, domain, thematic, location ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_viewing tv , (SELECT MAX(id_viewing) as id FROM ticketing_viewing) AS tvid SET tv.title = ?, tv.message = ?, tv.buton_label = ?, tv.channel = ?, tv.contact_mode = ?, tv.civility = ?, tv.domain = ?, tv.thematic = ?, tv.location = ? WHERE tv.id_viewing = tvid.id";
     private static final String SQL_QUERY_SELECT_COUNT = "SELECT count(1) FROM ticketing_viewing";
 
     /**

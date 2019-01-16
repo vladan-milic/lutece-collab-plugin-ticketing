@@ -47,15 +47,15 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class FormEntryDAO implements IFormEntryDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK            = "SELECT max( id_formentry ) FROM ticketing_formentry";
-    private static final String SQL_QUERY_SELECT            = "SELECT id_formentry, id_form, id_champ, hidden, mandatory, hierarchy, default_value FROM ticketing_formentry WHERE id_formentry = ?";
-    private static final String SQL_QUERY_SELECT_BY_FORM    = "SELECT id_formentry, id_form, id_champ, hidden, mandatory, hierarchy, default_value FROM ticketing_formentry WHERE id_form = ?";
-    private static final String SQL_QUERY_INSERT            = "INSERT INTO ticketing_formentry ( id_formentry, id_form, id_champ, hidden, mandatory, hierarchy, default_value ) VALUES ( ?, ?, ?, ?, ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE            = "DELETE FROM ticketing_formentry WHERE id_formentry = ? ";
+    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_formentry ) FROM ticketing_formentry";
+    private static final String SQL_QUERY_SELECT = "SELECT id_formentry, id_form, id_champ, hidden, mandatory, hierarchy, default_value FROM ticketing_formentry WHERE id_formentry = ?";
+    private static final String SQL_QUERY_SELECT_BY_FORM = "SELECT id_formentry, id_form, id_champ, hidden, mandatory, hierarchy, default_value FROM ticketing_formentry WHERE id_form = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_formentry ( id_formentry, id_form, id_champ, hidden, mandatory, hierarchy, default_value ) VALUES ( ?, ?, ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_formentry WHERE id_formentry = ? ";
     private static final String SQL_QUERY_DELETE_BY_ID_FORM = "DELETE FROM ticketing_formentry WHERE id_form = ? ";
-    private static final String SQL_QUERY_UPDATE            = "UPDATE ticketing_formentry SET id_formentry = ?, id_form = ?, id_champ = ?, hidden = ?, mandatory = ?, hierarchy = ?, default_value = ? WHERE id_formentry = ?";
-    private static final String SQL_QUERY_SELECTALL         = "SELECT id_formentry, id_form, id_champ, hidden, mandatory, hierarchy, default_value FROM ticketing_formentry";
-    private static final String SQL_QUERY_SELECTALL_ID      = "SELECT id_formentry FROM ticketing_formentry";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_formentry SET id_formentry = ?, id_form = ?, id_champ = ?, hidden = ?, mandatory = ?, hierarchy = ?, default_value = ? WHERE id_formentry = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_formentry, id_form, id_champ, hidden, mandatory, hierarchy, default_value FROM ticketing_formentry";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_formentry FROM ticketing_formentry";
 
     /**
      * Generates a new primary key

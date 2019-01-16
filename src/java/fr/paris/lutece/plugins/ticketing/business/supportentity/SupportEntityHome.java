@@ -49,8 +49,8 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class SupportEntityHome
 {
     // Static variable pointed at the DAO instance
-    private static ISupportEntityDAO _dao    = SpringContextService.getBean( "ticketing.supportEntityDAO" );
-    private static Plugin            _plugin = PluginService.getPlugin( "ticketing" );
+    private static ISupportEntityDAO _dao = SpringContextService.getBean( "ticketing.supportEntityDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated

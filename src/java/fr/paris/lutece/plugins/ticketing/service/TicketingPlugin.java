@@ -57,7 +57,8 @@ public class TicketingPlugin extends Plugin
     @Override
     public void init( )
     {
-        BeanUtilsBean.getInstance( ).getConvertUtils( ).register( new DateConverter( DateFormat.getDateInstance( DateFormat.SHORT, getPluginLocale( Locale.FRANCE ) ) ), java.sql.Date.class );
+        BeanUtilsBean.getInstance( ).getConvertUtils( )
+                .register( new DateConverter( DateFormat.getDateInstance( DateFormat.SHORT, getPluginLocale( Locale.FRANCE ) ) ), java.sql.Date.class );
     }
 
     /**

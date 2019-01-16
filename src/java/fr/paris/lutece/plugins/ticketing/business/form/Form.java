@@ -48,20 +48,20 @@ public class Form implements Serializable
     private static final long serialVersionUID = 1L;
 
     // Variables declarations
-    private int               _nId;
+    private int _nId;
     @NotEmpty( message = "#i18n{ticketing.validation.form.Title.notEmpty}" )
     @Size( max = 500, message = "#i18n{ticketing.validation.form.Title.size}" )
-    private String            _strTitle;
+    private String _strTitle;
     @Size( max = 500, message = "#i18n{ticketing.validation.form.Message.size}" )
-    private String            _strMessage;
+    private String _strMessage;
     @NotEmpty( message = "#i18n{ticketing.validation.form.ButtonLabel.notEmpty}" )
     @Size( max = 500, message = "#i18n{ticketing.validation.form.ButtonLabel.size}" )
-    private String            _strButtonLabel;
+    private String _strButtonLabel;
 
-    private boolean           _bConnection     = true;
-    private List<FormEntry>   formEntries;
+    private boolean _bConnection = true;
+    private List<FormEntry> formEntries;
 
-    private boolean           _bSelected       = false;
+    private boolean _bSelected = false;
 
     /**
      * Returns the Id

@@ -47,12 +47,12 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class FormDAO implements IFormDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK       = "SELECT max( id_form ) FROM ticketing_form";
-    private static final String SQL_QUERY_SELECT       = "SELECT id_form, title, message, button_label, connection FROM ticketing_form WHERE id_form = ?";
-    private static final String SQL_QUERY_INSERT       = "INSERT INTO ticketing_form ( id_form, title, message, button_label, connection ) VALUES ( ?, ?, ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE       = "DELETE FROM ticketing_form WHERE id_form = ? ";
-    private static final String SQL_QUERY_UPDATE       = "UPDATE ticketing_form SET id_form = ?, title = ?, message = ?, button_label = ?, connection = ? WHERE id_form = ?";
-    private static final String SQL_QUERY_SELECTALL    = "SELECT id_form, title, message, button_label, connection FROM ticketing_form";
+    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_form ) FROM ticketing_form";
+    private static final String SQL_QUERY_SELECT = "SELECT id_form, title, message, button_label, connection FROM ticketing_form WHERE id_form = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_form ( id_form, title, message, button_label, connection ) VALUES ( ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_form WHERE id_form = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_form SET id_form = ?, title = ?, message = ?, button_label = ?, connection = ? WHERE id_form = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_form, title, message, button_label, connection FROM ticketing_form";
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_form FROM ticketing_form";
 
     /**

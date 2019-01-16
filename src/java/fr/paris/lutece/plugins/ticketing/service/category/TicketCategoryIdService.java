@@ -86,7 +86,8 @@ public class TicketCategoryIdService extends ResourceIdService
         ReferenceList list = new ReferenceList( );
 
         List<TicketCategory> categories = TicketCategoryTypeService.getInstance( ).getManageableCategories( );
-        categories.stream( ).forEach( ( category ) -> list.addItem( category.getId( ), TicketCategoryService.getInstance( ).getBranchLabel( category, " -> " ) ) );
+        categories.stream( )
+                .forEach( ( category ) -> list.addItem( category.getId( ), TicketCategoryService.getInstance( ).getBranchLabel( category, " -> " ) ) );
 
         return list;
     }

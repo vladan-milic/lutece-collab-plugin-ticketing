@@ -61,18 +61,18 @@ import fr.paris.lutece.util.url.UrlItem;
 public class TicketingDashboardComponent extends DashboardComponent
 {
     // MARKS
-    private static final String MARK_URL                                  = "url";
-    private static final String MARK_ICON                                 = "icon";
-    private static final String MARK_TICKET_ASSIGNED_TO_ME_COUNTER        = "ticket_assigned_to_me_counter";
-    private static final String MARK_TICKET_ASSIGNED_TO_MY_GROUP_COUNTER  = "ticket_assigned_to_my_group_counter";
+    private static final String MARK_URL = "url";
+    private static final String MARK_ICON = "icon";
+    private static final String MARK_TICKET_ASSIGNED_TO_ME_COUNTER = "ticket_assigned_to_me_counter";
+    private static final String MARK_TICKET_ASSIGNED_TO_MY_GROUP_COUNTER = "ticket_assigned_to_my_group_counter";
     private static final String MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER = "ticket_assigned_to_my_domain_counter";
-    private static final String MARK_WORFLOWSERVICE_UNAVAILABLE           = "workflow_service_unavailable";
+    private static final String MARK_WORFLOWSERVICE_UNAVAILABLE = "workflow_service_unavailable";
 
     // PARAMETERS
-    private static final String PARAMETER_PLUGIN_NAME                     = "plugin_name";
+    private static final String PARAMETER_PLUGIN_NAME = "plugin_name";
 
     // TEMPLATES
-    private static final String TEMPLATE_DASHBOARD                        = "/admin/plugins/ticketing/ticketing_dashboard.html";
+    private static final String TEMPLATE_DASHBOARD = "/admin/plugins/ticketing/ticketing_dashboard.html";
 
     /**
      * {@inheritDoc}
@@ -96,7 +96,8 @@ public class TicketingDashboardComponent extends DashboardComponent
             try
             {
                 filter = TicketFilterHelper.getFilter( request, user );
-            } catch ( ParseException e )
+            }
+            catch( ParseException e )
             {
                 AppLogService.error( "Error while parsing dates", e );
             }
@@ -110,7 +111,8 @@ public class TicketingDashboardComponent extends DashboardComponent
             model.put( MARK_TICKET_ASSIGNED_TO_MY_DOMAIN_COUNTER, TicketUtils.getIdTickets( filter ).size( ) );
 
             model.put( MARK_WORFLOWSERVICE_UNAVAILABLE, false );
-        } else
+        }
+        else
         {
             model.put( MARK_WORFLOWSERVICE_UNAVAILABLE, true );
         }

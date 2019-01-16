@@ -9,11 +9,11 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public class MarkingDAO implements IMarkingDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK    = "SELECT max( id_marking ) FROM ticketing_markings";
-    private static final String SQL_QUERY_SELECT    = "SELECT id_marking, title, label_color, background_color FROM ticketing_markings WHERE id_marking = ?";
-    private static final String SQL_QUERY_INSERT    = "INSERT INTO ticketing_markings ( id_marking, title, label_color, background_color ) VALUES ( ?, ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE    = "DELETE FROM ticketing_markings WHERE id_marking = ? ";
-    private static final String SQL_QUERY_UPDATE    = "UPDATE ticketing_markings SET id_marking = ?, title = ?, label_color = ?, background_color =? WHERE id_marking = ?";
+    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_marking ) FROM ticketing_markings";
+    private static final String SQL_QUERY_SELECT = "SELECT id_marking, title, label_color, background_color FROM ticketing_markings WHERE id_marking = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_markings ( id_marking, title, label_color, background_color ) VALUES ( ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_markings WHERE id_marking = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_markings SET id_marking = ?, title = ?, label_color = ?, background_color =? WHERE id_marking = ?";
     private static final String SQL_QUERY_SELECTALL = "SELECT id_marking, title, label_color, background_color FROM ticketing_markings";
 
     /**

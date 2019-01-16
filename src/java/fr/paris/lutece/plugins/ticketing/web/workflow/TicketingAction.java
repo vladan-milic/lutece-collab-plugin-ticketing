@@ -46,7 +46,7 @@ import fr.paris.lutece.plugins.workflowcore.business.workflow.Workflow;
  */
 public class TicketingAction extends Action
 {
-    private Action  _action;
+    private Action _action;
     private boolean _bDisplayTasksForm;
 
     /**

@@ -42,9 +42,9 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
  */
 public final class TicketingIdentityService
 {
-    private static final String                      BEAN_IDENTITYSTORE_SERVICE = "ticketing.identitystore.service";
+    private static final String BEAN_IDENTITYSTORE_SERVICE = "ticketing.identitystore.service";
     private static volatile TicketingIdentityService _instance;
-    private final IdentityService                    _identityService;
+    private final IdentityService _identityService;
 
     /**
      * Default constructor
@@ -63,7 +63,7 @@ public final class TicketingIdentityService
     {
         if ( _instance == null )
         {
-            synchronized ( TicketingIdentityService.class )
+            synchronized( TicketingIdentityService.class )
             {
                 if ( _instance == null )
                 {

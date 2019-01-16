@@ -45,15 +45,15 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class TicketCategoryInputsDAO implements ITicketCategoryInputsDAO
 {
     // Constants
-    private static final String SQL_QUERY_SELECT_INPUTS_BY_CATEGORY         = "SELECT id_input FROM ticketing_category_input WHERE id_category = ? ORDER BY pos";
-    private static final String SQL_QUERY_INSERT_INPUT                      = "INSERT INTO ticketing_category_input ( id_category, id_input, pos ) VALUES ( ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE_INPUT                      = "DELETE FROM ticketing_category_input WHERE id_category = ? AND id_input = ?";
-    private static final String SQL_QUERY_DELETE_ALL_INPUT                  = "DELETE FROM ticketing_category_input WHERE id_category = ?";
-    private static final String SQL_QUERY_UPDATE_INPUT_POS                  = "UPDATE ticketing_category_input SET pos = ? WHERE id_category = ? AND id_input = ? ";
+    private static final String SQL_QUERY_SELECT_INPUTS_BY_CATEGORY = "SELECT id_input FROM ticketing_category_input WHERE id_category = ? ORDER BY pos";
+    private static final String SQL_QUERY_INSERT_INPUT = "INSERT INTO ticketing_category_input ( id_category, id_input, pos ) VALUES ( ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE_INPUT = "DELETE FROM ticketing_category_input WHERE id_category = ? AND id_input = ?";
+    private static final String SQL_QUERY_DELETE_ALL_INPUT = "DELETE FROM ticketing_category_input WHERE id_category = ?";
+    private static final String SQL_QUERY_UPDATE_INPUT_POS = "UPDATE ticketing_category_input SET pos = ? WHERE id_category = ? AND id_input = ? ";
     private static final String SQL_QUERY_SELECT_MAX_INPUT_POS_FOR_CATEGORY = "SELECT MAX(pos) FROM ticketing_category_input WHERE id_category = ? ";
-    private static final String SQL_QUERY_SELECT_INPUT_POS                  = "SELECT pos from ticketing_category_input WHERE id_category = ? AND id_input = ? ";
-    private static final String SQL_QUERY_SELECT_INPUT_BY_POS               = "SELECT id_input from ticketing_category_input WHERE id_category = ? AND pos = ? ";
-    private static final String SQL_QUERY_SELECT_INPUT_IN_ALL_CATEGORIES    = "SELECT id_category from ticketing_category_input WHERE id_input = ? ";
+    private static final String SQL_QUERY_SELECT_INPUT_POS = "SELECT pos from ticketing_category_input WHERE id_category = ? AND id_input = ? ";
+    private static final String SQL_QUERY_SELECT_INPUT_BY_POS = "SELECT id_input from ticketing_category_input WHERE id_category = ? AND pos = ? ";
+    private static final String SQL_QUERY_SELECT_INPUT_IN_ALL_CATEGORIES = "SELECT id_category from ticketing_category_input WHERE id_input = ? ";
 
     /**
      * Return the next available Position value for inputs linked to a category

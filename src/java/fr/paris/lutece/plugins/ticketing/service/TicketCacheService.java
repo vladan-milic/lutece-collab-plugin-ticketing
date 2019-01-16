@@ -40,10 +40,10 @@ import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
  */
 public final class TicketCacheService extends AbstractCacheableService
 {
-    private static final String       SERVICE_NAME             = "ticketing.ticketCacheService";
-    private static final String       CACHE_KEY_TICKET_MARKING = "ticketing.ticketMarking";
+    private static final String SERVICE_NAME = "ticketing.ticketCacheService";
+    private static final String CACHE_KEY_TICKET_MARKING = "ticketing.ticketMarking";
 
-    private static TicketCacheService _instance                = new TicketCacheService( );
+    private static TicketCacheService _instance = new TicketCacheService( );
 
     /**
      * Private constructor

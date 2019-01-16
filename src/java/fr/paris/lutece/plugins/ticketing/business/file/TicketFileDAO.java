@@ -48,13 +48,13 @@ import fr.paris.lutece.util.sql.DAOUtil;
  */
 public final class TicketFileDAO implements ITicketFileDAO
 {
-    private static final String SQL_QUERY_NEW_PK                        = "SELECT max( id_file_blob ) FROM ticketing_file_blob";
-    private static final String SQL_QUERY_INSERT                        = "INSERT INTO ticketing_file_blob ( id_file_blob, id_file, id_blob ) VALUES ( ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE                        = "DELETE FROM ticketing_file_blob where id_file = ? ";
-    private static final String SQL_QUERY_FIND_BY_FILE_ID               = "SELECT id_blob FROM ticketing_file_blob WHERE id_file = ? ";
+    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_file_blob ) FROM ticketing_file_blob";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_file_blob ( id_file_blob, id_file, id_blob ) VALUES ( ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_file_blob where id_file = ? ";
+    private static final String SQL_QUERY_FIND_BY_FILE_ID = "SELECT id_blob FROM ticketing_file_blob WHERE id_file = ? ";
     private static final String SQL_QUERY_FIND_DATE_CREATION_BY_FILE_ID = "SELECT creation_date FROM ticketing_file_blob WHERE id_file = ? ";
-    private static final String SQL_QUERY_FIND_BLOBS_BY_DATE            = "SELECT id_blob, id_file FROM ticketing_file_blob WHERE creation_date <= ? ";
-    private static final String SQL_QUERY_FIND_ID_FILE_LIST             = "SELECT id_file FROM ticketing_file_blob ";
+    private static final String SQL_QUERY_FIND_BLOBS_BY_DATE = "SELECT id_blob, id_file FROM ticketing_file_blob WHERE creation_date <= ? ";
+    private static final String SQL_QUERY_FIND_ID_FILE_LIST = "SELECT id_file FROM ticketing_file_blob ";
 
     /**
      * {@inheritDoc}

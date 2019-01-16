@@ -54,28 +54,28 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 public class FormValidator
 {
     // Parameters
-    private static final String PARAMETER_USER_TITLE_ID       = "id_user_title";
-    private static final String PARAMETER_FIRST_NAME          = "firstname";
-    private static final String PARAMETER_LAST_NAME           = "lastname";
-    private static final String PARAMETER_CONTACT_MODE_ID     = "id_contact_mode";
-    private static final String PARAMETER_EMAIL               = "email";
-    private static final String PARAMETER_FIXED_PHONE_NUMBER  = "fixed_phone_number";
+    private static final String PARAMETER_USER_TITLE_ID = "id_user_title";
+    private static final String PARAMETER_FIRST_NAME = "firstname";
+    private static final String PARAMETER_LAST_NAME = "lastname";
+    private static final String PARAMETER_CONTACT_MODE_ID = "id_contact_mode";
+    private static final String PARAMETER_EMAIL = "email";
+    private static final String PARAMETER_FIXED_PHONE_NUMBER = "fixed_phone_number";
     private static final String PARAMETER_MOBILE_PHONE_NUMBER = "mobile_phone_number";
-    private static final String PARAMETER_COMMENT             = "ticket_comment";
+    private static final String PARAMETER_COMMENT = "ticket_comment";
 
     // Errors
     private static final String ERROR_CONTACT_MODE_NOT_FILLED = "ticketing.error.contactmode.not.filled";
-    private static final String ERROR_EMAIL_NOT_FILLED        = "ticketing.validation.ticket.Email.notEmpty";
-    private static final String ERROR_PHONE_NUMBER_MISSING    = "ticketing.error.phonenumber.missing";
-    private static final String CONTACT_MODE_LABEL_I18N       = "ticketing.contactmodes.label.";
-    private static final String ERROR_EMPTY_COMMENT           = "ticketing.error.comment.empty";
-    private static final String ERROR_USER_TITLE_UNKNOWN      = "ticketing.error.userTitle.unknown";
-    private static final String ERROR_FIRST_NAME_NOT_FILLED   = "ticketing.validation.ticket.Firstname.notEmpty";
-    private static final String ERROR_LAST_NAME_NOT_FILLED    = "ticketing.validation.ticket.Lastname.notEmpty";
-    private HttpServletRequest  _request;
+    private static final String ERROR_EMAIL_NOT_FILLED = "ticketing.validation.ticket.Email.notEmpty";
+    private static final String ERROR_PHONE_NUMBER_MISSING = "ticketing.error.phonenumber.missing";
+    private static final String CONTACT_MODE_LABEL_I18N = "ticketing.contactmodes.label.";
+    private static final String ERROR_EMPTY_COMMENT = "ticketing.error.comment.empty";
+    private static final String ERROR_USER_TITLE_UNKNOWN = "ticketing.error.userTitle.unknown";
+    private static final String ERROR_FIRST_NAME_NOT_FILLED = "ticketing.validation.ticket.Firstname.notEmpty";
+    private static final String ERROR_LAST_NAME_NOT_FILLED = "ticketing.validation.ticket.Lastname.notEmpty";
+    private HttpServletRequest _request;
 
     // Pattern
-    private static final String PATTERN_CARRIAGE_RETURN       = "\r\n|\r|\n";
+    private static final String PATTERN_CARRIAGE_RETURN = "\r\n|\r|\n";
 
     /**
      * Constructor
@@ -119,14 +119,17 @@ public class FormValidator
                     }
                 }
             }
-        } catch ( Exception e )
+        }
+        catch( Exception e )
         {
             AppLogService.error( "Unabled to retrieve contact mode" );
         }
 
         if ( !bIsValid )
         {
-            Object[] args = { I18nService.getLocalizedString( CONTACT_MODE_LABEL_I18N + contactMode.getCode( ), _request.getLocale( ) ) };
+            Object [ ] args = {
+                I18nService.getLocalizedString( CONTACT_MODE_LABEL_I18N + contactMode.getCode( ), _request.getLocale( ) )
+            };
             strError = I18nService.getLocalizedString( ERROR_CONTACT_MODE_NOT_FILLED, args, _request.getLocale( ) );
         }
 
@@ -150,7 +153,8 @@ public class FormValidator
             {
                 userTitle = UserTitleHome.findByPrimaryKey( Integer.parseInt( strUserTitle ) );
             }
-        } catch ( Exception e )
+        }
+        catch( Exception e )
         {
             AppLogService.error( "Unabled to retrieve contact mode" );
         }
@@ -234,13 +238,15 @@ public class FormValidator
     /**
      * Tests whether the specified ticket has a phone number or not
      *
-     * @return the localized error message if neither the fixed phone number nor the mobile phone number are filled, {@code null} otherwise {@code true} if neither the fixed phone number nor the mobile phone number are filled, {@code false} otherwise
+     * @return the localized error message if neither the fixed phone number nor the mobile phone number are filled, {@code null} otherwise {@code true} if
+     *         neither the fixed phone number nor the mobile phone number are filled, {@code false} otherwise
      */
     public String isPhoneNumberFilled( )
     {
         String strError = null;
 
-        if ( StringUtils.isBlank( _request.getParameter( PARAMETER_FIXED_PHONE_NUMBER ) ) && StringUtils.isBlank( _request.getParameter( PARAMETER_MOBILE_PHONE_NUMBER ) ) )
+        if ( StringUtils.isBlank( _request.getParameter( PARAMETER_FIXED_PHONE_NUMBER ) )
+                && StringUtils.isBlank( _request.getParameter( PARAMETER_MOBILE_PHONE_NUMBER ) ) )
         {
             strError = I18nService.getLocalizedString( ERROR_PHONE_NUMBER_MISSING, _request.getLocale( ) );
         }
@@ -268,7 +274,7 @@ public class FormValidator
 
         // Count the number of character
         int iNbCharcount = 0;
-        String[] strArrayTicketComment = StringUtils.splitPreserveAllTokens( strTicketComment, PATTERN_CARRIAGE_RETURN );
+        String [ ] strArrayTicketComment = StringUtils.splitPreserveAllTokens( strTicketComment, PATTERN_CARRIAGE_RETURN );
         for ( String strCommentSplittedPart : strArrayTicketComment )
         {
             iNbCharcount += strCommentSplittedPart.length( );

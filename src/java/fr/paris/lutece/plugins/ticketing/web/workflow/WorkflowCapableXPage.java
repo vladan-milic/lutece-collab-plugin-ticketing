@@ -74,17 +74,17 @@ import fr.paris.lutece.portal.web.xpages.XPage;
 public abstract class WorkflowCapableXPage extends MVCApplication
 {
     // Errors
-    public static final String     ERROR_WORKFLOW_ACTION_ABORTED = "ticketing.error.workflow.action.aborted.frontoffice";
+    public static final String ERROR_WORKFLOW_ACTION_ABORTED = "ticketing.error.workflow.action.aborted.frontoffice";
 
     // Services
-    private static WorkflowService _workflowService              = WorkflowService.getInstance( );
+    private static WorkflowService _workflowService = WorkflowService.getInstance( );
 
     // Other constants
 
     /**
      * Generated serial id
      */
-    private static final long      serialVersionUID              = -249042695023346133L;
+    private static final long serialVersionUID = -249042695023346133L;
 
     /**
      * set workflow attributes for displayable tickets
@@ -118,7 +118,8 @@ public abstract class WorkflowCapableXPage extends MVCApplication
         {
             if ( _workflowService.isAvailable( ) )
             {
-                int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT );
+                int nIdWorkflow = PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID,
+                        TicketingConstants.PROPERTY_UNSET_INT );
                 State state = _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
 
                 if ( state != null )
@@ -128,12 +129,14 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
                 if ( nIdWorkflow > 0 )
                 {
-                    Collection<Action> listWorkflowActions = _workflowService.getActions( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, AdminUserService.getAdminUser( request ) );
+                    Collection<Action> listWorkflowActions = _workflowService.getActions( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow,
+                            AdminUserService.getAdminUser( request ) );
 
                     ticket.setListWorkflowActions( listWorkflowActions );
                 }
             }
-        } finally
+        }
+        finally
         {
             TicketUtils.unregisterAdminUserFront( request );
         }
@@ -159,7 +162,8 @@ public abstract class WorkflowCapableXPage extends MVCApplication
     }
 
     /**
-     * Get the workflow action form before processing the action. If the action does not need to display any form, then redirect the user to the workflow action processing page.
+     * Get the workflow action form before processing the action. If the action does not need to display any form, then redirect the user to the workflow action
+     * processing page.
      *
      * @param request
      *            The request
@@ -175,14 +179,16 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
         try
         {
-            if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) && StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
+            if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) && StringUtils.isNotEmpty( strIdTicket )
+                    && StringUtils.isNumeric( strIdTicket ) )
             {
                 int nIdAction = Integer.parseInt( strIdAction );
                 int nIdTicket = Integer.parseInt( strIdTicket );
 
                 if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( request ) ) )
                 {
-                    String strHtmlTasksForm = _workflowService.getDisplayTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, request, getLocale( request ) );
+                    String strHtmlTasksForm = _workflowService.getDisplayTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, request,
+                            getLocale( request ) );
 
                     Map<String, Object> model = new HashMap<String, Object>( );
 
@@ -210,7 +216,8 @@ public abstract class WorkflowCapableXPage extends MVCApplication
             }
 
             return defaultRedirectWorkflowAction( request );
-        } finally
+        }
+        finally
         {
             TicketUtils.unregisterAdminUserFront( request );
         }
@@ -234,7 +241,8 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
         try
         {
-            if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) && StringUtils.isNotEmpty( strIdTicket ) && StringUtils.isNumeric( strIdTicket ) )
+            if ( StringUtils.isNotEmpty( strIdAction ) && StringUtils.isNumeric( strIdAction ) && StringUtils.isNotEmpty( strIdTicket )
+                    && StringUtils.isNumeric( strIdTicket ) )
             {
                 int nIdAction = Integer.parseInt( strIdAction );
                 int nIdTicket = Integer.parseInt( strIdTicket );
@@ -247,34 +255,39 @@ public abstract class WorkflowCapableXPage extends MVCApplication
 
                         if ( _workflowService.isDisplayTasksForm( nIdAction, getLocale( request ) ) )
                         {
-                            strError = _workflowService.doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, null, request, getLocale( request ) );
+                            strError = _workflowService
+                                    .doSaveTasksForm( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, null, request, getLocale( request ) );
 
                             if ( strError != null )
                             {
                                 return redirect( request, strError );
                             }
-                        } else
+                        }
+                        else
                         {
                             _workflowService.doProcessAction( nIdTicket, Ticket.TICKET_RESOURCE_TYPE, nIdAction, null, request, getLocale( request ), false );
                         }
 
                         // Immediate indexation of the Ticket
                         immediateTicketIndexing( ticket.getId( ), request );
-                    } catch ( Exception e )
+                    }
+                    catch( Exception e )
                     {
                         addErrorWorkflowAction( request, nIdAction );
                         AppLogService.error( e );
 
                         return redirectWorkflowActionCancelled( request );
                     }
-                } else
+                }
+                else
                 {
                     return redirectWorkflowActionCancelled( request );
                 }
             }
 
             return redirectAfterWorkflowAction( request );
-        } finally
+        }
+        finally
         {
             TicketUtils.unregisterAdminUserFront( request );
         }
@@ -296,7 +309,8 @@ public abstract class WorkflowCapableXPage extends MVCApplication
             {
                 _workflowService.getState( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
                 _workflowService.executeActionAutomatic( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, nIdWorkflow, null );
-            } catch ( Exception e )
+            }
+            catch( Exception e )
             {
                 doRemoveWorkFlowResource( ticket.getId( ) );
                 TicketHome.remove( ticket.getId( ) );
@@ -332,20 +346,24 @@ public abstract class WorkflowCapableXPage extends MVCApplication
                     if ( actions.size( ) == 1 )
                     {
                         Action action = actions.iterator( ).next( );
-                        _workflowService.doProcessAction( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, action.getId( ), null, request, request.getLocale( ), false );
-                    } else
+                        _workflowService.doProcessAction( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, action.getId( ), null, request, request.getLocale( ),
+                                false );
+                    }
+                    else
                     {
                         // multiple actions or no action => ambiguous case
                         // TODO throw an exception
                     }
-                } catch ( Exception e )
+                }
+                catch( Exception e )
                 {
                     doRemoveWorkFlowResource( ticket.getId( ) );
                     TicketHome.remove( ticket.getId( ) );
                     throw e;
                 }
             }
-        } finally
+        }
+        finally
         {
             TicketUtils.unregisterAdminUserFront( request );
         }
@@ -382,7 +400,8 @@ public abstract class WorkflowCapableXPage extends MVCApplication
             {
                 TicketIndexer ticketIndexer = new TicketIndexer( );
                 ticketIndexer.indexTicket( ticket );
-            } catch ( TicketIndexerException ticketIndexerException )
+            }
+            catch( TicketIndexerException ticketIndexerException )
             {
                 addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_FRONT, getLocale( request ) );
 

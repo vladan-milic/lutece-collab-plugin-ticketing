@@ -34,7 +34,8 @@ public class TicketingUnitRemovalListener implements IUnitRemovalListener
                 TicketHome.update( ticket );
             }
 
-        } else
+        }
+        else
         {
             throw new UnitErrorException( MESSAGE_UNIT_NO_PARRENT_ERROR );
         }

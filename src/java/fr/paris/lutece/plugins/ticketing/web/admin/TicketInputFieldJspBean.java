@@ -64,53 +64,53 @@ import fr.paris.lutece.util.url.UrlItem;
 @Controller( controllerJsp = "ManageTicketInputFields.jsp", controllerPath = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH, right = TicketInputsJspBean.RIGHT_MANAGETICKETINPUTS )
 public class TicketInputFieldJspBean extends MVCAdminJspBean
 {
-    private static final long   serialVersionUID                      = 1L;
+    private static final long serialVersionUID = 1L;
 
     // Properties
-    private static final String PROPERTY_CREATE_FIELD_TITLE           = "ticketing.createField.title";
-    private static final String PROPERTY_MODIFY_FIELD_TITLE           = "ticketing.modifyField.title";
+    private static final String PROPERTY_CREATE_FIELD_TITLE = "ticketing.createField.title";
+    private static final String PROPERTY_MODIFY_FIELD_TITLE = "ticketing.modifyField.title";
 
     // Urls
     private static final String JSP_URL_MANAGE_TICKETING_INPUT_FIELDS = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageTicketInputFields.jsp";
 
     // Marks
-    private static final String MARK_FIELD                            = "field";
+    private static final String MARK_FIELD = "field";
 
     // Messages
-    private static final String MESSAGE_CONFIRM_REMOVE_FIELD          = "ticketing.message.confirmRemoveField";
-    private static final String MESSAGE_MANDATORY_FIELD               = "portal.util.message.mandatoryField";
-    private static final String MESSAGE_FIELD_CODE_FIELD              = "ticketing.message.error.field_code_field";
+    private static final String MESSAGE_CONFIRM_REMOVE_FIELD = "ticketing.message.confirmRemoveField";
+    private static final String MESSAGE_MANDATORY_FIELD = "portal.util.message.mandatoryField";
+    private static final String MESSAGE_FIELD_CODE_FIELD = "ticketing.message.error.field_code_field";
 
     // Views
-    private static final String VIEW_GET_CREATE_FIELD                 = "getCreateField";
-    private static final String VIEW_GET_MODIFY_FIELD                 = "getModifyField";
-    private static final String VIEW_GET_CONFIRM_REMOVE_FIELD         = "getConfirmRemoveField";
+    private static final String VIEW_GET_CREATE_FIELD = "getCreateField";
+    private static final String VIEW_GET_MODIFY_FIELD = "getModifyField";
+    private static final String VIEW_GET_CONFIRM_REMOVE_FIELD = "getConfirmRemoveField";
 
     // Actions
-    private static final String ACTION_DO_CREATE_FIELD                = "doCreateField";
-    private static final String ACTION_DO_MODIFY_FIELD                = "doModifyField";
-    private static final String ACTION_DO_MOVE_FIELD_UP               = "doMoveFieldUp";
-    private static final String ACTION_DO_MOVE_FIELD_DOWN             = "doMoveFieldDown";
-    private static final String ACTION_DO_REMOVE_FIELD                = "doRemoveField";
+    private static final String ACTION_DO_CREATE_FIELD = "doCreateField";
+    private static final String ACTION_DO_MODIFY_FIELD = "doModifyField";
+    private static final String ACTION_DO_MOVE_FIELD_UP = "doMoveFieldUp";
+    private static final String ACTION_DO_MOVE_FIELD_DOWN = "doMoveFieldDown";
+    private static final String ACTION_DO_REMOVE_FIELD = "doRemoveField";
 
     // Parameters
-    private static final String PARAMETER_ID_ENTRY                    = "id_entry";
-    private static final String PARAMETER_ID_FIELD                    = "id_field";
-    private static final String PARAMETER_CANCEL                      = "cancel";
-    private static final String PARAMETER_APPLY                       = "apply";
-    private static final String PARAMETER_TITLE                       = "title";
-    private static final String PARAMETER_CODE                        = "field_code";
-    private static final String PARAMETER_VALUE                       = "value";
-    private static final String PARAMETER_DEFAULT_VALUE               = "default_value";
-    private static final String PARAMETER_NO_DISPLAY_TITLE            = "no_display_title";
-    private static final String PARAMETER_COMMENT                     = "comment";
-    private static final String FIELD_TITLE_FIELD                     = "ticketing.createField.labelTitle";
-    private static final String FIELD_CODE_FIELD                      = "ticketing.createField.labelCode";
-    private static final String FIELD_VALUE_FIELD                     = "ticketing.createField.labelValue";
+    private static final String PARAMETER_ID_ENTRY = "id_entry";
+    private static final String PARAMETER_ID_FIELD = "id_field";
+    private static final String PARAMETER_CANCEL = "cancel";
+    private static final String PARAMETER_APPLY = "apply";
+    private static final String PARAMETER_TITLE = "title";
+    private static final String PARAMETER_CODE = "field_code";
+    private static final String PARAMETER_VALUE = "value";
+    private static final String PARAMETER_DEFAULT_VALUE = "default_value";
+    private static final String PARAMETER_NO_DISPLAY_TITLE = "no_display_title";
+    private static final String PARAMETER_COMMENT = "comment";
+    private static final String FIELD_TITLE_FIELD = "ticketing.createField.labelTitle";
+    private static final String FIELD_CODE_FIELD = "ticketing.createField.labelCode";
+    private static final String FIELD_VALUE_FIELD = "ticketing.createField.labelValue";
 
     // Templates
-    private static final String TEMPLATE_CREATE_FIELD                 = TicketingConstants.TEMPLATE_ADMIN_TICKETINPUTS_FEATURE_PATH + "create_field.html";
-    private static final String TEMPLATE_MODIFY_FIELD                 = TicketingConstants.TEMPLATE_ADMIN_TICKETINPUTS_FEATURE_PATH + "modify_field.html";
+    private static final String TEMPLATE_CREATE_FIELD = TicketingConstants.TEMPLATE_ADMIN_TICKETINPUTS_FEATURE_PATH + "create_field.html";
+    private static final String TEMPLATE_MODIFY_FIELD = TicketingConstants.TEMPLATE_ADMIN_TICKETINPUTS_FEATURE_PATH + "modify_field.html";
 
     /**
      * Gets the field creation page
@@ -363,7 +363,8 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
     }
 
     /**
-     * Get the request data and if there is no error insert the data in the field specified in parameter. return null if there is no error or else return the error page URL
+     * Get the request data and if there is no error insert the data in the field specified in parameter. return null if there is no error or else return the
+     * error page URL
      * 
      * @param request
      *            the request
@@ -385,20 +386,28 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
         if ( StringUtils.isEmpty( strTitle ) )
         {
             strFieldError = FIELD_TITLE_FIELD;
-        } else if ( StringUtils.isEmpty( strCode ) )
-        {
-            strFieldError = FIELD_CODE_FIELD;
-        } else if ( StringUtils.isEmpty( strValue ) )
-        {
-            strFieldError = FIELD_VALUE_FIELD;
-        } else if ( !StringUtil.checkCodeKey( strCode ) )
-        {
-            return AdminMessageService.getMessageUrl( request, MESSAGE_FIELD_CODE_FIELD, AdminMessage.TYPE_STOP );
         }
+        else
+            if ( StringUtils.isEmpty( strCode ) )
+            {
+                strFieldError = FIELD_CODE_FIELD;
+            }
+            else
+                if ( StringUtils.isEmpty( strValue ) )
+                {
+                    strFieldError = FIELD_VALUE_FIELD;
+                }
+                else
+                    if ( !StringUtil.checkCodeKey( strCode ) )
+                    {
+                        return AdminMessageService.getMessageUrl( request, MESSAGE_FIELD_CODE_FIELD, AdminMessage.TYPE_STOP );
+                    }
 
         if ( strFieldError != null )
         {
-            Object[] tabRequiredFields = { I18nService.getLocalizedString( strFieldError, getLocale( ) ) };
+            Object [ ] tabRequiredFields = {
+                I18nService.getLocalizedString( strFieldError, getLocale( ) )
+            };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
         }

@@ -39,14 +39,14 @@ import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
 
 public class TicketCategoryTreeCacheService extends AbstractCacheableService
 {
-    private static final String                   SERVICE_NAME                  = "TREE_CAT_CACHE_SERVICE";
-    private static final String                   SERVICE_NAME_WITH_INACTIVES   = "TREE_CAT_CACHE_SERVICE_WITH_INACTIVES";
-    private static final String                   KEY_CACHE_TREE                = "TREE_CAT";
-    private static final String                   KEY_CACHE_TREE_WITH_INACTIVES = "TREE_CAT_WITH_INACTIVES";
+    private static final String SERVICE_NAME = "TREE_CAT_CACHE_SERVICE";
+    private static final String SERVICE_NAME_WITH_INACTIVES = "TREE_CAT_CACHE_SERVICE_WITH_INACTIVES";
+    private static final String KEY_CACHE_TREE = "TREE_CAT";
+    private static final String KEY_CACHE_TREE_WITH_INACTIVES = "TREE_CAT_WITH_INACTIVES";
 
     private static TicketCategoryTreeCacheService _instance;
     private static TicketCategoryTreeCacheService _instanceWithInactives;
-    private final boolean                         _bWithInactives;
+    private final boolean _bWithInactives;
 
     /**
      * Private constructor
@@ -84,7 +84,8 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
                 _instanceWithInactives = new TicketCategoryTreeCacheService( withInactives );
             }
             return _instanceWithInactives;
-        } else
+        }
+        else
         {
             if ( _instance == null )
             {
@@ -110,7 +111,7 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
      */
     public TicketCategoryTree getResource( )
     {
-        TicketCategoryTree categoryTree = ( TicketCategoryTree ) getFromCache( _bWithInactives ? KEY_CACHE_TREE_WITH_INACTIVES : KEY_CACHE_TREE );
+        TicketCategoryTree categoryTree = (TicketCategoryTree) getFromCache( _bWithInactives ? KEY_CACHE_TREE_WITH_INACTIVES : KEY_CACHE_TREE );
         if ( categoryTree == null )
         {
             categoryTree = new TicketCategoryTree( TicketCategoryHome.getFullCategorysList( _bWithInactives ), TicketCategoryTypeHome.getCategoryTypesList( ) );
@@ -126,6 +127,7 @@ public class TicketCategoryTreeCacheService extends AbstractCacheableService
     public void reloadResource( )
     {
         putInCache( KEY_CACHE_TREE, new TicketCategoryTree( TicketCategoryHome.getFullCategorysList( false ), TicketCategoryTypeHome.getCategoryTypesList( ) ) );
-        putInCache( KEY_CACHE_TREE_WITH_INACTIVES, new TicketCategoryTree( TicketCategoryHome.getFullCategorysList( true ), TicketCategoryTypeHome.getCategoryTypesList( ) ) );
+        putInCache( KEY_CACHE_TREE_WITH_INACTIVES,
+                new TicketCategoryTree( TicketCategoryHome.getFullCategorysList( true ), TicketCategoryTypeHome.getCategoryTypesList( ) ) );
     }
 }

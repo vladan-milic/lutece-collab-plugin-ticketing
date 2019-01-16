@@ -52,15 +52,15 @@ import fr.paris.lutece.util.ReferenceList;
  */
 public final class PluginConfigurationService
 {
-    private static final String PROPERTY_PREFIX                               = "ticketing.configuration.";
-    public static final String  PROPERTY_TICKET_WORKFLOW_ID                   = PROPERTY_PREFIX + "workflow.id";
-    public static final String  PROPERTY_STATE_CLOSED_ID                      = PROPERTY_PREFIX + "state.id.closed";
-    public static final String  PROPERTY_STATES_SELECTED                      = PROPERTY_PREFIX + "states.selected";
-    public static final String  PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX      = PROPERTY_PREFIX + "states.selected.for.role.";
-    public static final String  PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME = PROPERTY_PREFIX + "actions.filtered.when.assigned.to.me";
-    public static final String  PROPERTY_ADMINUSER_ID_FRONT                   = PROPERTY_PREFIX + "adminUser.id.front";
-    public static final String  PROPERTY_CHANNEL_ID_FRONT                     = PROPERTY_PREFIX + "channel.id.front";
-    private static final String LIST_SEPARATOR                                = ";";
+    private static final String PROPERTY_PREFIX = "ticketing.configuration.";
+    public static final String PROPERTY_TICKET_WORKFLOW_ID = PROPERTY_PREFIX + "workflow.id";
+    public static final String PROPERTY_STATE_CLOSED_ID = PROPERTY_PREFIX + "state.id.closed";
+    public static final String PROPERTY_STATES_SELECTED = PROPERTY_PREFIX + "states.selected";
+    public static final String PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX = PROPERTY_PREFIX + "states.selected.for.role.";
+    public static final String PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME = PROPERTY_PREFIX + "actions.filtered.when.assigned.to.me";
+    public static final String PROPERTY_ADMINUSER_ID_FRONT = PROPERTY_PREFIX + "adminUser.id.front";
+    public static final String PROPERTY_CHANNEL_ID_FRONT = PROPERTY_PREFIX + "channel.id.front";
+    private static final String LIST_SEPARATOR = ";";
 
     /**
      * Default constructor
@@ -300,7 +300,7 @@ public final class PluginConfigurationService
 
         if ( strValue != null )
         {
-            String[] listValues = strValue.split( LIST_SEPARATOR );
+            String [ ] listValues = strValue.split( LIST_SEPARATOR );
 
             result = Arrays.asList( listValues );
         }
@@ -321,7 +321,7 @@ public final class PluginConfigurationService
 
         if ( strValue != null )
         {
-            String[] listValues = strValue.split( LIST_SEPARATOR );
+            String [ ] listValues = strValue.split( LIST_SEPARATOR );
             result = new ArrayList<Integer>( listValues.length );
 
             for ( String strValueItem : listValues )

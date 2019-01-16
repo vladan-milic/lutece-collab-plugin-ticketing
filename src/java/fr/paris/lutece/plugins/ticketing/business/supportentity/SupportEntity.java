@@ -56,17 +56,17 @@ public class SupportEntity implements RBACResource
     public static final String RESOURCE_TYPE = "SUPPORT_ENTITY";
 
     // Variables declarations
-    private int                _nId;
-    private AssigneeUser       _user;
+    private int _nId;
+    private AssigneeUser _user;
     @NotNull( message = "#i18n{ticketing.validation.supportentity.unit.notNull}" )
-    private AssigneeUnit       _unit;
+    private AssigneeUnit _unit;
 
     // Can actually be any category
-    private TicketCategory     _ticketDomain;
+    private TicketCategory _ticketDomain;
     @NotEmpty( message = "#i18n{ticketing.validation.supportentity.name.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.supportentity.name.size}" )
-    private String             _strName;
-    private SupportLevel       _supportLevel;
+    private String _strName;
+    private SupportLevel _supportLevel;
 
     /**
      * Returns the Id

@@ -49,7 +49,7 @@ public enum TicketCriticality
 {
     LOW, MEDIUM, HIGH;
 
-    private static final String                    MESSAGE_PREFIX        = "ticketing.criticality.";
+    private static final String MESSAGE_PREFIX = "ticketing.criticality.";
     private static Map<Integer, TicketCriticality> _mapTicketCriticality = new HashMap<Integer, TicketCriticality>( );
 
     static

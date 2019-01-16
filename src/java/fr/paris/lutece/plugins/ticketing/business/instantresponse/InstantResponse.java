@@ -51,16 +51,16 @@ public class InstantResponse implements Serializable
     private static final long serialVersionUID = 1L;
 
     // Variables declarations
-    private int               _nId;
-    private String            _strSubject;
-    private TicketCategory    _ticketCategory;
-    private Timestamp         _dDateCreate;
-    private int               _nIdAdminUser;
-    private String            _strUserFirstname;
-    private String            _strUserLastname;
-    private int               _nIdUnit;
-    private String            _strUnit;
-    private int               _nIdChannel;
+    private int _nId;
+    private String _strSubject;
+    private TicketCategory _ticketCategory;
+    private Timestamp _dDateCreate;
+    private int _nIdAdminUser;
+    private String _strUserFirstname;
+    private String _strUserLastname;
+    private int _nIdUnit;
+    private String _strUnit;
+    private int _nIdChannel;
 
     /**
      * Returns the Id

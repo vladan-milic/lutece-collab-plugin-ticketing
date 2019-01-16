@@ -43,9 +43,9 @@ public class IndexerActionFilter
     /**
      * Represent any integer
      */
-    public static final int ALL_INT    = -1;
-    private int             _nIdTask   = ALL_INT;
-    private int             _nIdTicket = ALL_INT;
+    public static final int ALL_INT = -1;
+    private int _nIdTask = ALL_INT;
+    private int _nIdTicket = ALL_INT;
 
     /**
      * gets the id of task

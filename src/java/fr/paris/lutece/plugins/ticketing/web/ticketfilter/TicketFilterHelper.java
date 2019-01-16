@@ -76,43 +76,43 @@ import fr.paris.lutece.util.ReferenceList;
 public final class TicketFilterHelper
 {
     // parameters
-    private static final String PARAMETER_FILTER_ID_TICKET             = "fltr_id_ticket";
-    private static final String PARAMETER_FILTER_OPEN_SINCE            = "fltr_open_since";
-    private static final String PARAMETER_FILTER_OPEN_UNTIL            = "fltr_open_until";
-    private static final String PARAMETER_FILTER_LASTUPDATE_DATE       = "fltr_lastupdate";
+    private static final String PARAMETER_FILTER_ID_TICKET = "fltr_id_ticket";
+    private static final String PARAMETER_FILTER_OPEN_SINCE = "fltr_open_since";
+    private static final String PARAMETER_FILTER_OPEN_UNTIL = "fltr_open_until";
+    private static final String PARAMETER_FILTER_LASTUPDATE_DATE = "fltr_lastupdate";
     private static final String PARAMETER_FILTER_START_LASTUPDATE_DATE = "fltr_start_lastupdate";
-    private static final String PARAMETER_FILTER_END_LASTUPDATE_DATE   = "fltr_end_lastupdate";
-    private static final String PARAMETER_FILTER_CREATION_DATE         = "fltr_creationdate";
-    private static final String PARAMETER_FILTER_CLOSE_DATE            = "fltr_closedate";
-    private static final String PARAMETER_FILTER_END_CREATION_DATE     = "fltr_end_creationdate";
-    private static final String PARAMETER_FILTER_START_CREATION_DATE   = "fltr_start_creationdate";
-    private static final String PARAMETER_FILTER_ID_USER               = "fltr_id_user";
-    private static final String PARAMETER_FILTER_ID_CATEGORY_DEPTH     = "fltr_id_category_depth_";
-    private static final String PARAMETER_FILTER_ORDER_BY              = "fltr_order_by";
-    private static final String PARAMETER_FILTER_EMAIL                 = "fltr_email";
-    private static final String PARAMETER_FILTER_LASTNAME              = "fltr_lastname";
-    private static final String PARAMETER_FILTER_FIRSTNAME             = "fltr_firstname";
-    private static final String PARAMETER_FILTER_NOMENCLATURE          = "fltr_nomenclature";
-    private static final String PARAMETER_FILTER_FIXED_PHONE_NUMBER    = "fltr_fixed_phone_number";
-    private static final String PARAMETER_FILTER_MOBILE_PHONE_NUMBER   = "fltr_mobile_phone_number";
-    private static final String PARAMETER_FILTER_URGENCY               = "fltr_urgency";
-    private static final String PARAMETER_FILTER_NEW_URGENCY           = "fltr_new_urgency";
-    private static final String PARAMETER_FILTER_REFERENCE             = "fltr_reference";
-    private static final String PARAMETER_FILTER_ORDER_SORT            = "fltr_order_sort";
-    private static final String PARAMETER_FILTER_SUBMITTED_FORM        = "submitted_form";
-    private static final String PARAMETER_FILTER_WORKFLOW_STATE_IDS    = "fltr_state_ids";
+    private static final String PARAMETER_FILTER_END_LASTUPDATE_DATE = "fltr_end_lastupdate";
+    private static final String PARAMETER_FILTER_CREATION_DATE = "fltr_creationdate";
+    private static final String PARAMETER_FILTER_CLOSE_DATE = "fltr_closedate";
+    private static final String PARAMETER_FILTER_END_CREATION_DATE = "fltr_end_creationdate";
+    private static final String PARAMETER_FILTER_START_CREATION_DATE = "fltr_start_creationdate";
+    private static final String PARAMETER_FILTER_ID_USER = "fltr_id_user";
+    private static final String PARAMETER_FILTER_ID_CATEGORY_DEPTH = "fltr_id_category_depth_";
+    private static final String PARAMETER_FILTER_ORDER_BY = "fltr_order_by";
+    private static final String PARAMETER_FILTER_EMAIL = "fltr_email";
+    private static final String PARAMETER_FILTER_LASTNAME = "fltr_lastname";
+    private static final String PARAMETER_FILTER_FIRSTNAME = "fltr_firstname";
+    private static final String PARAMETER_FILTER_NOMENCLATURE = "fltr_nomenclature";
+    private static final String PARAMETER_FILTER_FIXED_PHONE_NUMBER = "fltr_fixed_phone_number";
+    private static final String PARAMETER_FILTER_MOBILE_PHONE_NUMBER = "fltr_mobile_phone_number";
+    private static final String PARAMETER_FILTER_URGENCY = "fltr_urgency";
+    private static final String PARAMETER_FILTER_NEW_URGENCY = "fltr_new_urgency";
+    private static final String PARAMETER_FILTER_REFERENCE = "fltr_reference";
+    private static final String PARAMETER_FILTER_ORDER_SORT = "fltr_order_sort";
+    private static final String PARAMETER_FILTER_SUBMITTED_FORM = "submitted_form";
+    private static final String PARAMETER_FILTER_WORKFLOW_STATE_IDS = "fltr_state_ids";
 
     // Marks
-    private static final String MARK_TICKET_FILTER                     = "ticket_filter";
-    private static final String MARK_FULL_STATE_LIST                   = "state_list";
-    private static final String MARK_FULL_CATEGORY_MAP                 = "category_reflist_map";
-    private static final String DATE_FILTER_PATTERN                    = "yyyyMMdd";
-    private static final String TIME_START_OF_DAY                      = " 00:00:00";
-    private static final String TIME_END_OF_DAY                        = " 23:59:59";
-    private static final String DATETIME_PATTERN                       = "dd/MM/yyyy hh:mm:ss";
+    private static final String MARK_TICKET_FILTER = "ticket_filter";
+    private static final String MARK_FULL_STATE_LIST = "state_list";
+    private static final String MARK_FULL_CATEGORY_MAP = "category_reflist_map";
+    private static final String DATE_FILTER_PATTERN = "yyyyMMdd";
+    private static final String TIME_START_OF_DAY = " 00:00:00";
+    private static final String TIME_END_OF_DAY = " 23:59:59";
+    private static final String DATETIME_PATTERN = "dd/MM/yyyy hh:mm:ss";
 
     // Properties for page titles
-    private static final String NO_SELECTED_FIELD_ID                   = "-1";
+    private static final String NO_SELECTED_FIELD_ID = "-1";
 
     /**
      * private constructor
@@ -135,13 +135,17 @@ public final class TicketFilterHelper
     {
         TicketFilter fltrFiltre = new TicketFilter( );
 
-        if ( ( request.getParameterValues( PARAMETER_FILTER_WORKFLOW_STATE_IDS ) != null ) && ( request.getParameterValues( PARAMETER_FILTER_WORKFLOW_STATE_IDS ).length > 0 ) )
+        if ( ( request.getParameterValues( PARAMETER_FILTER_WORKFLOW_STATE_IDS ) != null )
+                && ( request.getParameterValues( PARAMETER_FILTER_WORKFLOW_STATE_IDS ).length > 0 ) )
         {
             fltrFiltre.setListIdWorkflowState( request.getParameterValues( PARAMETER_FILTER_WORKFLOW_STATE_IDS ) );
-        } else
+        }
+        else
         {
             // no state selected => we put a dummy one
-            fltrFiltre.setListIdWorkflowState( new String[] { NO_SELECTED_FIELD_ID } );
+            fltrFiltre.setListIdWorkflowState( new String [ ] {
+                NO_SELECTED_FIELD_ID
+            } );
         }
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ORDER_BY ) ) )
@@ -157,10 +161,12 @@ public final class TicketFilterHelper
         Map<Integer, Integer> mapCategoryId = new LinkedHashMap<Integer, Integer>( );
         for ( int i = 1; i <= getMaxNumberFilter( ); i++ )
         {
-            if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_CATEGORY_DEPTH + i ) ) && StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_CATEGORY_DEPTH + i ) ) )
+            if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_CATEGORY_DEPTH + i ) )
+                    && StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_CATEGORY_DEPTH + i ) ) )
             {
                 mapCategoryId.put( i, Integer.parseInt( request.getParameter( PARAMETER_FILTER_ID_CATEGORY_DEPTH + i ) ) );
-            } else
+            }
+            else
             {
                 mapCategoryId.put( i, TicketFilter.CONSTANT_ID_NULL );
             }
@@ -168,12 +174,14 @@ public final class TicketFilterHelper
         ;
         fltrFiltre.setMapCategoryId( mapCategoryId );
 
-        if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_USER ) ) && StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_USER ) ) )
+        if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_USER ) )
+                && StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_USER ) ) )
         {
             fltrFiltre.setIdUser( Integer.parseInt( request.getParameter( PARAMETER_FILTER_ID_USER ) ) );
         }
 
-        if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_TICKET ) ) && StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_TICKET ) ) )
+        if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_TICKET ) )
+                && StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_TICKET ) ) )
         {
             fltrFiltre.setIdTicket( Integer.parseInt( request.getParameter( PARAMETER_FILTER_ID_TICKET ) ) );
         }
@@ -293,14 +301,16 @@ public final class TicketFilterHelper
             // filter form has not been submitted => we use the one stored in session if exists
             if ( request.getSession( ).getAttribute( TicketingConstants.SESSION_TICKET_FILTER ) != null )
             {
-                filter = ( TicketFilter ) request.getSession( ).getAttribute( TicketingConstants.SESSION_TICKET_FILTER );
-            } else
+                filter = (TicketFilter) request.getSession( ).getAttribute( TicketingConstants.SESSION_TICKET_FILTER );
+            }
+            else
             {
                 // set default value
                 filter = getDefaultFilter( adminUser );
                 request.getSession( ).setAttribute( TicketingConstants.SESSION_TICKET_FILTER, filter );
             }
-        } else
+        }
+        else
         {
             filter = TicketFilterHelper.getFilterFromRequest( request );
             request.getSession( ).setAttribute( TicketingConstants.SESSION_TICKET_FILTER, filter );
@@ -327,7 +337,8 @@ public final class TicketFilterHelper
 
         // set default filtering for user from configuration
         List<Integer> lstIdWorkflowState = PluginConfigurationService.getIntegerList( PluginConfigurationService.PROPERTY_STATES_SELECTED, null );
-        Map<String, List<Integer>> mapStatesForRoles = PluginConfigurationService.getIntegerListByPrefix( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX, null );
+        Map<String, List<Integer>> mapStatesForRoles = PluginConfigurationService.getIntegerListByPrefix(
+                PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX, null );
 
         for ( String strRole : listUserRole.keySet( ) )
         {
@@ -398,7 +409,7 @@ public final class TicketFilterHelper
             {
                 mapCategories.put( StringUtils.EMPTY, depth.getLabel( ) );
             }
-            mapTypeCategoryList.put( i, ( LinkedHashMap<String, String> ) mapCategories );
+            mapTypeCategoryList.put( i, (LinkedHashMap<String, String>) mapCategories );
         }
         ;
 
@@ -408,11 +419,14 @@ public final class TicketFilterHelper
             ArrayList<TicketCategory> ticketCategoryList = new ArrayList<TicketCategory>( );
             if ( nParentId == TicketFilter.CONSTANT_ID_NULL )
             {
-                ticketCategoryList = ( ArrayList<TicketCategory> ) TicketCategoryService.getInstance( false ).getAuthorizedCategoryList( i, user, TicketCategory.PERMISSION_VIEW_LIST );
-            } else
+                ticketCategoryList = (ArrayList<TicketCategory>) TicketCategoryService.getInstance( false ).getAuthorizedCategoryList( i, user,
+                        TicketCategory.PERMISSION_VIEW_LIST );
+            }
+            else
             {
                 TicketCategory ticketCategory = TicketCategoryService.getInstance( true ).findCategoryById( nParentId );
-                ticketCategoryList = ( ArrayList<TicketCategory> ) TicketCategoryService.getInstance( false ).getAuthorizedCategoryList( ticketCategory, user, TicketCategory.PERMISSION_VIEW_LIST );
+                ticketCategoryList = (ArrayList<TicketCategory>) TicketCategoryService.getInstance( false ).getAuthorizedCategoryList( ticketCategory, user,
+                        TicketCategory.PERMISSION_VIEW_LIST );
             }
             nParentId = ( fltrFilter.getMapCategoryId( ).get( i ) != null ) ? fltrFilter.getMapCategoryId( ).get( i ) : TicketFilter.CONSTANT_ID_NULL;
 
@@ -450,8 +464,8 @@ public final class TicketFilterHelper
     public static ReferenceList getWorkflowStates( AdminUser user, List<Integer> listSelectedStates )
     {
         ReferenceList refList = new ReferenceList( );
-        Collection<State> collState = WorkflowService.getInstance( )
-                .getAllStateByWorkflow( PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT ), user );
+        Collection<State> collState = WorkflowService.getInstance( ).getAllStateByWorkflow(
+                PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, TicketingConstants.PROPERTY_UNSET_INT ), user );
 
         for ( State state : collState )
         {
@@ -496,7 +510,8 @@ public final class TicketFilterHelper
         try
         {
             date = sdf.parse( strDate );
-        } catch ( ParseException pe )
+        }
+        catch( ParseException pe )
         {
             AppLogService.info( "Invalid date : " + strDate + ". The expected pattern is : " + datePattern );
         }

@@ -41,13 +41,13 @@ public abstract class AbstractNode
 {
     protected List<AbstractNode> _childrenNodes;
 
-    protected AbstractNode       _parentNode;
+    protected AbstractNode _parentNode;
 
     protected List<AbstractNode> _leaves;
 
-    protected AbstractDepth      _depth;
+    protected AbstractDepth _depth;
 
-    private boolean              _bLeaf;
+    private boolean _bLeaf;
 
     /**
      * Constructor of the Abstract Node
@@ -186,12 +186,12 @@ public abstract class AbstractNode
     public <Node extends AbstractNode> List<Node> getBranch( )
     {
         List<Node> listNode = new ArrayList<>( );
-        listNode.add( ( Node ) this );
-        Node parent = ( Node ) getParent( );
+        listNode.add( (Node) this );
+        Node parent = (Node) getParent( );
         while ( parent != null )
         {
             listNode.add( parent );
-            parent = ( Node ) parent.getParent( );
+            parent = (Node) parent.getParent( );
         }
         Collections.reverse( listNode );
         return listNode;

@@ -54,16 +54,16 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class ContactMode implements Serializable
 {
     private static final long serialVersionUID = 1L;
-    private static final char COMMA            = ',';
+    private static final char COMMA = ',';
 
     // Variables declarations
-    private int               _nId;
+    private int _nId;
     @NotEmpty( message = "#i18n{ticketing.validation.contactmode.code.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.contactmode.code.size}" )
-    private String            _strCode;
+    private String _strCode;
     @Size( max = 150, message = "#i18n{ticketing.validation.contactmode.required_inputs.size}" )
-    private String            _strRequiredInputs;
-    private String            _strConfirmationMsg;
+    private String _strRequiredInputs;
+    private String _strConfirmationMsg;
 
     /**
      * Returns the Id

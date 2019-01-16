@@ -73,19 +73,19 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
     private static final String TEMPLATE_SEARCH_RESPONSE_RESULTS = "/admin/plugins/ticketing/search/search_response_results.html";
 
     // Actions
-    private static final String ACTION_SEARCH_RESPONSE           = "search_response";
+    private static final String ACTION_SEARCH_RESPONSE = "search_response";
 
     // Messages
-    private static final String MESSAGE_INFO_TOO_MANY_RESULTS    = "ticketing.search_ticket.tooManyResults";
+    private static final String MESSAGE_INFO_TOO_MANY_RESULTS = "ticketing.search_ticket.tooManyResults";
 
     // Other constants
-    private static final long   serialVersionUID                 = 1L;
+    private static final long serialVersionUID = 1L;
 
     // Variables
-    private String              _strCurrentPageIndex;
-    private int                 _nItemsPerPage;
-    private int                 _nDefaultItemsPerPage            = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_DEFAULT_RESPONSE_MODEL_ITEM_PER_PAGE, 10 );
-    private int                 _nMaxResponsePerQuery            = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY, 100 );
+    private String _strCurrentPageIndex;
+    private int _nItemsPerPage;
+    private int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_DEFAULT_RESPONSE_MODEL_ITEM_PER_PAGE, 10 );
+    private int _nMaxResponsePerQuery = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_MODEL_RESPONSE_LIMIT_PER_QUERY, 100 );
 
     /**
      * Search response for tickets
@@ -102,7 +102,7 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
 
         // Create the set of id domain
         Set<String> setDomain = new LinkedHashSet<>( );
-        String[] strSeqIdTickets = request.getParameterValues( TicketingConstants.PARAMETER_SELECTED_TICKETS );
+        String [ ] strSeqIdTickets = request.getParameterValues( TicketingConstants.PARAMETER_SELECTED_TICKETS );
         if ( strSeqIdTickets != null && strSeqIdTickets.length > 0 )
         {
             setDomain = getListDomain( strSeqIdTickets );
@@ -119,11 +119,14 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
             {
                 listResults = listFullResults.subList( 0, _nMaxResponsePerQuery );
 
-                Object[] args = { _nMaxResponsePerQuery, listFullResults.size( ) };
+                Object [ ] args = {
+                        _nMaxResponsePerQuery, listFullResults.size( )
+                };
                 List<ErrorMessage> listInfos = new ArrayList<ErrorMessage>( );
                 listInfos.add( new MVCMessage( I18nService.getLocalizedString( MESSAGE_INFO_TOO_MANY_RESULTS, args, getLocale( ) ) ) );
                 model.put( SearchConstants.MARK_INFOS, listInfos );
-            } else
+            }
+            else
             {
                 listResults = listFullResults;
             }
@@ -135,13 +138,14 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
             _strCurrentPageIndex = Paginator.getPageIndex( request, SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
             _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, _nDefaultItemsPerPage );
 
-            LocalizedPaginator<ModelResponse> paginator = new LocalizedPaginator<ModelResponse>( listResults, _nItemsPerPage, StringUtils.EMPTY, SearchConstants.PARAMETER_PAGE_INDEX,
-                    _strCurrentPageIndex, getLocale( ) );
+            LocalizedPaginator<ModelResponse> paginator = new LocalizedPaginator<ModelResponse>( listResults, _nItemsPerPage, StringUtils.EMPTY,
+                    SearchConstants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
             model.put( SearchConstants.MARK_RESULT, paginator.getPageItems( ) );
             model.put( SearchConstants.MARK_QUERY, strQuery );
             model.put( SearchConstants.MARK_PAGINATOR, paginator );
             model.put( SearchConstants.MARK_NB_ITEMS_PER_PAGE, String.valueOf( _nItemsPerPage ) );
-        } else
+        }
+        else
         {
             addError( model, SearchConstants.MESSAGE_SEARCH_NO_INPUT, request.getLocale( ) );
         }
@@ -168,7 +172,7 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
             model.put( SearchConstants.MARK_ERRORS, listErrors );
         }
 
-        ( ( List<ErrorMessage> ) model.get( SearchConstants.MARK_ERRORS ) ).add( new MVCMessage( I18nService.getLocalizedString( strMessageKey, locale ) ) );
+        ( (List<ErrorMessage>) model.get( SearchConstants.MARK_ERRORS ) ).add( new MVCMessage( I18nService.getLocalizedString( strMessageKey, locale ) ) );
     }
 
     /**
@@ -178,7 +182,7 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
      *            the list of id tickets
      * @return the set of domain labels
      */
-    private Set<String> getListDomain( String[] strIdTickets )
+    private Set<String> getListDomain( String [ ] strIdTickets )
     {
         Set<String> setDomain = new LinkedHashSet<>( );
         if ( strIdTickets != null && strIdTickets.length > 0 )

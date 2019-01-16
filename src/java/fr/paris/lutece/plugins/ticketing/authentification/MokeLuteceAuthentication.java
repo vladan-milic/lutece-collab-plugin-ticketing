@@ -104,7 +104,7 @@ public class MokeLuteceAuthentication implements LuteceAuthentication
     }
 
     @Override
-    public String[] getRolesByUser( LuteceUser user )
+    public String [ ] getRolesByUser( LuteceUser user )
     {
         return null;
     }

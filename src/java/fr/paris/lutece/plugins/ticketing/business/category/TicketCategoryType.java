@@ -49,13 +49,13 @@ public class TicketCategoryType extends AbstractDepth implements Serializable
     private static final long serialVersionUID = 1L;
 
     // Variables declarations
-    private int               _nId;
+    private int _nId;
 
-    private int               _nDepthNumber;
+    private int _nDepthNumber;
 
     @NotEmpty( message = "#i18n{ticketing.validation.categorytype.Label.notEmpty}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.categorytype.Label.size}" )
-    private String            _strLabel;
+    private String _strLabel;
 
     /**
      * Returns the Id

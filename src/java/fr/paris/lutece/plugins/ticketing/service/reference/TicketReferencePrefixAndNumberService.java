@@ -60,19 +60,19 @@ import fr.paris.lutece.util.html.HtmlTemplate;
  */
 public class TicketReferencePrefixAndNumberService implements ITicketReferenceService
 {
-    private static final int    SEQUENCE_INITIAL_VALUE   = 0;
-    private static final String REFERENCE_FORMAT         = "%s%05d";
-    private static final String DATE_FORMAT              = "yyMM";
+    private static final int SEQUENCE_INITIAL_VALUE = 0;
+    private static final String REFERENCE_FORMAT = "%s%05d";
+    private static final String DATE_FORMAT = "yyMM";
     private static final String PATTERN_REFERENCE_PREFIX = "^[A-Z]{3}$";
-    private static final String PATTERN_REFERENCE        = "\\b[A-Z]{3}\\d{9}\\b";
-    private static final String WORD_BOUNDARY_PATTERN    = "\\b";
+    private static final String PATTERN_REFERENCE = "\\b[A-Z]{3}\\d{9}\\b";
+    private static final String WORD_BOUNDARY_PATTERN = "\\b";
 
-    private static final String MARK_URL_REFERENCE       = "reference_url";
+    private static final String MARK_URL_REFERENCE = "reference_url";
 
-    private static final String TEMPLATE_COMMENT_URL     = "/admin/plugins/ticketing/ticket/comment_url_reference_ticket.html";
+    private static final String TEMPLATE_COMMENT_URL = "/admin/plugins/ticketing/ticket/comment_url_reference_ticket.html";
 
-    private static Pattern      _patternReferencePrefix  = Pattern.compile( PATTERN_REFERENCE_PREFIX );
-    private SimpleDateFormat    _simpleDateFormat        = new SimpleDateFormat( DATE_FORMAT );
+    private static Pattern _patternReferencePrefix = Pattern.compile( PATTERN_REFERENCE_PREFIX );
+    private SimpleDateFormat _simpleDateFormat = new SimpleDateFormat( DATE_FORMAT );
     private ITicketReferenceDAO _dao;
 
     /**
@@ -133,7 +133,7 @@ public class TicketReferencePrefixAndNumberService implements ITicketReferenceSe
     public String process( HttpServletRequest request, String strContent )
     {
         Object isProcessContent = request.getAttribute( TicketingConstants.ATTRIBUTE_IS_PROCESS_CONTENT );
-        if ( StringUtils.isNotBlank( strContent ) && ( isProcessContent != null ) && ( ( Boolean ) isProcessContent ).booleanValue( ) )
+        if ( StringUtils.isNotBlank( strContent ) && ( isProcessContent != null ) && ( (Boolean) isProcessContent ).booleanValue( ) )
         {
             String strResult = strContent;
             Set<String> setReferenceChecked = new LinkedHashSet<>( );

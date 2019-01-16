@@ -46,13 +46,13 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class ModelResponseDAO implements IModelResponseDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK           = "SELECT max( id_model_response ) FROM ticketing_model_reponses";
-    private static final String SQL_QUERY_SELECT           = "SELECT id_model_response, id_ticket_category, title, reponse, keyword, cat.label, date_update, firstname, lastname FROM ticketing_model_reponses res INNER JOIN ticketing_category cat ON cat.id_category = res.id_ticket_category WHERE res.id_model_response = ?";
-    private static final String SQL_QUERY_INSERT           = "INSERT INTO ticketing_model_reponses ( id_model_response, id_ticket_category, title, reponse, keyword, firstname, lastname, date_update ) VALUES ( ?, ?, ?, ?,?,?,?,?) ";
-    private static final String SQL_QUERY_DELETE           = "DELETE FROM ticketing_model_reponses WHERE id_model_response = ? ";
-    private static final String SQL_QUERY_UPDATE           = "UPDATE ticketing_model_reponses SET id_model_response = ?, id_ticket_category = ?, title = ?, reponse = ?, keyword =?, firstname= ?, lastname= ?, date_update = (SELECT DATE_FORMAT(NOW(), '%d/%m/%Y')) WHERE id_model_response = ?";
-    private static final String SQL_QUERY_SELECTALL        = "SELECT id_model_response, id_ticket_category, title, reponse, keyword, cat.label, date_update, firstname, lastname FROM ticketing_model_reponses res INNER JOIN ticketing_category cat ON cat.id_category = res.id_ticket_category";
-    private static final String SQL_QUERY_SELECTALL_ID     = "SELECT id_model_response FROM ticketing_model_reponses";
+    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_model_response ) FROM ticketing_model_reponses";
+    private static final String SQL_QUERY_SELECT = "SELECT id_model_response, id_ticket_category, title, reponse, keyword, cat.label, date_update, firstname, lastname FROM ticketing_model_reponses res INNER JOIN ticketing_category cat ON cat.id_category = res.id_ticket_category WHERE res.id_model_response = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_model_reponses ( id_model_response, id_ticket_category, title, reponse, keyword, firstname, lastname, date_update ) VALUES ( ?, ?, ?, ?,?,?,?,?) ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_model_reponses WHERE id_model_response = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_model_reponses SET id_model_response = ?, id_ticket_category = ?, title = ?, reponse = ?, keyword =?, firstname= ?, lastname= ?, date_update = (SELECT DATE_FORMAT(NOW(), '%d/%m/%Y')) WHERE id_model_response = ?";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_model_response, id_ticket_category, title, reponse, keyword, cat.label, date_update, firstname, lastname FROM ticketing_model_reponses res INNER JOIN ticketing_category cat ON cat.id_category = res.id_ticket_category";
+    private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_model_response FROM ticketing_model_reponses";
     private static final String SQL_QUERY_SELECT_BY_DOMAIN = "SELECT res.id_model_response, id_ticket_category, res.title, res.reponse, res.keyword,cat.label, date_update, firstname, lastname FROM ticketing_model_reponses res INNER JOIN ticketing_category cat ON cat.id_category = res.id_ticket_category WHERE res.id_ticket_category = ?";
 
     /**

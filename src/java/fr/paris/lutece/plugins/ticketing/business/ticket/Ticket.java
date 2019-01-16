@@ -66,59 +66,59 @@ import net.sf.json.JSONObject;
  */
 public class Ticket implements Serializable, RBACResource
 {
-    public static final String           TICKET_RESOURCE_TYPE = "ticket";
-    private static final long            serialVersionUID     = 1L;
-    private static final String          SEPARATOR            = " ";
-    private static final String          PHONE_NUMBER_REGEX   = "(^$|[0-9]{10})";
+    public static final String TICKET_RESOURCE_TYPE = "ticket";
+    private static final long serialVersionUID = 1L;
+    private static final String SEPARATOR = " ";
+    private static final String PHONE_NUMBER_REGEX = "(^$|[0-9]{10})";
 
     // Variables declarations
-    private int                          _nId;
-    private String                       _strReference;
-    private int                          _nIdUserTitle;
+    private int _nId;
+    private String _strReference;
+    private int _nIdUserTitle;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.UserTitle.size}" )
-    private String                       _strUserTitle;
+    private String _strUserTitle;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.Firstname.size}" )
-    private String                       _strFirstname;
+    private String _strFirstname;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.Lastname.size}" )
-    private String                       _strLastname;
+    private String _strLastname;
     @Email( message = "#i18n{ticketing.validation.ticket.Email.badFormat}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.ticket.Email.size}" )
-    private String                       _strEmail;
+    private String _strEmail;
     @Pattern( regexp = PHONE_NUMBER_REGEX, message = "#i18n{ticketing.validation.ticket.FixedPhoneNumber.format}" )
-    private String                       _strFixedPhoneNumber;
+    private String _strFixedPhoneNumber;
     @Pattern( regexp = PHONE_NUMBER_REGEX, message = "#i18n{ticketing.validation.ticket.MobilePhoneNumber.format}" )
-    private String                       _strMobilePhoneNumber;
-    private TicketCategory               _ticketCategory;
-    private int                          _nIdContactMode;
+    private String _strMobilePhoneNumber;
+    private TicketCategory _ticketCategory;
+    private int _nIdContactMode;
     @Size( max = 50, message = "#i18n{ticketing.validation.ticket.ContactMode.size}" )
-    private String                       _strContactMode;
-    private TicketAddress                _ticketAddress;
-    private String                       _strTicketComment;
-    private String                       _strConfirmationMsg;
-    private String                       _strGuid;
-    private int                          _nTicketStatus;
+    private String _strContactMode;
+    private TicketAddress _ticketAddress;
+    private String _strTicketComment;
+    private String _strConfirmationMsg;
+    private String _strGuid;
+    private int _nTicketStatus;
     @Size( max = 255, message = "#i18n{ticketing.validation.ticket.TicketStatusText.size}" )
-    private String                       _strTicketStatusText;
-    private transient State              _state;
-    private Timestamp                    _dDateCreate;
-    private Timestamp                    _dDateUpdate;
-    private Timestamp                    _dDateClose;
+    private String _strTicketStatusText;
+    private transient State _state;
+    private Timestamp _dDateCreate;
+    private Timestamp _dDateUpdate;
+    private Timestamp _dDateClose;
     private transient Collection<Action> _listWorkflowActions;
-    private List<Response>               _listResponse;
-    private int                          _nCriticality;
-    private int                          _nPriority;
-    private String                       _strCustomerId;
-    private transient AssigneeUser       _user;
-    private transient AssigneeUnit       _unit;
-    private transient AssigneeUser       _assignerUser;
-    private transient AssigneeUnit       _assignerUnit;
-    private String                       _strUserMessage;
-    private String                       _strUrl;
-    private Channel                      _channel             = new Channel( );
-    private String                       _strNomenclature;
-    private int                          _nIdticketMarking    = -1;
-    private int                          _nIdDemand           = -1;
-    private String                       _strFacilFamilleNumber;
+    private List<Response> _listResponse;
+    private int _nCriticality;
+    private int _nPriority;
+    private String _strCustomerId;
+    private transient AssigneeUser _user;
+    private transient AssigneeUnit _unit;
+    private transient AssigneeUser _assignerUser;
+    private transient AssigneeUnit _assignerUnit;
+    private String _strUserMessage;
+    private String _strUrl;
+    private Channel _channel = new Channel( );
+    private String _strNomenclature;
+    private int _nIdticketMarking = -1;
+    private int _nIdDemand = -1;
+    private String _strFacilFamilleNumber;
 
     /**
      * Enriches empty ticket attributes with specified values
@@ -150,8 +150,9 @@ public class Ticket implements Serializable, RBACResource
      * @param strNomenclature
      *            Nomenclature
      */
-    public void enrich( String strIdUserTitle, String strFirstname, String strLastname, String strFixedPhoneNumber, String strMobilePhoneNumber, String strEmail, String strCategoryCode,
-            String strIdContactMode, String strIdChannel, String strComment, String strGuid, String strCustomerId, String strNomenclature )
+    public void enrich( String strIdUserTitle, String strFirstname, String strLastname, String strFixedPhoneNumber, String strMobilePhoneNumber,
+            String strEmail, String strCategoryCode, String strIdContactMode, String strIdChannel, String strComment, String strGuid, String strCustomerId,
+            String strNomenclature )
     {
         if ( !StringUtils.isEmpty( strIdUserTitle ) )
         {
@@ -203,7 +204,8 @@ public class Ticket implements Serializable, RBACResource
             try
             {
                 setChannel( ChannelHome.findByPrimaryKey( Integer.parseInt( strIdChannel ) ) );
-            } catch ( NumberFormatException e )
+            }
+            catch( NumberFormatException e )
             {
             }
         }
@@ -507,7 +509,8 @@ public class Ticket implements Serializable, RBACResource
         if ( _ticketCategory.getDepth( ).getDepthNumber( ) >= depth )
         {
             return _ticketCategory.getBranch( ).get( depth - 1 );
-        } else
+        }
+        else
         {
             return new TicketCategory( );
         }
@@ -746,7 +749,8 @@ public class Ticket implements Serializable, RBACResource
     }
 
     /**
-     * Get the list of workflow actions available for this ticket. Workflow actions are NOT loaded by default, so check that they have been set before calling this method.
+     * Get the list of workflow actions available for this ticket. Workflow actions are NOT loaded by default, so check that they have been set before calling
+     * this method.
      *
      * @return The list of workflow actions available for this ticket.
      */

@@ -58,11 +58,11 @@ import fr.paris.lutece.util.ReferenceList;
 public class TicketCategoryService
 {
 
-    private final String                 KEY_DEFAULT_CATEGORY_TYPE_LABEL = "ticketing.create_categorytype.default.label";
+    private final String KEY_DEFAULT_CATEGORY_TYPE_LABEL = "ticketing.create_categorytype.default.label";
 
-    private final String                 KEY_HERITED_MESSAGE             = "ticketing.modify_category_inputs.herited";
-    private final String                 KEY_BLOCKED_MESSAGE             = "ticketing.modify_category_inputs.blocked";
-    private static TicketCategoryTree    _treeCategories;
+    private final String KEY_HERITED_MESSAGE = "ticketing.modify_category_inputs.herited";
+    private final String KEY_BLOCKED_MESSAGE = "ticketing.modify_category_inputs.blocked";
+    private static TicketCategoryTree _treeCategories;
 
     private static TicketCategoryService _instance;
 
@@ -203,11 +203,13 @@ public class TicketCategoryService
                 newCategoryType.setLabel( I18nService.getLocalizedString( KEY_DEFAULT_CATEGORY_TYPE_LABEL, Locale.getDefault( ) ) );
                 TicketCategoryTypeHome.create( newCategoryType );
                 subCategory.setCategoryType( newCategoryType );
-            } else
+            }
+            else
             {
                 subCategory.setCategoryType( childCategoryType );
             }
-        } else
+        }
+        else
         {
             // Try to get child category type
             TicketCategory parentCategory = subCategory.getParent( );
@@ -221,7 +223,8 @@ public class TicketCategoryService
                 newCategoryType.setLabel( I18nService.getLocalizedString( KEY_DEFAULT_CATEGORY_TYPE_LABEL, Locale.getDefault( ) ) );
                 TicketCategoryTypeHome.create( newCategoryType );
                 subCategory.setCategoryType( newCategoryType );
-            } else
+            }
+            else
             {
                 subCategory.setCategoryType( childCategoryType );
             }
@@ -296,8 +299,7 @@ public class TicketCategoryService
         List<TicketCategoryType> listType = TicketCategoryTypeHome.getCategoryTypesList( );
         TicketCategoryType ticketCategoryType = TicketCategoryTypeHome.findByPrimaryKey( nIdCategoryType );
 
-        listType.stream( ).filter( ( type ) -> ( type.getDepthNumber( ) >= ticketCategoryType.getDepthNumber( ) ) ).forEach( ( type ) ->
-        {
+        listType.stream( ).filter( ( type ) -> ( type.getDepthNumber( ) >= ticketCategoryType.getDepthNumber( ) ) ).forEach( ( type ) -> {
             TicketCategoryTypeHome.remove( type.getId( ) );
         } );
 
@@ -451,10 +453,11 @@ public class TicketCategoryService
      */
     public boolean isCategoryTypeNotReferenced( int nIdCategoryType )
     {
-        return TicketCategoryTreeCacheService.getInstance( ).getResource( ).getListNodesOfDepth( TicketCategoryTypeHome.findByPrimaryKey( nIdCategoryType ) ).size( ) == 0;
+        return TicketCategoryTreeCacheService.getInstance( ).getResource( ).getListNodesOfDepth( TicketCategoryTypeHome.findByPrimaryKey( nIdCategoryType ) )
+                .size( ) == 0;
     }
 
-    ////////
+    // //////
     // FOR TICKETING DOMAIN/TYPE/CATEGORY
 
     public TicketCategory getDepth( TicketCategory ticketCategory, int depth )
@@ -463,7 +466,8 @@ public class TicketCategoryService
         {
             TicketCategory domainCategory = ticketCategory.getBranch( ).get( depth );
             return domainCategory;
-        } catch ( IndexOutOfBoundsException e )
+        }
+        catch( IndexOutOfBoundsException e )
         {
             return null;
         }
@@ -506,7 +510,8 @@ public class TicketCategoryService
         {
             TicketCategory categoryCategory = ticketCategory.getBranch( ).get( TicketingConstants.THEMATIC_DEPTH - 1 );
             return categoryCategory;
-        } catch ( IndexOutOfBoundsException e )
+        }
+        catch( IndexOutOfBoundsException e )
         {
             return null;
         }
@@ -525,7 +530,8 @@ public class TicketCategoryService
         {
             TicketCategory precisionCategory = ticketCategory.getBranch( ).get( TicketingConstants.PRECISION_DEPTH - 1 );
             return precisionCategory;
-        } catch ( IndexOutOfBoundsException e )
+        }
+        catch( IndexOutOfBoundsException e )
         {
             return null;
         }
@@ -658,7 +664,8 @@ public class TicketCategoryService
     }
 
     /**
-     * Build item present in the inputs list combo for each input with the input title and the input type. Except for type comment having not title. For it, the item combo is build with the technical id
+     * Build item present in the inputs list combo for each input with the input title and the input type. Except for type comment having not title. For it, the
+     * item combo is build with the technical id
      *
      * @param entry
      *            The current entry
@@ -671,7 +678,8 @@ public class TicketCategoryService
         if ( entry.getEntryType( ).getComment( ) )
         {
             itemComboInput = new StringBuilder( entry.getCode( ) );
-        } else
+        }
+        else
         {
             itemComboInput = new StringBuilder( entry.getTitle( ) );
         }
@@ -730,17 +738,22 @@ public class TicketCategoryService
 
         if ( _category != null )
         {
-            _category.getBranch( ).stream( ).forEach( cat ->
-            {
-                if ( cat.getId( ) != _category.getId( ) )
-                {
-                    List<Entry> listEntryOfCategory = getCategoryEntryList( cat );
-                    listEntryOfCategory.stream( ).forEach( entry -> entry.setErrorMessage( I18nService.getLocalizedString( KEY_HERITED_MESSAGE, locale ) + getBranchLabel( cat, " -> " ) ) );
+            _category
+                    .getBranch( )
+                    .stream( )
+                    .forEach(
+                            cat -> {
+                                if ( cat.getId( ) != _category.getId( ) )
+                                {
+                                    List<Entry> listEntryOfCategory = getCategoryEntryList( cat );
+                                    listEntryOfCategory.stream( ).forEach(
+                                            entry -> entry.setErrorMessage( I18nService.getLocalizedString( KEY_HERITED_MESSAGE, locale )
+                                                    + getBranchLabel( cat, " -> " ) ) );
 
-                    listEntry.addAll( listEntryOfCategory );
+                                    listEntry.addAll( listEntryOfCategory );
 
-                }
-            } );
+                                }
+                            } );
         }
 
         return listEntry;
@@ -761,15 +774,20 @@ public class TicketCategoryService
 
         if ( _category != null )
         {
-            _category.getChildren( ).stream( ).forEach( cat ->
-            {
-                List<Entry> listEntryOfCategory = getCategoryEntryList( cat );
-                listEntryOfCategory.stream( ).forEach( entry -> entry.setErrorMessage( I18nService.getLocalizedString( KEY_BLOCKED_MESSAGE, locale ) + getBranchLabel( cat, " -> " ) ) );
-                listEntryOfCategory.addAll( getCategoryEntryBlockedList( cat, locale ) );
+            _category
+                    .getChildren( )
+                    .stream( )
+                    .forEach(
+                            cat -> {
+                                List<Entry> listEntryOfCategory = getCategoryEntryList( cat );
+                                listEntryOfCategory.stream( ).forEach(
+                                        entry -> entry.setErrorMessage( I18nService.getLocalizedString( KEY_BLOCKED_MESSAGE, locale )
+                                                + getBranchLabel( cat, " -> " ) ) );
+                                listEntryOfCategory.addAll( getCategoryEntryBlockedList( cat, locale ) );
 
-                listEntry.addAll( listEntryOfCategory );
+                                listEntry.addAll( listEntryOfCategory );
 
-            } );
+                            } );
         }
 
         return listEntry;
@@ -841,7 +859,8 @@ public class TicketCategoryService
         {
             TicketCategory ticketCategoryRBACResource = ticketCategory.getBranch( ).get( TicketingConstants.CATEGORY_DEPTH_RBAC_RESOURCE - 1 );
             return ticketCategoryRBACResource;
-        } catch ( IndexOutOfBoundsException e )
+        }
+        catch( IndexOutOfBoundsException e )
         {
             return null;
         }

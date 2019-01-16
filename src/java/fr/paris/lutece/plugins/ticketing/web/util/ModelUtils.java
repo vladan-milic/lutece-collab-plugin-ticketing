@@ -163,8 +163,8 @@ public final class ModelUtils
      */
     public static void storeUserSignature( HttpServletRequest request, Map<String, Object> model )
     {
-        String strUserSignature = AdminUserPreferencesService.instance( ).get( String.valueOf( AdminUserService.getAdminUser( request ).getUserId( ) ), TicketingConstants.USER_PREFERENCE_SIGNATURE,
-                StringUtils.EMPTY );
+        String strUserSignature = AdminUserPreferencesService.instance( ).get( String.valueOf( AdminUserService.getAdminUser( request ).getUserId( ) ),
+                TicketingConstants.USER_PREFERENCE_SIGNATURE, StringUtils.EMPTY );
 
         model.put( TicketingConstants.MARK_USER_SIGNATURE, strUserSignature );
     }

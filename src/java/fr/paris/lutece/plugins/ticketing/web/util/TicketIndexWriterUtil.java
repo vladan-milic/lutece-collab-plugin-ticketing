@@ -58,15 +58,15 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 public class TicketIndexWriterUtil
 {
     // Properties
-    private static final String               PROPERTY_WRITER_MERGE_FACTOR     = "ticketing.internalIndexer.lucene.writer.mergeFactor";
-    private static final String               PROPERTY_WRITER_MAX_FIELD_LENGTH = "ticketing.internalIndexer.lucene.writer.maxSectorLength";
+    private static final String PROPERTY_WRITER_MERGE_FACTOR = "ticketing.internalIndexer.lucene.writer.mergeFactor";
+    private static final String PROPERTY_WRITER_MAX_FIELD_LENGTH = "ticketing.internalIndexer.lucene.writer.maxSectorLength";
 
     // Default values
-    private static final int                  DEFAULT_WRITER_MERGE_FACTOR      = 20;
-    private static final int                  DEFAULT_WRITER_MAX_FIELD_LENGTH  = 1000000;
+    private static final int DEFAULT_WRITER_MERGE_FACTOR = 20;
+    private static final int DEFAULT_WRITER_MAX_FIELD_LENGTH = 1000000;
 
     // Variables
-    public static final Map<String, Analyzer> _mapAnalyzerPerField             = initPerFieldAnalyzerMap( );
+    public static final Map<String, Analyzer> _mapAnalyzerPerField = initPerFieldAnalyzerMap( );
 
     /**
      * Return the IndexWriterConfig for an IndexWriter
@@ -106,7 +106,8 @@ public class TicketIndexWriterUtil
             {
                 indexWriter.close( );
             }
-        } catch ( IOException e )
+        }
+        catch( IOException e )
         {
             AppLogService.error( e.getMessage( ), e );
         }

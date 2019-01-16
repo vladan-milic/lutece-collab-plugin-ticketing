@@ -68,13 +68,13 @@ public class TicketSearchJspBean extends MVCAdminJspBean
     private static final String TEMPLATE_SEARCH_TICKET = "/admin/plugins/ticketing/search/search_ticket.html";
 
     // Actions
-    private static final String ACTION_SEARCH_TICKET   = "search";
+    private static final String ACTION_SEARCH_TICKET = "search";
 
     // Other constants
-    private static final long   serialVersionUID       = 1L;
-    private String              _strCurrentPageIndex;
-    private int                 _nDefaultItemsPerPage;
-    private int                 _nItemsPerPage;
+    private static final long serialVersionUID = 1L;
+    private String _strCurrentPageIndex;
+    private int _nDefaultItemsPerPage;
+    private int _nItemsPerPage;
 
     /**
      * Search tickets
@@ -84,7 +84,9 @@ public class TicketSearchJspBean extends MVCAdminJspBean
      * @return The view
      */
     @Action( value = ACTION_SEARCH_TICKET )
-    @SuppressWarnings( { "rawtypes", "unchecked" } )
+    @SuppressWarnings( {
+            "rawtypes", "unchecked"
+    } )
     public String searchTickets( HttpServletRequest request )
     {
         String strQuery = request.getParameter( SearchConstants.PARAMETER_QUERY );
@@ -99,7 +101,7 @@ public class TicketSearchJspBean extends MVCAdminJspBean
             _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( SearchConstants.PROPERTY_DEFAULT_RESULT_PER_PAGE, 10 );
             _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, _nDefaultItemsPerPage );
 
-            TicketSearchEngine engine = ( TicketSearchEngine ) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
+            TicketSearchEngine engine = (TicketSearchEngine) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
             List<Ticket> listResults;
 
             try
@@ -112,12 +114,14 @@ public class TicketSearchJspBean extends MVCAdminJspBean
                 model.put( SearchConstants.MARK_QUERY, strQuery );
                 model.put( SearchConstants.MARK_PAGINATOR, paginator );
                 model.put( SearchConstants.MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
-            } catch ( ParseException pe )
+            }
+            catch( ParseException pe )
             {
                 AppLogService.error( "Error while parsing query " + strQuery, pe );
                 addError( model, SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
             }
-        } else
+        }
+        else
         {
             addError( model, SearchConstants.MESSAGE_SEARCH_NO_INPUT, getLocale( ) );
         }
@@ -144,6 +148,6 @@ public class TicketSearchJspBean extends MVCAdminJspBean
             model.put( SearchConstants.MARK_ERRORS, listErrors );
         }
 
-        ( ( List<ErrorMessage> ) model.get( SearchConstants.MARK_ERRORS ) ).add( new MVCMessage( I18nService.getLocalizedString( strMessageKey, locale ) ) );
+        ( (List<ErrorMessage>) model.get( SearchConstants.MARK_ERRORS ) ).add( new MVCMessage( I18nService.getLocalizedString( strMessageKey, locale ) ) );
     }
 }

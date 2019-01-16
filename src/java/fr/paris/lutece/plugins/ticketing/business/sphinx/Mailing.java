@@ -3,7 +3,7 @@ package fr.paris.lutece.plugins.ticketing.business.sphinx;
 public class Mailing
 {
 
-    private int    _nId;
+    private int _nId;
     private String _strEMail;
     private String _strDuration;
     private String _strDomains;

@@ -57,13 +57,13 @@ public class EntryTypeImage extends EntryTypeFile
     /**
      * Name of the bean of this service
      */
-    public static final String  BEAN_NAME                = "ticketing.entryTypeImage";
-    private static final String TEMPLATE_HTML_CODE       = "skin/plugins/ticketing/entries/html_code_entry_type_image.html";
+    public static final String BEAN_NAME = "ticketing.entryTypeImage";
+    private static final String TEMPLATE_HTML_CODE = "skin/plugins/ticketing/entries/html_code_entry_type_image.html";
     private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/ticketing/entries/html_code_entry_type_image.html";
-    private static final String TEMPLATE_FILE_IMAGE      = "admin/plugins/ticketing/entries/read_only_entry_type_image.html";
-    private static final String MARK_FILE_NAME           = "file_name";
-    private static final String MARK_IMG_URL             = "img_url";
-    private static final String MARK_ENTRY               = "entry";
+    private static final String TEMPLATE_FILE_IMAGE = "admin/plugins/ticketing/entries/read_only_entry_type_image.html";
+    private static final String MARK_FILE_NAME = "file_name";
+    private static final String MARK_IMG_URL = "img_url";
+    private static final String MARK_ENTRY = "entry";
 
     /**
      * {@inheritDoc}

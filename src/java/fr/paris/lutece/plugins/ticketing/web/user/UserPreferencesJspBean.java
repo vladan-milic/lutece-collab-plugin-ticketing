@@ -58,34 +58,34 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 @Controller( controllerJsp = UserPreferencesJspBean.CONTROLLER_JSP, controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH, right = UserPreferencesJspBean.CONTROLLER_RIGHT )
 public class UserPreferencesJspBean extends MVCAdminJspBean
 {
-    protected static final String          CONTROLLER_JSP                              = "UserPreferences.jsp";
-    protected static final String          CONTROLLER_RIGHT                            = "TICKETING_USER_PREFERENCES_MANAGEMENT";
+    protected static final String CONTROLLER_JSP = "UserPreferences.jsp";
+    protected static final String CONTROLLER_RIGHT = "TICKETING_USER_PREFERENCES_MANAGEMENT";
 
     // Parameters
-    private static final String            PARAMETER_CREATION_DATE_DISPLAY             = "creation_date_display";
+    private static final String PARAMETER_CREATION_DATE_DISPLAY = "creation_date_display";
 
     /**
      * Generated serial id
      */
-    private static final long              serialVersionUID                            = 591571470516993886L;
+    private static final long serialVersionUID = 591571470516993886L;
 
     // templates
-    private static final String            TEMPLATE_MANAGE_USER_PREFERENCES            = "/admin/plugins/ticketing/user/manage_user_preferences.html";
+    private static final String TEMPLATE_MANAGE_USER_PREFERENCES = "/admin/plugins/ticketing/user/manage_user_preferences.html";
 
     // Messages
-    private static final String            PROPERTY_PAGE_TITLE_MANAGE_USER_PREFERENCES = "ticketing.manage_user_preferences.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MANAGE_USER_PREFERENCES = "ticketing.manage_user_preferences.pageTitle";
 
     // Infos
-    private static final String            INFO_USER_PREFERENCES_SAVED                 = "ticketing.info.user.preferences.saved";
+    private static final String INFO_USER_PREFERENCES_SAVED = "ticketing.info.user.preferences.saved";
 
     // Views
-    private static final String            VIEW_MANAGE_USER_PREFERENCES                = "manageUserPreferences";
+    private static final String VIEW_MANAGE_USER_PREFERENCES = "manageUserPreferences";
 
     // Actions
-    private static final String            ACTION_MODIFY_USER_PREFERENCES              = "modifyUserPreferences";
+    private static final String ACTION_MODIFY_USER_PREFERENCES = "modifyUserPreferences";
 
     // Services
-    private static IUserPreferencesService _userPreferencesService                     = AdminUserPreferencesService.instance( );
+    private static IUserPreferencesService _userPreferencesService = AdminUserPreferencesService.instance( );
 
     /**
      * Gives the page to manage user preferences
@@ -100,7 +100,8 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
         Map<String, Object> model = getModel( );
         int nUserId = getUser( ).getUserId( );
 
-        String strCreationDateDisplay = _userPreferencesService.get( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY, StringUtils.EMPTY );
+        String strCreationDateDisplay = _userPreferencesService.get( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY,
+                StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_CREATION_DATE_AS_DATE, TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY_DATE.equals( strCreationDateDisplay ) );
 
         String strUserSignature = _userPreferencesService.get( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_SIGNATURE, StringUtils.EMPTY );
@@ -112,7 +113,8 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
         List<Integer> idChannelList = TicketUtils.extractListIdFromString( strIdChannelList );
         model.put( TicketingConstants.MARK_SELECTABLE_ID_CHANNEL_LIST, idChannelList );
 
-        String strPreferredIdChannel = _userPreferencesService.get( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, StringUtils.EMPTY );
+        String strPreferredIdChannel = _userPreferencesService.get( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL,
+                StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_PREFERRED_ID_CHANNEL, strPreferredIdChannel );
 
         String strWarningDays = _userPreferencesService.get( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_WARNING_DAYS, StringUtils.EMPTY );
@@ -141,8 +143,9 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
         String strUserSignature = request.getParameter( TicketingConstants.PARAMETER_USER_SIGNATURE );
         _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_SIGNATURE, strUserSignature );
 
-        String[] tabIdChannelList = request.getParameterValues( TicketingConstants.PARAMETER_SELECTABLE_ID_CHANNEL_LIST );
-        _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_CHANNELS_LIST, StringUtils.join( tabIdChannelList, TicketingConstants.FIELD_ID_SEPARATOR ) );
+        String [ ] tabIdChannelList = request.getParameterValues( TicketingConstants.PARAMETER_SELECTABLE_ID_CHANNEL_LIST );
+        _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_CHANNELS_LIST,
+                StringUtils.join( tabIdChannelList, TicketingConstants.FIELD_ID_SEPARATOR ) );
 
         String strPreferredIdChannel = request.getParameter( TicketingConstants.PARAMETER_SELECTED_ID_CHANNEL );
         _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_PREFERRED_CHANNEL, strPreferredIdChannel );

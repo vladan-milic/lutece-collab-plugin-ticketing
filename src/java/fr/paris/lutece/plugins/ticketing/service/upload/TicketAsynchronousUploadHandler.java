@@ -42,11 +42,11 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
  */
 public class TicketAsynchronousUploadHandler extends AbstractGenAttUploadHandler
 {
-    private static final String UPLOAD_SUBMIT_PREFIX                    = "_ticket_upload_submit_";
-    private static final String UPLOAD_DELETE_PREFIX                    = "_ticket_upload_delete_";
-    private static final String UPLOAD_CHECKBOX_PREFIX                  = "_ticket_upload_checkbox_";
+    private static final String UPLOAD_SUBMIT_PREFIX = "_ticket_upload_submit_";
+    private static final String UPLOAD_DELETE_PREFIX = "_ticket_upload_delete_";
+    private static final String UPLOAD_CHECKBOX_PREFIX = "_ticket_upload_checkbox_";
     private static final String BEAN_TICKET_ASYNCHRONOUS_UPLOAD_HANDLER = "ticketing.ticketAsynchronousUploadHandler";
-    private static final String HANDLER_NAME                            = "ticketAsynchronousUploadHandler";
+    private static final String HANDLER_NAME = "ticketAsynchronousUploadHandler";
 
     /**
      * Get the handler

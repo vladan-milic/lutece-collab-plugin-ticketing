@@ -50,22 +50,22 @@ public class ModelResponse implements Serializable
     private static final long serialVersionUID = 1L;
 
     // Variables declarations
-    private int               _nId;
+    private int _nId;
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Title.notEmpty}" )
     @Size( max = 500, message = "#i18n{ticketing.validation.modelresponse.Title.size}" )
-    private String            _strTitle;
+    private String _strTitle;
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Reponse.notEmpty}" )
     @Size( max = 60000, message = "#i18n{ticketing.validation.modelresponse.Reponse.size}" )
-    private String            _strReponse;
+    private String _strReponse;
     @Size( max = 1000, message = "#i18n{ticketing.validation.modelresponse.Keyword.size}" )
     @NotEmpty( message = "#i18n{ticketing.validation.modelresponse.Keyword.notEmpty}" )
-    private String            _strKeyword;
-    private String            _strDomain;
-    private String            _strDomainLabel;
-    private String            _strDateUpdate;
-    private String            _strLastName;
-    private String            _strFirstName;
-    private String            _strInfos;
+    private String _strKeyword;
+    private String _strDomain;
+    private String _strDomainLabel;
+    private String _strDateUpdate;
+    private String _strLastName;
+    private String _strFirstName;
+    private String _strInfos;
 
     /**
      * Returns the Id
@@ -252,7 +252,8 @@ public class ModelResponse implements Serializable
         if ( !getDateUpdate( ).isEmpty( ) && !getFirstName( ).isEmpty( ) && !getLastName( ).isEmpty( ) )
         {
             _strInfos = getDateUpdate( ) + " par " + getFirstName( ) + " " + getLastName( ).toUpperCase( );
-        } else
+        }
+        else
         {
             _strInfos = "";
         }

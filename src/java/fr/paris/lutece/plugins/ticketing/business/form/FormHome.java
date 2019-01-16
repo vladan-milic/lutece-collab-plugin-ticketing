@@ -54,8 +54,8 @@ import fr.paris.lutece.util.ReferenceList;
 public final class FormHome
 {
     // Static variable pointed at the DAO instance
-    private static IFormDAO _dao    = SpringContextService.getBean( "ticketing.formDAO" );
-    private static Plugin   _plugin = PluginService.getPlugin( "ticketing" );
+    private static IFormDAO _dao = SpringContextService.getBean( "ticketing.formDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -141,8 +141,7 @@ public final class FormHome
         {
             List<FormCategory> formCategories = FormCategoryHome.findByCategory( category.getId( ) );
 
-            Consumer<? super Form> updateSelected = form ->
-            {
+            Consumer<? super Form> updateSelected = form -> {
                 boolean selected = formCategories.stream( ).anyMatch( formCat -> formCat.getIdForm( ) == form.getId( ) );
                 form.setSelected( selected );
             };
@@ -188,7 +187,8 @@ public final class FormHome
         try
         {
             form = FormHome.findByPrimaryKey( Integer.parseInt( formId ) );
-        } catch ( NumberFormatException e )
+        }
+        catch( NumberFormatException e )
         {
             AppLogService.info( formId );
         }

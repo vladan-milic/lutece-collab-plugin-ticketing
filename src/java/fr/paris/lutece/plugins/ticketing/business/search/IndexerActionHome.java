@@ -46,8 +46,8 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class IndexerActionHome
 {
     // Static variable pointed at the DAO instance
-    private static IIndexerActionDAO _dao    = SpringContextService.getBean( "ticketing.ticketIndexerActionDAO" );
-    private static Plugin            _plugin = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME );
+    private static IIndexerActionDAO _dao = SpringContextService.getBean( "ticketing.ticketIndexerActionDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -69,10 +69,12 @@ public final class IndexerActionHome
         if ( indexerAction.getIdTask( ) == IndexerAction.TASK_CREATE )
         {
             nOppositeTask = IndexerAction.TASK_DELETE;
-        } else if ( indexerAction.getIdTask( ) == IndexerAction.TASK_DELETE )
-        {
-            nOppositeTask = IndexerAction.TASK_CREATE;
         }
+        else
+            if ( indexerAction.getIdTask( ) == IndexerAction.TASK_DELETE )
+            {
+                nOppositeTask = IndexerAction.TASK_CREATE;
+            }
 
         boolean bAlreadyFound = false;
 
@@ -88,16 +90,19 @@ public final class IndexerActionHome
                 if ( action.getIdTask( ) == nOppositeTask )
                 {
                     remove( action.getIdAction( ) );
-                } else if ( action.getIdTask( ) == indexerAction.getIdTask( ) )
-                {
-                    if ( bAlreadyFound )
-                    {
-                        remove( action.getIdAction( ) );
-                    } else
-                    {
-                        bAlreadyFound = true;
-                    }
                 }
+                else
+                    if ( action.getIdTask( ) == indexerAction.getIdTask( ) )
+                    {
+                        if ( bAlreadyFound )
+                        {
+                            remove( action.getIdAction( ) );
+                        }
+                        else
+                        {
+                            bAlreadyFound = true;
+                        }
+                    }
             }
         }
 

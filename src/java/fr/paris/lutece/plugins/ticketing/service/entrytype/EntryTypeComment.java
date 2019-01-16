@@ -51,11 +51,11 @@ import fr.paris.lutece.util.html.HtmlTemplate;
  */
 public class EntryTypeComment extends AbstractEntryTypeComment
 {
-    private static final String TEMPLATE_CREATE          = "admin/plugins/ticketing/entries/create_entry_type_comment.html";
-    private static final String TEMPLATE_MODIFY          = "admin/plugins/ticketing/entries/modify_entry_type_comment.html";
-    private static final String TEMPLATE_HTML_CODE       = "skin/plugins/ticketing/entries/html_code_entry_type_comment.html";
+    private static final String TEMPLATE_CREATE = "admin/plugins/ticketing/entries/create_entry_type_comment.html";
+    private static final String TEMPLATE_MODIFY = "admin/plugins/ticketing/entries/modify_entry_type_comment.html";
+    private static final String TEMPLATE_HTML_CODE = "skin/plugins/ticketing/entries/html_code_entry_type_comment.html";
     private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/ticketing/entries/html_code_entry_type_comment.html";
-    private static final String TEMPLATE_READ_ONLY_HTML  = "admin/plugins/ticketing/entries/read_only_entry_type_comment.html";
+    private static final String TEMPLATE_READ_ONLY_HTML = "admin/plugins/ticketing/entries/read_only_entry_type_comment.html";
 
     /**
      * {@inheritDoc}

@@ -66,7 +66,8 @@ public class TicketCategoryBusinessTest extends LuteceTestCase
         newTicketCategory.setCode( "RCLs" );
 
         newTicketCategory.setCategoryType( TicketCategoryTypeHome.findByDepth( 1 ) );
-        System.out.println( "Type newTicketCategory=" + newTicketCategory.getCategoryType( ).getLabel( ) + " " + newTicketCategory.getCategoryType( ).getDepthNumber( ) );
+        System.out.println( "Type newTicketCategory=" + newTicketCategory.getCategoryType( ).getLabel( ) + " "
+                + newTicketCategory.getCategoryType( ).getDepthNumber( ) );
 
         TicketCategoryHome.create( newTicketCategory );
 
@@ -173,11 +174,13 @@ public class TicketCategoryBusinessTest extends LuteceTestCase
 
         List<TicketCategory> listCategory = TicketCategoryHome.getFullCategorysList( false );
         assertEquals( listCategory.size( ), 11 );
-        listCategory.forEach( category -> System.out.println( category.getLabel( ) + "  " + category.getCode( ) + " " + category.getCategoryType( ).getLabel( ) ) );
+        listCategory
+                .forEach( category -> System.out.println( category.getLabel( ) + "  " + category.getCode( ) + " " + category.getCategoryType( ).getLabel( ) ) );
 
         listCategory = TicketCategoryHome.getCategorysList( );
         assertEquals( listCategory.size( ), 11 );
-        listCategory.forEach( category -> System.out.println( category.getLabel( ) + "  " + category.getCode( ) + " " + category.getCategoryType( ).getLabel( ) ) );
+        listCategory
+                .forEach( category -> System.out.println( category.getLabel( ) + "  " + category.getCode( ) + " " + category.getCategoryType( ).getLabel( ) ) );
 
         // // Delete test
         // listCategoryType.forEach(categoryType -> TicketCategoryTypeHome.remove( categoryType.getId( ) ) );

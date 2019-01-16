@@ -49,7 +49,7 @@ public enum SupportLevel
 {
     LEVEL1( 1 ), LEVEL2( 2 ), LEVEL3( 3 );
 
-    private static final String               MESSAGE_PREFIX   = "ticketing.supportentity.level";
+    private static final String MESSAGE_PREFIX = "ticketing.supportentity.level";
     private static Map<Integer, SupportLevel> _mapSupportLevel = new HashMap<Integer, SupportLevel>( );
 
     static

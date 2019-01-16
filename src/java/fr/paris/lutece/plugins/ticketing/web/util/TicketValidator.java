@@ -61,12 +61,12 @@ import fr.paris.lutece.util.beanvalidation.ValidationError;
 public class TicketValidator
 {
     // Errors
-    private static final String ERROR_USER_TITLE_UNKNOWN   = "ticketing.error.userTitle.unknown";
+    private static final String ERROR_USER_TITLE_UNKNOWN = "ticketing.error.userTitle.unknown";
     private static final String ERROR_CONTACT_MODE_UNKNOWN = "ticketing.error.contactMode.unknown";
-    private static final String ERROR_CHANNEL_UNKNOWN      = "ticketing.error.channel.unknown";
+    private static final String ERROR_CHANNEL_UNKNOWN = "ticketing.error.channel.unknown";
 
     // Attributes
-    private Locale              _locale;
+    private Locale _locale;
 
     /**
      * Constructor

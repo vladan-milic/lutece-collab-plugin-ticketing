@@ -56,11 +56,11 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 public final class TicketFileHome
 {
     // Static variable pointed at the DAO instance
-    private static ITicketFileDAO    _dao                = SpringContextService.getBean( "ticketing.ticketFileDAO" );
-    private static Plugin            _plugin             = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME );
-    private static IBlobStoreService _blobStoreService   = SpringContextService.getBean( "ticketing.blobStoreService" );
+    private static ITicketFileDAO _dao = SpringContextService.getBean( "ticketing.ticketFileDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( TicketingPlugin.PLUGIN_NAME );
+    private static IBlobStoreService _blobStoreService = SpringContextService.getBean( "ticketing.blobStoreService" );
 
-    private static final boolean     REMOVE_FILE_FROM_DB = AppPropertiesService.getPropertyBoolean( "ticketing.daemon.archiving.remove.database.blob", false );
+    private static final boolean REMOVE_FILE_FROM_DB = AppPropertiesService.getPropertyBoolean( "ticketing.daemon.archiving.remove.database.blob", false );
 
     /**
      * Migrate from database to filesystem file
@@ -156,13 +156,14 @@ public final class TicketFileHome
             String strBlobId = _dao.findIdBlobByIdFile( file.getIdFile( ), _plugin );
             if ( strBlobId != null )
             {
-                byte[] blob = _blobStoreService.getBlob( strBlobId );
+                byte [ ] blob = _blobStoreService.getBlob( strBlobId );
                 if ( blob != null )
                 {
                     physicalFile = new PhysicalFile( );
                     physicalFile.setValue( blob );
                 }
-            } else
+            }
+            else
             {
                 physicalFile = PhysicalFileHome.findByPrimaryKey( file.getPhysicalFile( ).getIdPhysicalFile( ) );
             }

@@ -44,8 +44,8 @@ public class ViewingHome
 {
 
     // Static variable pointed at the DAO instance
-    private static IViewingDAO _dao    = SpringContextService.getBean( "ticketing.viewingDAO" );
-    private static Plugin      _plugin = PluginService.getPlugin( "ticketing" );
+    private static IViewingDAO _dao = SpringContextService.getBean( "ticketing.viewingDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated

@@ -55,7 +55,8 @@ public class SphinxDaemon extends Daemon
         {
             ISphinxServices iSphinxServices = SpringContextService.getBean( ISphinxServices.BEAN_SERVICE );
             setLastRunLogs( iSphinxServices.mailingToSphinx( ) );
-        } catch ( IOException e )
+        }
+        catch( IOException e )
         {
             e.printStackTrace( );
         }

@@ -49,8 +49,8 @@ import fr.paris.lutece.util.ReferenceList;
 public final class TicketCategoryHome
 {
     // Static variable pointed at the DAO instance
-    private static ITicketCategoryDAO _dao    = SpringContextService.getBean( "ticketing.ticketCategoryDAO" );
-    private static Plugin             _plugin = PluginService.getPlugin( "ticketing" );
+    private static ITicketCategoryDAO _dao = SpringContextService.getBean( "ticketing.ticketCategoryDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated
@@ -91,7 +91,8 @@ public final class TicketCategoryHome
         {
             _dao.storeWithLastOrder( category, _plugin );
             _dao.rebuildCategoryOrders( nCurrentOrder, nCurrentParentId, _plugin );
-        } else
+        }
+        else
         {
             _dao.store( category, _plugin );
         }
@@ -217,7 +218,8 @@ public final class TicketCategoryHome
                 if ( bMoveUp )
                 {
                     sourceOrder++;
-                } else
+                }
+                else
                 {
                     targetOrder++;
                 }
@@ -225,9 +227,11 @@ public final class TicketCategoryHome
 
             _dao.updateCategoryOrder( sourceCategory.getId( ), targetOrder, _plugin );
             _dao.updateCategoryOrder( targetCategory.getId( ), sourceOrder, _plugin );
-        } else
+        }
+        else
         {
-            AppLogService.error( "Could not move TicketCategory " + nId + " " + ( bMoveUp ? "up" : "down" ) + " : no TicketCategory to replace on destination " );
+            AppLogService
+                    .error( "Could not move TicketCategory " + nId + " " + ( bMoveUp ? "up" : "down" ) + " : no TicketCategory to replace on destination " );
         }
     }
 

@@ -40,14 +40,14 @@ import fr.paris.lutece.test.LuteceTestCase;
 
 public class FormBusinessTest extends LuteceTestCase
 {
-    private final static String  TITLE1       = "Title1";
-    private final static String  TITLE2       = "Title2";
-    private final static String  MESSAGE1     = "Message1";
-    private final static String  MESSAGE2     = "Message2";
-    private final static String  BUTTONLABEL1 = "ButtonLabel1";
-    private final static String  BUTTONLABEL2 = "ButtonLabel2";
-    private final static boolean CONNECTION1  = true;
-    private final static boolean CONNECTION2  = false;
+    private final static String TITLE1 = "Title1";
+    private final static String TITLE2 = "Title2";
+    private final static String MESSAGE1 = "Message1";
+    private final static String MESSAGE2 = "Message2";
+    private final static String BUTTONLABEL1 = "ButtonLabel1";
+    private final static String BUTTONLABEL2 = "ButtonLabel2";
+    private final static boolean CONNECTION1 = true;
+    private final static boolean CONNECTION2 = false;
 
     public void testBusiness( )
     {

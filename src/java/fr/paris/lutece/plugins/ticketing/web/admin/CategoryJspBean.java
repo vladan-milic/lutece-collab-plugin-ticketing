@@ -75,113 +75,113 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
 {
 
     // Templates
-    private static final String TEMPLATE_MANAGE_CATEGORIES                 = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_categories.html";
-    private static final String TEMPLATE_CREATE_CATEGORY                   = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_category.html";
-    private static final String TEMPLATE_MODIFY_CATEGORY                   = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_category.html";
-    private static final String TEMPLATE_CREATE_CATEGORYTYPE               = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_categorytype.html";
-    private static final String TEMPLATE_MODIFY_CATEGORYTYPE               = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_categorytype.html";
-    private static final String TEMPLATE_MODIFY_CATEGORY_INPUTS            = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_category_inputs.html";
+    private static final String TEMPLATE_MANAGE_CATEGORIES = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_categories.html";
+    private static final String TEMPLATE_CREATE_CATEGORY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_category.html";
+    private static final String TEMPLATE_MODIFY_CATEGORY = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_category.html";
+    private static final String TEMPLATE_CREATE_CATEGORYTYPE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_categorytype.html";
+    private static final String TEMPLATE_MODIFY_CATEGORYTYPE = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_categorytype.html";
+    private static final String TEMPLATE_MODIFY_CATEGORY_INPUTS = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "modify_category_inputs.html";
 
     // Parameters
-    private static final String PARAMETER_ID_CATEGORY                      = "id_category";
-    private static final String PARAMETER_ASSIGNEE_UNIT                    = "id_unit";
-    private static final String PARAMETER_ID_PARENT_CATEGORY               = "id_parent_category";
-    private static final String PARAMETER_ID_CATEGORYTYPE                  = "id_category_type";
+    private static final String PARAMETER_ID_CATEGORY = "id_category";
+    private static final String PARAMETER_ASSIGNEE_UNIT = "id_unit";
+    private static final String PARAMETER_ID_PARENT_CATEGORY = "id_parent_category";
+    private static final String PARAMETER_ID_CATEGORYTYPE = "id_category_type";
 
-    private static final String PARAMETER_ID_CATEGORY_INPUT                = "id_input";
+    private static final String PARAMETER_ID_CATEGORY_INPUT = "id_input";
 
     // Properties for page titles
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_CATEGORYS       = "ticketing.manage_categories.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_CATEGORY        = "ticketing.modify_category.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_CATEGORY        = "ticketing.create_category.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_CATEGORYTYPE    = "ticketing.modify_categorytype.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_CATEGORYTYPE    = "ticketing.create_categorytype.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MANAGE_CATEGORYS = "ticketing.manage_categories.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MODIFY_CATEGORY = "ticketing.modify_category.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_CREATE_CATEGORY = "ticketing.create_category.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MODIFY_CATEGORYTYPE = "ticketing.modify_categorytype.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_CREATE_CATEGORYTYPE = "ticketing.create_categorytype.pageTitle";
 
     private static final String PROPERTY_PAGE_TITLE_MODIFY_CATEGORY_INPUTS = "ticketing.modify_category_inputs.pageTitle";
 
-    private static final String PROPERTY_DEMAND_TYPE_MY_ACCOUNT            = "ticketing.demand.type.my.account";
+    private static final String PROPERTY_DEMAND_TYPE_MY_ACCOUNT = "ticketing.demand.type.my.account";
 
     // Markers
-    private static final String MARK_CATEGORY                              = "category";
-    public static final String  MARK_CATEGORIES_TREE                       = "tree";
-    public static final String  MARK_LIST_CATEGORY_TYPES                   = "category_types";
-    public static final String  MARK_ID_CATEGORY_TYPE                      = "id_category_type";
-    public static final String  MARK_ID_PARENT_CATEGORY                    = "id_parent_category";
-    public static final String  MARK_ID_CATEGORY                           = "id_category";
-    public static final String  MARK_ASSIGNEE_UNIT_LIST                    = "unit_list";
-    public static final String  MARK_DEMAND_TYPE_MY_ACCOUNT_LIST           = "demand_type_my_account_list";
-    public static final String  MARK_FORM_LIST                             = "form_list";
-    public static final String  MARK_FORMCATEGORY_LIST                     = "formcategory_list";
-    private static final String MARK_CATEGORYTYPE                          = "categorytype";
+    private static final String MARK_CATEGORY = "category";
+    public static final String MARK_CATEGORIES_TREE = "tree";
+    public static final String MARK_LIST_CATEGORY_TYPES = "category_types";
+    public static final String MARK_ID_CATEGORY_TYPE = "id_category_type";
+    public static final String MARK_ID_PARENT_CATEGORY = "id_parent_category";
+    public static final String MARK_ID_CATEGORY = "id_category";
+    public static final String MARK_ASSIGNEE_UNIT_LIST = "unit_list";
+    public static final String MARK_DEMAND_TYPE_MY_ACCOUNT_LIST = "demand_type_my_account_list";
+    public static final String MARK_FORM_LIST = "form_list";
+    public static final String MARK_FORMCATEGORY_LIST = "formcategory_list";
+    private static final String MARK_CATEGORYTYPE = "categorytype";
 
-    private static final String MARK_ALL_INPUTS_LIST                       = "inputs_list";
-    private static final String MARK_LOCALE                                = "language";
-    private static final String MARK_LOCALE_TINY                           = "locale";
-    private static final String MARK_CATEGORY_INPUTS_LIST                  = "category_inputs_list";
-    private static final String MARK_CATEGORY_INPUTS_HERITED_LIST          = "category_inputs_herited_list";
-    private static final String MARK_CATEGORY_INPUTS_BLOCKED_LIST          = "category_inputs_blocked_list";
-    private static final String MARK_BRANCH_LABEL                          = "branch_label";
-    private static final String MARK_SELECTED_FORMS                        = "selected_forms";
+    private static final String MARK_ALL_INPUTS_LIST = "inputs_list";
+    private static final String MARK_LOCALE = "language";
+    private static final String MARK_LOCALE_TINY = "locale";
+    private static final String MARK_CATEGORY_INPUTS_LIST = "category_inputs_list";
+    private static final String MARK_CATEGORY_INPUTS_HERITED_LIST = "category_inputs_herited_list";
+    private static final String MARK_CATEGORY_INPUTS_BLOCKED_LIST = "category_inputs_blocked_list";
+    private static final String MARK_BRANCH_LABEL = "branch_label";
+    private static final String MARK_SELECTED_FORMS = "selected_forms";
 
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_CATEGORY            = "ticketing.message.confirmRemoveCategory";
-    private static final String MESSAGE_CONFIRM_REMOVE_CATEGORYTYPE        = "ticketing.message.confirmRemoveCategoryType";
+    private static final String MESSAGE_CONFIRM_REMOVE_CATEGORY = "ticketing.message.confirmRemoveCategory";
+    private static final String MESSAGE_CONFIRM_REMOVE_CATEGORYTYPE = "ticketing.message.confirmRemoveCategoryType";
 
-    private static final String MESSAGE_CONFIRM_REMOVE_CATEGORY_INPUT      = "ticketing.message.confirmRemoveCategoryInput";
+    private static final String MESSAGE_CONFIRM_REMOVE_CATEGORY_INPUT = "ticketing.message.confirmRemoveCategoryInput";
 
-    private static final String MESSAGE_NO_DEMAND_TYPE                     = "ticketing.create_category.demandType.noDemandType";
+    private static final String MESSAGE_NO_DEMAND_TYPE = "ticketing.create_category.demandType.noDemandType";
 
     // Validations
-    private static final String VALIDATION_ATTRIBUTES_PREFIX               = "ticketing.model.entity.category.attribute.";
-    private static final String VALIDATION_ATTRIBUTES_TYPE_PREFIX          = "ticketing.model.entity.categorytype.attribute.";
+    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.category.attribute.";
+    private static final String VALIDATION_ATTRIBUTES_TYPE_PREFIX = "ticketing.model.entity.categorytype.attribute.";
 
     // Views
-    private static final String VIEW_MANAGE_CATEGORIES                     = "manageCategories";
-    private static final String VIEW_CREATE_CATEGORY                       = "createCategory";
-    private static final String VIEW_MODIFY_CATEGORY                       = "modifyCategory";
-    private static final String VIEW_CREATE_CATEGORYTYPE                   = "createCategoryType";
-    private static final String VIEW_MODIFY_CATEGORYTYPE                   = "modifyCategoryType";
-    private static final String VIEW_MODIFY_CATEGORY_INPUTS                = "modifyCategoryInputs";
+    private static final String VIEW_MANAGE_CATEGORIES = "manageCategories";
+    private static final String VIEW_CREATE_CATEGORY = "createCategory";
+    private static final String VIEW_MODIFY_CATEGORY = "modifyCategory";
+    private static final String VIEW_CREATE_CATEGORYTYPE = "createCategoryType";
+    private static final String VIEW_MODIFY_CATEGORYTYPE = "modifyCategoryType";
+    private static final String VIEW_MODIFY_CATEGORY_INPUTS = "modifyCategoryInputs";
 
     // Actions
-    private static final String ACTION_CREATE_CATEGORY                     = "createCategory";
-    private static final String ACTION_MODIFY_CATEGORY                     = "modifyCategory";
-    private static final String ACTION_REMOVE_CATEGORY                     = "removeCategory";
-    private static final String ACTION_CONFIRM_REMOVE_CATEGORY             = "confirmRemoveCategory";
-    private static final String ACTION_CREATE_CATEGORYTYPE                 = "createCategoryType";
-    private static final String ACTION_MODIFY_CATEGORYTYPE                 = "modifyCategoryType";
-    private static final String ACTION_REMOVE_CATEGORYTYPE                 = "removeCategoryType";
-    private static final String ACTION_CONFIRM_REMOVE_CATEGORYTYPE         = "confirmRemoveCategoryType";
+    private static final String ACTION_CREATE_CATEGORY = "createCategory";
+    private static final String ACTION_MODIFY_CATEGORY = "modifyCategory";
+    private static final String ACTION_REMOVE_CATEGORY = "removeCategory";
+    private static final String ACTION_CONFIRM_REMOVE_CATEGORY = "confirmRemoveCategory";
+    private static final String ACTION_CREATE_CATEGORYTYPE = "createCategoryType";
+    private static final String ACTION_MODIFY_CATEGORYTYPE = "modifyCategoryType";
+    private static final String ACTION_REMOVE_CATEGORYTYPE = "removeCategoryType";
+    private static final String ACTION_CONFIRM_REMOVE_CATEGORYTYPE = "confirmRemoveCategoryType";
 
-    private static final String ACTION_ADD_CATEGORY_INPUT                  = "addCategoryInput";
-    private static final String ACTION_REMOVE_CATEGORY_INPUT               = "removeCategoryInput";
-    private static final String ACTION_CONFIRM_REMOVE_CATEGORY_INPUT       = "confirmRemoveCategoryInput";
-    private static final String ACTION_DO_MOVE_FIELD_UP                    = "doMoveFieldUp";
-    private static final String ACTION_DO_MOVE_FIELD_DOWN                  = "doMoveFieldDown";
-    private static final String ACTION_DO_MOVE_CATEGORY_UP                 = "doMoveCategoryUp";
-    private static final String ACTION_DO_MOVE_CATEGORY_DOWN               = "doMoveCategoryDown";
+    private static final String ACTION_ADD_CATEGORY_INPUT = "addCategoryInput";
+    private static final String ACTION_REMOVE_CATEGORY_INPUT = "removeCategoryInput";
+    private static final String ACTION_CONFIRM_REMOVE_CATEGORY_INPUT = "confirmRemoveCategoryInput";
+    private static final String ACTION_DO_MOVE_FIELD_UP = "doMoveFieldUp";
+    private static final String ACTION_DO_MOVE_FIELD_DOWN = "doMoveFieldDown";
+    private static final String ACTION_DO_MOVE_CATEGORY_UP = "doMoveCategoryUp";
+    private static final String ACTION_DO_MOVE_CATEGORY_DOWN = "doMoveCategoryDown";
 
     // Infos
-    private static final String INFO_CATEGORY_CREATED                      = "ticketing.info.category.created";
-    private static final String INFO_CATEGORY_UPDATED                      = "ticketing.info.category.updated";
-    private static final String INFO_CATEGORY_REMOVED                      = "ticketing.info.category.removed";
-    private static final String INFO_CATEGORYTYPE_CREATED                  = "ticketing.info.categorytype.created";
-    private static final String INFO_CATEGORYTYPE_UPDATED                  = "ticketing.info.categorytype.updated";
-    private static final String INFO_CATEGORYTYPE_REMOVED                  = "ticketing.info.categorytype.removed";
-    private static final String INFO_CATEGORY_INPUT_REMOVED                = "ticketing.info.category.input.removed";
+    private static final String INFO_CATEGORY_CREATED = "ticketing.info.category.created";
+    private static final String INFO_CATEGORY_UPDATED = "ticketing.info.category.updated";
+    private static final String INFO_CATEGORY_REMOVED = "ticketing.info.category.removed";
+    private static final String INFO_CATEGORYTYPE_CREATED = "ticketing.info.categorytype.created";
+    private static final String INFO_CATEGORYTYPE_UPDATED = "ticketing.info.categorytype.updated";
+    private static final String INFO_CATEGORYTYPE_REMOVED = "ticketing.info.categorytype.removed";
+    private static final String INFO_CATEGORY_INPUT_REMOVED = "ticketing.info.category.input.removed";
 
     // Errors
-    private static final String ERROR_CATEGORY_REFERENCED                  = "ticketing.error.category.referenced.in.categories";
+    private static final String ERROR_CATEGORY_REFERENCED = "ticketing.error.category.referenced.in.categories";
 
-    private static final String JSP_MANAGE_CATEGORIES                      = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageCategories.jsp";
+    private static final String JSP_MANAGE_CATEGORIES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageCategories.jsp";
 
-    private static final long   serialVersionUID                           = 1L;
+    private static final long serialVersionUID = 1L;
 
-    private static final String DEMAND_TYPE_KEYS_LIST_LABEL                = ".label";
+    private static final String DEMAND_TYPE_KEYS_LIST_LABEL = ".label";
 
     // Session variable to store working values
-    private TicketCategory      _category;
-    private TicketCategoryType  _categoryType;
+    private TicketCategory _category;
+    private TicketCategoryType _categoryType;
 
     /**
      * Build the Manage View
@@ -200,7 +200,7 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
 
         List<Integer> restrictedCategoriesId = null;
 
-        String[] selectedForms = request.getParameterValues( "selectedForms" );
+        String [ ] selectedForms = request.getParameterValues( "selectedForms" );
         if ( selectedForms != null )
         {
             restrictedCategoriesId = new ArrayList<>( );
@@ -210,29 +210,33 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
                 {
                     restrictedCategoriesId = null;
                     break;
-                } else if ( "none".equals( formId ) )
-                {
-                    // We get all categories of first depth
-                    List<TicketCategory> firstDepths = TicketCategoryService.getInstance( ).getCategoriesTree( ).getRootElements( );
-                    // We get all categories restricted in forms
-                    List<FormCategory> allCategoriesRestrictedInForms = FormCategoryHome.findAll( );
-
-                    // We only add categories which are not in forms.
-                    List<TicketCategory> restrictedCategories = new ArrayList<>( );
-                    for ( TicketCategory ticketCategory : firstDepths )
-                    {
-                        if ( !allCategoriesRestrictedInForms.stream( ).anyMatch( formCategory -> formCategory.getIdCategory( ) == ticketCategory.getId( ) ) )
-                        {
-                            restrictedCategories.add( ticketCategory );
-                        }
-                    }
-
-                    restrictedCategoriesId.addAll( restrictedCategories.stream( ).map( category -> category.getId( ) ).collect( Collectors.toList( ) ) );
-                } else
-                {
-                    List<FormCategory> restrictedCategories = FormCategoryHome.findByForm( Integer.parseInt( formId ) );
-                    restrictedCategoriesId.addAll( restrictedCategories.stream( ).map( category -> category.getIdCategory( ) ).collect( Collectors.toList( ) ) );
                 }
+                else
+                    if ( "none".equals( formId ) )
+                    {
+                        // We get all categories of first depth
+                        List<TicketCategory> firstDepths = TicketCategoryService.getInstance( ).getCategoriesTree( ).getRootElements( );
+                        // We get all categories restricted in forms
+                        List<FormCategory> allCategoriesRestrictedInForms = FormCategoryHome.findAll( );
+
+                        // We only add categories which are not in forms.
+                        List<TicketCategory> restrictedCategories = new ArrayList<>( );
+                        for ( TicketCategory ticketCategory : firstDepths )
+                        {
+                            if ( !allCategoriesRestrictedInForms.stream( ).anyMatch( formCategory -> formCategory.getIdCategory( ) == ticketCategory.getId( ) ) )
+                            {
+                                restrictedCategories.add( ticketCategory );
+                            }
+                        }
+
+                        restrictedCategoriesId.addAll( restrictedCategories.stream( ).map( category -> category.getId( ) ).collect( Collectors.toList( ) ) );
+                    }
+                    else
+                    {
+                        List<FormCategory> restrictedCategories = FormCategoryHome.findByForm( Integer.parseInt( formId ) );
+                        restrictedCategoriesId.addAll( restrictedCategories.stream( ).map( category -> category.getIdCategory( ) )
+                                .collect( Collectors.toList( ) ) );
+                    }
             }
         }
 
@@ -302,7 +306,8 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
             {
                 AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
                 _category.setDefaultAssignUnit( assigneeUnit );
-            } else
+            }
+            else
             {
                 AssigneeUnit emptyUnit = new AssigneeUnit( );
                 emptyUnit.setUnitId( -1 );
@@ -353,7 +358,8 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
         Tree<TicketCategory, TicketCategoryType> treeCategories = TicketCategoryService.getInstance( ).getCategoriesTree( );
 
         // Remove children
-        treeCategories.getAllChildren( treeCategories.findNodeById( nId ), true ).stream( ).forEach( category -> TicketCategoryService.getInstance( ).removeCategory( category.getId( ) ) );
+        treeCategories.getAllChildren( treeCategories.findNodeById( nId ), true ).stream( )
+                .forEach( category -> TicketCategoryService.getInstance( ).removeCategory( category.getId( ) ) );
 
         TicketCategoryService.getInstance( ).removeCategory( nId );
         addInfo( INFO_CATEGORY_REMOVED, getLocale( ) );
@@ -414,7 +420,8 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
             {
                 AssigneeUnit assigneeUnit = new AssigneeUnit( unit );
                 _category.setDefaultAssignUnit( assigneeUnit );
-            } else
+            }
+            else
             {
                 AssigneeUnit emptyUnit = new AssigneeUnit( );
                 emptyUnit.setUnitId( -1 );
@@ -488,7 +495,8 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
             int nId = Integer.parseInt( request.getParameter( PARAMETER_ID_CATEGORY ) );
 
             TicketCategoryService.getInstance( ).updateCategoryOrder( nId, bMoveUp );
-        } catch ( NumberFormatException e )
+        }
+        catch( NumberFormatException e )
         {
             AppLogService.debug( "Error while moving Category. " + e.getMessage( ) );
         }
@@ -572,7 +580,8 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
         {
             TicketCategoryService.getInstance( ).removeCategoryTypeAndSubType( nId );
             addInfo( INFO_CATEGORYTYPE_REMOVED, getLocale( ) );
-        } else
+        }
+        else
         {
             addError( ERROR_CATEGORY_REFERENCED, getLocale( ) );
         }
@@ -747,7 +756,8 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
         url.addParameter( PARAMETER_ID_CATEGORY, nId );
         url.addParameter( PARAMETER_ID_CATEGORY_INPUT, nIdInput );
 
-        String strMessageUrl = AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_CATEGORY_INPUT, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
+        String strMessageUrl = AdminMessageService
+                .getMessageUrl( request, MESSAGE_CONFIRM_REMOVE_CATEGORY_INPUT, url.getUrl( ), AdminMessage.TYPE_CONFIRMATION );
 
         return redirect( request, strMessageUrl );
     }

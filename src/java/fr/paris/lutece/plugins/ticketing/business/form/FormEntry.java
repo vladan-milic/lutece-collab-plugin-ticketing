@@ -47,22 +47,22 @@ public class FormEntry implements Serializable
     private static final long serialVersionUID = 1L;
 
     // Variables declarations
-    private int               _nId;
+    private int _nId;
 
-    private int               _nIdForm;
+    private int _nIdForm;
 
     @NotEmpty( message = "#i18n{ticketing.validation.formentry.IdChamp.notEmpty}" )
     @Size( max = 50, message = "#i18n{ticketing.validation.formentry.IdChamp.size}" )
-    private String            _strIdChamp;
+    private String _strIdChamp;
 
-    private boolean           _bHidden;
+    private boolean _bHidden;
 
-    private boolean           _bMandatory;
+    private boolean _bMandatory;
 
-    private int               _nHierarchy;
+    private int _nHierarchy;
 
     @Size( max = 500, message = "#i18n{ticketing.validation.formentry.DefaultValue.size}" )
-    private String            _strDefaultValue;
+    private String _strDefaultValue;
 
     /**
      * 

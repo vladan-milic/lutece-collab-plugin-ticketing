@@ -47,8 +47,8 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class InstantResponseHome
 {
     // Static variable pointed at the DAO instance
-    private static IInstantResponseDAO _dao    = SpringContextService.getBean( "ticketing.instantResponseDAO" );
-    private static Plugin              _plugin = PluginService.getPlugin( "ticketing" );
+    private static IInstantResponseDAO _dao = SpringContextService.getBean( "ticketing.instantResponseDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated

@@ -46,8 +46,8 @@ import fr.paris.lutece.util.ReferenceList;
 public final class ChannelHome
 {
     // Static variable pointed at the DAO instance
-    private static IChannelDAO _dao    = SpringContextService.getBean( "ticketing.channelDAO" );
-    private static Plugin      _plugin = PluginService.getPlugin( "ticketing" );
+    private static IChannelDAO _dao = SpringContextService.getBean( "ticketing.channelDAO" );
+    private static Plugin _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
      * Private constructor - this class need not be instantiated

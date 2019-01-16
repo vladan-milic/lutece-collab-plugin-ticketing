@@ -45,18 +45,18 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class IndexerActionDAO implements IIndexerActionDAO
 {
     // Constants
-    public static final String  CONSTANT_WHERE                = " WHERE ";
-    public static final String  CONSTANT_AND                  = " AND ";
+    public static final String CONSTANT_WHERE = " WHERE ";
+    public static final String CONSTANT_AND = " AND ";
 
     // Constants
-    private static final String SQL_QUERY_NEW_PK              = "SELECT max( id_action ) FROM ticketing_indexer_action";
+    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_action ) FROM ticketing_indexer_action";
     private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = "SELECT id_action,id_ticket,id_task" + " FROM ticketing_indexer_action WHERE id_action = ?";
-    private static final String SQL_QUERY_INSERT              = "INSERT INTO ticketing_indexer_action( id_action,id_ticket,id_task)" + " VALUES(?,?,?)";
-    private static final String SQL_QUERY_DELETE              = "DELETE FROM ticketing_indexer_action WHERE id_action = ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_indexer_action( id_action,id_ticket,id_task)" + " VALUES(?,?,?)";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_indexer_action WHERE id_action = ? ";
     private static final String SQL_QUERY_DELETE_BY_ID_TICKET = "DELETE FROM ticketing_indexer_action WHERE id_ticket = ? ";
-    private static final String SQL_QUERY_SELECT              = "SELECT id_action,id_ticket,id_task" + " FROM ticketing_indexer_action  ";
-    private static final String SQL_FILTER_ID_TASK            = " id_task = ? ";
-    private static final String SQL_FILTER_id_ticket          = " id_ticket = ? ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_action,id_ticket,id_task" + " FROM ticketing_indexer_action  ";
+    private static final String SQL_FILTER_ID_TASK = " id_task = ? ";
+    private static final String SQL_FILTER_id_ticket = " id_ticket = ? ";
 
     /**
      * {@inheritDoc}

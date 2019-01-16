@@ -47,14 +47,16 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public final class InstantResponseDAO implements IInstantResponseDAO
 {
     // Constants
-    private static final String SQL_QUERY_NEW_PK       = "SELECT max( id_instant_response ) FROM ticketing_instant_response";
-    private static final String SQL_QUERY_SELECT       = "SELECT r.id_instant_response, r.id_ticket_category, r.subject, r.id_admin_user, r.id_channel FROM ticketing_instant_response r WHERE id_instant_response = ?";
-    private static final String SQL_QUERY_INSERT       = "INSERT INTO ticketing_instant_response ( id_instant_response, id_ticket_category, subject, id_admin_user, id_unit, date_create, id_channel ) VALUES ( ?, ?, ?, ?, ?, ?, ? ) ";
-    private static final String SQL_QUERY_DELETE       = "DELETE FROM ticketing_instant_response WHERE id_instant_response = ? ";
-    private static final String SQL_QUERY_UPDATE       = "UPDATE ticketing_instant_response SET id_instant_response = ?, id_ticket_category = ?, subject = ?, id_admin_user = ?, id_unit = ? WHERE id_instant_response = ?";
+    private static final String SQL_QUERY_NEW_PK = "SELECT max( id_instant_response ) FROM ticketing_instant_response";
+    private static final String SQL_QUERY_SELECT = "SELECT r.id_instant_response, r.id_ticket_category, r.subject, r.id_admin_user, r.id_channel FROM ticketing_instant_response r WHERE id_instant_response = ?";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_instant_response ( id_instant_response, id_ticket_category, subject, id_admin_user, id_unit, date_create, id_channel ) VALUES ( ?, ?, ?, ?, ?, ?, ? ) ";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM ticketing_instant_response WHERE id_instant_response = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_instant_response SET id_instant_response = ?, id_ticket_category = ?, subject = ?, id_admin_user = ?, id_unit = ? WHERE id_instant_response = ?";
 
-    private static final String SQL_QUERY_SELECTALL    = "SELECT a.id_instant_response, a.id_ticket_category, a.subject, a.date_create, a.id_admin_user , e.first_name , e.last_name, a.id_unit, f.label "
-            + " FROM ticketing_instant_response a" + " LEFT JOIN core_admin_user e ON e.id_user=a.id_admin_user" + " LEFT JOIN unittree_unit f ON f.id_unit=a.id_unit";
+    private static final String SQL_QUERY_SELECTALL = "SELECT a.id_instant_response, a.id_ticket_category, a.subject, a.date_create, a.id_admin_user , e.first_name , e.last_name, a.id_unit, f.label "
+            + " FROM ticketing_instant_response a"
+            + " LEFT JOIN core_admin_user e ON e.id_user=a.id_admin_user"
+            + " LEFT JOIN unittree_unit f ON f.id_unit=a.id_unit";
 
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_instant_response FROM ticketing_instant_response";
 

@@ -46,17 +46,17 @@ import org.apache.commons.lang.StringUtils;
  */
 public abstract class OrderByFilter
 {
-    private static final String         CONSTANT_ASC           = " ASC";
-    private static final String         CONSTANT_DESC          = " DESC";
-    private static final String         CONSTANT_ORDER_BY      = " ORDER BY ";
-    private static final String         CONSTANT_SQL_SEPARATOR = " , ";
+    private static final String CONSTANT_ASC = " ASC";
+    private static final String CONSTANT_DESC = " DESC";
+    private static final String CONSTANT_ORDER_BY = " ORDER BY ";
+    private static final String CONSTANT_SQL_SEPARATOR = " , ";
 
     /**
      * map containing functional field name as key target sql column list name as value
      */
     protected Map<String, List<String>> _mapOrderNameToColumnName;
-    private String                      _strOrderBy;
-    private String                      _strOrderSort;
+    private String _strOrderBy;
+    private String _strOrderSort;
 
     /**
      * constructor
@@ -89,7 +89,8 @@ public abstract class OrderByFilter
      * Set the order by attribute of this filter.
      *
      * @param strOrderBy
-     *            The order by attribute of this filter. If the specified order does not match with column names of the ticket table of the database, then the order by is reinitialized.
+     *            The order by attribute of this filter. If the specified order does not match with column names of the ticket table of the database, then the
+     *            order by is reinitialized.
      */
     public void setOrderBy( String strOrderBy )
     {
@@ -119,13 +120,15 @@ public abstract class OrderByFilter
                 if ( iterator.hasNext( ) )
                 {
                     strComputedOrderby += ( strColumnName + ( isOrderAsc ? CONSTANT_ASC : CONSTANT_DESC ) + CONSTANT_SQL_SEPARATOR );
-                } else
+                }
+                else
                 {
                     // last item => no CONSTANT_SQL_SEPARATOR
                     strComputedOrderby += ( strColumnName + ( isOrderAsc ? CONSTANT_ASC : CONSTANT_DESC ) );
                 }
             }
-        } else
+        }
+        else
         {
             strComputedOrderby = getDefaultOrderBySqlClause( isOrderAsc );
         }
@@ -154,7 +157,8 @@ public abstract class OrderByFilter
             if ( iterator.hasNext( ) )
             {
                 strComputedOrderby += ( strColumnName + ( isOrderAsc ? CONSTANT_ASC : CONSTANT_DESC ) + CONSTANT_SQL_SEPARATOR );
-            } else
+            }
+            else
             {
                 // last item => no CONSTANT_SQL_SEPARATOR
                 strComputedOrderby += ( strColumnName + ( isOrderAsc ? CONSTANT_ASC : CONSTANT_DESC ) );

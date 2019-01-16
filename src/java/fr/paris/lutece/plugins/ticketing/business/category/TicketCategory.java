@@ -53,56 +53,56 @@ import fr.paris.lutece.portal.service.rbac.RBACResource;
  */
 public class TicketCategory extends AbstractNode implements Serializable, RBACResource
 {
-    private static final long  serialVersionUID                      = 1L;
+    private static final long serialVersionUID = 1L;
 
     // RBAC management
-    public static final String RESOURCE_TYPE                         = "TICKET_CATEGORY";
-    public static final String PROPERTY_LABEL_RESOURCE_TYPE          = "ticketing.category.ressourceType.label";
+    public static final String RESOURCE_TYPE = "TICKET_CATEGORY";
+    public static final String PROPERTY_LABEL_RESOURCE_TYPE = "ticketing.category.ressourceType.label";
 
     // Permissions
-    public static final String PERMISSION_VIEW_LIST                  = "VIEW_LIST";
-    public static final String PROPERTY_LABEL_PERMISSION_VIEW        = "ticketing.category.permission.view.label";
+    public static final String PERMISSION_VIEW_LIST = "VIEW_LIST";
+    public static final String PROPERTY_LABEL_PERMISSION_VIEW = "ticketing.category.permission.view.label";
 
-    public static final String PERMISSION_VIEW_DETAIL                = "VIEW_DETAIL";
+    public static final String PERMISSION_VIEW_DETAIL = "VIEW_DETAIL";
     public static final String PROPERTY_LABEL_PERMISSION_VIEW_DETAIL = "ticketing.category.permission.viewDetail.label";
 
-    public static final String PERMISSION_BELONG_TO                  = "BELONG_TO";
-    public static final String PROPERTY_LABEL_BELONG_TO              = "ticketing.category.permission.belongTo.label";
+    public static final String PERMISSION_BELONG_TO = "BELONG_TO";
+    public static final String PROPERTY_LABEL_BELONG_TO = "ticketing.category.permission.belongTo.label";
 
     // Variables declarations
-    private int                _nId;
+    private int _nId;
 
-    private int                _nIdParent;
+    private int _nIdParent;
 
     @NotEmpty( message = "#i18n{ticketing.validation.category.label.notEmpty}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.category.label.size}" )
-    private String             _strLabel;
+    private String _strLabel;
 
-    private int                _nOrder;
+    private int _nOrder;
 
     @NotEmpty( message = "#i18n{ticketing.validation.category.code.notEmpty}" )
     @Size( max = 255, message = "#i18n{ticketing.validation.category.code.size}" )
-    private String             _strCode;
+    private String _strCode;
 
-    private AssigneeUnit       _defaultAssignUnit;
+    private AssigneeUnit _defaultAssignUnit;
 
-    private List<Integer>      _listIdInput;
+    private List<Integer> _listIdInput;
 
     @Digits( integer = 6, fraction = 0, message = "#i18n{ticketing.validation.category.demandId.int}" )
     @Min( value = 1, message = "#i18n{ticketing.validation.category.demandId.notEmpty}" )
-    private int                _nDemandId;
+    private int _nDemandId;
 
     @Size( max = 500, message = "#i18n{ticketing.validation.category.helpMessage.size}" )
-    private String             _strHelpMessage;
+    private String _strHelpMessage;
 
-    private boolean            _bManageable;
+    private boolean _bManageable;
 
-    private boolean            _bInactive;
+    private boolean _bInactive;
 
-    private boolean            _bPiecesJointes;
+    private boolean _bPiecesJointes;
 
     @Size( max = 50, message = "#i18n{ticketing.validation.channel.IconFont.size}" )
-    private String             _strIconFont;
+    private String _strIconFont;
 
     /**
      * Constructor TicketCategory
@@ -112,7 +112,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
         _nId = -1;
         _nIdParent = -1;
         _depth = new TicketCategoryType( );
-        ( ( TicketCategoryType ) _depth ).setId( -1 );
+        ( (TicketCategoryType) _depth ).setId( -1 );
         _defaultAssignUnit = new AssigneeUnit( );
         _defaultAssignUnit.setUnitId( -1 );
         _strLabel = StringUtils.EMPTY;
@@ -254,7 +254,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
      */
     public TicketCategoryType getCategoryType( )
     {
-        return ( TicketCategoryType ) _depth;
+        return (TicketCategoryType) _depth;
     }
 
     /**
@@ -329,7 +329,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     @Override
     public TicketCategory getParent( )
     {
-        return ( TicketCategory ) super.getParent( );
+        return (TicketCategory) super.getParent( );
     }
 
     /**
@@ -338,7 +338,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     @Override
     public List<TicketCategory> getChildren( )
     {
-        List<TicketCategory> listCategories = ( List<TicketCategory> ) ( List<?> ) _childrenNodes;
+        List<TicketCategory> listCategories = (List<TicketCategory>) (List<?>) _childrenNodes;
         return listCategories;
     }
 
@@ -348,7 +348,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     @Override
     public List<TicketCategory> getLeaves( )
     {
-        List<TicketCategory> listCategories = ( List<TicketCategory> ) ( List<?> ) _leaves;
+        List<TicketCategory> listCategories = (List<TicketCategory>) (List<?>) _leaves;
         return listCategories;
     }
 
@@ -358,7 +358,7 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
     @Override
     public List<TicketCategory> getBranch( )
     {
-        List<TicketCategory> listCategories = ( List<TicketCategory> ) ( List<?> ) super.getBranch( );
+        List<TicketCategory> listCategories = (List<TicketCategory>) (List<?>) super.getBranch( );
         return listCategories;
     }
 
@@ -454,7 +454,8 @@ public class TicketCategory extends AbstractNode implements Serializable, RBACRe
         if ( getParent( ) != null )
         {
             siblings = getParent( ).getChildren( );
-        } else
+        }
+        else
         {
             siblings = tree.getRootElements( );
         }

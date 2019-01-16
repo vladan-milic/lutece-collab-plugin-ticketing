@@ -46,70 +46,70 @@ public class ManageFormsJspBean extends MVCAdminJspBean
     /**
      *
      */
-    private static final long   serialVersionUID                    = 3672494350924238271L;
+    private static final long serialVersionUID = 3672494350924238271L;
 
     // Templates
-    private static final String TEMPLATE_MANAGE_FORMS               = "/admin/plugins/ticketing/admin/manage_forms.html";
+    private static final String TEMPLATE_MANAGE_FORMS = "/admin/plugins/ticketing/admin/manage_forms.html";
     // private static final String TEMPLATE_CREATE_FORM = "/admin/plugins/ticketing/admin/create_form.html";
     // private static final String TEMPLATE_MODIFY_FORM = "/admin/plugins/ticketing/admin/modify_form.html";
-    private static final String TEMPLATE_EDIT_FORM                  = "/admin/plugins/ticketing/admin/edit_form.html";
+    private static final String TEMPLATE_EDIT_FORM = "/admin/plugins/ticketing/admin/edit_form.html";
     // Views
-    private static final String VIEW_MANAGE_FORMS                   = "manageForms";
-    private static final String VIEW_CREATE_FORM                    = "createForm";
-    private static final String VIEW_MODIFY_FORM                    = "modifyForm";
+    private static final String VIEW_MANAGE_FORMS = "manageForms";
+    private static final String VIEW_CREATE_FORM = "createForm";
+    private static final String VIEW_MODIFY_FORM = "modifyForm";
 
     // Actions
-    private static final String ACTION_CREATE_FORM                  = "createForm";
-    private static final String ACTION_MODIFY_FORM                  = "modifyForm";
-    private static final String ACTION_REMOVE_FORM                  = "removeForm";
-    private static final String ACTION_CONFIRM_REMOVE_FORM          = "confirmRemoveForm";
+    private static final String ACTION_CREATE_FORM = "createForm";
+    private static final String ACTION_MODIFY_FORM = "modifyForm";
+    private static final String ACTION_REMOVE_FORM = "removeForm";
+    private static final String ACTION_CONFIRM_REMOVE_FORM = "confirmRemoveForm";
 
     // Properties for page titles
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_FORMS    = "ticketing.manage_form.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_FORM     = "ticketing.modify_form.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_FORM     = "ticketing.create_form.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MANAGE_FORMS = "ticketing.manage_form.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_MODIFY_FORM = "ticketing.modify_form.pageTitle";
+    private static final String PROPERTY_PAGE_TITLE_CREATE_FORM = "ticketing.create_form.pageTitle";
 
     // Properties
     private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
 
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_FORM         = "ticketing.message.confirmRemoveForm";
+    private static final String MESSAGE_CONFIRM_REMOVE_FORM = "ticketing.message.confirmRemoveForm";
 
     // Validations
-    private static final String VALIDATION_ATTRIBUTES_PREFIX        = "ticketing.model.entity.form.attribute.";
+    private static final String VALIDATION_ATTRIBUTES_PREFIX = "ticketing.model.entity.form.attribute.";
 
     // Markers
-    private static final String MARK_FORM_LIST                      = "form_list";
-    private static final String MARK_FORM                           = "form";
-    private static final String MARK_TICKET                         = "ticket";
-    private static final String MARK_FORMENTRYTYPE                  = "formEntryType";
-    private static final String MARK_PAGINATOR                      = "paginator";
-    private static final String MARK_NB_ITEMS_PER_PAGE              = "nb_items_per_page";
-    private static final String MARK_MIN_DEPTH                      = "minDepth";
-    private static final String JSP_MANAGE_FORMS                    = "jsp/admin/plugins/ticketing/admin/ManageForms.jsp";
+    private static final String MARK_FORM_LIST = "form_list";
+    private static final String MARK_FORM = "form";
+    private static final String MARK_TICKET = "ticket";
+    private static final String MARK_FORMENTRYTYPE = "formEntryType";
+    private static final String MARK_PAGINATOR = "paginator";
+    private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
+    private static final String MARK_MIN_DEPTH = "minDepth";
+    private static final String JSP_MANAGE_FORMS = "jsp/admin/plugins/ticketing/admin/ManageForms.jsp";
 
-    private static final String MARK_USER_TITLES_LIST               = "user_titles_list";
-    private static final String MARK_CONTACT_MODES_LIST             = "contact_modes_list";
-    private static final String MARK_CHANNELS_LIST                  = "channels_list";
+    private static final String MARK_USER_TITLES_LIST = "user_titles_list";
+    private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
+    private static final String MARK_CHANNELS_LIST = "channels_list";
     // Infos
-    private static final String INFO_FORM_CREATED                   = "ticketing.info.form.created";
-    private static final String INFO_FORM_UPDATED                   = "ticketing.info.form.updated";
-    private static final String INFO_FORM_REMOVED                   = "ticketing.info.form.removed";
+    private static final String INFO_FORM_CREATED = "ticketing.info.form.created";
+    private static final String INFO_FORM_UPDATED = "ticketing.info.form.updated";
+    private static final String INFO_FORM_REMOVED = "ticketing.info.form.removed";
 
     // Variables
-    private int                 _nDefaultItemsPerPage;
-    private String              _strCurrentPageIndex;
-    private int                 _nItemsPerPage;
+    private int _nDefaultItemsPerPage;
+    private String _strCurrentPageIndex;
+    private int _nItemsPerPage;
 
     // Parameters
-    private static final String PARAMETER_PAGE_INDEX                = "page_index";
-    private static final String PARAMETER_ID_FORM                   = "id";
-    private static final String PARAMETER_ROLE                      = "roles";
+    private static final String PARAMETER_PAGE_INDEX = "page_index";
+    private static final String PARAMETER_ID_FORM = "id";
+    private static final String PARAMETER_ROLE = "roles";
 
     // Session variable to store working values
-    private Form                _form;
-    private FormEntryType       _formEntryType;
-    private FormEntry           _formEntry;
+    private Form _form;
+    private FormEntryType _formEntryType;
+    private FormEntry _formEntry;
 
     /**
      * Return a model that contains the list and paginator infos
@@ -134,7 +134,8 @@ public class ManageFormsJspBean extends MVCAdminJspBean
         String strUrl = url.getUrl( );
 
         // PAGINATOR
-        LocalizedPaginator<Form> paginator = new LocalizedPaginator<Form>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
+        LocalizedPaginator<Form> paginator = new LocalizedPaginator<Form>( list, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex,
+                getLocale( ) );
 
         Map<String, Object> model = getModel( );
 

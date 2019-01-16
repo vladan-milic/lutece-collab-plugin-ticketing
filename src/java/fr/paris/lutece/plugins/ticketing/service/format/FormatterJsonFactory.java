@@ -53,7 +53,7 @@ import fr.paris.lutece.plugins.ticketing.service.format.usertitle.UserTitleForma
 public class FormatterJsonFactory implements IFormatterFactory
 {
     private Map<Class<?>, ITicketingFormatter<?>> _formatters;
-    private IRestFormatter                        _restFormatter;
+    private IRestFormatter _restFormatter;
 
     /**
      * Default constructor
@@ -73,7 +73,7 @@ public class FormatterJsonFactory implements IFormatterFactory
     @Override
     public <T> ITicketingFormatter<T> createFormatter( Class<T> clazz )
     {
-        return ( ITicketingFormatter<T> ) _formatters.get( clazz );
+        return (ITicketingFormatter<T>) _formatters.get( clazz );
     }
 
     @Override

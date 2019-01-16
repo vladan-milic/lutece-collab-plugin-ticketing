@@ -48,7 +48,7 @@ import fr.paris.lutece.util.ReferenceList;
 public final class EntryTypeService
 {
     private static volatile EntryTypeService _instance;
-    private Map<Integer, EntryType>          _mapEntryTypes;
+    private Map<Integer, EntryType> _mapEntryTypes;
 
     /**
      * Private constructor

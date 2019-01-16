@@ -76,17 +76,17 @@ import fr.paris.lutece.portal.service.workflow.WorkflowService;
 public class TicketRest extends TicketingRest
 {
     // Parameters
-    private static final String    PARAMETER_TICKET_CATEGORY_CODE     = "ticket_category_code";
-    private static final String    PARAMETER_TICKET_CONTACT_MODE_ID   = "ticket_contact_mode_id";
-    private static final String    PARAMETER_TICKET_COMMENT           = "ticket_comment";
-    private static final String    PARAMETER_USER_TITLE_ID            = "user_title_id";
-    private static final String    PARAMETER_USER_FIRST_NAME          = "user_first_name";
-    private static final String    PARAMETER_USER_LAST_NAME           = "user_last_name";
-    private static final String    PARAMETER_USER_EMAIL               = "user_email";
-    private static final String    PARAMETER_USER_FIXED_PHONE_NUMBER  = "user_fixed_phone_number";
-    private static final String    PARAMETER_USER_MOBILE_PHONE_NUMBER = "user_mobile_phone_number";
-    private static final String    PARAMETER_TICKET_CHANNEL_ID        = "ticket_channel_id";
-    private static final String    PARAMETER_TICKET_NOMENCLATURE      = "ticket_nomenclature";
+    private static final String PARAMETER_TICKET_CATEGORY_CODE = "ticket_category_code";
+    private static final String PARAMETER_TICKET_CONTACT_MODE_ID = "ticket_contact_mode_id";
+    private static final String PARAMETER_TICKET_COMMENT = "ticket_comment";
+    private static final String PARAMETER_USER_TITLE_ID = "user_title_id";
+    private static final String PARAMETER_USER_FIRST_NAME = "user_first_name";
+    private static final String PARAMETER_USER_LAST_NAME = "user_last_name";
+    private static final String PARAMETER_USER_EMAIL = "user_email";
+    private static final String PARAMETER_USER_FIXED_PHONE_NUMBER = "user_fixed_phone_number";
+    private static final String PARAMETER_USER_MOBILE_PHONE_NUMBER = "user_mobile_phone_number";
+    private static final String PARAMETER_TICKET_CHANNEL_ID = "ticket_channel_id";
+    private static final String PARAMETER_TICKET_NOMENCLATURE = "ticket_nomenclature";
 
     // Services
     private static WorkflowService _workflowService;
@@ -138,7 +138,8 @@ public class TicketRest extends TicketingRest
      */
     @PUT
     public Response createTicket( @FormParam( PARAMETER_USER_TITLE_ID ) String strIdUserTitle, @FormParam( PARAMETER_USER_FIRST_NAME ) String strFirstname,
-            @FormParam( PARAMETER_USER_LAST_NAME ) String strLastname, @FormParam( PARAMETER_USER_EMAIL ) String strEmail, @FormParam( PARAMETER_USER_FIXED_PHONE_NUMBER ) String strFixedPhoneNumber,
+            @FormParam( PARAMETER_USER_LAST_NAME ) String strLastname, @FormParam( PARAMETER_USER_EMAIL ) String strEmail,
+            @FormParam( PARAMETER_USER_FIXED_PHONE_NUMBER ) String strFixedPhoneNumber,
             @FormParam( PARAMETER_USER_MOBILE_PHONE_NUMBER ) String strMobilePhoneNumber, @FormParam( PARAMETER_TICKET_CATEGORY_CODE ) String strCategoryCode,
             @FormParam( PARAMETER_TICKET_CONTACT_MODE_ID ) String strIdContactMode, @FormParam( PARAMETER_TICKET_CHANNEL_ID ) String strIdChannel,
             @FormParam( PARAMETER_TICKET_COMMENT ) String strComment, @FormParam( PARAMETER_TICKET_NOMENCLATURE ) String strNomenclature,
@@ -188,8 +189,8 @@ public class TicketRest extends TicketingRest
             }
         }
 
-        ticket.enrich( strModifiedIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber, strEmail, strCategoryCode, strModifiedIdContactMode, strModifiedIdChannel,
-                strComment, strGuid, strIdCustomer, strNomenclature );
+        ticket.enrich( strModifiedIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber, strEmail, strCategoryCode,
+                strModifiedIdContactMode, strModifiedIdChannel, strComment, strGuid, strIdCustomer, strNomenclature );
 
         IFormatterFactory formatterFactory = _formatterFactories.get( strMediaType );
 
@@ -250,7 +251,8 @@ public class TicketRest extends TicketingRest
 
                 // Immediate indexation of the Ticket
                 immediateTicketIndexing( ticket.getId( ), errors );
-            } catch ( Exception e )
+            }
+            catch( Exception e )
             {
                 _workflowService.doRemoveWorkFlowResource( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE );
                 TicketHome.remove( ticket.getId( ) );
@@ -271,7 +273,8 @@ public class TicketRest extends TicketingRest
             {
                 TicketIndexer ticketIndexer = new TicketIndexer( );
                 ticketIndexer.indexTicket( ticket );
-            } catch ( TicketIndexerException ticketIndexerException )
+            }
+            catch( TicketIndexerException ticketIndexerException )
             {
                 errors.add( I18nService.getLocalizedString( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, Locale.FRENCH ) );
 
