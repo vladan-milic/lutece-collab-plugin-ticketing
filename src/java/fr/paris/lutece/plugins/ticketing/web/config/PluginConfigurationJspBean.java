@@ -33,6 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.config;
 
+import fr.paris.lutece.plugins.genericattributes.business.Entry;
+import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
+import fr.paris.lutece.plugins.genericattributes.business.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -54,7 +57,9 @@ import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
@@ -103,6 +108,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     private static final String    MARK_ADMIN_USER_ID_FRONT                             = PARAMETER_ADMIN_USER_ID_FRONT;
     private static final String    MARK_CHANNELS                                        = "channels";
     private static final String    MARK_CHANNEL_ID_FRONT                                = PARAMETER_CHANNEL_ID_FRONT;
+    private static final String    MARK_ID_ATTACHMENTS_ENTRY                            = "id_entry";
 
     // Properties
     private static final String    PROPERTY_PAGE_TITLE_CONFIGURE_PLUGIN                 = "ticketing.configure_plugin.pageTitle";
@@ -144,6 +150,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
         manageWorkflowProperties( model );
         manageFrontOfficeProperties( model );
+        manageBackOfficeProperties( model );
 
         return getPage( PROPERTY_PAGE_TITLE_CONFIGURE_PLUGIN, TEMPLATE_CONFIGURE_PLUGIN, model );
     }
@@ -248,6 +255,18 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
         // All channels
         ReferenceList referenceListChannel = buildReferenceList( ChannelHome.getReferenceList( ) );
         model.put( MARK_CHANNELS, referenceListChannel );
+    }
+    
+    /**
+     * Inserts the properties related to the back office in the specified model
+     * 
+     * @param model
+     *            the model
+     */
+    private void manageBackOfficeProperties( Map<String, Object> model )
+    {
+        int nIdEntryAttachmentsReply = AppPropertiesService.getPropertyInt( TicketingConstants.PROPERTY_ENTRY_REPLY_ATTACHMENTS_ID, TicketingConstants.PROPERTY_UNSET_INT );
+        model.put( MARK_ID_ATTACHMENTS_ENTRY, nIdEntryAttachmentsReply);
     }
 
     /**
@@ -396,7 +415,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
         PluginConfigurationService.set( PluginConfigurationService.PROPERTY_CHANNEL_ID_FRONT, nIdChannel );
     }
-
+    
     /**
      * Builds a ReferenceList from the specified Collection. The ReferenceList is built with an empty value in the first position.
      * 

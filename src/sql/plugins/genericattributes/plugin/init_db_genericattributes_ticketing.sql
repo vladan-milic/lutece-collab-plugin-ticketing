@@ -27,8 +27,19 @@ INSERT INTO genatt_entry (id_entry, id_resource, resource_type, id_type, id_pare
 (201, 1, "TICKET_INPUT", 215, NULL, "Relevé d'imposition sur le revenu de l'année N-2", "Veuillez transmettre votre relevé d'imposition sur le revenu de l'année N-2. Si vous ne disposez pas de ce document, vous pourrez le transmettre à nos services ultérieurement.", "", 0, 0, 1, NULL, 0, NULL, 0, "", "", 0, NULL, 0, 0, 0, "IncomeRevenue-Year-2"), 
 (202, 2, "TICKET_INPUT", 206, NULL, "Numéro de compte facil'familles", "Numéro de compte facil'familles", "", 0, 0, 2, NULL, 0, NULL, 0, "", "", 0, NULL, 0, 0, 0, "FFAccountNumber"); 
 
+(100000, 1, "REPLY_ATTACHMENTS", 215, NULL, "Pièces(s) jointe(s)", "Vous pouvez sélectionner des pièces jointes à ajouter à votre message", "", 0, 0, 1, NULL, 0, NULL, 0, "", "", 0, NULL, 0, 0, 0, "attached_files");
+
 INSERT INTO genatt_field (id_field, id_entry, title, value, height, width, default_value, max_size_enter, pos, value_type_date, no_display_title, comment, role_key, code) VALUES
 (201, 201, NULL, NULL, 0, 255, 0, 0, 1, NULL, 0, NULL, NULL, NULL), 
 (202, 201, "max_files", "1", 0, 0, 0, 0, 2, NULL, 0, NULL, NULL, NULL), 
 (203, 201, "file_max_size", "1000000", 0, 0, 0, 0, 3, NULL, 0, NULL, NULL, NULL), 
 (204, 201, "export_binary", "false", 0, 0, 0, 0, 4, NULL, 0, NULL, NULL, NULL);
+
+(100000, 100000, NULL, NULL, 0, 255, 0, 0, 1, NULL, 0, NULL, NULL, NULL),
+(100001, 100000, "max_files", "5", 0, 0, 0, 0, 2, NULL, 0, NULL, NULL, NULL),
+(100002, 100000, "file_max_size", "1000000", 0, 0, 0, 0, 3, NULL, 0, NULL, NULL, NULL),
+(100003, 100000, "export_binary", "false", 0, 0, 0, 0, 4, NULL, 0, NULL, NULL, NULL);
+
+
+INSERT INTO genatt_entry VALUES
+INSERT INTO genatt_field VALUES 

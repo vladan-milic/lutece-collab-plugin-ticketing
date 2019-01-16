@@ -139,6 +139,7 @@ public final class TicketingConstants
     public static final String PROPERTIES_TYPE_DEPTH                                       = "ticketing.type.depth";
     public static final String PROPERTIES_THEMATIC_DEPTH                                   = "ticketing.thematic.depth";
     public static final String PROPERTIES_PRECISION_DEPTH                                  = "ticketing.precision.depth";
+    public static final String PROPERTY_ENTRY_REPLY_ATTACHMENTS_ID                         = "ticketing.entry.attachments.id";
 
     // Session keys
     public static final String SESSION_NOT_VALIDATED_TICKET                                = "ticketing.ticketFormService.notValidatedTicket";

@@ -675,5 +675,23 @@ public class TicketFormService implements Serializable
     {
         session.removeAttribute( TicketingConstants.SESSION_VALIDATED_TICKET_FORM );
     }
+    
+    /**
+     * Get HTML Entry for given id Entry
+     * @param nIdEntry
+     *          The id entry
+     * @param bDisplayFront
+     *          The front boolean
+     * @param request
+     *          The http servlet request
+     * @return The HTML corresponding to given id entry.
+     */
+    public String getHtmlEntry( int nIdEntry, boolean bDisplayFront, HttpServletRequest request )
+    {
+        StringBuffer htmlEntryStringBuffer = new StringBuffer( );
+        getHtmlEntry( nIdEntry, htmlEntryStringBuffer, request.getLocale(), bDisplayFront, request );
+        
+        return htmlEntryStringBuffer.toString( );
+    }
 
 }
