@@ -89,7 +89,7 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 public class TicketSearchEngine implements ITicketSearchEngine
 {
     // Constants
-    private static final String DESC_CONSTANT = "DESC";
+    private static final String                                            DESC_CONSTANT = "DESC";
 
     // The map for the association on the filter selected by the user and the Lucene field
     private final Map<String, List<AbstractMap.SimpleEntry<String, Type>>> _mapSortField = TicketSearchUtil.initMapSortField( );
@@ -123,6 +123,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             result.setNomenclature( document.get( TicketSearchItemConstant.FIELD_TICKET_NOMENCLATURE ) );
             result.setDateClose( new Timestamp( document.getField( TicketSearchItemConstant.FIELD_DATE_CLOSE ).numericValue( ).longValue( ) ) );
             result.setFacilFamilleNumber( document.get( TicketSearchItemConstant.FIELD_FACIL_FAMILLE ) );
+            result.setUserMessage( document.get( TicketSearchItemConstant.FIELD_USER_MESSAGE ) );
 
             // TicketCategory
             TicketCategoryService ticketCategoryInstance = TicketCategoryService.getInstance( true );
@@ -206,18 +207,17 @@ public class TicketSearchEngine implements ITicketSearchEngine
             {
                 // Get results documents
                 TopDocs topDocs = searcher.search( query, LuceneSearchEngine.MAX_RESPONSES, getSortQuery( filter ) );
-                ScoreDoc [ ] hits = topDocs.scoreDocs;
+                ScoreDoc[] hits = topDocs.scoreDocs;
 
                 for ( int i = 0; i < hits.length; i++ )
                 {
-                    int docId = hits [i].doc;
+                    int docId = hits[i].doc;
                     Document document = searcher.doc( docId );
                     listResults.add( createTicketFromDocument( document ) );
                 }
                 searcher.getIndexReader( ).close( );
             }
-        }
-        catch( IOException e )
+        } catch ( IOException e )
         {
             AppLogService.error( e.getMessage( ), e );
         }
@@ -240,7 +240,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
     @Override
     public List<Ticket> searchTicketsByIds( List<Integer> listIdsTickets, TicketFilter filter ) throws ParseException
     {
-        if ( listIdsTickets != null && !listIdsTickets.isEmpty( ) )
+        if ( ( listIdsTickets != null ) && !listIdsTickets.isEmpty( ) )
         {
             Builder idTicketsQueryBuilder = new Builder( );
             for ( int idTicket : listIdsTickets )
@@ -281,8 +281,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
                 searcher.getIndexReader( ).close( );
                 return nTotalHits;
             }
-        }
-        catch( IOException e )
+        } catch ( IOException e )
         {
             AppLogService.error( e.getMessage( ), e );
         }
@@ -301,7 +300,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
     /**
      * Method which create the main query use for the ticket search
-     * 
+     *
      * @param strQuery
      *            the query typed by the user
      * @param listTicketDomain
@@ -315,8 +314,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
         if ( StringUtils.isNotBlank( strQuery ) )
         {
-            PerFieldAnalyzerWrapper perFieldAnalyzerWrapper = new PerFieldAnalyzerWrapper( TicketSearchService.getInstance( ).getAnalyzer( ),
-                    TicketIndexWriterUtil.getPerFieldAnalyzerMap( ) );
+            PerFieldAnalyzerWrapper perFieldAnalyzerWrapper = new PerFieldAnalyzerWrapper( TicketSearchService.getInstance( ).getAnalyzer( ), TicketIndexWriterUtil.getPerFieldAnalyzerMap( ) );
             Query queryTicket = new QueryParser( TicketSearchItemConstant.FIELD_CONTENTS, perFieldAnalyzerWrapper ).parse( strQuery );
             mainQuery.add( queryTicket, BooleanClause.Occur.MUST );
         }
@@ -333,7 +331,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
     /**
      * add ticket domain clause
-     * 
+     *
      * @param booleanQueryBuilder
      *            input query
      * @param listUserDomain
@@ -349,8 +347,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
         for ( TicketCategory category : categories )
         {
-            TermQuery domQuery = new TermQuery( new Term( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + category.getDepth( ).getDepthNumber( ),
-                    Integer.toString( category.getId( ) ) ) );
+            TermQuery domQuery = new TermQuery( new Term( TicketSearchItemConstant.FIELD_CATEGORY_ID_DEPTHNUMBER + category.getDepth( ).getDepthNumber( ), Integer.toString( category.getId( ) ) ) );
 
             boolean isAuthorized = TicketCategoryService.isAuthorizedCategory( category, user, TicketCategory.PERMISSION_VIEW_LIST );
             categoriesQueryBuilder.add( new BooleanClause( domQuery, isAuthorized ? BooleanClause.Occur.SHOULD : BooleanClause.Occur.MUST_NOT ) );
@@ -361,7 +358,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
     /**
      * Return the Sort object to use for the search according to the given filter
-     * 
+     *
      * @param filter
      *            the filter to use for sorting the search results
      * @return the Sort object
@@ -381,10 +378,9 @@ public class TicketSearchEngine implements ITicketSearchEngine
                 }
                 if ( !listSortField.isEmpty( ) )
                 {
-                    return new Sort( listSortField.toArray( new SortField [ listSortField.size( )] ) );
+                    return new Sort( listSortField.toArray( new SortField[listSortField.size( )] ) );
                 }
-            }
-            else
+            } else
             {
                 return defaultSort;
             }
@@ -396,7 +392,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
     /**
      * Add ticket filter clause on the selected tab
-     * 
+     *
      * @param booleanQuery
      * @param filter
      */
@@ -413,14 +409,12 @@ public class TicketSearchEngine implements ITicketSearchEngine
             Query queryIdAssignerUser = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_ASSIGNER_USER_ID, nIdAdminUser );
 
             // Create a list of filter terms for the id of assignee unit
-            DocValuesTermsQuery docValuesTermsQueryIdAssigneeUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID,
-                    filter.getFilterIdAssigneeUnit( ) );
+            DocValuesTermsQuery docValuesTermsQueryIdAssigneeUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, filter.getFilterIdAssigneeUnit( ) );
 
             // Create a list of filter terms for the id of assigner unit
-            DocValuesTermsQuery docValuesTermsQueryIdAssignerUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID,
-                    filter.getFilterIdAssignerUnit( ) );
+            DocValuesTermsQuery docValuesTermsQueryIdAssignerUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNER_UNIT_ID, filter.getFilterIdAssignerUnit( ) );
 
-            switch( filter.getFilterView( ) )
+            switch ( filter.getFilterView( ) )
             {
                 case AGENT:
 
@@ -477,7 +471,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
     /**
      * Add the filters selected by the user
-     * 
+     *
      * @param booleanQueryBuilderGlobal
      *            The global query builder of the query
      * @param filter
@@ -508,7 +502,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             }
 
             // Filter on the creation start and end date
-            if ( filter.getCreationStartDate( ) != null || filter.getCreationEndDate( ) != null )
+            if ( ( filter.getCreationStartDate( ) != null ) || ( filter.getCreationEndDate( ) != null ) )
             {
                 Long startDate = filter.getCreationStartDate( ) != null ? filter.getCreationStartDate( ).getTime( ) : TicketingConstants.CONSTANT_ZERO;
                 Long endDate = filter.getCreationEndDate( ) != null ? filter.getCreationEndDate( ).getTime( ) : new Date( ).getTime( );
@@ -516,7 +510,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
             }
 
             // Filter on the selected state
-            if ( filter.getListIdWorkflowState( ) != null && !filter.getListIdWorkflowState( ).isEmpty( ) )
+            if ( ( filter.getListIdWorkflowState( ) != null ) && !filter.getListIdWorkflowState( ).isEmpty( ) )
             {
                 addIdWorkflowStateFilter( booleanQueryBuilderGlobal, filter.getListIdWorkflowState( ) );
             }
@@ -526,7 +520,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
     /**
      * Add a filter for the urgency value
-     * 
+     *
      * @param queryBuilder
      *            The query builder to add the new BooleanClause
      * @param urgencyValue
@@ -563,7 +557,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
     /**
      * Add a filter for the ticket category id value
-     * 
+     *
      * @param queryBuilder
      *            The query builder to add the new BooleanClause
      * @param ticketCategoryIdValue
@@ -599,7 +593,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
 
     /**
      * Add the boolean clause of the list id workflow state on the query builder
-     * 
+     *
      * @param queryBuilder
      *            The query builder to add the new BooleanClause
      * @param listIdWorkflowState
@@ -607,7 +601,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
      */
     private void addIdWorkflowStateFilter( Builder queryBuilder, List<Integer> listIdWorkflowState )
     {
-        if ( listIdWorkflowState != null && !listIdWorkflowState.isEmpty( ) )
+        if ( ( listIdWorkflowState != null ) && !listIdWorkflowState.isEmpty( ) )
         {
             // Create a list of filter terms for the id of workflow state
             DocValuesTermsQuery termsFilterIdWorkflowState = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_STATE_ID, listIdWorkflowState );
