@@ -1114,6 +1114,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         if ( listFormErrors.size( ) > 0 )
         {
+            // TICKETING-2217 affichage du message d'erreur
+            for ( GenericAttributeError error : listFormErrors )
+            {
+                addError( error.getMessage( ) );
+            }
             bIsFormValid = false;
         }
 
