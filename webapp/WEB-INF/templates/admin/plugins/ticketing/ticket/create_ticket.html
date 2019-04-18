@@ -138,9 +138,13 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
-         document.getElementById("channel.id").value = sessionStorage.channel || 1;    // set the value to this input
-        
         $(document).ready(function(){
+          // O2T 75998: valeur préférée si pas en session, sinon 1
+          <#if preferred_id_channel?? && preferred_id_channel?has_content>
+            document.getElementById("channel.id").value = sessionStorage.channel || ${preferred_id_channel};    // set the value to this input
+          <#else>
+            document.getElementById("channel.id").value = sessionStorage.channel || 1;    // set the value to this input
+           </#if>
         	$('#channel\\.id').on('change', function() { 
             	sessionStorage.channel = document.getElementById("channel.id").value;
         	});
