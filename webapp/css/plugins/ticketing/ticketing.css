@@ -68,3 +68,13 @@ textarea.ticketing {
     top: 0;
     left: 0;
 }
+
+/* O2T 76000 */
+div.form-control-static > p {
+    margin-bottom: 0 !important;
+}
+
+div.form-control-static{
+    width: 555px !important;
+    height: 50px !important;
+}
