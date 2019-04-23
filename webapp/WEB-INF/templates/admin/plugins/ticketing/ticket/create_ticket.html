@@ -86,13 +86,9 @@
             <@comboWithParams name="id_contact_mode" default_value="${ticket.idContactMode!''}" additionalParameters=" id=\"id_contact_mode\" class=\"form-control input-lg\" " items=contact_modes_list />
           </div>
           <div class="form-group">
-            <label for="id_channel">#i18n{ticketing.create_ticket.labelChannel}</label>
+            <label for="id_channel">#i18n{ticketing.create_ticket.labelChannel}&#8239;*</label>
             <#if selectable_channels_list?? && selectable_channels_list?has_content>
-              <#if preferred_id_channel?? && preferred_id_channel?has_content>
-                <@comboWithParams name="channel.id" default_value="${preferred_id_channel}" additionalParameters=" id=\"channel.id\" class=\"form-control input-lg\" " items=selectable_channels_list />
-              <#else>
                 <@comboWithParams name="channel.id" default_value="" additionalParameters=" id=\"channel.id\" class=\"form-control input-lg\" " items=selectable_channels_list />
-              </#if>
             <#else>
               <@comboWithParams name="channel.id" default_value="" additionalParameters=" id=\"channel.id\" class=\"form-control input-lg\" " items=channels_list />
             </#if>
@@ -138,9 +134,13 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
-         document.getElementById("channel.id").value = sessionStorage.channel || 1;    // set the value to this input
-        
         $(document).ready(function(){
+          // O2T 75998: valeur préférée si pas en session, sinon 1
+          <#if preferred_id_channel?? && preferred_id_channel?has_content>
+            document.getElementById("channel.id").value = sessionStorage.channel || ${preferred_id_channel};    // set the value to this input
+          <#else>
+            document.getElementById("channel.id").value = sessionStorage.channel || 1;    // set the value to this input
+           </#if>
         	$('#channel\\.id').on('change', function() { 
             	sessionStorage.channel = document.getElementById("channel.id").value;
         	});

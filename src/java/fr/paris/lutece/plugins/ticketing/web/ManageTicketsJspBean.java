@@ -507,6 +507,15 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
             listTickets = _engine.searchTickets( strQuery, getUser( ), filter );
 
+            // O2T 76319, remise en place des id ticket
+            if ( listTickets != null && !listTickets.isEmpty( ) )
+            {
+                for ( Ticket ticket : listTickets )
+                {
+                    listIdTickets.add( ticket.getId( ) );
+                }
+            }
+
             filter.setFilterView( TicketFilterViewEnum.AGENT );
             nAgentTickets = getNbTicketsWithLucene( strQuery, filter );
             filter.setFilterView( TicketFilterViewEnum.GROUP );
@@ -1114,6 +1123,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         if ( listFormErrors.size( ) > 0 )
         {
+            // TICKETING-2217 affichage du message d'erreur
+            for ( GenericAttributeError error : listFormErrors )
+            {
+                addError( error.getMessage( ) );
+            }
             bIsFormValid = false;
         }
 

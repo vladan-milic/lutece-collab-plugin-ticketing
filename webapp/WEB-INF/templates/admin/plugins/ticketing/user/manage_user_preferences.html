@@ -120,6 +120,7 @@
       } else {
         $("#selected_channel").append('<option value="' + $(this).val() + '">' + $(this).text() + '</option>')
       }
+      sessionStorage.channel = document.getElementById("selected_channel").value;
     }); 
   });
 </script>
@@ -130,9 +131,15 @@
       if($(this).is(":checked")) {
         var text = $(this).next('label').attr('name');
         $("#selected_channel").append('<option value="' + $(this).val() + '">' + text + '</option>')
+        sessionStorage.channel = document.getElementById("selected_channel").value;
       }
     });
   });  
+</script>
+<script type="text/javascript">
+  $('#selected_channel').on('change', function() {
+    sessionStorage.channel = document.getElementById("selected_channel").value;
+  });
 </script>
 
 
