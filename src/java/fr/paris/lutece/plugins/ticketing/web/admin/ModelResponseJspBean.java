@@ -46,6 +46,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.plugins.ticketing.util.sort.TicketAttributeComparator;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
@@ -71,7 +72,6 @@ import fr.paris.lutece.portal.web.constants.Parameters;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.Paginator;
-import fr.paris.lutece.util.sort.AttributeComparator;
 import fr.paris.lutece.util.url.UrlItem;
 
 /**
@@ -243,7 +243,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
         if ( _strSortedAttributeName != null )
         {
-            Collections.sort( listModelResponses, new AttributeComparator( _strSortedAttributeName, Boolean.parseBoolean( _strAscSort ) ) );
+            listModelResponses.sort( new TicketAttributeComparator( _strSortedAttributeName, Boolean.parseBoolean( _strAscSort ) ) );
             url.addParameter( Parameters.SORTED_ATTRIBUTE_NAME, _strSortedAttributeName );
             url.addParameter( Parameters.SORTED_ASC, _strAscSort );
         }
