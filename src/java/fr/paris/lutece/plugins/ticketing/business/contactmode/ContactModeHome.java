@@ -155,7 +155,11 @@ public final class ContactModeHome
 
         for ( ReferenceItem item : referenceList )
         {
-            String strLocalizedName = I18nService.getLocalizedString( MESSAGE_PREFIX + item.getName( ), locale );
+            String strLocalizedName = item.getName();
+            if (I18nService.getLocalizedString( MESSAGE_PREFIX + item.getName( ), locale )!=null &&
+                        !I18nService.getLocalizedString( MESSAGE_PREFIX + item.getName( ), locale ).trim().isEmpty()) {
+                strLocalizedName = I18nService.getLocalizedString( MESSAGE_PREFIX + item.getName( ), locale );
+            }
 
             if ( !StringUtils.isEmpty( strLocalizedName ) )
             {

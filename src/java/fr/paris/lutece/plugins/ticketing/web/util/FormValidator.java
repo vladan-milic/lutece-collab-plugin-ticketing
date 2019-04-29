@@ -127,10 +127,17 @@ public class FormValidator
 
         if ( !bIsValid )
         {
-            Object [ ] args = {
-                I18nService.getLocalizedString( CONTACT_MODE_LABEL_I18N + contactMode.getCode( ), _request.getLocale( ) )
-            };
-            strError = I18nService.getLocalizedString( ERROR_CONTACT_MODE_NOT_FILLED, args, _request.getLocale( ) );
+
+            if (I18nService.getLocalizedString( CONTACT_MODE_LABEL_I18N + contactMode.getCode( ), _request.getLocale( ) ) != null &&
+                        !I18nService.getLocalizedString( CONTACT_MODE_LABEL_I18N + contactMode.getCode( ), _request.getLocale( ) ).trim().isEmpty()) {
+                Object [ ] args = {
+                        I18nService.getLocalizedString( CONTACT_MODE_LABEL_I18N + contactMode.getCode( ), _request.getLocale( ) )
+                };
+                strError = I18nService.getLocalizedString( ERROR_CONTACT_MODE_NOT_FILLED, args, _request.getLocale( ) );
+            } else {
+                Object [ ] args = {contactMode.getCode( )};
+                strError = I18nService.getLocalizedString( ERROR_CONTACT_MODE_NOT_FILLED, args, _request.getLocale( ) );
+            }
         }
 
         return strError;
