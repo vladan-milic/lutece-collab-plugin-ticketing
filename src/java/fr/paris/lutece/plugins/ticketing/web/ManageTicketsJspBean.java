@@ -114,7 +114,7 @@ import fr.paris.lutece.portal.web.util.LocalizedPaginator;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
-/**
+/*
  * ManageTickets JSP Bean abstract class for JSP Bean
  */
 
@@ -1007,6 +1007,14 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         boolean bIsFormValid = populateAndValidateFormTicket( ticket, request );
 
+
+        // O2T : recuperation des attributs complementaires (dont num facil'familles)
+        for ( Map.Entry entry : request.getParameterMap().entrySet()) {
+            if (entry.getKey()!=null && entry.getKey().toString().startsWith( "attribute" )) {
+                request.getSession().setAttribute( String.valueOf( entry.getKey() ), entry.getValue() );
+            }
+        }
+
         if ( !bIsFormValid )
         {
             _ticketFormService.saveTicketInSession( request.getSession( ), ticket );
@@ -1015,6 +1023,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
         else
         {
+
+
             ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) ).getCode( ) );
             ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle( ) ).getLabel( ) );
             ticket.setChannel( ChannelHome.findByPrimaryKey( ticket.getChannel( ).getId( ) ) );

@@ -275,6 +275,23 @@ public class TicketFormService implements Serializable
             model.put( MARK_STR_LIST_CHILDREN, strConditionalQuestionStringBuffer.toString( ) );
         }
 
+
+        // O2T : recuperation des attributs complementaires (num facil'familles)
+        int idEntry = entry.getIdEntry();
+        for ( Field field : entry.getFields( ) )
+        {
+            if ( field != null &&
+                         field.getCode( ) != null &&
+                         field.getCode( ).equals( entry.getCode() ) &&
+                         request.getSession( ).getAttribute( "attribute"+idEntry ) != null )
+            {
+                if (request.getSession( ).getAttribute( "attribute"+idEntry ) instanceof String[]) {
+                    field.setValue( ((String[])request.getSession( ).getAttribute( "attribute"+idEntry ))[0] );
+                }
+            }
+        }
+
+
         model.put( MARK_ENTRY, entry );
         model.put( MARK_LOCALE, locale );
 
