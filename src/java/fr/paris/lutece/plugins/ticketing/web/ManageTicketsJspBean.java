@@ -219,6 +219,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
     // Header export
     private static final String HEADER_REFERENCE = "ticketing.export.header.reference";
+    private static final String HEADER_GUID = "ticketing.export.header.guid";
     private static final String HEADER_CREATION_DATE = "ticketing.export.header.creation.date";
     private static final String HEADER_TIME_CREATION = "ticketing.export.header.time.creation";
     private static final String HEADER_OBJECT_SOLICITATION = "ticketing.export.header.object.solicitation";
@@ -302,6 +303,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             File tempFile = File.createTempFile( "ticketing", null );
 
             List<String> titlesUntranslated = new ArrayList<>( );
+            titlesUntranslated.add( HEADER_GUID );
             titlesUntranslated.add( HEADER_REFERENCE );
             titlesUntranslated.add( HEADER_CREATION_DATE );
             titlesUntranslated.add( HEADER_TIME_CREATION );
@@ -336,6 +338,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             {
                 // Data line
                 List<String> line = new ArrayList<>( );
+                line.add( ticket.getGuid() );
                 line.add( ticket.getReference( ) );
                 line.add( sdf.format( ticket.getDateCreate( ) ) );
                 line.add( sdf2.format( ticket.getDateCreate( ) ) );

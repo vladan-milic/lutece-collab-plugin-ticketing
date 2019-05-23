@@ -271,6 +271,11 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new NumericDocValuesField( TicketSearchItemConstant.FIELD_DATE_CLOSE, longCloseDate ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_DATE_CLOSE, longCloseDate ) );
 
+        // --- ticket user Guid
+        String userGuid = ticket.getGuid()== null ? "" : Jsoup.parse( ticket.getGuid( ) ).text( );
+        doc.add( new StringField( TicketSearchItemConstant.FIELD_USER_GUID, userGuid, Store.YES ) );
+        doc.add( new SortedDocValuesField( TicketSearchItemConstant.FIELD_USER_MESSAGE, new BytesRef( userGuid ) ) );
+        
         // --- ticket user Message
         String userMessage = ticket.getUserMessage( ) == null ? "" : Jsoup.parse( ticket.getUserMessage( ) ).text( );
         doc.add( new StringField( TicketSearchItemConstant.FIELD_USER_MESSAGE, userMessage, Store.YES ) );

@@ -108,6 +108,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
         {
             result.setId( document.getField( TicketSearchItemConstant.FIELD_TICKET_ID ).numericValue( ).intValue( ) );
             result.setDateCreate( new Timestamp( document.getField( TicketSearchItemConstant.FIELD_DATE_CREATION ).numericValue( ).longValue( ) ) );
+            result.setGuid( document.get( TicketSearchItemConstant.FIELD_USER_GUID ) );
             result.setUrl( document.get( TicketSearchItemConstant.FIELD_URL ) );
             result.setTicketComment( document.get( TicketSearchItemConstant.FIELD_COMMENT ) );
             result.setCriticality( document.getField( TicketSearchItemConstant.FIELD_CRITICALITY ).numericValue( ).intValue( ) );
