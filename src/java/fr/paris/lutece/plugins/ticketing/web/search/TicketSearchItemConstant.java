@@ -54,6 +54,7 @@ public class TicketSearchItemConstant
     public static final String FIELD_DOMAIN                  = "domain";
     public static final String FIELD_REFERENCE               = "reference";
     public static final String FIELD_TICKET_ID               = "ticket_id";
+    public static final String FIELD_USER_GUID             = "ticket_guid";
     public static final String FIELD_DATE_CREATION           = "ticket_creation_date";
     public static final String FIELD_COMMENT                 = "ticket_comment";
     public static final String FIELD_TXT_COMMENT             = "ticket_txt_comment";
