@@ -8,9 +8,10 @@ public class StringUtils
     private static Pattern MARKER = Pattern.compile( "\\p{M}" );
 
     /**
-     * Removes accents & diacretics and converts ligatures into several chars
+     * Removes accents and diacretics and converts ligatures into several chars
      *
-     * @param x string to fold into ASCII
+     * @param x
+     *            string to fold into ASCII
      * @return string converted to ASCII equivalent, expanding common ligatures
      */
     public static String foldToAscii( String x )
