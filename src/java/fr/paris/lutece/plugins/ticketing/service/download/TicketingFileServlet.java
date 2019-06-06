@@ -92,7 +92,8 @@ public class TicketingFileServlet extends HttpServlet
         if ( user == null )
         {
             AppLogService.error( LOG_UNAUTHENTICATED_USER );
-            throw new ServletException( LOG_UNAUTHENTICATED_USER );
+            // TODO gerer FO / BO
+            // throw new ServletException( LOG_UNAUTHENTICATED_USER );
         }
 
         String strIdResponse = request.getParameter( PARAMETER_ID_RESPONSE );
