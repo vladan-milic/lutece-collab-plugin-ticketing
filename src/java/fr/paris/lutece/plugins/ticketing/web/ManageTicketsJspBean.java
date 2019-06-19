@@ -296,6 +296,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy" );
         SimpleDateFormat sdf2 = new SimpleDateFormat( "HH:mm" );
+        
+        boolean bExportGuid = AppPropertiesService.getPropertyBoolean( TicketingConstants.PROPERTY_EXPORT_CSV_GUID, false);
 
         try
         {
@@ -303,7 +305,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             File tempFile = File.createTempFile( "ticketing", null );
 
             List<String> titlesUntranslated = new ArrayList<>( );
-            titlesUntranslated.add( HEADER_GUID );
+            if ( bExportGuid ) 
+            {
+                titlesUntranslated.add( HEADER_GUID );
+            }
             titlesUntranslated.add( HEADER_REFERENCE );
             titlesUntranslated.add( HEADER_CREATION_DATE );
             titlesUntranslated.add( HEADER_TIME_CREATION );
@@ -338,7 +343,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             {
                 // Data line
                 List<String> line = new ArrayList<>( );
-                line.add( ticket.getGuid() );
+                if ( bExportGuid )
+                {
+                    line.add( ticket.getGuid() );
+                }
                 line.add( ticket.getReference( ) );
                 line.add( sdf.format( ticket.getDateCreate( ) ) );
                 line.add( sdf2.format( ticket.getDateCreate( ) ) );
