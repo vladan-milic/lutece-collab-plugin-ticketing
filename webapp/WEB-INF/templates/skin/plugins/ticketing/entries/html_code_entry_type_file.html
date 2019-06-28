@@ -16,7 +16,9 @@
 		</#if>
 		<@addFileInput fieldName=fieldName handler=uploadHandler cssClass=cssClass multiple=true />
 		<#if entry.helpMessage?exists&&entry.helpMessage!=''>
-			<span class="help-block">${entry.helpMessage}</span>
+			<div class="col-xs-12 col-sm-9">
+				<span class="help-block">${entry.helpMessage}</span>
+			</div>
 		</#if>
 	</div>
 </div>
