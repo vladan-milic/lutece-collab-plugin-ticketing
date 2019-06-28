@@ -45,6 +45,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.asynchronousupload.service.IAsyncUploadHandler;
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -285,7 +286,9 @@ public class TicketFormService implements Serializable {
 					for (Field field : entry.getFields()) {
 						if (field != null && field.getParentEntry() != null
 								&& field.getParentEntry().getIdEntry() == idEntry) {
-							field.setValue(reponse.getResponseValue());
+							if (StringUtils.isNotBlank(reponse.getResponseValue())) {
+								field.setValue(reponse.getResponseValue());
+							}
 						}
 					}
 				}
@@ -311,6 +314,10 @@ public class TicketFormService implements Serializable {
 		if (request != null) {
 			Form form = FormHome.getFormFromRequest(request);
 			Ticket ticket = getTicketFromSession(request.getSession(), form);
+			
+			if(ticket==null) {
+				ticket=getTicketFromSession(request.getSession());
+			}
 
 			if (ticket != null) {
 				listResponse = getEntryListResponse(ticket, entry);
