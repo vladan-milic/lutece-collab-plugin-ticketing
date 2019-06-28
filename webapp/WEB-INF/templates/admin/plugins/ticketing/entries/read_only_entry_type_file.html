@@ -10,7 +10,7 @@
 		            </a>
 	            </td>
 	            <td>
-		            <#if response.file.dateCreation??> #i18n{ticketing.xpage.view_ticket_details.files.uploadDate} ${response.file.dateCreation?date} #i18n{ticketing.xpage.view_ticket_details.files.uploadDateAt} ${response.file.dateCreation?time}</#if>
+		            <#if response.file.dateCreation??>&nbsp;#i18n{ticketing.xpage.view_ticket_details.files.uploadDate} ${response.file.dateCreation?date} #i18n{ticketing.xpage.view_ticket_details.files.uploadDateAt} ${response.file.dateCreation?time}</#if>
 		        </td>
 	        </tr>
         </table>
