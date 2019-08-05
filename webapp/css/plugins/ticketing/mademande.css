@@ -65,8 +65,8 @@ a:hover {
 .page-navigation {
     display: flex;
     align-items: center;
-    background-color: #0a4770;
-    min-height: 60px;
+    color: #0a4770;
+    min-height: 90px;
 }
 
 .header-logo {
@@ -606,6 +606,7 @@ footer {
 	
 	.header-logo .site-title {
 		margin-bottom: -4px;
+		color:#0a4770;
 	}
 }
 
