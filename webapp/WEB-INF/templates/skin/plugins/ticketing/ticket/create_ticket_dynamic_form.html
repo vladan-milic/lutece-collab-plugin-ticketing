@@ -123,7 +123,7 @@
 	                </#list>
 	                
 	                <!--second part-->
-	                <div class="second-part">
+	                <div class="second-part" id="second-part">
 	                    <div class="form last">
 	                        <h1 aria-label="#i18n{ticketing.xpage.create_ticket.title_bloc2}" class="title">#i18n{ticketing.xpage.create_ticket.title_bloc2}</h1>
 	                        
@@ -295,6 +295,8 @@
 				cache:false
 			});
 		</#if>
+		
+		$('#id_category_2').trigger('change');
     });
 </script>
 <script type="text/javascript" src="jsp/site/plugins/asynchronousupload/GetMainUploadJs.jsp?handler=ticketAsynchronousUploadHandler" ></script>
