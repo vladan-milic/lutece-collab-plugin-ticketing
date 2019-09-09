@@ -115,8 +115,10 @@ function lutece_ticket_tree(branch, categories_tree, url, allowNullSelection) {
 		loadGenericAttributesForm(url, false, "#id_category_" + depthNumber, false);
 		
 		categories = getCategories(depthNumber, categories_tree, arraySelectedCategoryId);
-		var category = categories[getIndex(categories, arraySelectedCategoryId[depthNumber])];
-		loadHelpMessage("#help_message_" + depthNumber, category);
+		if(categories != undefined){
+			var category = categories[getIndex(categories, arraySelectedCategoryId[depthNumber])];
+			loadHelpMessage("#help_message_" + depthNumber, category);
+		}
 	}
 }
 
