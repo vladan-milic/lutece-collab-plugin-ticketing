@@ -82,17 +82,20 @@ import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 /**
  * TicketSearchEngine
  */
 public class TicketSearchEngine implements ITicketSearchEngine
 {
+    private static final String                                            PROPERTY_TICKETING_LUCENE_BOOLEANQUERY_MAXCLAUSECOUNT = "ticketing.internalIndexer.lucene.booleanquery.maxclausecount";
+
     // Constants
-    private static final String                                            DESC_CONSTANT = "DESC";
+    private static final String                                            DESC_CONSTANT                                         = "DESC";
 
     // The map for the association on the filter selected by the user and the Lucene field
-    private final Map<String, List<AbstractMap.SimpleEntry<String, Type>>> _mapSortField = TicketSearchUtil.initMapSortField( );
+    private final Map<String, List<AbstractMap.SimpleEntry<String, Type>>> _mapSortField                                         = TicketSearchUtil.initMapSortField( );
 
     /**
      * Convert a Document to a Ticket
@@ -344,7 +347,13 @@ public class TicketSearchEngine implements ITicketSearchEngine
     {
         Builder categoriesQueryBuilder = new Builder( );
 
-        List<TicketCategory> categories = TicketCategoryService.getInstance( true ).getAllCategories( );
+        List<TicketCategory> domaines = TicketCategoryService.getInstance( true ).getDomainList( );
+        List<TicketCategory> types = TicketCategoryService.getInstance( true ).getTypeList( );
+
+        List<TicketCategory> categories = new ArrayList<>( domaines );
+        categories.addAll( types );
+
+        BooleanQuery.setMaxClauseCount( AppPropertiesService.getPropertyInt( PROPERTY_TICKETING_LUCENE_BOOLEANQUERY_MAXCLAUSECOUNT, BooleanQuery.getMaxClauseCount( ) ) );
 
         for ( TicketCategory category : categories )
         {
