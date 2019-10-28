@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.portal.business.rbac.RBACHome;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -66,6 +67,8 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
+
+import static fr.paris.lutece.plugins.ticketing.business.category.TicketCategory.RESOURCE_TYPE;
 
 /**
  * This class provides the user interface to manage Category features ( manage, create, modify, remove )
@@ -359,12 +362,21 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
 
         // Remove children
         treeCategories.getAllChildren( treeCategories.findNodeById( nId ), true ).stream( )
-                .forEach( category -> TicketCategoryService.getInstance( ).removeCategory( category.getId( ) ) );
+                .forEach( category -> removeCategory( category.getId( ) ) );
 
-        TicketCategoryService.getInstance( ).removeCategory( nId );
+        removeCategory( nId );
         addInfo( INFO_CATEGORY_REMOVED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_CATEGORIES );
+    }
+
+    /**
+     * delete element and delete from role if needed (O2T 73182)
+     * @param nId id category
+     */
+    private void removeCategory(int nId) {
+        TicketCategoryService.getInstance( ).removeCategory( nId );
+        RBACHome.removeForResource( RESOURCE_TYPE, String.valueOf( nId ) );
     }
 
     /**
