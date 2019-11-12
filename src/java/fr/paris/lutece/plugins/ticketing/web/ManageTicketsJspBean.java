@@ -41,13 +41,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -662,6 +656,16 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         if ( ticket == null )
         {
             ticket = new Ticket( );
+
+            // O2T 79721 delete previous values
+            Enumeration<String> attributeNames = request.getSession().getAttributeNames();
+            while ( attributeNames.hasMoreElements() )
+            {
+                String strAttributeName = attributeNames.nextElement();
+                if ( strAttributeName != null && strAttributeName.startsWith( "attribute" ) ) {
+                    request.getSession().removeAttribute( strAttributeName );
+                }
+            }
         }
 
         Map<String, Object> model = getModel( );
@@ -1149,22 +1153,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             for ( Entry entry : listEntry )
             {
                 listFormErrors.addAll( _ticketFormService.getResponseEntry( request, entry.getIdEntry( ), getLocale( ), ticket ) );
-            }
-        }
-
-        // O2T 79251, contrôle facil'famille
-        if ( ( ticket.getTicketDomain( ) != null ) && ticket.getTicketDomain( ).getLabel( ).equalsIgnoreCase( AppPropertiesService.getProperty( PROPERTY_ACCOUNT_NUMBER_DOMAIN_LABEL ) ) )
-        {
-            if ( ticket.getFacilFamilleNumber() == null || ticket.getFacilFamilleNumber().isEmpty() )
-            {
-                // null or empty
-                bIsFormValid = false;
-                addError( MESSAGE_ERROR_FACIL_EMPTY_VALIDATION, getLocale( ) );
-            } else if ( !ticket.getFacilFamilleNumber().matches( AppPropertiesService.getProperty( PROPERTY_ACCOUNT_NUMBER_REGEXP ) ))
-            {
-                // does not match facil'famille regex
-                bIsFormValid = false;
-                addError( MESSAGE_ERROR_FACIL_REGEX_VALIDATION, getLocale( ) );
             }
         }
 
