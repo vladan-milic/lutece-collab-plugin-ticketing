@@ -182,6 +182,16 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     // Properties
     private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
     private static final String MESSAGE_ERROR_COMMENT_VALIDATION = "ticketing.validation.ticket.TicketComment.size";
+    private static final String MESSAGE_ERROR_FACIL_EMPTY_VALIDATION = "ticketing.validation.ticket.TicketFacilNumber.size";
+    private static final String MESSAGE_ERROR_FACIL_REGEX_VALIDATION = "ticketing.validation.ticket.TicketFacilNumber.regex";
+    /**
+     * Domaine facil'famille
+     */
+    private static final String PROPERTY_ACCOUNT_NUMBER_DOMAIN_LABEL = "module.workflow.ticketingfacilfamilles.workflow.automatic_assignment.domainLabel";
+    /**
+     * facil'famille account number check
+     */
+    private static final String PROPERTY_ACCOUNT_NUMBER_REGEXP = "module.workflow.ticketingfacilfamilles.workflow.automatic_assignment.accountNumberRegexp";
 
     // Views
     private static final String VIEW_MANAGE_TICKETS = "manageTickets";
@@ -1142,6 +1152,22 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             }
         }
 
+        // O2T 79251, contrôle facil'famille
+        if ( ( ticket.getTicketDomain( ) != null ) && ticket.getTicketDomain( ).getLabel( ).equalsIgnoreCase( AppPropertiesService.getProperty( PROPERTY_ACCOUNT_NUMBER_DOMAIN_LABEL ) ) )
+        {
+            if ( ticket.getFacilFamilleNumber() == null || ticket.getFacilFamilleNumber().isEmpty() )
+            {
+                // null or empty
+                bIsFormValid = false;
+                addError( MESSAGE_ERROR_FACIL_EMPTY_VALIDATION, getLocale( ) );
+            } else if ( !ticket.getFacilFamilleNumber().matches( AppPropertiesService.getProperty( PROPERTY_ACCOUNT_NUMBER_REGEXP ) ))
+            {
+                // does not match facil'famille regex
+                bIsFormValid = false;
+                addError( MESSAGE_ERROR_FACIL_REGEX_VALIDATION, getLocale( ) );
+            }
+        }
+
         if ( listFormErrors.size( ) > 0 )
         {
             // TICKETING-2217 affichage du message d'erreur
@@ -1199,6 +1225,22 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             addError( MESSAGE_ERROR_COMMENT_VALIDATION, getLocale( ) );
             bIsFormValid = false;
+        }
+
+        // O2T 79251, contrôle facil'famille
+        if ( ( ticket.getTicketDomain( ) != null ) && ticket.getTicketDomain( ).getLabel( ).equalsIgnoreCase( AppPropertiesService.getProperty( PROPERTY_ACCOUNT_NUMBER_DOMAIN_LABEL ) ) )
+        {
+            if ( ticket.getFacilFamilleNumber() == null || ticket.getFacilFamilleNumber().isEmpty() )
+            {
+                // null or empty
+                bIsFormValid = false;
+                addError( MESSAGE_ERROR_FACIL_EMPTY_VALIDATION, getLocale( ) );
+            } else if ( !ticket.getFacilFamilleNumber().matches( AppPropertiesService.getProperty( PROPERTY_ACCOUNT_NUMBER_REGEXP ) ))
+            {
+                // does not match facil'famille regex
+                bIsFormValid = false;
+                addError( MESSAGE_ERROR_FACIL_REGEX_VALIDATION, getLocale( ) );
+            }
         }
 
         return bIsFormValid;
