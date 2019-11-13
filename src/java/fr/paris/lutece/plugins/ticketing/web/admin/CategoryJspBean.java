@@ -33,6 +33,9 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +43,8 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTree;
+import fr.paris.lutece.plugins.ticketing.web.util.CSVUtils;
 import fr.paris.lutece.portal.business.rbac.RBACHome;
 import org.apache.commons.lang.StringUtils;
 
@@ -163,6 +168,7 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
     private static final String ACTION_DO_MOVE_FIELD_DOWN = "doMoveFieldDown";
     private static final String ACTION_DO_MOVE_CATEGORY_UP = "doMoveCategoryUp";
     private static final String ACTION_DO_MOVE_CATEGORY_DOWN = "doMoveCategoryDown";
+    private static final String ACTION_EXPORT_CATEGORIES = "exportCategories";
 
     // Infos
     private static final String INFO_CATEGORY_CREATED = "ticketing.info.category.created";
@@ -185,6 +191,11 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
     // Session variable to store working values
     private TicketCategory _category;
     private TicketCategoryType _categoryType;
+
+    // Export categories
+    private static final String CONTENT_TYPE_CSV = "text/csv";
+    private static final String EXTENSION = ".csv";
+    private static final String TITRE_EXPORT = "Arborescence";
 
     /**
      * Build the Manage View
@@ -793,6 +804,107 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
         url.addParameter( PARAMETER_ID_CATEGORY, nId );
 
         return redirect( request, url.getUrl( ) );
+    }
+
+    /**
+     * Export all the categories
+     *
+     * @param request
+     *            The HTTP request
+     * @return The page
+     */
+    @Action( ACTION_EXPORT_CATEGORIES )
+    public String exportCategories( HttpServletRequest request )
+    {
+
+        // get all categories
+        TicketCategoryTree categoriesTree = TicketCategoryService.getInstance( ).getCategoriesTree( null );
+        if ( categoriesTree != null )
+        {
+            try
+            {
+                // tmp file used during the process
+                File tempFile = File.createTempFile( "categories", null );
+
+                try(Writer w = new OutputStreamWriter( new FileOutputStream( tempFile ), StandardCharsets.ISO_8859_1 ))
+                {
+                    // Write header in the temp file
+                    List<String> listHeaderElements = new ArrayList<>( );
+                    for ( TicketCategoryType ticketCategoryType : categoriesTree.getDepths( ) )
+                    {
+                        listHeaderElements.add( ticketCategoryType.getLabel( )!=null?ticketCategoryType.getLabel():StringUtils.EMPTY );
+                    }
+                    // add "Entité d'assignation"
+                    listHeaderElements.add( "Entité d'assignation" );
+
+                    // Write line in the temp file
+                    CSVUtils.writeLine( w, listHeaderElements );
+
+
+
+                    int nMaxDepthNumber = categoriesTree.getMaxDepthNumber( );
+
+                    if ( nMaxDepthNumber > 0 )
+                    {
+                        // get leaves from outer to inner
+                        for ( int i = nMaxDepthNumber; i > 0; i-- )
+                        {
+                            List<TicketCategory> listNodesOfDepth = categoriesTree.getListNodesOfDepth( categoriesTree.findDepthByDepthNumber( i ) );
+                            // get leaf attributes and parents to generate a line to export
+                            for ( TicketCategory ticketCategory : listNodesOfDepth ) {
+                                // Check if level has children to get only leaves not previously seen
+                                if ( ticketCategory.getChildren() == null || ticketCategory.getChildren().isEmpty() )
+                                {
+                                    ArrayList<String> listLine = new ArrayList<>(  );
+
+                                    listLine.add( 0, ticketCategory.getLabel( ) != null ? ticketCategory.getLabel( ) : StringUtils.EMPTY );
+                                    insertParentLabel( listLine, ticketCategory );
+
+                                    // insert empty column if not enough
+                                    while( listLine.size() < listHeaderElements.size() - 1 )
+                                    {
+                                        listLine.add( StringUtils.EMPTY );
+                                    }
+
+                                    // add assign unit as last column
+                                    if ( ticketCategory.getDefaultAssignUnit( ) != null && ticketCategory.getDefaultAssignUnit( ).getName( ) != null )
+                                    {
+                                        listLine.add( ticketCategory.getDefaultAssignUnit( ).getName( ) );
+                                    } else
+                                    {
+                                        listLine.add( StringUtils.EMPTY );
+                                    }
+
+                                    CSVUtils.writeLine( w, listLine );
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Send the the content of the file to the user
+                download( Files.readAllBytes( tempFile.toPath( ) ), TITRE_EXPORT + EXTENSION, CONTENT_TYPE_CSV );
+            }
+            catch( IOException e )
+            {
+                AppLogService.error( "Error while creating temporary file ", e );
+            }
+        }
+
+
+        return redirectView( request, VIEW_MANAGE_CATEGORIES );
+    }
+
+    private void insertParentLabel( ArrayList<String> listLine, TicketCategory ticketCategory )
+    {
+        TicketCategory parent = ticketCategory.getParent( );
+        if (parent != null) {
+            // insert parent label
+            listLine.add( 0, parent.getLabel()!=null?parent.getLabel():StringUtils.EMPTY );
+
+            // recursive call to get parent of parent until parent is null
+            insertParentLabel( listLine, parent );
+        }
     }
 
     /**

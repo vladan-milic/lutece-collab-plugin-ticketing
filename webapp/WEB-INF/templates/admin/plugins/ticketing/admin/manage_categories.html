@@ -4,9 +4,10 @@
   <@tabs tab="category" formName="manage_categories" />
     <@box>
         <@boxHeader title='#i18n{ticketing.manage_categories.title}' boxTools=true>
-                <@tform class='form-inline pull-right' name='manage_category_types' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
-                        <@button type='submit' name='view_createCategoryType' buttonIcon='plus' title='#i18n{ticketing.manage_categorytype.buttonAdd}' />
-                </@tform>
+				<@tform class='form-inline pull-right' name='manage_category_types' action='jsp/admin/plugins/ticketing/admin/ManageCategories.jsp'>
+					<@button type='submit' name='action_exportCategories' buttonIcon='download' title='#i18n{ticketing.manage_categorytype.buttonExport}' />
+					<@button type='submit' name='view_createCategoryType' buttonIcon='plus' title='#i18n{ticketing.manage_categorytype.buttonAdd}' />
+				</@tform>
         </@boxHeader>
         <@boxBody>    
         <@messages infos=infos />
