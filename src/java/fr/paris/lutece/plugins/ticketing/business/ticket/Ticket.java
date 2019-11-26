@@ -119,6 +119,8 @@ public class Ticket implements Serializable, RBACResource
     private int _nIdticketMarking = -1;
     private int _nIdDemand = -1;
     private String _strFacilFamilleNumber;
+    private int _nNbRelance = 0;
+    private Timestamp _dDateDerniereRelance;
 
     /**
      * Enriches empty ticket attributes with specified values
@@ -1145,6 +1147,40 @@ public class Ticket implements Serializable, RBACResource
     public void setFacilFamilleNumber( String _strFacilFamilleNumber )
     {
         this._strFacilFamilleNumber = _strFacilFamilleNumber;
+    }
+
+    /**
+     * @return load and return the ticket number of relance
+     */
+    public int getNbRelance( )
+    {
+        return _nNbRelance;
+    }
+
+    public void setNbRelance( int _nNbRelance )
+    {
+        this._nNbRelance = _nNbRelance;
+    }
+
+    /**
+     * Gets the last relance date
+     *
+     * @return the update date
+     */
+    public Timestamp getDateDerniereRelance( )
+    {
+        return _dDateDerniereRelance;
+    }
+
+    /**
+     * Sets the last relance date
+     *
+     * @param dDateDerniereRelance
+     *            the update date
+     */
+    public void setDateDerniereRelance( Timestamp dDateDerniereRelance )
+    {
+        _dDateDerniereRelance = dDateDerniereRelance;
     }
 
 }

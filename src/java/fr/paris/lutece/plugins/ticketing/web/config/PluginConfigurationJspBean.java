@@ -33,9 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.config;
 
-import fr.paris.lutece.plugins.genericattributes.business.Entry;
-import fr.paris.lutece.plugins.genericattributes.business.EntryHome;
-import fr.paris.lutece.plugins.genericattributes.business.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -57,7 +54,6 @@ import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
-import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
@@ -91,6 +87,8 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     private static final String PARAMETER_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME = "actions_filtered_when_assigned_to_me";
     private static final String PARAMETER_ADMIN_USER_ID_FRONT = "admin_user_id_front";
     private static final String PARAMETER_CHANNEL_ID_FRONT = "channel_id_front";
+    private static final String PARAMETER_ACTION_RELANCE_AUTO_FREQUENCE = "action_relance_auto_frequence";
+    private static final String PARAMETER_ACTION_RELANCE_AUTO_NB_MAX = "action_relance_auto_nb_max";
 
     // Properties for page titles
 
@@ -109,6 +107,8 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     private static final String MARK_CHANNELS = "channels";
     private static final String MARK_CHANNEL_ID_FRONT = PARAMETER_CHANNEL_ID_FRONT;
     private static final String MARK_ID_ATTACHMENTS_ENTRY = "id_entry";
+    private static final String MARK_ACTION_RELANCE_AUTO_NB_MAX = PARAMETER_ACTION_RELANCE_AUTO_NB_MAX;
+    private static final String MARK_ACTION_RELANCE_AUTO_FREQUENCE = PARAMETER_ACTION_RELANCE_AUTO_FREQUENCE;
 
     // Properties
     private static final String PROPERTY_PAGE_TITLE_CONFIGURE_PLUGIN = "ticketing.configure_plugin.pageTitle";
@@ -302,7 +302,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
             if ( mapStatesForRoles != null )
             {
-                List<SelectedStatesForRole> listStatesSelectedForRole = new ArrayList<SelectedStatesForRole>( );
+                List<SelectedStatesForRole> listStatesSelectedForRole = new ArrayList<>( );
 
                 for ( Map.Entry<String, List<String>> entry : mapStatesForRoles.entrySet( ) )
                 {
@@ -328,6 +328,10 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
             model.put( MARK_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME,
                     PluginConfigurationService.getStringList( PluginConfigurationService.PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME, null ) );
 
+            // Actions "RELANCE AUTOMATIQUE DES CONTRIBUTEURS METIER ET ACTEURS TERRAIN"
+            model.put( MARK_ACTION_RELANCE_AUTO_FREQUENCE, PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_RELANCE_FREQUENCE, 10 ) );
+            model.put( MARK_ACTION_RELANCE_AUTO_NB_MAX, PluginConfigurationService.getInt( PluginConfigurationService.PROPERTY_RELANCE_NB_MAX, 3 ) );
+
             HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_WORKFLOW_RELATED_PROPERTIES, locale, model );
 
             strResult = template.getHtml( );
@@ -346,8 +350,10 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     {
         int nIdWorkflow = TicketingConstants.PROPERTY_UNSET_INT;
         int nIdStateClosed = TicketingConstants.PROPERTY_UNSET_INT;
-        List<Integer> listStateSelected = new ArrayList<Integer>( );
-        List<Integer> listFilteredActionsWhenAssignedToMe = new ArrayList<Integer>( );
+        List<Integer> listStateSelected = new ArrayList<>( );
+        List<Integer> listFilteredActionsWhenAssignedToMe = new ArrayList<>( );
+        int nRelanceNbMax;
+        int nRelanceFrequence;
 
         PluginConfigurationService.removeByPrefix( PluginConfigurationService.PROPERTY_STATES_SELECTED_FOR_ROLE_PREFIX );
 
@@ -388,10 +394,16 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
             }
         }
 
+        nRelanceFrequence = Integer.parseInt( request.getParameter( PARAMETER_ACTION_RELANCE_AUTO_FREQUENCE ) );
+        nRelanceNbMax = Integer.parseInt( request.getParameter( PARAMETER_ACTION_RELANCE_AUTO_NB_MAX ) );
+
         PluginConfigurationService.set( PluginConfigurationService.PROPERTY_TICKET_WORKFLOW_ID, nIdWorkflow );
         PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATE_CLOSED_ID, nIdStateClosed );
         PluginConfigurationService.set( PluginConfigurationService.PROPERTY_STATES_SELECTED, listStateSelected );
         PluginConfigurationService.set( PluginConfigurationService.PROPERTY_ACTIONS_FILTERED_WHEN_ASSIGNED_TO_ME, listFilteredActionsWhenAssignedToMe );
+        PluginConfigurationService.set( PluginConfigurationService.PROPERTY_RELANCE_NB_MAX, listFilteredActionsWhenAssignedToMe );
+        PluginConfigurationService.set( PluginConfigurationService.PROPERTY_RELANCE_FREQUENCE, nRelanceFrequence );
+        PluginConfigurationService.set( PluginConfigurationService.PROPERTY_RELANCE_NB_MAX, nRelanceNbMax );
     }
 
     /**
@@ -475,7 +487,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
         if ( listStateSelectedForRoleRoles != null )
         {
-            List<String> setRoles = new ArrayList<String>( );
+            List<String> setRoles = new ArrayList<>( );
 
             for ( String strRole : listStateSelectedForRoleRoles )
             {

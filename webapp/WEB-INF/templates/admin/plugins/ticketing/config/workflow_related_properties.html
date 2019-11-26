@@ -65,6 +65,12 @@
 
 <@fieldInputListBox i18nLabelKey="ticketing.configure_plugin.labelActionsFilteredWhenAssignedToMe" inputName="actions_filtered_when_assigned_to_me" mandatory=false  items=actions values=actions_filtered_when_assigned_to_me![] i18nHelpBlockKey="ticketing.configure_plugin.labelActionsFilteredWhenAssignedToMe.help" cssClass='' />
 
+<hr/>
+
+<@fieldInputText i18nLabelKey="ticketing.configure_plugin.labelActionRelanceFrequence" inputName="action_relance_auto_frequence" value=action_relance_auto_frequence!'' mandatory=true i18nHelpBlockKey="ticketing.configure_plugin.labelActionRelanceFrequence.help" />
+
+<@fieldInputText i18nLabelKey="ticketing.configure_plugin.labelActionRelanceNbMax" inputName="action_relance_auto_nb_max" value=action_relance_auto_nb_max!'' mandatory=true i18nHelpBlockKey="ticketing.configure_plugin.labelActionRelanceNbMax.help" />
+
 <script type="text/javascript" >
   $('.btn-add').on('click', function(e) {
     e.preventDefault();

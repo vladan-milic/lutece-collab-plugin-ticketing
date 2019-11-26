@@ -62,6 +62,12 @@ public final class PluginConfigurationService
     public static final String PROPERTY_CHANNEL_ID_FRONT = PROPERTY_PREFIX + "channel.id.front";
     private static final String LIST_SEPARATOR = ";";
 
+    /*
+    * Propriétés pour "RELANCE AUTOMATIQUE DES CONTRIBUTEURS METIER ET ACTEURS TERRAIN" //TODO créer en bdd
+    */
+    public static final String PROPERTY_RELANCE_NB_MAX = PROPERTY_PREFIX + "relance_auto.nb_relance_max";
+    public static final String PROPERTY_RELANCE_FREQUENCE = PROPERTY_PREFIX + "relance_auto.frequence_relance";
+
     /**
      * Default constructor
      */
