@@ -34,101 +34,66 @@
 
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Response;
 
 import fr.paris.lutece.plugins.rest.service.RestConstants;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.util.httpaccess.HttpAccess;
+import fr.paris.lutece.util.httpaccess.HttpAccessException;
 
 /**
  * REST service for contact mode resource
  *
  */
-@Path( RestConstants.BASE_PATH + Constants.PLUGIN_PATH + Constants.CONTACT_MODE_PATH )
+@Path( RestConstants.BASE_PATH + Constants.PLUGIN_PATH + Constants.SPHINX_PATH )
 public class SphinxRest
 {
 
-    private static final String URL = "daemon.sphinxDaemon.url";
-    private static final String URL_MAILING = "daemon.sphinxDaemon.url.mailing";
-    private static final String URL_TOKEN = "daemon.sphinxDaemon.token.url";
-    private static final String USERNAME = "daemon.sphinxDaemon.unsername";
-    private static final String PASSWORD = "daemon.sphinxDaemon.password";
+    private static final String USERNAME_PROP    = "daemon.sphinxDaemon.unsername";
+    private static final String PASSWORD_PROP    = "daemon.sphinxDaemon.password";
+    private static final String URL_TOKEN        = "daemon.sphinxDaemon.token.url";
+    private static final String URL_TOKEN_SPHINX = AppPropertiesService.getProperty( URL_TOKEN );
+    private static final String USERNAME         = AppPropertiesService.getProperty( USERNAME_PROP );
+    private static final String PASSWORD         = AppPropertiesService.getProperty( PASSWORD_PROP );
 
     /**
-     * Gives the contact modes
-     * 
-     * @throws Exception
-     *             excpetions
+     *
+     * @return Response
      */
-    // @GET
-    // @Path( Constants.ALL_PATH )
-    // public Response getContactModes( @HeaderParam( HttpHeaders.ACCEPT ) String accept, @QueryParam( Constants.FORMAT_QUERY ) String format )
-    // {
-    // String strMediaType = getMediaType( accept, format );
-    //
-    // IFormatterFactory formatterFactory = _formatterFactories.get( strMediaType );
-    //
-    // List<ContactMode> listUserTitles = ContactModeHome.getContactModesList( );
-    //
-    // String strResponse = formatterFactory.createFormatter( ContactMode.class ).format( listUserTitles );
-    //
-    // return Response.ok( strResponse, strMediaType ).build( );
-    // }
-    public static void getHttpCon( ) throws Exception
+    @GET
+    @Path( Constants.ALL_PATH )
+    public Response getToken( )
     {
-
-        String tokenUrl = AppPropertiesService.getProperty( URL_TOKEN );
-        String username = AppPropertiesService.getProperty( USERNAME );
-        String password = AppPropertiesService.getProperty( PASSWORD );
-
-        String POST_PARAMS = "username=" + username + "&password=" + password + "&lang=fr&grant_type=password&client_id=sphinxapiclient";
-        URL obj = new URL( tokenUrl );
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection( );
-        con.setRequestMethod( "POST" );
-        con.setRequestProperty( "Content-Type", "application/json;odata=verbose" );
-        con.setRequestProperty( "Authorization", "Basic Base64_encoded_clientId:clientSecret" );
-        con.setRequestProperty( "Accept", "application/x-www-form-urlencoded" );
-
-        // For POST only - START
-        con.setDoOutput( true );
-        OutputStream os = con.getOutputStream( );
-        os.write( POST_PARAMS.getBytes( ) );
-        os.flush( );
-        os.close( );
-        // For POST only - END
-
-        int responseCode = con.getResponseCode( );
-        System.out.println( "POST Response Code :: " + responseCode );
-
-        if ( responseCode == HttpURLConnection.HTTP_OK )
-        { // success
-            BufferedReader in = new BufferedReader( new InputStreamReader( con.getInputStream( ) ) );
-            String inputLine;
-            StringBuffer response = new StringBuffer( );
-
-            while ( ( inputLine = in.readLine( ) ) != null )
-            {
-                response.append( inputLine );
-            }
-            in.close( );
-
-            // print result
-            System.out.println( response.toString( ) );
-        }
-        else
+        String result = "";
+        try
         {
-            System.out.println( "POST request not worked" );
+            result = getTokenAccess( );
+        } catch ( Exception e )
+        {
+            return Response.ok( "ko" ).build( );
         }
+
+        return Response.ok( result ).build( );
     }
 
-    public static void main( String [ ] args ) throws Exception
+    public String getTokenAccess( ) throws HttpAccessException
     {
-        getHttpCon( );
+        HttpAccess httpAccess = new HttpAccess( );
+        Map<String, String> headersRequest = new HashMap<String, String>( );
+        headersRequest.put( "Content-Type", "application/x-www-form-urlencoded" );
+        Map<String, String> params = new HashMap<String, String>( );
+        params.put( "username", USERNAME );
+        params.put( "password", PASSWORD );
+        params.put( "lang", "fr" );
+        params.put( "grant_type", "password" );
+        params.put( "client_id", "sphinxapiclient" );
+
+        return httpAccess.doPost( URL_TOKEN_SPHINX, params, null, null, headersRequest );
     }
 
 }

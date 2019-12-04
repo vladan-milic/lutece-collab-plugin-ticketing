@@ -39,16 +39,17 @@ package fr.paris.lutece.plugins.ticketing.web.rs;
  */
 public final class Constants
 {
-    public static final String TICKET_PATH = "ticket/";
-    public static final String TYPE_PATH = "type/";
-    public static final String USER_TITLE_PATH = "usertitle/";
+    public static final String TICKET_PATH       = "ticket/";
+    public static final String TYPE_PATH         = "type/";
+    public static final String USER_TITLE_PATH   = "usertitle/";
     public static final String CONTACT_MODE_PATH = "contactmode/";
-    public static final String CHANNEL_PATH = "channel/";
-    public static final String PLUGIN_PATH = "ticketing/";
-    public static final String ID_PATH = "id";
-    public static final String ALL_PATH = "s";
-    public static final String FORMAT_QUERY = "format";
-    public static final String MEDIA_TYPE_JSON = "json";
+    public static final String CHANNEL_PATH      = "channel/";
+    public static final String PLUGIN_PATH       = "ticketing/";
+    public static final String ID_PATH           = "id";
+    public static final String ALL_PATH          = "s";
+    public static final String FORMAT_QUERY      = "format";
+    public static final String MEDIA_TYPE_JSON   = "json";
+    public static final String SPHINX_PATH       = "sphinx";
 
     /**
      * Default constructor
