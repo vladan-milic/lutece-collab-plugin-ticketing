@@ -81,7 +81,7 @@ public class SphinxRest
         return Response.ok( result ).build( );
     }
 
-    public String getTokenAccess( ) throws HttpAccessException
+    public static String getTokenAccess( ) throws HttpAccessException
     {
         HttpAccess httpAccess = new HttpAccess( );
         Map<String, String> headersRequest = new HashMap<String, String>( );
