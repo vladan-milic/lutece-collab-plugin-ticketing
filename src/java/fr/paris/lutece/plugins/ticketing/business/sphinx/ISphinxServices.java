@@ -16,6 +16,6 @@ public interface ISphinxServices
      *             IOException
      *
      */
-    String mailingToSphinx( ) throws IOException;
+    String mailingToSphinx( );
 
 }

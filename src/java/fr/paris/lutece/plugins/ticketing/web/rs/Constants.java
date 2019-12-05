@@ -50,6 +50,8 @@ public final class Constants
     public static final String FORMAT_QUERY      = "format";
     public static final String MEDIA_TYPE_JSON   = "json";
     public static final String SPHINX_PATH       = "sphinx";
+    public static final String TICKET            = "ticket";
+    public static final String ID_TICKET_PATH    = "/{" + Constants.TICKET + "}";
 
     /**
      * Default constructor

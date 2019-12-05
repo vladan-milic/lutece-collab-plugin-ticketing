@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.plugins.ticketing.business.sphinx;
 
-import java.io.IOException;
-
 import fr.paris.lutece.portal.service.daemon.Daemon;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
@@ -55,8 +53,7 @@ public class SphinxDaemon extends Daemon
         {
             ISphinxServices iSphinxServices = SpringContextService.getBean( ISphinxServices.BEAN_SERVICE );
             setLastRunLogs( iSphinxServices.mailingToSphinx( ) );
-        }
-        catch( IOException e )
+        } catch ( Exception e )
         {
             e.printStackTrace( );
         }
