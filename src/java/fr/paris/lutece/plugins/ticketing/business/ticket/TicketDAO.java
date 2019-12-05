@@ -68,7 +68,7 @@ public final class TicketDAO implements ITicketDAO
             + " a.fixed_phone_number, a.mobile_phone_number, a.id_marking, "
             + " a.id_ticket_category, a.id_contact_mode, f.code, a.ticket_comment, "
             + " a.ticket_status, a.ticket_status_text, a.date_update, a.date_create, a.date_close, a.priority, a.criticality, a.id_customer, a.id_admin_user, g.first_name, g.last_name, a.id_unit, h.label, a.id_assigner_user, a.id_assigner_unit, h2.label, a.user_message, a.url, a.id_channel, x.label, x.icon_font, a.nomenclature, "
-            + " ad.address, ad.address_detail, ad.postal_code, ad.city, a.demand_id, ar.response_value as facilfamilles"
+            + " ad.address, ad.address_detail, ad.postal_code, ad.city, a.demand_id, ar.response_value as facilfamilles, a.nb_relance, a.date_derniere_relance"
             + " FROM ticketing_ticket a"
             + " LEFT JOIN core_admin_user g ON g.id_user=a.id_admin_user"
             + " LEFT JOIN unittree_unit h ON h.id_unit=a.id_unit"
@@ -90,12 +90,12 @@ public final class TicketDAO implements ITicketDAO
     private static final String SQL_QUERY_INSERT = "INSERT INTO ticketing_ticket ( id_ticket, ticket_reference , guid, id_user_title, firstname, lastname, email, "
             + " fixed_phone_number, mobile_phone_number, id_ticket_category, "
             + " id_contact_mode, ticket_comment, ticket_status, ticket_status_text, date_update, date_create, "
-            + " priority, criticality, id_customer, id_admin_user, id_unit, id_assigner_user, id_assigner_unit, user_message, url, id_channel, nomenclature, demand_id ) "
+            + " priority, criticality, id_customer, id_admin_user, id_unit, id_assigner_user, id_assigner_unit, user_message, url, id_channel, nomenclature, demand_id, nb_relance, date_derniere_relance ) "
             + " VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE t, ad FROM ticketing_ticket t LEFT JOIN ticketing_ticket_address ad ON ad.id_ticket = t.id_ticket WHERE t.id_ticket = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE ticketing_ticket SET id_ticket = ?, ticket_reference = ?, guid = ?, id_user_title = ?, firstname = ?, lastname = ?, email = ?, fixed_phone_number = ?, mobile_phone_number = ?, "
             + " id_ticket_category = ?, id_contact_mode = ?, ticket_comment = ?, ticket_status = ?, ticket_status_text = ?, date_update = ?,"
-            + " date_close = ? , priority = ? , criticality = ? , id_customer = ? , id_admin_user = ? , id_unit = ?, id_assigner_user = ? , id_assigner_unit = ?, user_message = ?, url = ?, id_channel = ?, nomenclature = ? "
+            + " date_close = ? , priority = ? , criticality = ? , id_customer = ? , id_admin_user = ? , id_unit = ?, id_assigner_user = ? , id_assigner_unit = ?, user_message = ?, url = ?, id_channel = ?, nomenclature = ?, nb_relance = ?, date_derniere_relance = ? "
             + " WHERE id_ticket = ?";
     private static final String SQL_QUERY_SELECTALL_SELECT_CLAUSE = SQL_SELECT_WITH_JOIN_DATA_TICKET;
     private static final String SQL_QUERY_SELECTALL_ID = "SELECT id_ticket FROM ticketing_ticket";
@@ -190,7 +190,6 @@ public final class TicketDAO implements ITicketDAO
     public synchronized void insert( Ticket ticket, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
-
         ticket.setId( newPrimaryKey( plugin ) );
 
         int nIndex = 1;
@@ -227,8 +226,7 @@ public final class TicketDAO implements ITicketDAO
         if ( ( ticket.getChannel( ) != null ) && TicketUtils.isIdSet( ticket.getChannel( ).getId( ) ) )
         {
             daoUtil.setInt( nIndex++, ticket.getChannel( ).getId( ) );
-        }
-        else
+        } else
         {
             daoUtil.setIntNull( nIndex++ );
         }
@@ -236,13 +234,16 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setString( nIndex++, ticket.getNomenclature( ) );
         daoUtil.setInt( nIndex++, TicketCategoryService.getInstance( ).findCategoryById( ticket.getTicketType( ).getId( ) ).getDemandId( ) );
 
+        daoUtil.setInt( nIndex++, ticket.getNbRelance( ) );
+        daoUtil.setTimestamp( nIndex, ticket.getDateDerniereRelance( ) );
+
         daoUtil.executeUpdate( );
         daoUtil.free( );
 
         TicketAddress _ticketAddress = ticket.getTicketAddress( );
         if ( ( _ticketAddress != null )
-                && ( StringUtils.isNotBlank( _ticketAddress.getAddress( ) ) || StringUtils.isNotBlank( _ticketAddress.getAddressDetail( ) )
-                        || StringUtils.isNotBlank( _ticketAddress.getPostalCode( ) ) || StringUtils.isNotBlank( _ticketAddress.getCity( ) ) ) )
+                     && ( StringUtils.isNotBlank( _ticketAddress.getAddress( ) ) || StringUtils.isNotBlank( _ticketAddress.getAddressDetail( ) )
+                                  || StringUtils.isNotBlank( _ticketAddress.getPostalCode( ) ) || StringUtils.isNotBlank( _ticketAddress.getCity( ) ) ) )
         {
             storeTicketAddress( ticket, plugin );
         }
@@ -290,7 +291,6 @@ public final class TicketDAO implements ITicketDAO
     public void store( Ticket ticket, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-
         int nIndex = 1;
         daoUtil.setInt( nIndex++, ticket.getId( ) );
         daoUtil.setString( nIndex++, ticket.getReference( ) );
@@ -323,15 +323,17 @@ public final class TicketDAO implements ITicketDAO
         if ( ( ticket.getChannel( ) != null ) && TicketUtils.isIdSet( ticket.getChannel( ).getId( ) ) )
         {
             daoUtil.setInt( nIndex++, ticket.getChannel( ).getId( ) );
-        }
-        else
+        } else
         {
             daoUtil.setIntNull( nIndex++ );
         }
 
         daoUtil.setString( nIndex++, ticket.getNomenclature( ) );
 
-        daoUtil.setInt( nIndex++, ticket.getId( ) );
+        daoUtil.setInt( nIndex++, ticket.getNbRelance( ) );
+        daoUtil.setTimestamp( nIndex++, ticket.getDateDerniereRelance( ) );
+
+        daoUtil.setInt( nIndex, ticket.getId( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -342,6 +344,7 @@ public final class TicketDAO implements ITicketDAO
 
             storeTicketAddress( ticket, plugin );
         }
+
     }
 
     /**
@@ -363,29 +366,29 @@ public final class TicketDAO implements ITicketDAO
 
         if ( _bAddressExists )
         {
-            daoUtil = new DAOUtil( SQL_QUERY_UPDATE_TICKET_ADDRESS, plugin );
+            DAOUtil daoUtil2 = new DAOUtil( SQL_QUERY_UPDATE_TICKET_ADDRESS, plugin );
             int nIndex = 1;
-            daoUtil.setString( nIndex++, ticket.getTicketAddress( ).getAddress( ) );
-            daoUtil.setString( nIndex++, ticket.getTicketAddress( ).getAddressDetail( ) );
-            daoUtil.setString( nIndex++, ticket.getTicketAddress( ).getPostalCode( ) );
-            daoUtil.setString( nIndex++, ticket.getTicketAddress( ).getCity( ) );
-            daoUtil.setInt( nIndex++, ticket.getId( ) );
+            daoUtil2.setString( nIndex++, ticket.getTicketAddress( ).getAddress( ) );
+            daoUtil2.setString( nIndex++, ticket.getTicketAddress( ).getAddressDetail( ) );
+            daoUtil2.setString( nIndex++, ticket.getTicketAddress( ).getPostalCode( ) );
+            daoUtil2.setString( nIndex++, ticket.getTicketAddress( ).getCity( ) );
+            daoUtil2.setInt( nIndex, ticket.getId( ) );
 
-            daoUtil.executeUpdate( );
-            daoUtil.free( );
-        }
-        else
+            daoUtil2.executeUpdate( );
+            daoUtil2.free( );
+
+        } else
         {
-            daoUtil = new DAOUtil( SQL_QUERY_INSERT_TICKET_ADDRESS, plugin );
+            DAOUtil daoUtil2 = new DAOUtil( SQL_QUERY_INSERT_TICKET_ADDRESS, plugin );
             int nIndex = 1;
-            daoUtil.setInt( nIndex++, ticket.getId( ) );
-            daoUtil.setString( nIndex++, ticket.getTicketAddress( ).getAddress( ) );
-            daoUtil.setString( nIndex++, ticket.getTicketAddress( ).getAddressDetail( ) );
-            daoUtil.setString( nIndex++, ticket.getTicketAddress( ).getPostalCode( ) );
-            daoUtil.setString( nIndex++, ticket.getTicketAddress( ).getCity( ) );
+            daoUtil2.setInt( nIndex++, ticket.getId( ) );
+            daoUtil2.setString( nIndex++, ticket.getTicketAddress( ).getAddress( ) );
+            daoUtil2.setString( nIndex++, ticket.getTicketAddress( ).getAddressDetail( ) );
+            daoUtil2.setString( nIndex++, ticket.getTicketAddress( ).getPostalCode( ) );
+            daoUtil2.setString( nIndex, ticket.getTicketAddress( ).getCity( ) );
 
-            daoUtil.executeUpdate( );
-            daoUtil.free( );
+            daoUtil2.executeUpdate( );
+            daoUtil2.free( );
         }
 
     }
@@ -435,13 +438,12 @@ public final class TicketDAO implements ITicketDAO
     @Override
     public List<Ticket> selectTicketsList( Plugin plugin )
     {
-        List<Ticket> ticketList = new ArrayList<Ticket>( );
+        List<Ticket> ticketList = new ArrayList<>( );
 
         DAOUtil daoUtil = new DAOUtil( getSelectAllQuery( SQL_QUERY_SELECTALL_SELECT_CLAUSE, null ), plugin );
-
         daoUtil.executeQuery( );
 
-        while ( daoUtil.next( ) )
+        while (daoUtil.next( ))
         {
             Ticket ticket = dataToTicket( daoUtil );
 
@@ -451,6 +453,7 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.free( );
 
         return ticketList;
+
     }
 
     /**
@@ -459,11 +462,11 @@ public final class TicketDAO implements ITicketDAO
     @Override
     public List<Integer> selectIdTicketsList( Plugin plugin )
     {
-        List<Integer> ticketList = new ArrayList<Integer>( );
+        List<Integer> ticketList = new ArrayList<>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL_ID, plugin );
         daoUtil.executeQuery( );
 
-        while ( daoUtil.next( ) )
+        while (daoUtil.next( ))
         {
             ticketList.add( daoUtil.getInt( 1 ) );
         }
@@ -471,6 +474,7 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.free( );
 
         return ticketList;
+
     }
 
     /**
@@ -504,7 +508,7 @@ public final class TicketDAO implements ITicketDAO
         int nIndex = 1;
 
         daoUtil.setInt( nIndex++, nIdMarking );
-        daoUtil.setInt( nIndex++, nIdTicket );
+        daoUtil.setInt( nIndex, nIdTicket );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -517,11 +521,11 @@ public final class TicketDAO implements ITicketDAO
     public void resetMarkingId( int nIdMarking, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_RESET_ID_MARKING, plugin );
-
         daoUtil.setInt( 1, nIdMarking );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
+
     }
 
     /**
@@ -534,7 +538,7 @@ public final class TicketDAO implements ITicketDAO
         int nIndex = 1;
 
         daoUtil.setInt( nIndex++, TicketingConstants.DEFAULT_MARKING );
-        daoUtil.setInt( nIndex++, nIdTicket );
+        daoUtil.setInt( nIndex, nIdTicket );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -567,9 +571,9 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setInt( 1, nIdTicket );
         daoUtil.executeQuery( );
 
-        List<Integer> listIdResponse = new ArrayList<Integer>( );
+        List<Integer> listIdResponse = new ArrayList<>( );
 
-        while ( daoUtil.next( ) )
+        while (daoUtil.next( ))
         {
             listIdResponse.add( daoUtil.getInt( 1 ) );
         }
@@ -737,14 +741,15 @@ public final class TicketDAO implements ITicketDAO
 
         ticket.setFacilFamilleNumber( daoUtil.getString( nIndex++ ) );
 
+        ticket.setNbRelance( daoUtil.getInt( nIndex++ ) );
+        ticket.setDateDerniereRelance( daoUtil.getTimestamp( nIndex ) );
+
         return ticket;
     }
 
     /**
      * get criteria to request
      *
-     * @param sbSQL
-     *            request
      * @param filter
      *            filter
      */
@@ -1063,7 +1068,7 @@ public final class TicketDAO implements ITicketDAO
     @Override
     public List<Ticket> selectTicketsList( TicketFilter filter, Plugin plugin )
     {
-        List<Ticket> ticketList = new ArrayList<Ticket>( );
+        List<Ticket> ticketList = new ArrayList<>( );
 
         if ( ( filter != null ) && ( TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) ) && CollectionUtils.isEmpty( filter.getAdminUserRoles( ) ) )
         {
@@ -1071,9 +1076,7 @@ public final class TicketDAO implements ITicketDAO
             return ticketList;
         }
 
-        StringBuilder sbSQL = new StringBuilder( getSelectAllQuery( SQL_QUERY_SELECTALL_SELECT_CLAUSE, filter ) );
-        DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ), plugin );
-
+        DAOUtil daoUtil = new DAOUtil( getSelectAllQuery( SQL_QUERY_SELECTALL_SELECT_CLAUSE, filter ), plugin );
         if ( filter != null )
         {
             addFilterCriteriaValues( daoUtil, filter );
@@ -1081,7 +1084,7 @@ public final class TicketDAO implements ITicketDAO
 
         daoUtil.executeQuery( );
 
-        while ( daoUtil.next( ) )
+        while (daoUtil.next( ))
         {
             Ticket ticket = dataToTicket( daoUtil );
 
@@ -1099,7 +1102,7 @@ public final class TicketDAO implements ITicketDAO
     @Override
     public List<Integer> selectIdTicketsList( TicketFilter filter, Plugin plugin )
     {
-        List<Integer> listIdTickets = new ArrayList<Integer>( );
+        List<Integer> listIdTickets = new ArrayList<>( );
 
         if ( ( filter != null ) && ( TicketFilterViewEnum.DOMAIN == filter.getFilterView( ) ) && CollectionUtils.isEmpty( filter.getAdminUserRoles( ) ) )
         {
@@ -1107,9 +1110,7 @@ public final class TicketDAO implements ITicketDAO
             return listIdTickets;
         }
 
-        StringBuilder sbSQL = new StringBuilder( getSelectAllQuery( SQL_SELECT_ALL_ID_TICKET, filter ) );
-        DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ), plugin );
-
+        DAOUtil daoUtil = new DAOUtil( getSelectAllQuery( SQL_SELECT_ALL_ID_TICKET, filter ), plugin );
         if ( filter != null )
         {
             addFilterCriteriaValues( daoUtil, filter );
@@ -1117,7 +1118,7 @@ public final class TicketDAO implements ITicketDAO
 
         daoUtil.executeQuery( );
 
-        while ( daoUtil.next( ) )
+        while (daoUtil.next( ))
         {
 
             listIdTickets.add( daoUtil.getInt( 1 ) );
@@ -1154,7 +1155,7 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setInt( 1, nIdUnit );
         daoUtil.executeQuery( );
 
-        List<Ticket> listTickets = new ArrayList<Ticket>( );
+        List<Ticket> listTickets = new ArrayList<>( );
 
         if ( daoUtil.next( ) )
         {
