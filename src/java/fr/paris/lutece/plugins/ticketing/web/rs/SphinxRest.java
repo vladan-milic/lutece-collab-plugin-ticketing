@@ -34,101 +34,150 @@
 
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Response;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import fr.paris.lutece.plugins.rest.service.RestConstants;
+import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
+import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.util.httpaccess.HttpAccess;
+import fr.paris.lutece.util.httpaccess.HttpAccessException;
 
 /**
  * REST service for contact mode resource
  *
  */
-@Path( RestConstants.BASE_PATH + Constants.PLUGIN_PATH + Constants.CONTACT_MODE_PATH )
+@Path( RestConstants.BASE_PATH + Constants.PLUGIN_PATH + Constants.SPHINX_PATH )
 public class SphinxRest
 {
 
-    private static final String URL = "daemon.sphinxDaemon.url";
-    private static final String URL_MAILING = "daemon.sphinxDaemon.url.mailing";
-    private static final String URL_TOKEN = "daemon.sphinxDaemon.token.url";
-    private static final String USERNAME = "daemon.sphinxDaemon.unsername";
-    private static final String PASSWORD = "daemon.sphinxDaemon.password";
+    private static final String USERNAME_PROP        = "daemon.sphinxDaemon.unsername";
+    private static final String PASSWORD_PROP        = "daemon.sphinxDaemon.password";
+    private static final String URL_TOKEN            = "daemon.sphinxDaemon.token.url";
+    private static final String URL_TOKEN_SPHINX     = AppPropertiesService.getProperty( URL_TOKEN );
+    private static final String USERNAME             = AppPropertiesService.getProperty( USERNAME_PROP );
+    private static final String PASSWORD             = AppPropertiesService.getProperty( PASSWORD_PROP );
+
+    private static final String API_URL              = AppPropertiesService.getProperty( "daemon.sphinxDaemon.url" );
+    private static final String SURVEY               = AppPropertiesService.getProperty( "ticketing.sphinx.survey" );
+
+    private static final String ACCESS_TOKEN         = "access_token";
+
+    private static final String COLUMN_EMAIL         = "email";
+    private static final String COLUMN_CREATION_DATE = "Date_de_creation";
+    private static final String COLUMN_CATEGORY_1    = "domaine";
+    private static final String COLUMN_CATEGORY_2    = "thematique";
+    private static final String COLUMN_CATEGORY_3    = "sous_thematique";
+    private static final String COLUMN_CATEGORY_4    = "localisation";
+    private static final String COLUMN_CHANNEL       = "Canal";
+    private static final String COLUMN_ASSIGN_ENTITY = "Entite_d_assignation";
+    private static final String COLUMN_CLOSE_DATE    = "Date_de_cloture";
+    private static final String COLUMN_DAYS_OPENED   = "delai_en_jours";
 
     /**
-     * Gives the contact modes
-     * 
-     * @throws Exception
-     *             excpetions
+     *
+     * @param idTicket
+     *            ticket
+     * @return response
      */
-    // @GET
-    // @Path( Constants.ALL_PATH )
-    // public Response getContactModes( @HeaderParam( HttpHeaders.ACCEPT ) String accept, @QueryParam( Constants.FORMAT_QUERY ) String format )
-    // {
-    // String strMediaType = getMediaType( accept, format );
-    //
-    // IFormatterFactory formatterFactory = _formatterFactories.get( strMediaType );
-    //
-    // List<ContactMode> listUserTitles = ContactModeHome.getContactModesList( );
-    //
-    // String strResponse = formatterFactory.createFormatter( ContactMode.class ).format( listUserTitles );
-    //
-    // return Response.ok( strResponse, strMediaType ).build( );
-    // }
-    public static void getHttpCon( ) throws Exception
+    @GET
+    @Path( Constants.ID_TICKET_PATH )
+    public Response getToken( @PathParam( Constants.TICKET ) Integer idTicket )
     {
-
-        String tokenUrl = AppPropertiesService.getProperty( URL_TOKEN );
-        String username = AppPropertiesService.getProperty( USERNAME );
-        String password = AppPropertiesService.getProperty( PASSWORD );
-
-        String POST_PARAMS = "username=" + username + "&password=" + password + "&lang=fr&grant_type=password&client_id=sphinxapiclient";
-        URL obj = new URL( tokenUrl );
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection( );
-        con.setRequestMethod( "POST" );
-        con.setRequestProperty( "Content-Type", "application/json;odata=verbose" );
-        con.setRequestProperty( "Authorization", "Basic Base64_encoded_clientId:clientSecret" );
-        con.setRequestProperty( "Accept", "application/x-www-form-urlencoded" );
-
-        // For POST only - START
-        con.setDoOutput( true );
-        OutputStream os = con.getOutputStream( );
-        os.write( POST_PARAMS.getBytes( ) );
-        os.flush( );
-        os.close( );
-        // For POST only - END
-
-        int responseCode = con.getResponseCode( );
-        System.out.println( "POST Response Code :: " + responseCode );
-
-        if ( responseCode == HttpURLConnection.HTTP_OK )
-        { // success
-            BufferedReader in = new BufferedReader( new InputStreamReader( con.getInputStream( ) ) );
-            String inputLine;
-            StringBuffer response = new StringBuffer( );
-
-            while ( ( inputLine = in.readLine( ) ) != null )
-            {
-                response.append( inputLine );
-            }
-            in.close( );
-
-            // print result
-            System.out.println( response.toString( ) );
-        }
-        else
+        try
         {
-            System.out.println( "POST request not worked" );
+            Ticket ticket = TicketHome.findByPrimaryKey( idTicket );
+            postTicketData( ticket );
+        } catch ( Exception e )
+        {
+            return Response.ok( "ko" ).build( );
         }
+
+        return Response.ok( "ok" ).build( );
     }
 
-    public static void main( String [ ] args ) throws Exception
+    public static String getTokenAccess( ) throws HttpAccessException
     {
-        getHttpCon( );
+        HttpAccess httpAccess = new HttpAccess( );
+        Map<String, String> headersRequest = new HashMap<String, String>( );
+        headersRequest.put( "Content-Type", "application/x-www-form-urlencoded" );
+        Map<String, String> params = new HashMap<String, String>( );
+        params.put( "username", USERNAME );
+        params.put( "password", PASSWORD );
+        params.put( "lang", "fr" );
+        params.put( "grant_type", "password" );
+        params.put( "client_id", "sphinxapiclient" );
+
+        String rawData = httpAccess.doPost( URL_TOKEN_SPHINX, params, null, null, headersRequest );
+        JsonObject dataJson = new JsonParser( ).parse( rawData ).getAsJsonObject( );
+        return dataJson.get( ACCESS_TOKEN ).getAsString( );
+    }
+
+    public void post( String endpoint, String json ) throws HttpAccessException
+    {
+        HttpAccess httpAccess = new HttpAccess( );
+        Map<String, String> headersRequest = new HashMap<String, String>( );
+        headersRequest.put( "Authorization", "bearer " + getTokenAccess( ) );
+        httpAccess.doPostJSON( API_URL + endpoint, json, headersRequest, null );
+    }
+
+    public void postTicketData( Ticket ticket ) throws HttpAccessException
+    {
+        JsonObject ticketJson = new JsonObject( );
+
+        ticketJson.addProperty( COLUMN_EMAIL, ticket.getEmail( ) );
+
+        String creationDate = new SimpleDateFormat( "dd/MM/yyyy" ).format( ticket.getDateCreate( ) );
+        ticketJson.addProperty( COLUMN_CREATION_DATE, creationDate );
+
+        if ( ticket.getCategoryDepth( 0 ) != null )
+        {
+            ticketJson.addProperty( COLUMN_CATEGORY_1, ticket.getCategoryDepth( 0 ).getLabel( ) );
+        }
+        if ( ticket.getCategoryDepth( 1 ) != null )
+        {
+            ticketJson.addProperty( COLUMN_CATEGORY_2, ticket.getCategoryDepth( 1 ).getLabel( ) );
+        }
+        if ( ticket.getCategoryDepth( 2 ) != null )
+        {
+            ticketJson.addProperty( COLUMN_CATEGORY_3, ticket.getCategoryDepth( 2 ).getLabel( ) );
+        }
+        if ( ticket.getCategoryDepth( 3 ) != null )
+        {
+            ticketJson.addProperty( COLUMN_CATEGORY_4, ticket.getCategoryDepth( 3 ).getLabel( ) );
+        }
+        if ( ticket.getChannel( ) != null )
+        {
+            ticketJson.addProperty( COLUMN_CHANNEL, ticket.getChannel( ).getLabel( ) );
+        }
+        if ( ticket.getAssigneeUnit( ) != null )
+        {
+            ticketJson.addProperty( COLUMN_ASSIGN_ENTITY, ticket.getAssigneeUnit( ).getName( ) );
+        }
+
+        if ( ticket.getDateClose( ) != null )
+        {
+            String closeDate = new SimpleDateFormat( "dd/MM/yyyy" ).format( ticket.getDateClose( ) );
+            ticketJson.addProperty( COLUMN_CLOSE_DATE, closeDate );
+
+            ticketJson.addProperty( COLUMN_DAYS_OPENED, ( int ) ( ticket.getDateClose( ).getTime( ) - ticket.getDateCreate( ).getTime( ) ) / ( 24 * 60 * 60 * 1000 ) );
+        }
+
+        JsonArray ticketsJson = new JsonArray( );
+        ticketsJson.add( ticketJson );
+
+        post( "/api/v4.0/survey/" + SURVEY + "/data", ticketsJson.toString( ) );
     }
 
 }
