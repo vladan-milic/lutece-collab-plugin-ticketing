@@ -63,6 +63,17 @@ public interface ITicketDAO
     void store( Ticket ticket, Plugin plugin );
 
     /**
+     * Update the record in the table
+     *
+     * @param ticket
+     *            the reference of the Ticket
+     * @param plugin
+     *            the Plugin
+     * @param updateDateUpdate update dateUpdate
+     */
+    void store( Ticket ticket, boolean updateDateUpdate, Plugin plugin );
+
+    /**
      * Delete a record from the table
      *
      * @param nKey

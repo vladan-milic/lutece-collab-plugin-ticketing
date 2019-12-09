@@ -290,6 +290,16 @@ public final class TicketDAO implements ITicketDAO
     @Override
     public void store( Ticket ticket, Plugin plugin )
     {
+        // store with update dateUpdate
+        store( ticket, true,plugin );
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public void store( Ticket ticket, boolean updateDateUpdate, Plugin plugin )
+    {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
         int nIndex = 1;
         daoUtil.setInt( nIndex++, ticket.getId( ) );
@@ -307,7 +317,10 @@ public final class TicketDAO implements ITicketDAO
         daoUtil.setInt( nIndex++, ticket.getTicketStatus( ) );
         daoUtil.setString( nIndex++, ticket.getTicketStatusText( ) );
 
-        ticket.setDateUpdate( new Timestamp( new java.util.Date( ).getTime( ) ) );
+        if (updateDateUpdate)
+        {
+            ticket.setDateUpdate( new Timestamp( new java.util.Date( ).getTime( ) ) );
+        }
         daoUtil.setTimestamp( nIndex++, ticket.getDateUpdate( ) );
         daoUtil.setTimestamp( nIndex++, ticket.getDateClose( ) );
         daoUtil.setInt( nIndex++, ticket.getPriority( ) );

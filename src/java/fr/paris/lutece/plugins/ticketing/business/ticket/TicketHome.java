@@ -98,6 +98,20 @@ public final class TicketHome
     }
 
     /**
+     * Update of the ticket which is specified in parameter
+     *
+     * @param ticket
+     *            The instance of the Ticket which contains the data to store
+     * @return The instance of the ticket which has been updated
+     */
+    public static Ticket update( Ticket ticket, boolean updateDateUpdate )
+    {
+        _dao.store( ticket, updateDateUpdate,_plugin );
+
+        return ticket;
+    }
+
+    /**
      * Remove the ticket and its generic attributes responses whose identifier is specified in parameter
      *
      * @param nKey
