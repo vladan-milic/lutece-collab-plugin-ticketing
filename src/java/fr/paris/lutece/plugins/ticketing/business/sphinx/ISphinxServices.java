@@ -1,6 +1,5 @@
 package fr.paris.lutece.plugins.ticketing.business.sphinx;
 
-import java.io.IOException;
 
 public interface ISphinxServices
 {
@@ -12,8 +11,6 @@ public interface ISphinxServices
      * update index with modelResponse
      *
      * @return message
-     * @throws IOException
-     *             IOException
      *
      */
     String mailingToSphinx( );
