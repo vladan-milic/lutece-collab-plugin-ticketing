@@ -146,6 +146,14 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
     @View( value = VIEW_MANAGE_CONFIGURATION, defaultView = true )
     public String getManageConfiguration( HttpServletRequest request )
     {
+        // bouton validation
+        if ( request.getParameter( "action_" + ACTION_MODIFIY_CONFIGURATION )!=null ) {
+            return doModifyConfiguration( request );
+        }
+        if ( request.getParameter( "action_" + ACTION_BUILD_WORKFLOW_RELATED_PROPERTIES )!=null ) {
+            return doBuildWorkflowRelatedProperties( request );
+        }
+
         Map<String, Object> model = getModel( );
 
         manageWorkflowProperties( model );
