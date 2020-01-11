@@ -62,7 +62,7 @@ import fr.paris.lutece.util.httpaccess.HttpAccessException;
 public class SphinxRest
 {
 
-    private static final String USERNAME_PROP        = "daemon.sphinxDaemon.unsername";
+    private static final String USERNAME_PROP        = "daemon.sphinxDaemon.username";
     private static final String PASSWORD_PROP        = "daemon.sphinxDaemon.password";
     private static final String URL_TOKEN            = "daemon.sphinxDaemon.token.url";
     private static final String URL_TOKEN_SPHINX     = AppPropertiesService.getProperty( URL_TOKEN );
