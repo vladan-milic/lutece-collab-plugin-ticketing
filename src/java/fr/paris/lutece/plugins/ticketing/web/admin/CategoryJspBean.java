@@ -379,9 +379,9 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
 
         // Remove children
         treeCategories.getAllChildren( treeCategories.findNodeById( nId ), true ).stream( )
-                .forEach( category -> removeCategory( category.getId( ) ) );
+                .forEach( category -> TicketCategoryService.getInstance( ).removeCategory( category.getId( ) ) );
 
-        removeCategory( nId );
+        TicketCategoryService.getInstance( ).removeCategory( nId );
         addInfo( INFO_CATEGORY_REMOVED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_CATEGORIES );
