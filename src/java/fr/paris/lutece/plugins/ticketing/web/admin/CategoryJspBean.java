@@ -191,6 +191,7 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
     // Session variable to store working values
     private TicketCategory _category;
     private TicketCategoryType _categoryType;
+    String [ ] _selectedForms = null;
 
     // Export categories
     private static final String CONTENT_TYPE_CSV = "text/csv";
@@ -214,51 +215,56 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
 
         List<Integer> restrictedCategoriesId = null;
 
-        String [ ] selectedForms = request.getParameterValues( "selectedForms" );
+        _selectedForms = request.getParameterValues( "selectedForms" );
+
+        restrictedCategoriesId = getRestrictedCategoriesId( _selectedForms );
+
+        model.put( MARK_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( restrictedCategoriesId ) );
+        model.put( MARK_SELECTED_FORMS, _selectedForms );
+        model.put( MARK_FORMCATEGORY_LIST, FormCategoryHome.findAll( ) );
+
+        return getPage( PROPERTY_PAGE_TITLE_MANAGE_CATEGORYS, TEMPLATE_MANAGE_CATEGORIES, model );
+    }
+
+    private List<Integer> getRestrictedCategoriesId( String [ ] selectedForms ) {
+        List<Integer> restrictedCategoriesId = new ArrayList<>( );
+
         if ( selectedForms != null )
         {
-            restrictedCategoriesId = new ArrayList<>( );
             for ( String formId : selectedForms )
             {
                 if ( "all".equals( formId ) )
                 {
                     restrictedCategoriesId = null;
                     break;
-                }
-                else
-                    if ( "none".equals( formId ) )
-                    {
-                        // We get all categories of first depth
-                        List<TicketCategory> firstDepths = TicketCategoryService.getInstance( ).getCategoriesTree( ).getRootElements( );
-                        // We get all categories restricted in forms
-                        List<FormCategory> allCategoriesRestrictedInForms = FormCategoryHome.findAll( );
+                } else if ( "none".equals( formId ) )
+                {
+                    // We get all categories of first depth
+                    List<TicketCategory> firstDepths = TicketCategoryService.getInstance( ).getCategoriesTree( ).getRootElements( );
+                    // We get all categories restricted in forms
+                    List<FormCategory> allCategoriesRestrictedInForms = FormCategoryHome.findAll( );
 
-                        // We only add categories which are not in forms.
-                        List<TicketCategory> restrictedCategories = new ArrayList<>( );
-                        for ( TicketCategory ticketCategory : firstDepths )
+                    // We only add categories which are not in forms.
+                    List<TicketCategory> restrictedCategories = new ArrayList<>( );
+                    for ( TicketCategory ticketCategory : firstDepths )
+                    {
+                        if ( !allCategoriesRestrictedInForms.stream( ).anyMatch( formCategory -> formCategory.getIdCategory( ) == ticketCategory.getId( ) ) )
                         {
-                            if ( !allCategoriesRestrictedInForms.stream( ).anyMatch( formCategory -> formCategory.getIdCategory( ) == ticketCategory.getId( ) ) )
-                            {
-                                restrictedCategories.add( ticketCategory );
-                            }
+                            restrictedCategories.add( ticketCategory );
                         }
+                    }
 
-                        restrictedCategoriesId.addAll( restrictedCategories.stream( ).map( category -> category.getId( ) ).collect( Collectors.toList( ) ) );
-                    }
-                    else
-                    {
-                        List<FormCategory> restrictedCategories = FormCategoryHome.findByForm( Integer.parseInt( formId ) );
-                        restrictedCategoriesId.addAll( restrictedCategories.stream( ).map( category -> category.getIdCategory( ) )
-                                .collect( Collectors.toList( ) ) );
-                    }
+                    restrictedCategoriesId.addAll( restrictedCategories.stream( ).map( category -> category.getId( ) ).collect( Collectors.toList( ) ) );
+                } else
+                {
+                    List<FormCategory> restrictedCategories = FormCategoryHome.findByForm( Integer.parseInt( formId ) );
+                    restrictedCategoriesId.addAll( restrictedCategories.stream( ).map( category -> category.getIdCategory( ) )
+                                                           .collect( Collectors.toList( ) ) );
+                }
             }
         }
 
-        model.put( MARK_CATEGORIES_TREE, TicketCategoryService.getInstance( ).getCategoriesTree( restrictedCategoriesId ) );
-        model.put( MARK_SELECTED_FORMS, selectedForms );
-        model.put( MARK_FORMCATEGORY_LIST, FormCategoryHome.findAll( ) );
-
-        return getPage( PROPERTY_PAGE_TITLE_MANAGE_CATEGORYS, TEMPLATE_MANAGE_CATEGORIES, model );
+        return restrictedCategoriesId;
     }
 
     /**
@@ -816,9 +822,10 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
     @Action( ACTION_EXPORT_CATEGORIES )
     public String exportCategories( HttpServletRequest request )
     {
+        List<Integer> restrictedCategoriesId = getRestrictedCategoriesId( _selectedForms );
 
-        // get all categories
-        TicketCategoryTree categoriesTree = TicketCategoryService.getInstance( ).getCategoriesTree( null );
+        // get all categories (restricted)
+        TicketCategoryTree categoriesTree = TicketCategoryService.getInstance( ).getCategoriesTree( restrictedCategoriesId );
         if ( categoriesTree != null )
         {
             try
@@ -849,7 +856,8 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
                         // get leaves from outer to inner
                         for ( int i = nMaxDepthNumber; i > 0; i-- )
                         {
-                            List<TicketCategory> listNodesOfDepth = categoriesTree.getListNodesOfDepth( categoriesTree.findDepthByDepthNumber( i ) );
+                            //List<TicketCategory> listNodesOfDepth = categoriesTree.getListNodesOfDepth( categoriesTree.findDepthByDepthNumber( i ) );
+                            List<TicketCategory> listNodesOfDepth = getListNodesOfDepth( categoriesTree.getRootElements( ), i );
                             // get leaf attributes and parents to generate a line to export
                             for ( TicketCategory ticketCategory : listNodesOfDepth ) {
                                 // Check if level has children to get only leaves not previously seen
@@ -893,6 +901,25 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
 
 
         return redirectView( request, VIEW_MANAGE_CATEGORIES );
+    }
+
+    private List<TicketCategory> getListNodesOfDepth( List<TicketCategory> rootElements, int i )
+    {
+        List<TicketCategory> listNodes = new ArrayList<>( );
+
+        for ( TicketCategory ticketCategory : rootElements ) {
+            if (ticketCategory.getDepth().getDepthNumber() == i ) {
+                listNodes.add( ticketCategory );
+            } else {
+                List<TicketCategory> leaves = ticketCategory.getLeaves( );
+                for ( TicketCategory leave : leaves ) {
+                    if ( leave.getDepth().getDepthNumber() == i ) {
+                        listNodes.add( leave );
+                    }
+                }
+            }
+        }
+        return listNodes;
     }
 
     private void insertParentLabel( ArrayList<String> listLine, TicketCategory ticketCategory )
