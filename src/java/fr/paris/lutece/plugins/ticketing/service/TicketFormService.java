@@ -278,9 +278,8 @@ public class TicketFormService implements Serializable {
 			}
 		}
 
-		Ticket ticketFromSession = getTicketFromSession(request.getSession());
-
-		if (ticketFromSession != null) {
+		if (request != null) {
+			Ticket ticketFromSession = getTicketFromSession(request.getSession());
 			if (ticketFromSession != null && ticketFromSession.getListResponse() != null) {
 				for (Response reponse : ticketFromSession.getListResponse()) {
 					for (Field field : entry.getFields()) {
@@ -359,8 +358,8 @@ public class TicketFormService implements Serializable {
 	}
 
 	/**
-	 * @param ticket
-	 * @param entry
+	 * @param ticket the ticket
+	 * @param entry the entry
 	 * @return list of Response for the given entry
 	 */
 	private static List<Response> getEntryListResponse(Ticket ticket, Entry entry) {
