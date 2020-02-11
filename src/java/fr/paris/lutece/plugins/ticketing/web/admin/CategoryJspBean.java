@@ -226,6 +226,11 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_CATEGORYS, TEMPLATE_MANAGE_CATEGORIES, model );
     }
 
+    /**
+     * Get list filter categories
+     * @param selectedForms
+     * @return list of categories to filter (null if "all" or no filter found)
+     */
     private List<Integer> getRestrictedCategoriesId( String [ ] selectedForms ) {
         List<Integer> restrictedCategoriesId = new ArrayList<>( );
 
@@ -262,6 +267,10 @@ public class CategoryJspBean extends ManageAdminTicketingJspBean
                                                            .collect( Collectors.toList( ) ) );
                 }
             }
+        }
+        else
+        {
+            restrictedCategoriesId = null;
         }
 
         return restrictedCategoriesId;
