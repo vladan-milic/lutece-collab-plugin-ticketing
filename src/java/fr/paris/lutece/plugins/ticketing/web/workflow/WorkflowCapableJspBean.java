@@ -47,6 +47,7 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerLockObtainFailedException;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -665,9 +666,15 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 TicketIndexer ticketIndexer = new TicketIndexer( );
                 ticketIndexer.indexTicket( ticket );
             }
+            catch ( TicketIndexerLockObtainFailedException ticketIndexerLockObtainFailedException )
+            {
+                AppLogService.error( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK_WKFLOW_JSPBEAN );
+
+                // The indexation of the Ticket fail, we will store the Ticket in the table for the daemon
+                IndexerActionHome.create( TicketIndexerActionUtil.createIndexerActionFromTicket( ticket ) );
+            }
             catch( TicketIndexerException ticketIndexerException )
             {
-                // addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
                 AppLogService.error( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, ticketIndexerException );
 
                 // The indexation of the Ticket fail, we will store the Ticket in the table for the daemon

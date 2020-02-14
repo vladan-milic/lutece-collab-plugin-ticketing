@@ -40,6 +40,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerLockObtainFailedException;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Response;
@@ -231,9 +232,15 @@ public class TicketViewJspBean extends WorkflowCapableJspBean
                 TicketIndexer ticketIndexer = new TicketIndexer( );
                 ticketIndexer.indexTicket( ticket );
             }
+            catch ( TicketIndexerLockObtainFailedException ticketIndexerLockObtainFailedException )
+            {
+                AppLogService.error( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK_TICKET_VIEW );
+
+                // The indexation of the Ticket fail, we will store the Ticket in the table for the daemon
+                IndexerActionHome.create( TicketIndexerActionUtil.createIndexerActionFromTicket( ticket ) );
+            }
             catch( TicketIndexerException ticketIndexerException )
             {
-                // addError( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, getLocale( ) );
                 AppLogService.error( TicketingConstants.ERROR_INDEX_TICKET_FAILED_BACK, ticketIndexerException );
 
                 // The indexation of the Ticket fail, we will store the Ticket in the table for the daemon

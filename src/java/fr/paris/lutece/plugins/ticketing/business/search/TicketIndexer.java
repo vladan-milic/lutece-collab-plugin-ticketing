@@ -80,6 +80,8 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.url.UrlItem;
 
+import javax.validation.constraints.Null;
+
 /**
  * Ticket Indexer
  *
@@ -480,7 +482,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
      * {@inheritDoc}
      */
     @Override
-    public void indexTicket( Ticket ticket ) throws TicketIndexerException
+    public void indexTicket( Ticket ticket ) throws TicketIndexerException, TicketIndexerLockObtainFailedException
     {
         IndexWriter indexWriter = null;
         try
@@ -490,7 +492,7 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         } catch ( LockObtainFailedException e )
         {
             // When a writer is already writing in the index directory
-            throw new TicketIndexerException( );
+            throw new TicketIndexerLockObtainFailedException( );
         } catch ( IOException | TicketIndexerException e )
         {
             AppLogService.error( "Error during the indexation of the ticket : " + e.getMessage( ), e );

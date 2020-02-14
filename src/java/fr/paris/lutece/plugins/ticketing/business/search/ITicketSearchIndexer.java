@@ -76,7 +76,7 @@ public interface ITicketSearchIndexer
      * @throws TicketIndexerException
      *             TicketIndexerException
      */
-    void indexTicket( Ticket ticket ) throws TicketIndexerException;
+    void indexTicket( Ticket ticket ) throws TicketIndexerException, TicketIndexerLockObtainFailedException;
 
     /**
      * Returns the indexer service name
