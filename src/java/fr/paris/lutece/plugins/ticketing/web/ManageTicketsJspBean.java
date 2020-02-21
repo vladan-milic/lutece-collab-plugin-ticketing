@@ -394,10 +394,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             AppLogService.error( "Error while parsing query " + strQuery, e );
             addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
+            return redirectView( request, VIEW_MANAGE_TICKETS );
         }
         catch( IOException e )
         {
             AppLogService.error( "Error while creating temporary file ", e );
+            return redirectView( request, VIEW_MANAGE_TICKETS );
         }
 
         return null;
