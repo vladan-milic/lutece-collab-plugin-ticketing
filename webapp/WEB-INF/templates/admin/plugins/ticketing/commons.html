@@ -221,3 +221,148 @@
       </#if>
     </#if>
 </#macro>
+
+<#macro paginationAdminTop paginator combo=0 form=1 nb_items_per_page=nb_items_per_page showcount=1 showall=0>
+	<div class="pagination-start">
+        <nav aria-label="navigation">
+            <ul class="pager-start">
+                <li class="previous-pagination <#if (paginator.pageCurrent == 1) >disabled</#if>"><a href="${paginator.previousPageLink?xhtml}" title="Pr&eacute;c&eacute;dent"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+                <p class="count-start">Page <span class="">${paginator.pageCurrent}</span> sur <span class="">${paginator.pagesCount}</span></p>
+                <li class="next-pagination <#if (paginator.pageCurrent == paginator.pagesCount) >disabled</#if>"><a href="${paginator.nextPageLink?xhtml}" title="Suivant"><i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+            </ul>
+        </nav>
+    </div>
+</#macro>
+
+
+
+
+<#macro paginationAdmin paginator combo=0 form=1 nb_items_per_page=nb_items_per_page showcount=1 showall=0>
+	<div class="pagination-bloc">
+            <div class="text-center">
+        <#if (paginator.pagesCount > 1) >
+            <@paginationPageLinks paginator=paginator />
+        </#if>
+    </div>
+     </div>
+        <div class="pull-right">
+            <#if form == 1 >
+                <form method="post" class="form-inline">
+            </#if>
+            <@paginationItemCount paginator=paginator combo=combo nb_items_per_page=nb_items_per_page showcount=showcount showall=showall/>
+            <#if form == 1 >
+                </form>
+            </#if>
+        </div>
+    
+ </#macro>
+
+<#macro paginationPageLinks paginator >
+<#assign nbLinkPagesToDisplay = 10 />
+<#assign offsetPrev = nbLinkPagesToDisplay / 2 />
+<#assign offsetNext = nbLinkPagesToDisplay / 2 />
+<#if ( paginator.pageCurrent <= nbLinkPagesToDisplay - offsetPrev )>
+    <#assign offsetPrev = paginator.pageCurrent - 1 />
+    <#assign offsetNext = nbLinkPagesToDisplay - offsetPrev />
+<#elseif ( paginator.pageCurrent + offsetNext > paginator.pagesCount )>
+    <#assign offsetNext = paginator.pagesCount - paginator.pageCurrent />
+    <#assign offsetPrev = nbLinkPagesToDisplay - offsetNext />
+</#if>
+<ul class="pagination-footer">
+<#if ( paginator.pageCurrent - offsetPrev > 1 )>
+    <li>
+        <a href="${paginator.firstPageLink?xhtml}">
+            ${paginator.labelFirst}
+        </a>
+    </li>
+</#if>
+<#if (paginator.pageCurrent > 1) >
+    <li class="previous">
+        <a href="${paginator.previousPageLink?xhtml}">
+            ${paginator.labelPrevious}
+        </a>
+    </li>
+<#else>
+    <li class="disabled">
+        <a href="${paginator.firstPageLink?xhtml}">${paginator.labelPrevious}</a>
+    </li>
+</#if>
+<#if ( paginator.pageCurrent - offsetPrev > 1 )>
+    <li>
+        <a href="${(paginator.pagesLinks?first).url?xhtml}"><strong>...</strong></a>
+    </li>
+</#if>
+<#list paginator.pagesLinks as link>
+    <#if ( link.index == paginator.pageCurrent )>
+        <li class="active">
+            <a href="${link.url?xhtml}">${link.name}</a>
+        </li>
+    <#else>
+        <li>
+            <a href="${link.url?xhtml}">${link.name}</a>
+        </li>
+    </#if>
+</#list>
+<#if ( paginator.pageCurrent + offsetNext < paginator.pagesCount )>
+    <li>
+        <a href="${(paginator.pagesLinks?last).url?xhtml}"><strong>...</strong></a>
+    </li>
+</#if>
+<#if (paginator.pageCurrent < paginator.pagesCount) >
+    <li>
+        <a href="${paginator.nextPageLink?xhtml}">
+            ${paginator.labelNext}
+        </a>
+    </li>
+    <#if ( paginator.pageCurrent + offsetNext < paginator.pagesCount )>
+        <li>
+            <a href="${paginator.lastPageLink?xhtml}">
+                ${paginator.labelLast}
+            </a>
+        </li>
+    </#if>
+<#else>
+    <li class="disabled">
+        <a href="${paginator.lastPageLink?xhtml}">${paginator.labelNext}</a>
+    </li>
+</#if>
+</ul>
+ </#macro>
+
+<#macro paginationCombo paginator nb_items_per_page=nb_items_per_page showall=0>
+    <label>${paginator.labelItemCountPerPage}</label>
+  <div class="input-group">
+      <select data-max-item="${paginator.itemsCount}" class="input-xs" name="${paginator.itemsPerPageParameterName}" id="${paginator.itemsPerPageParameterName}" title="${paginator.labelItemCountPerPage}">
+        <#list [ "10" , "20" , "50" , "100" ] as nb>
+            <#if nb_items_per_page = nb >
+                <option selected="selected" value="${nb}">${nb}</option>
+            <#else>
+                <option value="${nb}">${nb}</option>
+            </#if>
+        </#list>
+        <#if showall ==1>
+            <#if paginator.itemsCount &gt; 100 >
+                <option <#if nb_items_per_page?number = paginator.itemsCount?number >selected="selected"</#if> value="${paginator.itemsCount}" class="${nb_items_per_page}">#i18n{portal.util.labelAll}</option>
+            </#if>
+        </#if>
+      </select>
+      <span class="input-group-btn">
+        <button class="btn btn-default btn-xs" type="submit" title="#i18n{portal.util.labelRefresh}">
+            <i class="fa fa-repeat"></i>
+        </button>
+    </span>
+</div>
+</#macro>
+
+<#macro paginationItemCount paginator combo=0 nb_items_per_page=nb_items_per_page showcount=1 showall=0>
+<#-- Display combo -->
+<#if combo == 1 >
+  <@paginationCombo paginator=paginator nb_items_per_page=nb_items_per_page showall=showall />
+</#if>
+<#-- Display item count -->
+<#if showcount == 1 >
+<span class="showcount font-weight-bold">
+    <#if (paginator.labelItemCount)?? && paginator.labelItemCount?has_content>&nbsp;-&nbsp;${paginator.labelItemCount} : </#if> ${paginator.itemsCount}
+</span>
+</#if>
+</#macro>

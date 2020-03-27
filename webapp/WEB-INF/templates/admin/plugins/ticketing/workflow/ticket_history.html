@@ -1,7 +1,6 @@
 <#include "/admin/plugins/ticketing/include/user_info.html"/>
 <#if history_information_list?has_content>
-  <div id="ticketing-history-panel">
-    <div class="panel">
+  <div id="collapsegru" role="tablist" aria-multiselectable="true">
       <#assign defaultUserFrontId=5>
       <#list history_information_list as history_information>
 		  <#assign lastAction = history_information?index == 0>
@@ -16,63 +15,36 @@
 		  	</#if>
 		  </#list>
 		  <#assign lineOpened = containsComment || containsMessage || lastAction>
-          <p class="history-line-over" onclick="open_close_history(${history_information.resource_history.id?string})">
-	          <span id="icon-${history_information.resource_history.id?string}" class="glyphicon <#if lineOpened>glyphicon-minus<#else>glyphicon-plus</#if>" aria-hidden="true"></span>
-	          <strong class="text-gru">${history_information.resource_history.creationDate!'Date missing'}</strong> &nbsp;
-	          <strong>${history_information.resource_history.action.description}</strong>
-	          
-	          <#if resource_history_channel[history_information.resource_history.id?string]?has_content>
-	            <#assign msgTooltip="#i18n{ticketing.view_ticket_history.channel.used}">
-	            <span title="${msgTooltip} ${resource_history_channel[history_information.resource_history.id?string].label}" style="float:right;margin-top:3px;" class="${resource_history_channel[history_information.resource_history.id?string].iconFont}"></span>
-	          </#if>
-       	   </p>
-        <ul id="message-${history_information.resource_history.id?string}" class="timeline"<#if !lineOpened>style="display: none"</#if>>
-          <li>
-            <#if history_information.admin_user_history?exists>
-              <#if adminAvatar>
-                <#if history_information.admin_user_history.userId?string != "${defaultUserFrontId}">
-                <#assign user=user_factory.create(history_information.admin_user_history.userId)!>
-                 <#if user?has_content>
-                    <img class="info_user fa direct-chat-img" data-key-id="${user.idUser}" data-container="body" data-toggle="popover" data-placement="top"
-                    	src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}">
-                  <@info_user user/>
-                  </#if>
-                <#else>
-                  <img class="fa direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${history_information.admin_user_history.userId}" alt="Avatar" title="Avatar">
-                </#if>
-              <#else>
-                <i class="fa fa-user bg-gru-cat2"></i>
-              </#if>
-            <#else>
-              <i class="fa fa-user-times bg-gru-cat2"></i>
-            </#if>
-            <div class="timeline-item">
-              <h4 class="timeline-header">
-                <#if history_information.admin_user_history?exists>
-                  <#if history_information.admin_user_history.userId?string != "${defaultUserFrontId}">
-                  <#assign user=user_factory.create(history_information.admin_user_history.userId)!>
-                    <#if user?has_content>
-                      <em  class="info_user" data-key-id="${user.idUser}" data-container="body" data-toggle="popover" data-placement="top">
-	                    &nbsp; ${history_information.admin_user_history.firstName} ${history_information.admin_user_history.lastName}</em>
-	                    <@info_user user/>
-	                </#if>
-                  <#else>
-                      <em>&nbsp; ${history_information.admin_user_history.firstName} ${history_information.admin_user_history.lastName}</em>
-                  </#if>
-                <#else>
-                  &nbsp;#i18n{ticketing.view_ticket_history.admin_user_undefined}
-                </#if>
-              </h4>
-              <div class="timeline-body">
-                <#list history_information.task_information_list as task_information>
-                  ${task_information}
-                </#list>
+		  <div class="panel-default d-flex">
+		  <a class="btn-collapse <#if !lineOpened>collapsed</#if>" data-toggle="collapse" data-parent="#collapsegru" href="#answer_${history_information?index}" aria-expanded="${lineOpened?c}" aria-controls="answer_${history_information?index}">
+                            </a>
+        <div class="panelbox">
+        <div class="panel-body head d-flex">
+	          <button class="width-fix tag-detail-light">${history_information.resource_history.action.description}</button>
+              <div class="detail-part">
+                  <!-- <h3>DPE - Division 01/02/03/04</h3> -->
+                  <span>
+                  <#if history_information.admin_user_history?exists && history_information.admin_user_history.userId?string != "${defaultUserFrontId}">
+	                <#assign user=user_factory.create(history_information.admin_user_history.userId)!>
+	                 <#if user?has_content>${user.firstName}  ${user.lastName}</#if>
+	           		 </#if>
+           		 </span>
               </div>
-            </div>
-          </li>
-        </ul>
+              <div class="detail-date">${history_information.resource_history.creationDate!'Date missing'}</div>
+	          
+	      </div>
+          <div id="answer_${history_information?index}" class="panel-collapse collapse <#if lineOpened>in</#if>" role="tabpanel" aria-labelledby="answer_${history_information?index}" aria-expanded="${lineOpened?c}">
+                <#list history_information.task_information_list as task_information>
+                	<#if task_information?? && task_information!="">
+	                	<div class="message">
+	                  		${task_information}
+	                  	</div>
+                  	</#if>
+                </#list>
+          </div>
+        </div>
+        </div>
       </#list>
-    </div>
   </div>
 
 <#else>

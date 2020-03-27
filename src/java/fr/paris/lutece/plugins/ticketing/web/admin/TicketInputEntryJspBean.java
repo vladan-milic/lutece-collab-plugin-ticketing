@@ -127,7 +127,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Get the HTML code to create an entry
-     * 
+     *
      * @param request
      *            The request
      * @return The HTML code to display or the next URL to redirect to
@@ -182,7 +182,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Do create an entry
-     * 
+     *
      * @param request
      *            the request
      * @return The HTML code to display or the next URL to redirect to
@@ -223,7 +223,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
             if ( StringUtils.isEmpty( strEntryCode ) )
             {
                 String [ ] tabErr = new String [ ] {
-                    I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) )
+                        I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) )
                 };
 
                 return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabErr, AdminMessage.TYPE_STOP ) );
@@ -256,7 +256,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Gets the entry modification page
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The entry modification page
@@ -317,7 +317,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Perform the entry modification
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The URL to go after performing the action
@@ -348,7 +348,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
                 if ( StringUtils.isEmpty( strEntryCode ) )
                 {
                     String [ ] tabErr = new String [ ] {
-                        I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) )
+                            I18nService.getLocalizedString( FIELD_ENTRY_CODE, getLocale( ) )
                     };
 
                     return redirect( request, AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabErr, AdminMessage.TYPE_STOP ) );
@@ -393,7 +393,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Gets the confirmation page of delete entry
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return the confirmation page of delete entry
@@ -429,7 +429,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Perform the entry removal
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The URL to go after performing the action
@@ -454,7 +454,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
             {
                 String strCause = AdminMessageService.getFormattedList( listErrors, getLocale( ) );
                 Object [ ] args = {
-                    strCause
+                        strCause
                 };
 
                 return AdminMessageService.getMessageUrl( request, MESSAGE_CANT_REMOVE_ENTRY, args, AdminMessage.TYPE_STOP );
@@ -471,7 +471,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Copy the entry whose key is specified in the HTTP request
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The URL to go after performing the action
@@ -493,7 +493,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
             Entry entry = EntryHome.findByPrimaryKey( nIdEntry );
 
             Object [ ] tabEntryTileCopy = {
-                entry.getTitle( )
+                    entry.getTitle( )
             };
             String strTitleCopyEntry = I18nService.getLocalizedString( PROPERTY_COPY_ENTRY_TITLE, tabEntryTileCopy, getLocale( ) );
 
@@ -526,7 +526,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Delete the association between a field and and regular expression
-     * 
+     *
      * @param request
      *            the HTTP Request
      * @return The URL to go after performing the action
@@ -554,7 +554,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Insert an association between a field and a regular expression
-     * 
+     *
      * @param request
      *            the HTTP Request
      * @return The URL to go after performing the action
@@ -583,7 +583,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Get the URL to modify an entry
-     * 
+     *
      * @param request
      *            The request
      * @param nIdEntry
@@ -601,7 +601,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
     /**
      * Get the next idResource of type TICKET_INPUT
-     * 
+     *
      * @return The next id resource of type TICKET_INPUT
      */
     public int getNextIdInput( )
@@ -622,7 +622,7 @@ public class TicketInputEntryJspBean extends MVCAdminJspBean
 
         try
         {
-            nNextIdInput = (Integer) Collections.max( listIdInput ) + 1;
+            nNextIdInput = Collections.max( listIdInput ) + 1;
         }
         catch( NoSuchElementException e )
         {

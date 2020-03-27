@@ -80,8 +80,6 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.service.workflow.WorkflowService;
 import fr.paris.lutece.util.url.UrlItem;
 
-import javax.validation.constraints.Null;
-
 /**
  * Ticket Indexer
  *
@@ -266,6 +264,12 @@ public class TicketIndexer implements SearchIndexer, ITicketSearchIndexer
         doc.add( new LongPoint( TicketSearchItemConstant.FIELD_DATE_CREATION, longCreationDate ) );
         doc.add( new NumericDocValuesField( TicketSearchItemConstant.FIELD_DATE_CREATION, longCreationDate ) );
         doc.add( new StoredField( TicketSearchItemConstant.FIELD_DATE_CREATION, longCreationDate ) );
+
+        // --- ticket date creation
+        Long longUpdateDate = ticket.getDateUpdate( ) == null ? 0 : ticket.getDateUpdate( ).getTime( );
+        doc.add( new LongPoint( TicketSearchItemConstant.FIELD_DATE_UPDATE, longUpdateDate ) );
+        doc.add( new NumericDocValuesField( TicketSearchItemConstant.FIELD_DATE_UPDATE, longUpdateDate ) );
+        doc.add( new StoredField( TicketSearchItemConstant.FIELD_DATE_UPDATE, longUpdateDate ) );
 
         // --- ticket date close
         Long longCloseDate = ticket.getDateClose( ) == null ? 0 : ticket.getDateClose( ).getTime( );

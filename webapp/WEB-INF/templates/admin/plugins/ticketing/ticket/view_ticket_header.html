@@ -1,171 +1,82 @@
 <#include "/admin/plugins/ticketing/include/user_info.html"/>
 <#macro ticketHeader tab ticket navigation_next=-1 navigation_previous=-1>
 <div class="gru-wrapper">
-<div id="customer-panel" class="row ticket-head bg-gru-light">
-<div class="col-sm-offset-1 col-sm-7">
-<div class="row ticket-contact-block">
-   <div class="col-xs-8 col-sm-4">
-      <h2>${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}</h2>
-      <div class="visible-xs">
-		 <#if ticket.email?has_content && ticket.email!="">
-         <p><i class="fa fa-at"></i> ${ticket.email}</p>
-		 </#if>
-         <#if ticket.fixedPhoneNumber?has_content>
-         <p>
-            <i class="fa fa-phone" ></i>
-            <#if ticket.fixedPhoneNumber?length == 10>
-            ${ticket.fixedPhoneNumber[0..1]} ${ticket.fixedPhoneNumber[2..3]} ${ticket.fixedPhoneNumber[4..5]} ${ticket.fixedPhoneNumber[6..7]} ${ticket.fixedPhoneNumber[8..9]}
-            <#else>
-            ${ticket.fixedPhoneNumber!}
-            </#if>
-         </p>
-         </#if>
-         <#if ticket.mobilePhoneNumber?has_content>
-         <p>
-            <i class="fa fa-mobile" ></i>
-            <#if ticket.mobilePhoneNumber?length == 10>
-            ${ticket.mobilePhoneNumber[0..1]} ${ticket.mobilePhoneNumber[2..3]} ${ticket.mobilePhoneNumber[4..5]} ${ticket.mobilePhoneNumber[6..7]} ${ticket.mobilePhoneNumber[8..9]}
-            <#else>
-            ${ticket.mobilePhoneNumber!}
-            </#if>
-         </p>
-         </#if>
-      </div>
+            <div class="container">
+                <div class="detail-header row">
+                  
+                  <#if next_ticket ?? || previous_ticket ?? >
+                	<#if previous_ticket ??   >
+                        <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${previous_ticket}" title="#i18n{ticketing.navigation.ticket.view.details.previous.title}" class="previous btn-nav">
+                            <i class="fa fa-chevron-left"></i> #i18n{ticketing.navigation.ticket.view.details.previous}
+                        </a>
+                    </#if>
+                    <#if next_ticket ??  >
+                        <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${next_ticket}" title="#i18n{ticketing.navigation.ticket.view.details.next.title}" class="next btn-nav">
+                            #i18n{ticketing.navigation.ticket.view.details.next} <i class="fa fa-chevron-right"></i>
+                        </a>
+                     </#if>
+                     </#if>   
+                        <a href="jsp/admin/plugins/ticketing/ManageTickets.jsp?plugin_name=ticketing#ticket_row_${ticket.id}" class="retour btn-nav">
+                            <i class="fa fa-chevron-left"></i> #i18n{ticketing.view_ticket_header.labelReturn}
+                        </a>
 
-   </div>
-   
-   <div class="hidden-xs col-sm-8 ticket-contact-block">
-   <div class=" hidden-xs no-padding wordwrap-ticket-comment <#if ticket.ticketAddress?has_content> col-sm-7 <#else> col-sm-12 </#if>">
-      
-	  <#if ticket.email?has_content && ticket.email!="">
-      <h4><i class="fa fa-at"></i> ${ticket.email}</h4>
-      </#if>
-      <#if ticket.fixedPhoneNumber?has_content>
-      <h4>
-         <i class="fa fa-phone" ></i>
-         <#if ticket.fixedPhoneNumber?length == 10>
-         ${ticket.fixedPhoneNumber[0..1]} ${ticket.fixedPhoneNumber[2..3]} ${ticket.fixedPhoneNumber[4..5]} ${ticket.fixedPhoneNumber[6..7]} ${ticket.fixedPhoneNumber[8..9]}
-         <#else>
-         ${ticket.fixedPhoneNumber!}
-         </#if>
-      </h4>
-      </#if>
-      <#if ticket.mobilePhoneNumber?has_content>
-      <h4>
-         <i class="fa fa-mobile" ></i>
-         <#if ticket.mobilePhoneNumber?length == 10>
-         ${ticket.mobilePhoneNumber[0..1]} ${ticket.mobilePhoneNumber[2..3]} ${ticket.mobilePhoneNumber[4..5]} ${ticket.mobilePhoneNumber[6..7]} ${ticket.mobilePhoneNumber[8..9]}
-         <#else>
-         ${ticket.mobilePhoneNumber!}
-         </#if>
-      </h4>
-      </#if>
-      <!-- FIXME -->
-      <!--
-         <p id="info">Pour me contacter privil&eacute;gier le mail</p>
-         -->
+                   
+                    <div class="bloc-detail col-sm-6 col-md-6">
+                        <p><span class="font-weight-bold">R&eacute;f&eacute;rence</span> ${ticket.reference!}</p>
+                        <p>${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}</p>
+                        <#if ticket.email?has_content && ticket.email!="">
+				         <p>${ticket.email}</p>
+						</#if>
+						<#if ticket.fixedPhoneNumber?has_content || ticket.mobilePhoneNumber?has_content>
+						 <p>
+						 	<#if ticket.mobilePhoneNumber?has_content>
+						         <#if ticket.mobilePhoneNumber?length == 10>
+						         ${ticket.mobilePhoneNumber[0..1]} ${ticket.mobilePhoneNumber[2..3]} ${ticket.mobilePhoneNumber[4..5]} ${ticket.mobilePhoneNumber[6..7]} ${ticket.mobilePhoneNumber[8..9]}
+						         <#else>
+						         ${ticket.mobilePhoneNumber!}
+						         </#if>
+						         .
+						    </#if>
+	                        <#if ticket.fixedPhoneNumber?has_content>
+						         <#if ticket.fixedPhoneNumber?length == 10>
+						         ${ticket.fixedPhoneNumber[0..1]} ${ticket.fixedPhoneNumber[2..3]} ${ticket.fixedPhoneNumber[4..5]} ${ticket.fixedPhoneNumber[6..7]} ${ticket.fixedPhoneNumber[8..9]}
+						         <#else>
+						         ${ticket.fixedPhoneNumber!}
+						         </#if>
+						    </#if>
+						     </p>
+						  </#if>
+                        <#if ticket.ticketAddress?has_content>
+							<p>
+						         <#if ticket.ticketAddress.address?has_content>
+						         ${ticket.ticketAddress.address!''}
+						         </#if>
+						         <#if ticket.ticketAddress.addressDetail?has_content>
+						         ${ticket.ticketAddress.addressDetail!''}
+						         </#if>
+						         <#if ticket.ticketAddress.postalCode?has_content>
+						         ${ticket.ticketAddress.postalCode!''}
+						         </#if>
+						         <#if ticket.ticketAddress.city?has_content>
+						         ${ticket.ticketAddress.city!''}
+						         </#if>
+							</p>
+						</#if>
+                      
+                    </div>
+                    <div class="bloc-detail col-sm-6 col-md-6">
+                        <#if ticket.state?? ><p><span class="font-weight-bold">Statut </span>${ticket.state.name}</p></#if>
+                        <#if ticket.assigneeUnit??><p><span class="font-weight-bold">&Eacute;quipe </span>${ticket.assigneeUnit.name}</p></#if>
+                        <#if ticket.assigneeUser??><#assign user=user_factory.create(ticket.assigneeUser.adminUserId)! />
+                        	<#if user?has_content>
+                        		<p><span class="font-weight-bold">Agent </span> ${ticket.assigneeUser.firstname} ${ticket.assigneeUser.lastname}</p>
+                        	</#if>
+         				</#if>
+                        <p><span class="font-weight-bold">Cr&eacute;ation </span>${ticket.dateCreate!''}</p>
+                        <#if ticket.channel??><p><span class="font-weight-bold">#i18n{ticketing.view_ticket_details.labelChannel} </span>${ticket.channel.label!''}</p></#if>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-	</div>
-
-	<#if ticket.ticketAddress?has_content>
-	<div class=" hidden-xs col-sm-5">
-      <h4>
-		 <i class="fa fa-envelope" style="margin-left:-21px"></i>
-         <#if ticket.ticketAddress.address?has_content>
-         ${ticket.ticketAddress.address!''}
-         </#if>
-      </h4>
-      <h4>
-         <#if ticket.ticketAddress.addressDetail?has_content>
-         ${ticket.ticketAddress.addressDetail!''}
-         </#if>
-      </h4>
-	  <h4>
-         <#if ticket.ticketAddress.postalCode?has_content>
-         ${ticket.ticketAddress.postalCode!''}
-         </#if>
-         <#if ticket.ticketAddress.city?has_content>
-         ${ticket.ticketAddress.city!''}
-         </#if>
-      </h4>
-	</div>
-	</#if>
-	</div>
-</div>
-<div class="row">
-	<div class="col-sm-4">
-      <h2>
-         <a class="btn btn-border" href="jsp/admin/plugins/ticketing/ManageTickets.jsp?plugin_name=ticketing" >
-         <i class="fa fa-arrow-left"></i> #i18n{ticketing.view_ticket_header.labelReturn}
-         </a>
-      </h2>
-	</div>
-	<div class="col-sm-7">
- <!-- NAVIGATION -->
-      <#if next_ticket ?? || previous_ticket ?? >
-      <nav id="item-navigator">
-         <ul class="pager">
-            <#if previous_ticket ??   >
-            <li class="previous">
-               <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${previous_ticket}" title="#i18n{ticketing.navigation.ticket.view.details.previous.title}">
-               <i class="fa fa-arrow-left"></i> #i18n{ticketing.navigation.ticket.view.details.previous}
-               </a>
-            </li>
-            </#if>
-            <#if next_ticket ??  >
-            <li class="next">
-               <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${next_ticket}" title="#i18n{ticketing.navigation.ticket.view.details.next.title}">
-               #i18n{ticketing.navigation.ticket.view.details.next} <i class="fa fa-arrow-right"></i>
-               </a>
-            </li>
-            </#if>
-         </ul>
-      </nav>
-      </#if>    
-      <!-- END NAVIGATION -->
-	  </div>
-   </div>
-</div>
-   <div class="col-xs-4 col-sm-3" id="info-head-right">
-      <#assign textColor="green"/>
-      <#if ticket.urgency==1 >
-      <#assign textColor="orange"/>
-      <#elseif ticket.urgency==2 >
-      <#assign textColor="red"/>
-      </#if>
-      <p data-toggle="tooltip" data-placement="bottom" title="Priorit&eacute; : ${priority!''} / Criticit&eacute; : ${criticality!''}">
-         <i class="fa fa-circle text-${textColor} fa-fw"></i> ${ticket.reference!}
-      </p>
-      <p>
-         <#if ticket.state?? >
-           <#switch ticket.ticketStatus>
-             <#case 0>
-               <i class="fa fa-hourglass-half fa-fw"></i>
-               <#break>
-             <#case 1>
-               <i class="fa fa-check fa-fw"></i>
-               <#break>
-           </#switch>
-           ${ticket.state.name}
-         </#if>
-      </p>
-      <#if ticket.assigneeUnit??>
-        <p>
-          <i class="fa fa-sitemap fa-fw"></i> ${ticket.assigneeUnit.name}
-        </p>
-      </#if>
-      <#if ticket.assigneeUser??>
-      	<#assign user=user_factory.create(ticket.assigneeUser.adminUserId)!>
-          <#if user?has_content>
-          <p class="info_user" data-key-id="${user.idUser}" data-container="body" data-toggle="popover" data-placement="left">
-            <#if avatar_available>
-            <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}">
-            </#if>
-            <span class="avatar-label">${ticket.assigneeUser.firstname} ${ticket.assigneeUser.lastname}</span>
-            <@info_user user/>
-          </p>
-         </#if>
-      </#if>
-   </div>
-</div>
 </#macro>

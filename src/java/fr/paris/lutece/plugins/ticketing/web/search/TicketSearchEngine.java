@@ -41,6 +41,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
@@ -111,6 +112,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
         {
             result.setId( document.getField( TicketSearchItemConstant.FIELD_TICKET_ID ).numericValue( ).intValue( ) );
             result.setDateCreate( new Timestamp( document.getField( TicketSearchItemConstant.FIELD_DATE_CREATION ).numericValue( ).longValue( ) ) );
+            result.setDateUpdate( new Timestamp( document.getField( TicketSearchItemConstant.FIELD_DATE_UPDATE ).numericValue( ).longValue( ) ) );
             result.setGuid( document.get( TicketSearchItemConstant.FIELD_USER_GUID ) );
             result.setUrl( document.get( TicketSearchItemConstant.FIELD_URL ) );
             result.setTicketComment( document.get( TicketSearchItemConstant.FIELD_COMMENT ) );
@@ -201,7 +203,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
      */
     private List<Ticket> search( Query query, TicketFilter filter )
     {
-        List<Ticket> listResults = new ArrayList<Ticket>( );
+        List<Ticket> listResults = new ArrayList<>( );
 
         try
         {
@@ -269,7 +271,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
      *            lucene query
      * @return the number of result
      */
-    private int searchCount( Query query, TicketFilter filter )
+    private int searchCount( Query query )
     {
         int nNbResult = 0;
         try
@@ -299,7 +301,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
     @Override
     public int searchCountTickets( String strQuery, AdminUser user, TicketFilter filter ) throws ParseException
     {
-        return searchCount( createMainSearchQuery( strQuery, user, filter ), filter );
+        return searchCount( createMainSearchQuery( strQuery, user, filter ) );
     }
 
     /**
@@ -378,7 +380,7 @@ public class TicketSearchEngine implements ITicketSearchEngine
         Sort defaultSort = new Sort( new SortField( TicketSearchItemConstant.FIELD_DATE_CREATION, SortField.Type.LONG, true ) );
         if ( filter != null )
         {
-            boolean order = StringUtils.equalsIgnoreCase( filter.getOrderSort( ), DESC_CONSTANT ) ? true : false;
+            boolean order = StringUtils.equalsIgnoreCase( filter.getOrderSort( ), DESC_CONSTANT );
             if ( _mapSortField.containsKey( filter.getOrderBy( ) ) )
             {
                 List<SortField> listSortField = new LinkedList<>( );
@@ -417,6 +419,14 @@ public class TicketSearchEngine implements ITicketSearchEngine
             int nIdAdminUser = filter.getFilterIdAdminUser( );
             Query queryIdAdminUser = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_ASSIGNEE_USER_ADMIN_ID, nIdAdminUser );
             Query queryIdAssignerUser = IntPoint.newExactQuery( TicketSearchItemConstant.FIELD_ASSIGNER_USER_ID, nIdAdminUser );
+
+            List<Integer> markingsIds = filter.getMarkingsId( ).stream( ).map( Integer::parseInt ).collect( Collectors.toList( ) );
+
+            if ( !markingsIds.isEmpty( ) )
+            {
+                Query markingQuery = IntPoint.newSetQuery( TicketSearchItemConstant.FIELD_TICKET_MARKING_ID, markingsIds );
+                booleanQueryBuilderGlobal.add( markingQuery, Occur.MUST );
+            }
 
             // Create a list of filter terms for the id of assignee unit
             DocValuesTermsQuery docValuesTermsQueryIdAssigneeUnit = TicketSearchUtil.createTermsFilter( TicketSearchItemConstant.FIELD_ASSIGNEE_UNIT_ID, filter.getFilterIdAssigneeUnit( ) );

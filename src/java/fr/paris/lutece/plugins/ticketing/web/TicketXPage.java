@@ -201,7 +201,7 @@ public class TicketXPage extends WorkflowCapableXPage
                 ticket = new Ticket( );
                 TicketAsynchronousUploadHandler.getHandler( ).removeSessionFiles( request.getSession( ).getId( ) );
 
-                prefillTicketWithDefaultForm( request, ticket, form );
+                prefillTicketWithDefaultForm( ticket, form );
                 prefillTicketWithUserInfo( request, ticket );
             }
 
@@ -213,7 +213,7 @@ public class TicketXPage extends WorkflowCapableXPage
             // _ticketFormService.removeTicketFromSession( request.getSession( ), form );
 
             List<FormCategory> restrictedCategories = FormCategoryHome.findByForm( form.getId( ) );
-            restrictedCategoriesId = restrictedCategories.stream( ).map( category -> category.getIdCategory( ) ).collect( Collectors.toList( ) );
+            restrictedCategoriesId = restrictedCategories.stream( ).map( FormCategory::getIdCategory ).collect( Collectors.toList( ) );
         }
 
         model.put( MARK_FORM, form );
@@ -263,13 +263,10 @@ public class TicketXPage extends WorkflowCapableXPage
 
     /**
      * Prefill ticket with form default values
-     *
-     * @param request
-     *            the http request
      * @param form
      *            the form
      */
-    private void prefillTicketWithDefaultForm( HttpServletRequest request, Ticket ticket, Form form )
+    private void prefillTicketWithDefaultForm( Ticket ticket, Form form )
     {
         FormEntryType formEntryType = new FormEntryType( );
 
@@ -551,7 +548,7 @@ public class TicketXPage extends WorkflowCapableXPage
         TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, request.getLocale( ) ).validateTicketCategory( form );
         if ( !categoryValidatorResult.isTicketCategoryValid( ) )
         {
-            categoryValidatorResult.getListValidationErrors( ).stream( ).forEach( ( error ) -> addError( error ) );
+            categoryValidatorResult.getListValidationErrors( ).stream( ).forEach( error -> addError( error ) );
             bIsFormValid = false;
         }
 
@@ -605,7 +602,7 @@ public class TicketXPage extends WorkflowCapableXPage
             }
         }
 
-        if ( listFormErrors.size( ) > 0 )
+        if ( !listFormErrors.isEmpty( ) )
         {
             for ( GenericAttributeError error : listFormErrors )
             {
@@ -770,10 +767,7 @@ public class TicketXPage extends WorkflowCapableXPage
         model.put( MARK_FIX_PHONE_NUMBER, ticket.getFixedPhoneNumber( ) );
         model.put( MARK_MOBILE_PHONE_NUMBER, ticket.getMobilePhoneNumber( ) );
 
-        @SuppressWarnings( "deprecation" )
-        String strContent = AppTemplateService.getTemplateFromStringFtl( template.getHtml( ), request.getLocale( ), model ).getHtml( );
-
-        return strContent;
+        return AppTemplateService.getTemplateFromStringFtl( template.getHtml( ), request.getLocale( ), model ).getHtml( );
     }
 
     /**

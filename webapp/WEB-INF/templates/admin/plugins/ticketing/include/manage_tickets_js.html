@@ -1,0 +1,210 @@
+<script type='text/javascript' > 
+$( function(){
+
+    // Set link on whole tr
+    $("tbody > tr").on( 'click', function(e){
+        if (!$(e.target).hasClass("mass-checkbox") && !$(e.target).hasClass("mass-action-ready")){
+            redirectOnClick(this);
+        }
+    });
+
+    // Tooltip
+  $('[data-toggle="tooltip"]').tooltip();
+
+  // Order Management
+  // Init Order
+  var sort_order = $("input[name=fltr_order_sort]").val();
+  var sort_field = $("input[name=fltr_order_by]").val()=="" ? 'th[data-field="date_create"]' : 'th[data-field="' + $("input[name=fltr_order_by]").val() + '"]';
+  $(sort_field).addClass( "th-sort-" + sort_order );
+
+  // Column order
+  $("th").on( 'click', function( e ){
+    var field = $(this).attr('data-field');
+    if(field != 'mass_selection'){
+        var oldField = $("input[name=fltr_order_by]").val();
+        var order;
+        if( field === oldField ){
+            order = sort_order=="asc" ? "desc" : "asc";
+        }
+        else{
+            order = "asc";
+        }
+        sortList( field, order);
+    }
+  });
+
+  function sortList(field, order){
+        $("input[name=fltr_order_sort]").val(order);
+        $("input[name=fltr_order_by]").val(field);
+        $("#filter_form").submit( );
+    }
+    
+    loadFilter(${(ticket_filter.mapCategoryId?size)!});
+});
+
+function setSelectedTab(tab){
+    $("input[name=selected_tab]").val(tab);
+    $("#filter_form").submit( );
+}
+
+function loadFilter(mapSize){
+
+    for (var i = 1; i<=mapSize; i++)
+    {
+        $("#fltr_id_category_depth_" + i).on( 'change', function() {
+            changeSelector(this);
+        });
+    }
+    
+    // Change the next filters
+    function changeSelector(selector)
+    {
+        var depthNumber = parseInt($(selector).attr('depth'));
+        
+        for (var i = depthNumber+1; i<=mapSize; i++)
+        {
+            var selector = "#fltr_id_category_depth_" + i;
+            if (selector != undefined)
+            {
+                $(selector).val( -1 );
+            }
+        }
+        $("#filter_form").submit( );
+    }
+}
+
+// initialization functions for multiselect state list
+    $(document).ready(function() {
+        $('#fltr_open_since, #fltr_open_until')      
+		.datepicker({
+			language: 'fr',
+			format :"dd/mm/yyyy",
+			onSelect: function(dateText, inst) {
+	                $(this).change();
+		  		}
+			})
+			.on("change", function(){
+				$("input[name=selected_tab]").val('agent');
+	            $("#filter_form").submit();
+			});
+        
+        $('#filter_button').click(function(e) {
+    	    $("input[name=selected_tab]").val('agent');
+            $("#filter_form").submit( );
+        })
+    
+	    $('#fltr_open_since').parent().find('.input-group-addon').click(function() { $('#fltr_open_since').focus(); });
+	    $('#fltr_open_until').parent().find('.input-group-addon').click(function() { $('#fltr_open_until').focus(); });  
+    
+        $("#search_clear").click(function(){
+            $("#search_input").val('');
+            $("#hidden_query_value").val('');
+            $("#filter_form").submit( );
+        });
+          
+        var orderCount = 0;
+        $('#fltr_state_ids').multiselect({
+            buttonText: function(options, select) {
+                if (options.length === 0) {
+                    return '#i18n{ticketing.manage_tickets.filter.state.allLabel}';
+                }
+                else if(options.length < select[0].length) {
+                    return getSelectStateLabel(options);
+                }
+                else {
+                    return '#i18n{ticketing.manage_tickets.filter.state.allSelected}';
+                }
+            },
+            includeSelectAllOption: true,
+            selectAllText: '#i18n{ticketing.manage_tickets.filter.state.selectAll}',
+        });
+
+        //compute label to display
+        function getSelectStateLabel(options) {
+            var maxSize = 20;
+            var text = '';
+            var selected = [];
+            options.each(function() {
+                selected.push([$(this).text(), $(this).data('OK')]);
+            });
+            for (var i = 0; i < selected.length; i++) {
+                text += selected[i][0] + ', ';
+            }
+            //remove trailing ', '
+            text = text.substr(0, text.length -2);
+            
+            //add etc label if string is too long
+            if  ( text.length > maxSize ){
+                text = text.substr(0, maxSize - 4) + '#i18n{ticketing.manage_tickets.filter.state.etcLabel}';
+            }
+            return text;
+        }
+        
+    });
+    
+    $("#check_all_status").click(function(){
+    	var isChecked = $(this).is(':checked');
+    	$(".checkbox_status").each(function(){
+    		$(this).prop("checked",isChecked);
+    	});
+    	$("#filter_form").submit();
+    });
+    
+    $(".checkbox_status").click(function(){
+    	$("#filter_form").submit();
+	});
+    
+    $("#checkbox_urgency").change(function(){
+		$("#filter_form").submit();
+	});
+    
+    $("#check_all_markings").click(function(){
+    	var isChecked = $(this).is(':checked');
+    	$(".checkbox_markings").each(function(){
+    		if(!$(this).is(':checked')){
+        		$(this).trigger( "click" );
+    		} 
+    	});
+    	$("#pastille_text").html(" : Toutes");
+    });
+    
+    $(".checkbox_markings").click(function(){
+    	var isChecked = $(this).is(':checked');
+    	var id = $(this).attr('id');
+    	
+    	if(isChecked){
+    		$('<input>').attr({
+        	    type: 'hidden',
+        	    name: 'markings_filter',
+        	    id: 'markings_filter_' + id,
+        	    value: id
+        	}).appendTo('#filter_form');
+    	} else {
+    		$("#markings_filter_"+id).remove();
+    	}
+    	
+    });
+    
+    (function(){
+        var originalAddClassMethod = jQuery.fn.addClass;
+        var originalRemoveClassMethod = jQuery.fn.removeClass;
+        jQuery.fn.addClass = function(){
+            var result = originalAddClassMethod.apply( this, arguments );
+            jQuery(this).trigger('classChanged');
+            return result;
+        }
+        jQuery.fn.removeClass = function(){
+            var result = originalRemoveClassMethod.apply( this, arguments );
+            jQuery(this).trigger('classChanged');
+            return result;
+        }
+    })();
+    
+    $("#pastille-dropdown").bind("classChanged",function(){
+    	var isOpen = $(this).hasClass('open');
+    	if(!isOpen){
+    		$("#filter_form").submit();
+    	}
+    });
+    
+</script>

@@ -71,18 +71,18 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
     public Tree( List<Node> listNode, List<Depth> listDepth )
     {
         _depths = listDepth;
-        for ( AbstractNode Node : listNode )
+        for ( AbstractNode node : listNode )
         {
 
             // Set the parent
-            if ( Node.getIdParent( ) != -1 )
+            if ( node.getIdParent( ) != -1 )
             {
                 for ( AbstractNode nodeParent : listNode )
                 {
-                    if ( nodeParent.getId( ) == Node.getIdParent( ) )
+                    if ( nodeParent.getId( ) == node.getIdParent( ) )
                     {
-                        Node.setParent( nodeParent );
-                        Node.setDepth( findDepthByDepthNumber( nodeParent.getDepth( ).getDepthNumber( ) + 1 ) );
+                        node.setParent( nodeParent );
+                        node.setDepth( findDepthByDepthNumber( nodeParent.getDepth( ).getDepthNumber( ) + 1 ) );
                         break;
                     }
                 }
@@ -90,32 +90,21 @@ public abstract class Tree<Node extends AbstractNode, Depth extends AbstractDept
             else
             {
                 // Set the depth of the node
-                Node.setParent( null );
-                Node.setDepth( findDepthByDepthNumber( 1 ) );
+                node.setParent( null );
+                node.setDepth( findDepthByDepthNumber( 1 ) );
             }
 
             // Set the children
             List<AbstractNode> listChildren = new ArrayList<>( );
 
-            listNode.stream( ).filter( ( childNode ) -> ( childNode.getIdParent( ) == Node.getId( ) ) ).forEach( ( childNode ) -> {
-                listChildren.add( childNode );
-            } );
-            if ( listChildren.isEmpty( ) )
-            {
-                Node.setLeaf( true );
-            }
-            else
-            {
-                Node.setLeaf( false );
-            }
-            Node.setChildren( listChildren );
+            listNode.stream( ).filter( childNode -> ( childNode.getIdParent( ) == node.getId( ) ) ).forEach( childNode -> listChildren.add( childNode ) );
+            node.setLeaf( listChildren.isEmpty( ) );
+            node.setChildren( listChildren );
         }
-        _nodes = new ArrayList<Node>( listNode );
+        _nodes = new ArrayList<>( listNode );
         _rootNodes = _nodes.stream( ).filter( node -> ( node.getIdParent( ) == -1 ) ).collect( Collectors.toList( ) );
-        _leaves = _nodes.stream( ).filter( node -> ( node.getLeaf( ) == true ) ).collect( Collectors.toList( ) );
-        _nodes.stream( ).forEach( ( node ) -> {
-            node.setLeaves( getLeavesOf( node ) );
-        } );
+        _leaves = _nodes.stream( ).filter( node -> ( node.getLeaf( ) ) ).collect( Collectors.toList( ) );
+        _nodes.stream( ).forEach( node -> node.setLeaves( getLeavesOf( node ) ) );
     }
 
     /**

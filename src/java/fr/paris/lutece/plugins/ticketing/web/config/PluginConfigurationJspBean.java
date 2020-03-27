@@ -138,7 +138,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Build the Manage View
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The page
@@ -165,7 +165,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Saves the modified configuration
-     * 
+     *
      * @param request
      *            the request
      * @return the page to redirect when the modification is done
@@ -198,7 +198,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Builds the properties related to the workflow
-     * 
+     *
      * @param request
      *            the request
      * @return the HTML for the properties
@@ -223,7 +223,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Inserts the properties related to the workflow in the specified model
-     * 
+     *
      * @param model
      *            the model
      */
@@ -243,7 +243,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Inserts the properties related to the front office in the specified model
-     * 
+     *
      * @param model
      *            the model
      */
@@ -269,7 +269,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Inserts the properties related to the back office in the specified model
-     * 
+     *
      * @param model
      *            the model
      */
@@ -282,7 +282,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Builds the properties related to the workflow
-     * 
+     *
      * @param nIdWorkflow
      *            the workflow id
      * @param locale
@@ -350,7 +350,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Saves the properties related to the workflow
-     * 
+     *
      * @param request
      *            the request
      */
@@ -416,7 +416,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Saves the properties related to the front office
-     * 
+     *
      * @param request
      *            the request
      */
@@ -445,7 +445,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Builds a ReferenceList from the specified Collection. The ReferenceList is built with an empty value in the first position.
-     * 
+     *
      * @param collection
      *            the Collection used to build the ReferenceList
      * @param strCode
@@ -466,7 +466,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Builds a ReferenceList from the specified ReferenceList. The ReferenceList is built with an empty value in the first position.
-     * 
+     *
      * @param referenceList
      *            the ReferenceList used to build the ReferenceList
      * @return the ReferenceList
@@ -482,7 +482,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
     /**
      * Tests whether the form is valid or not.
-     * 
+     *
      * @param request
      *            the request
      * @return {@code true} if the form is valid, {@code false} otherwise
@@ -530,7 +530,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
         /**
          * Constructor
-         * 
+         *
          * @param strRole
          *            the role
          * @param listState
@@ -544,7 +544,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
         /**
          * Gets the role
-         * 
+         *
          * @return the role
          */
         public String getRole( )
@@ -554,7 +554,7 @@ public class PluginConfigurationJspBean extends MVCAdminJspBean
 
         /**
          * Gets the states
-         * 
+         *
          * @return the states
          */
         public List<String> getStates( )

@@ -18,7 +18,7 @@ public class MarkingDAO implements IMarkingDAO
 
     /**
      * Generates a new primary key
-     * 
+     *
      * @param plugin
      *            The Plugin
      * @return The new primary key
@@ -54,7 +54,7 @@ public class MarkingDAO implements IMarkingDAO
         daoUtil.setInt( nIndex++, marking.getId( ) );
         daoUtil.setString( nIndex++, marking.getTitle( ) );
         daoUtil.setString( nIndex++, marking.getLabelColor( ) );
-        daoUtil.setString( nIndex++, marking.getBackgroundColor( ) );
+        daoUtil.setString( nIndex, marking.getBackgroundColor( ) );
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
@@ -82,7 +82,7 @@ public class MarkingDAO implements IMarkingDAO
             marking.setId( daoUtil.getInt( nIndex++ ) );
             marking.setTitle( daoUtil.getString( nIndex++ ) );
             marking.setLabelColor( daoUtil.getString( nIndex++ ) );
-            marking.setBackgroundColor( daoUtil.getString( nIndex++ ) );
+            marking.setBackgroundColor( daoUtil.getString( nIndex ) );
         }
 
         daoUtil.free( );
@@ -130,7 +130,7 @@ public class MarkingDAO implements IMarkingDAO
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin );
         daoUtil.executeQuery( );
 
-        List<Marking> listMarkings = new ArrayList<Marking>( );
+        List<Marking> listMarkings = new ArrayList<>( );
 
         while ( daoUtil.next( ) )
         {
@@ -140,7 +140,7 @@ public class MarkingDAO implements IMarkingDAO
             marking.setId( daoUtil.getInt( nIndex++ ) );
             marking.setTitle( daoUtil.getString( nIndex++ ) );
             marking.setLabelColor( daoUtil.getString( nIndex++ ) );
-            marking.setBackgroundColor( daoUtil.getString( nIndex++ ) );
+            marking.setBackgroundColor( daoUtil.getString( nIndex ) );
 
             listMarkings.add( marking );
         }

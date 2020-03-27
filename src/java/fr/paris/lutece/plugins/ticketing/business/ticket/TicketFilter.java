@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,6 @@ public class TicketFilter extends OrderByFilter
     private Date _dateCreationStartDate;
     private Date _dateCreationEndDate;
     private Date _dateCloseDate;
-    private boolean _bCloseDatePosterior;
     private int _nIdUser = CONSTANT_ID_NULL;
     private int _nIdChannel = CONSTANT_ID_NULL;
     private int _nOpenSincePeriod = CONSTANT_ID_NULL;
@@ -99,6 +99,7 @@ public class TicketFilter extends OrderByFilter
     private int _nTicketsLimitStart = CONSTANT_ID_NULL;
     private int _nTicketsLimitCount = CONSTANT_ID_NULL;
     private Map<Integer, Integer> _mapCategoryId = new LinkedHashMap<Integer, Integer>( );
+    private Set<String> _listMarkingsId = new HashSet<>( );
 
     /**
      * Check if this filter contains a idUser
@@ -134,7 +135,7 @@ public class TicketFilter extends OrderByFilter
      */
     public boolean containsListIdWorkflowState( )
     {
-        return ( ( _listIdWorkflowState != null ) && ( _listIdWorkflowState.size( ) > 0 ) );
+        return ( ( _listIdWorkflowState != null ) && ( !_listIdWorkflowState.isEmpty( ) ) );
     }
 
     /**
@@ -834,6 +835,22 @@ public class TicketFilter extends OrderByFilter
     public void setMapCategoryId( Map<Integer, Integer> mapCategoryId )
     {
         _mapCategoryId = mapCategoryId;
+    }
+
+    /**
+     * @return the _listMarkingsId
+     */
+    public Set<String> getMarkingsId( )
+    {
+        return _listMarkingsId;
+    }
+
+    /**
+     * @param _listMarkingsId the _listMarkingsId to set
+     */
+    public void setMarkingsId( Set<String> _listMarkingsId )
+    {
+        this._listMarkingsId = _listMarkingsId;
     }
 
     @Override

@@ -2,318 +2,117 @@
 <#include "/admin/plugins/ticketing/commons.html" />
 <#include "/admin/plugins/ticketing/include/user_info.html"/>
 <#include "/admin/plugins/ticketing/include/popins.html" />
+<#include "/admin/plugins/ticketing/include/manage_tickets_macros.html" />
+
 <!-- Include the plugin's CSS and JS for multiselect bootstrap -->
 <script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
 <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css"/>
 
-<#macro sortColumn field=''>
-    <i class="fa fa-chevron-up" onclick="sortList('${field}','asc')"></i>&nbsp;<i class="fa fa-chevron-down" onclick="sortList('${field}','desc')"></i>
-</#macro>
-
-<#macro renderTabPanel panel_list active=false id=''>
-    <div role="tabpanel" class="tab-pane <#if active> active</#if>" <#if id!="">id="${id}"</#if> >
-        <input type="hidden" id="id" name="id">
-    <div class="row">
-      <div class="col-xs-12 col-sm-offset-1 col-sm-10 table-responsive">
-      <#if panel_list?? && panel_list?has_content>
-        <table class="table table-hover table-striped">
-            <thead>
-              <tr>
-                    <#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
-                        <th data-field="mass_selection" class="mass-checkbox"><input id="select_all_tickets" type="checkbox" value=""></th>
-                    </#if>
-                    <th data-field="reference">#i18n{ticketing.manage_tickets.columnReference}</th>
-                    <#if creation_date_as_date >
-                      <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.date}</th>
-                    <#else>
-                      <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.counter}</th>
-                    </#if>
-                    <th data-field="category_label">#i18n{ticketing.manage_tickets.columnCategory}</th>
-                    <th data-field="lastname">#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment}</th>
-                    <th data-field="state">#i18n{ticketing.manage_tickets.columnTicketState}</th>
-                    <th data-field="nomenclature">#i18n{ticketing.manage_tickets.columnTicketNomenclature}</th>
-                    <th data-field="channel">#i18n{ticketing.manage_tickets.columnTicketChannel}</th>
-                    <th data-field="assignee">#i18n{ticketing.manage_tickets.columnTicketAssignee}</th>
-              </tr>
-          </thead>  
-            <tbody>
-                <#list panel_list as ticket >
-                <tr data-url="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" >
-                <#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
-                    <td class="mass-checkbox">
-                        <input type="checkbox" value="${ticket.id}" class="mass-action-ready">
-                    </td>
-                </#if>
-                  <td>
-               <div class="reference-tag">
-              <#assign textColor="aqua"/>
-              <#if ticket.urgency==1 >
-                <#assign textColor="orange"/>
-              <#elseif ticket.urgency==2 >
-                <#assign textColor="red"/>
-              </#if>
-              <#switch ticket.criticality>
-              <#case 1>
-                <#assign criticality="#i18n{ticketing.manage_tickets.criticality.labelMedium}"/>
-                <#break>
-              <#case 2>
-                <#assign criticality="#i18n{ticketing.manage_tickets.criticality.labelHigh}"/>
-                <#break>
-              <#default>
-                <#assign criticality="#i18n{ticketing.manage_tickets.criticality.labelLow}"/>
-            </#switch>
-            <#switch ticket.priority>
-              <#case 1>
-                <#assign priority="#i18n{ticketing.manage_tickets.priority.labelMedium}"/>
-                <#break>
-              <#case 2>
-                <#assign priority="#i18n{ticketing.manage_tickets.priority.labelHigh}"/>
-                <#break>
-              <#default>
-                <#assign priority="#i18n{ticketing.manage_tickets.priority.labelLow}"/>
-            </#switch>
-              <#if ticket.reference??>
-                <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" data-toggle="tooltip" data-placement="bottom" title="Criticit&eacute;:  ${criticality!''} / Priorit&eacute;: ${priority!''}" >
-                  <i class="fa fa-circle text-${textColor}" ></i> ${ticket.reference}
-                </a>
-              <#else>
-                <a data-toggle="tooltip" data-placement="bottom" href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" title="Criticit&eacute;: ${criticality!''} / Priorit&eacute;: ${priority!''}">
-                  <i class="fa fa-circle text-${textColor}" ></i> ${ticket.id}
-                </a>
-              </#if>
-              </div>
-              <#if id == "agent" || id == "group">
-                <#if ticket.marking??>
-                    <#assign marking=ticket.marking>
-                    <#if marking.title?exists >
-                        <div class="label unread" style="color:${marking.labelColor!};background-color:${marking.backgroundColor!};border-radius: 5px;" for="marking_id" title="${marking.title}">${marking.title}</div>
-                    </#if>
-                </#if>
-              </#if>  
-            </td>
-                  <td>
-                    <#if creation_date_as_date >
-                      ${ticket.dateCreate?string["dd/MM/yyyy HH:mm"]}
-                    <#else>
-                      ${displayDateAsCounter( ticket.dateCreate, ticket.ticketStatus ) }
-                    </#if>
-                  </td>
-                  <td>
-                    <#list ticket.branch as ticket_category>
-                       ${ticket_category.categoryType.label!''}: <strong>${ticket_category.label!''}</strong><br>
-                    </#list>
-                  </td>
-                  <td >
-                    <!-- <p class="text-left"> -->
-                    <p>
-                      <strong>${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}</strong>
-            </p>
-            <!-- <p class="text-left"> -->
-            <p>
-                    <#if ticket.email ?? && ticket.email?length &gt; 1>
-                      <small>
-                          <i class="fa fa-envelope"></i> ${ticket.email}
-                      </small>
-                    </#if>
-                    <#if ticket.mobilePhoneNumber ?? && ticket.mobilePhoneNumber?length &gt; 1 >
-                      <small>
-                          / <i class="fa fa-mobile-phone"></i> ${ticket.mobilePhoneNumber}
-                      </small>
-                    </#if>
-                    <#if ticket.fixedPhoneNumber ?? && ticket.fixedPhoneNumber?length &gt; 1>
-                      <small>
-                          / <i class="fa fa-phone"></i> ${ticket.fixedPhoneNumber}
-                      </small>
-                    </#if>
-                    </p>
-            <#if ticket.ticketComment?has_content>
-              <div class="ticket-comments text-left wordwrap-ticket-comment" style="word-break: break-all;">
-                ${convertNewLineToHtml(ticket.ticketComment)}
-              </div>
-            </#if>
-                  </td>
-                  <td><#if ticket.state?? && ticket.state.name??>
-                    ${ticket.state.name!''}
-                    </#if>
-                  </td>
-                  <td><#if ticket.nomenclature??>
-                    ${ticket.nomenclature}
-                    </#if>
-                  </td>
-                   <td>
-                      <#if ticket.channel??>
-                        <#if ticket.channel.iconFont??><i class="${ticket.channel.iconFont}"></i>&nbsp;</#if>${ticket.channel.label!''}
-                      </#if>
-                  </td>
-                  <td>
-                    <#if ticket.assigneeUnit??>
-            <!-- <p class="text-left"> -->
-            <p>
-              <strong><i class=" fa fa-sitemap"></i> ${ticket.assigneeUnit.name}</strong>
-            </p>
-            </#if>
-             <#if ticket.assigneeUser??>
-             <#assign user=user_factory.create(ticket.assigneeUser.adminUserId)!>
-              <#if user?has_content>
-              <p class="info_user" data-key-id="${user.idUser}" data-container="body" data-toggle="popover" data-placement="left">
-                <#if avatar_available>
-                <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}"></#if>
-                <span>${ticket.assigneeUser.firstname} <br/> ${ticket.assigneeUser.lastname}</span>
-                <@info_user user/>
-              </p>
-             </#if>
-            </#if>
-                  </td>
-                </tr>
-                </#list>
-          </tbody>
-      </table>
-      <div class="row">
-        <div class="col-xs-12 pull-right">
-          <@paginationAdmin paginator=paginator combo=1 />
-        </div>
-      </div>
-    <#else>
-      <div id="no-content">
-       <h2 class="text-muted">
-        <#if user_with_no_unit>
-            #i18n{ticketing.manage_tickets.noTicket.labelNoUnit}
-        <#else>
-            #i18n{ticketing.manage_tickets.labelNoTicket}
-        </#if>
-       </h2>
-       <img class="img-responsive" src="images/admin/skin/plugins/ticketing/no_content.jpg" alt="" title="">
-      </div>
-    </#if>
-    </div>
-  </div>
-</div>
-</#macro>
-
 <!-- TEMPLATE -->
 <div class="gru-wrapper">
-  <div id="customer-panel" class="bg-gru-light">
-    <div class="row">
-      <div class="col-xs-12 col-sm-offset-1 col-sm-8">
-        <h2>#i18n{ticketing.manage_tickets.pageTitle}</h2>
-      </div>
-      <div class="col-xs-12 col-sm-3">
-      <#if ticket_creation_right?? && ticket_creation_right>
-        <form method="post" class="form" name="manage_tickets" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
-          <h2>
-          <button name="view_createTicket" type="submit" class="btn btn-border bg-gru-light">
-            <i class="fa fa-plus"></i> <span>#i18n{ticketing.manage_tickets.buttonAdd}</span>
-          </button>
-        </h2>
-        </form>
-      </#if>
-      </div>
-    </div>
-    <div id="filter-ticket" class="row">
-      <div class="col-xs-12 col-sm-offset-1 col-sm-3">
-        <h3 style="margin-top:0px;">${manage_ticket_page_title}</h3>
-      </div>
-      <form id="filter_form" class="form-inline" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
-      <div class="col-xs-12 col-sm-5">
+  <div id="customer-panel" class="form-header container">
+    <div id="filter-ticket">
+      <form id="filter_form" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
         <input type="hidden" name="submitted_form" value="1">
-        <input type="hidden" name="fltr_urgency" value="${ticket_filter.urgency!}">
         <input type="hidden" name="selected_tab" value="<#if selected_tab?? && selected_tab?has_content>${selected_tab}<#else>agent</#if>">
-        <input type="hidden" name="fltr_order_sort" value="${ticket_filter.orderSort!}">
-        <input type="hidden" name="fltr_order_by" value="${ticket_filter.orderBy!}">
+        <input type="hidden" name="fltr_order_sort" value="${(ticket_filter.orderSort)!}">
+        <input type="hidden" name="fltr_order_by" value="${(ticket_filter.orderBy)!}">
         <input type="hidden" name="fltr_warnings_only" value="0">
-        <input type="hidden" id="hidden_query_value" name="query" value="${query!}">
-        <div class="row">
-            <div class="col-xs-12">
-                <button type="submit" name="fltr_new_urgency" value="-1" class="btn btn-link btn-xs <#if ticket_filter.urgency==-1>btn-primary border-gru<#else>border-gru text-gru btn-default</#if>">#i18n{ticketing.manage_tickets.urgency.all}</button>
-                <button type="submit" name="fltr_new_urgency" value="2" class="btn btn-link btn-xs <#if ticket_filter.urgency==2>btn-danger<#else>border-red text-red btn-default</#if>">#i18n{ticketing.manage_tickets.urgency.high}</button>
-                <button type="submit" name="fltr_new_urgency" value="1" class="btn btn-link btn-xs <#if ticket_filter.urgency==1>btn-warning<#else>border-orange text-orange btn-default</#if>">#i18n{ticketing.manage_tickets.urgency.medium}</button>
-                <button type="submit" name="fltr_new_urgency" value="0" class="btn btn-link btn-xs <#if ticket_filter.urgency==0>btn-info<#else>border-info text-aqua btn-default</#if>">#i18n{ticketing.manage_tickets.urgency.low}</button>
+        <#list ticket_filter.markingsId as markingId>
+        	<input type="hidden" name="markings_filter" id="markings_filter_${markingId}" value="${markingId}">
+        </#list>
+                
+                <div class="col-md-4 d-flex-colums">
+                    <h1 class="sous-title-form">Cat&eacute;gories</h1>
+                    <div class="">
+				<#if category_reflist_map?? >
+		            <#list category_reflist_map as index, category_list>
+		                <#if category_list?? && 1 < category_list?size>
+		                    <#list ticket_filter.mapCategoryId as key, value>
+		                        <#if key?string == index>
+		                           <#assign categoryId=value>
+		                        </#if>
+		                    </#list>
+		                    <div class="select-wrapper">
+		                        <@comboWithParams name="fltr_id_category_depth_${index}" default_value="${categoryId!''}" additionalParameters=" id=\"fltr_id_category_depth_${index}\" depth=\"${index}\" class=\"select\" " items=category_list />
+		                    </div>
+		                </#if>
+		              </#list>
+		              </#if>                    </div>
+                    <div class="w-fixe pt-54 d-flex flex-espace ">
+                        <div>
+                            <div class="checkbox-custom">
+                            	<#assign urgencyChecked = ticket_filter.urgency == 2 />
+                                <input type="checkbox" id="checkbox_urgency" name="fltr_new_urgency" value="2" ${urgencyChecked?string("checked='checked'","")}>
+                                <span class="boxcustom"></span>
+                                <label for="scales">#i18n{ticketing.manage_tickets.urgency.high}</label>
+                            </div>
+                        </div>
+                        <#if warning_count != -1>
+	                        <div class="notifications">
+	                            <span class="bell fa fa-bell"></span>
+	                            <span class="notifications-count">${warning_count}</span>
+	                        </div>
+	                    </#if>
+                    </div>
+
+                </div>
+                
+                
                 <!-- multi select state list -->
                 <#if state_list?? && state_list?size != 0>
-                    <select name="fltr_state_ids" id="fltr_state_ids" multiple="multiple">
+                <div class="col-md-4 ">
+
+                    <h1 class="sous-title-form">Statuts</h1>
+
+                    <div class="d-flex-colums checkbox-container">
+                   	    <div class="checkbox-custom">
+                            <input type="checkbox" id="check_all_status" name="Statuts">
+                            <span class="boxcustom"></span>
+                            <label for="Statuts">Voir tous les statuts</label>
+                       	</div>
                         <#list state_list as state>
-                            <#if state.checked ?? && state.checked == true>
-                                <option value="${state.code!}" selected> ${state.name!}</option>
-                            <#else>
-                                <option value="${state.code!}">${state.name!}</option>
-                            </#if>
+                        	<div class="checkbox-custom">
+	                            <#if state.checked ?? && state.checked == true>
+	                                <input name="fltr_state_ids" class="checkbox_status" type="checkbox" value="${state.code!}" checked /> 
+	                            <#else>
+	                                <input name="fltr_state_ids" class="checkbox_status" type="checkbox" value="${state.code!}" />
+	                            </#if>
+                            <span class="boxcustom"></span>
+                            <label for="Statuts">${state.name!}</label>
+                        </div>
                         </#list>
-                    </select>
+                      </div>
+                   </div>
                 </#if>
-                <button type="button" id="filter_button" class="filter-button btn btn-border bg-gru-light">
-                    #i18n{ticketing.manage_tickets.filter.label}
-                </button>
-            </div>
-        </div>
-        <br/>
-        <div class="row">
-            <div class="col-xs-12">
-            <#list category_reflist_map as index, category_list>
-                <#if category_list?? && 1 < category_list?size>
-                    <#list ticket_filter.mapCategoryId as key, value>
-                        <#if key?string == index>
-                           <#assign categoryId=value>
-                        </#if>
-                    </#list>
-                    <label class="select" for="category">
-                        <@comboWithParams name="fltr_id_category_depth_${index}" default_value="${categoryId!''}" additionalParameters=" id=\"fltr_id_category_depth_${index}\" depth=\"${index}\" class=\"form-control input-xs\" " items=category_list />
-                    </label>
-                </#if>
-              </#list>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12 filter-ticket-date">
-                <label class="filter" for="fltr_open_since">#i18n{ticketing.manage_tickets.start_date}</label>
-                <div class="input-group input-group-xs">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    <input type="text" name="fltr_open_since" id="fltr_open_since" class="form-control"
-                           <#if ticket_filter.creationStartDate??>value="${ticket_filter.creationStartDate?date}"</#if>>
+                <div class="col-md-4">
+                    <h1 class="sous-title-form">Mots-cl&eacute;s&nbsp;&nbsp;<i class="fa fa-question-circle-o" aria-hidden="true"></i></h1>
+                    <div class="form-group">
+                       <input id="search_input" class="input-sm form-control-index" type="search" name="query" placeholder="#i18n{ticketing.manage_tickets.searchDefaultTxt}" value="<#if query?has_content>${query}</#if>">
+                        <button type="submit" class="btn btn-search btn-sm"><span class="ico-loupe"></span></button>
+                    </div>
+                    <h1 class="sous-title-form">#i18n{ticketing.manage_tickets.start_date}</h1>
+                    <div class="select-calendar">
+                        <div class="select-wrapper-calendar">
+                            <p>Du&nbsp;:</p>
+                            <input type="search" name="fltr_open_since" id="fltr_open_since" class="input-sm form-control-index-sm calendar" <#if ticket_filter?? && ticket_filter.creationStartDate??>value="${ticket_filter.creationStartDate?date}"</#if>>
+                        </div>
+                        <div class="select-wrapper-calendar">
+                            <p>#i18n{ticketing.manage_tickets.start_end}&nbsp;:</p>
+                            <input type="search" name="fltr_open_until" id="fltr_open_until" class="input-sm form-control-index-sm calendar" <#if ticket_filter?? && ticket_filter.creationEndDate??>value="${ticket_filter.creationEndDate?date}"</#if>>
+                        </div>
+                    </div>
                 </div>
-                <label class="filter" for="fltr_open_since">#i18n{ticketing.manage_tickets.start_end}</label>
-                <div class="input-group input-group-xs">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    <input type="text" name="fltr_open_until" id="fltr_open_until" class="form-control"
-                           <#if ticket_filter.creationEndDate??>value="${ticket_filter.creationEndDate?date}"</#if>>
-                </div>
-            </div>
-        </div>
+                
     </div>
-	<#if ticket_export_right?? && ticket_export_right>
-	    <div class="col-xs-12 col-sm-3">
-	        <button id="filter-ticket-export" name="action_exportTicket" type="submit" class="btn btn-info">
-	            <span>#i18n{ticketing.manage_tickets.buttonExport}</span>
-	        </button>
-	    </div>
-	</#if>
+	
     </form>
-      <div class="col-xs-12 col-sm-3">
-    <form class="form-inline" method="post" action="jsp/admin/plugins/ticketing/ManageTickets.jsp?page_index=1">
-        <input type="hidden" id="searched_field" name="searched_field" value="contents">
-        <div class="input-group">
-            <label class="sr-only">#i18n{ticketing.manage_tickets.searchDefaultTxt}</label>         
-            <div class="input-group-btn">               
-                <input id="search_input" class="form-control input-xs btn-group" type="text" name="query" placeholder="#i18n{ticketing.manage_tickets.searchDefaultTxt}" value="<#if query?has_content>${query}</#if>">
-                <#if query?has_content>
-                    <span id="search_clear" class="glyphicon glyphicon-remove-circle"></span>
-                </#if>
-            </div>
-            <div class="input-group-btn">
-                <button class="btn btn-xs" type="submit" >
-                    <span class="fa fa-search"></span>
-                </button>
-            </div>
-        </div>
-    </form>
-      </div>
     </div>
-  </div>
-  
-  <div id="demand-panel" class="row bg-gru-light tickets">
-    <div class="col-xs-12 col-sm-12">
-    <ul class="nav nav-tabs nav-ticket">
-      <li role="presentation" class="mass-action-tab">
+ 
+  <div id="demand-panel">
+    <ul class="nav nav-tabs">
       	<#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
+      		<li role="presentation" class="mass-action-tab">
               <form id="mass_action_form" class="form" method="post" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
                   <div class="form-group">
                       <label class="select" for="mass_action">
@@ -331,186 +130,107 @@
                       </a>
                   </div>
               </form>
+              </li>
       	</#if>
-      </li>
-      <li class="separator"></li>
-      <#if warning_count != -1>
-	      <li class="alert-box <#if selected_tab?? && selected_tab == "warning">active</#if>">
-	        <div>
-		      	<i onclick="setSelectedTab('warning')" class="fa fa-bell icon"></i>
-		      	<a onclick="setSelectedTab('warning')" class="counter btn btn-border bg-gru-light link-modal link-mass-action">${warning_count}</a>
-	      	</div>
-	      </li>
-      </#if>
+      
       <li role="presentation" <#if !selected_tab?? || ( selected_tab?? && selected_tab=="agent")> class="active" </#if> >
         <a href="#" onclick="setSelectedTab('agent')" aria-controls="agent" role="tab" data-toggle="tab">
-          <i class="fa fa-inbox"></i> #i18n{ticketing.manage_tickets.labelAgentTickets} <span class="badge">${nb_ticket_agent}</span>
+          <i class="fa fa-inbox"></i> #i18n{ticketing.manage_tickets.labelAgentTickets} (${nb_ticket_agent})
         </a>
       </li>
       <li role="presentation" <#if selected_tab?? && selected_tab == "group"> class="active" </#if> >
         <a href="#" onclick="setSelectedTab('group')" aria-controls="group" role="tab" data-toggle="tab">
-          <i class="fa fa-users"></i> #i18n{ticketing.manage_tickets.labelGroupTickets} <span class="badge">${nb_ticket_group!}</span>
+          <i class="fa fa-users"></i> #i18n{ticketing.manage_tickets.labelGroupTickets} (${nb_ticket_group!})
         </a>
       </li>
       <li role="presentation" <#if selected_tab?? && selected_tab == "domain"> class="active" </#if> >
         <a href="#" onclick="setSelectedTab('domain')"  aria-controls="domain" role="tab" data-toggle="tab" >
-          <i class="fa fa-tags"></i> #i18n{ticketing.manage_tickets.labelDomainTickets} <span class="badge">${nb_ticket_domain!}</span>
+          <i class="fa fa-tags"></i> #i18n{ticketing.manage_tickets.labelDomainTickets} (${nb_ticket_domain!})
         </a>
       </li>
     </ul>
+</div>
+</div>
     <div class="tab-content">
         <@messages errors=errors />
         <@notification infos=infos />
+        
+        <div class="tab-button container">
+            <div class="row">
+                <div class="col-mb-6 col-lg-6 mb-30">
+                    <div id="pastille-dropdown" class="dropdown">
+                        <button class="box filtre mb-30 dropdown-toggle text-left" type="button" id="dropdownMenuButtonPastille" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-filter mr-13" aria-hidden="true"></i>
+                            FILTRER PAR PASTILLE<span class="font-weight-light" id="pastille_text"></span><i class="fa fa-chevron-down right ln-37" aria-hidden="true"></i>
+                        </button>
+
+                        <div class="list-filter  dropdown-menu" aria-labelledby="dropdownMenuButtonPastille">
+                        	<div class="checkbox-custom">
+                                <input type="checkbox" id="check_all_markings" name="check_all_markings">
+                                <span class="boxcustom"></span>
+                                <label class="filter filter-black font-weight-bold">S&eacute;lectionner tout</label>
+                            </div>
+                            
+                            <#list marking_list as marking>
+								 <div class="checkbox-custom">
+								 	<#assign markingChecked = ticket_filter?? && ticket_filter.markingsId?seq_contains(marking.id?c)/>
+	                                <input type="checkbox" class="checkbox_markings" id="${marking.id}" ${markingChecked?string("checked='checked'","")}>
+	                                <span class="boxcustom"></span>
+	                                <label class="filter font-weight-bold" style="background-color: ${marking.backgroundColor};">${marking.title}</label>
+	                            </div>
+							</#list>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <#if ticket_creation_right?? && ticket_creation_right>
+        <form method="post" class="form" name="manage_tickets" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+          <div class="col-md-6 col-lg-6 mb-30">
+               		<button name="view_createTicket" type="submit" class="box sollicitation right mb-30 text-right"><i class="fa fa-plus left ln-37" aria-hidden="true"></i> #i18n{ticketing.manage_tickets.buttonAdd}</button>
+           </div>
+        </form>
+      </#if>
+            </div>
+            <div class="row filters">
+                <div class="col-mb-6 col-lg-6 mb-30">
+                    <div class="dropdown" style="display: none;">
+                        <button class="box agent mb-30 dropdown-toggle text-left" type="button" id="dropdownMenuButtonAgent" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-filter mr-13" aria-hidden="true"></i>
+                            FILTRER PAR AGENT : <span class="font-weight-light">Tous</span><i class="fa fa-chevron-down right ln-37" aria-hidden="true"></i>
+                        </button>
+                        <div class="list-filter dropdown-menu" aria-labelledby="dropdownMenuButtonAgent">
+
+                            <div class="filter-detail">
+                                Exploit EXPLOIT
+                            </div>
+                            <div class="filter-detail">Stephane MALOLEPSZA
+                            </div>
+                            <div class="filter-detail">Jon HARPER
+                            </div>
+                            <div class="filter-detail">Pierre LEVY
+                            </div>
+                            <div class="filter-detail">Isabelle LENAIN
+                            </div>
+                            <div class="filter-detail">ISA BITI
+                            </div>
+                            <div class="filter-detail">Baptise GABOURIN
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<#if ticket_export_right?? && ticket_export_right>
+					<form method="post" class="form" name="manage_tickets" action="jsp/admin/plugins/ticketing/ManageTickets.jsp">
+		                <div class="col-md-6 col-lg-6">
+		                    <button id="filter-ticket-export" name="action_exportTicket" type="submit" class="box export right text-right"><i class="fa fa-reply rotate left ln-37" aria-hidden="true"></i> #i18n{ticketing.manage_tickets.buttonExport}</button>
+		                </div>
+		            </form>
+				</#if>
+            </div>
+        </div>
+         </div>
         <@renderTabPanel panel_list=ticket_list active=true id=selected_tab />
-      </div>
-    </div>
-  </div>
-</div>
+     
+    
+  
 <script src="js/plugins/ticketing/ticketing.js"></script>
 <script type="text/javascript" src="js/plugins/ticketing/action_mass.js"></script>
-<script>
-$( function(){
-
-    // Set link on whole tr
-    $("tbody > tr").on( 'click', function(e){
-        if (!$(e.target).hasClass("mass-checkbox") && !$(e.target).hasClass("mass-action-ready")){
-            redirectOnClick(this);
-        }
-    });
-
-    // Tooltip
-  $('[data-toggle="tooltip"]').tooltip();
-
-  // Order Management
-  // Init Order
-  var sort_order = $("input[name=fltr_order_sort]").val();
-  var sort_field = $("input[name=fltr_order_by]").val()=="" ? 'th[data-field="date_create"]' : 'th[data-field="' + $("input[name=fltr_order_by]").val() + '"]';
-  $(sort_field).addClass( "th-sort-" + sort_order );
-
-  // Column order
-  $("th").on( 'click', function( e ){
-    var field = $(this).attr('data-field');
-    if(field != 'mass_selection'){
-        var oldField = $("input[name=fltr_order_by]").val();
-        var order;
-        if( field === oldField ){
-            order = sort_order=="asc" ? "desc" : "asc";
-        }
-        else{
-            order = "asc";
-        }
-        sortList( field, order);
-    }
-  });
-
-  function sortList(field, order){
-        $("input[name=fltr_order_sort]").val(order);
-        $("input[name=fltr_order_by]").val(field);
-        $("#filter_form").submit( );
-    }
-    
-    loadFilter(${ticket_filter.mapCategoryId?size});
-});
-
-function setSelectedTab(tab){
-    $("input[name=selected_tab]").val(tab);
-    $("#filter_form").submit( );
-}
-
-function loadFilter(mapSize){
-
-    for (var i = 1; i<=mapSize; i++)
-    {
-        $("#fltr_id_category_depth_" + i).on( 'change', function() {
-            changeSelector(this);
-        });
-    }
-    
-    // Change the next filters
-    function changeSelector(selector)
-    {
-        var depthNumber = parseInt($(selector).attr('depth'));
-        
-        for (var i = depthNumber+1; i<=mapSize; i++)
-        {
-            var selector = "#fltr_id_category_depth_" + i;
-            if (selector != undefined)
-            {
-                $(selector).val( -1 );
-            }
-        }
-        $("#filter_form").submit( );
-    }
-}
-</script>
-
-<script type="text/javascript">
- // initialization functions for multiselect state list
-    $(document).ready(function() {
-        $('#fltr_open_since, #fltr_open_until')      
-		.datepicker({
-			language: 'fr',
-			format :"dd/mm/yyyy",
-			onSelect: function(dateText, inst) {
-	                $(this).change();
-		  		}
-			})
-			.on("change", function(){
-				$("input[name=selected_tab]").val('agent');
-	            $("#filter_form").submit();
-			});
-        
-        $('#filter_button').click(function(e) {
-    	    $("input[name=selected_tab]").val('agent');
-            $("#filter_form").submit( );
-        })
-    
-	    $('#fltr_open_since').parent().find('.input-group-addon').click(function() { $('#fltr_open_since').focus(); });
-	    $('#fltr_open_until').parent().find('.input-group-addon').click(function() { $('#fltr_open_until').focus(); });  
-    
-        $("#search_clear").click(function(){
-            $("#search_input").val('');
-            $("#hidden_query_value").val('');
-            $("#filter_form").submit( );
-        });
-          
-        var orderCount = 0;
-        $('#fltr_state_ids').multiselect({
-            buttonText: function(options, select) {
-                if (options.length === 0) {
-                    return '#i18n{ticketing.manage_tickets.filter.state.allLabel}';
-                }
-                else if(options.length < select[0].length) {
-                    return getSelectStateLabel(options);
-                }
-                else {
-                    return '#i18n{ticketing.manage_tickets.filter.state.allSelected}';
-                }
-            },
-            includeSelectAllOption: true,
-            selectAllText: '#i18n{ticketing.manage_tickets.filter.state.selectAll}',
-        });
-
-        //compute label to display
-        function getSelectStateLabel(options) {
-            var maxSize = 20;
-            var text = '';
-            var selected = [];
-            options.each(function() {
-                selected.push([$(this).text(), $(this).data('OK')]);
-            });
-            for (var i = 0; i < selected.length; i++) {
-                text += selected[i][0] + ', ';
-            }
-            //remove trailing ', '
-            text = text.substr(0, text.length -2);
-            
-            //add etc label if string is too long
-            if  ( text.length > maxSize ){
-                text = text.substr(0, maxSize - 4) + '#i18n{ticketing.manage_tickets.filter.state.etcLabel}';
-            }
-            return text;
-        }
-        
-    });
-</script>
+<#include "/admin/plugins/ticketing/include/manage_tickets_js.html" />

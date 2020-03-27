@@ -89,10 +89,6 @@
       
     </admin-features>    
 
-    <admin-css-stylesheets>
-        <admin-css-stylesheet>css/admin/plugins/ticketing/ticketing.css</admin-css-stylesheet>
-    </admin-css-stylesheets>
-	
     <!-- XPages parameters -->
     <applications>
         <application>
