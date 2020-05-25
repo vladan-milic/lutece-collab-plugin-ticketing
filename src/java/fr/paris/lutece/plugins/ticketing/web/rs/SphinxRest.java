@@ -37,6 +37,7 @@ package fr.paris.lutece.plugins.ticketing.web.rs;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -68,7 +69,6 @@ import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.util.httpaccess.HttpAccess;
 import fr.paris.lutece.util.httpaccess.HttpAccessException;
 
 /**
@@ -222,15 +222,42 @@ public class SphinxRest
 
 
 
-    public void post( String endpoint, String json ) throws HttpAccessException
+    public static void post( String endpoint, String json ) throws HttpAccessException
     {
-        HttpAccess httpAccess = new HttpAccess( );
-        Map<String, String> headersRequest = new HashMap<String, String>( );
-        headersRequest.put( "Authorization", "bearer " + getTokenAccess( ) );
-        httpAccess.doPostJSON( API_URL + endpoint, json, headersRequest, null );
+
+        try{
+            URL url = new URL (API_URL + endpoint);
+
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            con.setRequestMethod("POST");
+
+            con.setRequestProperty("Content-Type", "application/json; utf-8");
+            con.setRequestProperty("Accept", "application/json");
+            con.setRequestProperty( "Authorization", "bearer " + getTokenAccess( ) );
+
+            createTrustManager( );
+
+            con.setDoOutput(true);
+
+            try(OutputStream os = con.getOutputStream()){
+                byte[] input = json.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))){
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+            }
+
+        }catch(Exception e) {
+            AppLogService.error( "error post" );
+        }
     }
 
-    public void postTicketData( Ticket ticket ) throws HttpAccessException
+    public static void postTicketData( Ticket ticket ) throws HttpAccessException
     {
         JsonObject ticketJson = new JsonObject( );
 
