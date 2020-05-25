@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.ticketing.web.rs;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -124,12 +125,13 @@ public class SphinxRest
         return Response.ok( "ok" ).build( );
     }
 
-    public static String getTokenAccess( ) throws HttpAccessException
+    public static String getTokenAccess( )
     {
         String token = null;
         try
         {
             URL url = new URL( URL_TOKEN_SPHINX );
+            AppLogService.info( "Appel Rest sphinx token: " + URL_TOKEN_SPHINX );
 
             HttpURLConnection con = ( HttpURLConnection ) url.openConnection( );
             con.setRequestMethod( "POST" );
@@ -151,6 +153,8 @@ public class SphinxRest
             DataOutputStream out = new DataOutputStream( con.getOutputStream( ) );
             out.writeBytes( getParamsString( params ) );
 
+            AppLogService.debug( "Params get token sphinx: "+ getParamsString( params )  );
+
             try ( BufferedReader br = new BufferedReader( new InputStreamReader( con.getInputStream( ), "utf-8" ) ) )
             {
                 StringBuilder response = new StringBuilder( );
@@ -161,99 +165,58 @@ public class SphinxRest
                 }
                 JsonObject dataJson = new JsonParser( ).parse( response.toString( ) ).getAsJsonObject( );
                 token = dataJson.get( ACCESS_TOKEN ).getAsString( );
+                AppLogService.debug( "Token généré pour sphinx: "+token );
+                AppLogService.info( "Fin d'appel Sphinx token sans erreur" );
             }
-        } catch ( Exception e )
+        } catch ( IOException |  KeyManagementException | NoSuchAlgorithmException e  )
         {
-            AppLogService.error( "error get token" );
+            AppLogService.error( "Fin d'appel Sphinx token avec erreur", e );
         }
         return token;
     }
 
-    public static String getParamsString(Map<String, String> params)
-            throws UnsupportedEncodingException{
-        StringBuilder result = new StringBuilder();
-
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-            result.append("&");
-        }
-
-        String resultString = result.toString();
-        return resultString.length() > 0
-                ? resultString.substring(0, resultString.length() - 1)
-                        : resultString;
-    }
-
-    private static void createTrustManager() throws NoSuchAlgorithmException, KeyManagementException {
-        // Create a trust manager that does not validate certificate chains
-        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-            @Override
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
-
-            @Override
-            public void checkClientTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
-                    throws CertificateException {
-            }
-
-            @Override
-            public void checkServerTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
-                    throws CertificateException {
-            }
-        } };
-        // Install the all-trusting trust manager
-        final SSLContext sc = SSLContext.getInstance("SSL");
-        sc.init(null, trustAllCerts, new java.security.SecureRandom());
-        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        // Create all-trusting host name verifier
-        HostnameVerifier allHostsValid = new HostnameVerifier() {
-            @Override
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        };
-
-        // Install the all-trusting host verifier
-        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-    }
-
-
-
-    public static void post( String endpoint, String json ) throws HttpAccessException
+    public static void post( String endpoint, String json )
     {
 
-        try{
-            URL url = new URL (API_URL + endpoint);
+        try
+        {
+            URL url = new URL( API_URL + endpoint );
 
-            HttpURLConnection con = (HttpURLConnection)url.openConnection();
-            con.setRequestMethod("POST");
+            AppLogService.info( "Appel Rest sphinx: " + API_URL + endpoint );
+            AppLogService.debug( "Json de l'appel sphinx rest: " + json );
 
-            con.setRequestProperty("Content-Type", "application/json; utf-8");
-            con.setRequestProperty("Accept", "application/json");
+            HttpURLConnection con = ( HttpURLConnection ) url.openConnection( );
+            con.setRequestMethod( "POST" );
+
+            con.setRequestProperty( "Content-Type", "application/json; utf-8" );
+            con.setRequestProperty( "Accept", "application/json" );
             con.setRequestProperty( "Authorization", "bearer " + getTokenAccess( ) );
 
             createTrustManager( );
 
-            con.setDoOutput(true);
+            con.setDoOutput( true );
 
-            try(OutputStream os = con.getOutputStream()){
-                byte[] input = json.getBytes("utf-8");
-                os.write(input, 0, input.length);
+            try ( OutputStream os = con.getOutputStream( ) )
+            {
+                byte[] input = json.getBytes( "utf-8" );
+                os.write( input, 0, input.length );
             }
 
-            try(BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))){
-                StringBuilder response = new StringBuilder();
+            try ( BufferedReader br = new BufferedReader( new InputStreamReader( con.getInputStream( ), "utf-8" ) ) )
+            {
+                StringBuilder response = new StringBuilder( );
                 String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
+                while ( ( responseLine = br.readLine( ) ) != null )
+                {
+                    response.append( responseLine.trim( ) );
                 }
+                AppLogService.debug( "Résultat de l'appel sphinx rest: " + response.toString( ) );
             }
+            AppLogService.info( "Fin d'appel Sphinx sans erreur" );
 
-        }catch(Exception e) {
-            AppLogService.error( "error post" );
+        } catch ( IOException |  KeyManagementException | NoSuchAlgorithmException e  )
+        {
+            AppLogService.error( "Fin d'appel Sphinx avec erreur", e );
         }
     }
 
@@ -303,6 +266,52 @@ public class SphinxRest
         ticketsJson.add( ticketJson );
 
         post( "/api/v4.0/survey/" + SURVEY + "/data", ticketsJson.toString( ) );
+    }
+
+
+    public static String getParamsString( Map<String, String> params ) throws UnsupportedEncodingException
+    {
+        StringBuilder result = new StringBuilder( );
+
+        for ( Map.Entry<String, String> entry : params.entrySet( ) )
+        {
+            result.append( URLEncoder.encode( entry.getKey( ), "UTF-8" ) );
+            result.append( "=" );
+            result.append( URLEncoder.encode( entry.getValue( ), "UTF-8" ) );
+            result.append( "&" );
+        }
+
+        String resultString = result.toString( );
+        return resultString.length( ) > 0 ? resultString.substring( 0, resultString.length( ) - 1 ) : resultString;
+    }
+
+    private static void createTrustManager() throws NoSuchAlgorithmException, KeyManagementException  {
+        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+            @Override
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+
+            @Override
+            public void checkClientTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
+                    throws CertificateException {
+            }
+
+            @Override
+            public void checkServerTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
+                    throws CertificateException {
+            }
+        } };
+        final SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new java.security.SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
     }
 
 }
