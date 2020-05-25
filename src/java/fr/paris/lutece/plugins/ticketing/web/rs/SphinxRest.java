@@ -34,10 +34,26 @@
 
 package fr.paris.lutece.plugins.ticketing.web.rs;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -50,6 +66,7 @@ import com.google.gson.JsonParser;
 import fr.paris.lutece.plugins.rest.service.RestConstants;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.httpaccess.HttpAccess;
 import fr.paris.lutece.util.httpaccess.HttpAccessException;
@@ -109,20 +126,101 @@ public class SphinxRest
 
     public static String getTokenAccess( ) throws HttpAccessException
     {
-        HttpAccess httpAccess = new HttpAccess( );
-        Map<String, String> headersRequest = new HashMap<String, String>( );
-        headersRequest.put( "Content-Type", "application/x-www-form-urlencoded" );
-        Map<String, String> params = new HashMap<String, String>( );
-        params.put( "username", USERNAME );
-        params.put( "password", PASSWORD );
-        params.put( "lang", "fr" );
-        params.put( "grant_type", "password" );
-        params.put( "client_id", "sphinxapiclient" );
+        String token = null;
+        try
+        {
+            URL url = new URL( URL_TOKEN_SPHINX );
 
-        String rawData = httpAccess.doPost( URL_TOKEN_SPHINX, params, null, null, headersRequest );
-        JsonObject dataJson = new JsonParser( ).parse( rawData ).getAsJsonObject( );
-        return dataJson.get( ACCESS_TOKEN ).getAsString( );
+            HttpURLConnection con = ( HttpURLConnection ) url.openConnection( );
+            con.setRequestMethod( "POST" );
+
+            con.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded; utf-8" );
+            con.setRequestProperty( "Accept", "application/json" );
+
+            createTrustManager( );
+
+            con.setDoOutput( true );
+
+            Map<String, String> params = new HashMap<String, String>( );
+            params.put( "username", USERNAME );
+            params.put( "password", PASSWORD );
+            params.put( "lang", "fr" );
+            params.put( "grant_type", "password" );
+            params.put( "client_id", "sphinxapiclient" );
+
+            DataOutputStream out = new DataOutputStream( con.getOutputStream( ) );
+            out.writeBytes( getParamsString( params ) );
+
+            try ( BufferedReader br = new BufferedReader( new InputStreamReader( con.getInputStream( ), "utf-8" ) ) )
+            {
+                StringBuilder response = new StringBuilder( );
+                String responseLine = null;
+                while ( ( responseLine = br.readLine( ) ) != null )
+                {
+                    response.append( responseLine.trim( ) );
+                }
+                JsonObject dataJson = new JsonParser( ).parse( response.toString( ) ).getAsJsonObject( );
+                token = dataJson.get( ACCESS_TOKEN ).getAsString( );
+            }
+        } catch ( Exception e )
+        {
+            AppLogService.error( "error get token" );
+        }
+        return token;
     }
+
+    public static String getParamsString(Map<String, String> params)
+            throws UnsupportedEncodingException{
+        StringBuilder result = new StringBuilder();
+
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+            result.append("&");
+        }
+
+        String resultString = result.toString();
+        return resultString.length() > 0
+                ? resultString.substring(0, resultString.length() - 1)
+                        : resultString;
+    }
+
+    private static void createTrustManager() throws NoSuchAlgorithmException, KeyManagementException {
+        // Create a trust manager that does not validate certificate chains
+        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+            @Override
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+
+            @Override
+            public void checkClientTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
+                    throws CertificateException {
+            }
+
+            @Override
+            public void checkServerTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
+                    throws CertificateException {
+            }
+        } };
+        // Install the all-trusting trust manager
+        final SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new java.security.SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        // Create all-trusting host name verifier
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+
+        // Install the all-trusting host verifier
+        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+    }
+
+
 
     public void post( String endpoint, String json ) throws HttpAccessException
     {
