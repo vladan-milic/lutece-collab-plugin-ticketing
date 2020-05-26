@@ -1168,10 +1168,13 @@ input[type=radio]:focus {
 
 #collapsegru .bg-gray.panelbox {
   background: url("../../../../images/admin/skin/plugins/ticketing/pixel.jpg");
-  ;
   padding: 15px 25px !important;
   background-size: 100% 50px;
   background-repeat: no-repeat;
+}
+
+.bg-gray {
+ background: none;
 }
 
 .bg-gray.panelbox {

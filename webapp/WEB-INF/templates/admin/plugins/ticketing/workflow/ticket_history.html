@@ -18,32 +18,35 @@
 		  <div class="panel-default d-flex">
 		  <a class="btn-collapse <#if !lineOpened>collapsed</#if>" data-toggle="collapse" data-parent="#collapsegru" href="#answer_${history_information?index}" aria-expanded="${lineOpened?c}" aria-controls="answer_${history_information?index}">
                             </a>
-        <div class="panelbox">
+        <div class="panelbox <#if history_information?is_last>bg-gray</#if>">
         <div class="panel-body head d-flex">
+        <#if history_information?is_last>
+	        <div class="detail-part">
+	        	<h3>${history_information.resource_history.action.description}</h3>
+	        </div>
+        <#else>
 	          <button class="width-fix tag-detail-light">${history_information.resource_history.action.description}</button>
               <div class="detail-part">
-                  <!-- <h3>DPE - Division 01/02/03/04</h3> -->
-                  <span>
+                  
                   <#if history_information.admin_user_history?exists && history_information.admin_user_history.userId?string != "${defaultUserFrontId}">
 	                <#assign user=user_factory.create(history_information.admin_user_history.userId)!>
-	                 <#if user?has_content>${user.firstName}  ${user.lastName}</#if>
+	                 <#if user?has_content><#if user.units[user.units?size-1]??><h3>${user.units[user.units?size-1].label}</h3></#if><span>${user.firstName}  ${user.lastName}</span></#if>
 	           		 </#if>
-           		 </span>
               </div>
-              <div class="detail-date">${history_information.resource_history.creationDate!'Date missing'}</div>
+        </#if>
+              <div class="detail-date">${history_information.resource_history.creationDate?string('dd/MM/yyyy HH:mm')!'Date missing'}</div>
 	          
 	      </div>
           <div id="answer_${history_information?index}" class="panel-collapse collapse <#if lineOpened>in</#if>" role="tabpanel" aria-labelledby="answer_${history_information?index}" aria-expanded="${lineOpened?c}">
                 <#list history_information.task_information_list as task_information>
                 	<#if task_information?? && task_information!="">
-	                	<div class="message">
-	                  		${task_information}
-	                  	</div>
+	                  	${task_information}
                   	</#if>
                 </#list>
           </div>
         </div>
         </div>
+        
       </#list>
   </div>
 
