@@ -282,10 +282,6 @@
             ${paginator.labelPrevious}
         </a>
     </li>
-<#else>
-    <li class="disabled">
-        <a href="${paginator.firstPageLink?xhtml}">${paginator.labelPrevious}</a>
-    </li>
 </#if>
 <#if ( paginator.pageCurrent - offsetPrev > 1 )>
     <li>
@@ -321,10 +317,6 @@
             </a>
         </li>
     </#if>
-<#else>
-    <li class="disabled">
-        <a href="${paginator.lastPageLink?xhtml}">${paginator.labelNext}</a>
-    </li>
 </#if>
 </ul>
  </#macro>
