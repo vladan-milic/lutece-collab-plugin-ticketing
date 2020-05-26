@@ -771,6 +771,7 @@ input[type="checkbox"]:checked {
   font-weight: 700;
   border: none;
   margin-bottom: 24px;
+  font-size: 12px;
 }
 
 .tag-rep {
@@ -1081,7 +1082,7 @@ input[type=radio]:focus {
 }
 
 #collapsegru button.width-fix {
-  width: 130px;
+  width: 120px;
   margin-right: 10px;
 }
 
