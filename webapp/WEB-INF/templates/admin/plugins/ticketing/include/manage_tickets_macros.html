@@ -86,24 +86,28 @@
                 </#if>
               </#if>  
             </td>
-                  <td>
+                  <td><strong classl="info-table">
                     <#if creation_date_as_date >
                       ${ticket.dateCreate?string["dd/MM/yyyy HH:mm"]}
                     <#else>
                       ${displayDateAsCounter( ticket.dateCreate, ticket.ticketStatus ) }
                     </#if>
+                    </strong>
                   </td>
-                  <td>
+                  <td><strong classl="info-table">
                       ${ticket.dateUpdate?string["dd/MM/yyyy HH:mm"]}
+                      </strong>
                   </td>
-                  <td>
+                  <td class="text-left">
                     <#list ticket.branch as ticket_category>
                        ${ticket_category.categoryType.label!''}: <strong>${ticket_category.label!''}</strong><br>
                     </#list>
                   </td>
-                  <td >
-                    <p>
-                      <strong>${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}</strong>
+                  <td class="text-left">
+                    <div class="d-flex">
+                                    <div class="visible-scrollbar">
+                                        <p class="pr-22">
+                      <b>${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}</b>
             </p>
             <p>
                     <#if ticket.email ?? && ticket.email?length &gt; 1>
@@ -127,8 +131,10 @@
                 ${convertNewLineToHtml(ticket.ticketComment)}
               </div>
             </#if>
+            </div>
+            </div>
                   </td>
-                  <td><#if ticket.state?? && ticket.state.name??>
+                  <td class="font-weight-bold fs-18"><#if ticket.state?? && ticket.state.name??>
                     ${ticket.state.name!''}
                     </#if>
                   </td>
