@@ -16,19 +16,19 @@
                     <#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
                         <th data-field="mass_selection" class="mass-checkbox"><input id="select_all_tickets" type="checkbox" value=""></th>
                     </#if>
-                    <th data-field="reference">#i18n{ticketing.manage_tickets.columnReference}</th>
+                    <th data-field="reference">#i18n{ticketing.manage_tickets.columnReference}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='reference' /></th>
                     <#if creation_date_as_date >
-                      <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.date}</th>
+                      <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.date}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='date_create' /></th>
                     <#else>
-                      <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.counter}</th>
+                      <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.counter}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='date_create' /></th>
                     </#if>
-                    <th data-field="date_update">#i18n{ticketing.manage_tickets.columnDateUpdate.date}</th>
-                    <th data-field="category_label">#i18n{ticketing.manage_tickets.columnCategory}</th>
-                    <th data-field="lastname">#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment}</th>
-                    <th data-field="state">#i18n{ticketing.manage_tickets.columnTicketState}</th>
-                    <th data-field="nomenclature">#i18n{ticketing.manage_tickets.columnTicketNomenclature}</th>
-                    <th data-field="channel">#i18n{ticketing.manage_tickets.columnTicketChannel}</th>
-                    <th data-field="assignee">#i18n{ticketing.manage_tickets.columnTicketAssignee}</th>
+                    <th data-field="date_update">#i18n{ticketing.manage_tickets.columnDateUpdate.date}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='date_update' /></th>
+                    <th data-field="category_label">#i18n{ticketing.manage_tickets.columnCategory}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='category_label' /></th>
+                    <th data-field="lastname">#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='lastname' /></th>
+                    <th data-field="state">#i18n{ticketing.manage_tickets.columnTicketState}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='state' /></th>
+                    <th data-field="nomenclature">#i18n{ticketing.manage_tickets.columnTicketNomenclature}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='nomenclature' /></th>
+                    <th data-field="channel">#i18n{ticketing.manage_tickets.columnTicketChannel}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='channel' /></th>
+                    <th data-field="assignee">#i18n{ticketing.manage_tickets.columnTicketAssignee}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='assignee' /></th>
               </tr>
           </thead>  
             <tbody>
