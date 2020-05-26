@@ -13,25 +13,15 @@ $( function(){
 
   // Order Management
   // Init Order
-  var sort_order = $("input[name=fltr_order_sort]").val();
-  var sort_field = $("input[name=fltr_order_by]").val()=="" ? 'th[data-field="date_create"]' : 'th[data-field="' + $("input[name=fltr_order_by]").val() + '"]';
-  $(sort_field).addClass( "th-sort-" + sort_order );
-
-  // Column order
-  $("th").on( 'click', function( e ){
-    var field = $(this).attr('data-field');
-    if(field != 'mass_selection'){
-        var oldField = $("input[name=fltr_order_by]").val();
-        var order;
-        if( field === oldField ){
-            order = sort_order=="asc" ? "desc" : "asc";
-        }
-        else{
-            order = "asc";
-        }
-        sortList( field, order);
-    }
+  $(".sort-up").on( 'click', function( e ){
+	    var field = $(this).attr('data-field');
+        sortList( field, "asc");
   });
+  
+  $(".sort-down").on( 'click', function( e ){
+	    var field = $(this).attr('data-field');
+        sortList( field, "desc");
+	});
 
   function sortList(field, order){
         $("input[name=fltr_order_sort]").val(order);

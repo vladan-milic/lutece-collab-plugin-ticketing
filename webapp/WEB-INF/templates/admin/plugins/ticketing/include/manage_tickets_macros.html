@@ -16,19 +16,19 @@
                     <#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
                         <th data-field="mass_selection" class="mass-checkbox"><input id="select_all_tickets" type="checkbox" value=""></th>
                     </#if>
-                    <th data-field="reference">#i18n{ticketing.manage_tickets.columnReference}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='reference' /></th>
+                    <th data-field="reference">#i18n{ticketing.manage_tickets.columnReference}<@sortTickets attribute='reference' /></th>
                     <#if creation_date_as_date >
-                      <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.date}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='date_create' /></th>
+                      <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.date}<@sortTickets attribute='date_create' /></th>
                     <#else>
-                      <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.counter}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='date_create' /></th>
+                      <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.counter}<@sortTickets attribute='date_create' /></th>
                     </#if>
-                    <th data-field="date_update">#i18n{ticketing.manage_tickets.columnDateUpdate.date}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='date_update' /></th>
-                    <th data-field="category_label">#i18n{ticketing.manage_tickets.columnCategory}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='category_label' /></th>
-                    <th data-field="lastname">#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='lastname' /></th>
-                    <th data-field="state">#i18n{ticketing.manage_tickets.columnTicketState}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='state' /></th>
-                    <th data-field="nomenclature">#i18n{ticketing.manage_tickets.columnTicketNomenclature}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='nomenclature' /></th>
-                    <th data-field="channel">#i18n{ticketing.manage_tickets.columnTicketChannel}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='channel' /></th>
-                    <th data-field="assignee">#i18n{ticketing.manage_tickets.columnTicketAssignee}<@sort jsp_url='jsp/admin/plugins/ticketing/ManageTickets.jsp' attribute='assignee' /></th>
+                    <th data-field="date_update">#i18n{ticketing.manage_tickets.columnDateUpdate.date}<@sortTickets attribute='date_update' /></th>
+                    <th data-field="category_label">#i18n{ticketing.manage_tickets.columnCategory}<@sortTickets attribute='category_label' /></th>
+                    <th data-field="lastname">#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment}<@sortTickets attribute='lastname' /></th>
+                    <th data-field="state">#i18n{ticketing.manage_tickets.columnTicketState}<@sortTickets attribute='state' /></th>
+                    <th data-field="nomenclature">#i18n{ticketing.manage_tickets.columnTicketNomenclature}<@sortTickets attribute='nomenclature' /></th>
+                    <th data-field="channel">#i18n{ticketing.manage_tickets.columnTicketChannel}<@sortTickets attribute='channel' /></th>
+                    <th data-field="assignee">#i18n{ticketing.manage_tickets.columnTicketAssignee}<@sortTickets attribute='assignee' /></th>
               </tr>
           </thead>  
             <tbody>
@@ -185,4 +185,17 @@
     </div>
   </div>
 
+</#macro>
+
+<#macro sortTickets attribute>
+	<div class="btn-group" role="group" aria-label="sortButton">
+		<span class="test">
+	        <a class="sort-up" data-field="${attribute}"  title="Tri croissant" style="cursor: pointer;">
+	            <i class="fa fa-angle-up fa-angle-up"></i>
+	        </a>
+	        <a class="sort-down" data-field="${attribute}"  title="Tri d&eacute;croissant" style="cursor: pointer;">
+	            <i class="fa fa-angle-up fa-angle-down"></i>
+	        </a>
+        </span>
+	 </div>
 </#macro>
