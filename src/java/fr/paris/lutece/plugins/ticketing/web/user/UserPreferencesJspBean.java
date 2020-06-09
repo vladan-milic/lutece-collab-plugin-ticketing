@@ -89,7 +89,7 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
 
     /**
      * Gives the page to manage user preferences
-     * 
+     *
      * @param request
      *            the request
      * @return the page
@@ -127,7 +127,7 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
 
     /**
      * Modifies the user preferences
-     * 
+     *
      * @param request
      *            the request
      * @return the page after modification

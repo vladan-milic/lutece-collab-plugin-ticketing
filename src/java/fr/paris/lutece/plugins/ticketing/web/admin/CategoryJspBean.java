@@ -33,7 +33,13 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
-import java.io.*;
+import static fr.paris.lutece.plugins.ticketing.business.category.TicketCategory.RESOURCE_TYPE;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -43,9 +49,6 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
-import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTree;
-import fr.paris.lutece.plugins.ticketing.web.util.CSVUtils;
-import fr.paris.lutece.portal.business.rbac.RBACHome;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
@@ -57,10 +60,13 @@ import fr.paris.lutece.plugins.ticketing.business.form.FormHome;
 import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategory;
 import fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategoryHome;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
+import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryTree;
 import fr.paris.lutece.plugins.ticketing.service.tree.Tree;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.ticketing.web.util.CSVUtils;
 import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.business.unit.UnitHome;
+import fr.paris.lutece.portal.business.rbac.RBACHome;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -72,8 +78,6 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.url.UrlItem;
-
-import static fr.paris.lutece.plugins.ticketing.business.category.TicketCategory.RESOURCE_TYPE;
 
 /**
  * This class provides the user interface to manage Category features ( manage, create, modify, remove )

@@ -1,13 +1,12 @@
 package fr.paris.lutece.plugins.ticketing.util.sort;
 
-import fr.paris.lutece.portal.service.util.AppLogService;
-
-
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.Locale;
+
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 public class TicketAttributeComparator  implements Comparator<Object>, Serializable
 {

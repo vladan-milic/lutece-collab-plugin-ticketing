@@ -41,7 +41,14 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,6 +70,8 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryTypeHom
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.contactmode.ContactModeHome;
 import fr.paris.lutece.plugins.ticketing.business.file.TicketFileHome;
+import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
+import fr.paris.lutece.plugins.ticketing.business.marking.MarkingHome;
 import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
@@ -119,122 +128,120 @@ import fr.paris.lutece.util.url.UrlItem;
 public class ManageTicketsJspBean extends WorkflowCapableJspBean
 {
     // Right
-    public static final String RIGHT_MANAGETICKETS = "TICKETING_TICKETS_MANAGEMENT";
-    private static final long serialVersionUID = 1L;
+    public static final String             RIGHT_MANAGETICKETS                  = "TICKETING_TICKETS_MANAGEMENT";
+    private static final long              serialVersionUID                     = 1L;
 
     // //////////////////////////////////////////////////////////////////////////
     // Constants
 
     // templates
-    private static final String TEMPLATE_MANAGE_TICKETS = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "manage_tickets.html";
-    private static final String TEMPLATE_CREATE_TICKET = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "create_ticket.html";
-    private static final String TEMPLATE_MODIFY_TICKET = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "modify_ticket.html";
-    private static final String TEMPLATE_RECAP_TICKET = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "recap_ticket.html";
+    private static final String            TEMPLATE_MANAGE_TICKETS              = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "manage_tickets.html";
+    private static final String            TEMPLATE_CREATE_TICKET               = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "create_ticket.html";
+    private static final String            TEMPLATE_MODIFY_TICKET               = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "modify_ticket.html";
+    private static final String            TEMPLATE_RECAP_TICKET                = TicketingConstants.TEMPLATE_ADMIN_TICKET_FEATURE_PATH + "recap_ticket.html";
 
     // Parameters
-    private static final String PARAMETER_USER_TITLE = "ut";
-    private static final String PARAMETER_FIRSTNAME = "fn";
-    private static final String PARAMETER_FAMILYNAME = "fan";
-    private static final String PARAMETER_LASTNAME = "ln";
-    private static final String PARAMETER_FIXED_PHONE = "fph";
-    private static final String PARAMETER_MOBILE_PHONE = "mph";
-    private static final String PARAMETER_EMAIL = "em";
-    private static final String PARAMETER_CATEGORY = "cat";
-    private static final String PARAMETER_PAGE_INDEX = "page_index";
-    private static final String PARAMETER_SELECTED_TAB = "selected_tab";
-    private static final String PARAMETER_NOMENCLATURE = "nom";
+    private static final String            PARAMETER_USER_TITLE                 = "ut";
+    private static final String            PARAMETER_FIRSTNAME                  = "fn";
+    private static final String            PARAMETER_FAMILYNAME                 = "fan";
+    private static final String            PARAMETER_LASTNAME                   = "ln";
+    private static final String            PARAMETER_FIXED_PHONE                = "fph";
+    private static final String            PARAMETER_MOBILE_PHONE               = "mph";
+    private static final String            PARAMETER_EMAIL                      = "em";
+    private static final String            PARAMETER_CATEGORY                   = "cat";
+    private static final String            PARAMETER_PAGE_INDEX                 = "page_index";
+    private static final String            PARAMETER_SELECTED_TAB               = "selected_tab";
+    private static final String            PARAMETER_NOMENCLATURE               = "nom";
 
     // Properties for page titles
-    private static final String PROPERTY_PAGE_MANAGE_TITLE = "ticketing.manage_tickets.title";
-    private static final String PROPERTY_PAGE_SEARCH_TILE = "ticketing.search_ticket.pageTitle";
-    private static final String PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE = "ticketing.listItems.itemsPerPage";
-    private static final String PROPERTY_PAGE_TITLE_MANAGE_TICKETS = "ticketing.manage_tickets.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_MODIFY_TICKET = "ticketing.modify_ticket.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_CREATE_TICKET = "ticketing.create_ticket.pageTitle";
-    private static final String PROPERTY_PAGE_TITLE_RECAP_TICKET = "ticketing.recap_ticket.pageTitle";
+    private static final String            PROPERTY_PAGE_MANAGE_TITLE           = "ticketing.manage_tickets.title";
+    private static final String            PROPERTY_PAGE_SEARCH_TILE            = "ticketing.search_ticket.pageTitle";
+    private static final String            PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE  = "ticketing.listItems.itemsPerPage";
+    private static final String            PROPERTY_PAGE_TITLE_MANAGE_TICKETS   = "ticketing.manage_tickets.pageTitle";
+    private static final String            PROPERTY_PAGE_TITLE_MODIFY_TICKET    = "ticketing.modify_ticket.pageTitle";
+    private static final String            PROPERTY_PAGE_TITLE_CREATE_TICKET    = "ticketing.create_ticket.pageTitle";
+    private static final String            PROPERTY_PAGE_TITLE_RECAP_TICKET     = "ticketing.recap_ticket.pageTitle";
 
     // Markers
-    private static final String MARK_TICKET_LIST = "ticket_list";
-    private static final String MARK_USER_FACTORY = "user_factory";
-    private static final String MARK_USER_TITLES_LIST = "user_titles_list";
-    private static final String MARK_MASS_ACTIONS_LIST = "mass_actions_list";
-    private static final String MARK_NB_TICKET_AGENT = "nb_ticket_agent";
-    private static final String MARK_NB_TICKET_GROUP = "nb_ticket_group";
-    private static final String MARK_NB_TICKET_DOMAIN = "nb_ticket_domain";
-    private static final String MARK_CONTACT_MODES_LIST = "contact_modes_list";
-    private static final String MARK_GUID = "guid";
-    private static final String MARK_RESPONSE_RECAP_LIST = "response_recap_list";
-    private static final String MARK_PAGINATOR = "paginator";
-    private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
-    private static final String MARK_SELECTED_TAB = "selected_tab";
-    private static final String MARK_USER_WITH_NO_UNIT = "user_with_no_unit";
-    private static final String JSP_MANAGE_TICKETS = TicketingConstants.ADMIN_CONTROLLLER_PATH + "ManageTickets.jsp";
-    private static final String MARK_MANAGE_PAGE_TITLE = "manage_ticket_page_title";
-    private static final String MARK_CREATE_ASSIGN_RIGHT = "create_assign_right";
-    private static final String MARK_WARNING_COUNT = "warning_count";
+    private static final String            MARK_TICKET_LIST                     = "ticket_list";
+    private static final String            MARK_USER_FACTORY                    = "user_factory";
+    private static final String            MARK_USER_TITLES_LIST                = "user_titles_list";
+    private static final String            MARK_MASS_ACTIONS_LIST               = "mass_actions_list";
+    private static final String            MARK_NB_TICKET_AGENT                 = "nb_ticket_agent";
+    private static final String            MARK_NB_TICKET_GROUP                 = "nb_ticket_group";
+    private static final String            MARK_NB_TICKET_DOMAIN                = "nb_ticket_domain";
+    private static final String            MARK_CONTACT_MODES_LIST              = "contact_modes_list";
+    private static final String            MARK_GUID                            = "guid";
+    private static final String            MARK_RESPONSE_RECAP_LIST             = "response_recap_list";
+    private static final String            MARK_PAGINATOR                       = "paginator";
+    private static final String            MARK_NB_ITEMS_PER_PAGE               = "nb_items_per_page";
+    private static final String            MARK_SELECTED_TAB                    = "selected_tab";
+    private static final String            MARK_USER_WITH_NO_UNIT               = "user_with_no_unit";
+    private static final String            JSP_MANAGE_TICKETS                   = TicketingConstants.ADMIN_CONTROLLLER_PATH + "ManageTickets.jsp";
+    private static final String            MARK_MANAGE_PAGE_TITLE               = "manage_ticket_page_title";
+    private static final String            MARK_CREATE_ASSIGN_RIGHT             = "create_assign_right";
+    private static final String            MARK_WARNING_COUNT                   = "warning_count";
 
     // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_TICKET = "ticketing.message.confirmRemoveTicket";
-    private static final String MESSAGE_ERROR_COMMENT_VALIDATION = "ticketing.validation.ticket.TicketComment.size";
-    private static final String MESSAGE_ERROR_FACIL_EMPTY_VALIDATION = "ticketing.validation.ticket.TicketFacilNumber.size";
-    private static final String MESSAGE_ERROR_FACIL_REGEX_VALIDATION = "ticketing.validation.ticket.TicketFacilNumber.regex";
+    private static final String            MESSAGE_CONFIRM_REMOVE_TICKET        = "ticketing.message.confirmRemoveTicket";
+    private static final String            MESSAGE_ERROR_COMMENT_VALIDATION     = "ticketing.validation.ticket.TicketComment.size";
+    private static final String            MESSAGE_ERROR_FACIL_EMPTY_VALIDATION = "ticketing.validation.ticket.TicketFacilNumber.size";
+    private static final String            MESSAGE_ERROR_FACIL_REGEX_VALIDATION = "ticketing.validation.ticket.TicketFacilNumber.regex";
     /**
      * Domaine facil'famille
      */
-    private static final String PROPERTY_ACCOUNT_NUMBER_DOMAIN_LABEL = "module.workflow.ticketingfacilfamilles.workflow.automatic_assignment.domainLabel";
+    private static final String            PROPERTY_ACCOUNT_NUMBER_DOMAIN_LABEL = "module.workflow.ticketingfacilfamilles.workflow.automatic_assignment.domainLabel";
     /**
      * facil'famille account number check
      */
-    private static final String PROPERTY_ACCOUNT_NUMBER_REGEXP = "module.workflow.ticketingfacilfamilles.workflow.automatic_assignment.accountNumberRegexp";
+    private static final String            PROPERTY_ACCOUNT_NUMBER_REGEXP       = "module.workflow.ticketingfacilfamilles.workflow.automatic_assignment.accountNumberRegexp";
 
     // Views
-    private static final String VIEW_MANAGE_TICKETS = "manageTickets";
-    private static final String VIEW_TICKET_PAGE = "ticketPage";
-    private static final String VIEW_CREATE_TICKET = "createTicket";
-    private static final String VIEW_MODIFY_TICKET = "modifyTicket";
-    private static final String VIEW_RECAP_TICKET = "recapTicket";
+    private static final String            VIEW_MANAGE_TICKETS                  = "manageTickets";
+    private static final String            VIEW_TICKET_PAGE                     = "ticketPage";
+    private static final String            VIEW_CREATE_TICKET                   = "createTicket";
+    private static final String            VIEW_MODIFY_TICKET                   = "modifyTicket";
+    private static final String            VIEW_RECAP_TICKET                    = "recapTicket";
 
     // Actions
-    private static final String ACTION_CREATE_TICKET = "createTicket";
-    private static final String ACTION_CREATE_ASSIGN_TICKET = "createAssignTicket";
-    private static final String ACTION_MODIFY_TICKET = "modifyTicket";
-    private static final String ACTION_REMOVE_TICKET = "removeTicket";
-    private static final String ACTION_CONFIRM_REMOVE_TICKET = "confirmRemoveTicket";
-    private static final String ACTION_RECAP_TICKET = "recapTicket";
-    private static final String ACTION_EXPORT_TICKET = "exportTicket";
+    private static final String            ACTION_CREATE_TICKET                 = "createTicket";
+    private static final String            ACTION_CREATE_ASSIGN_TICKET          = "createAssignTicket";
+    private static final String            ACTION_MODIFY_TICKET                 = "modifyTicket";
+    private static final String            ACTION_REMOVE_TICKET                 = "removeTicket";
+    private static final String            ACTION_CONFIRM_REMOVE_TICKET         = "confirmRemoveTicket";
+    private static final String            ACTION_RECAP_TICKET                  = "recapTicket";
+    private static final String            ACTION_EXPORT_TICKET                 = "exportTicket";
 
     // Infos
-    private static final String INFO_TICKET_CREATED = "ticketing.info.ticket.created";
-    private static final String INFO_TICKET_UPDATED = "ticketing.info.ticket.updated";
-    private static final String INFO_TICKET_REMOVED = "ticketing.info.ticket.removed";
+    private static final String            INFO_TICKET_CREATED                  = "ticketing.info.ticket.created";
+    private static final String            INFO_TICKET_UPDATED                  = "ticketing.info.ticket.updated";
+    private static final String            INFO_TICKET_REMOVED                  = "ticketing.info.ticket.removed";
 
     // Other constants
-    private static boolean _bAvatarAvailable = ( PluginService.getPlugin( TicketingConstants.PLUGIN_AVATAR ) != null );
-    private static final String CONTENT_TYPE_CSV = "application/csv";
+    private static boolean                 _bAvatarAvailable                    = ( PluginService.getPlugin( TicketingConstants.PLUGIN_AVATAR ) != null );
+    private static final String            CONTENT_TYPE_CSV                     = "application/csv";
 
     // Variables
-    private int _nDefaultItemsPerPage;
-    private String _strCurrentPageIndex;
-    private int _nItemsPerPage;
-    private boolean _bSearchMode = false;
-    private final TicketFormService _ticketFormService = SpringContextService.getBean( TicketFormService.BEAN_NAME );
-    private final TicketSearchEngine _engine = (TicketSearchEngine) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
-    private static IUserPreferencesService _userPreferencesService = AdminUserPreferencesService.instance( );
+    private String                         _strCurrentPageIndex;
+    private int                            _nItemsPerPage;
+    private final TicketFormService        _ticketFormService                   = SpringContextService.getBean( TicketFormService.BEAN_NAME );
+    private final TicketSearchEngine       _engine                              = ( TicketSearchEngine ) SpringContextService.getBean( SearchConstants.BEAN_SEARCH_ENGINE );
+    private static IUserPreferencesService _userPreferencesService              = AdminUserPreferencesService.instance( );
 
     // Header export
-    private static final String HEADER_REFERENCE = "ticketing.export.header.reference";
-    private static final String HEADER_GUID = "ticketing.export.header.guid";
-    private static final String HEADER_CREATION_DATE = "ticketing.export.header.creation.date";
-    private static final String HEADER_TIME_CREATION = "ticketing.export.header.time.creation";
-    private static final String HEADER_OBJECT_SOLICITATION = "ticketing.export.header.object.solicitation";
-    private static final String HEADER_STATUS = "ticketing.export.header.status";
-    private static final String HEADER_NOMENCLATURE = "ticketing.export.header.nomenclature";
-    private static final String HEADER_CHANNEL = "ticketing.export.header.channel";
-    private static final String HEADER_ASSIGNEMENT_ENTITY = "ticketing.export.header.assignement.entity";
-    private static final String HEADER_ASSIGNEMENT_OFFICER = "ticketing.export.header.assignement.officer";
-    private static final String HEADER_FINAL_RESPONSE_DATE = "ticketing.export.header.final.response.date";
-    private static final String HEADER_NUM_FACIL_FAMILLE = "ticketing.export.header.numeroFacilFamille";
-    private static final String HEADER_FINAL_RESPONSE_MESSAGE = "ticketing.export.header.final.response.message";
+    private static final String            HEADER_REFERENCE                     = "ticketing.export.header.reference";
+    private static final String            HEADER_GUID                          = "ticketing.export.header.guid";
+    private static final String            HEADER_CREATION_DATE                 = "ticketing.export.header.creation.date";
+    private static final String            HEADER_TIME_CREATION                 = "ticketing.export.header.time.creation";
+    private static final String            HEADER_OBJECT_SOLICITATION           = "ticketing.export.header.object.solicitation";
+    private static final String            HEADER_STATUS                        = "ticketing.export.header.status";
+    private static final String            HEADER_NOMENCLATURE                  = "ticketing.export.header.nomenclature";
+    private static final String            HEADER_CHANNEL                       = "ticketing.export.header.channel";
+    private static final String            HEADER_ASSIGNEMENT_ENTITY            = "ticketing.export.header.assignement.entity";
+    private static final String            HEADER_ASSIGNEMENT_OFFICER           = "ticketing.export.header.assignement.officer";
+    private static final String            HEADER_FINAL_RESPONSE_DATE           = "ticketing.export.header.final.response.date";
+    private static final String            HEADER_NUM_FACIL_FAMILLE             = "ticketing.export.header.numeroFacilFamille";
+    private static final String            HEADER_FINAL_RESPONSE_MESSAGE        = "ticketing.export.header.final.response.message";
 
     /**
      * Build the Manage View
@@ -251,12 +258,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         if ( RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_VIEW, userCurrent ) )
         {
             return getManageTickets( request );
+        } else if ( RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_CREATE, getUser( ) ) )
+        {
+            return getCreateTicket( request );
         }
-        else
-            if ( RBACService.isAuthorized( new Ticket( ), TicketResourceIdService.PERMISSION_CREATE, getUser( ) ) )
-            {
-                return getCreateTicket( request );
-            }
 
         return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
     }
@@ -282,8 +287,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         try
         {
             filter = TicketFilterHelper.getFilter( request, userCurrent );
-        }
-        catch( java.text.ParseException e )
+        } catch ( java.text.ParseException e )
         {
             AppLogService.error( "Error while parsing dates", e );
             addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
@@ -300,8 +304,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy" );
         SimpleDateFormat sdf2 = new SimpleDateFormat( "HH:mm" );
-        
-        boolean bExportGuid = AppPropertiesService.getPropertyBoolean( TicketingConstants.PROPERTY_EXPORT_CSV_GUID, false);
+
+        boolean bExportGuid = AppPropertiesService.getPropertyBoolean( TicketingConstants.PROPERTY_EXPORT_CSV_GUID, false );
 
         try
         {
@@ -309,7 +313,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             File tempFile = File.createTempFile( "ticketing", null );
 
             List<String> titlesUntranslated = new ArrayList<>( );
-            if ( bExportGuid ) 
+            if ( bExportGuid )
             {
                 titlesUntranslated.add( HEADER_GUID );
             }
@@ -328,8 +332,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             titlesUntranslated.add( HEADER_FINAL_RESPONSE_DATE );
             titlesUntranslated.add( HEADER_FINAL_RESPONSE_MESSAGE );
 
-            List<String> titlesTranslated = titlesUntranslated.stream( ).map( title -> I18nService.getLocalizedString( title, Locale.FRENCH ) )
-                    .collect( Collectors.toList( ) );
+            List<String> titlesTranslated = titlesUntranslated.stream( ).map( title -> I18nService.getLocalizedString( title, Locale.FRENCH ) ).collect( Collectors.toList( ) );
 
             List<TicketCategoryType> categoryTypesList = TicketCategoryTypeHome.getCategoryTypesList( );
             for ( TicketCategoryType category : categoryTypesList )
@@ -349,7 +352,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 List<String> line = new ArrayList<>( );
                 if ( bExportGuid )
                 {
-                    line.add( ticket.getGuid() );
+                    line.add( ticket.getGuid( ) );
                 }
                 line.add( ticket.getReference( ) );
                 line.add( sdf.format( ticket.getDateCreate( ) ) );
@@ -373,8 +376,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 {
                     line.add( ticket.getDateClose( ) != null ? sdf.format( ticket.getDateClose( ) ) : "" );
                     line.add( ticket.getUserMessage( ) != null ? ticket.getUserMessage( ) : "" );
-                }
-                else
+                } else
                 {
                     line.add( "" );
                     line.add( "" );
@@ -389,14 +391,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             // Send the the content of the file to the user
             download( Files.readAllBytes( tempFile.toPath( ) ), "sollicitations.csv", CONTENT_TYPE_CSV );
 
-        }
-        catch( ParseException e )
+        } catch ( ParseException e )
         {
             AppLogService.error( "Error while parsing query " + strQuery, e );
             addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
             return redirectView( request, VIEW_MANAGE_TICKETS );
-        }
-        catch( IOException e )
+        } catch ( IOException e )
         {
             AppLogService.error( "Error while creating temporary file ", e );
             return redirectView( request, VIEW_MANAGE_TICKETS );
@@ -433,8 +433,14 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
 
         // Determine if we are in Search Ticket mode or in Manage Ticket mode
-        String strQuery = request.getParameter( SearchConstants.PARAMETER_QUERY );
-        _bSearchMode = StringUtils.isNotBlank( strQuery ) ? true : false;
+        String strQuery = ( String ) request.getSession( ).getAttribute( SearchConstants.PARAMETER_QUERY );
+        String strQueryParam = request.getParameter( SearchConstants.PARAMETER_QUERY );
+        if ( StringUtils.isNotBlank( strQueryParam ) )
+        {
+            strQuery = strQueryParam;
+            request.getSession( ).setAttribute( SearchConstants.PARAMETER_QUERY, strQueryParam );
+        }
+        boolean _bSearchMode = StringUtils.isNotBlank( strQuery ) ;
         if ( StringUtils.isBlank( strQuery ) )
         {
             strQuery = StringUtils.EMPTY;
@@ -444,8 +450,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         try
         {
             filter = TicketFilterHelper.getFilter( request, userCurrent );
-        }
-        catch( java.text.ParseException e )
+        } catch ( java.text.ParseException e )
         {
             AppLogService.error( "Error while parsing dates", e );
             addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
@@ -453,11 +458,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         TicketFilterHelper.setFilterUserAndUnitIds( filter, userCurrent );
 
         // Check if a user belong to a unit
-        boolean bUserWithNoUnit = ( filter.getFilterIdAssigneeUnit( ) == null ) || filter.getFilterIdAssigneeUnit( ).isEmpty( )
-                || ( filter.getFilterIdAssignerUnit( ) == null ) || filter.getFilterIdAssignerUnit( ).isEmpty( );
+        boolean bUserWithNoUnit = ( filter.getFilterIdAssigneeUnit( ) == null ) || filter.getFilterIdAssigneeUnit( ).isEmpty( ) || ( filter.getFilterIdAssignerUnit( ) == null )
+                || filter.getFilterIdAssignerUnit( ).isEmpty( );
 
         _strCurrentPageIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
-        _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
+        int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
         _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, _nDefaultItemsPerPage );
 
         UrlItem url = new UrlItem( JSP_MANAGE_TICKETS );
@@ -467,8 +472,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
         String strUrl = url.getUrl( );
 
-        String strPreviousSelectedTab = ( request.getSession( ).getAttribute( PARAMETER_SELECTED_TAB ) != null ) ? (String) request.getSession( ).getAttribute(
-                PARAMETER_SELECTED_TAB ) : TabulationEnum.AGENT.getLabel( );
+        String strPreviousSelectedTab = ( request.getSession( ).getAttribute( PARAMETER_SELECTED_TAB ) != null ) ? ( String ) request.getSession( ).getAttribute( PARAMETER_SELECTED_TAB )
+                : TabulationEnum.AGENT.getLabel( );
         String strSelectedTab = getSelectedTab( request );
 
         if ( !strPreviousSelectedTab.equals( strSelectedTab ) || StringUtils.isEmpty( _strCurrentPageIndex ) )
@@ -483,8 +488,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         long warningCount = -1;
         Calendar warningDate = null;
         // Count warning tickets
-        String warningPreference = _userPreferencesService.get( String.valueOf( userCurrent.getUserId( ) ), TicketingConstants.USER_PREFERENCE_WARNING_DAYS,
-                StringUtils.EMPTY );
+        String warningPreference = _userPreferencesService.get( String.valueOf( userCurrent.getUserId( ) ), TicketingConstants.USER_PREFERENCE_WARNING_DAYS, StringUtils.EMPTY );
         if ( StringUtils.isNotEmpty( warningPreference ) )
         {
             warningDate = Calendar.getInstance( );
@@ -501,13 +505,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         int nDomainTickets = 0;
 
         // Get the seleted tab name
-        String strUpperSelectedTab = StringUtils.isBlank( StringUtils.upperCase( strSelectedTab ) ) ? StringUtils.EMPTY : StringUtils
-                .upperCase( strSelectedTab );
+        String strUpperSelectedTab = StringUtils.isBlank( StringUtils.upperCase( strSelectedTab ) ) ? StringUtils.EMPTY : StringUtils.upperCase( strSelectedTab );
         try
         {
             filter.setFilterView( TicketFilterViewEnum.valueOf( strUpperSelectedTab ) );
-        }
-        catch( IllegalArgumentException e )
+        } catch ( IllegalArgumentException e )
         {
             // The default view
             filter.setFilterView( TicketFilterViewEnum.AGENT );
@@ -518,14 +520,14 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             if ( TicketFilterViewEnum.WARNING.equals( filter.getFilterView( ) ) && StringUtils.isNotEmpty( warningPreference ) )
             {
                 filter.setCreationStartDate( null );
-                filter.setCreationEndDate( warningDate.getTime( ) );
+                filter.setCreationEndDate( warningDate != null ? warningDate.getTime( ) : null );
                 filter.setListIdWorkflowState( Arrays.asList( 303, 305, 307 ) );
             }
 
             listTickets = _engine.searchTickets( strQuery, getUser( ), filter );
 
             // O2T 76319, remise en place des id ticket
-            if ( listTickets != null && !listTickets.isEmpty( ) )
+            if ( ( listTickets != null ) && !listTickets.isEmpty( ) )
             {
                 for ( Ticket ticket : listTickets )
                 {
@@ -547,13 +549,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
                 TicketFilterHelper.setFilterUserAndUnitIds( filterWarning, userCurrent );
                 filterWarning.setFilterView( TicketFilterViewEnum.WARNING );
                 filterWarning.setCreationStartDate( null );
-                filterWarning.setCreationEndDate( warningDate.getTime( ) );
+                filterWarning.setCreationEndDate( warningDate != null ? warningDate.getTime( ) : null );
                 filterWarning.setListIdWorkflowState( Arrays.asList( 303, 305, 307 ) );
                 warningCount = getNbTicketsWithLucene( strQuery, filterWarning );
             }
 
-        }
-        catch( ParseException e )
+        } catch ( ParseException e )
         {
             AppLogService.error( "Error while parsing query " + strQuery, e );
             addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
@@ -568,8 +569,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         request.getSession( ).setAttribute( TicketingConstants.SESSION_LIST_TICKETS_NAVIGATION, listIdTickets );
 
         // PAGINATORS
-        LocalizedPaginator<Ticket> paginatorTickets = new LocalizedPaginator<Ticket>( listTickets, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX,
-                _strCurrentPageIndex, getLocale( ) );
+        LocalizedPaginator<Ticket> paginatorTickets = new LocalizedPaginator<>( listTickets, _nItemsPerPage, strUrl, PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
         Map<String, Object> model = getModel( );
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
@@ -584,16 +584,14 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         model.put( MARK_USER_WITH_NO_UNIT, bUserWithNoUnit );
         model.put( MARK_USER_FACTORY, UserFactory.getInstance( ) );
         model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
-        model.put(
-                MARK_MANAGE_PAGE_TITLE,
-                ( _bSearchMode ? I18nService.getLocalizedString( PROPERTY_PAGE_SEARCH_TILE, getLocale( ) ) : I18nService.getLocalizedString(
-                        PROPERTY_PAGE_MANAGE_TITLE, getLocale( ) ) ) );
+        model.put( MARK_MANAGE_PAGE_TITLE,
+                ( _bSearchMode ? I18nService.getLocalizedString( PROPERTY_PAGE_SEARCH_TILE, getLocale( ) ) : I18nService.getLocalizedString( PROPERTY_PAGE_MANAGE_TITLE, getLocale( ) ) ) );
         model.put( TicketingConstants.MARK_JSP_CONTROLLER, getControllerJsp( ) );
-        TicketFilterHelper.setModel( model, filter, request, userCurrent );
+        TicketFilterHelper.setModel( model, filter, userCurrent );
         ModelUtils.storeTicketRights( model, userCurrent );
 
-        String strCreationDateDisplay = AdminUserPreferencesService.instance( ).get( String.valueOf( userCurrent.getUserId( ) ),
-                TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY, StringUtils.EMPTY );
+        String strCreationDateDisplay = AdminUserPreferencesService.instance( ).get( String.valueOf( userCurrent.getUserId( ) ), TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY,
+                StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_CREATION_DATE_AS_DATE, TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY_DATE.equals( strCreationDateDisplay ) );
         model.put( MARK_MASS_ACTIONS_LIST, getListMassActions( userCurrent, filter ) );
 
@@ -604,6 +602,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             addInfo( messageInfo );
             fillCommons( model );
         }
+
+        List<Marking> markings = MarkingHome.getMarkingsList( );
+        model.put( "marking_list", markings );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
     }
@@ -623,12 +624,11 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             strSelectedTab = request.getParameter( PARAMETER_SELECTED_TAB );
             request.getSession( ).setAttribute( PARAMETER_SELECTED_TAB, strSelectedTab );
-        }
-        else
+        } else
         {
-            if ( StringUtils.isNotEmpty( (String) request.getSession( ).getAttribute( PARAMETER_SELECTED_TAB ) ) )
+            if ( StringUtils.isNotEmpty( ( String ) request.getSession( ).getAttribute( PARAMETER_SELECTED_TAB ) ) )
             {
-                strSelectedTab = (String) request.getSession( ).getAttribute( PARAMETER_SELECTED_TAB );
+                strSelectedTab = ( String ) request.getSession( ).getAttribute( PARAMETER_SELECTED_TAB );
             }
         }
 
@@ -660,12 +660,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             ticket = new Ticket( );
 
             // O2T 79721 delete previous values
-            Enumeration<String> attributeNames = request.getSession().getAttributeNames();
-            while ( attributeNames.hasMoreElements() )
+            Enumeration<String> attributeNames = request.getSession( ).getAttributeNames( );
+            while ( attributeNames.hasMoreElements( ) )
             {
-                String strAttributeName = attributeNames.nextElement();
-                if ( strAttributeName != null && strAttributeName.startsWith( "attribute" ) ) {
-                    request.getSession().removeAttribute( strAttributeName );
+                String strAttributeName = attributeNames.nextElement( );
+                if ( ( strAttributeName != null ) && strAttributeName.startsWith( "attribute" ) )
+                {
+                    request.getSession( ).removeAttribute( strAttributeName );
                 }
             }
         }
@@ -704,8 +705,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             strLastname = strFamilyname;
         }
-        ticket.enrich( strIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber, strEmail, strCategoryCode, null, null, null,
-                strGuid, strIdCustomer, strNomenclature );
+        ticket.enrich( strIdUserTitle, strFirstname, strLastname, strFixedPhoneNumber, strMobilePhoneNumber, strEmail, strCategoryCode, null, null, null, strGuid, strIdCustomer, strNomenclature );
 
         model.put( MARK_USER_TITLES_LIST, UserTitleHome.getReferenceList( request.getLocale( ) ) );
         model.put( TicketingConstants.MARK_TICKET_CATEGORIES_TREE, TicketCategoryService.getInstance( true ).getCategoriesTree( ).getTreeJSONObject( ) );
@@ -759,8 +759,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
             _ticketFormService.removeTicketFromSession( request.getSession( ) );
             return redirectAfterCreateAction( request );
-        }
-        catch( Exception e )
+        } catch ( Exception e )
         {
             addError( TicketingConstants.ERROR_TICKET_CREATION_ABORTED, getLocale( ) );
             AppLogService.error( e );
@@ -789,8 +788,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         {
             Ticket ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
             // Check user rights on domain
-            if ( !RBACService.isAuthorized( TicketCategoryService.getInstance( ).getTicketCategoryRBACResource( ticket.getTicketCategory( ) ),
-                    TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) )
+            if ( !RBACService.isAuthorized( TicketCategoryService.getInstance( ).getTicketCategoryRBACResource( ticket.getTicketCategory( ) ), TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) )
             {
                 return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
             }
@@ -819,8 +817,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             _ticketFormService.removeTicketFromSession( request.getSession( ) );
 
             return redirectToViewDetails( request, ticket );
-        }
-        catch( Exception e )
+        } catch ( Exception e )
         {
             addError( TicketingConstants.ERROR_TICKET_CREATION_ABORTED, getLocale( ) );
             AppLogService.error( e );
@@ -927,8 +924,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         if ( ticket == null )
         {
             ticket = TicketHome.findByPrimaryKey( nId );
-        }
-        else
+        } else
         {
             ticket = _ticketFormService.getTicketFromSession( request.getSession( ) );
         }
@@ -1006,9 +1002,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         Map<String, Object> model = getModel( );
         model.put( TicketingConstants.MARK_TICKET, ticket );
         model.put( MARK_RESPONSE_RECAP_LIST, listResponseRecap );
-        model.put( MARK_CREATE_ASSIGN_RIGHT, RBACService.isAuthorized(
-                TicketCategoryService.getInstance( ).getTicketCategoryRBACResource( ticket.getTicketCategory( ) ), TicketCategory.PERMISSION_VIEW_DETAIL,
-                getUser( ) ) );
+        model.put( MARK_CREATE_ASSIGN_RIGHT,
+                RBACService.isAuthorized( TicketCategoryService.getInstance( ).getTicketCategoryRBACResource( ticket.getTicketCategory( ) ), TicketCategory.PERMISSION_VIEW_DETAIL, getUser( ) ) );
 
         return getPage( PROPERTY_PAGE_TITLE_RECAP_TICKET, TEMPLATE_RECAP_TICKET, model );
     }
@@ -1034,11 +1029,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         boolean bIsFormValid = populateAndValidateFormTicket( ticket, request );
 
-
         // O2T : recuperation des attributs complementaires (dont num facil'familles)
-        for ( Map.Entry entry : request.getParameterMap().entrySet()) {
-            if (entry.getKey()!=null && entry.getKey().toString().startsWith( "attribute" )) {
-                request.getSession().setAttribute( String.valueOf( entry.getKey() ), entry.getValue() );
+        for ( Map.Entry entry : request.getParameterMap( ).entrySet( ) )
+        {
+            if ( ( entry.getKey( ) != null ) && entry.getKey( ).toString( ).startsWith( "attribute" ) )
+            {
+                request.getSession( ).setAttribute( String.valueOf( entry.getKey( ) ), entry.getValue( ) );
             }
         }
 
@@ -1047,10 +1043,8 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             _ticketFormService.saveTicketInSession( request.getSession( ), ticket );
 
             return redirectView( request, VIEW_CREATE_TICKET );
-        }
-        else
+        } else
         {
-
 
             ticket.setContactMode( ContactModeHome.findByPrimaryKey( ticket.getIdContactMode( ) ).getCode( ) );
             ticket.setUserTitle( UserTitleHome.findByPrimaryKey( ticket.getIdUserTitle( ) ).getLabel( ) );
@@ -1084,10 +1078,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         TicketCategoryValidatorResult categoryValidatorResult = new TicketCategoryValidator( request, getLocale( ) ).validateTicketCategory( );
         if ( !categoryValidatorResult.isTicketCategoryValid( ) )
         {
-            categoryValidatorResult.getListValidationErrors( ).stream( ).forEach( ( error ) -> addError( error ) );
+            categoryValidatorResult.getListValidationErrors( ).stream( ).forEach( error -> addError( error ) );
             bIsFormValid = false;
-        }
-        else
+        } else
         {
             ticket.setTicketCategory( categoryValidatorResult.getTicketCategory( ) );
         }
@@ -1144,7 +1137,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             bIsFormValid = false;
         }
 
-        List<GenericAttributeError> listFormErrors = new ArrayList<GenericAttributeError>( );
+        List<GenericAttributeError> listFormErrors = new ArrayList<>( );
 
         if ( categoryValidatorResult.isTicketCategoryValid( ) )
         {
@@ -1158,7 +1151,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             }
         }
 
-        if ( listFormErrors.size( ) > 0 )
+        if ( !listFormErrors.isEmpty( ) )
         {
             // TICKETING-2217 affichage du message d'erreur
             for ( GenericAttributeError error : listFormErrors )
@@ -1220,12 +1213,12 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // O2T 79251, contrôle facil'famille
         if ( ( ticket.getTicketDomain( ) != null ) && ticket.getTicketDomain( ).getLabel( ).equalsIgnoreCase( AppPropertiesService.getProperty( PROPERTY_ACCOUNT_NUMBER_DOMAIN_LABEL ) ) )
         {
-            if ( ticket.getFacilFamilleNumber() == null || ticket.getFacilFamilleNumber().isEmpty() )
+            if ( ( ticket.getFacilFamilleNumber( ) == null ) || ticket.getFacilFamilleNumber( ).isEmpty( ) )
             {
                 // null or empty
                 bIsFormValid = false;
                 addError( MESSAGE_ERROR_FACIL_EMPTY_VALIDATION, getLocale( ) );
-            } else if ( !ticket.getFacilFamilleNumber().matches( AppPropertiesService.getProperty( PROPERTY_ACCOUNT_NUMBER_REGEXP ) ))
+            } else if ( !ticket.getFacilFamilleNumber( ).matches( AppPropertiesService.getProperty( PROPERTY_ACCOUNT_NUMBER_REGEXP ) ) )
             {
                 // does not match facil'famille regex
                 bIsFormValid = false;
@@ -1307,8 +1300,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         try
         {
             return _engine.searchCountTickets( strQuery, getUser( ), filter );
-        }
-        catch( ParseException e )
+        } catch ( ParseException e )
         {
             AppLogService.error( "Error while parsing query " + strQuery, e );
             addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
@@ -1345,8 +1337,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     @View( TicketingConstants.VIEW_WORKFLOW_MASS_ACTION_FORM )
     public String getWorkflowMassActionForm( HttpServletRequest request )
     {
-        request.getSession( )
-                .setAttribute( TicketingConstants.PARAMETER_SELECTED_TICKETS, request.getParameterValues( TicketingConstants.PARAMETER_ID_TICKET ) );
+        request.getSession( ).setAttribute( TicketingConstants.PARAMETER_SELECTED_TICKETS, request.getParameterValues( TicketingConstants.PARAMETER_ID_TICKET ) );
         request.getSession( ).setAttribute( TicketingConstants.PARAMETER_IS_MASS_ACTION, true );
         return getWorkflowActionForm( request );
     }
@@ -1358,7 +1349,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         List<Unit> unitsList = UnitHome.findByIdUser( user.getUserId( ) );
 
         // Check if user is in same unit tree as unit assigned to ticket
-        Set<Integer> subUnits = unitsList.stream( ).map( unit -> unit.getIdUnit( ) ).collect( Collectors.toSet( ) );
+        Set<Integer> subUnits = unitsList.stream( ).map( Unit::getIdUnit).collect( Collectors.toSet( ) );
         unitsList.stream( ).forEach( unit -> subUnits.addAll( UnitHome.getAllSubUnitsId( unit.getIdUnit( ) ) ) );
         boolean ticketInSubUnit = true;
         if ( ticket.getAssigneeUnit( ) != null )

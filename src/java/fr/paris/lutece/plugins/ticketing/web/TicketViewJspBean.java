@@ -40,7 +40,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerLockObtainFailedException;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.genericattributes.business.Response;
@@ -50,6 +49,7 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerException;
+import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerLockObtainFailedException;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketCriticality;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;

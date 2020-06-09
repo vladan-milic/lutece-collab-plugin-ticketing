@@ -38,7 +38,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -46,7 +45,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import fr.paris.lutece.plugins.ticketing.util.sort.TicketAttributeComparator;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
@@ -56,6 +54,7 @@ import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponse;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.ModelResponseHome;
 import fr.paris.lutece.plugins.ticketing.business.modelresponse.search.IModelResponseIndexer;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
+import fr.paris.lutece.plugins.ticketing.util.sort.TicketAttributeComparator;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -157,7 +156,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
     /**
      * Return a model that contains the list and paginator infos
-     * 
+     *
      * @param request
      *            The HTTP request
      * @param strBookmark
@@ -192,7 +191,7 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
     /**
      * Build the Manage View
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The page
@@ -424,10 +423,10 @@ public class ModelResponseJspBean extends MVCAdminJspBean
 
     /**
      * Return a ReferenceList with all domain names allowed by current user
-     * 
+     *
      * @param mapDomains
      *            the map to be completed with domain names
-     * 
+     *
      * @return filtered referenceList
      */
     private Map<String, String> getFilteredCategoryList( )

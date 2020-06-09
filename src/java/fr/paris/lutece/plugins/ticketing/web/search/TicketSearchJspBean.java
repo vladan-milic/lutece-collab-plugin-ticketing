@@ -78,14 +78,14 @@ public class TicketSearchJspBean extends MVCAdminJspBean
 
     /**
      * Search tickets
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The view
      */
     @Action( value = ACTION_SEARCH_TICKET )
     @SuppressWarnings( {
-            "rawtypes", "unchecked"
+        "rawtypes", "unchecked"
     } )
     public String searchTickets( HttpServletRequest request )
     {
@@ -131,7 +131,7 @@ public class TicketSearchJspBean extends MVCAdminJspBean
 
     /**
      * add error to model
-     * 
+     *
      * @param model
      *            model
      * @param strMessageKey

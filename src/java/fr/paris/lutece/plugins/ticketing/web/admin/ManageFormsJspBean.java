@@ -1,7 +1,6 @@
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -50,8 +49,6 @@ public class ManageFormsJspBean extends MVCAdminJspBean
 
     // Templates
     private static final String TEMPLATE_MANAGE_FORMS = "/admin/plugins/ticketing/admin/manage_forms.html";
-    // private static final String TEMPLATE_CREATE_FORM = "/admin/plugins/ticketing/admin/create_form.html";
-    // private static final String TEMPLATE_MODIFY_FORM = "/admin/plugins/ticketing/admin/modify_form.html";
     private static final String TEMPLATE_EDIT_FORM = "/admin/plugins/ticketing/admin/edit_form.html";
     // Views
     private static final String VIEW_MANAGE_FORMS = "manageForms";
@@ -104,7 +101,6 @@ public class ManageFormsJspBean extends MVCAdminJspBean
     // Parameters
     private static final String PARAMETER_PAGE_INDEX = "page_index";
     private static final String PARAMETER_ID_FORM = "id";
-    private static final String PARAMETER_ROLE = "roles";
 
     // Session variable to store working values
     private Form _form;
@@ -156,8 +152,7 @@ public class ManageFormsJspBean extends MVCAdminJspBean
     @View( value = VIEW_MANAGE_FORMS, defaultView = true )
     public String getManageForms( HttpServletRequest request )
     {
-        List<Form> listForms = new ArrayList<Form>( );
-        listForms = FormHome.getFormsList( );
+        List<Form> listForms = FormHome.getFormsList( );
 
         Map<String, Object> model = getPaginatedListModel( request, MARK_FORM_LIST, listForms, JSP_MANAGE_FORMS );
 

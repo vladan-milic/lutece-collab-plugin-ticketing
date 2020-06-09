@@ -3,20 +3,26 @@
 <#include "/admin/plugins/ticketing/include/popins.html" />
 <#include "view_ticket_header.html" />
 <@ticketHeader tab='details' ticket=ticket navigation_next=navigation_next navigation_previous=navigation_previous/>
-<div id="demand-panel" class="row ticket-content">
+<div id="demand-panel" class="container ticket-content">
+<div class="row">
+			<nav aria-label="Breadcrumb" class="breadcrumb">
+              <ul>
+                  <#list ticket.branch as ticket_category>
+				    <li><a href="">${ticket_category.label!''}</a></li>
+		   		  </#list>
+              </ul>
+          </nav>
+          
   <@notification infos=infos />
   <@messages errors=errors />
-  <div id="demand-content" class="col-xs-12 col-sm-offset-1 col-sm-7">
-    <h3 class="text-darkgray">${ticket.dateCreate!''}</h3>
+  <div id="demand-content" class="col-md-8">
+  <div class="detail-txt text-justify">
     <#if ticket.ticketComment !=''>
-      <div class="text-justify">
-        <p class="wordwrap-ticket-comment">${ticket_processed_comment}</p>
-      </div>
+        ${ticket_processed_comment}
     <#else>
-      <p class="lead">
         <i class="fa fa-warning"></i> #i18n{ticketing.view_ticket_details.labelNoComment}
-      </p>
     </#if>
+   
     <#if read_only_reponses_html_list?has_content>
       <hr>
       <#list read_only_reponses_html_list as html_response>
@@ -25,53 +31,38 @@
         </#if>
       </#list>
     </#if>
-    <hr/>
+    </div>
     ${history!''}
   </div>
-  <div id="info-right" class="col-xs-12 col-sm-3">
-    <#list ticket.branch as ticket_category>
-	    <h5>${ticket_category.categoryType.label!''}<h5>
-	    <h4>${ticket_category.label!''}</h4>
-    </#list>
-    <#if ticket.nomenclature??>
-      <h5>#i18n{ticketing.view_ticket_details.labelNomenclature}</h5>
-      <h4>${ticket.nomenclature}</h4>
-    </#if>
-    <#if ticket.channel??>
-      <h5>#i18n{ticketing.view_ticket_details.labelChannel}</h5>
-      <h4><#if ticket.channel.iconFont??><i class="${ticket.channel.iconFont}"></i>&nbsp;</#if>${ticket.channel.label!''}</h4>
-    </#if>
-    <hr>
+  <div id="info-right" class="col-sm-4">
     <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
       <#list ticket.listWorkflowActions as action>
-        <p>
           <#if action.displayTasksForm>
-            <a class="btn btn-lg btn-primary btn-block bg-gru-dark"  href="jsp/admin/plugins/ticketing/Standalone.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}&amp;jsp=${jsp_controller}"
+            <a class="btn tag-detail"  href="jsp/admin/plugins/ticketing/Standalone.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}&amp;jsp=${jsp_controller}"
               data-remote="false" data-toggle="modal" data-title="${action.description}" data-target="#ticketing-modal-workflow-action-form" title="${action.name}" data-action-id="${action.id}">
-              <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
+              <i class="fa fa-desktop"></i> ${action.name}
             </a>
+            <br>
           <#else>
-            <a class="btn btn-lg btn-primary btn-block bg-gru-dark" data-title="${action.name}" href="jsp/admin/plugins/ticketing/TicketView.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}"
+            <a class="btn tag-detail" data-title="${action.name}" href="jsp/admin/plugins/ticketing/TicketView.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}"
                 title="${action.name}" data-action-id="${action.id}">
-                <i class="fa fa-${action.name!'plus'}"></i>  ${action.name}
+                <i class="fa fa-desktop"></i> ${action.name}
             </a>
+            <br>
           </#if>
-          </p>
         </#list>
       </#if>
       <#if ticket_modification_right?? && ticket_modification_right>
-       <p>
-         <a class="btn btn-lg btn-primary btn-block bg-gru-dark"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}" title="#i18n{portal.util.labelModify}">
+         <a class="btn tag-detail"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}" title="#i18n{portal.util.labelModify}">
            <i class="fa fa-pencil"></i>  #i18n{portal.util.labelModify}
          </a>
-       </p>
+         <br>
      </#if>
      <#if ticket_deletion_right?? && ticket_deletion_right>
-         <p>
-           <a class="btn btn-lg btn-primary btn-block bg-gru-dark"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}" title="#i18n{portal.util.labelDelete}">
+           <a class="btn tag-detail"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?action=confirmRemoveTicket&id=${ticket.id}" title="#i18n{portal.util.labelDelete}">
              <i class="fa fa-trash"></i>  #i18n{portal.util.labelDelete}
            </a>
-         </p>
+           <br>
      </#if>
   </div>
 </div>

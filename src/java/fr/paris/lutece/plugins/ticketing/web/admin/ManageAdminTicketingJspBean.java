@@ -73,7 +73,7 @@ public abstract class ManageAdminTicketingJspBean extends MVCAdminJspBean
 
     /**
      * Return a model that contains the list and paginator infos
-     * 
+     *
      * @param request
      *            The HTTP request
      * @param strBookmark

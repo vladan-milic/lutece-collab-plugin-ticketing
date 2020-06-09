@@ -112,6 +112,10 @@ public class TicketSearchUtil
         mapSortField.put( "date_create",
                 Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_DATE_CREATION, SortField.Type.LONG ) ) );
 
+        // Sort on the update date
+        mapSortField.put( "date_update",
+                Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_DATE_UPDATE, SortField.Type.LONG ) ) );
+
         // Sort on category label
         mapSortField.put( "category_label",
                 Arrays.asList( new AbstractMap.SimpleEntry<String, Type>( TicketSearchItemConstant.FIELD_CATEGORY, SortField.Type.STRING ) ) );
