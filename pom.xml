@@ -10,7 +10,7 @@
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>plugin-ticketing</artifactId>
     <packaging>lutece-plugin</packaging>
-    <version>3.0.0</version>
+    <version>3.0.1-SNAPSHOT</version>
     <name>Lutece ticketing plugin</name>
 
     <repositories>
