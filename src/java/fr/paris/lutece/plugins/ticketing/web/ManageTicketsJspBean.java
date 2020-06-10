@@ -302,6 +302,31 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             strQuery = StringUtils.EMPTY;
         }
 
+        try
+        {
+            List<Ticket> listTickets = _engine.searchTickets( strQuery, getUser( ), filter );
+            return generateDownloadCsvFile( listTickets, request );
+
+        } catch ( ParseException e )
+        {
+            AppLogService.error( "Error while parsing query " + strQuery, e );
+            addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
+            return redirectView( request, VIEW_MANAGE_TICKETS );
+        }
+
+    }
+
+    /**
+     * Generate and download csv export file.
+     * @param listTicketsToExport
+     *         tickets to export
+     * @param request
+     *          The HTTP request
+     * @return csv file.
+     */
+    private String generateDownloadCsvFile( List<Ticket> listTicketsToExport, HttpServletRequest request )
+    {
+
         SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy" );
         SimpleDateFormat sdf2 = new SimpleDateFormat( "HH:mm" );
 
@@ -309,7 +334,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         try
         {
-            List<Ticket> listTickets = _engine.searchTickets( strQuery, getUser( ), filter );
             File tempFile = File.createTempFile( "ticketing", null );
 
             List<String> titlesUntranslated = new ArrayList<>( );
@@ -346,43 +370,10 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             // Write line in the temp file
             CSVUtils.writeLine( w, titlesTranslated );
 
-            for ( Ticket ticket : listTickets )
+            for ( Ticket ticket : listTicketsToExport )
             {
-                // Data line
-                List<String> line = new ArrayList<>( );
-                if ( bExportGuid )
-                {
-                    line.add( ticket.getGuid( ) );
-                }
-                line.add( ticket.getReference( ) );
-                line.add( sdf.format( ticket.getDateCreate( ) ) );
-                line.add( sdf2.format( ticket.getDateCreate( ) ) );
-                for ( TicketCategory category : ticket.getBranch( ) )
-                {
-                    line.add( category.getLabel( ) );
-                }
-                for ( int index = 0; index < ( categoryTypesList.size( ) - ticket.getBranch( ).size( ) ); index++ )
-                {
-                    line.add( "" );
-                }
-                line.add( ticket.getTicketComment( ) );
-                line.add( ticket.getFacilFamilleNumber( ) != null ? "=\"" + ticket.getFacilFamilleNumber( ) + "\"" : "" );
-                line.add( ticket.getState( ).getName( ) );
-                line.add( ticket.getNomenclature( ) );
-                line.add( ticket.getChannel( ) != null ? ticket.getChannel( ).getLabel( ) : "" );
-                line.add( ticket.getAssigneeUnit( ) != null ? ticket.getAssigneeUnit( ).getName( ) : "" );
-                line.add( ticket.getAssigneeUser( ) != null ? ticket.getAssigneeUser( ).getFirstname( ) + " " + ticket.getAssigneeUser( ).getLastname( ) : "" );
-                if ( ticket.getTicketStatus( ) == TicketingConstants.TICKET_STATUS_CLOSED )
-                {
-                    line.add( ticket.getDateClose( ) != null ? sdf.format( ticket.getDateClose( ) ) : "" );
-                    line.add( ticket.getUserMessage( ) != null ? ticket.getUserMessage( ) : "" );
-                } else
-                {
-                    line.add( "" );
-                    line.add( "" );
-                }
-
-                // Write line in the temp file
+                //Write data
+                List<String> line = writelineData( ticket, categoryTypesList, bExportGuid, sdf, sdf2 );
                 CSVUtils.writeLine( w, line );
 
             }
@@ -390,12 +381,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             w.close( );
             // Send the the content of the file to the user
             download( Files.readAllBytes( tempFile.toPath( ) ), "sollicitations.csv", CONTENT_TYPE_CSV );
-
-        } catch ( ParseException e )
-        {
-            AppLogService.error( "Error while parsing query " + strQuery, e );
-            addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
-            return redirectView( request, VIEW_MANAGE_TICKETS );
         } catch ( IOException e )
         {
             AppLogService.error( "Error while creating temporary file ", e );
@@ -403,6 +388,61 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         }
 
         return null;
+    }
+
+    /**
+     * Write csv data line.
+     * @param ticket
+     *         ticket to write
+     * @param categoryTypesList
+     *         list category type
+     * @param bExportGuid
+     *         boolean export guid true to export
+     * @param sdfDate
+     *         date format
+     * @param sdfHeure
+     *         hour format
+     * @return csv line
+     *
+     */
+    private List<String> writelineData ( Ticket ticket, List<TicketCategoryType> categoryTypesList,  boolean bExportGuid, SimpleDateFormat sdfDate, SimpleDateFormat sdfHour ) {
+
+        // Data line
+        List<String> line = new ArrayList<>( );
+        if ( bExportGuid )
+        {
+            line.add( ticket.getGuid( ) );
+        }
+        line.add( ticket.getReference( ) );
+        line.add( sdfDate.format( ticket.getDateCreate( ) ) );
+        line.add( sdfHour.format( ticket.getDateCreate( ) ) );
+        for ( TicketCategory category : ticket.getBranch( ) )
+        {
+            line.add( category.getLabel( ) );
+        }
+        for ( int index = 0; index < ( categoryTypesList.size( ) - ticket.getBranch( ).size( ) ); index++ )
+        {
+            line.add( "" );
+        }
+        line.add( ticket.getTicketComment( ) );
+        line.add( ticket.getFacilFamilleNumber( ) != null ? "=\"" + ticket.getFacilFamilleNumber( ) + "\"" : "" );
+        line.add( ticket.getState( ).getName( ) );
+        line.add( ticket.getNomenclature( ) );
+        line.add( ticket.getChannel( ) != null ? ticket.getChannel( ).getLabel( ) : "" );
+        line.add( ticket.getAssigneeUnit( ) != null ? ticket.getAssigneeUnit( ).getName( ) : "" );
+        line.add( ticket.getAssigneeUser( ) != null ? ticket.getAssigneeUser( ).getFirstname( ) + " " + ticket.getAssigneeUser( ).getLastname( ) : "" );
+        if ( ticket.getTicketStatus( ) == TicketingConstants.TICKET_STATUS_CLOSED )
+        {
+            line.add( ticket.getDateClose( ) != null ? sdfDate.format( ticket.getDateClose( ) ) : "" );
+            line.add( ticket.getUserMessage( ) != null ? ticket.getUserMessage( ) : "" );
+        } else
+        {
+            line.add( "" );
+            line.add( "" );
+        }
+
+        return line;
+
     }
 
     /**
