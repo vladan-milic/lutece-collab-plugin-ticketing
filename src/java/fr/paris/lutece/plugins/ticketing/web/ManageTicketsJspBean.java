@@ -295,7 +295,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         TicketFilterHelper.setFilterUserAndUnitIds( filter, userCurrent );
 
         // Determine if we are in Search Ticket mode or in Manage Ticket mode
-        String strQuery = request.getParameter( SearchConstants.PARAMETER_QUERY );
+        String strQuery = ( String ) request.getSession( ).getAttribute( SearchConstants.PARAMETER_QUERY );
 
         if ( StringUtils.isBlank( strQuery ) )
         {
