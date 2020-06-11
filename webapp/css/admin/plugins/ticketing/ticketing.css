@@ -1480,6 +1480,11 @@ h1.welcome-text {
   transition: all 1s ease;
 } */
 
+.button-flex-end {
+  padding-right: 20px;
+  align-self: flex-end;
+}
+
 .info {
   margin-top: 30px;
   text-align: center;

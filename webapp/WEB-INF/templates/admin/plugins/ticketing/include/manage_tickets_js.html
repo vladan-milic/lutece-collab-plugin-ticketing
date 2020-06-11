@@ -190,11 +190,8 @@ function loadFilter(mapSize){
         }
     })();
     
-    $("#pastille-dropdown").bind("classChanged",function(){
-    	var isOpen = $(this).hasClass('open');
-    	if(!isOpen){
-    		$("#filter_form").submit();
-    	}
+     $("#filterByPastille").click(function(){
+        $("#filter_form").submit();
     });
     
 </script>
