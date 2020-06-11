@@ -159,6 +159,12 @@ hr.separate {
   padding-top: 88px;
 }
 
+.gru-wrapper-small {
+  background-image: url("../../../../images/admin/skin/plugins/ticketing/home-banner.jpg");
+  padding-top: 88px;
+  height: 300px;
+}
+
 select.select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -1674,4 +1680,8 @@ textarea.richtext {
 
 .navbar-fixed-top{
 	background-color: white;
+}
+
+hr.bor-2{
+  border-top: 2px solid gray;
 }
