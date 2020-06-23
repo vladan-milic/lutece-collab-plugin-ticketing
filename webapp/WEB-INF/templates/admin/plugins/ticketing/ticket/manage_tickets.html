@@ -69,7 +69,7 @@
                    	    <div class="checkbox-custom">
                             <input type="checkbox" id="check_all_status" name="Statuts">
                             <span class="boxcustom"></span>
-                            <label for="Statuts">Voir tous les statuts</label>
+                            <label for="Statuts">Tous les statuts</label>
                        	</div>
                         <#list state_list as state>
                         	<div class="checkbox-custom">
@@ -82,6 +82,9 @@
                             <label for="Statuts">${state.name!}</label>
                         </div>
                         </#list>
+                        <div class="w-fixe pt-54 d-flex flex-espace ">
+                          <button type="submit" class="btn btn-search btn-sm"><span class="ico-loupe"></span>Rechercher</button>
+                       </div>
                       </div>
                    </div>
                 </#if>
@@ -89,7 +92,7 @@
                     <h1 class="sous-title-form">Mots-cl&eacute;s&nbsp;&nbsp;<i class="fa fa-question-circle-o" aria-hidden="true"></i></h1>
                     <div class="form-group">
                        <input id="search_input" class="input-sm form-control-index" type="search" name="query" placeholder="#i18n{ticketing.manage_tickets.searchDefaultTxt}" value="<#if query?has_content>${query}</#if>">
-                        <button type="submit" class="btn btn-search btn-sm"><span class="ico-loupe"></span></button>
+                        <button type="submit" class="btn btn-search-mini btn-sm"><span class="ico-loupe"></span></button>
                     </div>
                     <h1 class="sous-title-form">#i18n{ticketing.manage_tickets.start_date}</h1>
                     <div class="select-calendar">
