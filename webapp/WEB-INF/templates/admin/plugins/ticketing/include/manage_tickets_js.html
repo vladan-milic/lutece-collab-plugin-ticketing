@@ -130,6 +130,14 @@ function loadFilter(mapSize){
             return text;
         }
         
+        var allStatusChecked = true;
+        $(".checkbox_status").each(function(){
+           allStatusChecked = allStatusChecked &&  $(this).is(':checked');
+        });
+        if (allStatusChecked === true) {
+           $("#check_all_status").prop("checked",true);
+        }
+        
     });
     
     $("#check_all_status").click(function(){
@@ -137,12 +145,8 @@ function loadFilter(mapSize){
     	$(".checkbox_status").each(function(){
     		$(this).prop("checked",isChecked);
     	});
-    	$("#filter_form").submit();
     });
     
-    $(".checkbox_status").click(function(){
-    	$("#filter_form").submit();
-	});
     
     $("#checkbox_urgency").change(function(){
 		$("#filter_form").submit();

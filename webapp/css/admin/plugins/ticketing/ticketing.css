@@ -265,8 +265,19 @@ select.select {
   border-radius: 5px;
 }
 
-.btn.btn-search.btn-sm {
+.btn.btn-search-mini.btn-sm {
   width: 39px;
+  height: 37px;
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #fff;
+  background: url(../../../../images/admin/skin/plugins/ticketing/loupe.png) no-repeat 8px 6px;
+  border: 1px solid #071f32;
+  border-radius: 5px;
+}
+
+.btn.btn-search.btn-sm {
+  width: 150px;
   height: 37px;
   padding: 6px 12px;
   font-size: 14px;
