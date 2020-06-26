@@ -2,7 +2,7 @@
     <i class="fa fa-chevron-up" onclick="sortList('${field}','asc')"></i>&nbsp;<i class="fa fa-chevron-down" onclick="sortList('${field}','desc')"></i>
 </#macro>
 
-<#macro renderTabPanel panel_list active=false id=''>
+<#macro renderTabPanel panel_list pref_user active=false id=''>
 	
     <div role="tabpanel" class="tab-pane <#if active> active</#if>" <#if id!="">id="${id}"</#if> >
         <input type="hidden" id="id" name="id">
@@ -22,13 +22,23 @@
                     <#else>
                       <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.counter}<@sortTickets attribute='date_create' /></th>
                     </#if>
-                    <th data-field="date_update">#i18n{ticketing.manage_tickets.columnDateUpdate.date}<@sortTickets attribute='date_update' /></th>
-                    <th data-field="category_label">#i18n{ticketing.manage_tickets.columnCategory}<@sortTickets attribute='category_label' /></th>
+                    <#if pref_user?contains("lastaction") || pref_user=="displayAllColumn">
+                      <th data-field="date_update">#i18n{ticketing.manage_tickets.columnDateUpdate.date}<@sortTickets attribute='date_update' /></th>
+					</#if>
+                    <#if pref_user?contains("category") || pref_user=="displayAllColumn">
+                      <th data-field="category_label">#i18n{ticketing.manage_tickets.columnCategory}<@sortTickets attribute='category_label' /></th>
+                    </#if> 
                     <th data-field="lastname">#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment}<@sortTickets attribute='lastname' /></th>
                     <th data-field="state">#i18n{ticketing.manage_tickets.columnTicketState}<@sortTickets attribute='state' /></th>
-                    <th data-field="nomenclature">#i18n{ticketing.manage_tickets.columnTicketNomenclature}<@sortTickets attribute='nomenclature' /></th>
+                    <#if pref_user?contains("nomenclature") || pref_user=="displayAllColumn">
+                      <th data-field="nomenclature">#i18n{ticketing.manage_tickets.columnTicketNomenclature}<@sortTickets attribute='nomenclature' /></th>
+					</#if>
+                    <#if pref_user?contains("canal") || pref_user=="displayAllColumn">
                     <th data-field="channel">#i18n{ticketing.manage_tickets.columnTicketChannel}<@sortTickets attribute='channel' /></th>
-                    <th data-field="assignee">#i18n{ticketing.manage_tickets.columnTicketAssignee}<@sortTickets attribute='assignee' /></th>
+                    </#if>
+                    <#if pref_user?contains("assignation") || pref_user=="displayAllColumn">
+                      <th data-field="assignee">#i18n{ticketing.manage_tickets.columnTicketAssignee}<@sortTickets attribute='assignee' /></th>
+                    </#if> 
               </tr>
           </thead>  
             <tbody>
@@ -94,22 +104,27 @@
                     </#if>
                     </strong>
                   </td>
+                  <#if pref_user?contains("lastaction") || pref_user=="displayAllColumn">
                   <td><strong classl="info-table">
                       ${ticket.dateUpdate?string["dd/MM/yyyy HH:mm"]}
                       </strong>
                   </td>
-                  <td class="text-left">
-                    <#list ticket.branch as ticket_category>
-                       ${ticket_category.categoryType.label!''}: <strong>${ticket_category.label!''}</strong><br>
-                    </#list>
-                  </td>
+				  </#if>
+                  <#if pref_user?contains("category") || pref_user=="displayAllColumn" >
+	                  <td class="text-left">
+	                    <#list ticket.branch as ticket_category>
+	                       ${ticket_category.categoryType.label!''}: <strong>${ticket_category.label!''}</strong><br>
+	                    </#list>
+	                  </td>
+	              </#if>
                   <td class="text-left">
                     <div class="d-flex">
                                     <div class="visible-scrollbar">
                                         <p class="pr-22">
                       <b>${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}</b>
             </p>
-            <p>
+            <#if pref_user?contains("usercontact") || pref_user=="displayAllColumn" >
+                  <p>
                     <#if ticket.email ?? && ticket.email?length &gt; 1>
                       <small>
                           <i class="fa fa-envelope"></i> ${ticket.email}
@@ -125,7 +140,8 @@
                           / <i class="fa fa-phone"></i> ${ticket.fixedPhoneNumber}
                       </small>
                     </#if>
-                    </p>
+                   </p>
+			 </#if>
             <#if ticket.ticketComment?has_content>
               <div class="ticket-comments text-left wordwrap-ticket-comment" style="word-break: break-all;">
                 ${convertNewLineToHtml(ticket.ticketComment)}
@@ -138,15 +154,20 @@
                     ${ticket.state.name!''}
                     </#if>
                   </td>
+                  <#if pref_user?contains("nomenclature") || pref_user=="displayAllColumn">
                   <td><#if ticket.nomenclature??>
                     ${ticket.nomenclature}
                     </#if>
                   </td>
+				  </#if>
+                  <#if pref_user?contains("canal") || pref_user=="displayAllColumn">
                    <td>
                       <#if ticket.channel??>
                         <#if ticket.channel.iconFont??><i class="${ticket.channel.iconFont}"></i>&nbsp;</#if>
                       </#if>
                   </td>
+                  </#if>
+                <#if pref_user?contains("assignation") || pref_user=="displayAllColumn">
                   <td>
                     <#if ticket.assigneeUnit??>
             <p>
@@ -165,6 +186,7 @@
              </#if>
             </#if>
                   </td>
+                 </#if>
                 </tr>
                 </#list>
           </tbody>

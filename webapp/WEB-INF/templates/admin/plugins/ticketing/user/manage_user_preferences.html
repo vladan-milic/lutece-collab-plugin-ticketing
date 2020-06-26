@@ -1,12 +1,13 @@
 <script>$(".content-header").hide();</script>
 <#include "/admin/util/editor/editor.html" />
-<div class="gru-wrapper">
+<div class="gru-wrapper-small">
   <div id="customer-panel" class="row ticket-head bg-gru-light">
     <div class="col-xs-12 col-sm-offset-1 col-sm-11">
-      <h2>#i18n{ticketing.manage_user_preferences.pageTitle}</h2>
-      <h3>#i18n{ticketing.manage_user_preferences.labelTitle}</h3>
+      <h1 class="welcome-text">${hello}</h1>
+      <h1 class="welcome-text">#i18n{ticketing.manage_user_preferences.labelTitle}</h1>
     </div>
   </div>
+</div>
   <div id="demand-panel" class="row">
     <div class="col-xs-12 col-sm-12 top">
       <div class="row">
@@ -18,9 +19,81 @@
       <div class="row">
         <div class="col-xs-12 col-sm-offset-1 col-sm-9">
           <form id="" class="form-horizontal" method="post" name="modify_user_preferences" action="jsp/admin/plugins/ticketing/UserPreferences.jsp" enctype="multipart/form-data">
+            <h3>#i18n{ticketing.manage_user_preferences.labelParam.tableauSoll}</h3>
+            <hr class="bor-2">
+             <div class="form-group">
+              <label class="col-xs-12 col-sm-12 form-text">#i18n{ticketing.manage_user_preferences.labelParam.tableauSollInfo}</label>
+              <div class="col-xs-6 col-sm-6">
+                <div>
+                  <input type="checkbox" name="param_sol_reference" id="cb_reference" value="reference" disabled="disabled" checked/>
+                  <label for="cb_reference" >&nbsp;Référence * </label>
+                </div>
+                <div>
+                  <input type="checkbox" name="param_sol_category" id="cb_category" value="category" <#if selected_sollicitation?contains("category")>checked</#if>/>
+                  <label for="cb_category" >&nbsp;Catégories</label>
+                </div>
+				<div>
+                  <input type="checkbox" name="param_sol_username" id="cb_username" value="username" disabled="disabled" checked/>
+                  <label for="cb_username" >&nbsp;Nom de l'usager *</label>
+                </div>
+				<div>
+                  <input type="checkbox" name="param_sol_usercontact" id="cb_usercontact" value="usercontact" <#if selected_sollicitation?contains("usercontact")>checked</#if>/>
+                  <label for="cb_usercontact" >&nbsp;Contact de l'usager</label>
+                </div>
+				<div>
+                  <input type="checkbox" name="param_sol_messageobject" id="cb_messageobject" value="messageobject"  disabled="disabled" checked/>
+                  <label for="cb_messageobject" >&nbsp;Objet du message *</label>
+                </div>
+				<div>
+                  <input type="checkbox" name="param_sol_assignation" id="cb_assignation" value="assignation"  <#if selected_sollicitation?contains("assignation")>checked</#if>/>
+                  <label for="cb_assignation" >&nbsp;Assignation</label>
+                </div>
+              </div>
+              <div class="col-xs-6 col-sm-6">
+                <div>
+                  <input type="checkbox" name="param_sol_date_creation" id="cb_date_creation" value="date_creation" disabled="disabled" checked/>
+                  <label for="cb_reference" >&nbsp;Date de création *</label>
+                </div>
+				<div>
+                  <input type="checkbox" name="param_sol_lastaction" id="cb_lastaction" value="lastaction"  <#if selected_sollicitation?contains("lastaction")>checked</#if>/>
+                  <label for="cb_lastaction" >&nbsp;Date de dernière action</label>
+                </div>
+				<div>
+                  <input type="checkbox" name="param_sol_canal" id="cb_canal" value="canal"  <#if selected_sollicitation?contains("canal")>checked</#if>/>
+                  <label for="cb_canal" >&nbsp;Canal</label>
+                </div>
+				<div>
+                  <input type="checkbox" name="param_sol_statut" id="cb_statut" value="statut" disabled="disabled" checked/>
+                  <label for="cb_statut" >&nbsp;Statut *</label>
+                </div>
+				<div>
+                  <input type="checkbox" name="param_sol_nomenclature" id="cb_nomenclature" value="nomenclature"  <#if selected_sollicitation?contains("nomenclature")>checked</#if>/>
+                  <label for="cb_nomenclature" >&nbsp;Nomenclature</label>
+                </div>
+              </div>
+              <label class="col-xs-12 col-sm-12 form-text"> * Case cochées par défaut, non décochables</label>
+              <div class="col-xs-12 col-sm-12">
+			    <label>Faire apparaître </label>
+				<select name="items_per_page" style="color:#000">
+				  <#list [ "10" , "20" , "50" , "100" ] as nb>
+				   <#if pref_nb_items_perpage == nb?number >
+                     <option selected="selected" value="${nb}">${nb}</option>
+                   <#else>
+				     <option value="${nb}">${nb}</option>
+				   </#if>
+				  </#list>
+			    </select>
+				<label> sollicitations par page.</label>
+			  </div>
+            </div>
+            
+            </br>
+            <h3 class="mt-30">#i18n{ticketing.manage_user_preferences.labelParam.prefGeneral}</h3>
+            <hr class="bor-2">
+            
             <div class="form-group">
-              <label class="col-xs-12 col-sm-3 control-label">#i18n{ticketing.manage_user_preferences.labelCreationDate} :</label>
-              <div class="col-xs-12 col-sm-9">
+              <label class="col-xs-12 col-sm-4 control-label">#i18n{ticketing.manage_user_preferences.labelCreationDate} :</label>
+              <div class="col-xs-12 col-sm-4">
                 <div>
                   <input type="radio" name="creation_date_display" id="check_creation_date_as_counter" value="counter" <#if !creation_date_as_date>checked</#if> />
                   <label for="check_creation_date_as_counter" >
@@ -46,7 +119,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-xs-12 col-sm-3 control-label" for="user_signature">#i18n{ticketing.manage_user_preferences.labelWarningDays}&nbsp;:</label>
+                <label class="col-xs-12 col-sm-3 control-label" for="warning_days">#i18n{ticketing.manage_user_preferences.labelWarningDays}&nbsp;:</label>
                 <div class="col-xs-12 col-sm-9">
                     <input type="number" min="0" step="1" style="width: 80px; display: inline-block" class="form-control" id="warning_days" name="warning_days" value="${warning_days!''}"> #i18n{ticketing.manage_user_preferences.labelWarningDays.append}
                     <p class="help-block">#i18n{ticketing.manage_user_preferences.labelWarningDays.help}</p>
@@ -107,7 +180,6 @@
       </div>
     </div>
   </div>
-</div>
 <@initEditor />
 <script language="javascript">
   $('#selectable_channels').change(function() {
