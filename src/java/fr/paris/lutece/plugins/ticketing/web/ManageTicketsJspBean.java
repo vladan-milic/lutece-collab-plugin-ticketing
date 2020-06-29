@@ -114,7 +114,7 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.portal.web.util.LocalizedPaginator;
-import fr.paris.lutece.util.html.Paginator;
+import fr.paris.lutece.util.html.AbstractPaginator;
 import fr.paris.lutece.util.url.UrlItem;
 
 /*
@@ -220,6 +220,7 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
     // Other constants
     private static boolean                 _bAvatarAvailable                    = ( PluginService.getPlugin( TicketingConstants.PLUGIN_AVATAR ) != null );
     private static final String            CONTENT_TYPE_CSV                     = "application/csv";
+    private static final String            DISPALL_ALL_SOLLICITATION_COLUMN     = "displayAllColumn";
 
     // Variables
     private String                         _strCurrentPageIndex;
@@ -501,9 +502,13 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         boolean bUserWithNoUnit = ( filter.getFilterIdAssigneeUnit( ) == null ) || filter.getFilterIdAssigneeUnit( ).isEmpty( ) || ( filter.getFilterIdAssignerUnit( ) == null )
                 || filter.getFilterIdAssignerUnit( ).isEmpty( );
 
-        _strCurrentPageIndex = Paginator.getPageIndex( request, PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
+        _strCurrentPageIndex = AbstractPaginator.getPageIndex( request, PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_DEFAULT_LIST_ITEM_PER_PAGE, 50 );
-        _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, _nDefaultItemsPerPage );
+        if (_userPreferencesService.existsKey( String.valueOf( userCurrent.getUserId( ) ), TicketingConstants.USER_PREFERENCE_NB_ITEMS_PER_PAGE )) {
+            _nDefaultItemsPerPage = _userPreferencesService.getInt( String.valueOf( userCurrent.getUserId( ) ), TicketingConstants.USER_PREFERENCE_NB_ITEMS_PER_PAGE, _nDefaultItemsPerPage );
+            _nItemsPerPage = _nDefaultItemsPerPage;
+        }
+        _nItemsPerPage = AbstractPaginator.getItemsPerPage( request, AbstractPaginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage, _nDefaultItemsPerPage );
 
         UrlItem url = new UrlItem( JSP_MANAGE_TICKETS );
         if ( StringUtils.isNotBlank( strQuery ) )
@@ -645,6 +650,15 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
 
         List<Marking> markings = MarkingHome.getMarkingsList( );
         model.put( "marking_list", markings );
+
+        if (_userPreferencesService.existsKey(  String.valueOf( userCurrent.getUserId( ) ), TicketingConstants.USER_PREFERENCE_SOLLICITATION ))
+        {
+            String strTabSollicitation = _userPreferencesService.get( String.valueOf( userCurrent.getUserId( ) ) , TicketingConstants.USER_PREFERENCE_SOLLICITATION, StringUtils.EMPTY );
+            model.put( TicketingConstants.MARK_TAB_SOLLICITATION, strTabSollicitation );
+        }
+        else {
+            model.put( TicketingConstants.MARK_TAB_SOLLICITATION, DISPALL_ALL_SOLLICITATION_COLUMN );
+        }
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_TICKETS, TEMPLATE_MANAGE_TICKETS, model );
     }
@@ -1346,25 +1360,6 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
             addError( SearchConstants.MESSAGE_SEARCH_ERROR, getLocale( ) );
         }
         return 0;
-    }
-
-    /**
-     * Add the list of ticket domain associated to the given permission
-     *
-     * @param mapIntegerTicketDomain
-     * @param permission
-     */
-    private void addTicketDomainToMapFromPermission( Map<Integer, TicketCategory> mapIntegerTicketDomain, String permission )
-    {
-        List<TicketCategory> listDomain = TicketCategoryService.getInstance( true ).getAuthorizedDomainsList( getUser( ), permission );
-
-        if ( ( mapIntegerTicketDomain != null ) && ( listDomain != null ) && !listDomain.isEmpty( ) )
-        {
-            for ( TicketCategory ticketDomain : listDomain )
-            {
-                mapIntegerTicketDomain.put( ticketDomain.getId( ), ticketDomain );
-            }
-        }
     }
 
     /**

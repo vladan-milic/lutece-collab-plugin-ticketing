@@ -58,6 +58,7 @@ public final class TicketingConstants
     public static final String PARAMETER_SELECTABLE_ID_CHANNEL_LIST = "selectable_channels";
     public static final String PARAMETER_SELECTED_ID_CHANNEL = "selected_channel";
     public static final String PARAMETER_WARNING_DAYS = "warning_days";
+    public static final String PARAMETER_ITEMS_PER_PAGE = "items_per_page";
     public static final String PARAMETER_SIGNATURE = "signature";
     public static final String PARAMETER_TIMESTAMP = "timestamp";
     public static final String PARAMETER_FILTER_URGENCY = "fltr_new_urgency";
@@ -119,6 +120,9 @@ public final class TicketingConstants
     public static final String MARK_TICKET_COMMENT = "ticket_processed_comment";
     public static final String MARK_TICKET_CATEGORIES_TREE = "categories_tree";
     public static final String MARK_TICKET_CATEGORIES_DEPTHS = "categories_depths";
+    public static final String MARK_HELLO = "hello";
+    public static final String MARK_TAB_SOLLICITATION = "selected_sollicitation";
+    public static final String MARK_PREF_NB_ITEMS_PER_PAGE = "pref_nb_items_perpage";
 
     // Properties
     public static final String PROPERTY_POCGRU_URL_360 = "ticketing.pocgru.url.360View";
@@ -179,6 +183,9 @@ public final class TicketingConstants
     public static final String USER_PREFERENCE_CHANNELS_LIST = "ticketingUserChannelsList";
     public static final String USER_PREFERENCE_PREFERRED_CHANNEL = "ticketingUserPreferredChannel";
     public static final String USER_PREFERENCE_WARNING_DAYS = "ticketingUserWarningDays";
+    public static final String USER_PREFERENCE_SOLLICITATION = "ticketingUserSollicitation";
+    public static final String USER_PREFERENCE_NB_ITEMS_PER_PAGE = "ticketingUserItemsPerPage";
+    public static final String USER_PREFERENCE_PREFIX_SOLLICITATION = "param_sol_";
 
     // Plugins
     public static final String PLUGIN_AVATAR = "avatar";
