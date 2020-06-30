@@ -15,7 +15,7 @@ public class GroupActionDAO implements IGroupActionDAO
     private static final String SQL_QUERY_INSERT              = "INSERT INTO ticketing_groupe_action (libelle_identifiant, cle, description, ordre) VALUES(?,?,?,?)";
     private static final String SQL_QUERY_DELETE              = "DELETE FROM ticketing_groupe_action WHERE id_groupe=?";
     private static final String SQL_QUERY_UPDATE              = "UPDATE ticketing_groupe_action SET libelle_identifiant=?, cle=?, description=?, ordre=? WHERE id_groupe=?";
-    private static final String SQL_QUERY_SELECTALL           = "SELECT id_groupe, libelle_identifiant, cle, description, ordre FROM ticketing_groupe_action ";
+    private static final String SQL_QUERY_SELECTALL           = "SELECT id_groupe, libelle_identifiant, cle, description, ordre FROM ticketing_groupe_action order by ordre asc ";
 
     private int getMaxIdGroup( Plugin plugin )
     {

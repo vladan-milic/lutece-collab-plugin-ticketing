@@ -10,11 +10,11 @@
           </a>
         </li>
         <li class="active">
-          <a href="jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp?view=manageGroup">#i18n{ticketing.manage_actionButton.onglet.gestion.groupe}</a>
+          <a href="jsp/admin/plugins/ticketing/admin/ManageGroupActionButton.jsp">#i18n{ticketing.manage_actionButton.onglet.gestion.groupe}</a>
         </li>
         <li class="pull-right">
 			<span>
-				<@aButton href='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp?view=createGroup' buttonIcon='plus' size='' title='#i18n{ticketing.manage_actionButton.button.add.group}'  />
+				<@aButton href='jsp/admin/plugins/ticketing/admin/ManageGroupActionButton.jsp?view=createGroup' buttonIcon='plus' size='' title='#i18n{ticketing.manage_actionButton.button.add.group}'  />
 			</span>
 		</li>
       </@listTabs>
@@ -35,7 +35,7 @@
 					  <br>${group.cle}
 					  <br>${group.description}
 					  <td>
-						<@tform method='post' action='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp?' class='form-inline'>
+						<@tform method='post' action='jsp/admin/plugins/ticketing/admin/ManageGroupActionButton.jsp' class='form-inline'>
 						  <input type="hidden" name="group_id" value="${group.idGroup?html}">
 						  <@formGroup rows=2>
 							<@inputGroup>
@@ -48,11 +48,13 @@
 						</@tform>
 					  </td>
 					  <td>
-						<@aButton href='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp?view=editGroup&group_id=${group.idGroup?html}' title='#i18n{portal.util.labelModify} ${group.libelleIdentifiant?html}' buttonIcon='pencil' showTitle=false />
+					  	<#if group.idGroup != 1>
+						<@aButton href='jsp/admin/plugins/ticketing/admin/ManageGroupActionButton.jsp?view=editGroup&group_id=${group.idGroup?html}' title='#i18n{portal.util.labelModify} ${group.libelleIdentifiant?html}' buttonIcon='pencil' showTitle=false />
 						<@tform class='inline' method='post' action='jsp/admin/plugins/ticketing/admin/RemoveGroup.jsp'>
 						  <input type="hidden" name="group_id" value="${group.idGroup?html}">
 						  <@button type='submit' title='#i18n{portal.features.manage_groups.buttonDelete}' showTitle=false buttonIcon='trash' color='btn-danger' />
 						</@tform>
+						</#if>
 					  </td>
 				  </tr>
 			  </#list>

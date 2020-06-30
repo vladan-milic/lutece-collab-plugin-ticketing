@@ -3,7 +3,7 @@
 		<@box color='danger'>
 			<@boxHeader title='#i18n{ticketing.create_group.pageTitle}' />
 			<@boxBody>
-				<@tform method='post' action='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp'>
+				<@tform method='post' action='jsp/admin/plugins/ticketing/admin/ManageGroupActionButton.jsp'>
 					<@formGroup labelFor='libelleIdentifiant' labelKey='#i18n{ticketing.create_group.label.id}' mandatory=true>
 						<@input type='text' id='libelleIdentifiant' name='libelleIdentifiant' />
 					</@formGroup>	
@@ -18,7 +18,7 @@
 					</@formGroup>
 					<@formGroup>
 						<@button type='submit' name="action_createGroup" buttonIcon='check' title='#i18n{portal.features.create_group.buttonCreate}'  size='' />
-						<@aButton href='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp?view=manageGroup' buttonIcon='close' title='#i18n{portal.util.labelCancel}'  size='' color='btn-secondary' />
+						<@aButton href='jsp/admin/plugins/ticketing/admin/ManageGroupActionButton.jsp' buttonIcon='close' title='#i18n{portal.util.labelCancel}'  size='' color='btn-secondary' />
 					</@formGroup>
 				</@tform>
 			</@boxBody>
