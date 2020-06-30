@@ -35,6 +35,9 @@ package fr.paris.lutece.plugins.ticketing.business.parambouton;
 
 import java.io.Serializable;
 
+import fr.paris.lutece.plugins.ticketing.business.groupaction.GroupAction;
+import fr.paris.lutece.plugins.workflowcore.business.action.Action;
+
 public class ParamBouton implements Serializable
 {
     private static final long serialVersionUID = 4229191492315251652L;
@@ -45,6 +48,8 @@ public class ParamBouton implements Serializable
     private int               _nOrdre;
     private String            _strIcone;
     private String            _strCouleur;
+    private transient Action  _action;
+    private GroupAction       _groupAction;
 
     public int getIdparam( )
     {
@@ -105,4 +110,25 @@ public class ParamBouton implements Serializable
     {
         _strCouleur = strCouleur;
     }
+
+    public Action getAction( )
+    {
+        return _action;
+    }
+
+    public GroupAction getGroupAction( )
+    {
+        return _groupAction;
+    }
+
+    public void setAction( Action action )
+    {
+        _action = action;
+    }
+
+    public void setGroupAction( GroupAction groupAction )
+    {
+        _groupAction = groupAction;
+    }
+
 }
