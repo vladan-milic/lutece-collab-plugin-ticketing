@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2016, Mairie de Paris
+ * Copyright (c) 2002-2020, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,6 @@ import fr.paris.lutece.plugins.ticketing.business.groupaction.GroupAction;
 import fr.paris.lutece.plugins.ticketing.business.groupaction.GroupActionHome;
 import fr.paris.lutece.plugins.ticketing.business.parambouton.ParamBoutonHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
-import fr.paris.lutece.portal.business.right.FeatureGroupHome;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
@@ -67,10 +66,12 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     private static final String TEMPLATE_MANAGE_ACTION_BUTTON            = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_action_button.html";
     private static final String TEMPLATE_MANAGE_GROUPS                   = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_groups.html";
     private static final String TEMPLATE_CREATE_GROUP                    = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_group.html";
+    private static final String TEMPLATE_EDIT_GROUP                      = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "edit_group.html";
     private static final String JSP_MANAGE_ACTION_BUTTON                 = "ManageActionButton.jsp";
 
     // Parameters
     private static final String PARAMETER_GROUP_ID                       = "group_id";
+    private static final String PARAMETER_ORDER_ID                       = "order_id";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_ACTION_BUTTON = "ticketing.manage_actionButton.pageTitle";
@@ -80,27 +81,25 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_GROUPE                              = "groupe";
     private static final String MARK_PARAM_BOUTON                        = "param_bouton";
     private static final String MARK_ORDER_LIST                          = "order_list";
-    private static final String MARK_DEFAULT_ORDER                       = "order_default";
-
-    // Validations
-    private static final String VALIDATION_ATTRIBUTES_PREFIX             = "ticketing.model.entity.category.attribute.";
 
     // Views
     private static final String VIEW_MANAGE_ACTION_BUTTON                = "manageActionButton";
     private static final String VIEW_MANAGE_GROUP                        = "manageGroup";
     private static final String VIEW_CREATE_GROUP                        = "createGroup";
+    private static final String VIEW_EDIT_GROUP                          = "editGroup";
 
     // Actions
     private static final String ACTION_CREATE_GROUPE                     = "createGroup";
+    private static final String ACTION_EDIT_GROUPE                       = "editGroup";
+    private static final String ACTION_CHANGE_ORDER                      = "changeOrder";
 
     // Properties
     private static final String MESSAGE_CONFIRM_DELETE                   = "ticketing.message.confirmDeleteGroup";
 
-    // Errors
-    private static final String ERROR_CATEGORY_REFERENCED                = "ticketing.error.category.referenced.in.categories";
-
     // JSP
     private static final String JSP_REMOVE_GROUPS                        = "jsp/admin/plugins/ticketing/admin//DoRemoveGroup.jsp";
+
+    private static final String REGEX_ID                                 = "^[\\d]+$";
 
     /**
      * Build the Manage View
@@ -180,8 +179,7 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
         List<GroupAction> groupeList = GroupActionHome.getGroupActionList( );
 
         ReferenceList listOrders = new ReferenceList( );
-        IntStream.range( 0, groupeList.size( ) ).forEach( index -> listOrders.addItem( index + 1, Integer.toString( index + 1 ) ) );
-        // TODO ajouter +1 à l'ordre
+        IntStream.range( 0, groupeList.size( ) + 1 ).forEach( index -> listOrders.addItem( index + 1, Integer.toString( index + 1 ) ) );
         model.put( MARK_ORDER_LIST, listOrders );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_ACTION_BUTTON, TEMPLATE_CREATE_GROUP, model );
@@ -203,6 +201,47 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
 
         // Création du groupe
         GroupActionHome.create( groupAction );
+
+        return redirectView( request, VIEW_MANAGE_GROUP );
+    }
+
+    /**
+     * Gets the edits the group.
+     *
+     * @param request
+     *            the request
+     * @return the edits the group
+     */
+    @View( value = VIEW_EDIT_GROUP )
+    public String getEditGroup( HttpServletRequest request )
+    {
+        Map<String, Object> model = new HashMap<>( );
+
+        List<GroupAction> groupeList = GroupActionHome.getGroupActionList( );
+
+        ReferenceList listOrders = new ReferenceList( );
+        IntStream.range( 0, groupeList.size( ) ).forEach( index -> listOrders.addItem( index + 1, Integer.toString( index + 1 ) ) );
+        model.put( MARK_ORDER_LIST, listOrders );
+
+        String strGroupId = request.getParameter( PARAMETER_GROUP_ID );
+        model.put( MARK_GROUPE, GroupActionHome.findByPrimaryKey( Integer.parseInt( strGroupId ) ) );
+
+        return getPage( PROPERTY_PAGE_TITLE_MANAGE_ACTION_BUTTON, TEMPLATE_EDIT_GROUP, model );
+    }
+
+    /**
+     * Do edit group.
+     *
+     * @param request
+     *            the request
+     * @return the string
+     */
+    @Action( ACTION_EDIT_GROUPE )
+    public String doEditGroup( HttpServletRequest request )
+    {
+        GroupAction groupAction = new GroupAction( );
+        populate( groupAction, request );
+        GroupActionHome.update( groupAction );
 
         return redirectView( request, VIEW_MANAGE_GROUP );
     }
@@ -237,8 +276,25 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     public String doRemoveGroup( HttpServletRequest request ) throws AccessDeniedException
     {
         String strGroupId = request.getParameter( PARAMETER_GROUP_ID );
-        FeatureGroupHome.remove( strGroupId );
+        GroupActionHome.remove( Integer.parseInt( strGroupId ) );
 
-        return JSP_MANAGE_ACTION_BUTTON;
+        return JSP_MANAGE_ACTION_BUTTON + "?view=manageGroup";
+    }
+
+    @Action( ACTION_CHANGE_ORDER )
+    public String doChangeOrder( HttpServletRequest request )
+    {
+        String strGroupId = request.getParameter( PARAMETER_GROUP_ID );
+        String strOrderId = request.getParameter( PARAMETER_ORDER_ID );
+        GroupAction groupAction = GroupActionHome.findByPrimaryKey( Integer.parseInt( strGroupId ) );
+
+        if ( ( strOrderId != null ) && strOrderId.matches( REGEX_ID ) )
+        {
+            groupAction.setOrdre( Integer.parseInt( strOrderId ) );
+        }
+
+        GroupActionHome.update( groupAction );
+
+        return redirectView( request, VIEW_MANAGE_GROUP );
     }
 }
