@@ -46,6 +46,10 @@ import fr.paris.lutece.plugins.ticketing.business.groupaction.GroupAction;
 import fr.paris.lutece.plugins.ticketing.business.groupaction.GroupActionHome;
 import fr.paris.lutece.plugins.ticketing.business.parambouton.ParamBoutonHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.portal.business.right.FeatureGroupHome;
+import fr.paris.lutece.portal.service.admin.AccessDeniedException;
+import fr.paris.lutece.portal.service.message.AdminMessage;
+import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.util.mvc.admin.annotations.Controller;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
@@ -63,9 +67,10 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     private static final String TEMPLATE_MANAGE_ACTION_BUTTON            = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_action_button.html";
     private static final String TEMPLATE_MANAGE_GROUPS                   = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_groups.html";
     private static final String TEMPLATE_CREATE_GROUP                    = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_group.html";
+    private static final String JSP_MANAGE_ACTION_BUTTON                 = "ManageActionButton.jsp";
 
     // Parameters
-    private static final String PARAMETER_ID_CATEGORY                    = "id_category";
+    private static final String PARAMETER_GROUP_ID                       = "group_id";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_ACTION_BUTTON = "ticketing.manage_actionButton.pageTitle";
@@ -76,8 +81,6 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_PARAM_BOUTON                        = "param_bouton";
     private static final String MARK_ORDER_LIST                          = "order_list";
     private static final String MARK_DEFAULT_ORDER                       = "order_default";
-    // Properties
-    private static final String MESSAGE_CONFIRM_REMOVE_CATEGORY          = "ticketing.message.confirmRemoveCategory";
 
     // Validations
     private static final String VALIDATION_ATTRIBUTES_PREFIX             = "ticketing.model.entity.category.attribute.";
@@ -90,11 +93,14 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     // Actions
     private static final String ACTION_CREATE_GROUPE                     = "createGroup";
 
-    // Infos
-    private static final String INFO_CATEGORY_CREATED                    = "ticketing.info.category.created";
+    // Properties
+    private static final String MESSAGE_CONFIRM_DELETE                   = "ticketing.message.confirmDeleteGroup";
 
     // Errors
     private static final String ERROR_CATEGORY_REFERENCED                = "ticketing.error.category.referenced.in.categories";
+
+    // JSP
+    private static final String JSP_REMOVE_GROUPS                        = "jsp/admin/plugins/ticketing/admin//DoRemoveGroup.jsp";
 
     /**
      * Build the Manage View
@@ -198,7 +204,41 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
         // Création du groupe
         GroupActionHome.create( groupAction );
 
-        // private static final String JSP_MANAGE_GROUPS = "ManageGroups.jsp";
         return redirectView( request, VIEW_MANAGE_GROUP );
+    }
+
+    /**
+     * Returns the Remove page
+     *
+     * @param request
+     *            The HTTP request
+     * @return The HTML page
+     */
+    public String getRemoveGroup( HttpServletRequest request )
+    {
+        String strGroupId = request.getParameter( PARAMETER_GROUP_ID );
+
+        String strUrl = JSP_REMOVE_GROUPS;
+        Map<String, Object> parameters = new HashMap<>( );
+        parameters.put( PARAMETER_GROUP_ID, strGroupId );
+
+        return AdminMessageService.getMessageUrl( request, MESSAGE_CONFIRM_DELETE, null, null, strUrl, "", AdminMessage.TYPE_CONFIRMATION, parameters );
+    }
+
+    /**
+     * Remove the group
+     *
+     * @param request
+     *            The HTTP request
+     * @return The next URL to redirect after processing
+     * @throws AccessDeniedException
+     *             if the security token is invalid
+     */
+    public String doRemoveGroup( HttpServletRequest request ) throws AccessDeniedException
+    {
+        String strGroupId = request.getParameter( PARAMETER_GROUP_ID );
+        FeatureGroupHome.remove( strGroupId );
+
+        return JSP_MANAGE_ACTION_BUTTON;
     }
 }

@@ -49,7 +49,7 @@
 					  </td>
 					  <td>
 						<@aButton href='jsp/admin/features/ModifyGroup.jsp?group_id=${group.idGroup?html}' title='#i18n{portal.util.labelModify} ${group.idGroup?html}' buttonIcon='pencil' showTitle=false />
-						<@tform class='inline' method='post' action='jsp/admin/features/RemoveGroup.jsp'>
+						<@tform class='inline' method='post' action='jsp/admin/plugins/ticketing/admin/RemoveGroup.jsp'>
 						  <input type="hidden" name="group_id" value="${group.idGroup?html}">
 						  <@button type='submit' title='#i18n{portal.features.manage_groups.buttonDelete}' showTitle=false buttonIcon='trash' color='btn-danger' />
 						</@tform>

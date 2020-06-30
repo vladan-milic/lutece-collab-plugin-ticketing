@@ -37,6 +37,14 @@ public class GroupActionHome
         return groupAction;
     }
 
+    /**
+     * Change order.
+     *
+     * @param groupAction
+     *            the group action
+     * @param oldOrder
+     *            the old order
+     */
     private static void changeOrder( GroupAction groupAction, int oldOrder )
     {
         int nNewOrder = groupAction.getOrdre( );
