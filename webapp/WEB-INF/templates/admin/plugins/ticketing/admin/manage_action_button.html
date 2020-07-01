@@ -25,11 +25,11 @@
 										<@table>
 											<thead>
 												<tr>
-													<th>#i18n{ticketing.manage_actionButton.tableLabelNom}</th>
-													<th>#i18n{ticketing.manage_actionButton.tableLabelGroupe}</th>
-													<th>#i18n{ticketing.manage_actionButton.tableLabelOrdre}</th>
-													<th>#i18n{ticketing.manage_actionButton.tableLabelIcone}</th>
-													<th>#i18n{ticketing.manage_actionButton.tableLabelCouleur}</th>
+													<th class="col-md-4">#i18n{ticketing.manage_actionButton.tableLabelNom}</th>
+													<th class="col-md-3">#i18n{ticketing.manage_actionButton.tableLabelGroupe}</th>
+													<th class="col-md-2">#i18n{ticketing.manage_actionButton.tableLabelOrdre}</th>
+													<th class="col-md-1">#i18n{ticketing.manage_actionButton.tableLabelIcone}</th>
+													<th class="col-md-2">#i18n{ticketing.manage_actionButton.tableLabelCouleur}</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -43,12 +43,16 @@
 															<td>
 																<@tform method='post' class='form-inline' action='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp'>
 																	<input type="hidden" name="param_id" value="${param_bouton.idparam}">
-																	<input type="hidden" name="action_id" value="${param_bouton.action.id}">
+																	<input type="hidden" name="id_action" value="${param_bouton.idAction}">
 																	<@formGroup rows=2>
 																		<@inputGroup>
 																		  <@select id='group_name-${group.groupe.idGroup}' name='group_id' title='' size='sm'>
 																			<#list groupe_list as groupDisplay>
-																				<option label="${groupDisplay.groupe.libelleIdentifiant}" value="${groupDisplay.groupe.idGroup?if_exists}" >${groupDisplay.groupe.libelleIdentifiant}</option>
+																				<#if groupDisplay.groupe.idGroup = group.groupe.idGroup>
+																					<option selected="selected" label="${groupDisplay.groupe.libelleIdentifiant}" value="${groupDisplay.groupe.idGroup?if_exists}" >${groupDisplay.groupe.libelleIdentifiant}</option>
+																				<#else>
+																					<option label="${groupDisplay.groupe.libelleIdentifiant}" value="${groupDisplay.groupe.idGroup?if_exists}" >${groupDisplay.groupe.libelleIdentifiant}</option>							
+																				</#if>
 																			</#list>
 																		  </@select>
 																	  <@inputGroupItem>
@@ -57,6 +61,38 @@
 																	</@inputGroup>
 																  </@formGroup>
 																</@tform>
+															</td>
+															<td>
+																<@tform method='post' class='form-inline' action='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp'>
+																<@formGroup rows=2>
+																  <@inputGroup>
+																	<@select name='order_id' id='order_id-${param_bouton.idparam}' title='#i18n{portal.features.dispatch_features.tableLabelOrder}' size='sm'>
+																		<#list 1..group.param_bouton_list?size as i>
+																			<!-- Cas des actions pas encore paramétrées -->
+																			<#if "${param_bouton.ordre}" == "0">
+																				<#if (param_bouton?index + 1) == i>
+																					<option selected="selected" value="${i}" >${i}</option>
+																				<#else>
+																					<option value="${i}" >${i}</option>
+																				</#if>
+																			<#elseif param_bouton.ordre == i>
+																				<option selected="selected" value="${i}" >${i}</option>
+																			<#else>
+																				<option value="${i}" >${i}</option>
+																			</#if>
+																		</#list>
+																	</@select>
+																	<@inputGroupItem>
+																		<@button type='submit' name='action_changeOrder' title='#i18n{portal.features.dispatch_features_row.buttonSetOrder}' buttonIcon='refresh' showTitle=false />
+																	</@inputGroupItem>
+																  </@inputGroup>
+																</@formGroup>
+															  </@tform>
+															</td>
+															<td>
+																<@inputGroupItem><i style="font-size: 24px;padding: 6px 12px;vertical-align: middle;" class="${param_bouton.icone}" aria-hidden="true"></i>
+																<@aButton href='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp?view=editIcon&id_action=${param_bouton.idAction}&param_id=${param_bouton.idparam}' buttonIcon='pencil' size='' title=''  />
+																</@inputGroupItem>
 															</td>
 														</tr>
 													</#list>

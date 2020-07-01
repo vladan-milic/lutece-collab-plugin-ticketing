@@ -60,15 +60,13 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
 
     // Templates
     private static final String TEMPLATE_MANAGE_ACTION_BUTTON            = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "manage_action_button.html";
-    private static final String TEMPLATE_CREATE_GROUP                    = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "create_group.html";
-    private static final String TEMPLATE_EDIT_GROUP                      = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "edit_group.html";
-    private static final String JSP_MANAGE_ACTION_BUTTON                 = "ManageActionButton.jsp";
+    private static final String TEMPLATE_EDIT_ICON                       = TicketingConstants.TEMPLATE_ADMIN_ADMIN_FEATURE_PATH + "edit_icon.html";
 
     // Parameters
     private static final String PARAMETER_ID                             = "param_id";
     private static final String PARAMETER_GROUP_ID                       = "group_id";
-    private static final String PARAMETER_ORDER_ID                       = "order_id";
-    private static final String PARAMETER_ACTION_ID                      = "action_id";
+    private static final String PARAMETER_ORDER                          = "order";
+    private static final String PARAMETER_ACTION_ID                      = "id_action";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_ACTION_BUTTON = "ticketing.manage_actionButton.pageTitle";
@@ -78,6 +76,10 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_GROUPE                              = "groupe";
     private static final String MARK_PARAM_BOUTON_LIST                   = "param_bouton_list";
     private static final String MARK_ORDER_LIST                          = "order_list";
+    private static final String MARK_ID_ACTION                           = "id_action";
+    private static final String MARK_ID_PARAMETER                        = "id_parameter";
+    private static final String MARK_PARAMETER                           = "parameter";
+    private static final String MARK_DEFAULT_ICONE                       = "default_icone";
 
     // Views
     private static final String VIEW_MANAGE_ACTION_BUTTON                = "manageActionButton";
@@ -91,6 +93,8 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
 
     private static final String REGEX_ID                                 = "^[\\d]+$";
     private static final int    ID_GROUPE_NON_CONFIGURE                  = 1;
+    private static final String DEFAULT_COLOR                            = "Bleu foncé";
+    private static final String DEFAULT_ICONE                            = "fa fa-question-circle-o";
 
     /**
      * Build the Manage View
@@ -136,14 +140,75 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     @Action( ACTION_CHANGE_GROUP )
     public String doChangeGroup( HttpServletRequest request )
     {
-        String strGroupId = request.getParameter( PARAMETER_GROUP_ID );
-        String strParameterId = request.getParameter( PARAMETER_ID );
-        String strActionId = request.getParameter( PARAMETER_ACTION_ID );
+        int groupId = Integer.parseInt( request.getParameter( PARAMETER_GROUP_ID ) );
+        int parameterId = Integer.parseInt( request.getParameter( PARAMETER_ID ) );
+        int actionId = Integer.parseInt( request.getParameter( PARAMETER_ACTION_ID ) );
 
-        // FeatureGroup featureGroup = FeatureGroupHome.findByPrimaryKey( strGroupId );
+        if ( parameterId == 0 )
+        {
+            // Création du paramètre pour l'action
+            ParamBouton paramBouton = new ParamBouton( );
+            paramBouton.setIdAction( actionId );
+            paramBouton.setIdGroupe( groupId );
+            paramBouton.setIcone( DEFAULT_ICONE );
+            paramBouton.setIdCouleur( DEFAULT_COLOR );
 
-        // FeatureGroupHome.update( featureGroup );
+            ParamBoutonHome.create( paramBouton );
+        }
+        else
+        {
+            // MAJ du groupe pour le paramètre
+            ParamBouton paramBouton = ParamBoutonHome.findByPrimaryKey( parameterId );
+            if ( paramBouton.getIdGroupe( ) != groupId )
+            {
+                paramBouton.setIdGroupe( groupId );
+                ParamBoutonHome.updateGroup( paramBouton );
+            }
+        }
 
+        return redirectView( request, VIEW_MANAGE_ACTION_BUTTON );
+    }
+
+    @Action( ACTION_CHANGE_ORDER )
+    public String doChangeOrder( HttpServletRequest request )
+    {
+        int groupId = Integer.parseInt( request.getParameter( PARAMETER_GROUP_ID ) );
+        int parameterId = Integer.parseInt( request.getParameter( PARAMETER_ID ) );
+        int actionId = Integer.parseInt( request.getParameter( PARAMETER_ACTION_ID ) );
+        int ordre = Integer.parseInt( request.getParameter( PARAMETER_ORDER ) );
+
+        return redirectView( request, VIEW_MANAGE_ACTION_BUTTON );
+    }
+
+    @Action( ACTION_CHANGE_COLOR )
+    public String doChangeColor( HttpServletRequest request )
+    {
+        return redirectView( request, VIEW_MANAGE_ACTION_BUTTON );
+    }
+
+    @View( VIEW_EDIT_ICON )
+    public String getEditIcon( HttpServletRequest request )
+    {
+        Map<String, Object> model = new HashMap<>( );
+
+        int parameterId = Integer.parseInt( request.getParameter( PARAMETER_ID ) );
+        int actionId = Integer.parseInt( request.getParameter( PARAMETER_ACTION_ID ) );
+
+        if ( parameterId > 0 )
+        {
+            model.put( MARK_PARAMETER, ParamBoutonHome.findByPrimaryKey( parameterId ) );
+        }
+
+        model.put( MARK_ID_ACTION, actionId );
+        model.put( MARK_ID_PARAMETER, parameterId );
+        model.put( MARK_DEFAULT_ICONE, DEFAULT_ICONE );
+
+        return getPage( PROPERTY_PAGE_TITLE_MANAGE_ACTION_BUTTON, TEMPLATE_EDIT_ICON, model );
+    }
+
+    @Action( ACTION_SAVE_ICON )
+    public String doSaveIcon( HttpServletRequest request )
+    {
         return redirectView( request, VIEW_MANAGE_ACTION_BUTTON );
     }
 

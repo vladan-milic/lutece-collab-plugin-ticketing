@@ -46,6 +46,7 @@ public class ParamBouton implements Serializable
     private int               _nIdAction;
     private int               _nIdGroupe;
     private int               _nOrdre;
+    private String            _strIdCouleur;
     private String            _strIcone;
     private String            _strCouleur;
     private transient Action  _action;
@@ -131,4 +132,13 @@ public class ParamBouton implements Serializable
         _groupAction = groupAction;
     }
 
+    public String getIdCouleur( )
+    {
+        return _strIdCouleur;
+    }
+
+    public void setIdCouleur( String idCouleur )
+    {
+        _strIdCouleur = idCouleur;
+    }
 }

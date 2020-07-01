@@ -34,15 +34,15 @@ public class ParamBoutonHome
     }
 
     /**
-     * Update.
+     * Update group.
      *
-     * @param groupAction
-     *            the group action
-     * @return the group action
+     * @param paramBouton
+     *            the param bouton
+     * @return the param bouton
      */
-    public static ParamBouton update( ParamBouton paramBouton )
+    public static ParamBouton updateGroup( ParamBouton paramBouton )
     {
-        _dao.store( paramBouton, _plugin );
+        _dao.updateGroup( paramBouton, _plugin );
 
         return paramBouton;
     }
@@ -67,6 +67,18 @@ public class ParamBoutonHome
     public static List<ParamBouton> selectParamBoutonListWithoutGroup( )
     {
         return _dao.selectParamBoutonListWithoutGroup( _plugin );
+    }
+
+    /**
+     * Find by primary key.
+     *
+     * @param nKey
+     *            the n key
+     * @return the param bouton
+     */
+    public static ParamBouton findByPrimaryKey( int nKey )
+    {
+        return _dao.load( nKey, _plugin );
     }
 
 }

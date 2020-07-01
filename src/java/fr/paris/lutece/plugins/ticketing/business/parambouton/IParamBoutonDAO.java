@@ -80,4 +80,25 @@ public interface IParamBoutonDAO
      */
     List<ParamBouton> selectParamBoutonListWithoutGroup( Plugin plugin );
 
+    /**
+     * Load.
+     *
+     * @param nKey
+     *            the n key
+     * @param plugin
+     *            the plugin
+     * @return the param bouton
+     */
+    ParamBouton load( int nKey, Plugin plugin );
+
+    /**
+     * Update group.
+     *
+     * @param paramBouton
+     *            the param bouton
+     * @param plugin
+     *            the plugin
+     */
+    void updateGroup( ParamBouton paramBouton, Plugin plugin );
+
 }
