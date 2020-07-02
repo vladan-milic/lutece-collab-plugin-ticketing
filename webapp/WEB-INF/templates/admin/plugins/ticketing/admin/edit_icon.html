@@ -4,7 +4,6 @@
 			<@boxHeader title='#i18n{ticketing.edit_icone.pageTitle}' />
 			<@boxBody>
 				<@tform method='post' action='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp'>
-					<input type="hidden" name="id_action" value="${id_action}">
 					<input type="hidden" name="param_id" value="${id_parameter}">
 					<@formGroup labelFor='icon' labelKey='#i18n{ticketing.edit_icone.libelle.label}' mandatory=true>
 						<#if id_parameter = 0>

@@ -120,4 +120,14 @@ public interface IParamBoutonDAO
      */
     List<String> getCouleursList( Plugin plugin );
 
+    /**
+     * Update order old group.
+     *
+     * @param oldGroupId
+     *            the old group id
+     * @param oldOrdre
+     *            the old ordre
+     */
+    void updateOrderOldGroup( int oldGroupId, int oldOrdre, Plugin plugin );
+
 }

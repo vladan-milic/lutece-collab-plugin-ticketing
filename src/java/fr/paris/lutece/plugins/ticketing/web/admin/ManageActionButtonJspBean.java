@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.ticketing.web.admin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -78,11 +77,9 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     private static final String MARK_COULEUR_LIST                        = "couleur_list";
     private static final String MARK_GROUPE                              = "groupe";
     private static final String MARK_PARAM_BOUTON_LIST                   = "param_bouton_list";
-    private static final String MARK_ORDER_LIST                          = "order_list";
     private static final String MARK_ID_ACTION                           = "id_action";
     private static final String MARK_ID_PARAMETER                        = "id_parameter";
     private static final String MARK_PARAMETER                           = "parameter";
-    private static final String MARK_DEFAULT_ICONE                       = "default_icone";
 
     // Views
     private static final String VIEW_MANAGE_ACTION_BUTTON                = "manageActionButton";
@@ -93,11 +90,6 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     private static final String ACTION_CHANGE_ORDER                      = "changeOrder";
     private static final String ACTION_CHANGE_COLOR                      = "changeColor";
     private static final String ACTION_SAVE_ICON                         = "saveIcon";
-
-    private static final String REGEX_ID                                 = "^[\\d]+$";
-    private static final int    DEFAULT_GROUP                            = 1;
-    private static final String DEFAULT_COLOR                            = "Bleu foncé";
-    private static final String DEFAULT_ICONE                            = "fa fa-question-circle-o";
 
     /**
      * Build the Manage View
@@ -116,23 +108,16 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
         // Récupération des groupes
         Collection<GroupAction> groupActionList = GroupActionHome.getGroupActionList( );
 
+        // Création d'un parametre par defaut pour les actions qui n'en ont pas
+        ParamBoutonHome.createDefautParam( );
+
         for ( GroupAction groupAction : groupActionList )
         {
             // Récupération des paramètres de bouton pour chaque groupe
             HashMap<String, Object> groupMap = new HashMap<>( );
             groupMap.put( MARK_GROUPE, groupAction );
             colGroupMap.add( groupMap );
-
-            // Groupe non configuré
-            if ( groupAction.getIdGroup( ) == 1 )
-            {
-                List<ParamBouton> paramBoutonList = ParamBoutonHome.selectParamBoutonListWithoutGroup( );
-                groupMap.put( MARK_PARAM_BOUTON_LIST, paramBoutonList );
-            }
-            else
-            {
-                groupMap.put( MARK_PARAM_BOUTON_LIST, ParamBoutonHome.selectParamBoutonListByGroup( groupAction.getIdGroup( ) ) );
-            }
+            groupMap.put( MARK_PARAM_BOUTON_LIST, ParamBoutonHome.selectParamBoutonListByGroup( groupAction.getIdGroup( ) ) );
 
         }
         model.put( MARK_GROUPE_LIST, colGroupMap );
@@ -153,28 +138,14 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     {
         int groupId = Integer.parseInt( request.getParameter( PARAMETER_GROUP_ID ) );
         int parameterId = Integer.parseInt( request.getParameter( PARAMETER_ID ) );
-        int actionId = Integer.parseInt( request.getParameter( PARAMETER_ACTION_ID ) );
 
-        if ( parameterId == 0 )
+        // MAJ du groupe pour le paramètre
+        ParamBouton paramBouton = ParamBoutonHome.findByPrimaryKey( parameterId );
+        int oldGroupId = paramBouton.getIdGroupe( );
+        if ( oldGroupId != groupId )
         {
-            // Création du paramètre pour l'action
-            ParamBouton paramBouton = new ParamBouton( );
-            paramBouton.setIdAction( actionId );
             paramBouton.setIdGroupe( groupId );
-            paramBouton.setIcone( DEFAULT_ICONE );
-            paramBouton.setIdCouleur( DEFAULT_COLOR );
-
-            ParamBoutonHome.create( paramBouton );
-        }
-        else
-        {
-            // MAJ du groupe pour le paramètre
-            ParamBouton paramBouton = ParamBoutonHome.findByPrimaryKey( parameterId );
-            if ( paramBouton.getIdGroupe( ) != groupId )
-            {
-                paramBouton.setIdGroupe( groupId );
-                ParamBoutonHome.updateGroup( paramBouton );
-            }
+            ParamBoutonHome.updateGroup( paramBouton, oldGroupId, paramBouton.getOrdre( ) );
         }
 
         return redirectView( request, VIEW_MANAGE_ACTION_BUTTON );
@@ -190,10 +161,11 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     @Action( ACTION_CHANGE_ORDER )
     public String doChangeOrder( HttpServletRequest request )
     {
-        int groupId = Integer.parseInt( request.getParameter( PARAMETER_GROUP_ID ) );
         int parameterId = Integer.parseInt( request.getParameter( PARAMETER_ID ) );
-        int actionId = Integer.parseInt( request.getParameter( PARAMETER_ACTION_ID ) );
         int ordre = Integer.parseInt( request.getParameter( PARAMETER_ORDER ) );
+
+        ParamBouton paramBouton = ParamBoutonHome.findByPrimaryKey( parameterId );
+        ParamBoutonHome.changeOrder( paramBouton, ordre );
 
         return redirectView( request, VIEW_MANAGE_ACTION_BUTTON );
     }
@@ -209,28 +181,12 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     public String doChangeColor( HttpServletRequest request )
     {
         int parameterId = Integer.parseInt( request.getParameter( PARAMETER_ID ) );
-        int actionId = Integer.parseInt( request.getParameter( PARAMETER_ACTION_ID ) );
         String couleurId = request.getParameter( PARAMETER_COULEUR_ID );
 
-        // Si la paramètre n'a aps encore été créé
-        if ( parameterId == 0 )
-        {
-            // Création du paramètre pour l'action
-            ParamBouton paramBouton = new ParamBouton( );
-            paramBouton.setIdAction( actionId );
-            paramBouton.setIdGroupe( DEFAULT_GROUP );
-            paramBouton.setIcone( DEFAULT_ICONE );
-            paramBouton.setIdCouleur( couleurId );
+        ParamBouton paramBouton = ParamBoutonHome.findByPrimaryKey( parameterId );
+        paramBouton.setIdCouleur( couleurId );
 
-            ParamBoutonHome.create( paramBouton );
-        }
-        else
-        {
-            ParamBouton paramBouton = ParamBoutonHome.findByPrimaryKey( parameterId );
-            paramBouton.setIdCouleur( couleurId );
-
-            ParamBoutonHome.updateWithoutOrder( paramBouton );
-        }
+        ParamBoutonHome.updateWithoutOrder( paramBouton );
 
         return redirectView( request, VIEW_MANAGE_ACTION_BUTTON );
     }
@@ -257,7 +213,6 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
 
         model.put( MARK_ID_ACTION, actionId );
         model.put( MARK_ID_PARAMETER, parameterId );
-        model.put( MARK_DEFAULT_ICONE, DEFAULT_ICONE );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_ACTION_BUTTON, TEMPLATE_EDIT_ICON, model );
     }
@@ -273,28 +228,12 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     public String doSaveIcon( HttpServletRequest request )
     {
         int parameterId = Integer.parseInt( request.getParameter( PARAMETER_ID ) );
-        int actionId = Integer.parseInt( request.getParameter( PARAMETER_ACTION_ID ) );
         String icon = request.getParameter( PARAMETER_ICON );
 
-        // Si la paramètre n'a aps encore été créé
-        if ( parameterId == 0 )
-        {
-            // Création du paramètre pour l'action
-            ParamBouton paramBouton = new ParamBouton( );
-            paramBouton.setIdAction( actionId );
-            paramBouton.setIdGroupe( DEFAULT_GROUP );
-            paramBouton.setIcone( icon );
-            paramBouton.setIdCouleur( DEFAULT_COLOR );
+        ParamBouton paramBouton = ParamBoutonHome.findByPrimaryKey( parameterId );
+        paramBouton.setIcone( icon );
 
-            ParamBoutonHome.create( paramBouton );
-        }
-        else
-        {
-            ParamBouton paramBouton = ParamBoutonHome.findByPrimaryKey( parameterId );
-            paramBouton.setIcone( icon );
-
-            ParamBoutonHome.updateWithoutOrder( paramBouton );
-        }
+        ParamBoutonHome.updateWithoutOrder( paramBouton );
 
         return redirectView( request, VIEW_MANAGE_ACTION_BUTTON );
     }

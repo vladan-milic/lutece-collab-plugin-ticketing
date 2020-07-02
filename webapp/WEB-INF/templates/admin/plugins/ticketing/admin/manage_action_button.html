@@ -33,7 +33,7 @@
 												</tr>
 											</thead>
 											<tbody>
-												<#list group.param_bouton_list?sort_by('ordre') as param_bouton>
+												<#list group.param_bouton_list as param_bouton>
 													<tr>
 														<td>
 															<strong>${param_bouton.action.name}</strong>
@@ -43,7 +43,6 @@
 															<td>
 																<@tform method='post' class='form-inline' action='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp'>
 																	<input type="hidden" name="param_id" value="${param_bouton.idparam}">
-																	<input type="hidden" name="id_action" value="${param_bouton.idAction}">
 																	<@formGroup rows=2>
 																		<@inputGroup>
 																		  <@select id='group_name-${group.groupe.idGroup}' name='group_id' title='' size='sm'>
@@ -64,9 +63,10 @@
 															</td>
 															<td>
 																<@tform method='post' class='form-inline' action='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp'>
+																<input type="hidden" name="param_id" value="${param_bouton.idparam}">
 																<@formGroup rows=2>
 																  <@inputGroup>
-																	<@select name='order_id' id='order_id-${param_bouton.idparam}' title='#i18n{portal.features.dispatch_features.tableLabelOrder}' size='sm'>
+																	<@select name='order' id='order_id-${param_bouton.idparam}' title='#i18n{portal.features.dispatch_features.tableLabelOrder}' size='sm'>
 																		<#list 1..group.param_bouton_list?size as i>
 																			<!-- Cas des actions pas encore paramétrées -->
 																			<#if "${param_bouton.ordre}" == "0">
@@ -97,7 +97,6 @@
 															<td>
 																<@tform method='post' class='form-inline' action='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp'>
 																	<input type="hidden" name="param_id" value="${param_bouton.idparam}">
-																	<input type="hidden" name="id_action" value="${param_bouton.idAction}">
 																	<@formGroup rows=2>
 																	  <@inputGroup>
 																		<@select name='couleur_id' id='couleur_id-${param_bouton.idCouleur}' title='#i18n{portal.features.dispatch_features.tableLabelOrder}' size='sm'>
