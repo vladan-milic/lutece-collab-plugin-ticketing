@@ -95,4 +95,14 @@ public interface IGroupActionDAO
      */
     List<GroupAction> selectGroupActionList( Plugin plugin );
 
+    /**
+     * Reassign parameter from deleted group.
+     *
+     * @param nGroup
+     *            the n group
+     * @param plugin
+     *            the plugin
+     */
+    void reassignParameterFromDeletedGroup( int nGroup, Plugin plugin );
+
 }

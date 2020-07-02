@@ -10,12 +10,13 @@ public class GroupActionDAO implements IGroupActionDAO
 {
 
     // Constants
-    private static final String SQL_QUERY_SELECT_MAX_ID_GROUP = "SELECT max(id_groupe) FROM ticketing_groupe_action";
-    private static final String SQL_QUERY_SELECT              = "SELECT id_groupe, libelle_identifiant, cle, description, ordre FROM ticketing_groupe_action WHERE id_groupe = ?";
-    private static final String SQL_QUERY_INSERT              = "INSERT INTO ticketing_groupe_action (libelle_identifiant, cle, description, ordre) VALUES(?,?,?,?)";
-    private static final String SQL_QUERY_DELETE              = "DELETE FROM ticketing_groupe_action WHERE id_groupe=?";
-    private static final String SQL_QUERY_UPDATE              = "UPDATE ticketing_groupe_action SET libelle_identifiant=?, cle=?, description=?, ordre=? WHERE id_groupe=?";
-    private static final String SQL_QUERY_SELECTALL           = "SELECT id_groupe, libelle_identifiant, cle, description, ordre FROM ticketing_groupe_action order by ordre asc ";
+    private static final String SQL_QUERY_SELECT_MAX_ID_GROUP                 = "SELECT max(id_groupe) FROM ticketing_groupe_action";
+    private static final String SQL_QUERY_SELECT                              = "SELECT id_groupe, libelle_identifiant, cle, description, ordre FROM ticketing_groupe_action WHERE id_groupe = ?";
+    private static final String SQL_QUERY_INSERT                              = "INSERT INTO ticketing_groupe_action (libelle_identifiant, cle, description, ordre) VALUES(?,?,?,?)";
+    private static final String SQL_QUERY_DELETE                              = "DELETE FROM ticketing_groupe_action WHERE id_groupe=?";
+    private static final String SQL_QUERY_UPDATE                              = "UPDATE ticketing_groupe_action SET libelle_identifiant=?, cle=?, description=?, ordre=? WHERE id_groupe=?";
+    private static final String SQL_QUERY_UPDATE_PARAMETER_FROM_DELETED_GROUP = "UPDATE ticketing_param_bouton_action SET id_groupe=1, ordre=(select IFNULL(max(ordre)+1,1) from ticketing_param_bouton_action where id_groupe=1) WHERE id_groupe=?";
+    private static final String SQL_QUERY_SELECTALL                           = "SELECT id_groupe, libelle_identifiant, cle, description, ordre FROM ticketing_groupe_action order by ordre asc ";
 
     private int getMaxIdGroup( Plugin plugin )
     {
@@ -178,5 +179,24 @@ public class GroupActionDAO implements IGroupActionDAO
         groupAction.setCle( daoUtil.getString( nIndex++ ) );
         groupAction.setDescription( daoUtil.getString( nIndex++ ) );
         groupAction.setOrdre( daoUtil.getInt( nIndex ) );
+    }
+
+    /**
+     * Reassign parameter from deleted group.
+     *
+     * @param nGroup
+     *            the n group
+     * @param _plugin
+     *            the plugin
+     */
+    @Override
+    public void reassignParameterFromDeletedGroup( int nGroup, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_PARAMETER_FROM_DELETED_GROUP, plugin );
+
+        daoUtil.setInt( 1, nGroup );
+
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 }

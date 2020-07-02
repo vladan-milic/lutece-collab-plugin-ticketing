@@ -91,7 +91,7 @@ public class ManageGroupActionButtonJspBean extends ManageAdminTicketingJspBean
     private static final String MESSAGE_CONFIRM_DELETE                   = "ticketing.message.confirmDeleteGroup";
 
     // JSP
-    private static final String JSP_REMOVE_GROUPS                        = "jsp/admin/plugins/ticketing/admin//DoRemoveGroup.jsp";
+    private static final String JSP_REMOVE_GROUPS                        = "jsp/admin/plugins/ticketing/admin/DoRemoveGroup.jsp";
 
     private static final String REGEX_ID                                 = "^[\\d]+$";
 

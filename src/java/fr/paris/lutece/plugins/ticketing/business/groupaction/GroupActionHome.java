@@ -163,7 +163,22 @@ public class GroupActionHome
         {
             updateOrderOnRemove( oldGroupAction.getOrdre( ) );
         }
+
+        // Affectation des paramètres du groupe supprimé au groupe par défaut
+        reassignParameterFromDeletedGroup( nKey );
+
         _dao.delete( nKey, _plugin );
+    }
+
+    /**
+     * Reassign parameter from deleted group.
+     *
+     * @param nGroup
+     *            the n group
+     */
+    private static void reassignParameterFromDeletedGroup( int nGroup )
+    {
+        _dao.reassignParameterFromDeletedGroup( nGroup, _plugin );
     }
 
     /**
