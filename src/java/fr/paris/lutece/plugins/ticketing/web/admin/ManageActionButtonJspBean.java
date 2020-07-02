@@ -67,12 +67,15 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     private static final String PARAMETER_GROUP_ID                       = "group_id";
     private static final String PARAMETER_ORDER                          = "order";
     private static final String PARAMETER_ACTION_ID                      = "id_action";
+    private static final String PARAMETER_ICON                           = "icon";
+    private static final String PARAMETER_COULEUR_ID                     = "couleur_id";
 
     // Properties for page titles
     private static final String PROPERTY_PAGE_TITLE_MANAGE_ACTION_BUTTON = "ticketing.manage_actionButton.pageTitle";
 
     // Markers
     private static final String MARK_GROUPE_LIST                         = "groupe_list";
+    private static final String MARK_COULEUR_LIST                        = "couleur_list";
     private static final String MARK_GROUPE                              = "groupe";
     private static final String MARK_PARAM_BOUTON_LIST                   = "param_bouton_list";
     private static final String MARK_ORDER_LIST                          = "order_list";
@@ -92,7 +95,7 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
     private static final String ACTION_SAVE_ICON                         = "saveIcon";
 
     private static final String REGEX_ID                                 = "^[\\d]+$";
-    private static final int    ID_GROUPE_NON_CONFIGURE                  = 1;
+    private static final int    DEFAULT_GROUP                            = 1;
     private static final String DEFAULT_COLOR                            = "Bleu foncé";
     private static final String DEFAULT_ICONE                            = "fa fa-question-circle-o";
 
@@ -133,10 +136,18 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
 
         }
         model.put( MARK_GROUPE_LIST, colGroupMap );
+        model.put( MARK_COULEUR_LIST, ParamBoutonHome.getCouleursList( ) );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_ACTION_BUTTON, TEMPLATE_MANAGE_ACTION_BUTTON, model );
     }
 
+    /**
+     * Do change group.
+     *
+     * @param request
+     *            the request
+     * @return the string
+     */
     @Action( ACTION_CHANGE_GROUP )
     public String doChangeGroup( HttpServletRequest request )
     {
@@ -169,6 +180,13 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
         return redirectView( request, VIEW_MANAGE_ACTION_BUTTON );
     }
 
+    /**
+     * Do change order.
+     *
+     * @param request
+     *            the request
+     * @return the string
+     */
     @Action( ACTION_CHANGE_ORDER )
     public String doChangeOrder( HttpServletRequest request )
     {
@@ -180,12 +198,50 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
         return redirectView( request, VIEW_MANAGE_ACTION_BUTTON );
     }
 
+    /**
+     * Do change color.
+     *
+     * @param request
+     *            the request
+     * @return the string
+     */
     @Action( ACTION_CHANGE_COLOR )
     public String doChangeColor( HttpServletRequest request )
     {
+        int parameterId = Integer.parseInt( request.getParameter( PARAMETER_ID ) );
+        int actionId = Integer.parseInt( request.getParameter( PARAMETER_ACTION_ID ) );
+        String couleurId = request.getParameter( PARAMETER_COULEUR_ID );
+
+        // Si la paramètre n'a aps encore été créé
+        if ( parameterId == 0 )
+        {
+            // Création du paramètre pour l'action
+            ParamBouton paramBouton = new ParamBouton( );
+            paramBouton.setIdAction( actionId );
+            paramBouton.setIdGroupe( DEFAULT_GROUP );
+            paramBouton.setIcone( DEFAULT_ICONE );
+            paramBouton.setIdCouleur( couleurId );
+
+            ParamBoutonHome.create( paramBouton );
+        }
+        else
+        {
+            ParamBouton paramBouton = ParamBoutonHome.findByPrimaryKey( parameterId );
+            paramBouton.setIdCouleur( couleurId );
+
+            ParamBoutonHome.updateWithoutOrder( paramBouton );
+        }
+
         return redirectView( request, VIEW_MANAGE_ACTION_BUTTON );
     }
 
+    /**
+     * Gets the edits the icon.
+     *
+     * @param request
+     *            the request
+     * @return the edits the icon
+     */
     @View( VIEW_EDIT_ICON )
     public String getEditIcon( HttpServletRequest request )
     {
@@ -206,9 +262,40 @@ public class ManageActionButtonJspBean extends ManageAdminTicketingJspBean
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_ACTION_BUTTON, TEMPLATE_EDIT_ICON, model );
     }
 
+    /**
+     * Do save icon.
+     *
+     * @param request
+     *            the request
+     * @return the string
+     */
     @Action( ACTION_SAVE_ICON )
     public String doSaveIcon( HttpServletRequest request )
     {
+        int parameterId = Integer.parseInt( request.getParameter( PARAMETER_ID ) );
+        int actionId = Integer.parseInt( request.getParameter( PARAMETER_ACTION_ID ) );
+        String icon = request.getParameter( PARAMETER_ICON );
+
+        // Si la paramètre n'a aps encore été créé
+        if ( parameterId == 0 )
+        {
+            // Création du paramètre pour l'action
+            ParamBouton paramBouton = new ParamBouton( );
+            paramBouton.setIdAction( actionId );
+            paramBouton.setIdGroupe( DEFAULT_GROUP );
+            paramBouton.setIcone( icon );
+            paramBouton.setIdCouleur( DEFAULT_COLOR );
+
+            ParamBoutonHome.create( paramBouton );
+        }
+        else
+        {
+            ParamBouton paramBouton = ParamBoutonHome.findByPrimaryKey( parameterId );
+            paramBouton.setIcone( icon );
+
+            ParamBoutonHome.updateWithoutOrder( paramBouton );
+        }
+
         return redirectView( request, VIEW_MANAGE_ACTION_BUTTON );
     }
 

@@ -15,10 +15,12 @@ public class ParamBoutonDAO implements IParamBoutonDAO
     private static final String SQL_QUERY_SELECT_ORDER         = "select IFNULL(max(ordre)+1,1) from ticketing_param_bouton_action where id_groupe=?";
     private static final String SQL_QUERY_INSERT               = "INSERT INTO ticketing_param_bouton_action (id_action, id_couleur, ordre, icone, id_groupe) VALUES( ?, ?, ?, ?, ?)";
     private static final String SQL_QUERY_UPDATE               = "UPDATE ticketing_groupe_action SET libelle_identifiant=?, cle=?, description=?, ordre=? WHERE id_groupe=?";
+    private static final String SQL_QUERY_UPDATE_WITHOUT_ORDER = "UPDATE ticketing_param_bouton_action SET id_couleur=?, icone=? WHERE id_param=?";
     private static final String SQL_QUERY_UPDATE_GROUP         = "UPDATE ticketing_param_bouton_action SET ordre=?, id_groupe=? WHERE id_param=?";
-    private static final String SQL_QUERY_SELECT_BY_GROUP      = "select id_param, param.id_action, couleur, ordre, icone, id_groupe,  name, (select name from  workflow_state state where id_state =id_state_before) state_before , (select name from  workflow_state state where id_state =id_state_after) state_after from ticketing_param_bouton_action param join ticketing_couleur_bouton couleur on couleur.id_couleur = param.id_couleur join workflow_action act on act.id_action = param.id_action where id_groupe=?";
+    private static final String SQL_QUERY_SELECT_BY_GROUP      = "select id_param, param.id_couleur, param.id_action, couleur, ordre, icone, id_groupe,  name, (select name from  workflow_state state where id_state =id_state_before) state_before , (select name from  workflow_state state where id_state =id_state_after) state_after from ticketing_param_bouton_action param join ticketing_couleur_bouton couleur on couleur.id_couleur = param.id_couleur join workflow_action act on act.id_action = param.id_action where id_groupe=?";
     private static final String SQL_QUERY_SELECT_WITHOUT_GROUP = "SELECT id_action, name, (select name from  workflow_state state where id_state =id_state_before) state_before , (select name from  workflow_state state where id_state =id_state_after) state_after from workflow_action act where id_action not in (select id_action FROM ticketing_param_bouton_action)";
     private static final String SQL_QUERY_SELECT_ACTION_STATE  = "select name, id_state_before, (select name from  workflow_state state where id_state =id_state_before) state_before , (select name from  workflow_state state where id_state =id_state_after) state_after from workflow_action where id_action=?";
+    private static final String SQL_QUERY_SELECT_COULEUR_LIST  = "SELECT id_couleur from ticketing_couleur_bouton";
 
     private static final int    ID_GROUPE_NON_CONFIGURE        = 1;
     private static final String DEFAULT_COLOR                  = "Bleu foncé";
@@ -114,7 +116,7 @@ public class ParamBoutonDAO implements IParamBoutonDAO
             action.setStateBefore( stateBefore );
             paramBouton.setAction( action );
             paramBouton.setIcone( DEFAULT_ICONE );
-            paramBouton.setCouleur( DEFAULT_COLOR );
+            paramBouton.setIdCouleur( DEFAULT_COLOR );
 
             listParamBouton.add( paramBouton );
         }
@@ -145,6 +147,7 @@ public class ParamBoutonDAO implements IParamBoutonDAO
         State stateAfter = new State( );
 
         paramBouton.setIdparam( daoUtil.getInt( nIndex++ ) );
+        paramBouton.setIdCouleur( daoUtil.getString( nIndex++ ) );
         paramBouton.setIdAction( daoUtil.getInt( nIndex++ ) );
         paramBouton.setCouleur( daoUtil.getString( nIndex++ ) );
         paramBouton.setOrdre( daoUtil.getInt( nIndex++ ) );
@@ -175,7 +178,7 @@ public class ParamBoutonDAO implements IParamBoutonDAO
             paramBouton = new ParamBouton( );
             paramBouton.setIdparam( daoUtil.getInt( nIndex++ ) );
             paramBouton.setIdAction( daoUtil.getInt( nIndex++ ) );
-            paramBouton.setCouleur( daoUtil.getString( nIndex++ ) );
+            paramBouton.setIdCouleur( daoUtil.getString( nIndex++ ) );
             paramBouton.setOrdre( daoUtil.getInt( nIndex++ ) );
             paramBouton.setIcone( daoUtil.getString( nIndex++ ) );
             paramBouton.setIdGroupe( daoUtil.getInt( nIndex ) );
@@ -200,5 +203,37 @@ public class ParamBoutonDAO implements IParamBoutonDAO
 
         daoUtil.executeUpdate( );
         daoUtil.free( );
+    }
+
+    @Override
+    public void updateWithoutOrder( ParamBouton paramBouton, Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_WITHOUT_ORDER, plugin );
+        int nIndex = 1;
+
+        daoUtil.setString( nIndex++, paramBouton.getIdCouleur( ) );
+        daoUtil.setString( nIndex++, paramBouton.getIcone( ) );
+        daoUtil.setInt( nIndex, paramBouton.getIdparam( ) );
+
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
+    }
+
+    @Override
+    public List<String> getCouleursList( Plugin plugin )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_COULEUR_LIST, plugin );
+        daoUtil.executeQuery( );
+
+        List<String> listCouleur = new ArrayList<>( );
+
+        while ( daoUtil.next( ) )
+        {
+            listCouleur.add( daoUtil.getString( 1 ) );
+        }
+
+        daoUtil.free( );
+
+        return listCouleur;
     }
 }

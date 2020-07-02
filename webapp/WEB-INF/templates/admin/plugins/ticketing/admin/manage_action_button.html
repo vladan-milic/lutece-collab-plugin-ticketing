@@ -94,17 +94,39 @@
 																<@aButton href='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp?view=editIcon&id_action=${param_bouton.idAction}&param_id=${param_bouton.idparam}' buttonIcon='pencil' size='' title=''  />
 																</@inputGroupItem>
 															</td>
+															<td>
+																<@tform method='post' class='form-inline' action='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp'>
+																	<input type="hidden" name="param_id" value="${param_bouton.idparam}">
+																	<input type="hidden" name="id_action" value="${param_bouton.idAction}">
+																	<@formGroup rows=2>
+																	  <@inputGroup>
+																		<@select name='couleur_id' id='couleur_id-${param_bouton.idCouleur}' title='#i18n{portal.features.dispatch_features.tableLabelOrder}' size='sm'>
+																			<#list couleur_list as couleur>
+																				<#if param_bouton.idCouleur == couleur>
+																					<option selected="selected" value="${couleur}" >${couleur}</option>
+																				<#else>
+																					<option value="${couleur}" >${couleur}</option>
+																				</#if>
+																			</#list>
+																		</@select>
+																		<@inputGroupItem>
+																			<@button type='submit' name='action_changeColor' title='#i18n{portal.features.dispatch_features_row.buttonSetOrder}' buttonIcon='check' showTitle=false />
+																		</@inputGroupItem>
+																	  </@inputGroup>
+																	</@formGroup>
+																  </@tform>
+															</td>
 														</tr>
 													</#list>
 												</tbody>
-											</@table>
-										</@boxBody>
-									</@box>
-								</@columns>
-							</@row>
-						</#if>
-					</#list>
-				</@tabContent>
-			</@tabs>
-		</@columns>
-	</@row>
+										</@table>
+									</@boxBody>
+								</@box>
+							</@columns>
+						</@row>
+					</#if>
+				</#list>
+			</@tabContent>
+		</@tabs>
+	</@columns>
+</@row>

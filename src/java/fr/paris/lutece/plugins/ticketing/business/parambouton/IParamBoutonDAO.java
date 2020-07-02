@@ -101,4 +101,23 @@ public interface IParamBoutonDAO
      */
     void updateGroup( ParamBouton paramBouton, Plugin plugin );
 
+    /**
+     * Update without order.
+     *
+     * @param paramBouton
+     *            the param bouton
+     * @param plugin
+     *            the plugin
+     */
+    void updateWithoutOrder( ParamBouton paramBouton, Plugin plugin );
+
+    /**
+     * Gets the couleurs list.
+     *
+     * @param plugin
+     *            the plugin
+     * @return the couleurs list
+     */
+    List<String> getCouleursList( Plugin plugin );
+
 }

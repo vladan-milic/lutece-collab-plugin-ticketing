@@ -4,6 +4,8 @@
 			<@boxHeader title='#i18n{ticketing.edit_icone.pageTitle}' />
 			<@boxBody>
 				<@tform method='post' action='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp'>
+					<input type="hidden" name="id_action" value="${id_action}">
+					<input type="hidden" name="param_id" value="${id_parameter}">
 					<@formGroup labelFor='icon' labelKey='#i18n{ticketing.edit_icone.libelle.label}' mandatory=true>
 						<#if id_parameter = 0>
 							<@input type='text' id='icon' name='icon' value='${default_icone}' />
@@ -13,7 +15,7 @@
 						<small>#i18n{ticketing.edit_icone.libelle.description}</small>
 					</@formGroup>	
 					<@formGroup labelFor='cle' labelKey='#i18n{ticketing.edit_icone.icone.label}'>
-						<i id="iconePreview" style="font-size: 24px;padding: 6px 12px;vertical-align: middle;" class="fa fa-question-circle-o" aria-hidden="true"></i>
+						<i id="iconePreview" style="font-size: 24px;padding: 6px 12px;vertical-align: middle;" class="${parameter.icone}" aria-hidden="true"></i>
 					</@formGroup>
 					<@formGroup>
 						<@button type='submit' name="action_saveIcon" buttonIcon='check' title='#i18n{portal.create_ticket.button.labelOk}'  size='' />
@@ -26,8 +28,7 @@
 </@row>
 
 <script>
-$( "#icon" ).keyup(function() {
-	  console.log("kk");
+$( "#icon" ).bind("change keyup blur input",function(){
 	  $("#iconePreview").removeClass().addClass($( "#icon" ).val());
 });
 </script>

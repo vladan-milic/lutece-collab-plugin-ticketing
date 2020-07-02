@@ -6,14 +6,22 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ParamBoutonHome.
+ */
 public class ParamBoutonHome
 {
+
+    /** The dao. */
     // Static variable pointed at the DAO instance
     private static IParamBoutonDAO _dao    = SpringContextService.getBean( "ticketing.paramBoutonDAO" );
+
+    /** The plugin. */
     private static Plugin          _plugin = PluginService.getPlugin( "ticketing" );
 
     /**
-     * Private constructor - this class need not be instantiated
+     * Private constructor - this class need not be instantiated.
      */
     private ParamBoutonHome( )
     {
@@ -22,8 +30,8 @@ public class ParamBoutonHome
     /**
      * Creates the.
      *
-     * @param groupAction
-     *            the group action
+     * @param paramBouton
+     *            the param bouton
      * @return the group action
      */
     public static ParamBouton create( ParamBouton paramBouton )
@@ -43,7 +51,20 @@ public class ParamBoutonHome
     public static ParamBouton updateGroup( ParamBouton paramBouton )
     {
         _dao.updateGroup( paramBouton, _plugin );
+        // TODO gestion ordre
+        return paramBouton;
+    }
 
+    /**
+     * Update without order.
+     *
+     * @param paramBouton
+     *            the param bouton
+     * @return the param bouton
+     */
+    public static ParamBouton updateWithoutOrder( ParamBouton paramBouton )
+    {
+        _dao.updateWithoutOrder( paramBouton, _plugin );
         return paramBouton;
     }
 
@@ -79,6 +100,16 @@ public class ParamBoutonHome
     public static ParamBouton findByPrimaryKey( int nKey )
     {
         return _dao.load( nKey, _plugin );
+    }
+
+    /**
+     * Gets the couleurs list.
+     *
+     * @return the couleurs list
+     */
+    public static List<String> getCouleursList( )
+    {
+        return _dao.getCouleursList( _plugin );
     }
 
 }
