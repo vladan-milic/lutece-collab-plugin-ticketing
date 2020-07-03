@@ -125,7 +125,7 @@
         <componentName>ticketing</componentName>
         <jiraProjectName>TICKETING</jiraProjectName>
         <jiraComponentId>12915</jiraComponentId>
-        <maven.javadoc.skip>false</maven.javadoc.skip>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
     </properties>
         
     <scm>
