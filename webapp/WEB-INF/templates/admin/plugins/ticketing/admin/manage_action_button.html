@@ -1,0 +1,131 @@
+<@boxHeader title='#i18n{ticketing.manage_actionButton.pageTitle}' boxTools=true>
+</@boxHeader>
+<@row>
+	<@columns>
+		<@tabs color='top-danger'>
+			<@listTabs>
+				<li class="active">
+					<a href="jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp">
+						#i18n{ticketing.manage_actionButton.onglet.parametrage}
+					</a>
+				</li>
+				<li>
+					<a href="jsp/admin/plugins/ticketing/admin/ManageGroupActionButton.jsp">#i18n{ticketing.manage_actionButton.onglet.gestion.groupe}</a>
+				</li>
+			</@listTabs>
+			<@tabContent>
+				<#list groupe_list as group>
+					<#if group.param_bouton_list?has_content>
+						<@row>
+							<@columns>
+								<@box color='danger'>
+									<@boxHeader title='${group.groupe.libelleIdentifiant}' boxTools=boxTools>
+									</@boxHeader>
+									<@boxBody>
+										<@table>
+											<thead>
+												<tr>
+													<th class="col-md-4">#i18n{ticketing.manage_actionButton.tableLabelNom}</th>
+													<th class="col-md-3">#i18n{ticketing.manage_actionButton.tableLabelGroupe}</th>
+													<th class="col-md-2">#i18n{ticketing.manage_actionButton.tableLabelOrdre}</th>
+													<th class="col-md-1">#i18n{ticketing.manage_actionButton.tableLabelIcone}</th>
+													<th class="col-md-2">#i18n{ticketing.manage_actionButton.tableLabelCouleur}</th>
+												</tr>
+											</thead>
+											<tbody>
+												<#list group.param_bouton_list as param_bouton>
+													<tr>
+														<td>
+															<strong>${param_bouton.action.name}</strong>
+															<br>
+																<small>${param_bouton.action.stateBefore.name} <i class="fa fa-long-arrow-right" aria-hidden="true"></i> ${param_bouton.action.stateAfter.name} </small>
+															</td>
+															<td>
+																<@tform method='post' class='form-inline' action='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp'>
+																	<input type="hidden" name="param_id" value="${param_bouton.idparam}">
+																	<@formGroup rows=2>
+																		<@inputGroup>
+																		  <@select id='group_name-${group.groupe.idGroup}' name='group_id' title='' size='sm'>
+																			<#list groupe_list as groupDisplay>
+																				<#if groupDisplay.groupe.idGroup = group.groupe.idGroup>
+																					<option selected="selected" label="${groupDisplay.groupe.libelleIdentifiant}" value="${groupDisplay.groupe.idGroup?if_exists}" >${groupDisplay.groupe.libelleIdentifiant}</option>
+																				<#else>
+																					<option label="${groupDisplay.groupe.libelleIdentifiant}" value="${groupDisplay.groupe.idGroup?if_exists}" >${groupDisplay.groupe.libelleIdentifiant}</option>							
+																				</#if>
+																			</#list>
+																		  </@select>
+																	  <@inputGroupItem>
+																		<@button type='submit' name='action_changeGroup' title='#i18n{portal.features.dispatch_features_row.buttonSetGroup}' showTitle=false buttonIcon='check' />
+																	  </@inputGroupItem>
+																	</@inputGroup>
+																  </@formGroup>
+																</@tform>
+															</td>
+															<td>
+																<@tform method='post' class='form-inline' action='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp'>
+																<input type="hidden" name="param_id" value="${param_bouton.idparam}">
+																<@formGroup rows=2>
+																  <@inputGroup>
+																	<@select name='order' id='order_id-${param_bouton.idparam}' title='#i18n{portal.features.dispatch_features.tableLabelOrder}' size='sm'>
+																		<#list 1..group.param_bouton_list?size as i>
+																			<!-- Cas des actions pas encore paramétrées -->
+																			<#if "${param_bouton.ordre}" == "0">
+																				<#if (param_bouton?index + 1) == i>
+																					<option selected="selected" value="${i}" >${i}</option>
+																				<#else>
+																					<option value="${i}" >${i}</option>
+																				</#if>
+																			<#elseif param_bouton.ordre == i>
+																				<option selected="selected" value="${i}" >${i}</option>
+																			<#else>
+																				<option value="${i}" >${i}</option>
+																			</#if>
+																		</#list>
+																	</@select>
+																	<@inputGroupItem>
+																		<@button type='submit' name='action_changeOrder' title='#i18n{portal.features.dispatch_features_row.buttonSetOrder}' buttonIcon='refresh' showTitle=false />
+																	</@inputGroupItem>
+																  </@inputGroup>
+																</@formGroup>
+															  </@tform>
+															</td>
+															<td>
+																<@inputGroupItem><i style="font-size: 24px;padding: 6px 12px;vertical-align: middle;" class="${param_bouton.icone}" aria-hidden="true"></i>
+																<@aButton href='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp?view=editIcon&id_action=${param_bouton.idAction}&param_id=${param_bouton.idparam}' buttonIcon='pencil' size='' title=''  />
+																</@inputGroupItem>
+															</td>
+															<td>
+																<@tform method='post' class='form-inline' action='jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp'>
+																	<input type="hidden" name="param_id" value="${param_bouton.idparam}">
+																	<@formGroup rows=2>
+																	  <@inputGroup>
+																		<@select name='couleur_id' id='couleur_id-${param_bouton.idCouleur}' title='#i18n{portal.features.dispatch_features.tableLabelOrder}' size='sm'>
+																			<#list couleur_list as couleur>
+																				<#if param_bouton.idCouleur == couleur>
+																					<option selected="selected" value="${couleur}" >${couleur}</option>
+																				<#else>
+																					<option value="${couleur}" >${couleur}</option>
+																				</#if>
+																			</#list>
+																		</@select>
+																		<@inputGroupItem>
+																			<@button type='submit' name='action_changeColor' title='#i18n{portal.features.dispatch_features_row.buttonSetOrder}' buttonIcon='check' showTitle=false />
+																		</@inputGroupItem>
+																	  </@inputGroup>
+																	</@formGroup>
+																  </@tform>
+															</td>
+														</tr>
+													</#list>
+												</tbody>
+										</@table>
+									</@boxBody>
+								</@box>
+							</@columns>
+						</@row>
+					</#if>
+				</#list>
+			</@tabContent>
+		</@tabs>
+	</@columns>
+</@row>

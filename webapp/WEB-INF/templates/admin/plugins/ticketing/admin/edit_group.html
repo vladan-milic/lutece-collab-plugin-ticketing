@@ -1,0 +1,28 @@
+<@row>
+	<@columns>
+		<@box color='danger'>
+			<@boxHeader title='#i18n{ticketing.edit_group.pageTitle}' />
+			<@boxBody>
+				<@tform method='post' action='jsp/admin/plugins/ticketing/admin/ManageGroupActionButton.jsp'>
+					<input type="hidden" name="idGroup" value=${groupe.idGroup}>
+					<@formGroup labelFor='libelleIdentifiant' labelKey='#i18n{ticketing.create_group.label.id}' mandatory=true>
+						<@input type='text' id='libelleIdentifiant' name='libelleIdentifiant' value='${groupe.libelleIdentifiant}' />
+					</@formGroup>	
+					<@formGroup labelFor='cle' labelKey='#i18n{ticketing.create_group.label.cle}' mandatory=true>
+						<@input type='text' id='cle' name='cle' value='${groupe.cle}' />
+					</@formGroup>
+					<@formGroup labelFor='description' labelKey='#i18n{ticketing.create_group.label.description}' mandatory=true>
+						<@input type='text' id='description' name='description' value='${groupe.description}' />
+					</@formGroup>
+					<@formGroup labelFor='ordre' labelKey='#i18n{ticketing.create_group.label.ordre}'>
+						<@select name='ordre' default_value='${groupe.ordre}' items=order_list sort=true />
+					</@formGroup>
+					<@formGroup>
+						<@button type='submit' name="action_editGroup" buttonIcon='check' title='#i18n{portal.features.create_group.buttonCreate}'  size='' />
+						<@aButton href='jsp/admin/plugins/ticketing/admin/ManageGroupActionButton.jsp' buttonIcon='close' title='#i18n{portal.util.labelCancel}'  size='' color='btn-secondary' />
+					</@formGroup>
+				</@tform>
+			</@boxBody>
+		</@box>
+	</@columns>
+</@row>

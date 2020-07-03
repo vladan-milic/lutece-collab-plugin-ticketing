@@ -35,23 +35,27 @@
     ${history!''}
   </div>
   <div id="info-right" class="col-sm-4">
-    <#if ticket.listWorkflowActions?? && ticket.listWorkflowActions?size &gt; 0>
-      <#list ticket.listWorkflowActions as action>
-          <#if action.displayTasksForm>
-            <a class="btn tag-detail"  href="jsp/admin/plugins/ticketing/Standalone.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}&amp;jsp=${jsp_controller}"
-              data-remote="false" data-toggle="modal" data-title="${action.description}" data-target="#ticketing-modal-workflow-action-form" title="${action.name}" data-action-id="${action.id}">
-              <i class="fa fa-desktop"></i> ${action.name}
+    <#if ticket.listParamButton?? && ticket.listParamButton?size &gt; 0>
+      <#list ticket.listParamButton as configButton>
+           <#if configButton?index gt 0 && configButton.idGroupe != ticket.listParamButton[configButton?index-1].idGroupe >
+              <hr class="separate">
+          </#if>
+          <#if configButton.action.displayTasksForm>
+            <a class="btn tag-detail" style="background-color : ${configButton.couleur};"  href="jsp/admin/plugins/ticketing/Standalone.jsp?view=viewWorkflowActionForm&id_action=${configButton.action.id}&amp;id=${ticket.id}&amp;jsp=${jsp_controller}"
+              data-remote="false" data-toggle="modal" data-title="${configButton.action.description}" data-target="#ticketing-modal-workflow-action-form" title="${configButton.action.name}" data-action-id="${configButton.action.id}">
+              <i class="${configButton.icone}"></i>${configButton.action.name}
             </a>
             <br>
           <#else>
-            <a class="btn tag-detail" data-title="${action.name}" href="jsp/admin/plugins/ticketing/TicketView.jsp?view=viewWorkflowActionForm&id_action=${action.id}&amp;id=${ticket.id}"
-                title="${action.name}" data-action-id="${action.id}">
-                <i class="fa fa-desktop"></i> ${action.name}
+            <a class="btn tag-detail" style="background-color : ${configButton.couleur};" data-title="${configButton.action.name}" href="jsp/admin/plugins/ticketing/TicketView.jsp?view=viewWorkflowActionForm&id_action=${configButton.action.id}&amp;id=${ticket.id}"
+                title="${configButton.action.name}" data-action-id="${configButton.action.id}">
+                <i class="${configButton.icone}"></i> ${configButton.action.name}
             </a>
             <br>
           </#if>
         </#list>
       </#if>
+      <hr class="separate">
       <#if ticket_modification_right?? && ticket_modification_right>
          <a class="btn tag-detail"  href="jsp/admin/plugins/ticketing/ManageTickets.jsp?view=modifyTicket&id=${ticket.id}" title="#i18n{portal.util.labelModify}">
            <i class="fa fa-pencil"></i>  #i18n{portal.util.labelModify}

@@ -31,6 +31,8 @@
     <bean id="ticketing.formDAO" class=" fr.paris.lutece.plugins.ticketing.business.form.FormDAO" />
     <bean id="ticketing.formCategoryDAO" class=" fr.paris.lutece.plugins.ticketing.business.formcategory.FormCategoryDao" />
     <bean id="ticketing.formEntryDAO" class=" fr.paris.lutece.plugins.ticketing.business.form.FormEntryDAO" />
+    <bean id="ticketing.groupActionDAO" class="fr.paris.lutece.plugins.ticketing.business.groupaction.GroupActionDAO" />
+    <bean id="ticketing.paramBoutonDAO" class="fr.paris.lutece.plugins.ticketing.business.parambouton.ParamBoutonDAO" />
     
     <bean id="ticketing.ticketFormService" class="fr.paris.lutece.plugins.ticketing.service.TicketFormService" />         
     <bean id="ticketing.ticketAsynchronousUploadHandler" class="fr.paris.lutece.plugins.ticketing.service.upload.TicketAsynchronousUploadHandler" />

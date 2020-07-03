@@ -85,14 +85,17 @@
             <feature-url>jsp/admin/plugins/ticketing/admin/ManageModelResponses.jsp</feature-url>
             <feature-icon-url/>
       </admin-feature>
-      
+      <admin-feature>
+           <feature-id>TICKETING_MANAGEMENT_ACTION_BUTTON</feature-id>
+           <feature-title>ticketing.adminFeature.ManageActionButton.name</feature-title>
+           <feature-description>ticketing.adminFeature.ManageActionButton.description</feature-description>
+           <feature-level>2</feature-level>
+           <feature-url>jsp/admin/plugins/ticketing/admin/ManageActionButton.jsp</feature-url>
+           <feature-icon-url/>
+       </admin-feature>
       
     </admin-features>    
 
-    <admin-css-stylesheets>
-        <admin-css-stylesheet>css/admin/plugins/ticketing/ticketing.css</admin-css-stylesheet>
-    </admin-css-stylesheets>
-	
     <!-- XPages parameters -->
     <applications>
         <application>
