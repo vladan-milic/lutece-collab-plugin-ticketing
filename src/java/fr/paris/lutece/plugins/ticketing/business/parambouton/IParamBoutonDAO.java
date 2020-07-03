@@ -80,7 +80,6 @@ public interface IParamBoutonDAO
      */
     List<ParamBouton> selectParamBoutonListWithoutGroup( Plugin plugin );
 
-
     /**
      * Select param bouton list for detail ticket screen.
      *
@@ -90,7 +89,8 @@ public interface IParamBoutonDAO
      *            the plugin
      * @return the list
      */
-    List<ParamBouton> selectParamBoutonListTicketDetail( List<Integer> lstIdAction, Plugin plugin);
+    List<ParamBouton> selectParamBoutonListTicketDetail( List<Integer> lstIdAction, Plugin plugin );
+
     /**
      * Load.
      *
@@ -138,6 +138,8 @@ public interface IParamBoutonDAO
      *            the old group id
      * @param oldOrdre
      *            the old ordre
+     * @param plugin
+     *            the plugin
      */
     void updateOrderOldGroup( int oldGroupId, int oldOrdre, Plugin plugin );
 
