@@ -476,11 +476,9 @@ public class ManageTicketsJspBean extends WorkflowCapableJspBean
         // Determine if we are in Search Ticket mode or in Manage Ticket mode
         String strQuery = ( String ) request.getSession( ).getAttribute( SearchConstants.PARAMETER_QUERY );
         String strQueryParam = request.getParameter( SearchConstants.PARAMETER_QUERY );
-        if ( StringUtils.isNotBlank( strQueryParam ) )
-        {
-            strQuery = strQueryParam;
-            request.getSession( ).setAttribute( SearchConstants.PARAMETER_QUERY, strQueryParam );
-        }
+        strQuery = strQueryParam;
+        request.getSession( ).setAttribute( SearchConstants.PARAMETER_QUERY, strQueryParam );
+
         boolean _bSearchMode = StringUtils.isNotBlank( strQuery ) ;
         if ( StringUtils.isBlank( strQuery ) )
         {
