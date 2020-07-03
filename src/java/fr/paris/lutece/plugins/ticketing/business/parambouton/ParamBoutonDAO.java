@@ -223,12 +223,13 @@ public class ParamBoutonDAO implements IParamBoutonDAO
     }
 
     /**
-     * Fill param bouton.
+     * Select param bouton list ticket detail.
      *
-     * @param daoUtil
-     *            the dao util
-     * @param paramBouton
-     *            the param bouton
+     * @param lstIdAction
+     *            the lst id action
+     * @param plugin
+     *            the plugin
+     * @return the list
      */
     @Override
     public List<ParamBouton> selectParamBoutonListTicketDetail( List<Integer> lstIdAction, Plugin plugin )

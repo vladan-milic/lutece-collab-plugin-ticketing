@@ -42,6 +42,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ParamBoutonHome.
  */
@@ -55,6 +56,7 @@ public class ParamBoutonHome
     /** The plugin. */
     private static Plugin          _plugin             = PluginService.getPlugin( "ticketing" );
 
+    /** The Constant CONSTANT_STEP_ORDER. */
     private static final int       CONSTANT_STEP_ORDER = 1;
 
     /**
@@ -83,6 +85,10 @@ public class ParamBoutonHome
      *
      * @param paramBouton
      *            the param bouton
+     * @param oldGroupId
+     *            the old group id
+     * @param oldOrdre
+     *            the old ordre
      * @return the param bouton
      */
     public static ParamBouton updateGroup( ParamBouton paramBouton, int oldGroupId, int oldOrdre )
@@ -157,11 +163,18 @@ public class ParamBoutonHome
         return lstParamButton;
     }
 
+    /**
+     * Find by primary key.
+     *
+     * @param nKey
+     *            the n key
+     * @return the param bouton
+     */
     /*
      * Find by primary key.
      *
      * @param nKey the n key
-     * 
+     *
      * @return the param bouton
      */
     public static ParamBouton findByPrimaryKey( int nKey )
@@ -196,8 +209,8 @@ public class ParamBoutonHome
      *
      * @param paramBouton
      *            the param bouton
-     * @param newOrdre
-     *            the new ordre
+     * @param nNewOrder
+     *            the n new order
      */
     public static void changeOrder( ParamBouton paramBouton, int nNewOrder )
     {
