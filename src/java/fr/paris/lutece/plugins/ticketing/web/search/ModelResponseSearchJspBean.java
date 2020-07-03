@@ -89,7 +89,7 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
 
     /**
      * Search response for tickets
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The view
@@ -103,7 +103,7 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
         // Create the set of id domain
         Set<String> setDomain = new LinkedHashSet<>( );
         String [ ] strSeqIdTickets = request.getParameterValues( TicketingConstants.PARAMETER_SELECTED_TICKETS );
-        if ( strSeqIdTickets != null && strSeqIdTickets.length > 0 )
+        if ( ( strSeqIdTickets != null ) && ( strSeqIdTickets.length > 0 ) )
         {
             setDomain = getListDomain( strSeqIdTickets );
         }
@@ -155,7 +155,7 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
 
     /**
      * add error to model
-     * 
+     *
      * @param model
      *            model
      * @param strMessageKey
@@ -177,7 +177,7 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
 
     /**
      * Return the set of domain labels associated to the list of id ticket given in parameter
-     * 
+     *
      * @param listIdTickets
      *            the list of id tickets
      * @return the set of domain labels
@@ -185,7 +185,7 @@ public class ModelResponseSearchJspBean extends MVCAdminJspBean
     private Set<String> getListDomain( String [ ] strIdTickets )
     {
         Set<String> setDomain = new LinkedHashSet<>( );
-        if ( strIdTickets != null && strIdTickets.length > 0 )
+        if ( ( strIdTickets != null ) && ( strIdTickets.length > 0 ) )
         {
             for ( String idTicket : strIdTickets )
             {

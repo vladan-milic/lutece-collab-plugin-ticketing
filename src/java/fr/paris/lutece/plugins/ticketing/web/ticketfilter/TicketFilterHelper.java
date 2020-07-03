@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.ticketing.web.ticketfilter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -144,7 +145,7 @@ public final class TicketFilterHelper
         {
             // no state selected => we put a dummy one
             fltrFiltre.setListIdWorkflowState( new String [ ] {
-                NO_SELECTED_FIELD_ID
+                    NO_SELECTED_FIELD_ID
             } );
         }
 
@@ -158,7 +159,7 @@ public final class TicketFilterHelper
             fltrFiltre.setOrderSort( request.getParameter( PARAMETER_FILTER_ORDER_SORT ) );
         }
 
-        Map<Integer, Integer> mapCategoryId = new LinkedHashMap<Integer, Integer>( );
+        Map<Integer, Integer> mapCategoryId = new LinkedHashMap<>( );
         for ( int i = 1; i <= getMaxNumberFilter( ); i++ )
         {
             if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_CATEGORY_DEPTH + i ) )
@@ -171,8 +172,11 @@ public final class TicketFilterHelper
                 mapCategoryId.put( i, TicketFilter.CONSTANT_ID_NULL );
             }
         }
-        ;
         fltrFiltre.setMapCategoryId( mapCategoryId );
+
+        if(request.getParameterValues( "markings_filter" ) !=null) {
+            fltrFiltre.setMarkingsId( new HashSet<String>(Arrays.asList(  request.getParameterValues( "markings_filter" ))  ));
+        }
 
         if ( StringUtils.isNotEmpty( request.getParameter( PARAMETER_FILTER_ID_USER ) )
                 && StringUtils.isNumeric( request.getParameter( PARAMETER_FILTER_ID_USER ) ) )
@@ -374,12 +378,11 @@ public final class TicketFilterHelper
 
         filter.setListIdWorkflowState( lstIdWorkflowState );
 
-        Map<Integer, Integer> mapCategoryId = new LinkedHashMap<Integer, Integer>( );
+        Map<Integer, Integer> mapCategoryId = new LinkedHashMap<>( );
         for ( int i = 1; i <= getMaxNumberFilter( ); i++ )
         {
             mapCategoryId.put( i, TicketFilter.CONSTANT_ID_NULL );
         }
-        ;
         filter.setMapCategoryId( mapCategoryId );
 
         return filter;
@@ -392,17 +395,15 @@ public final class TicketFilterHelper
      *            model to update
      * @param fltrFilter
      *            filter attribute to set to model
-     * @param request
-     *            http request
      * @param user
      *            current admin user
      */
-    public static void setModel( Map<String, Object> mapModel, TicketFilter fltrFilter, HttpServletRequest request, AdminUser user )
+    public static void setModel( Map<String, Object> mapModel, TicketFilter fltrFilter, AdminUser user )
     {
-        Map<Integer, LinkedHashMap<String, String>> mapTypeCategoryList = new LinkedHashMap<Integer, LinkedHashMap<String, String>>( );
+        Map<Integer, LinkedHashMap<String, String>> mapTypeCategoryList = new LinkedHashMap<>( );
         for ( int i = 1; i <= getMaxNumberFilter( ); i++ )
         {
-            Map<String, String> mapCategories = new LinkedHashMap<String, String>( );
+            Map<String, String> mapCategories = new LinkedHashMap<>( );
 
             TicketCategoryType depth = TicketCategoryService.getInstance( true ).getCategoriesTree( ).findDepthByDepthNumber( i );
             if ( depth != null )
@@ -411,12 +412,11 @@ public final class TicketFilterHelper
             }
             mapTypeCategoryList.put( i, (LinkedHashMap<String, String>) mapCategories );
         }
-        ;
 
         int nParentId = TicketFilter.CONSTANT_ID_NULL;
         for ( int i = 1; i <= getMaxNumberFilter( ); i++ )
         {
-            ArrayList<TicketCategory> ticketCategoryList = new ArrayList<TicketCategory>( );
+            ArrayList<TicketCategory> ticketCategoryList = null;
             if ( nParentId == TicketFilter.CONSTANT_ID_NULL )
             {
                 ticketCategoryList = (ArrayList<TicketCategory>) TicketCategoryService.getInstance( false ).getAuthorizedCategoryList( i, user,
@@ -435,14 +435,13 @@ public final class TicketFilterHelper
                 mapTypeCategoryList.get( i ).put( String.valueOf( ticketCategory.getId( ) ), ticketCategory.getLabel( ) );
             }
         }
-        ;
 
         ReferenceList refListStates = new ReferenceList( );
         refListStates.addAll( getWorkflowStates( user, fltrFilter.getListIdWorkflowState( ) ) );
 
         mapModel.put( MARK_TICKET_FILTER, fltrFilter );
 
-        Map<String, ReferenceList> mapTypeCategoryReferenceList = new LinkedHashMap<String, ReferenceList>( );
+        Map<String, ReferenceList> mapTypeCategoryReferenceList = new LinkedHashMap<>( );
         for ( int i = 1; i <= mapTypeCategoryList.size( ); i++ )
         {
             mapTypeCategoryReferenceList.put( String.valueOf( i ), ReferenceList.convert( mapTypeCategoryList.get( i ) ) );

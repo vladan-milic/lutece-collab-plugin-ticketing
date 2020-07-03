@@ -10,6 +10,8 @@ response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
 <%@ page errorPage="../../ErrorPage.jsp" %>
 <jsp:include page="../../AdminHeader.jsp" />
 
+<link rel="stylesheet" href="css/admin/plugins/ticketing/ticketing.css" type="text/css"/>
+
 <%= strContent %>
 
 <%@ include file="../../AdminFooter.jsp" %>

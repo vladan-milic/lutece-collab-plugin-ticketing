@@ -47,17 +47,19 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
-import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerLockObtainFailedException;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
+import fr.paris.lutece.plugins.ticketing.business.parambouton.ParamBouton;
+import fr.paris.lutece.plugins.ticketing.business.parambouton.ParamBoutonHome;
 import fr.paris.lutece.plugins.ticketing.business.resourcehistory.IResourceHistoryInformationService;
 import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerException;
+import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexerLockObtainFailedException;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketFilter;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
@@ -244,7 +246,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                     filteredListWorkflowActions = new ArrayList<Action>( );
                 }
 
-                ticket.setListWorkflowActions( filteredListWorkflowActions );
+                List<ParamBouton> configWorkflowButton = ParamBoutonHome.getParamBouttonWorkflowAction( filteredListWorkflowActions );
+                ticket.setListParamButton( configWorkflowButton );
             }
         }
     }
@@ -398,7 +401,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                         }
                         else
                         {
-                            addErrorWorkflowAction( request, _nIdAction );
+                            addErrorWorkflowAction( _nIdAction );
                             return redirectWorkflowActionCancelled( request );
                         }
 
@@ -421,7 +424,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 }
                 catch( Exception e )
                 {
-                    addErrorWorkflowAction( request, _nIdAction );
+                    addErrorWorkflowAction( _nIdAction );
                     AppLogService.error( e );
 
                     return redirectWorkflowActionCancelled( request );
@@ -591,7 +594,7 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                 {
                     Action action = actions.iterator( ).next( );
                     _workflowService
-                            .doProcessAction( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, action.getId( ), null, request, request.getLocale( ), false );
+                    .doProcessAction( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, action.getId( ), null, request, request.getLocale( ), false );
                 }
                 else
                 {
@@ -725,13 +728,10 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
 
     /**
      * Adds error message for workflow action
-     *
-     * @param request
-     *            the request
      * @param nIdAction
      *            the action id
      */
-    private void addErrorWorkflowAction( HttpServletRequest request, int nIdAction )
+    private void addErrorWorkflowAction( int nIdAction )
     {
         IActionService actionService = SpringContextService.getBean( TicketingConstants.BEAN_ACTION_SERVICE );
         Action action = actionService.findByPrimaryKey( nIdAction );

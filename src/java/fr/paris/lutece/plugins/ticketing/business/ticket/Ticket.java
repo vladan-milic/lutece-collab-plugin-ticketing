@@ -53,6 +53,7 @@ import fr.paris.lutece.plugins.ticketing.business.category.TicketCategoryHome;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
 import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.business.marking.Marking;
+import fr.paris.lutece.plugins.ticketing.business.parambouton.ParamBouton;
 import fr.paris.lutece.plugins.ticketing.service.category.TicketCategoryService;
 import fr.paris.lutece.plugins.ticketing.service.format.FormatConstants;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
@@ -104,6 +105,7 @@ public class Ticket implements Serializable, RBACResource
     private Timestamp _dDateUpdate;
     private Timestamp _dDateClose;
     private transient Collection<Action> _listWorkflowActions;
+    private List<ParamBouton> _listParamButton;
     private List<Response> _listResponse;
     private int _nCriticality;
     private int _nPriority;
@@ -1182,5 +1184,26 @@ public class Ticket implements Serializable, RBACResource
     {
         _dDateDerniereRelance = dDateDerniereRelance;
     }
+
+    /**
+     * Get List Param Button Workflow Action
+     * @return list param button configuration
+     */
+    public List<ParamBouton> getListParamButton( )
+    {
+        return _listParamButton;
+    }
+
+    /**
+     * Sets list param button.
+     * @param listParamButton
+     *          list param button
+     */
+    public void setListParamButton( List<ParamBouton> listParamButton )
+    {
+        _listParamButton = listParamButton;
+    }
+
+
 
 }

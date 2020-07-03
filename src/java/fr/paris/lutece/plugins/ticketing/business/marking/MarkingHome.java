@@ -96,11 +96,9 @@ public class MarkingHome
      */
     public static Marking loadMarkingFromCache( int nIdMarking )
     {
-        Marking marking = new Marking( );
-
         String strCacheKey = _ticketCacheService.getMarkingByIdCacheKey( nIdMarking );
 
-        marking = (Marking) _ticketCacheService.getFromCache( strCacheKey );
+        Marking marking = (Marking) _ticketCacheService.getFromCache( strCacheKey );
 
         if ( marking == null )
         {

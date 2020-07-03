@@ -114,7 +114,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
 
     /**
      * Gets the field creation page
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return the field creation page
@@ -134,7 +134,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
 
     /**
      * Get the page to modify a field questions
-     * 
+     *
      * @param request
      *            The request
      * @return The HTML content to display, or the next URL to redirect to
@@ -161,7 +161,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
 
     /**
      * Perform creation field
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The URL to go after performing the action
@@ -199,7 +199,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
 
     /**
      * Perform modification field
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The URL to go after performing the action
@@ -241,7 +241,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
 
     /**
      * Gets the confirmation page before deleting a field
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return the confirmation page before deleting a field
@@ -265,7 +265,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
 
     /**
      * Perform the suppression of a field
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The URL to go after performing the action
@@ -299,7 +299,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
 
     /**
      * Move a field up
-     * 
+     *
      * @param request
      *            The request
      * @return The next URL to redirect to
@@ -312,7 +312,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
 
     /**
      * Move a field up
-     * 
+     *
      * @param request
      *            The request
      * @return The next URL to redirect to
@@ -325,7 +325,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
 
     /**
      * Move a field up or down
-     * 
+     *
      * @param request
      *            The request
      * @param bMoveUp
@@ -365,7 +365,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
     /**
      * Get the request data and if there is no error insert the data in the field specified in parameter. return null if there is no error or else return the
      * error page URL
-     * 
+     *
      * @param request
      *            the request
      * @param field
@@ -406,7 +406,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
         if ( strFieldError != null )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, getLocale( ) )
+                    I18nService.getLocalizedString( strFieldError, getLocale( ) )
             };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
@@ -425,7 +425,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
 
     /**
      * Return the index in the list of the field whose key is specified in parameter
-     * 
+     *
      * @param nIdField
      *            the key of the field
      * @param listField
@@ -451,7 +451,7 @@ public class TicketInputFieldJspBean extends MVCAdminJspBean
 
     /**
      * Get the URL to modify a field. The field is assumed to allow conditional questions.
-     * 
+     *
      * @param request
      *            The request
      * @param nIdField

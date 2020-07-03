@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2019, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,8 +33,12 @@
  */
 package fr.paris.lutece.plugins.ticketing.web.user;
 
+import java.text.MessageFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,6 +48,7 @@ import fr.paris.lutece.plugins.ticketing.business.channel.ChannelHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.ticketing.web.util.TicketUtils;
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.prefs.AdminUserPreferencesService;
 import fr.paris.lutece.portal.service.prefs.IUserPreferencesService;
 import fr.paris.lutece.portal.util.mvc.admin.MVCAdminJspBean;
@@ -77,6 +82,7 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
 
     // Infos
     private static final String INFO_USER_PREFERENCES_SAVED = "ticketing.info.user.preferences.saved";
+    private static final String INFO_USER_PREFERENCES_HELLO = "ticketing.manage_user_preferences.labelHello";
 
     // Views
     private static final String VIEW_MANAGE_USER_PREFERENCES = "manageUserPreferences";
@@ -87,9 +93,10 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
     // Services
     private static IUserPreferencesService _userPreferencesService = AdminUserPreferencesService.instance( );
 
+
     /**
      * Gives the page to manage user preferences
-     * 
+     *
      * @param request
      *            the request
      * @return the page
@@ -99,6 +106,9 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
     {
         Map<String, Object> model = getModel( );
         int nUserId = getUser( ).getUserId( );
+
+        String strMessageHello = MessageFormat.format( I18nService.getLocalizedString( INFO_USER_PREFERENCES_HELLO, Locale.FRENCH ),getUser( ).getFirstName( ), getUser( ).getLastName( ));
+        model.put( TicketingConstants.MARK_HELLO, strMessageHello );
 
         String strCreationDateDisplay = _userPreferencesService.get( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_CREATION_DATE_DISPLAY,
                 StringUtils.EMPTY );
@@ -120,6 +130,12 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
         String strWarningDays = _userPreferencesService.get( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_WARNING_DAYS, StringUtils.EMPTY );
         model.put( TicketingConstants.MARK_WARNING_DAYS, strWarningDays );
 
+        String strTabSollicitation = _userPreferencesService.get( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_SOLLICITATION, StringUtils.EMPTY );
+        model.put( TicketingConstants.MARK_TAB_SOLLICITATION, strTabSollicitation );
+
+        int nNbItemsPerPage = _userPreferencesService.getInt( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_NB_ITEMS_PER_PAGE, 10 );
+        model.put( TicketingConstants.MARK_PREF_NB_ITEMS_PER_PAGE, nNbItemsPerPage );
+
         ModelUtils.storeRichText( request, model );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_USER_PREFERENCES, TEMPLATE_MANAGE_USER_PREFERENCES, model );
@@ -127,7 +143,7 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
 
     /**
      * Modifies the user preferences
-     * 
+     *
      * @param request
      *            the request
      * @return the page after modification
@@ -157,8 +173,30 @@ public class UserPreferencesJspBean extends MVCAdminJspBean
 
         _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_WARNING_DAYS, sWarningDays );
 
+        // user preference sollicitation
+        List<String> preferenceSollicitationSelect = buildStringPreferenceSollicitation( request );
+        if ( ! preferenceSollicitationSelect.isEmpty( ) )
+        {
+            _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_SOLLICITATION, String.join( ",", preferenceSollicitationSelect ));
+        } else if (StringUtils.isNotBlank( _userPreferencesService.get( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_SOLLICITATION, StringUtils.EMPTY ) )) {
+            _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_SOLLICITATION, StringUtils.EMPTY);
+        }
+
+        String strPreferredItemsPerPage = request.getParameter( TicketingConstants.PARAMETER_ITEMS_PER_PAGE );
+        _userPreferencesService.put( String.valueOf( nUserId ), TicketingConstants.USER_PREFERENCE_NB_ITEMS_PER_PAGE, strPreferredItemsPerPage );
+
         addInfo( INFO_USER_PREFERENCES_SAVED, getLocale( ) );
 
         return redirectView( request, VIEW_MANAGE_USER_PREFERENCES );
+    }
+
+    private List<String> buildStringPreferenceSollicitation( HttpServletRequest request )
+    {
+
+        Map<String, String[]> mapPreferenceSollicitationSelect = request.getParameterMap( ).entrySet( ).stream( )
+                .filter( entry -> entry.getKey( ).startsWith( TicketingConstants.USER_PREFERENCE_PREFIX_SOLLICITATION ) ).collect( Collectors.toMap( Entry::getKey, Entry::getValue ) );
+
+        return  mapPreferenceSollicitationSelect.entrySet( ).stream( ).map( entry -> request.getParameter( entry.getKey( ) ) ).collect( Collectors.toList( ) );
+
     }
 }

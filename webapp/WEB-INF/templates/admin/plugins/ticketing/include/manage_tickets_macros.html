@@ -1,0 +1,229 @@
+<#macro sortColumn field=''>
+    <i class="fa fa-chevron-up" onclick="sortList('${field}','asc')"></i>&nbsp;<i class="fa fa-chevron-down" onclick="sortList('${field}','desc')"></i>
+</#macro>
+
+<#macro renderTabPanel panel_list pref_user active=false id=''>
+	
+    <div role="tabpanel" class="tab-pane <#if active> active</#if>" <#if id!="">id="${id}"</#if> >
+        <input type="hidden" id="id" name="id">
+    <div class="row">
+      <div class="col-xs-12 table-responsive">
+      <#if panel_list?? && panel_list?has_content>
+      <@paginationAdminTop paginator=paginator combo=1 />
+        <table class="table">
+            <thead>
+              <tr>
+                    <#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
+                        <th data-field="mass_selection" class="mass-checkbox"><input id="select_all_tickets" type="checkbox" value=""></th>
+                    </#if>
+                    <th data-field="reference">#i18n{ticketing.manage_tickets.columnReference}<@sortTickets attribute='reference' /></th>
+                    <#if creation_date_as_date >
+                      <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.date}<@sortTickets attribute='date_create' /></th>
+                    <#else>
+                      <th data-field="date_create">#i18n{ticketing.manage_tickets.columnDateCreate.counter}<@sortTickets attribute='date_create' /></th>
+                    </#if>
+                    <#if pref_user?contains("lastaction") || pref_user=="displayAllColumn">
+                      <th data-field="date_update">#i18n{ticketing.manage_tickets.columnDateUpdate.date}<@sortTickets attribute='date_update' /></th>
+					</#if>
+                    <#if pref_user?contains("category") || pref_user=="displayAllColumn">
+                      <th data-field="category_label">#i18n{ticketing.manage_tickets.columnCategory}<@sortTickets attribute='category_label' /></th>
+                    </#if> 
+                    <th data-field="lastname">#i18n{ticketing.manage_tickets.columnUser} / #i18n{ticketing.manage_tickets.columnTicketComment}<@sortTickets attribute='lastname' /></th>
+                    <th data-field="state">#i18n{ticketing.manage_tickets.columnTicketState}<@sortTickets attribute='state' /></th>
+                    <#if pref_user?contains("nomenclature") || pref_user=="displayAllColumn">
+                      <th data-field="nomenclature">#i18n{ticketing.manage_tickets.columnTicketNomenclature}<@sortTickets attribute='nomenclature' /></th>
+					</#if>
+                    <#if pref_user?contains("canal") || pref_user=="displayAllColumn">
+                    <th data-field="channel">#i18n{ticketing.manage_tickets.columnTicketChannel}<@sortTickets attribute='channel' /></th>
+                    </#if>
+                    <#if pref_user?contains("assignation") || pref_user=="displayAllColumn">
+                      <th data-field="assignee">#i18n{ticketing.manage_tickets.columnTicketAssignee}<@sortTickets attribute='assignee' /></th>
+                    </#if> 
+              </tr>
+          </thead>  
+            <tbody>
+                <#list panel_list as ticket >
+                <tr data-url="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" id="ticket_row_${ticket.id}">
+                <#if mass_actions_list?? && mass_actions_list?has_content && selected_tab?? && selected_tab!="domain">
+                    <td class="mass-checkbox">
+                        <input type="checkbox" value="${ticket.id}" class="mass-action-ready">
+                    </td>
+                </#if>
+                  <td>
+               <div class="info-table">
+              <#assign textColor="aqua"/>
+              <#if ticket.urgency==1 >
+                <#assign textColor="orange"/>
+              <#elseif ticket.urgency==2 >
+                <#assign textColor="red"/>
+              </#if>
+              <#switch ticket.criticality>
+              <#case 1>
+                <#assign criticality="#i18n{ticketing.manage_tickets.criticality.labelMedium}"/>
+                <#break>
+              <#case 2>
+                <#assign criticality="#i18n{ticketing.manage_tickets.criticality.labelHigh}"/>
+                <#break>
+              <#default>
+                <#assign criticality="#i18n{ticketing.manage_tickets.criticality.labelLow}"/>
+            </#switch>
+            <#switch ticket.priority>
+              <#case 1>
+                <#assign priority="#i18n{ticketing.manage_tickets.priority.labelMedium}"/>
+                <#break>
+              <#case 2>
+                <#assign priority="#i18n{ticketing.manage_tickets.priority.labelHigh}"/>
+                <#break>
+              <#default>
+                <#assign priority="#i18n{ticketing.manage_tickets.priority.labelLow}"/>
+            </#switch>
+              <#if ticket.reference??>
+                <a href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" data-toggle="tooltip" data-placement="bottom" title="Criticit&eacute;:  ${criticality!''} / Priorit&eacute;: ${priority!''}" >
+                  ${ticket.reference}
+                </a>
+              <#else>
+                <a data-toggle="tooltip" data-placement="bottom" href="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" title="Criticit&eacute;: ${criticality!''} / Priorit&eacute;: ${priority!''}">
+                  ${ticket.id}
+                </a>
+              </#if>
+              </div>
+              <#if id == "agent" || id == "group">
+                <#if ticket.marking??>
+                    <#assign marking=ticket.marking>
+                    <#if marking.title?exists >
+                        <div class="label unread" style="color:${marking.labelColor!};background-color:${marking.backgroundColor!};border-radius: 5px;" for="marking_id" title="${marking.title}">${marking.title}</div>
+                    </#if>
+                </#if>
+              </#if>  
+            </td>
+                  <td><strong classl="info-table">
+                    <#if creation_date_as_date >
+                      ${ticket.dateCreate?string["dd/MM/yyyy HH:mm"]}
+                    <#else>
+                      ${displayDateAsCounter( ticket.dateCreate, ticket.ticketStatus ) }
+                    </#if>
+                    </strong>
+                  </td>
+                  <#if pref_user?contains("lastaction") || pref_user=="displayAllColumn">
+                  <td><strong classl="info-table">
+                      ${ticket.dateUpdate?string["dd/MM/yyyy HH:mm"]}
+                      </strong>
+                  </td>
+				  </#if>
+                  <#if pref_user?contains("category") || pref_user=="displayAllColumn" >
+	                  <td class="text-left">
+	                    <#list ticket.branch as ticket_category>
+	                       ${ticket_category.categoryType.label!''}: <strong>${ticket_category.label!''}</strong><br>
+	                    </#list>
+	                  </td>
+	              </#if>
+                  <td class="text-left">
+                    <div class="d-flex">
+                                    <div class="visible-scrollbar">
+                                        <p class="pr-22">
+                      <b>${ticket.userTitle} ${ticket.firstname} ${ticket.lastname}</b>
+            </p>
+            <#if pref_user?contains("usercontact") || pref_user=="displayAllColumn" >
+                  <p>
+                    <#if ticket.email ?? && ticket.email?length &gt; 1>
+                      <small>
+                          <i class="fa fa-envelope"></i> ${ticket.email}
+                      </small>
+                    </#if>
+                    <#if ticket.mobilePhoneNumber ?? && ticket.mobilePhoneNumber?length &gt; 1 >
+                      <small>
+                          / <i class="fa fa-mobile-phone"></i> ${ticket.mobilePhoneNumber}
+                      </small>
+                    </#if>
+                    <#if ticket.fixedPhoneNumber ?? && ticket.fixedPhoneNumber?length &gt; 1>
+                      <small>
+                          / <i class="fa fa-phone"></i> ${ticket.fixedPhoneNumber}
+                      </small>
+                    </#if>
+                   </p>
+			 </#if>
+            <#if ticket.ticketComment?has_content>
+              <div class="ticket-comments text-left wordwrap-ticket-comment" style="word-break: break-all;">
+                ${convertNewLineToHtml(ticket.ticketComment)}
+              </div>
+            </#if>
+            </div>
+            </div>
+                  </td>
+                  <td class="font-weight-bold fs-18"><#if ticket.state?? && ticket.state.name??>
+                    ${ticket.state.name!''}
+                    </#if>
+                  </td>
+                  <#if pref_user?contains("nomenclature") || pref_user=="displayAllColumn">
+                  <td><#if ticket.nomenclature??>
+                    ${ticket.nomenclature}
+                    </#if>
+                  </td>
+				  </#if>
+                  <#if pref_user?contains("canal") || pref_user=="displayAllColumn">
+                   <td>
+                      <#if ticket.channel??>
+                        <#if ticket.channel.iconFont??><i class="${ticket.channel.iconFont}"></i>&nbsp;</#if>
+                      </#if>
+                  </td>
+                  </#if>
+                <#if pref_user?contains("assignation") || pref_user=="displayAllColumn">
+                  <td>
+                    <#if ticket.assigneeUnit??>
+            <p>
+              <strong><i class=" fa fa-sitemap"></i> ${ticket.assigneeUnit.name}</strong>
+            </p>
+            </#if>
+             <#if ticket.assigneeUser??>
+             <#assign user=user_factory.create(ticket.assigneeUser.adminUserId)!>
+              <#if user?has_content>
+              <p class="info_user" data-key-id="${user.idUser}" data-container="body" data-toggle="popover" data-placement="left">
+                <#if avatar_available>
+                <img class="direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${ticket.assigneeUser.adminUserId}"></#if>
+                <span>${ticket.assigneeUser.firstname} <br/> ${ticket.assigneeUser.lastname}</span>
+                <@info_user user/>
+              </p>
+             </#if>
+            </#if>
+                  </td>
+                 </#if>
+                </tr>
+                </#list>
+          </tbody>
+      </table>
+      </div>
+      </div>
+      </div>
+        <div class="pagination-end-bloc">
+        <@paginationAdmin paginator=paginator combo=1 />
+    </div>
+    <#else>
+      <div id="no-content">
+       <h2 class="text-muted text-center">
+        <#if user_with_no_unit>
+            #i18n{ticketing.manage_tickets.noTicket.labelNoUnit}
+        <#else>
+            #i18n{ticketing.manage_tickets.labelNoTicket}
+        </#if>
+       </h2>
+       <img class="img-responsive text-center" src="images/admin/skin/plugins/ticketing/no_content.jpg" alt="" title="">
+      </div>
+      </div>
+    </#if>
+    </div>
+  </div>
+
+</#macro>
+
+<#macro sortTickets attribute>
+	<div class="btn-group" role="group" aria-label="sortButton">
+		<span class="test">
+	        <a class="sort-up" data-field="${attribute}"  title="Tri croissant" style="cursor: pointer;">
+	            <i class="fa fa-angle-up fa-angle-up"></i>
+	        </a>
+	        <a class="sort-down" data-field="${attribute}"  title="Tri d&eacute;croissant" style="cursor: pointer;">
+	            <i class="fa fa-angle-up fa-angle-down"></i>
+	        </a>
+        </span>
+	 </div>
+</#macro>

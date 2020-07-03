@@ -132,7 +132,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
 
     /**
      * Return a model that contains the list and paginator infos
-     * 
+     *
      * @param request
      *            The HTTP request
      * @param strBookmark
@@ -168,7 +168,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
 
     /**
      * Build the Manage View
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The page
@@ -343,7 +343,7 @@ public class InstantResponseJspBean extends MVCAdminJspBean
 
     /**
      * Computes redirection for creation action
-     * 
+     *
      * @param request
      *            http request
      * @return redirect view

@@ -1,7 +1,9 @@
 <script>$(".content-header").hide();</script>
 <#include "/admin/plugins/address/modules/autocomplete/include/suggestPOI.html" />
 
-<div class="gru-wrapper">
+<link rel="stylesheet" href="css/plugins/ticketing/ticketing.css" type="text/css"/>
+
+<div class="">
   <div id="customer-panel" class="row ticket-head bg-gru-light">
     <div class="col-xs-12 col-sm-offset-1 col-sm-10">
       <h2>#i18n{ticketing.modify_ticket.pageTitle}</h2>
@@ -73,10 +75,10 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row mb-30">
         <div class="col-xs-12 col-sm-12">
           <div class="form-group text-center">
-            <button class="btn btn-primary btn-lg" name="action_modifyTicket" type="submit">
+            <button class="btn btn-primary btn-lg valid" name="action_modifyTicket" type="submit">
               <i class="fa fa-check"></i> #i18n{ticketing.modify_ticket.button.labelOk}
             </button>
             <button class="btn btn-default btn-lg" formaction="jsp/admin/plugins/ticketing/TicketView.jsp?id=${ticket.id}" name="view_ticketDetails" type="submit">

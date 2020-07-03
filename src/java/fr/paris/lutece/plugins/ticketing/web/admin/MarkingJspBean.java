@@ -1,6 +1,5 @@
 package fr.paris.lutece.plugins.ticketing.web.admin;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -85,7 +84,7 @@ public class MarkingJspBean extends MVCAdminJspBean
 
     /**
      * Return a model that contains the list and paginator infos
-     * 
+     *
      * @param request
      *            The HTTP request
      * @param strBookmark
@@ -120,7 +119,7 @@ public class MarkingJspBean extends MVCAdminJspBean
 
     /**
      * Build the Manage View
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The page
@@ -128,8 +127,7 @@ public class MarkingJspBean extends MVCAdminJspBean
     @View( value = VIEW_MANAGE_MARKINGS, defaultView = true )
     public String getManageMarkings( HttpServletRequest request )
     {
-        List<Marking> listMarkings = new ArrayList<Marking>( );
-        listMarkings = MarkingHome.getMarkingsList( );
+        List<Marking> listMarkings = MarkingHome.getMarkingsList( );
 
         Map<String, Object> model = getPaginatedListModel( request, MARK_MARKING_LIST, listMarkings, JSP_MANAGE_MARKINGS );
 

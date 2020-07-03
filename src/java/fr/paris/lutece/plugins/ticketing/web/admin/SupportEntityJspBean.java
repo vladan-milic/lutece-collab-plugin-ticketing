@@ -86,7 +86,6 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     // Markers
     private static final String MARK_SUPPORT_ENTITY_LIST = "supportentity_list";
     private static final String MARK_SUPPORT_ENTITY = "supportentity";
-    private static final String MARK_TICKET_DOMAINS_LIST = "ticket_domains_list";
     private static final String MARK_UNIT_LIST = "unit_list";
     private static final String MARK_LEVEL_LIST = "level_list";
     private static final String JSP_MANAGE_SUPPORT_ENTITIES = TicketingConstants.ADMIN_ADMIN_FEATURE_CONTROLLLER_PATH + "ManageSupportEntities.jsp";
@@ -117,7 +116,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
 
     /**
      * Build the Manage View
-     * 
+     *
      * @param request
      *            The HTTP request
      * @return The page
@@ -127,7 +126,7 @@ public class SupportEntityJspBean extends ManageAdminTicketingJspBean
     {
         _supportEntity = null;
 
-        List<SupportEntity> listSupportEntities = (List<SupportEntity>) SupportEntityHome.getSupportEntityList( );
+        List<SupportEntity> listSupportEntities = SupportEntityHome.getSupportEntityList( );
         Map<String, Object> model = getPaginatedListModel( request, MARK_SUPPORT_ENTITY_LIST, listSupportEntities, JSP_MANAGE_SUPPORT_ENTITIES );
 
         return getPage( PROPERTY_PAGE_TITLE_MANAGE_SUPPORT_ENTITIES, TEMPLATE_MANAGE_SUPPORT_ENTITIES, model );

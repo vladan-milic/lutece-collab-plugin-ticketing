@@ -1,10 +1,12 @@
 <script>$(".content-header").hide();</script>
 <#include "/admin/plugins/ticketing/commons.html" />
-<div class="gru-wrapper">
+<link rel="stylesheet" href="css/plugins/ticketing/ticketing.css" type="text/css"/>
+
+  <div class="gru-wrapper-small"></div>
   <div id="customer-panel" class="row ticket-head bg-gru-light">
     <div class="col-xs-12 col-sm-offset-1 col-sm-10">
-      <h2>#i18n{ticketing.create_ticket.pageTitle}</h2>
       <h3>#i18n{ticketing.recap_ticket.pageTitle}</h3>
+      <hr class="bor-2">
     </div>
   </div>
   <div id="demand-panel" class="row ticket-content">
@@ -93,14 +95,14 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row mb-30">
         <div class="col-xs-12 col-sm-12">
           <div class="form-group text-center">
-             <button class="btn btn-primary btn-lg" name="action_createTicket" type="submit">
+             <button class="btn btn-primary btn-lg valid" name="action_createTicket" type="submit">
                <i class="fa fa-check"></i> #i18n{ticketing.recap_ticket.button.labelCreate}
              </button>
              <#if create_assign_right?? && create_assign_right>
-             <button class="btn btn-primary btn-lg" name="action_createAssignTicket" type="submit">
+             <button class="btn btn-primary btn-lg valid" style="width:250px" name="action_createAssignTicket" type="submit">
                <i class="fa fa-check"></i> #i18n{ticketing.recap_ticket.button.labelCreateAssign}
              </button>
              </#if>
@@ -113,4 +115,3 @@
       </form>
     </div>
   </div>
-</div>
