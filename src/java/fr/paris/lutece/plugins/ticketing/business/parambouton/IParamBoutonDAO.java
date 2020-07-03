@@ -80,6 +80,17 @@ public interface IParamBoutonDAO
      */
     List<ParamBouton> selectParamBoutonListWithoutGroup( Plugin plugin );
 
+
+    /**
+     * Select param bouton list for detail ticket screen.
+     *
+     * @param lstIdAction
+     *            list id action to display
+     * @param plugin
+     *            the plugin
+     * @return the list
+     */
+    List<ParamBouton> selectParamBoutonListTicketDetail( List<Integer> lstIdAction, Plugin plugin);
     /**
      * Load.
      *

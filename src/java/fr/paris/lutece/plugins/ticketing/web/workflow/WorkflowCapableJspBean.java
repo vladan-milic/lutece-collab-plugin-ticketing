@@ -53,6 +53,8 @@ import org.apache.lucene.queryparser.classic.ParseException;
 
 import fr.paris.lutece.plugins.ticketing.business.category.TicketCategory;
 import fr.paris.lutece.plugins.ticketing.business.channel.Channel;
+import fr.paris.lutece.plugins.ticketing.business.parambouton.ParamBouton;
+import fr.paris.lutece.plugins.ticketing.business.parambouton.ParamBoutonHome;
 import fr.paris.lutece.plugins.ticketing.business.resourcehistory.IResourceHistoryInformationService;
 import fr.paris.lutece.plugins.ticketing.business.search.IndexerActionHome;
 import fr.paris.lutece.plugins.ticketing.business.search.TicketIndexer;
@@ -244,7 +246,8 @@ public abstract class WorkflowCapableJspBean extends MVCAdminJspBean
                     filteredListWorkflowActions = new ArrayList<Action>( );
                 }
 
-                ticket.setListWorkflowActions( filteredListWorkflowActions );
+                List<ParamBouton> configWorkflowButton = ParamBoutonHome.getParamBouttonWorkflowAction( filteredListWorkflowActions );
+                ticket.setListParamButton( configWorkflowButton );
             }
         }
     }
