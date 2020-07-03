@@ -1,4 +1,11 @@
-<script>$(".content-header").hide();</script>
+<script>$(".content-header").hide();
+$(document).ready(function(){
+	if(window.location.hash.includes("#ticket_row_")) {
+		var y = $(window).scrollTop(); 
+		$(window).scrollTop(y - $("#navbar-collapse").height() );
+	}
+});
+</script>
 <#include "/admin/plugins/ticketing/commons.html" />
 <#include "/admin/plugins/ticketing/include/user_info.html"/>
 <#include "/admin/plugins/ticketing/include/popins.html" />
