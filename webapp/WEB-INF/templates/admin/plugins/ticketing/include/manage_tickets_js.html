@@ -154,12 +154,21 @@ function loadFilter(mapSize){
     
     $("#check_all_markings").click(function(){
     	var isChecked = $(this).is(':checked');
-    	$(".checkbox_markings").each(function(){
+    	if (isChecked) {
+    	  $(".checkbox_markings").each(function(){
     		if(!$(this).is(':checked')){
         		$(this).trigger( "click" );
     		} 
-    	});
-    	$("#pastille_text").html(" : Toutes");
+    	  });
+    	  $("#pastille_text").html(" : Toutes");
+    	 } else {
+    	   $(".checkbox_markings").each(function(){
+    		if($(this).is(':checked')){
+        		$(this).trigger( "click" );
+    		} 
+    	  });
+    	  $("#pastille_text").html("");
+    	 }
     });
     
     $(".checkbox_markings").click(function(){
